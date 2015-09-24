@@ -1,0 +1,101 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 10;
+	pager.IgnoreSitePath = false;
+	pager.FetchData();
+
+}
+
+@section SideBar {
+	@(new PostCalendar())
+}
+
+@section PagedDataSection {
+
+	@if (pager != null) {
+
+		foreach (var item in pager.DataSource) {
+			<div>
+				<p>
+					<b class="green" style="font-size: 110%;">
+						<a class="green" href="@item.FileName">@item.NavigationText</a>
+						&nbsp;|&nbsp;
+						@String.Format("{0:d}", item.GoLiveDate)
+					</b>
+					<br />
+					by @{
+			var usr = item.GetUserInfo();
+					}
+					@usr.FullName_FirstLast
+					<br />
+					@item.PageTextPlainSummary
+				</p>
+
+				<p class="post-footer align-right">
+					<a class="readmore" href="@item.FileName">
+						Read more
+					</a>
+					<span class="comments">
+						@String.Format(" Comments ({0}) ", item.CommentCount)
+					</span><span class="date">
+						@String.Format("{0:MMMM d, yyyy}", item.GoLiveDate)
+					</span>
+				</p>
+			</div>
+			@*<div>
+					<p>
+
+						<span id="PagedDataSummary1_rpPagedContents_ctl04_wpl1">
+							<span class="meta-caption">Categories:  </span>
+							<span class="meta-used-7"><a href="#/archive/keyword/cat5.aspx">Meta Info Cat 5</a></span>
+							<span class="meta-used-6"><a href="#/archive/keyword/cat4.aspx">Meta Info Cat 4</a></span>
+							<span class="meta-used-5"><a href="#/archive/keyword/cat3.aspx">Meta Info Cat 3</a></span>
+							<span class="meta-used-4"><a href="#/archive/keyword/cat2.aspx">Meta Info Cat 2</a></span>
+							<span class="meta-used-3"><a href="#/archive/keyword/cat1.aspx">Meta Info Cat 1</a></span>
+						</span>
+
+						<br />
+
+						<span id="PagedDataSummary1_rpPagedContents_ctl04_wpl2">
+							<span class="meta-caption">Tags:  </span>
+							<span class="meta-used-5"><a href="#/archive/keyword/tag3.aspx">Meta Info Tag 3</a></span>
+							<span class="meta-used-4"><a href="#/archive/keyword/tag2.aspx">Meta Info Tag 2</a></span>
+							<span class="meta-used-3"><a href="#/archive/keyword/tag1.aspx">Meta Info Tag 1</a></span>
+						</span>
+					</p>
+					<p class="post-footer align-right">
+						<a class="readmore" href="/#">
+							Read more
+						</a>
+						<span class="comments">
+							Comments
+							(7)
+						</span><span class="date">
+							Aug 8, 2015
+						</span>
+					</p>
+				</div>*@
+		}
+
+		<div class="pagerfooterlinks">
+			@foreach (var i in pager.PageNumbers) {
+				using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+					using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+						@String.Format(" {0} ", i)
+					}
+				}
+			}
+		</div>
+
+		<div style="clear: both;">
+		</div>
+		<br />
+	}
+}
+
+<br />

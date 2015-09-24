@@ -1,0 +1,106 @@
+﻿/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+.cmsGlossySeaGreen div, .cmsGlossySeaGreen span, .cmsGlossySeaGreen applet, .cmsGlossySeaGreen object, .cmsGlossySeaGreen iframe, .cmsGlossySeaGreen h1, .cmsGlossySeaGreen h2, .cmsGlossySeaGreen h3, .cmsGlossySeaGreen h4, .cmsGlossySeaGreen h5, .cmsGlossySeaGreen h6, .cmsGlossySeaGreen p, .cmsGlossySeaGreen blockquote, .cmsGlossySeaGreen pre, .cmsGlossySeaGreen a, .cmsGlossySeaGreen abbr, .cmsGlossySeaGreen acronym, .cmsGlossySeaGreen address, .cmsGlossySeaGreen big, .cmsGlossySeaGreen cite, .cmsGlossySeaGreen code, .cmsGlossySeaGreen del, .cmsGlossySeaGreen dfn, .cmsGlossySeaGreen em, .cmsGlossySeaGreen img, .cmsGlossySeaGreen ins, .cmsGlossySeaGreen kbd, .cmsGlossySeaGreen q, .cmsGlossySeaGreen s, .cmsGlossySeaGreen samp, .cmsGlossySeaGreen small, .cmsGlossySeaGreen strike, .cmsGlossySeaGreen strong, .cmsGlossySeaGreen sub, .cmsGlossySeaGreen sup, .cmsGlossySeaGreen tt, .cmsGlossySeaGreen var, .cmsGlossySeaGreen b, .cmsGlossySeaGreen u, .cmsGlossySeaGreen i, .cmsGlossySeaGreen center, .cmsGlossySeaGreen dl, .cmsGlossySeaGreen dt, .cmsGlossySeaGreen dd, .cmsGlossySeaGreen ol, .cmsGlossySeaGreen ul, .cmsGlossySeaGreen li, .cmsGlossySeaGreen fieldset, .cmsGlossySeaGreen form, .cmsGlossySeaGreen label, .cmsGlossySeaGreen legend, .cmsGlossySeaGreen table, .cmsGlossySeaGreen caption, .cmsGlossySeaGreen tbody, .cmsGlossySeaGreen tfoot, .cmsGlossySeaGreen thead, .cmsGlossySeaGreen tr, .cmsGlossySeaGreen th, .cmsGlossySeaGreen td, .cmsGlossySeaGreen article, .cmsGlossySeaGreen aside, .cmsGlossySeaGreen canvas, .cmsGlossySeaGreen details, .cmsGlossySeaGreen embed, .cmsGlossySeaGreen figure, .cmsGlossySeaGreen figcaption, .cmsGlossySeaGreen footer, .cmsGlossySeaGreen header, .cmsGlossySeaGreen hgroup, .cmsGlossySeaGreen menu, .cmsGlossySeaGreen nav, .cmsGlossySeaGreen output, .cmsGlossySeaGreen ruby, .cmsGlossySeaGreen section, .cmsGlossySeaGreen summary, .cmsGlossySeaGreen time, .cmsGlossySeaGreen mark, .cmsGlossySeaGreen audio, .cmsGlossySeaGreen video {
+	margin: 1px;
+	padding: 1px;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	font-size: 12px;
+	font-size: small;
+	background: transparent;
+	background-color: transparent;
+	border: 0px solid transparent;
+}
+/* HTML5 display-role reset for older browsers */
+.cmsGlossySeaGreen article, .cmsGlossySeaGreen aside, .cmsGlossySeaGreen details, .cmsGlossySeaGreen figcaption, .cmsGlossySeaGreen figure, .cmsGlossySeaGreen footer, .cmsGlossySeaGreen header, .cmsGlossySeaGreen hgroup, .cmsGlossySeaGreen menu, .cmsGlossySeaGreen nav, .cmsGlossySeaGreen section {
+	display: block;
+}
+
+.cmsGlossySeaGreen {
+	line-height: 1;
+}
+
+	.cmsGlossySeaGreen ol, .cmsGlossySeaGreen ul {
+		list-style: none;
+	}
+
+	.cmsGlossySeaGreen blockquote, .cmsGlossySeaGreen q {
+		quotes: none;
+	}
+
+		.cmsGlossySeaGreen blockquote:before, .cmsGlossySeaGreen blockquote:after, .cmsGlossySeaGreen q:before, .cmsGlossySeaGreen q:after {
+			content: '';
+			content: none;
+		}
+
+	.cmsGlossySeaGreen table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+
+	/* cms specific */
+
+	.cmsGlossySeaGreen * {
+		font-family: 'Segoe UI',Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+	}
+
+	.cmsGlossySeaGreen *, #cmsGlossySeaGreenID * {
+		font-size: 11px;
+		font-size: small;
+		line-height: normal;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		outline: 0;
+		text-decoration: none;
+		text-shadow: 0 0 0 #FFFFFF;
+		margin: 1px;
+		padding: 1px;
+		text-align: left;
+		background: transparent;
+		background-color: transparent;
+		border: 0px solid transparent;
+	}
+
+	.cmsGlossySeaGreen li > ul {
+		margin: 0;
+		padding: 0;
+		display: inline;
+	}
+
+	.cmsGlossySeaGreen ul > li:before, #cmsEditMenuList ul > li:before {
+		margin: 0;
+		content: '';
+	}
+
+	.cmsGlossySeaGreen select, .cmsGlossySeaGreen textarea, .cmsGlossySeaGreen input[type="text"], #cmsGlossySeaGreenID select, #cmsGlossySeaGreenID textarea, #cmsGlossySeaGreenID input[type="text"] {
+		font-size: small;
+		color: #000000;
+		background-color: #ffffff;
+		border: 1px solid #c0c0c0;
+		padding: 1px;
+		margin: 1px;
+		width: auto;
+		text-transform: none;
+	}
+
+	.cmsGlossySeaGreen input[type="button"], .cmsGlossySeaGreen input[type="submit"], .cmsGlossySeaGreen button, #cmsGlossySeaGreenID input[type="button"], #cmsGlossySeaGreenID input[type="submit"], #cmsGlossySeaGreenID button {
+		margin: 4px;
+		padding: 6px;
+		text-transform: none;
+	}
+
+	.cmsGlossySeaGreen .ui-dialog .ui-dialog-buttonset button, #cmsGlossySeaGreenID .ui-dialog .ui-dialog-buttonset button {
+		margin: 4px;
+		padding: 6px;
+	}
+
+	.cmsGlossySeaGreen .ui-dialog button.ui-button .ui-button-text, #cmsGlossySeaGreenID .ui-dialog button.ui-button .ui-button-text {
+		margin: 0px;
+		padding: 2px;
+	}

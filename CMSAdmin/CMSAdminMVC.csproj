@@ -1,0 +1,1034 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{230946A9-E90D-4D48-BBD6-46D61223E82C}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Carrotware.CMS.Mvc.UI.Admin</RootNamespace>
+    <AssemblyName>Carrotware.CMS.Mvc.UI.Admin</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Admin\CMS.asmx" />
+    <Content Include="Assets\Admin\glossyseagreen\images\animated-overlay.gif" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_flat_15_f9cecd_40x100.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_flat_15_fceaea_40x100.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_flat_25_fbf9ee_40x100.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_flat_70_000000_40x100.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_glass_100_b7d7c4_1x400.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_glass_100_dff6e8_1x400.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_glass_100_f2f5f7_1x400.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_glass_50_468b5e_1x400.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_glass_80_b7d7c4_1x400.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_hexagon_90_eeeeee_12x10.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_highlight-hard_100_f2f5f7_1x100.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_highlight-hard_70_000000_1x100.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-bg_highlight-soft_25_fbf9ee_1x100.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-icons_468b5e_256x240.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Assets\Admin\glossyseagreen\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen-scoped.css" />
+    <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen-scoped2.css" />
+    <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen.css" />
+    <Content Include="Assets\Admin\iCheck\iCheck.css" />
+    <Content Include="Assets\Admin\iCheck\flat\aero%402x.png" />
+    <Content Include="Assets\Admin\iCheck\flat\aero.css" />
+    <Content Include="Assets\Admin\iCheck\flat\aero.png" />
+    <Content Include="Assets\Admin\iCheck\flat\blue%402x.png" />
+    <Content Include="Assets\Admin\iCheck\flat\blue.css" />
+    <Content Include="Assets\Admin\iCheck\flat\blue.png" />
+    <Content Include="Assets\Admin\iCheck\flat\flat%402x.png" />
+    <Content Include="Assets\Admin\iCheck\flat\flat.css" />
+    <Content Include="Assets\Admin\iCheck\flat\flat.png" />
+    <Content Include="Assets\Admin\iCheck\flat\green%402x.png" />
+    <Content Include="Assets\Admin\iCheck\flat\green.css" />
+    <Content Include="Assets\Admin\iCheck\flat\green.png" />
+    <Content Include="Assets\Admin\iCheck\flat\grey%402x.png" />
+    <Content Include="Assets\Admin\iCheck\flat\grey.css" />
+    <Content Include="Assets\Admin\iCheck\flat\grey.png" />
+    <Content Include="Assets\Admin\iCheck\flat\orange%402x.png" />
+    <Content Include="Assets\Admin\iCheck\flat\orange.css" />
+    <Content Include="Assets\Admin\iCheck\flat\orange.png" />
+    <Content Include="Assets\Admin\iCheck\flat\pink%402x.png" />
+    <Content Include="Assets\Admin\iCheck\flat\pink.css" />
+    <Content Include="Assets\Admin\iCheck\flat\pink.png" />
+    <Content Include="Assets\Admin\iCheck\flat\purple%402x.png" />
+    <Content Include="Assets\Admin\iCheck\flat\purple.css" />
+    <Content Include="Assets\Admin\iCheck\flat\purple.png" />
+    <Content Include="Assets\Admin\iCheck\flat\red%402x.png" />
+    <Content Include="Assets\Admin\iCheck\flat\red.css" />
+    <Content Include="Assets\Admin\iCheck\flat\red.png" />
+    <Content Include="Assets\Admin\iCheck\flat\yellow%402x.png" />
+    <Content Include="Assets\Admin\iCheck\flat\yellow.css" />
+    <Content Include="Assets\Admin\iCheck\flat\yellow.png" />
+    <Content Include="Assets\Admin\iCheck\flat\_all.css" />
+    <Content Include="Assets\Admin\iCheck\futurico\futurico%402x.png" />
+    <Content Include="Assets\Admin\iCheck\futurico\futurico.css" />
+    <Content Include="Assets\Admin\iCheck\futurico\futurico.png" />
+    <Content Include="Assets\Admin\iCheck\icheck.min.js" />
+    <Content Include="Assets\Admin\iCheck\line\aero.css" />
+    <Content Include="Assets\Admin\iCheck\line\blue.css" />
+    <Content Include="Assets\Admin\iCheck\line\green.css" />
+    <Content Include="Assets\Admin\iCheck\line\grey.css" />
+    <Content Include="Assets\Admin\iCheck\line\line%402x.png" />
+    <Content Include="Assets\Admin\iCheck\line\line.css" />
+    <Content Include="Assets\Admin\iCheck\line\line.png" />
+    <Content Include="Assets\Admin\iCheck\line\orange.css" />
+    <Content Include="Assets\Admin\iCheck\line\pink.css" />
+    <Content Include="Assets\Admin\iCheck\line\purple.css" />
+    <Content Include="Assets\Admin\iCheck\line\red.css" />
+    <Content Include="Assets\Admin\iCheck\line\yellow.css" />
+    <Content Include="Assets\Admin\iCheck\line\_all.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\aero%402x.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\aero.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\aero.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\blue%402x.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\blue.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\blue.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\green%402x.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\green.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\green.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\grey%402x.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\grey.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\grey.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\minimal%402x.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\minimal.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\minimal.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\orange%402x.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\orange.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\orange.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\pink%402x.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\pink.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\pink.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\purple%402x.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\purple.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\purple.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\red%402x.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\red.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\red.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\yellow%402x.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\yellow.css" />
+    <Content Include="Assets\Admin\iCheck\minimal\yellow.png" />
+    <Content Include="Assets\Admin\iCheck\minimal\_all.css" />
+    <Content Include="Assets\Admin\iCheck\polaris\polaris%402x.png" />
+    <Content Include="Assets\Admin\iCheck\polaris\polaris.css" />
+    <Content Include="Assets\Admin\iCheck\polaris\polaris.png" />
+    <Content Include="Assets\Admin\iCheck\square\aero%402x.png" />
+    <Content Include="Assets\Admin\iCheck\square\aero.css" />
+    <Content Include="Assets\Admin\iCheck\square\aero.png" />
+    <Content Include="Assets\Admin\iCheck\square\blue%402x.png" />
+    <Content Include="Assets\Admin\iCheck\square\blue.css" />
+    <Content Include="Assets\Admin\iCheck\square\blue.png" />
+    <Content Include="Assets\Admin\iCheck\square\green%402x.png" />
+    <Content Include="Assets\Admin\iCheck\square\green.css" />
+    <Content Include="Assets\Admin\iCheck\square\green.png" />
+    <Content Include="Assets\Admin\iCheck\square\grey%402x.png" />
+    <Content Include="Assets\Admin\iCheck\square\grey.css" />
+    <Content Include="Assets\Admin\iCheck\square\grey.png" />
+    <Content Include="Assets\Admin\iCheck\square\orange%402x.png" />
+    <Content Include="Assets\Admin\iCheck\square\orange.css" />
+    <Content Include="Assets\Admin\iCheck\square\orange.png" />
+    <Content Include="Assets\Admin\iCheck\square\pink%402x.png" />
+    <Content Include="Assets\Admin\iCheck\square\pink.css" />
+    <Content Include="Assets\Admin\iCheck\square\pink.png" />
+    <Content Include="Assets\Admin\iCheck\square\purple%402x.png" />
+    <Content Include="Assets\Admin\iCheck\square\purple.css" />
+    <Content Include="Assets\Admin\iCheck\square\purple.png" />
+    <Content Include="Assets\Admin\iCheck\square\red%402x.png" />
+    <Content Include="Assets\Admin\iCheck\square\red.css" />
+    <Content Include="Assets\Admin\iCheck\square\red.png" />
+    <Content Include="Assets\Admin\iCheck\square\square%402x.png" />
+    <Content Include="Assets\Admin\iCheck\square\square.css" />
+    <Content Include="Assets\Admin\iCheck\square\square.png" />
+    <Content Include="Assets\Admin\iCheck\square\yellow%402x.png" />
+    <Content Include="Assets\Admin\iCheck\square\yellow.css" />
+    <Content Include="Assets\Admin\iCheck\square\yellow.png" />
+    <Content Include="Assets\Admin\iCheck\square\_all.css" />
+    <Content Include="Assets\Admin\Images\accept.png" />
+    <Content Include="Assets\Admin\Images\add.png" />
+    <Content Include="Assets\Admin\Images\ani-drip.gif" />
+    <Content Include="Assets\Admin\Images\ani-flower.gif" />
+    <Content Include="Assets\Admin\Images\ani-smallbar.gif" />
+    <Content Include="Assets\Admin\Images\application.png" />
+    <Content Include="Assets\Admin\Images\application_edit.png" />
+    <Content Include="Assets\Admin\Images\application_lightning.png" />
+    <Content Include="Assets\Admin\Images\application_side_expand.png" />
+    <Content Include="Assets\Admin\Images\application_view_icons.png" />
+    <Content Include="Assets\Admin\Images\application_view_tile.png" />
+    <Content Include="Assets\Admin\Images\arrowdown.png" />
+    <Content Include="Assets\Admin\Images\arrow_in.png" />
+    <Content Include="Assets\Admin\Images\audio.png" />
+    <Content Include="Assets\Admin\Images\back.png" />
+    <Content Include="Assets\Admin\Images\balloons\balloon_bottom.png" />
+    <Content Include="Assets\Admin\Images\balloons\balloon_bottomLeft.png" />
+    <Content Include="Assets\Admin\Images\balloons\balloon_bottomRight.png" />
+    <Content Include="Assets\Admin\Images\balloons\balloon_left.png" />
+    <Content Include="Assets\Admin\Images\balloons\balloon_right.png" />
+    <Content Include="Assets\Admin\Images\balloons\balloon_tail.png" />
+    <Content Include="Assets\Admin\Images\balloons\balloon_top.png" />
+    <Content Include="Assets\Admin\Images\balloons\balloon_topLeft.png" />
+    <Content Include="Assets\Admin\Images\balloons\balloon_topRight.png" />
+    <Content Include="Assets\Admin\Images\blogger.png" />
+    <Content Include="Assets\Admin\Images\BlogIndex.png" />
+    <Content Include="Assets\Admin\Images\book_next.png" />
+    <Content Include="Assets\Admin\Images\book_previous.png" />
+    <Content Include="Assets\Admin\Images\brick.png" />
+    <Content Include="Assets\Admin\Images\bullet_toggle_minus.png" />
+    <Content Include="Assets\Admin\Images\bullet_toggle_plus.png" />
+    <Content Include="Assets\Admin\Images\calendar.png" />
+    <Content Include="Assets\Admin\Images\cancel.png" />
+    <Content Include="Assets\Admin\Images\carrotcake.png" />
+    <Content Include="Assets\Admin\Images\carrotpower.png" />
+    <Content Include="Assets\Admin\Images\carrot_med.png" />
+    <Content Include="Assets\Admin\Images\carrot_sm.png" />
+    <Content Include="Assets\Admin\Images\chart_organisation.png" />
+    <Content Include="Assets\Admin\Images\chosen-sprite%402x.png" />
+    <Content Include="Assets\Admin\Images\chosen-sprite.png" />
+    <Content Include="Assets\Admin\Images\clock.png" />
+    <Content Include="Assets\Admin\Images\clock_add.png" />
+    <Content Include="Assets\Admin\Images\clock_delete.png" />
+    <Content Include="Assets\Admin\Images\clock_edit.png" />
+    <Content Include="Assets\Admin\Images\clock_play.png" />
+    <Content Include="Assets\Admin\Images\clock_red.png" />
+    <Content Include="Assets\Admin\Images\clock_stop.png" />
+    <Content Include="Assets\Admin\Images\cog.png" />
+    <Content Include="Assets\Admin\Images\cog_edit.png" />
+    <Content Include="Assets\Admin\Images\cog_go.png" />
+    <Content Include="Assets\Admin\Images\comment.png" />
+    <Content Include="Assets\Admin\Images\comments.png" />
+    <Content Include="Assets\Admin\Images\compress.png" />
+    <Content Include="Assets\Admin\Images\cross.png" />
+    <Content Include="Assets\Admin\Images\delete.png" />
+    <Content Include="Assets\Admin\Images\doc.png" />
+    <Content Include="Assets\Admin\Images\document.png" />
+    <Content Include="Assets\Admin\Images\dragbg.png" />
+    <Content Include="Assets\Admin\Images\error.png" />
+    <Content Include="Assets\Admin\Images\exclamation.png" />
+    <Content Include="Assets\Admin\Images\ExportData.png" />
+    <Content Include="Assets\Admin\Images\file_doc.png" />
+    <Content Include="Assets\Admin\Images\film.png" />
+    <Content Include="Assets\Admin\Images\flag_blue.png" />
+    <Content Include="Assets\Admin\Images\flag_green.png" />
+    <Content Include="Assets\Admin\Images\flag_orange.png" />
+    <Content Include="Assets\Admin\Images\flag_pink.png" />
+    <Content Include="Assets\Admin\Images\flag_purple.png" />
+    <Content Include="Assets\Admin\Images\flag_red.png" />
+    <Content Include="Assets\Admin\Images\flag_yellow.png" />
+    <Content Include="Assets\Admin\Images\folder.png" />
+    <Content Include="Assets\Admin\Images\folder_up.png" />
+    <Content Include="Assets\Admin\Images\group.png" />
+    <Content Include="Assets\Admin\Images\GroupList.png" />
+    <Content Include="Assets\Admin\Images\heading-gradient.png" />
+    <Content Include="Assets\Admin\Images\hourglass.png" />
+    <Content Include="Assets\Admin\Images\house.png" />
+    <Content Include="Assets\Admin\Images\house_go.png" />
+    <Content Include="Assets\Admin\Images\html.png" />
+    <Content Include="Assets\Admin\Images\html2.png" />
+    <Content Include="Assets\Admin\Images\html_go.png" />
+    <Content Include="Assets\Admin\Images\image.png" />
+    <Content Include="Assets\Admin\Images\ImportData.png" />
+    <Content Include="Assets\Admin\Images\LargeDoc.png" />
+    <Content Include="Assets\Admin\Images\layers.png" />
+    <Content Include="Assets\Admin\Images\layout.png" />
+    <Content Include="Assets\Admin\Images\layout_content.png" />
+    <Content Include="Assets\Admin\Images\layout_edit.png" />
+    <Content Include="Assets\Admin\Images\lightbulb.png" />
+    <Content Include="Assets\Admin\Images\lightbulb_off.png" />
+    <Content Include="Assets\Admin\Images\lock.png" />
+    <Content Include="Assets\Admin\Images\logonbox-bottomcenter.png" />
+    <Content Include="Assets\Admin\Images\logonbox-bottomleft.png" />
+    <Content Include="Assets\Admin\Images\logonbox-bottomright.png" />
+    <Content Include="Assets\Admin\Images\logonbox-left.png" />
+    <Content Include="Assets\Admin\Images\logonbox-right.png" />
+    <Content Include="Assets\Admin\Images\logonbox-topcenter.png" />
+    <Content Include="Assets\Admin\Images\logonbox-topleft.png" />
+    <Content Include="Assets\Admin\Images\logonbox-topright.png" />
+    <Content Include="Assets\Admin\Images\logonbox.gif" />
+    <Content Include="Assets\Admin\Images\magifier_zoom_out.png" />
+    <Content Include="Assets\Admin\Images\magnifier.png" />
+    <Content Include="Assets\Admin\Images\menu-gradient.png" />
+    <Content Include="Assets\Admin\Images\mini-spinner1-6F997D.gif" />
+    <Content Include="Assets\Admin\Images\mini-spinner2-6F997D.gif" />
+    <Content Include="Assets\Admin\Images\mini-spinner3-6F997D.gif" />
+    <Content Include="Assets\Admin\Images\ModuleAdmin.png" />
+    <Content Include="Assets\Admin\Images\overlays.png" />
+    <Content Include="Assets\Admin\Images\package.png" />
+    <Content Include="Assets\Admin\Images\page.png" />
+    <Content Include="Assets\Admin\Images\PageIndex.png" />
+    <Content Include="Assets\Admin\Images\page_add.png" />
+    <Content Include="Assets\Admin\Images\page_code.png" />
+    <Content Include="Assets\Admin\Images\page_edit.png" />
+    <Content Include="Assets\Admin\Images\page_gear.png" />
+    <Content Include="Assets\Admin\Images\page_paintbrush.png" />
+    <Content Include="Assets\Admin\Images\page_white.png" />
+    <Content Include="Assets\Admin\Images\page_white_text.png" />
+    <Content Include="Assets\Admin\Images\page_white_wrench.png" />
+    <Content Include="Assets\Admin\Images\page_world.png" />
+    <Content Include="Assets\Admin\Images\pdf.png" />
+    <Content Include="Assets\Admin\Images\pencil.png" />
+    <Content Include="Assets\Admin\Images\plain.png" />
+    <Content Include="Assets\Admin\Images\plugin.png" />
+    <Content Include="Assets\Admin\Images\PostCategories.png" />
+    <Content Include="Assets\Admin\Images\PostTags.png" />
+    <Content Include="Assets\Admin\Images\Ring-64px-72A584.gif" />
+    <Content Include="Assets\Admin\Images\Ring-64px-A7B2A0.gif" />
+    <Content Include="Assets\Admin\Images\script.png" />
+    <Content Include="Assets\Admin\Images\script_add.png" />
+    <Content Include="Assets\Admin\Images\script_code.png" />
+    <Content Include="Assets\Admin\Images\script_code_red.png" />
+    <Content Include="Assets\Admin\Images\script_edit.png" />
+    <Content Include="Assets\Admin\Images\shape_move_back.png" />
+    <Content Include="Assets\Admin\Images\shape_ungroup.png" />
+    <Content Include="Assets\Admin\Images\shield.png" />
+    <Content Include="Assets\Admin\Images\SiteData.png" />
+    <Content Include="Assets\Admin\Images\SiteMap.png" />
+    <Content Include="Assets\Admin\Images\SiteSkins.png" />
+    <Content Include="Assets\Admin\Images\Snake-64px-72A584.gif" />
+    <Content Include="Assets\Admin\Images\Snake-64px-A7B2A0.gif" />
+    <Content Include="Assets\Admin\Images\spreadsheet.png" />
+    <Content Include="Assets\Admin\Images\StatusChange.png" />
+    <Content Include="Assets\Admin\Images\stop.png" />
+    <Content Include="Assets\Admin\Images\table.png" />
+    <Content Include="Assets\Admin\Images\TableIndex.png" />
+    <Content Include="Assets\Admin\Images\table_go.png" />
+    <Content Include="Assets\Admin\Images\TemplateUpdate.png" />
+    <Content Include="Assets\Admin\Images\thumb_down.png" />
+    <Content Include="Assets\Admin\Images\thumb_up.png" />
+    <Content Include="Assets\Admin\Images\tick.png" />
+    <Content Include="Assets\Admin\Images\time.png" />
+    <Content Include="Assets\Admin\Images\time_add.png" />
+    <Content Include="Assets\Admin\Images\time_delete.png" />
+    <Content Include="Assets\Admin\Images\ui-anim_basic_16x16.gif" />
+    <Content Include="Assets\Admin\Images\user.png" />
+    <Content Include="Assets\Admin\Images\UserList.png" />
+    <Content Include="Assets\Admin\Images\user_gray.png" />
+    <Content Include="Assets\Admin\Images\user_green.png" />
+    <Content Include="Assets\Admin\Images\user_orange.png" />
+    <Content Include="Assets\Admin\Images\user_red.png" />
+    <Content Include="Assets\Admin\Images\video.png" />
+    <Content Include="Assets\Admin\Images\webpage.png" />
+    <Content Include="Assets\Admin\Images\wordprocessing.png" />
+    <Content Include="Assets\Admin\Images\x.png" />
+    <Content Include="Assets\Admin\Images\zoom.png" />
+    <Content Include="Assets\Admin\Images\zoom_in.png" />
+    <Content Include="Assets\Admin\Images\zoom_out.png" />
+    <Content Include="Assets\Admin\Includes\advanced-editor-reset.css" />
+    <Content Include="Assets\Admin\Includes\advanced-editor.css" />
+    <Content Include="Assets\Admin\Includes\advanced-editor.js" />
+    <Content Include="Assets\Admin\Includes\base64.js" />
+    <Content Include="Assets\Admin\Includes\Blank.htm" />
+    <Content Include="Assets\Admin\Includes\chosen.jquery.min.js" />
+    <Content Include="Assets\Admin\Includes\chosen.min.css" />
+    <Content Include="Assets\Admin\Includes\fauxstrap.css" />
+    <Content Include="Assets\Admin\Includes\common-utils.js" />
+    <Content Include="Assets\Admin\Includes\common.css" />
+    <Content Include="Assets\Admin\Includes\edit-notifier.css" />
+    <Content Include="Assets\Admin\Includes\filebrowser.css" />
+    <Content Include="Assets\Admin\Includes\FindUsers.js" />
+    <Content Include="Assets\Admin\Includes\jquery.blockUI.js" />
+    <Content Include="Assets\Admin\Includes\jquery.form.min.js" />
+    <Content Include="Assets\Admin\Includes\jquery.simplemodal.js" />
+    <Content Include="Assets\Admin\Includes\jquery.ui.nestedSortable.js" />
+    <Content Include="Assets\Admin\Includes\jquery.ui.timepicker.css" />
+    <Content Include="Assets\Admin\Includes\jquery.ui.timepicker.js" />
+    <Content Include="Assets\Admin\Includes\jquery.uploadfile.min.js" />
+    <Content Include="Assets\Admin\Includes\logon.css" />
+    <Content Include="Assets\Admin\Includes\main.css" />
+    <Content Include="Assets\Admin\Includes\mainpopup.css" />
+    <Content Include="Assets\Admin\Includes\modal.css" />
+    <Content Include="Assets\Admin\Includes\normalize.css" />
+    <Content Include="Assets\Admin\Includes\page-drill-down.js" />
+    <Content Include="Assets\Admin\Includes\richedit.css" />
+    <Content Include="Assets\Admin\Includes\TableStyles.css" />
+    <Content Include="Assets\Admin\Includes\tinymce-config.js" />
+    <Content Include="Assets\Admin\Includes\tooltiphelper.css" />
+    <Content Include="Assets\Admin\Includes\tooltiphelper.js" />
+    <Content Include="Assets\Admin\Includes\uploadfile.css" />
+    <Content Include="Assets\Admin\tiny_mce\classes\adapter\jquery\adapter.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\adapter\jquery\jquery.tinymce.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\adapter\prototype\adapter.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\AddOnManager.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ControlManager.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\DOMUtils.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\Element.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\EventUtils.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\Range.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\RangeUtils.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\ScriptLoader.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\Selection.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\Serializer.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\Sizzle.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\TreeWalker.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\dom\TridentSelection.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\Editor.Events.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\Editor.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\EditorCommands.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\EditorManager.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\EnterKey.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\firebug\firebug-lite.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ForceBlocks.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\Formatter.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\html\DomParser.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\html\Entities.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\html\Node.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\html\SaxParser.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\html\Schema.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\html\Serializer.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\html\Styles.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\html\Writer.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\LegacyInput.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\Popup.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\tinymce.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\Button.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\ColorSplitButton.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\Container.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\Control.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\DropMenu.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\KeyboardNavigation.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\ListBox.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\Menu.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\MenuButton.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\MenuItem.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\NativeListBox.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\Separator.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\SplitButton.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\Toolbar.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\ui\ToolbarGroup.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\UndoManager.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\util\Cookie.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\util\Dispatcher.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\util\JSON.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\util\JSONP.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\util\JSONRequest.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\util\Quirks.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\util\URI.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\util\VK.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\util\XHR.js" />
+    <Content Include="Assets\Admin\tiny_mce\classes\WindowManager.js" />
+    <Content Include="Assets\Admin\tiny_mce\File.gif" />
+    <Content Include="Assets\Admin\tiny_mce\fileUp.gif" />
+    <Content Include="Assets\Admin\tiny_mce\Folder.gif" />
+    <Content Include="Assets\Admin\tiny_mce\FolderOpened.gif" />
+    <Content Include="Assets\Admin\tiny_mce\FolderUp.gif" />
+    <Content Include="Assets\Admin\tiny_mce\insertfile.gif" />
+    <Content Include="Assets\Admin\tiny_mce\jquery.tinymce.js" />
+    <Content Include="Assets\Admin\tiny_mce\langs\en.js" />
+    <Content Include="Assets\Admin\tiny_mce\license.txt" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advhr\css\advhr.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advhr\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advhr\js\rule.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advhr\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advhr\rule.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advimage\css\advimage.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advimage\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advimage\image.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advimage\img\sample.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advimage\js\image.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advimage\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advlink\css\advlink.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advlink\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advlink\js\advlink.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advlink\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advlink\link.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\advlist\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\autolink\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\autoresize\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\autosave\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\bbcode\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\contextmenu\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\directionality\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\emotions.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-cool.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-cry.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-embarassed.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-foot-in-mouth.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-frown.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-innocent.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-kiss.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-laughing.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-money-mouth.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-sealed.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-smile.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-surprised.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-tongue-out.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-undecided.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-wink.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\img\smiley-yell.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\js\emotions.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\emotions\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\example\dialog.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\example\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\example\img\example.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\example\js\dialog.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\example\langs\en.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\example\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\example_dependency\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\fullpage\css\fullpage.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\fullpage\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\fullpage\fullpage.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\fullpage\js\fullpage.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\fullpage\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\fullscreen\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\fullscreen\fullscreen.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\iespell\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\inlinepopups\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\inlinepopups\skins\clearlooks2\img\alert.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\inlinepopups\skins\clearlooks2\img\button.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\inlinepopups\skins\clearlooks2\img\buttons.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\inlinepopups\skins\clearlooks2\img\confirm.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\inlinepopups\skins\clearlooks2\img\corners.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\inlinepopups\skins\clearlooks2\img\horizontal.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\inlinepopups\skins\clearlooks2\img\vertical.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\inlinepopups\skins\clearlooks2\window.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\inlinepopups\template.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\insertdatetime\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\insertpreformattedtext\dialog.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\insertpreformattedtext\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\insertpreformattedtext\img\insertpreformattedtext.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\insertpreformattedtext\js\dialog.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\insertpreformattedtext\langs\en.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\insertpreformattedtext\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\layer\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\legacyoutput\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\lists\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\media\css\media.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\media\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\media\js\embed.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\media\js\media.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\media\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\media\media.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\media\moxieplayer.swf" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\nonbreaking\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\noneditable\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\pagebreak\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\paste\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\paste\js\pastetext.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\paste\js\pasteword.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\paste\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\paste\pastetext.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\paste\pasteword.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\preview\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\preview\example.html" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\preview\jscripts\embed.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\preview\preview.html" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\print\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\save\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\searchreplace\css\searchreplace.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\searchreplace\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\searchreplace\js\searchreplace.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\searchreplace\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\searchreplace\searchreplace.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\spellchecker\css\content.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\spellchecker\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\spellchecker\img\wline.gif" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\style\css\props.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\style\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\style\js\props.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\style\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\style\props.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\style\readme.txt" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\tabfocus\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\cell.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\css\cell.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\css\row.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\css\table.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\js\cell.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\js\merge_cells.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\js\row.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\js\table.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\merge_cells.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\row.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\table\table.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\template\blank.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\template\css\template.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\template\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\template\js\template.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\template\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\template\template.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\visualblocks\css\visualblocks.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\visualblocks\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\visualchars\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\wordcount\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\abbr.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\acronym.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\attributes.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\cite.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\css\attributes.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\css\popup.css" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\del.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\editor_plugin.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\ins.htm" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\js\abbr.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\js\acronym.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\js\attributes.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\js\cite.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\js\del.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\js\element_common.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\js\ins.js" />
+    <Content Include="Assets\Admin\tiny_mce\plugins\xhtmlxtras\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\about.htm" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\anchor.htm" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\charmap.htm" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\color_picker.htm" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\editor_template.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\image.htm" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\colorpicker.jpg" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\flash.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\icons.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\iframe.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\pagebreak.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\quicktime.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\realmedia.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\shockwave.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\trans.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\video.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\img\windowsmedia.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\js\about.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\js\anchor.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\js\charmap.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\js\color_picker.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\js\image.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\js\link.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\js\source_editor.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\langs\en.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\langs\en_dlg.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\link.htm" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\shortcuts.htm" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\default\content.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\default\dialog.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\default\img\buttons.png" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\default\img\items.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\default\img\menu_arrow.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\default\img\menu_check.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\default\img\progress.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\default\img\tabs.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\default\ui.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\highcontrast\content.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\highcontrast\dialog.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\highcontrast\ui.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\o2k7\content.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\o2k7\dialog.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\o2k7\img\button_bg.png" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\o2k7\img\button_bg_black.png" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\o2k7\img\button_bg_silver.png" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\o2k7\ui.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\o2k7\ui_black.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\skins\o2k7\ui_silver.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\advanced\source_editor.htm" />
+    <Content Include="Assets\Admin\tiny_mce\themes\simple\editor_template.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\simple\img\icons.gif" />
+    <Content Include="Assets\Admin\tiny_mce\themes\simple\langs\en.js" />
+    <Content Include="Assets\Admin\tiny_mce\themes\simple\skins\default\content.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\simple\skins\default\ui.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\simple\skins\o2k7\content.css" />
+    <Content Include="Assets\Admin\tiny_mce\themes\simple\skins\o2k7\img\button_bg.png" />
+    <Content Include="Assets\Admin\tiny_mce\themes\simple\skins\o2k7\ui.css" />
+    <Content Include="Assets\Admin\tiny_mce\tiny_mce.js" />
+    <Content Include="Assets\Admin\tiny_mce\tiny_mce_jquery.js" />
+    <Content Include="Assets\Admin\tiny_mce\tiny_mce_popup.js" />
+    <Content Include="Assets\Admin\tiny_mce\tiny_mce_prototype.js" />
+    <Content Include="Assets\Admin\tiny_mce\utils\editable_selects.js" />
+    <Content Include="Assets\Admin\tiny_mce\utils\form_utils.js" />
+    <Content Include="Assets\Admin\tiny_mce\utils\mctabs.js" />
+    <Content Include="Assets\Admin\tiny_mce\utils\validate.js" />
+    <Content Include="Assets\citrus-island\arrow.gif" />
+    <Content Include="Assets\citrus-island\bg.gif" />
+    <Content Include="Assets\citrus-island\CitrusIsland.css" />
+    <Content Include="Assets\citrus-island\clock.gif" />
+    <Content Include="Assets\citrus-island\comment.gif" />
+    <Content Include="Assets\citrus-island\footerbg.gif" />
+    <Content Include="Assets\citrus-island\menu-current-bg.gif" />
+    <Content Include="Assets\citrus-island\menu-hover-bg.gif" />
+    <Content Include="Assets\citrus-island\menubg.gif" />
+    <Content Include="Assets\citrus-island\page.gif" />
+    <Content Include="Assets\citrus-island\quote.gif" />
+    <Content Include="Assets\oilpainting\images\img01.jpg" />
+    <Content Include="Assets\oilpainting\images\pics01.jpg" />
+    <Content Include="Assets\oilpainting\menu.css" />
+    <Content Include="Assets\oilpainting\style.css" />
+    <Content Include="Assets\telephasic\css\font-awesome.min.css" />
+    <Content Include="Assets\telephasic\css\ie8.css" />
+    <Content Include="Assets\telephasic\css\ie9.css" />
+    <Content Include="Assets\telephasic\css\images\footer.svg" />
+    <Content Include="Assets\telephasic\css\images\header.svg" />
+    <Content Include="Assets\telephasic\css\images\image-wrapper.svg" />
+    <Content Include="Assets\telephasic\css\images\navPanel.svg" />
+    <Content Include="Assets\telephasic\css\images\overlay.png" />
+    <Content Include="Assets\telephasic\css\main.css" />
+    <Content Include="Assets\telephasic\fonts\fontawesome-webfont.svg" />
+    <Content Include="Assets\telephasic\images\pic01.jpg" />
+    <Content Include="Assets\telephasic\images\pic02.jpg" />
+    <Content Include="Assets\telephasic\images\pic03.jpg" />
+    <Content Include="Assets\telephasic\images\pic04.jpg" />
+    <Content Include="Assets\telephasic\images\pic05.jpg" />
+    <Content Include="Assets\telephasic\images\pic06.jpg" />
+    <Content Include="Assets\telephasic\images\pic07.jpg" />
+    <Content Include="Assets\telephasic\images\promo.jpg" />
+    <Content Include="Assets\telephasic\js\ie\backgroundsize.min.htc" />
+    <Content Include="Assets\telephasic\js\ie\html5shiv.js" />
+    <Content Include="Assets\telephasic\js\ie\PIE.htc" />
+    <Content Include="Assets\telephasic\js\ie\respond.min.js" />
+    <Content Include="Assets\telephasic\js\jquery.dropotron.min.js" />
+    <Content Include="Assets\telephasic\js\main.js" />
+    <Content Include="Assets\telephasic\js\skel.min.js" />
+    <Content Include="Assets\telephasic\js\util.js" />
+    <Content Include="Content\bootstrap.violet.css" />
+    <Content Include="env.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="Assets\telephasic\fonts\fontawesome-webfont.eot" />
+    <Content Include="Assets\telephasic\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Assets\telephasic\fonts\fontawesome-webfont.woff" />
+    <Content Include="Assets\telephasic\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Assets\telephasic\fonts\FontAwesome.otf" />
+    <Content Include="App_Code\CmsHelpers.cshtml" />
+    <None Include="Assets\Admin\Includes\C3WebConfigSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Assets\Admin\tiny_mce\classes\firebug\FIREBUG.LICENSE" />
+    <Content Include="Assets\Admin\tiny_mce\tiny_mce.zip" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\Templates\oilpainting\page.cshtml" />
+    <Content Include="Views\Templates\oilpainting\list.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_contactform.cshtml" />
+    <Content Include="Views\CmsAdmin\PageAddEdit.cshtml" />
+    <Content Include="Views\CmsAdmin\_datetime.cshtml" />
+    <Content Include="Views\Templates\oilpainting\blog.cshtml" />
+    <Content Include="Views\Templates\oilpainting\home.cshtml" />
+    <Content Include="Views\CmsAdmin\CategoryIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\TagIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\NotAuthorized.cshtml" />
+    <Content Include="Views\CmsAdmin\CategoryAddEdit.cshtml" />
+    <Content Include="Views\CmsAdmin\TagAddEdit.cshtml" />
+    <Content Include="Views\CmsAdmin\BlogPostAddEdit.cshtml" />
+    <Content Include="Views\CmsAdmin\_SiteMap.cshtml" />
+    <Content Include="Views\CmsAdmin\UserIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\RoleIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\ContentEditHistory.cshtml" />
+    <Content Include="Views\CmsAdmin\UserAdd.cshtml" />
+    <Content Include="Views\CmsAdmin\UserEdit.cshtml" />
+    <Content Include="Views\CmsAdmin\RoleAddEdit.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\ContentSnippetIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\ContentSnippetAddEdit.cshtml" />
+    <Content Include="Views\CmsAdmin\FileBrowser.cshtml" />
+    <Content Include="Views\CmsAdmin\DatabaseSetup.cshtml" />
+    <Content Include="Views\CmsAdmin\CreateFirstAdmin.cshtml" />
+    <Content Include="Views\CmsAdmin\WidgetList.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteDataExport.cshtml" />
+    <Content Include="Views\CmsAdmin\ContentImport.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteImport.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteImportWP.cshtml" />
+    <Content Include="Views\CmsAdmin\TextWidgetIndex.cshtml" />
+    <Content Include="TextContentProcessors.config" />
+    <Content Include="Views\CmsAdmin\CommentIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteMap.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteMapPop.cshtml" />
+    <Content Include="Views\CmsAdmin\PageChildSort.cshtml" />
+    <Content Include="Views\CmsAdmin\PageAddChild.cshtml" />
+    <None Include="Views\Templates\oilpainting\_main.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\CmsControllerFactory.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Assets\Admin\CMS.asmx.cs">
+      <DependentUpon>CMS.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Code\Helper.cs" />
+    <Compile Include="Controllers\CmsAdminController.cs" />
+    <Compile Include="Controllers\CmsContentController.cs" />
+    <Compile Include="Models\CommentIndexModel.cs" />
+    <Compile Include="Models\ContentHistoryModel.cs" />
+    <Compile Include="Models\ContentPageModel.cs" />
+    <Compile Include="Models\ContentSingleModel.cs" />
+    <Compile Include="Models\DashboardInfo.cs" />
+    <Compile Include="Models\DatabaseSetupModel.cs" />
+    <Compile Include="Models\FileBrowserModel.cs" />
+    <Compile Include="Models\FileUpModel.cs" />
+    <Compile Include="Models\PageChildSortModel.cs" />
+    <Compile Include="Models\PostIndexModel.cs" />
+    <Compile Include="Models\PageIndexModel.cs" />
+    <Compile Include="Models\RoleModel.cs" />
+    <Compile Include="Models\SiteDataModel.cs" />
+    <Compile Include="Models\SiteImportWordpressModel.cs" />
+    <Compile Include="Models\SiteImportNativeModel.cs" />
+    <Compile Include="Models\SitePageDrillDownModel.cs" />
+    <Compile Include="Models\SiteTemplateUpdateModel.cs" />
+    <Compile Include="Models\SplitDateTime.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\WidgetListModel.cs" />
+    <Compile Include="Models\WidgetProperties.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="Views\CmsContent\_Default.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Templates\citrus-island\page.cshtml" />
+    <Content Include="Views\CmsAdmin\About.cshtml" />
+    <Content Include="Views\CmsAdmin\Contact.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_contactform.cshtml" />
+    <Content Include="Views\CmsAdmin\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\CmsAdmin\ResetPassword.cshtml" />
+    <Content Include="Views\CmsAdmin\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\CmsAdmin\Lockout.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\CmsAdmin\ChangePassword.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\CmsAdmin\UserProfile.cshtml" />
+    <Content Include="Views\Shared\_LayoutModule.cshtml" />
+    <Content Include="Views\CmsAdmin\ModuleIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\_ViewStart.cshtml" />
+    <Content Include="Views\Templates\citrus-island\list.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_main.cshtml" />
+    <Content Include="Views\Templates\Telephasic\index.cshtml" />
+    <Content Include="Views\Templates\Telephasic\left-sidebar.cshtml" />
+    <Content Include="Views\Templates\Telephasic\no-sidebar.cshtml" />
+    <Content Include="Views\Templates\Telephasic\right-sidebar.cshtml" />
+    <Content Include="Views\Templates\Telephasic\_main.cshtml" />
+    <Content Include="Views\Templates\Telephasic\_features.cshtml" />
+    <Content Include="Views\CmsAdmin\Login.cshtml" />
+    <Content Include="Views\CmsAdmin\ForgotPassword.cshtml" />
+    <Content Include="Views\CmsAdmin\Index.cshtml" />
+    <Content Include="Views\CmsContent\_EditNotifier.cshtml" />
+    <Content Include="Views\CmsAdmin\_LayoutPublic.cshtml" />
+    <Content Include="Views\CmsAdmin\_LayoutMain.cshtml" />
+    <Content Include="Views\CmsAdmin\_LayoutPopup.cshtml" />
+    <Content Include="Views\CmsContent\_EmptyHome.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteInfo.cshtml" />
+    <Content Include="Views\CmsAdmin\_SitePageDrillDown.cshtml" />
+    <Content Include="Views\CmsContent\_AdvancedEdit.cshtml" />
+    <Content Include="Views\CmsContent\_AdvancedEditHead.cshtml" />
+    <Content Include="Views\CmsContent\PlainPageView.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteTemplateUpdate.cshtml" />
+    <Content Include="Views\Templates\citrus-island\Skin.config" />
+    <Content Include="Views\Templates\Telephasic\Skin.config" />
+    <Content Include="Views\CmsAdmin\ContentEdit.cshtml" />
+    <Content Include="Views\CmsAdmin\PageIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\BlogPostIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\ControlPropertiesEdit.cshtml" />
+    <Content Include="Views\Templates\Telephasic\_contactus.cshtml" />
+    <Content Include="Views\Templates\oilpainting\Skin.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Assets\Admin\tiny_mce\plugins\autosave\langs\" />
+    <Folder Include="Assets\Admin\tiny_mce\plugins\spellchecker\classes\utils\" />
+    <Folder Include="Assets\Admin\tiny_mce\plugins\spellchecker\includes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CMSComponents\CMSComponents.csproj">
+      <Project>{5dceab4c-2e06-4a3a-badd-ec2680db6b54}</Project>
+      <Name>CMSComponents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMSCore\CMSCore.csproj">
+      <Project>{83b39b26-ec55-4d23-aae7-0eb3b76bb965}</Project>
+      <Name>CMSCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMSDBUpdater\CMSDBUpdater.csproj">
+      <Project>{18b29bf3-d8de-4bf4-ac22-2dd5ae389dec}</Project>
+      <Name>CMSDBUpdater</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMSInterfaces\CMSInterfaces.csproj">
+      <Project>{33d1ea6c-65ea-4234-9861-c1c88317b78a}</Project>
+      <Name>CMSInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMSSecurity\CMSSecurity.csproj">
+      <Project>{92b1049e-7381-4805-8b60-30dc61efc014}</Project>
+      <Name>CMSSecurity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebComponents\WebComponents.csproj">
+      <Project>{5ad0fff2-6700-41ac-85bd-4f7452fdb7b7}</Project>
+      <Name>WebComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>10109</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:10109/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <servers defaultServer="">
+            <server name="SelfHostServer" exePath="" cmdArgs="" url="http://localhost:10109/" workingDir="" />
+          </servers>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

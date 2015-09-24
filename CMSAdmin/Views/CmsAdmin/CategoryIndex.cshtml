@@ -1,0 +1,35 @@
+﻿@model PagedData<ContentCategory>
+
+@{
+	ViewBag.Title = "Category Index";
+}
+
+<p>
+	<a href="@SiteFilename.CategoryAddEditURL">
+		<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add" />
+		Add Category
+	</a>
+</p>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	var grid = CarrotWeb.CarrotWebGrid<ContentCategory>(Model);
+
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.ConfigName(Html.NameFor(x => x));
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<ContentCategory> {
+			HasHeadingText = false,
+			FormatTemplate = @<text> @CarrotWeb.ActionImage("CategoryAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.ContentCategoryID }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
+		})
+		.AddColumn(x => x.CategoryText, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.IsPublic, new CarrotGridBooleanImageColumn {
+			Sortable = true
+		});
+
+		@grid.Write()
+}

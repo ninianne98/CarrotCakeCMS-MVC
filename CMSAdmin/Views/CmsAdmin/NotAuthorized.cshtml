@@ -1,0 +1,26 @@
+﻿@{
+	ViewBag.Title = "Not Authorized";
+	Layout = "~/Views/CmsAdmin/_LayoutPublic.cshtml";
+}
+
+<div style="float:left">
+	<h2>@ViewBag.Title</h2>
+</div>
+<div style="float:right">
+	<a href="~/">
+		<img class="imgNoBorder" src="~/Assets/Admin/Images/house_go.png" alt="Homepage" title="Homepage" />
+	</a>
+</div>
+<br style="clear:both;" />
+<p>
+	You do not have access to the admin tools for this website.
+</p>
+<div>
+	@if (Request.IsAuthenticated) {
+		using (Html.BeginForm("LogOff", RouteConfig.AdminCtrlr, FormMethod.Post, new { id = "logoutForm" })) {
+			@Html.AntiForgeryToken()
+
+			<input type="submit" name="btnLogout" value="Logout" id="btnLogout" />
+		}
+	}
+</div>

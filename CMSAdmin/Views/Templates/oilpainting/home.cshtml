@@ -1,0 +1,69 @@
+@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	var cats = CmsPage.GetSiteCategories(10, true);
+	var tags = CmsPage.GetSiteTags(10, true);
+
+	var pagecat = CmsPage.GetPageCategories(10);
+	var pagetag = CmsPage.GetPageTags(10);
+
+	var dates = CmsPage.GetSiteDates(12);
+}
+
+@section SideBar {
+	<ul>
+		<li>
+			@if (CmsPage.ChildNav.Any()) {
+				<h2>Child Pages</h2>
+				<ul class="sidemenu">
+					@foreach (var itm in CmsPage.ChildNav) {
+						<li><a href="@itm.FileName">@itm.NavigationText</a></li>
+					}
+				</ul>
+			}
+		</li>
+		<li>
+			@if (CmsPage.SiblingNav.Any()) {
+				<h2>Sibling Pages</h2>
+				<ul class="sidemenu">
+					@foreach (var itm in CmsPage.SiblingNav) {
+						<li><a href="@itm.FileName">@itm.NavigationText</a></li>
+					}
+				</ul>
+			}
+		</li>
+		<li>
+			@if (dates.Any()) {
+				<h2>Dates</h2>
+				<ul class="sidemenu">
+					@foreach (var itm in dates) {
+						<li><a href="@itm.Uri">@itm.Text</a></li>
+					}
+				</ul>
+			}
+		</li>
+		<li>
+			@if (cats.Any()) {
+				<h2>Categories</h2>
+				<ul class="sidemenu">
+					@foreach (var itm in cats) {
+						<li><a href="@itm.Uri">@itm.Text</a></li>
+					}
+				</ul>
+			}
+		</li>
+		<li>
+			@if (tags.Any()) {
+				<h2>Tags</h2>
+				<ul class="sidemenu">
+					@foreach (var itm in tags) {
+						<li><a href="@itm.Uri">@itm.Text</a></li>
+					}
+				</ul>
+			}
+		</li>
+	</ul>
+
+}

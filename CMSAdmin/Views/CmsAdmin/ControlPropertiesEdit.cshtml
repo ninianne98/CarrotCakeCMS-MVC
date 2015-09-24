@@ -1,0 +1,97 @@
+﻿@model WidgetProperties
+
+@using Carrotware.CMS.Interface
+
+@{
+	ViewBag.Title = "Edit Properties";
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+}
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	@Html.HiddenFor(modelItem => Model.Widget.Root_WidgetID)
+	@Html.HiddenFor(modelItem => Model.Widget.Root_ContentID)
+
+	for (int i = 0; i < Model.Properties.Count; i++) {
+
+		<div style="padding-bottom: 5px;">
+			<div style="float: left; padding-right: 10px;">
+				<b>
+					@Model.Properties[i].FieldDescription
+				</b>
+			</div>
+			<div style="clear: both;">
+			</div>
+		</div>
+		<div style="padding-bottom: 20px;">
+			<div style="float: left; padding-right: 50px;">
+				@Model.Properties[i].Name
+			</div>
+			<div style="float: left;">
+
+				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.DropDownList) {
+					@Html.DropDownListFor(modelItem => Model.Properties[i].TextValue,
+						new SelectList(Model.Properties[i].Options, "Key", "Value", Model.Properties[i].TextValue), "[select]")
+				}
+
+				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.CheckBox) {
+					@Html.CheckBoxFor(modelItem => Model.Properties[i].CheckBoxState)
+				}
+
+				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.CheckBoxList) {
+					for (var j = 0; j < Model.Properties[i].Options.Count(); j++) {
+						<table>
+							<tr>
+								<td>
+									@Html.CheckBoxFor(it => Model.Properties[i].Options[j].Selected)
+								</td>
+								<td>
+									@Html.DisplayFor(it => Model.Properties[i].Options[j].Value)
+									@Html.HiddenFor(it => Model.Properties[i].Options[j].Key)
+								</td>
+							</tr>
+						</table>
+					}
+				}
+
+				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.TextBox) {
+					@Html.TextBoxFor(modelItem => Model.Properties[i].TextValue, new { maxlength = "1024", size = 75 })
+				}
+				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.RichHTMLTextBox) {
+					@Html.TextAreaFor(modelItem => Model.Properties[i].TextValue, new { @class = "mceEditor", cols = "60", rows = "5" })
+				}
+				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.MultiLineTextBox) {
+					@Html.TextAreaFor(modelItem => Model.Properties[i].TextValue, new { cols = "60", rows = "5" })
+				}
+
+				@Html.HiddenFor(modelItem => Model.Properties[i].Name)
+				@Html.HiddenFor(modelItem => Model.Properties[i].FieldDescription)
+				@Html.HiddenFor(modelItem => Model.Properties[i].CompanionSourceFieldName)
+				@Html.HiddenFor(modelItem => Model.Properties[i].FieldMode)
+			</div>
+			<div style="clear: both;">
+			</div>
+		</div>
+
+	}
+
+	<div style="display: none;">
+		<input type="submit" name="btnSave" value="Apply" id="btnSave" />
+	</div>
+}
+
+<div style="margin-top: 10px;">
+	<input type="submit" name="btnSaveButton" value="Apply" onclick="SubmitPage();" id="btnSaveButton" />
+	<br />
+</div>
+
+<script type="text/javascript">
+	function SubmitPage() {
+		var ret = tinyMCE.triggerSave();
+		setTimeout("ClickBtn();", 800);
+	}
+	function ClickBtn() {
+		$('#btnSave').click();
+	}
+</script>

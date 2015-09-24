@@ -1,0 +1,216 @@
+﻿@model SiteDataModel
+
+@using Carrotware.CMS.Mvc.UI.Admin.Models
+
+@{
+	ViewBag.Title = "Site Info";
+	string buttonCaption = "Apply Changes";
+
+	if (!SiteData.CurretSiteExists) {
+		ViewBag.Title = "Create Site";
+		buttonCaption = "Create";
+	}
+}
+
+@if (SiteData.CurretSiteExists) {
+	using (Html.BeginForm("ResetVars", RouteConfig.AdminCtrlr)) {
+		@Html.AntiForgeryToken()
+		<p>
+			<input type="submit" name="btnResetVars" value="Refresh Configs" id="btnResetVars" />
+			<br />
+		</p>
+	}
+}
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<fieldset style="width: 675px;">
+		<legend>
+			<label>
+				Site Information
+
+				@CmsHelpers.DisplayErrorPopupButton()
+			</label>
+		</legend>
+		<table style="width: 99%;">
+			<tr>
+				<td class="tablecaption" style="width: 160px;">
+					Site ID
+				</td>
+				<td>
+					<div style="padding: 5px; padding-left: 10px; width: 275px;" class=" ui-widget-content ui-corner-all ">
+						@Model.Site.SiteID
+					</div>
+					@Html.HiddenFor(m => m.Site.SiteID)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					Site Name
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Site.SiteName, new { @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.Site.SiteName, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					Site Tagline
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Site.SiteTagline, new { @class = "form-control-xlg" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					Site Titlebar Pattern
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Site.SiteTitlebarPattern, new { @class = "form-control-xlg" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					Site Time Zone
+				</td>
+				<td>
+					@Html.DropDownListFor(m => m.Site.TimeZoneIdentifier, new SelectList(ViewBag.TimeZoneInfoList, "Id", "DisplayName"), new { @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.Site.TimeZoneIdentifier, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					Site URL
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Site.MainURL, new { @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.Site.MainURL, "", new { @class = "validationError" })
+				</td>
+			</tr>
+
+			@if (SiteData.CurretSiteExists) {
+				<tr>
+					<td class="tablecaption">
+						Index Page
+						<br />
+					</td>
+					<td>
+						@{
+				var drill = new SitePageDrillDownModel {
+					FieldName = Html.NameFor(m => m.Site.Blog_Root_ContentID).ToString(),
+					CurrentPageID = Guid.Empty,
+					SelectedPageID = Model.Site.Blog_Root_ContentID
+				};
+						}
+
+						@Html.Partial("_SitePageDrillDown", drill)
+
+						<div style="clear: both; height: 2px;">
+						</div>
+					</td>
+				</tr>
+			}
+
+			<tr>
+				<td class="tablecaption"></td>
+				<td class="tablecaption">
+					<p>
+						Hide from Search Engines
+						@Html.CheckBoxFor(m => m.Site.BlockIndex)
+					</p>
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+
+	<fieldset style="width: 675px;">
+		<legend>
+			<label>
+				Blog Settings
+
+				@CmsHelpers.DisplayErrorPopupButton()
+			</label>
+		</legend>
+		<table style="width: 99%;">
+			<tr>
+				<td class="tablecaption" style="width: 160px;">
+					Blog Feature Base Folder
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Site.Blog_FolderPath, new { @class = "form-control-md" })
+					@Html.ValidationMultiMessageFor(m => m.Site.Blog_FolderPath, new { @class = "validationError" }, true)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					Blog Category Path
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Site.Blog_CategoryPath, new { @class = "form-control-md" })
+					@Html.ValidationMultiMessageFor(m => m.Site.Blog_CategoryPath, new { @class = "validationError" }, true)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					Blog Tag Path
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Site.Blog_TagPath, new { @class = "form-control-md" })
+					@Html.ValidationMultiMessageFor(m => m.Site.Blog_TagPath, new { @class = "validationError" }, true)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					Blog Date Path
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Site.Blog_DatePath, new { @class = "form-control-md" })
+					@Html.ValidationMultiMessageFor(m => m.Site.Blog_DatePath, new { @class = "validationError" }, true)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					Blog Author Path
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Site.Blog_EditorPath, new { @class = "form-control-md" })
+					@Html.ValidationMultiMessageFor(m => m.Site.Blog_EditorPath, new { @class = "validationError" }, true)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					Date Pattern
+				</td>
+				<td>
+					@Html.DropDownListFor(m => m.Site.Blog_DatePattern, new SelectList(ViewBag.DatePatternList, "Key", "Value"), new { @class = "form-control-md" })
+					@Html.ValidationMessageFor(m => m.Site.Blog_DatePattern, "", new { @class = "validationError" })
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+
+	<div style="display: none;">
+		<div id="formPrettyValidationSummary">
+			@Html.ValidationSummary(true, "")
+		</div>
+	</div>
+
+	if (!SiteData.CurretSiteExists) {
+		<br />
+		<h2>
+			Create initial homepage on site creation?
+			@Html.CheckBoxFor(m => m.CreateHomePage)
+		</h2>
+		<br />
+	}
+
+	<br />
+	<input type="submit" name="btnSave" value="@buttonCaption" id="btnSave" />
+}
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		cmsInputEnterBlock();
+	});
+</script>

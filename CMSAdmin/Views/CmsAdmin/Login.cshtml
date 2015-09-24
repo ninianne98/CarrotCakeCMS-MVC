@@ -1,0 +1,89 @@
+﻿@model Carrotware.CMS.Security.Models.LoginViewModel
+
+@{
+	Layout = "~/Views/CmsAdmin/_LayoutPublic.cshtml";
+
+	ViewBag.Title = "Login";
+}
+
+@using (Html.BeginForm("Login", RouteConfig.AdminCtrlr, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" })) {
+	@Html.AntiForgeryToken()
+
+	<table style="width: 300px;">
+		<tr>
+			<td>
+				<div style="height: 35px; width: 50px; border: 1px solid #ffffff;">
+				</div>
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				&nbsp;<b class="caption">username</b>
+				@Html.ValidationMessageFor(m => m.UserName, "", new { @class = "validationError" })
+				<br />
+				@Html.TextBoxFor(m => m.UserName, new { @class = "form-control-md", tabindex = "1" })
+			</td>
+			<td rowspan="2">
+				<div style="height: 50px; width: 75px; text-align: right; border: 1px solid #ffffff;">
+					<a href="~/">
+						<img class="imgNoBorder" src="~/Assets/Admin/Images/house_go.png" alt="Homepage" title="Homepage" />
+					</a>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div style="height: 35px; width: 10px; border: 1px solid #ffffff;">
+				</div>
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				<br />
+				&nbsp;<b class="caption">password</b>
+				@Html.ValidationMessageFor(m => m.Password, "", new { @class = "validationError" })
+				<br />
+				@Html.PasswordFor(m => m.Password, new { @class = "form-control-md", tabindex = "2" })
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div style="height: 25px; width: 10px; border: 1px solid #ffffff;">
+				</div>
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				<div style="float: right; clear: both; margin-right: 10px;">
+					<input type="submit" name="cmdLogon" value="Logon" id="cmdLogon" tabindex="3" />
+				</div>
+			</td>
+			<td>
+				&nbsp;
+			</td>
+		</tr>
+	</table>
+	<div style="width: 400px; text-align: left; clear: both;">
+		@if (!ViewData.ModelState.IsValid) {
+			<div class="ui-widget">
+				<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+					<p>
+						<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+						<span id="FailureText">
+							@Html.ValidationSummary(true, "")
+						</span>
+					</p>
+				</div>
+			</div>
+		}
+		<div>
+			<p>
+				<a href="ForgotPassword" id="lnkForgot">Forgot Password?</a>
+			</p>
+		</div>
+	</div>
+
+}

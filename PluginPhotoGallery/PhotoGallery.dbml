@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CarrotCakeMVC" Class="PhotoGalleryDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\SQL2008EXPRESS;Initial Catalog=CarrotCakeMVC;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="CarrotCakeMVCConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.tblGallery" Member="tblGalleries">
+    <Type Name="tblGallery">
+      <Column Name="GalleryID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GalleryTitle" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="SiteID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="tblGallery_tblGalleryImage" Member="tblGalleryImages" ThisKey="GalleryID" OtherKey="GalleryID" Type="tblGalleryImage" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblGalleryImageMeta" Member="tblGalleryImageMetas">
+    <Type Name="tblGalleryImageMeta">
+      <Column Name="GalleryImageMetaID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GalleryImage" Type="System.String" DbType="VarChar(512)" CanBeNull="true" />
+      <Column Name="ImageTitle" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
+      <Column Name="ImageMetaData" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="SiteID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tblGalleryImage" Member="tblGalleryImages">
+    <Type Name="tblGalleryImage">
+      <Column Name="GalleryImageID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GalleryImage" Type="System.String" DbType="VarChar(512)" CanBeNull="true" />
+      <Column Name="ImageOrder" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="GalleryID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="tblGallery_tblGalleryImage" Member="tblGallery" ThisKey="GalleryID" OtherKey="GalleryID" Type="tblGallery" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

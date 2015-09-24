@@ -1,0 +1,125 @@
+﻿@{
+	ViewBag.Title = "Site Export";
+
+	DateTime dtBegin = SiteData.CurrentSite.Now.AddMonths(-6);
+	DateTime dtEnd = SiteData.CurrentSite.Now.AddDays(7);
+}
+
+<script type="text/javascript">
+
+	function ExportContent() {
+		var dateBegin = $('#txtBegin').val();
+		var dateEnd = $('#txtEnd').val();
+
+		var exportAll = $('#rdoAll').prop('checked');
+		var exportRange = $('#rdoRange').prop('checked');
+		var exportScope = $('#rdoScope').prop('checked');
+
+		var exportBlog = $('#chkBlog').prop('checked');
+		var exportPage = $('#chkPage').prop('checked');
+		var exportComment = $('#chkComment').prop('checked');
+
+		var selectedNode = getSelectedNodeValue();
+
+		//alert("dateBegin : " + dateBegin + " exportBlog : " + exportBlog + " exportPage : " + exportPage + " exportAll : " + exportAll);
+
+		var exportQS = "export=site";
+
+		if (exportRange) {
+			exportQS = exportQS + "&datebegin=" + encodeURIComponent(dateBegin) + "&dateend=" + encodeURIComponent(dateEnd);
+		}
+
+		if (exportScope) {
+			exportQS = exportQS + "&node=" + selectedNode;
+		}
+
+		if (exportComment) {
+			exportQS = exportQS + "&comment=include";
+		}
+
+		if (exportBlog && exportPage) {
+			exportQS = exportQS + "&exportwhat=AllData";
+		} else {
+			if (exportPage) {
+				exportQS = exportQS + "&exportwhat=ContentData";
+			}
+			if (exportBlog) {
+				exportQS = exportQS + "&exportwhat=BlogData";
+			}
+		}
+
+		if (exportBlog || exportPage) {
+			var exportURL = '@String.Format("{0}?", SiteFilename.ContentExportURL)' + exportQS;
+			//alert(exportURL);
+			window.open(exportURL);
+		} else {
+			cmsAlertModal("You must select at least one export data type.");
+		}
+
+	}
+</script>
+
+<fieldset style="width: 650px;">
+	<legend>
+		<label>
+			Export Date Range
+		</label>
+	</legend>
+	<p>
+		Will not restrict selection by any criteria other than page/post content type.<br />
+		<br />
+		<input id="rdoAll" type="radio" name="rdoExportGroup" value="all" checked="checked" />
+		<label for="rdoAll" class="caption">All date ranges</label>
+		<br />
+	</p>
+	<p>
+		<br />
+		Restrict pages/posts to those with a go live data that falls in the selected range
+		<br />
+		<br />
+		<input id="rdoRange" type="radio" name="rdoExportGroup" value="range" />
+		<label for="rdoRange" class="caption">Selected date range</label>&nbsp;&nbsp;&nbsp;
+		From : <input name="txtBegin" type="text" value="@dtBegin.ToString("MM/dd/yyyy")" size="12" id="txtBegin" class="dateRegion" />
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		Through : <input name="txtEnd" type="text" value="@dtEnd.ToString("MM/dd/yyyy")" size="12" id="txtEnd" class="dateRegion" />
+		<br />
+	</p>
+	<p>
+		<br />
+		Only export pages that fall under the hierarchy of the selected page. Does not affect blog post selection.
+	</p>
+	<div style="clear: both">
+		<div style="float: left; margin-top: 8px;">
+			<input id="rdoScope" type="radio" name="rdoExportGroup" value="scope" />
+		</div>
+		<div style="float: left;">
+			<!-- parent page plugin-->
+			@{
+				var drill = new SitePageDrillDownModel {
+					FieldName = "txtPageNodeID",
+					CurrentPageID = Guid.Empty,
+					SelectedPageID = null
+				};
+			}
+
+			@Html.Partial("_SitePageDrillDown", drill)
+		</div>
+	</div>
+</fieldset>
+<fieldset style="width: 650px;">
+	<legend>
+		<label>
+			Export Data Types
+		</label>
+	</legend>
+	<p>
+		<input id="chkBlog" type="checkbox" name="chkBlog" checked="checked" />
+		<label for="chkBlog">Blog Posts</label> <br />
+		<input id="chkPage" type="checkbox" name="chkPage" checked="checked" />
+		<label for="chkPage">Content Pages</label> <br />
+		<input id="chkComment" type="checkbox" name="chkComment" />
+		<label for="chkComment">Comments for Selected Pages / Posts</label> <br />
+	</p>
+</fieldset>
+
+<input name="btnExport" type="button" id="btnExport" value="Export Site" onclick="ExportContent();" />

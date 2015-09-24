@@ -1,0 +1,104 @@
+﻿@model PageChildSortModel
+
+@{
+	ViewBag.Title = "Sort Child / Sub Pages";
+
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+}
+
+<script type="text/javascript">
+
+	function BuildOrder() {
+		var map = "#@Html.IdFor(m => m.Sort)";
+		$(map).val('');
+
+		$("#sortable li").each(function (i) {
+			var itm = $(this);
+			var id = itm.attr('id');
+
+			var v = i + '\t' + id;
+			$(map).val($(map).val() + '\r\n ' + v);
+		});
+	}
+
+	function WireUpSorting() {
+		$("#sortable").sortable({
+			placeholder: "ui-state-highlight",
+			update: function (event, ui) {
+				setTimeout("BuildOrder();", 250);
+			}
+		});
+		$("#sortable").disableSelection();
+
+		setTimeout("BuildOrder();", 250);
+	}
+
+	$(document).ready(function () {
+		WireUpSorting();
+	});
+
+	function AutoSort() {
+		setTimeout("ClickBtn('true');", 100);
+	}
+
+	function SaveSort() {
+		setTimeout("ClickBtn('false');", 100);
+	}
+
+	function ClickBtn(v) {
+		$("#@Html.IdFor(m => m.SortChild)").val(v);
+		$('#btnSave').click();
+	}
+</script>
+<style type="text/css">
+	#sortable {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		width: 700px;
+	}
+
+		#sortable li {
+			margin: 5px;
+			padding: 5px;
+			height: 2.5em;
+		}
+
+		html > body #sortable li {
+			line-height: 1.1em;
+		}
+
+	.ui-state-highlight {
+		line-height: 1.1em;
+	}
+</style>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	<p>
+		@Html.DropDownListFor(m => m.SelectedSort, new SelectList(Model.SortOptions, "Key", "Value"), "[Select]")
+		<input type="button" name="btnSort" value="Apply Sort Preset" id="btnSort" onclick="AutoSort()" />
+	</p>
+
+	if (Model.Pages.Any()) {
+		<ul id="sortable">
+			@foreach (var m in Model.Pages) {
+				<li class="ui-state-default" id="@m.Root_ContentID">
+					@m.NavigationText
+					&nbsp;&nbsp;&nbsp;
+					@String.Format(" [{0}] ", m.FileName)
+				</li>
+			}
+		</ul>
+
+		@Html.HiddenFor(m => m.Root_ContentID)
+		@Html.HiddenFor(m => m.SortChild)
+
+		<div style="display: none;">
+			@Html.TextAreaFor(m => m.Sort, new { rows = "5", cols = "60", style = "width: 475px;" })
+			<input type="submit" name="btnSave" value="Save" id="btnSave" />
+		</div>
+
+		<input type="button" name="btnSaveButton" value="Save" id="btnSaveButton" onclick="SaveSort()" />
+	}
+}

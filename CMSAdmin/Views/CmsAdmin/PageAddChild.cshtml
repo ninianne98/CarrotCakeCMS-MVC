@@ -1,0 +1,371 @@
+﻿@model ContentPageModel
+
+@{
+	ViewBag.Title = "Add Page Info";
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+
+	string editCSS = "mceEditor";
+
+	if (ViewBag.ContentEditMode == "raw") {
+		editCSS = "rawEditor";
+	}
+}
+
+@if (!Model.VisitPage) {
+
+	<script type="text/javascript">
+		var webSvc = cmsGetServiceAddress();
+
+		var thePageID = '@Model.ContentPage.Root_ContentID';
+
+		var tTitle = '#@Html.IdFor(m => m.ContentPage.TitleBar)';
+		var tNav = '#@Html.IdFor(m => m.ContentPage.NavMenuText)';
+		var tHead = '#@Html.IdFor(m => m.ContentPage.PageHead)';
+		var tValidFile = '#@Html.IdFor(m => m.ContentPage.FileName)';
+
+		var thePage = '';
+
+		function exportPage() {
+			window.open('@String.Format("{0}?id={1}", SiteFilename.ContentExportURL, Model.ContentPage.Root_ContentID)');
+		}
+
+		function AutoGeneratePageFilename() {
+			var theTitle = $(tTitle).val();
+			var theFile = $(tValidFile).val();
+			var theNav = $(tNav).val();
+
+			if (theTitle.length > 0 && theFile.length < 1 && theNav.length < 1) {
+				GeneratePageFilename();
+			}
+		}
+
+		function GeneratePageFilename() {
+			var theTitle = $(tTitle).val();
+			var theFile = $(tValidFile).val();
+			var sGoLiveDate = $('#@Html.IdFor(m => m.ContentPage.GoLiveDate)').val();
+
+			if (theTitle.length > 0) {
+
+				var webMthd = webSvc + "/GenerateNewFilename";
+				var myPageTitle = MakeStringSafe(theTitle);
+
+				$.ajax({
+					type: "POST",
+					url: webMthd,
+					data: JSON.stringify({ ThePageTitle: myPageTitle, GoLiveDate: sGoLiveDate, PageID: thePageID, Mode: 'page' }),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: ajaxGeneratePageFilename,
+					error: cmsAjaxFailed
+				});
+			} else {
+				cmsAlertModalSmall("Cannot create a filename with there is no title value assigned.");
+			}
+		}
+
+		function ajaxGeneratePageFilename(data, status) {
+			//debugger;
+			if (data.d == "FAIL") {
+				cmsAlertModal(data.d);
+			} else {
+				var theTitle = $(tTitle).val();
+				var theFile = $(tValidFile).val();
+				var theNav = $(tNav).val();
+				var theHead = $(tHead).val();
+
+				if (theFile.length < 3) {
+					$(tValidFile).val(data.d);
+				}
+				if (theNav.length < 1) {
+					$(tNav).val(theTitle);
+				}
+				if (theHead.length < 1) {
+					$(tHead).val(theTitle);
+				}
+			}
+			CheckFileName();
+		}
+
+		function CheckFileName() {
+			thePage = $(tValidFile).val();
+
+			var webMthd = webSvc + "/ValidateUniqueFilename";
+			var myPage = MakeStringSafe(thePage);
+
+			$.ajax({
+				type: "POST",
+				url: webMthd,
+				data: JSON.stringify({ TheFileName: myPage, PageID: thePageID }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: editFilenameCallback,
+				error: cmsAjaxFailed
+			});
+		}
+
+		$(document).ready(function () {
+			setTimeout("CheckFileName();", 250);
+		});
+
+		function editFilenameCallback(data, status) {
+			if (data.d != "FAIL" && data.d != "OK") {
+				cmsAlertModal(data.d);
+			}
+
+			var act = true;
+			if (data.d == "OK") {
+				act = false;
+			}
+
+			cmsFlipValidationCss(tValidFile, act, 'validationExclaimBox', 'validationExclaim', 'Filename not unique');
+		}
+
+		function EditHB() { }
+
+		function cancelEditing() { }
+
+		function deleteContent() { }
+
+		function cmsRecordCancellation() { }
+
+		function openPage() { }
+
+		var cmsIsPageLocked = @Model.ContentPage.IsPageLocked.ToString().ToLower();
+
+		$(document).ready(function () {
+			if (!cmsIsPageLocked) {
+				// these click events because of stoopid IE9 navigate away behavior
+				$('#nav-menu a.lnkPopup').each(function (i) {
+					$(this).click(function () {
+						cmsMakeOKToLeave();
+						setTimeout("cmsMakeNotOKToLeave();", 500);
+					});
+				});
+
+				$('#PageContents a').each(function (i) {
+					$(this).click(function () {
+						cmsMakeOKToLeave();
+						setTimeout("cmsMakeNotOKToLeave();", 500);
+					});
+				});
+			}
+		});
+	</script>
+
+	<script type="text/javascript">
+		var webSvc = cmsGetServiceAddress();
+		var thisPageID = '@Model.ContentPage.Root_ContentID';
+
+		function cmsGetWidgetText(val) {
+
+			var webMthd = webSvc + "/GetWidgetLatestText";
+
+			$.ajax({
+				type: "POST",
+				url: webMthd,
+				data: JSON.stringify({ DBKey: val, ThisPage: thisPageID }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: cmsReqContentCallback,
+				error: cmsAjaxFailed
+			});
+		}
+
+		function cmsDoToolTipDataRequest(val) {
+			cmsGetWidgetText(val);
+		}
+
+		function cmsReqContentCallback(data, status) {
+			if (data.d == "FAIL") {
+				cmsSetHTMLMessage('<i>An error occurred. Please try again.</i>');
+			} else {
+				cmsSetTextMessage(data.d);
+			}
+		}
+	</script>
+
+	<p>This creates a basic page with the specified filename and title etc. You will have the opportunity to update the appearance when you visit the new page. </p>
+
+	<div>
+		@CmsHelpers.DisplayErrorPopupButton()
+		<br />
+		<br />
+	</div>
+
+	using (Html.BeginForm()) {
+		@Html.AntiForgeryToken()
+		<table style="width: 700px;">
+			<tr>
+				<td class="tablecaption">
+					titlebar:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.ContentPage.TitleBar, new { size = "60", @class = "form-control-xlg", onblur = "AutoGeneratePageFilename()" })
+					@Html.ValidationMessageFor(m => m.ContentPage.TitleBar, "", new { @class = "validationError" })
+					<a href="javascript:void(0)" onclick="GeneratePageFilename()" class="lnkPopup">
+						<img class="imgNoBorder" src="~/Assets/Admin/Images/page_white_wrench.png" title="Generate Filename and other Title fields" alt="Generate Filename and other Title fields" />
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					filename:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.ContentPage.FileName, new { size = "60", @class = "form-control-xlg", onblur = "CheckFileName()" })
+					@Html.ValidationMessageFor(m => m.ContentPage.FileName, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					navigation:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.ContentPage.NavMenuText, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.ContentPage.NavMenuText, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					page head:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.ContentPage.PageHead, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.ContentPage.PageHead, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					&nbsp;
+				</td>
+				<td>
+					@Html.CheckBoxFor(m => m.ContentPage.PageActive)
+					<label for="chkActive">Show publicly</label>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 125px;" class="tablecaption">
+					meta keywords:
+				</td>
+				<td>
+					@Html.TextAreaFor(m => m.ContentPage.MetaKeyword, new { rows = "4", cols = "60", style = "width: 475px;" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					meta description:
+				</td>
+				<td>
+					@Html.TextAreaFor(m => m.ContentPage.MetaDescription, new { rows = "4", cols = "60", style = "width: 475px;" })
+				</td>
+			</tr>
+			<tr style="display: none">
+				<td class="tablecaption">
+					sort:
+				</td>
+				<td>
+					@Html.HiddenFor(m => m.ContentPage.NavOrder)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					parent page:
+					<br />
+				</td>
+				<td>
+					<!-- parent page plugin-->
+					@{
+		var drill = new SitePageDrillDownModel {
+			FieldName = Html.NameFor(m => m.ContentPage.Parent_ContentID).ToString(),
+			CurrentPageID = Model.ContentPage.Root_ContentID,
+			SelectedPageID = Model.ContentPage.Parent_ContentID
+		};
+					}
+
+					@Html.Partial("_SitePageDrillDown", drill)
+
+					<div style="clear: both; height: 2px;">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					template:
+				</td>
+				<td>
+					@Html.DropDownListFor(m => m.ContentPage.TemplateFile, new SelectList(Model.SiteTemplates, "TemplatePath", "Caption"))
+					@Html.ValidationMessageFor(m => m.ContentPage.TemplateFile, "", new { @class = "validationError" })
+					@*&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="button" onclick="cmsPreviewTemplate()" value="Preview" />*@
+				</td>
+			</tr>
+		</table>
+		<br />
+
+		<div style="margin-bottom: 25px;">
+			<div id="divCenter">
+				body (main/center)<br />
+			</div>
+			@Html.TextAreaFor(m => m.ContentPage.PageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 300px; width: 850px;" })
+			<br />
+		</div>
+
+		<input type="submit" name="btnSaveButton" value="Create" onclick="SubmitPage()" id="btnSaveButton" />
+		<br />
+		<div style="display: none;">
+			@Html.TextBoxFor(m => m.ContentPage.GoLiveDate)
+			@Html.TextBoxFor(m => m.ContentPage.RetireDate)
+			@Html.TextBoxFor(m => m.ContentPage.CreateDate)
+			@Html.TextBoxFor(m => m.ContentPage.EditDate)
+			@Html.HiddenFor(m => m.ContentPage.ShowInSiteMap)
+			@Html.HiddenFor(m => m.ContentPage.ShowInSiteNav)
+
+			@Html.HiddenFor(m => m.ContentPage.Root_ContentID)
+			@*@Html.HiddenFor(m => m.ContentPage.TemplateFile)*@
+			@Html.HiddenFor(m => m.ContentPage.ContentType)
+			@Html.HiddenFor(m => m.ContentPage.SiteID)
+
+			@Html.HiddenFor(m => m.ParentID)
+
+			<div id="formPrettyValidationSummary">
+				@Html.ValidationSummary(true, "")
+			</div>
+
+			<input type="submit" name="btnSave" value="Create" id="btnSave" />
+		</div>
+	}
+
+	<script type="text/javascript">
+		function SubmitPage() {
+			var ret = tinyMCE.triggerSave();
+			ClickSaveBtn();
+		}
+
+		function ClickSaveBtn() {
+			if (cmsIsPageValid()) {
+				$('#btnSave').click();
+			}
+			return true;
+		}
+	</script>
+} else {
+	<h2>
+		The page
+		<a id="lnkNew" target="_blank" href="@Model.ContentPage.FileName">
+			@Model.ContentPage.FileName
+			<img class="imgNoBorder" src="~/Assets/Admin/images/html2.png" title="Visit page" alt="Visit page" />
+		</a>
+		has been created.
+	</h2>
+	<h3>
+		<a href="@Url.Action("PageAddChild", new { @id = Model.ParentID })" id="lnkCreatePage">
+			<img class="imgNoBorder" src="~/Assets/Admin/images/add.png" alt="Add" title="Add" />
+			Create Another Page
+		</a>
+	</h3>
+}
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>

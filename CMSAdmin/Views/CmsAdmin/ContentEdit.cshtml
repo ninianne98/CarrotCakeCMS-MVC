@@ -1,0 +1,52 @@
+﻿@model Carrotware.CMS.Mvc.UI.Admin.Models.ContentSingleModel
+
+@{
+	ViewBag.Title = "Edit Content";
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+
+	string editCSS = "mceEditor";
+
+	if (Model.Mode.ToLower() == "plain") {
+		editCSS = "rawEditor";
+	}
+
+}
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div style="margin-bottom: 25px;">
+		@*<div id="divCenter">
+				<a href="javascript:cmsToggleTinyMCE('@Html.IdFor(m => m.PageText)');">Show/Hide Editor</a>
+			</div>*@
+		@Html.TextAreaFor(m => m.PageText, new { rows = "20", cols = "100", @class = @editCSS, @style = "height: 300px; width: 800px;" })
+		<br>
+	</div>
+	<div style="margin-top: 25px;">
+		<input name="btnSaveButton" value="Apply" onclick="SubmitPageRich();" id="btnSaveButton" type="submit">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<br>
+	</div>
+	<div style="display: none;">
+		<input name="btnSave" value="Apply" id="btnSave" type="submit">
+		@Html.HiddenFor(x => x.PageId)
+		@Html.HiddenFor(x => x.WidgetId)
+		@Html.HiddenFor(x => x.Field)
+		@Html.HiddenFor(x => x.Mode)
+	</div>
+
+	<script type="text/javascript">
+		function SubmitPageRich() {
+			var ret = tinyMCE.triggerSave();
+			setTimeout("ClickBtn();", 500);
+		}
+
+		function SubmitPagePlain() {
+			setTimeout("ClickBtn();", 250);
+		}
+
+		function ClickBtn() {
+			$('#btnSave').click();
+		}
+	</script>
+
+}

@@ -1,0 +1,180 @@
+﻿@model Carrotware.CMS.Core.ContentCategory
+
+@{
+	ViewBag.Title = "Category Add/Edit";
+}
+
+<script type="text/javascript">
+	var webSvc = cmsGetServiceAddress();
+
+	var theItemID = '@Model.ContentCategoryID';
+
+	var tSlug = '#@Html.IdFor(m => m.CategorySlug)';
+	var tCaption = '#@Html.IdFor(m => m.CategoryText)';
+
+	var theSlug = '';
+
+	function CheckSlug() {
+		theSlug = $(tSlug).val();
+
+		var webMthd = webSvc + "/ValidateUniqueCategory";
+		var mySlug = MakeStringSafe(theSlug);
+
+		$.ajax({
+			type: "POST",
+			url: webMthd,
+			data: JSON.stringify({ TheSlug: mySlug, ItemID: theItemID }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: editSlugCallback,
+			error: cmsAjaxFailed
+		});
+	}
+
+	function GenerateSlug() {
+		var theSlug = $(tSlug).val();
+
+		var webMthd = webSvc + "/GenerateCategoryTagSlug";
+
+		if (theSlug.length < 1) {
+			var theText = $(tCaption).val();
+			var mySlug = MakeStringSafe(theText);
+
+			$.ajax({
+				type: "POST",
+				url: webMthd,
+				data: JSON.stringify({ TheSlug: mySlug, Mode: 'Category' }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: editSlug,
+				error: cmsAjaxFailed
+			});
+
+		} else {
+			CheckSlug();
+		}
+	}
+
+	function editSlugCallback(data, status) {
+		if (data.d != "FAIL" && data.d != "OK") {
+			cmsAlertModal(data.d);
+		}
+
+		var act = true;
+		if (data.d == "OK") {
+			act = false;
+		}
+
+		cmsFlipValidationCss(tSlug, act, 'validationExclaimBox', 'validationExclaim', 'Slug not unique');
+	}
+
+	function editSlug(data, status) {
+		if (data.d == "FAIL") {
+			cmsAlertModal(data.d);
+		} else {
+			$(tSlug).val(data.d);
+		}
+
+		CheckSlug();
+	}
+
+	$(document).ready(function () {
+		setTimeout("CheckSlug();", 750);
+	});
+</script>
+
+<div>
+	@CmsHelpers.DisplayErrorPopupButton()
+	<br />
+	<br />
+</div>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<table style="width: 700px;">
+		<tr>
+			<td style="width: 90px;" class="tablecaption">
+				caption:
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.CategoryText, new { size = "45", onblur = "GenerateSlug()" })
+				@Html.ValidationMessageFor(m => m.CategoryText, "", new { @class = "validationError" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				url slug:
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.CategorySlug, new { size = "45", onblur = "CheckSlug()" })
+				@Html.ValidationMessageFor(m => m.CategorySlug, "", new { @class = "validationError" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				public:
+			</td>
+			<td>
+				@Html.CheckBoxFor(m => m.IsPublic)
+			</td>
+		</tr>
+	</table>
+	<br />
+	<input type="submit" name="btnSaveButton" value="Save" id="btnSaveButton" /><text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</text>
+	<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing();" /><text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</text>
+	if (Model.ContentCategoryID != Guid.Empty) {
+		<input type="button" id="btnDeleteButton" value="Delete" onclick="return DeleteItem();" />
+	}
+
+	<div style="display: none">
+		@Html.HiddenFor(m => m.ContentCategoryID)
+
+		<div id="formPrettyValidationSummary">
+			@Html.ValidationSummary(true, "")
+		</div>
+	</div>
+
+}
+
+<div style="display: none">
+	@using (Html.BeginForm("CategoryDelete", RouteConfig.AdminCtrlr)) {
+		@Html.AntiForgeryToken()
+
+		@Html.HiddenFor(m => m.ContentCategoryID)
+
+		<input type="submit" name="btnDelete" value="Delete" id="btnDelete" />
+	}
+</div>
+
+<script type="text/javascript">
+
+	function DeleteItem() {
+		var opts = {
+			"No": function () { cmsAlertModalClose(); },
+			"Yes": function () { ClickDeleteItem(); }
+		};
+
+		cmsAlertModalSmallBtns('Are you sure you want to delete this item?  This will untag any content using this keyword.', opts);
+
+		return false;
+	}
+
+	function ClickDeleteItem() {
+		$('#btnDelete').click();
+	}
+
+	function cancelEditing() {
+		window.setTimeout("location.href = '@SiteFilename.CategoryIndexURL';", 250);
+	}
+
+	$(document).ready(function () {
+		cmsInputEnterBlock();
+	})
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		cmsInputEnterBlock();
+	});
+</script>

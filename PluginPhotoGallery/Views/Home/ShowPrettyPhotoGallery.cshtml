@@ -1,0 +1,27 @@
+﻿@model  CarrotCake.CMS.Plugins.PhotoGallery.Models.GalleryModel
+
+<link href="~/Assets/prettyPhoto/prettyPhoto.css" rel="stylesheet" />
+<script src="~/Assets/prettyPhoto/jquery.prettyPhoto.js"></script>
+
+@if (Model.ShowHeading) {
+	<h2>
+		@Model.Gallery.GalleryTitle
+	</h2>
+}
+
+<div class="prettyphotoGallery gallery" id="@Model.InstanceId">
+	@foreach (var item in Model.Images) {
+		<a target="_blank" href="@item.GalleryImage" rel="prettyPhoto[@Model.InstanceId]" title="@item.GalleryImage">
+			@CarrotWeb.ImageSizer(item.GalleryImage, item.GalleryImage, Model.ThumbSize, Model.ScaleImage, null)
+		</a>
+	}
+</div>
+
+<div style="clear: both;">
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		InitPrettyPhoto("#@Model.InstanceId a[rel^='prettyPhoto']", '@Model.PrettyPhotoSkin');
+	});
+</script>

@@ -1,0 +1,384 @@
+﻿@model Carrotware.CMS.Core.ContentSnippet
+
+@{
+	ViewBag.Title = "Content Snippet Add/Edit";
+
+	string editCSS = "mceEditor";
+
+	if (ViewBag.ContentEditMode == "raw") {
+		editCSS = "rawEditor";
+	}
+}
+
+@section scripts{
+
+	<script type="text/javascript">
+		var webSvc = cmsGetServiceAddress();
+
+		var thePageID = '@Model.Root_ContentSnippetID';
+
+		var tValidSlug = '#@Html.IdFor(m => m.ContentSnippetSlug)';
+		var tCaption = '#@Html.IdFor(m => m.ContentSnippetName)';
+
+		var thePage = '';
+
+		function CheckSlug() {
+			thePage = $(tValidSlug).val();
+
+			var webMthd = webSvc + "/ValidateUniqueSnippet";
+			var myPage = MakeStringSafe(thePage);
+
+			$.ajax({
+				type: "POST",
+				url: webMthd,
+				data: JSON.stringify({ TheSlug: myPage, ItemID: thePageID }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: editSlugCallback,
+				error: cmsAjaxFailed
+			});
+		}
+
+		function GenerateSlug() {
+			var theSlug = $(tValidSlug).val();
+
+			var webMthd = webSvc + "/GenerateSnippetSlug";
+
+			if (theSlug.length < 1) {
+				var theText = $(tCaption).val();
+				var mySlug = MakeStringSafe(theText);
+
+				$.ajax({
+					type: "POST",
+					url: webMthd,
+					data: JSON.stringify({ TheSlug: mySlug }),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: editSlug,
+					error: cmsAjaxFailed
+				});
+
+			} else {
+				CheckSlug();
+			}
+		}
+
+		$(document).ready(function () {
+			setTimeout("CheckSlug();", 250);
+		});
+
+		function editSlugCallback(data, status) {
+			if (data.d != "FAIL" && data.d != "OK") {
+				cmsAlertModal(data.d);
+			}
+
+			var act = true;
+			if (data.d == "OK") {
+				act = false;
+			}
+
+			cmsFlipValidationCss(tValidSlug, act, 'validationExclaimBox', 'validationExclaim', 'Content slug not unique');
+		}
+
+		function editSlug(data, status) {
+			if (data.d == "FAIL") {
+				cmsAlertModal(data.d);
+			} else {
+				$(tValidSlug).val(data.d);
+			}
+
+			CheckSlug();
+		}
+
+		$(document).ready(function () {
+			// these click events because of stoopid IE9 navigate away behavior
+			$('#nav-menu a.lnkPopup').each(function (i) {
+				$(this).click(function () {
+					cmsMakeOKToLeave();
+					setTimeout("cmsMakeNotOKToLeave();", 500);
+				});
+			});
+
+		});
+
+		function cancelEditing() {
+
+			$("#divCMSCancelWinMsg").text('Are you sure you want to leave the editor? All changes will be lost!');
+
+			$("#divCMSCancelWin").dialog({
+				open: function () {
+					$(this).parents('.ui-dialog-buttonpane button:eq(0)').focus();
+				},
+
+				resizable: false,
+				height: 350,
+				width: 450,
+				modal: true,
+				buttons: {
+					"No": function () {
+						$(this).dialog("close");
+					},
+					"Yes": function () {
+						cmsRecordCancellation();
+						cmsMakeOKToLeave();
+						window.setTimeout("location.href = '@SiteFilename.ContentSnippetIndexURL';", 800);
+						$(this).dialog("close");
+					}
+				}
+			});
+		}
+
+		@if (Model.IsLocked) {
+		<text>
+
+		function EditHB() { }
+
+		function cmsRecordCancellation() { }
+		</text>
+		} else {
+			<text>
+
+		function EditHB() {
+			var webMthd = webSvc + "/RecordSnippetHeartbeat";
+			setTimeout("EditHB();", 25 * 1000);
+
+			if(!cmsGetOKToLeaveStatus()){
+
+				$.ajax({
+					type: "POST",
+					url: webMthd,
+					data: JSON.stringify({ ItemID: thePageID }),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: updateHeartbeat,
+					error: cmsAjaxFailedSwallow
+				});
+			}
+		}
+
+		function updateHeartbeat(data, status) {
+			var hb = $('#cmsHeartBeat');
+			hb.empty().append('HB:  ');
+			hb.append(data.d);
+		}
+
+		$(document).ready(function () {
+			setTimeout("EditHB();", 1500);
+		});
+
+		function cmsRecordCancellation() {
+
+			if (thePageID != '@Guid.Empty') {
+
+				var webMthd = webSvc + "/CancelSnippetEditing";
+
+				$.ajax({
+					type: "POST",
+					url: webMthd,
+					data: JSON.stringify({ ItemID: thePageID }),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: cmsAjaxGeneralCallback,
+					error: cmsAjaxFailed
+				});
+			}
+		}
+		</text>
+		}
+
+		var cmsIsPageLocked = @Model.IsLocked.ToString().ToLower();
+
+		$(window).bind('beforeunload', function () {
+			//cmsConfirmLeavingPage = false;
+			if (!cmsIsPageLocked) {
+				if (cmsGetPageStatus()) {
+					return '>>Are you sure you want to navigate away<<';
+				}
+			}
+		});
+
+		$(document).ready(function () {
+			if (!cmsIsPageLocked) {
+				// these click events because of stoopid IE9 navigate away behavior
+				$('#nav-menu a.lnkPopup').each(function (i) {
+					$(this).click(function () {
+						cmsMakeOKToLeave();
+						setTimeout("cmsMakeNotOKToLeave();", 500);
+					});
+				});
+			}
+		});
+	</script>
+
+}
+
+<div>
+	@CmsHelpers.DisplayErrorPopupButton()
+	<br />
+	<br />
+</div>
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<table style="width: 820px;">
+		<tr>
+			<td style="width: 110px;" class="tablecaption">
+				name:
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.ContentSnippetName, new { size = "60", @class = "form-control-xlg", onblur = "GenerateSlug()" })
+				@Html.ValidationMessageFor(m => m.ContentSnippetName, "", new { @class = "validationError" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				slug:
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.ContentSnippetSlug, new { size = "60", @class = "form-control-xlg", onblur = "CheckSlug()" })
+				@Html.ValidationMessageFor(m => m.ContentSnippetSlug, "", new { @class = "validationError" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				release date:
+			</td>
+			<td>
+				@{
+	SplitDateTime gld = new SplitDateTime();
+	gld.CombinedDateTime = Model.GoLiveDate;
+	gld.FieldName = Html.NameFor(model => model.GoLiveDate).ToString();
+				}
+
+				@Html.Partial("_datetime", gld)
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				retire date:
+			</td>
+			<td>
+				@{
+	SplitDateTime rdt = new SplitDateTime();
+	rdt.CombinedDateTime = Model.RetireDate;
+	rdt.FieldName = Html.NameFor(model => model.RetireDate).ToString();
+				}
+
+				@Html.Partial("_datetime", rdt)
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				active:
+			</td>
+			<td>
+				@Html.CheckBoxFor(m => m.ContentSnippetActive)
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				snippet text:
+			</td>
+			<td>
+				@Html.TextAreaFor(m => m.ContentBody, new { rows = "20", cols = "60", @class = @editCSS, style = "height: 300px; width: 650px;" })
+				<br />
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				&nbsp;
+			</td>
+			<td>
+				<div id="cmsHeartBeat" style="clear: both; padding: 2px; margin: 2px; min-height: 22px;">
+					&nbsp;
+				</div>
+			</td>
+		</tr>
+	</table>
+	<div id="pnlButtons">
+
+		<table style="width: 900px;">
+			<tr>
+				<td>
+					<input type="button" name="btnSaveButton" value="Save" onclick="return SubmitPage();" id="btnSaveButton" />
+					&nbsp;&nbsp;
+					<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing()" />
+					&nbsp;&nbsp;
+					@if (Model.Root_ContentSnippetID != Guid.Empty) {
+						<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
+					}
+				</td>
+				<td>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div style="display: none;">
+		<input type="submit" name="btnSave" value="Save" id="btnSave" />
+
+		@Html.HiddenFor(m => m.Root_ContentSnippetID)
+		@Html.HiddenFor(m => m.ContentSnippetID)
+		@Html.HiddenFor(m => m.SiteID)
+
+		<div id="formPrettyValidationSummary">
+			@Html.ValidationSummary(true, "")
+		</div>
+	</div>
+
+}
+
+<div style="display: none">
+	@using (Html.BeginForm("DeleteSnippet", RouteConfig.AdminCtrlr)) {
+		@Html.AntiForgeryToken()
+
+		@Html.HiddenFor(m => m.Root_ContentSnippetID)
+
+		<input type="submit" name="btnDelete" value="Delete" id="btnDelete" />
+	}
+</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+		cmsInputEnterBlock();
+	});
+
+	function deleteContent() {
+
+		var opts = {
+			"No": function () { cmsAlertModalClose(); },
+			"Yes": function () {
+				cmsMakeOKToLeave();
+				$('#btnDelete').click();
+				cmsAlertModalClose();
+			}
+		};
+
+		cmsAlertModalSmallBtns('Are you sure you want to delete this content? All version history and widget data will be lost!', opts);
+
+	}
+
+	function SubmitPage() {
+		var sc = SaveCommon();
+		setTimeout("ClickSaveBtn();", 500);
+		return true;
+	}
+
+	function SubmitPageVisit() {
+		var sc = SaveCommon();
+		setTimeout("ClickSaveVisitBtn();", 500);
+		return true;
+	}
+
+	function ClickSaveBtn() {
+		$('#btnSave').click();
+	}
+
+	function SaveCommon() {
+		var ret = tinyMCE.triggerSave();
+		cmsSaveMakeOKAndCancelLeave();
+		return true;
+	}
+</script>

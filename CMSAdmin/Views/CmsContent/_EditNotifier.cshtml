@@ -1,0 +1,129 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	string ContentIxPage = SiteFilename.PageIndexURL;
+
+	if (CmsPage.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+		ContentIxPage = SiteFilename.BlogPostIndexURL;
+	}
+
+}
+
+<!-- Edit Notify Body -->
+
+<link href="~/Assets/Admin/includes/edit-notifier.css" rel="stylesheet" type="text/css" />
+
+<div style="clear: both;">
+	&nbsp;
+</div>
+
+<div class="cmsNavFooterBox">
+	<p class="cmsFooterP">
+		<a class="cmsFooterLinks" target="_blank" href="@String.Format("{0}PageAddEdit/{1}", SiteData.AdminFolderPath, CmsPage.ThePage.Root_ContentID)">EDIT</a>
+		<a class="cmsFooterLinks" target="_top" href="@String.Format("{0}?{1}=true", CmsPage.ThePage.FileName, SiteData.AdvancedEditParameter)">ADVANCED EDIT</a>
+		<a class="cmsFooterLinks" target="_top" href="@ContentIxPage">CONTENT INDEX</a>
+		<a class="cmsFooterLinks" target="_top" href="@SiteFilename.ModuleIndexURL">MODULE INDEX</a>
+	</p>
+	<p class="cmsFooterP">
+		<a class="cmsFooterLinks" href="~/">HOME PAGE</a>
+
+		@if (CmsPage.ParentNav != null) {
+			<a href="@CmsPage.ParentNav.FileName" id="lnkParent" class="cmsFooterLinks">PARENT PAGE</a>
+		}
+
+		<a href="@CmsPage.ThePage.FileName" id="lnkCurrent" class="cmsFooterLinks">CURRENT PAGE</a>
+
+		@{
+			List<SiteNav> lstNav = (from n in CmsPage.ChildEditNav
+									orderby n.NavOrder
+									select new SiteNav {
+										NavOrder = n.NavOrder,
+										FileName = n.FileName,
+										NavMenuText = (n.NavOrder > 0 ? "  -- " : "") + n.FileName + "  [[" + (n.PageActive ? "" : "{*U*}  ") + n.NavMenuText + "]]",
+										PageActive = n.PageActive,
+										ContentID = n.ContentID,
+										Root_ContentID = n.Root_ContentID,
+										PageHead = n.PageHead,
+										SiteID = n.SiteID
+									}).ToList();
+		}
+
+		@if (lstNav.Any()) {
+
+			<span id="lblCmsChildDDL" class="cmsFooterLinks">CHILD PAGES</span>
+
+			@Html.DropDownList("ddlCmsLinks", new SelectList(lstNav, "FileName", "NavMenuText"), "[Navigate]", new { @onchange = "cmsNavPage(this);" })
+		}
+	</p>
+	<p class="cmsFooterP cmsFooterLinks">
+		@SiteData.CarrotCakeCMSVersion
+	</p>
+	<p class="cmsFooterP cmsFooterLinks">
+		@CmsPage.ThePage.TemplateFile
+	</p>
+	<p class="cmsFooterP cmsFooterLinks">
+		Release Date: @CmsPage.ThePage.GoLiveDate
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		Retire Date: @CmsPage.ThePage.RetireDate
+	</p>
+</div>
+
+<script type="text/javascript">
+	function cmsNavPage(y) {
+		var url = y.options[y.selectedIndex].value;
+
+		if (url != '') {
+			window.setTimeout('location.href = \'' + url + '\'', 500);
+		}
+	}
+</script>
+
+<div id="cmsAdminToolbox1" class="cmsNavigationBlock">
+	<div class="cmsNavBox2">
+		<div class="cmsNavBox1">
+			<a class="cmsNavImageLink" target="_blank" href="@String.Format("{0}PageAddEdit/{1}", SiteData.AdminFolderPath, CmsPage.ThePage.Root_ContentID)">
+				<img alt="EDIT" title="EDIT" src="~/Assets/Admin/Images/application_edit.png" />
+			</a>
+		</div>
+		<div class="cmsNavBox1">
+			<a title="ADVANCED EDIT" class="cmsNavImageLink" target="_top" href="@String.Format("{0}?{1}=true", CmsPage.ThePage.FileName, SiteData.AdvancedEditParameter)">
+				<img alt="ADVANCED EDIT" title="ADVANCED EDIT" src="~/Assets/Admin/Images/overlays.png" />
+			</a>
+		</div>
+		<div class="cmsNavBox1">
+			<a title="CONTENT INDEX" class="cmsNavImageLink" target="_top" href="@ContentIxPage">
+				<img alt="CONTENT INDEX" title="CONTENT INDEX" src="~/Assets/Admin/Images/table.png" />
+			</a>
+		</div>
+		<div class="cmsNavBox2">
+			<a title="MODULE INDEX" class="cmsNavImageLink" target="_top" href="@SiteFilename.ModuleIndexURL">
+				<img alt="MODULE INDEX" title="MODULE INDEX" src="~/Assets/Admin/Images/brick.png" />
+			</a>
+		</div>
+	</div>
+</div>
+
+<div id="cmsAdminToolbox2" class="cmsNavigationBlock">
+	<div class="cmsNavBox2">
+		<div class="cmsNavBox1">
+			<a class="cmsNavImageLink" target="_blank" href="@String.Format("{0}PageAddEdit/{1}", SiteData.AdminFolderPath, CmsPage.ThePage.Root_ContentID)">
+				<img alt="EDIT" title="EDIT" src="~/Assets/Admin/Images/application_edit.png" />
+			</a>
+		</div>
+		<div class="cmsNavBox1">
+			<a title="ADVANCED EDIT" class="cmsNavImageLink" target="_top" href="@String.Format("{0}?{1}=true", CmsPage.ThePage.FileName, SiteData.AdvancedEditParameter)">
+				<img alt="ADVANCED EDIT" title="ADVANCED EDIT" src="~/Assets/Admin/Images/overlays.png" />
+			</a>
+		</div>
+		<div class="cmsNavBox1">
+			<a title="CONTENT INDEX" class="cmsNavImageLink" target="_top" href="@ContentIxPage">
+				<img alt="CONTENT INDEX" title="CONTENT INDEX" src="~/Assets/Admin/Images/table.png" />
+			</a>
+		</div>
+		<div class="cmsNavBox2">
+			<a title="MODULE INDEX" class="cmsNavImageLink" target="_top" href="@SiteFilename.ModuleIndexURL">
+				<img alt="MODULE INDEX" title="MODULE INDEX" src="~/Assets/Admin/Images/brick.png" />
+			</a>
+		</div>
+	</div>
+</div>

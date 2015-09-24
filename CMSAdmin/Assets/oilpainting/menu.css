@@ -1,0 +1,36 @@
+
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+/* Menu */
+
+#menu-wrapper {
+	text-transform: uppercase;
+	font-family: 'Open Sans Condensed', sans-serif;
+	font-size: 14px;
+}
+
+	#menu-wrapper ul:first-child {
+		margin-right: 0;
+		margin-left: 0;
+		padding-left: 0;
+		border-left: 1px solid #1C1916;
+	}
+
+#menu-inner {
+	border: 0 solid #1C1916;
+	margin: 0 auto;
+	padding: 0;
+}
+
+#menu-wrapper li.level1 {
+	margin-right: 0;
+	border-right: 1px solid #1C1916;
+}
+
+#menu-wrapper a {
+	letter-spacing: 1px;
+}

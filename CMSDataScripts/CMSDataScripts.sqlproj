@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>CMSDataScripts</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{be957d52-307d-4eba-8b37-7016f8cd77e0}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>CMSDataScripts</RootNamespace>
+    <AssemblyName>CMSDataScripts</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\membership_UserRole.sql" />
+    <Build Include="dbo\Tables\membership_UserLogin.sql" />
+    <Build Include="dbo\Tables\membership_UserClaim.sql" />
+    <Build Include="dbo\Tables\membership_User.sql" />
+    <Build Include="dbo\Tables\membership_Role.sql" />
+    <Build Include="dbo\Tables\carrot_WidgetData.sql" />
+    <Build Include="dbo\Tables\carrot_Widget.sql" />
+    <Build Include="dbo\Tables\carrot_UserSiteMapping.sql" />
+    <Build Include="dbo\Tables\carrot_UserData.sql" />
+    <Build Include="dbo\Tables\carrot_TrackbackQueue.sql" />
+    <Build Include="dbo\Tables\carrot_TextWidget.sql" />
+    <Build Include="dbo\Tables\carrot_TagContentMapping.sql" />
+    <Build Include="dbo\Tables\carrot_Sites.sql" />
+    <Build Include="dbo\Tables\carrot_SerialCache.sql" />
+    <Build Include="dbo\Tables\carrot_RootContentSnippet.sql" />
+    <Build Include="dbo\Tables\carrot_RootContent.sql" />
+    <Build Include="dbo\Tables\carrot_DataInfo.sql" />
+    <Build Include="dbo\Tables\carrot_ContentType.sql" />
+    <Build Include="dbo\Tables\carrot_ContentTag.sql" />
+    <Build Include="dbo\Tables\carrot_ContentSnippet.sql" />
+    <Build Include="dbo\Tables\carrot_ContentComment.sql" />
+    <Build Include="dbo\Tables\carrot_ContentCategory.sql" />
+    <Build Include="dbo\Tables\carrot_Content.sql" />
+    <Build Include="dbo\Tables\carrot_CategoryContentMapping.sql" />
+    <Build Include="dbo\Views\vw_carrot_Widget.sql" />
+    <Build Include="dbo\Views\vw_carrot_UserData.sql" />
+    <Build Include="dbo\Views\vw_carrot_TrackbackQueue.sql" />
+    <Build Include="dbo\Views\vw_carrot_TagURL.sql" />
+    <Build Include="dbo\Views\vw_carrot_TagCounted.sql" />
+    <Build Include="dbo\Views\vw_carrot_EditorURL.sql" />
+    <Build Include="dbo\Views\vw_carrot_EditHistory.sql" />
+    <Build Include="dbo\Views\vw_carrot_ContentSnippet.sql" />
+    <Build Include="dbo\Views\vw_carrot_ContentChild.sql" />
+    <Build Include="dbo\Views\vw_carrot_Content.sql" />
+    <Build Include="dbo\Views\vw_carrot_Comment.sql" />
+    <Build Include="dbo\Views\vw_carrot_CategoryURL.sql" />
+    <Build Include="dbo\Views\vw_carrot_CategoryCounted.sql" />
+    <Build Include="dbo\Stored Procedures\carrot_UpdateGoLiveLocal.sql" />
+    <Build Include="dbo\Stored Procedures\carrot_BlogMonthlyTallies.sql">
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
+    <Build Include="dbo\Stored Procedures\carrot_BlogDateFilenameUpdate.sql">
+      <QuotedIdentifier>Off</QuotedIdentifier>
+    </Build>
+  </ItemGroup>
+</Project>

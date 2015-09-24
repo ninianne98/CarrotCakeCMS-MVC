@@ -1,0 +1,16 @@
+﻿@model List<string>
+
+@{
+	Layout = Carrotware.CMS.Interface.CarrotLayout.Main;
+	ViewBag.Title = "Gallery Database";
+}
+
+<h3>@ViewBag.Title</h3>
+
+<ol>
+	@foreach (var s in Model) {
+		<li>
+			@s
+		</li>
+	}
+</ol>

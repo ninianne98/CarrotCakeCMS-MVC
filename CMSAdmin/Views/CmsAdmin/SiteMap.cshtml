@@ -1,0 +1,16 @@
+﻿@model IList<SiteMapOrder>
+
+<p>
+	@using (Html.BeginForm("FixOrphan", RouteConfig.AdminCtrlr, FormMethod.Post)) {
+		@Html.AntiForgeryToken()
+		<input type="submit" name="btnFixOrphan" value="Fix Orphaned Pages" id="btnFixOrphan" />
+	}
+</p>
+<p>
+	@using (Html.BeginForm("FixBlog", RouteConfig.AdminCtrlr, FormMethod.Post)) {
+		@Html.AntiForgeryToken()
+		<input type="submit" name="btnFixBlog" value="Fix Blog Navs" id="btnFixBlog" />
+	}
+</p>
+
+@Html.Partial("_SiteMap", Model)

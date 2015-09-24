@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{83B39B26-EC55-4D23-AAE7-0EB3B76BB965}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Carrotware.CMS.Core</RootNamespace>
+    <AssemblyName>Carrotware.CMS.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\..\MvcExpermentSite\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CannedQueries.cs" />
+    <Compile Include="MVC\CmsWebViewPage.cs" />
+    <Compile Include="MVC\CmsTemplateViewEngine.cs" />
+    <Compile Include="ConfigHelper\CarrotCakeConfig.cs" />
+    <Compile Include="ConfigHelper\CMSConfigHelper.cs" />
+    <Compile Include="ConfigHelper\ConfigTypes.cs" />
+    <Compile Include="ConfigHelper\ObjectProperty.cs" />
+    <Compile Include="CompiledQueries.cs" />
+    <Compile Include="MVC\CmsRouteHandler.cs" />
+    <Compile Include="ImportExport\CommentExport.cs" />
+    <Compile Include="ImportExport\ContentImportExportUtils.cs" />
+    <Compile Include="ImportExport\BasicContentData.cs" />
+    <Compile Include="ImportExport\SiteExport.cs" />
+    <Compile Include="ImportExport\InfoKVP.cs" />
+    <Compile Include="ImportExport\SiteExportUser.cs" />
+    <Compile Include="ImportExport\WordPressComment.cs" />
+    <Compile Include="ImportExport\WordPressPost.cs" />
+    <Compile Include="ImportExport\WordPressSite.cs" />
+    <Compile Include="ImportExport\WordPressUser.cs" />
+    <Compile Include="ImportExport\WPBlogReader.cs" />
+    <Compile Include="SearchParameterObject.cs" />
+    <Compile Include="Security\UserRole.cs" />
+    <Compile Include="Security\UserProfile.cs" />
+    <Compile Include="SiteContent\BlogDatePathParser.cs" />
+    <Compile Include="SiteContent\IMetaDataLinks.cs" />
+    <Compile Include="SiteContent\SiteDataStatic.cs" />
+    <Compile Include="Security\ExtendedUserData.cs" />
+    <Compile Include="SiteContent\DataMetaData.cs" />
+    <Compile Include="SiteContent\ContentCategory.cs" />
+    <Compile Include="SiteContent\ContentEditor.cs" />
+    <Compile Include="SiteContent\ContentPage.cs" />
+    <Compile Include="ImportExport\ContentPageExport.cs" />
+    <Compile Include="SiteContent\ContentPageHelper.cs" />
+    <Compile Include="SiteContent\ContentPageType.cs" />
+    <Compile Include="SiteContent\ContentSnippet.cs" />
+    <Compile Include="SiteContent\ContentTag.cs" />
+    <Compile Include="SiteContent\EditHistory.cs" />
+    <Compile Include="MVC\PagePayload.cs" />
+    <Compile Include="SiteContent\PageViewType.cs" />
+    <Compile Include="SiteContent\PostComment.cs" />
+    <Compile Include="SiteContent\SiteMapHelper.cs" />
+    <Compile Include="SiteContent\SiteNavHelper.cs" />
+    <Compile Include="SiteContent\SiteNavHelperMock.cs" />
+    <Compile Include="SiteContent\ISiteNavHelper.cs" />
+    <Compile Include="SiteContent\SiteMapOrder.cs" />
+    <Compile Include="SiteContent\SiteMapOrderHelper.cs" />
+    <Compile Include="SiteContent\SiteNav.cs" />
+    <Compile Include="SiteContent\SiteNavHelperReal.cs" />
+    <Compile Include="SiteContent\TextWidget.cs" />
+    <Compile Include="SiteContent\TrackBackEntry.cs" />
+    <Compile Include="SiteFilename.cs" />
+    <Compile Include="SiteContent\ISiteContent.cs" />
+    <Compile Include="SiteContent\WidgetHelper.cs" />
+    <Compile Include="Security\SecurityData.cs" />
+    <Compile Include="ConfigHelper\UserEditState.cs" />
+    <Compile Include="ConfigHelper\LabeledControl.cs" />
+    <Compile Include="SiteContent\Widget.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SiteContent\SiteData.cs" />
+    <Compile Include="Utilities\FileData.cs" />
+    <Compile Include="Utilities\SiteTimeZone.cs" />
+    <Compile Include="Utilities\TrackbackHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CarrotCMSData\CMSData.csproj">
+      <Project>{88CC5073-9F28-42EB-A502-133DB06865A7}</Project>
+      <Name>CMSData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMSDBUpdater\CMSDBUpdater.csproj">
+      <Project>{18B29BF3-D8DE-4BF4-AC22-2DD5AE389DEC}</Project>
+      <Name>CMSDBUpdater</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMSInterfaces\CMSInterfaces.csproj">
+      <Project>{33D1EA6C-65EA-4234-9861-C1C88317B78A}</Project>
+      <Name>CMSInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CMSSecurity\CMSSecurity.csproj">
+      <Project>{92b1049e-7381-4805-8b60-30dc61efc014}</Project>
+      <Name>CMSSecurity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebComponents\WebComponents.csproj">
+      <Project>{5ad0fff2-6700-41ac-85bd-4f7452fdb7b7}</Project>
+      <Name>WebComponents</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Security\EmailForgotPassMsg.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SiteContent\Mock\SampleContent2.txt" />
+    <EmbeddedResource Include="SiteContent\Mock\SampleContent1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SiteContent\Mock\sample1.png" />
+    <EmbeddedResource Include="SiteContent\Mock\sample2.png" />
+    <EmbeddedResource Include="SiteContent\Mock\sample3.png" />
+    <EmbeddedResource Include="SiteContent\Mock\sample4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SiteContent\ErrorFormat.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SiteContent\Default.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SiteContent\Mock\SampleContent3.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SiteContent\FirstPage.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

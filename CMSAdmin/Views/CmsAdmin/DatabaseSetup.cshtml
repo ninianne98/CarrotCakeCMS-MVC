@@ -1,0 +1,58 @@
+﻿@model DatabaseSetupModel
+
+@{
+	ViewBag.Title = "Create Database";
+
+	Layout = "~/Views/CmsAdmin/_LayoutPublic.cshtml";
+}
+
+<div style="height: 20px; width: 18px; float: right; border: 1px solid #ffffff; clear: both;">
+	<a href="~/">
+		<img class="imgNoBorder" src="~/Assets/Admin/Images/house_go.png" alt="Homepage" title="Homepage" />
+	</a>
+</div>
+<div style="border: solid 0  transparent; width: 375px; height: 140px; overflow: auto;" class="okMsg">
+
+	@foreach (var itm in Model.Messages) {
+		<div>
+			<div>
+				<b>
+					@if (itm.HasException) {
+						<img class="imgNoBorder" src="~/Assets/Admin/Images/exclamation.png" alt="Error" title="Error" />
+					} else {
+						if (itm.AlteredData) {
+							<img class="imgNoBorder" src="~/Assets/Admin/Images/lightbulb.png" alt="Executed" title="Executed" />
+						} else {
+							<img class="imgNoBorder" src="~/Assets/Admin/Images/lightbulb_off.png" alt="Skipped" title="Skipped" />
+						}
+					}
+
+					@itm.Message
+				</b>
+				@itm.Response
+			</div>
+			@if (itm.HasException) {
+				<div>
+					@itm.ExceptionText
+				</div>
+				<div>
+					<i>
+						@itm.InnerExceptionText
+					</i>
+				</div>
+			}
+			<hr />
+		</div>
+	}
+</div>
+<div>
+	@if (Model.CreateUser) {
+		<input type="button" name="btnNext" value="Create First User" id="btnNext" onclick="location.href = '@SiteFilename.CreateFirstAdminURL';" />
+	} else {
+		<input type="button" name="btnNext" value="Continue" id="btnNext" onclick="location.href = '@SiteFilename.DashboardURL';" />
+	}
+</div>
+<p>
+	<a href="@String.Format("{0}?", SiteFilename.DatabaseSetupURL)">Re-run</a> &nbsp;
+	| &nbsp; <a href="@String.Format("{0}?signout=true", SiteFilename.DatabaseSetupURL)">Re-run with signout</a>
+</p>

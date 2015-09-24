@@ -1,0 +1,278 @@
+/*
+Main CarrotCake CMS stylesheet
+*/
+body {
+	margin: 0;
+	padding: 0;
+	background: #ffffff;
+	color: #000000;
+	font-family: Georgia, Times New Roman, Serif;
+	font-size: 12px;
+	min-width: 1080px;
+	width: 100%;
+}
+
+h1, h2, h3 {
+	margin: 0 0 0.5em 0;
+	padding: 0;
+	font-weight: bold;
+	font-family: Georgia, Times New Roman, Serif;
+	color: #69775F;
+}
+
+H1 {
+	font-size: 24px;
+}
+
+H2 {
+	font-size: 20px;
+}
+
+H3 {
+	font-size: 16px;
+}
+
+.headingColor {
+	color: #69775F;
+	font-family: Georgia, Times New Roman, Serif;
+	font-weight: bold;
+}
+
+/* Header */
+#headercontainer {
+	margin: 0;
+	padding: 0;
+	height: 115px; /*background: #468B5E;  */
+	background: #7dad8e url(../images/heading-gradient.png) repeat-x;
+	min-width: 1080px;
+	width: 100%;
+}
+
+#header {
+	font-family: Georgia, Times New Roman, Serif;
+	margin: 0;
+	padding: 0;
+	height: 110px;
+	width: 1080px;
+	margin-left: 50px;
+}
+
+	#header h1, #header h2, #header h3 {
+		font-weight: bolder;
+		color: #FFFFFF;
+		font-family: Georgia, Times New Roman, Serif;
+		padding: 2px;
+		margin: 2px;
+	}
+
+	#header h1 {
+		float: left;
+		padding: 20px 0 0 20px;
+		font-size: 36px;
+	}
+
+	#header h2 {
+		float: left;
+		padding: 20px 0 0 0;
+		font-size: 28px;
+	}
+
+	#header h3 {
+		float: left;
+		padding: 10px 0 0 0;
+		font-size: 20px;
+		color: #3F3F3F;
+	}
+
+/* Menu */
+
+#nav-menu-container {
+	margin: 0;
+	padding: 0;
+	font: normal 14px 'Segoe UI',Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif; /* background: #3F3F3F;  */
+	background: #3F3F3F url(../images/menu-gradient.png) repeat-x;
+	font-weight: normal;
+	min-width: 1080px;
+	width: 100%;
+}
+
+#nav-menu {
+	margin: 0;
+	padding: 0;
+	height: 3em;
+	list-style: none;
+	z-index: 990;
+	margin-left: 50px;
+}
+
+	#nav-menu > li {
+		float: left;
+		height: 100%;
+		margin-right: 0.3em;
+		padding: 0 1em;
+	}
+
+		#nav-menu > li > a {
+			float: left;
+			height: 100%;
+			color: #ffffff;
+			text-decoration: none;
+			line-height: 3em;
+		}
+
+		#nav-menu > li.current > a {
+			font-weight: bolder;
+		}
+
+		#nav-menu > li.current > ul > li > a {
+			font-weight: normal;
+		}
+
+		#nav-menu > li > a:hover {
+			text-decoration: underline;
+		}
+
+		#nav-menu > li.sub {
+			position: relative;
+			z-index: 998;
+		}
+
+			#nav-menu > li.sub ul {
+				width: 14em;
+				margin: 0;
+				padding: 0.4em 0;
+				list-style: none;
+				background: #2D2D2D;
+				position: absolute;
+				top: -1000em;
+			}
+
+				#nav-menu > li.sub ul li {
+					width: 90%;
+					margin: 0 auto 0.2em auto;
+				}
+
+					#nav-menu > li.sub ul li a {
+						height: 100%;
+						display: block;
+						padding: 0.3em;
+						color: #fff;
+						text-decoration: none;
+					}
+
+		#nav-menu > li.current ul li.current a {
+			font-weight: bolder;
+		}
+
+		#nav-menu > li.sub ul li a:hover {
+			background: #878787;
+			text-decoration: underline;
+		}
+
+		#nav-menu > li.sub:hover ul {
+			top: 3em;
+		}
+
+		#nav-menu > li:hover {
+			margin-left: 0px;
+			padding-left: 0px;
+		}
+
+			#nav-menu > li:hover a {
+				margin-left: 0.5em;
+				padding-left: 0.5em;
+			}
+
+		#nav-menu > li.sub {
+			padding-right: 20px;
+			margin-right: 10px;
+			background: url(../images/arrowdown.png) no-repeat 98% 50%;
+		}
+
+			#nav-menu > li.sub ul li a {
+				padding: 0.4em;
+				margin: 0 auto 0.2em auto;
+			}
+
+.widthshim {
+	height: 1px;
+	width: 1180px !important;
+	clear: both;
+	border: 1px dashed transparent !important;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	display: inline-block;
+}
+
+/* Content */
+
+#content {
+	min-width: 720px;
+	margin: 0 auto 20px auto;
+	padding: 20px;
+	background: #FFFFFF;
+}
+
+	#content H1 {
+		font-size: 24px;
+	}
+
+	#content H2 {
+		font-size: 18px;
+	}
+
+/* Footer */
+
+#footer {
+	margin: 0;
+	padding: 0;
+	height: 150px;
+	background: #333333;
+	border-top: 5px solid #000000;
+	min-width: 1080px;
+	width: 100%;
+}
+
+#footer-inner {
+	margin: 0;
+	padding: 0;
+	width: 600px;
+	padding-top: 20px;
+	margin: 0 auto;
+}
+
+#footer p {
+	line-height: 120%;
+	text-align: center;
+	color: #FFFFFF;
+}
+
+#footer a {
+	color: #FFFFFF;
+}
+
+/*
+jqmodal styles
+*/
+
+#cms-simplemodal-container, .cms-simplemodal-container {
+	min-height: 525px;
+	height: 75%;
+	min-width: 780px;
+	width: 85%;
+	z-index: 9950008;
+}
+
+#cms-basic-modal-content, #cmsModalFrame, #cmsAjaxMainDiv2 {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+#cmsFrameEditor {
+	margin: 0;
+	padding: 0;
+	height: 98%;
+	width: 100%;
+}

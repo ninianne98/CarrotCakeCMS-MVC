@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"
+           elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:simpleType name="guid">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="CarrotCakeCMS.Web">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Settings">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Config">
+								<xs:complexType>
+									<xs:attribute name="SiteID" type="guid" use="optional" />
+									<xs:attribute name="AdminFolderPath" type="xs:string" use="optional" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="FileManager">
+								<xs:complexType>
+									<xs:attribute name="BlockedExtensions" type="xs:string" use="optional" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Options">
+								<xs:complexType>
+									<xs:attribute name="WriteErrorLog" type="xs:boolean" use="optional" />
+									<xs:attribute name="OldSiteQuerystring" type="xs:string" use="optional" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AdminFooter">
+								<xs:complexType>
+									<xs:attribute name="ControlPathMain" type="xs:string" use="optional" />
+									<xs:attribute name="ControlPathPopup" type="xs:string" use="optional" />
+									<xs:attribute name="ControlPathPublic" type="xs:string" use="optional" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="OverrideConfigFile">
+								<xs:complexType>
+									<xs:attribute name="PublicControls" type="xs:string" use="optional" />
+									<xs:attribute name="AdminModules" type="xs:string" use="optional" />
+									<xs:attribute name="TextContentProcessors" type="xs:string" use="optional" />
+									<xs:attribute name="SiteMapping" type="xs:string" use="optional" />
+									<xs:attribute name="SiteSkins" type="xs:string" use="optional" />
+									<xs:attribute name="TemplatePath" type="xs:string" use="optional" />
+									<xs:attribute name="PluginPath" type="xs:string" use="optional" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

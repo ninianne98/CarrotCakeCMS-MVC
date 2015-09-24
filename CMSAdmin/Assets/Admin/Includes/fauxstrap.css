@@ -1,0 +1,236 @@
+﻿/*!
+	* portions of this css extracted from bootstrap - get the layout without all the other stuff!
+	* Bootstrap v3.2.0 (http://getbootstrap.com)
+	* Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+.form-horizontal, .form-group, .row, .dl-horizontal {
+	width: 100%;
+	display: inline-block;
+	clear: both;
+	padding: 0.1em;
+	margin: 0.25em 0 0.5em 0;
+}
+
+	.dl-horizontal dt {
+		float: left;
+		width: 160px;
+		overflow: hidden;
+		clear: left;
+		text-align: right;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.dl-horizontal dd {
+		margin-left: 180px;
+	}
+
+/*======================*/
+
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6,
+.col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+	float: left;
+	min-height: 1.5em;
+	margin: 0;
+	padding: 0;
+}
+
+.col-md-1 {
+	width: 83px;
+}
+
+.col-md-2 {
+	width: 166px;
+}
+
+.col-md-3 {
+	width: 249px;
+}
+
+.col-md-4 {
+	width: 332px;
+}
+
+.col-md-5 {
+	width: 415px;
+}
+
+.col-md-6 {
+	width: 498px;
+}
+
+.col-md-7 {
+	width: 581px;
+}
+
+.col-md-8 {
+	width: 664px;
+}
+
+.col-md-9 {
+	width: 747px;
+}
+
+.col-md-10 {
+	width: 830px;
+}
+
+.col-md-11 {
+	width: 913px;
+}
+
+.col-md-12 {
+	width: 996px;
+}
+
+.col-md-offset-1, .col-md-offset-2, .col-md-offset-3, .col-md-offset-4, .col-md-offset-5, .col-md-offset-6,
+.col-md-offset-7, .col-md-offset-8, .col-md-offset-9, .col-md-offset-10, .col-md-offset-11, .col-md-offset-12 {
+	margin: 0 0.25em 0 1em;
+	padding: 0 0.25em 0 1em;
+}
+
+.col-md-offset-1 {
+	margin-left: 83px;
+}
+
+.col-md-offset-2 {
+	margin-left: 166px;
+}
+
+.col-md-offset-3 {
+	margin-left: 249px;
+}
+
+.col-md-offset-4 {
+	margin-left: 332px;
+}
+
+.col-md-offset-5 {
+	margin-left: 415px;
+}
+
+.col-md-offset-6 {
+	margin-left: 498px;
+}
+
+.col-md-offset-7 {
+	margin-left: 581px;
+}
+
+.col-md-offset-8 {
+	margin-left: 664px;
+}
+
+.col-md-offset-9 {
+	margin-left: 747px;
+}
+
+.col-md-offset-10 {
+	margin-left: 830px;
+}
+
+.col-md-offset-11 {
+	margin-left: 913px;
+}
+
+.col-md-offset-12 {
+	margin-left: 996px;
+}
+
+/*======================*/
+
+table.table {
+	max-width: 100%;
+	margin: 1em 0.5em;
+	display: inline-block;
+	clear: both;
+}
+
+	table.table th {
+		text-align: left;
+	}
+
+	table.table col[class*="col-"] {
+		position: static;
+		float: none;
+		display: table-column;
+	}
+
+	table.table td[class*="col-"], table.table th[class*="col-"] {
+		position: static;
+		float: none;
+		display: table-cell;
+	}
+
+	table.table thead.header {
+		font-weight: bolder;
+		background-color: #468B5E;
+		color: #fff;
+	}
+
+.text-danger {
+	color: #BB0000;
+}
+
+.control-label {
+	text-align: right;
+	font-weight: bolder;
+	padding: 0;
+	margin: 0.25em 1em 0.25em 0;
+}
+
+.form-control {
+	padding: 0;
+	margin: 0.25em;
+}
+
+textarea.form-control {
+	height: auto;
+}
+
+.pagination {
+	display: block;
+	padding-left: 0;
+	margin: 1em 0;
+	clear: both;
+	font-size: 1.5em;
+}
+
+	.pagination > li {
+		display: inline;
+	}
+
+		.pagination > li > a,
+		.pagination > li > span {
+			position: relative;
+			float: left;
+			padding: 0.5em 0.75em;
+			color: #7dad8e;
+			text-decoration: none;
+			background-color: #fff;
+			border: 1px solid #b7d7c4;
+		}
+
+	.pagination > .active > a,
+	.pagination > .active > span,
+	.pagination > .active > a:hover,
+	.pagination > .active > span:hover,
+	.pagination > .active > a:focus,
+	.pagination > .active > span:focus {
+		z-index: 2;
+		color: #fff;
+		cursor: default;
+		background-color: #7dad8e;
+		border-color: #7dad8e;
+	}
+
+	.pagination > li:first-child > a, .pagination > li:first-child > span {
+		border-bottom-left-radius: 6px;
+		border-top-left-radius: 6px;
+	}
+
+	.pagination > li:last-child > a, .pagination > li:last-child > span {
+		border-bottom-right-radius: 6px;
+		border-top-right-radius: 6px;
+	}

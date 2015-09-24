@@ -1,0 +1,199 @@
+﻿@model PageIndexModel
+
+@{
+	ViewBag.Title = "Page Index";
+}
+
+<div>
+	<table style="width: 625px;">
+		<tr>
+			<td style="width: 48%;">
+				<a href="@SiteFilename.PageIndexURL">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/table.png" alt="View Page Index" title="View Page Index" />
+					View Page Index
+				</a>
+			</td>
+			<td>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+			<td style="width: 48%;">
+				<a href="@SiteFilename.PageTemplateUpdateURL">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/overlays.png" alt="Apply Skins" title="Bulk Apply Templates/Skins" />
+					Bulk Apply Templates/Skins
+				</a>
+			</td>
+		</tr>
+
+		<tr>
+			<td style="width: 48%;">
+				<a href="@SiteFilename.PageAddEditURL">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add as WYSIWYG" />
+					Add Page (with HTML editor)
+				</a>
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td style="width: 48%;">
+				<a href="@String.Format("{0}?mode=raw", SiteFilename.PageAddEditURL)">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/script_add.png" alt="Add" title="Add as Plain Text" />
+					Add Page (as plain text)
+				</a>
+			</td>
+		</tr>
+	</table>
+</div>
+<br />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "contentIndex" })) {
+	@Html.AntiForgeryToken()
+
+	var grid = CarrotWeb.CarrotWebGrid<ContentPage>(Model.Page);
+
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.HtmlFormId = "contentIndex";
+	grid.PageSizeExternal = true;
+	grid.ConfigName(Html.NameFor(x => x.Page));
+
+	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix ui-widget-content ui-corner-all" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
+
+	<table>
+		<tr>
+			<td class="tablecaption">
+				show content:
+			</td>
+			<td>
+				<div class="jqradioset">
+					@Html.RadioButtonFor(i => i.SelectedSearch, PageIndexModel.SearchBy.Filtered, new { GroupName = "rdoSelectedSearch", id = "rdoSelectedSearch1", onclick = "this.form.submit();" })
+					<label for="rdoSelectedSearch1">Show Filtered</label>
+
+					@Html.RadioButtonFor(i => i.SelectedSearch, PageIndexModel.SearchBy.AllPages, new { GroupName = "rdoSelectedSearch", id = "rdoSelectedSearch2", onclick = "this.form.submit();" })
+					<label for="rdoSelectedSearch2">Show All</label>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+	if (Model.SelectedSearch == PageIndexModel.SearchBy.Filtered) {
+		<table>
+			<tr>
+				<td class="tablecaption">
+					page filter:
+					<br />
+				</td>
+				<td>
+					<input type="submit" name="btnFilter" value="Filter" id="btnFilter" />
+				</td>
+				<td>
+					&nbsp;&nbsp;
+				</td>
+				<td>
+					<!-- parent page plugin-->
+					@{
+		var drill = new SitePageDrillDownModel {
+			FieldName = Html.NameFor(m => m.ParentPageID).ToString(),
+			CurrentPageID = Guid.Empty,
+			SelectedPageID = Model.ParentPageID
+		};
+					}
+
+					@Html.Partial("_SitePageDrillDown", drill)
+				</td>
+			</tr>
+		</table>
+	} else {
+		<p>
+			<input id="btnChangePage" type="submit" value="Change Page Size" name="btnChangePage">
+			@Html.DropDownListFor(m => m.Page.PageSize, new SelectList(Model.PageSizes.Select(x => new { Value = x, Text = x }), "Value", "Text"))
+		</p>
+	}
+
+	<p>
+		<br />
+	</p>
+	<p>
+		@String.Format("{0} total records", grid.DataPage.TotalRecords)
+	</p>
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<text> @CarrotWeb.ActionImage("PageAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentID }, "~/Assets/Admin/Images/pencil.png", "Edit with WYSIWYG", null, null) </text>
+		})
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<text> @CarrotWeb.ActionImage("PageAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentID, @mode = "raw" }, "~/Assets/Admin/Images/script.png", "Edit with Plain Text", null, null) </text>
+		})
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<a target="_blank" href="@String.Format("{0}/{1}", SiteFilename.ContentExportURL, item.Root_ContentID)">
+				<img src="~/Assets/Admin/Images/html_go.png" alt="Export latest version of this page" title="Export latest version of this page" />
+			</a>
+		})
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<a target="_blank" href="@item.FileName">
+				<img src="~/Assets/Admin/Images/html.png" alt="Visit Page" title="Visit Page" />
+			</a>
+		})
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<a target="_blank" href="@String.Format("{0}?carrotedit=true", item.FileName)">
+				<img src="~/Assets/Admin/Images/overlays.png" alt="Advanced Editor" title="Advanced Editor" />
+			</a>
+		})
+		.AddColumn(x => x.NavMenuText, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.FileName, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.RetireDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.VersionCount, new CarrotGridColumn { Sortable = true })
+
+		.AddColumn(x => x.IsRetired, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Retired",
+			AlternateTextFalse = "Active",
+			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
+			ImagePathFalse = "~/Assets/Admin/Images/clock.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.IsUnReleased, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Unreleased",
+			AlternateTextFalse = "Active",
+			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
+			ImagePathFalse = "~/Assets/Admin/Images/clock.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.ShowInSiteNav, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Yes",
+			AlternateTextFalse = "No",
+			ImagePathTrue = "~/Assets/Admin/Images/lightbulb.png",
+			ImagePathFalse = "~/Assets/Admin/Images/lightbulb_off.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.ShowInSiteMap, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Yes",
+			AlternateTextFalse = "No",
+			ImagePathTrue = "~/Assets/Admin/Images/lightbulb.png",
+			ImagePathFalse = "~/Assets/Admin/Images/lightbulb_off.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.BlockIndex, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Yes",
+			AlternateTextFalse = "No",
+			ImagePathTrue = "~/Assets/Admin/Images/zoom_out.png",
+			ImagePathFalse = "~/Assets/Admin/Images/magnifier.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Active",
+			AlternateTextFalse = "Inactive",
+			Sortable = true
+		});
+
+		<div class="tablezone">
+			@grid.Write()
+		</div>
+}

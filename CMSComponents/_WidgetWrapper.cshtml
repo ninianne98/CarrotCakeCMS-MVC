@@ -1,0 +1,33 @@
+﻿<div class="cmsWidgetContainerWrapper" id="ID-[[ITEM_ID]]">
+	<div class="cmsGlossySeaGreen" id="cms_WidgetWrapCtrlId[[sequence]]">
+		<div class="cmsWidgetTitleBar ui-sortable-handle" id="cmsWidgetHead">
+			<div tooltip="[[WIDGET_PATH]]" title="[[WIDGET_PATH]]" id="cmsControlPath" class="cmsGlossySeaGreen">
+				[[WIDGET_CAPTION]]
+			</div>
+			<div class="cmsWidgetMenu" id="cmsEditMenuList">
+				<ul class="cmsWidgetMenu cmsMnuParent">
+					<li class="cmsWidgetCogIcon">
+						<a href="javascript:void(0);" id="cmsWidgetBarIcon" class="cmsWidgetBarLink cmsWidgetBarIconCog" alt="Modify" title="">
+							<img border="0" title="Modify" alt="Modify" src="~/Assets/Admin/Images/cog.png" class="cmsWidgetBarImgReset">
+						</a>
+						<ul class="cmsWidgetMenu cmsMnuChildren">
+							[[MENU_ITEMS]]
+							<li id="liClone"><a href="javascript:cmsCopyWidget('[[ITEM_ID]]')" id="cmsCopySettingsLink" class="cmsWidgetBarLink cmsWidgetBarIconDup" alt="Clone" title="Clone">  Clone</a></li>
+							<li id="liTime"><a href="javascript:cmsManageWidgetTime('[[ITEM_ID]]')" id="A1" class="cmsWidgetBarLink cmsWidgetBarIconTime" alt="Set Time" title="Set Time">  Set Time</a></li>
+							<li id="liStatus">[[STATUS_LINK]]</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div id="cmsControl" class="cmsWidgetControl cmsWidgetControlItem" style="">
+		<input type="hidden" value="[[ITEM_ID]]" id="cmsCtrlID">
+		<input type="hidden" value="[[sequence]]	[[PLACEHOLDER]]	[[ITEM_ID]]" id="cmsCtrlOrder">
+
+		[[CONTENT]]
+
+		<div style="clear: both;">
+		</div>
+	</div>
+</div>

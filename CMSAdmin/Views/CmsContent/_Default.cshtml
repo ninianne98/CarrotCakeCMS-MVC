@@ -1,0 +1,13 @@
+﻿@inherits CmsWebViewPage
+
+@{
+
+	ViewBag.Title = CmsPage.ThePage.TitleBar;
+	ViewBag.Heading = CmsPage.ThePage.PageHead;
+}
+
+<h2>@ViewBag.Heading</h2>
+
+<div>
+	@Html.Raw(CmsPage.ThePage.PageText)
+</div>

@@ -1,0 +1,30 @@
+@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+}
+
+@section SideBar {
+	<ul>
+		<li>
+			@if (CmsPage.ChildNav.Any()) {
+				<h2>Child Pages</h2>
+				<ul class="sidemenu">
+					@foreach (var itm in CmsPage.ChildNav) {
+						<li><a href="@itm.FileName">@itm.NavigationText</a></li>
+					}
+				</ul>
+			}
+		</li>
+		<li>
+			@if (CmsPage.SiblingNav.Any()) {
+				<h2>Sibling Pages</h2>
+				<ul class="sidemenu">
+					@foreach (var itm in CmsPage.SiblingNav) {
+						<li><a href="@itm.FileName">@itm.NavigationText</a></li>
+					}
+				</ul>
+			}
+		</li>
+	</ul>
+}

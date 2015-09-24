@@ -1,0 +1,165 @@
+﻿@model DashboardInfo
+
+@{
+	ViewBag.Title = "Site Dashboard";
+}
+
+<div class="ui-widget-content ui-corner-all" style="width: 762px; clear: both;">
+
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.SiteInfoURL">
+			<img alt="" src="~/Assets/Admin/Images/SiteData.png" class="imgNoBorder" />
+			<br />
+			<br />
+			Site Info
+		</a>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.ContentImportURL">
+			<img alt="" src="~/Assets/Admin/Images/ImportData.png" class="imgNoBorder" />
+			<br />
+			<br />
+			Import Content
+		</a>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.SiteExportURL">
+			<img alt="" src="~/Assets/Admin/Images/ExportData.png" class="imgNoBorder" />
+			<br />
+			<br />
+			Export Content
+		</a>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.SiteTemplateUpdateURL">
+			<img alt="" src="~/Assets/Admin/Images/TemplateUpdate.png" class="imgNoBorder" />
+			<br />
+			<br />
+			Bulk Apply Templates
+		</a>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="/c3-admin/SiteContentStatusChange">
+			<img alt="" src="~/Assets/Admin/Images/StatusChange.png" class="imgNoBorder" />
+			<br />
+			<br />
+			Bulk Change Status
+		</a>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.PageIndexURL">
+			<img alt="" src="~/Assets/Admin/Images/PageIndex.png" class="imgNoBorder" />
+			<br />
+			<br />
+			@String.Format("Pages ({0}) ", Model.Pages)
+		</a>
+		<p>
+			<a href="@SiteFilename.PageAddEditURL">
+				<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add as WYSIWYG" />
+				Add
+			</a>
+		</p>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.BlogPostIndexURL">
+			<img alt="" src="~/Assets/Admin/Images/BlogIndex.png" class="imgNoBorder" />
+			<br />
+			<br />
+			@String.Format("Posts ({0}) ", Model.Posts)
+		</a>
+		<p>
+			<a href="@SiteFilename.BlogPostAddEditURL">
+				<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add as WYSIWYG" />
+				Add
+			</a>
+		</p>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.CategoryIndexURL">
+			<img alt="" src="~/Assets/Admin/Images/PostCategories.png" class="imgNoBorder" />
+			<br />
+			<br />
+			@String.Format("Categories ({0}) ", Model.Categories)
+		</a>
+		<p>
+			<a href="@SiteFilename.CategoryAddEditURL">
+				<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add as WYSIWYG" />
+				Add
+			</a>
+		</p>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.TagIndexURL">
+			<img alt="" src="~/Assets/Admin/Images/PostTags.png" class="imgNoBorder" />
+			<br />
+			<br />
+			@String.Format("Tags ({0}) ", Model.Tags)
+		</a>
+		<p>
+			<a href="@SiteFilename.TagAddEditURL">
+				<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add as WYSIWYG" />
+				Add
+			</a>
+		</p>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.ContentSnippetIndexURL">
+			<img alt="" src="~/Assets/Admin/Images/PageIndex.png" class="imgNoBorder" />
+			<br />
+			<br />
+			@String.Format("Snippets ({0}) ", Model.Snippets)
+		</a>
+		<p>
+			<a href="@SiteFilename.ContentSnippetAddEditURL">
+				<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add as WYSIWYG" />
+				Add
+			</a>
+		</p>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.ModuleIndexURL">
+			<img alt="" src="~/Assets/Admin/Images/ModuleAdmin.png" class="imgNoBorder" />
+			<br />
+			<br />
+			Modules
+		</a>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="@SiteFilename.SiteMapURL">
+			<img alt="" src="~/Assets/Admin/Images/SiteMap.png" class="imgNoBorder" />
+			<br />
+			<br />
+			Edit Site Map
+		</a>
+	</div>
+	<div class="ui-widget-header ui-corner-all dashboardCell">
+		<a href="/c3-admin/SiteSkinIndex">
+			<img alt="" src="~/Assets/Admin/Images/SiteSkins.png" class="imgNoBorder" />
+			<br />
+			<br />
+			Site Skin Index
+		</a>
+	</div>
+
+	@if (SecurityData.IsAdmin) {
+		<div class="ui-widget-header ui-corner-all dashboardCell">
+			<a href="@SiteFilename.UserIndexURL">
+				<img alt="" src="~/Assets/Admin/Images/UserList.png" class="imgNoBorder" />
+				<br />
+				<br />
+				Users
+			</a>
+		</div>
+		<div class="ui-widget-header ui-corner-all dashboardCell">
+			<a href="@SiteFilename.RoleIndexURL">
+				<img alt="" src="~/Assets/Admin/Images/GroupList.png" class="imgNoBorder" />
+				<br />
+				<br />
+				Groups
+			</a>
+		</div>
+	}
+
+	<div style="clear: both;">
+	</div>
+</div>

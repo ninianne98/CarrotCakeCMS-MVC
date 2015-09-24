@@ -1,0 +1,102 @@
+﻿/*
+Main Popup CarrotCake CMS stylesheet
+*/
+body {
+	background-color: #ffffff;
+	font-size: 12px;
+	font-family: Verdana, Helvetica, Sans-Serif;
+}
+
+.greenborder2, .greenborder2-small {
+	border-width: 10px;
+	border-style: solid;
+	border-color: #F5F5F5;
+	border-collapse: collapse;
+	margin: 50px 50px 50px 50px;
+	background-color: #ffffff;
+}
+
+.greenborder, .greenborder-small {
+	border-width: 2px;
+	border-style: solid;
+	border-color: #353535;
+	border-collapse: collapse;
+	margin: 0px;
+	padding: 10px;
+	min-height: 500px;
+	min-width: 780px;
+	font-size: 12px;
+	font-family: Verdana, Helvetica, Sans-Serif;
+	background-color: #ffffff;
+}
+
+.greenborder2-small {
+	width: 425px;
+	margin: 50px 100px 50px 100px;
+	padding: 0px;
+}
+
+.greenborder-small {
+	padding: 10px;
+	min-height: 200px;
+	min-width: 400px;
+	margin: 0px;
+}
+
+H1, H2, H3 {
+	font-weight: bold;
+	font-family: Georgia, Times New Roman, Serif;
+	color: #69775F;
+}
+
+H1 {
+	font-size: 24px;
+}
+
+H2 {
+	font-size: 20px;
+}
+
+H3 {
+	font-size: 16px;
+}
+
+#cms-simplemodal-container, .cms-simplemodal-container {
+	height: 400px;
+	width: 650px;
+	z-index: 5100;
+}
+
+#cms-basic-modal-content, #cmsModalFrame, #cmsAjaxMainDiv2 {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+#cmsFrameEditor {
+	margin: 0;
+	padding: 0;
+	height: 98%;
+	width: 100%;
+}
+
+.info-saved {
+	position: fixed;
+	z-index: 500;
+	margin: 0.5em auto;
+	top: 1em;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	padding: 0.25em;
+	width: 30em;
+	border: 2px solid #7FAF90;
+	background-color: #CDDFD3;
+	text-align: center;
+	font-weight: bold;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}

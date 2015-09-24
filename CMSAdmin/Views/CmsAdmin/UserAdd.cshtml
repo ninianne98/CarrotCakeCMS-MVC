@@ -1,0 +1,92 @@
+﻿@model Carrotware.CMS.Security.Models.RegisterViewModel
+@{
+	ViewBag.Title = "Add User";
+}
+
+<div>
+	@CmsHelpers.DisplayErrorPopupButton()
+	<br />
+	<br />
+</div>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div style="display: none">
+		<div id="formPrettyValidationSummary">
+			@Html.ValidationSummary(true, "")
+		</div>
+	</div>
+
+	<div>
+		<table>
+			<tr>
+				<td>
+					<table style="width: 450px;">
+						<tr>
+							<td style="width: 180px;">
+								<b class="caption">
+									<label for="UserName" id="UserNameLabel">User Name</label>
+								</b>
+							</td>
+							<td style="width: 300px;">
+								@Html.TextBoxFor(m => m.UserName, new { @class = "form-control-md" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b class="caption">
+									<label for="Email" id="EmailLabel">E-mail </label>
+								</b>
+							</td>
+							<td>
+								@Html.TextBoxFor(m => m.Email, new { @class = "form-control-md" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b class="caption">
+									<label for="Password" id="PasswordLabel">Password </label>
+								</b>
+							</td>
+							<td>
+								@Html.PasswordFor(m => m.Password, new { @class = "form-control-md" })
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<b class="caption">
+									<label for="ConfirmPassword" id="ConfirmPasswordLabel">Password (confirm) </label>
+								</b>
+							</td>
+							<td>
+								@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control-md" })
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+					<table style="width: 300px;">
+						<tr>
+							<td>
+								<div style="height: 10px; width: 125px; border: 1px solid transparent;">
+								</div>
+							</td>
+							<td>
+								<input type="submit" name="btnCreate" value="Create User" id="btnCreate" />
+							</td>
+							<td>
+								&nbsp;
+							</td>
+							<td>
+								<input type="button" name="CancelButtonButton" value="Cancel" id="CancelButtonButton" onclick="location.href = '@SiteFilename.UserIndexURL';" />
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>
+}

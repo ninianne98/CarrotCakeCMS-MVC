@@ -1,0 +1,89 @@
+﻿@{
+	Layout = "~/Views/CmsAdmin/_LayoutMain.cshtml";
+
+	ViewBag.Title = "Modules";
+	int iOpenTab = 0;
+	int selTab = 0;
+
+	string SelMenu = CMSConfigHelper.PluginAreaPath;
+
+	List<CMSAdminModule> modules = new List<CMSAdminModule>();
+	using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+		modules = cmsHelper.AdminModules;
+	}
+}
+
+@section scripts {
+
+	@RenderSection("scripts", required: false)
+
+}
+
+<table style="width: 96%">
+	<tr>
+		<td style="width: 275px;">
+			<div style="width: 250px; padding-right: 25px;">
+				<div id="module-accordion">
+					@foreach (var mod in modules) {
+						if (mod.AreaKey.ToLower() == SelMenu.ToLower()) {
+							selTab = iOpenTab;
+						}
+						<h3>
+							<a href="#">
+								@mod.PluginName
+							</a>
+						</h3>
+						<div>
+							<input type="hidden" name="hdnID" id="hdnID" value="@mod.AreaKey" />
+							@foreach (var plug in mod.PluginMenus.OrderBy(x => x.SortOrder).Where(x => x.IsVisible)) {
+								<div class="moduleLink">
+									<a href="@String.Format("/{0}/{1}/{2}", plug.AreaKey, plug.Controller, plug.Action)">
+										@plug.Caption
+									</a>
+								</div>
+							}
+						</div>
+							iOpenTab++;
+					}
+				</div>
+			</div>
+		</td>
+
+		<td>
+			<!--   @SelMenu   -->
+			@RenderBody()
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+		moduleLoader();
+	});
+
+	$(document).ajaxComplete(function (event, xhr, settings) {
+		moduleLoader();
+	});
+
+	setTimeout("moduleLoader();", 250);
+
+	function moduleLoader() {
+		modulePageLoad();
+	}
+
+	function modulePageLoad() {
+		$("#module-accordion").accordion({
+			heightStyle: "content",
+			active: parseInt('@selTab')
+		});
+
+		$('#tabExtensions').attr('class', "current sub");
+	}
+</script>
+
+@section footer {
+
+	@RenderSection("footer", required: false)
+
+}

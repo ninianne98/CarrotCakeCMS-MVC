@@ -1,0 +1,76 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 10;
+	pager.IgnoreSitePath = false;
+	pager.FetchData();
+
+	var cats = CmsPage.GetSiteCategories(10, true);
+	var tags = CmsPage.GetSiteTags(10, true);
+}
+
+@section SideBar {
+	<ul>
+		<li>
+			@if (cats.Any()) {
+				<h2>Categories</h2>
+				<ul class="sidemenu">
+					@foreach (var itm in cats) {
+						<li><a href="@itm.Uri">@itm.Text</a></li>
+					}
+				</ul>
+			}
+		</li>
+		<li>
+			@if (tags.Any()) {
+				<h2>Tags</h2>
+				<ul class="sidemenu">
+					@foreach (var itm in tags) {
+						<li><a href="@itm.Uri">@itm.Text</a></li>
+					}
+				</ul>
+			}
+		</li>
+	</ul>
+}
+
+@section PagedDataSection {
+
+	@if (pager != null) {
+
+		foreach (var item in pager.DataSource) {
+			var usr = item.GetUserInfo();
+
+			<div class="post">
+				<h2 class="title"><a href="@item.FileName">@item.NavigationText</a></h2>
+				<p class="meta">
+					<span class="date">@String.Format("{0:MMMM d, yyyy}", item.GoLiveDate)</span>
+					<span class="posted">Posted by @usr.FullName_FirstLast</span>
+				</p>
+				<div style="clear: both;">&nbsp;</div>
+				<div class="entry">
+					<p>@item.PageTextPlainSummary</p>
+					<p class="links"><a href="@item.FileName">Read More</a> </p>
+				</div>
+			</div>
+		}
+
+		<div class="pagerfooterlinks">
+			@foreach (var i in pager.PageNumbers) {
+				using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+					using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+						@String.Format(" {0} ", i)
+					}
+				}
+			}
+		</div>
+
+		<div style="clear: both;">
+		</div>
+		<br />
+	}
+}

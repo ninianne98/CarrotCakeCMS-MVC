@@ -1,0 +1,169 @@
+﻿body {
+	background-color: #FFFFFF;
+	text-align: left;
+	font-size: 12px;
+	font-family: Lucida Grande, Lucida Sans Arial, Arial, sans-serif;
+}
+
+.headerRow {
+	background-color: #7dad8e;
+	color: #FFFFFF;
+}
+
+.headerRowText {
+	color: #FFFFFF;
+}
+
+a {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+	a:link {
+		color: #000099;
+	}
+
+	a:active {
+		color: #FFDB0D;
+	}
+
+	a:visited {
+		color: #BF9232;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
+div.scroll {
+	height: 175px;
+	width: 90%;
+	overflow: auto;
+	border: 1px solid #666;
+	padding: 2px;
+}
+
+#folderZone {
+	height: 100px;
+}
+
+#fileZone {
+	height: 225px;
+}
+
+td {
+	font-size: 11px;
+	color: #000000;
+	background-color: #FFFFFF;
+}
+
+th {
+	font-size: 11px;
+	color: #FFFFFF;
+	background-color: #7dad8e;
+}
+
+.head2 {
+	color: #7dad8e;
+}
+
+.ImgGroup {
+	position: relative;
+	z-index: 1200;
+}
+
+#imgWrapperMain {
+	min-height: 25px;
+	min-width: 25px;
+	padding: 8px;
+	position: absolute;
+	z-index: 2000;
+}
+
+.thumbpreview {
+	font-size: 12px;
+	color: #000000;
+	background-color: #B7D7C4;
+}
+
+#imgDimension {
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+}
+
+#imgThmbnailPreview {
+	min-height: 2px;
+	min-width: 2px;
+	max-height: 200px;
+	width: auto;
+}
+
+/* table resets */
+
+/* cellpadding */
+th, td {
+	padding: 2px;
+}
+
+/* cellspacing */
+table {
+	border-collapse: separate;
+	border-spacing: 2px;
+}
+/*  cellspacing="5" */
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/*  cellspacing="0" */
+
+/* valign */
+th, td {
+	vertical-align: top;
+}
+
+/* align (center) */
+table.centered {
+	margin: 0 auto;
+}
+
+.thumbCell {
+	padding: 5px;
+	margin: 5px;
+	float: left;
+	text-align: center;
+}
+
+.thumbPreview {
+	padding: 2px;
+	margin: 3px;
+	border: thin solid #000000;
+	background-color: #c0c0c0;
+}
+
+.uploadSuccess {
+	color: #009900;
+}
+
+.uploadBlocked {
+	color: #990099;
+}
+
+.uploadNoFile {
+	color: #990000;
+}
+
+.uploadFail {
+	color: #990000;
+}
+
+.jqradioset label {
+	margin-left: 0.5em;
+	margin-right: 3em;
+}
+
+.icheckbox_flat-grey, .iradio_flat-grey {
+	margin: 0 3px 2px 3px;
+}

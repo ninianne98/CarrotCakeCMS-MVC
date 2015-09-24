@@ -1,0 +1,39 @@
+﻿@model PagedData<ContentSnippet>
+
+@{
+	ViewBag.Title = "Content Snippet Index";
+}
+
+<p>
+	<a href="@SiteFilename.ContentSnippetAddEditURL">
+		<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add" />
+		Add Snippet
+	</a>
+</p>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	var grid = CarrotWeb.CarrotWebGrid<ContentSnippet>(Model);
+
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.ConfigName(Html.NameFor(x => x));
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<ContentSnippet> {
+			HasHeadingText = false,
+			FormatTemplate = @<text> @CarrotWeb.ActionImage("ContentSnippetAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentSnippetID }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
+		})
+		.AddColumn(x => x.ContentSnippetName, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.ContentSnippetActive, new CarrotGridBooleanImageColumn {
+			Sortable = true
+		})
+		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.RetireDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" });
+
+		@grid.Write()
+}

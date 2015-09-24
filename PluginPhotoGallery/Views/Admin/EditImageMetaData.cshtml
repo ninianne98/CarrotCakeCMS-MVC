@@ -1,0 +1,46 @@
+﻿@model GalleryMetaData
+
+@{
+	Layout = Carrotware.CMS.Interface.CarrotLayout.Popup;
+
+	ViewBag.Title = "Photo Gallery : Image Meta Data";
+}
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	@Html.HiddenFor(m => m.GalleryImageMetaID)
+	@Html.HiddenFor(m => m.GalleryImage)
+	@Html.HiddenFor(m => m.SiteID)
+
+	<p>
+		@Model.GalleryImage<br />
+
+		@CarrotWeb.ImageSizer(Model.GalleryImage, Model.GalleryImage, 100, true, new { @id = "imgThumb" })
+	</p>
+	<p>
+		<b>Title</b><br />
+		@Html.TextBoxFor(m => m.ImageTitle, new { @style = "width: 680px;" })
+	</p>
+	<p>
+		<b>Details</b><br />
+		@Html.TextAreaFor(m => m.ImageMetaData, new { @class = "mceEditor", rows = "12", cols = "80", @style = "height: 200px; width: 680px;" })
+	</p>
+	<br />
+	<input type="submit" name="btnSaveButton" value="Save" onclick="SubmitPage();" id="btnSaveButton" />
+	<br />
+	<div style="display: none;">
+		<input type="submit" name="btnSave" value="Save" id="btnSave" />
+	</div>
+}
+
+<script type="text/javascript">
+	function SubmitPage() {
+		var ret = tinyMCE.triggerSave();
+		setTimeout("ClickBtn();", 500);
+	}
+
+	function ClickBtn() {
+		$('#btnSave').click();
+	}
+</script>

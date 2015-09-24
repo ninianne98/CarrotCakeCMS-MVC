@@ -1,0 +1,25 @@
+﻿@model PagePayload
+
+<div id="contactForm">
+	@{
+		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" }, Model)) {
+			var cmt = cmtFrm.GetModelHelper("_contactform");
+
+			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+			<label>Name</label>
+			@cmt.TextBoxFor(m => m.CommenterName)
+			@cmt.ValidationMessageFor(m => m.CommenterName, "", new { @class = "text-danger" })
+			<label>Email</label>
+			@cmt.TextBoxFor(m => m.CommenterEmail)
+			@cmt.ValidationMessageFor(m => m.CommenterEmail, "", new { @class = "text-danger" })
+			<label>Your Comments</label>
+			@cmt.ValidationMessageFor(m => m.PostCommentText, "", new { @class = "text-danger" })
+			@cmt.TextAreaFor(m => m.PostCommentText, new { rows = "5", cols = "50" })
+			<br />
+			<input class="button" type="submit" />
+			<input class="button" type="reset" value="Clear form" />
+		}
+
+	}
+</div>

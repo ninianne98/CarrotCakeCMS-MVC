@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tbl>
+
+	<querynugget>
+		<priority>3</priority>
+		<mode>LT</mode>
+		<rowcount>6</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|AreCMSTablesIncomplete|AlterStep01|</testcontext>
+		<sql>
+			select [specific_name], [ordinal_position], [parameter_name]
+			from [information_schema].[parameters]
+			where [specific_name] like 'carrot%'
+		</sql>
+	</querynugget>
+
+	<querynugget>
+		<priority>1</priority>
+		<mode>GTE</mode>
+		<rowcount>4</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|DoCMSTablesExist|AlterStep01|</testcontext>
+		<sql>
+			select distinct table_name
+			from [information_schema].[columns]
+			where table_name in ('carrot_Sites', 'carrot_RootContent', 'carrot_Content', 'carrot_Widget')
+		</sql>
+	</querynugget>
+
+	<querynugget>
+		<priority>1</priority>
+		<mode>GTE</mode>
+		<rowcount>5</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|DoCMSTablesExist|</testcontext>
+		<sql>
+			select distinct table_name
+			from [information_schema].[columns]
+			where table_name in ('membership_Role', 'membership_User', 'carrot_Sites', 'carrot_Content', 'carrot_Widget')
+		</sql>
+	</querynugget>
+
+	<querynugget>
+		<priority>-1</priority>
+		<mode>LT</mode>
+		<rowcount>1</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|SchemaVersionCheck|</testcontext>
+		<sql>
+			if not exists(select [table_name]  from [information_schema].[columns] where [table_name] in ('carrot_DataInfo') ) begin
+			select @DataKey as [DataKey], '' [DataValue]
+			end else begin
+			select [DataKey], [DataValue] from dbo.[carrot_DataInfo] where [DataKey] = @DataKey
+			end
+		</sql>
+	</querynugget>
+
+	<querynugget>
+		<priority>-1</priority>
+		<mode>LT</mode>
+		<rowcount>1</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|SchemaVersionUpdate|</testcontext>
+		<sql>
+			if exists(select [table_name]  from [information_schema].[columns] where [table_name] in ('carrot_DataInfo') ) begin
+
+			if not exists(select * from dbo.[carrot_DataInfo] where [DataKey] = @DataKey) begin
+
+			insert into dbo.[carrot_DataInfo]([DataKey], [DataValue])
+			values (@DataKey, @DataValue)
+
+			end else begin
+
+			update dbo.[carrot_DataInfo]
+			set [DataValue] = @DataValue
+			where [DataKey] = @DataKey
+
+			end
+
+			end
+		</sql>
+	</querynugget>
+
+	<querynugget>
+		<priority>100</priority>
+		<mode>LT</mode>
+		<rowcount>2</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|StepXX|</testcontext>
+		<sql>XXXXXXXXXXXXXXXX</sql>
+	</querynugget>
+	<querynugget>
+		<priority>100</priority>
+		<mode>LT</mode>
+		<rowcount>2</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|StepXX|</testcontext>
+		<sql>XXXXXXXXXXXXXXXX</sql>
+	</querynugget>
+	<querynugget>
+		<priority>100</priority>
+		<mode>LT</mode>
+		<rowcount>2</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|StepXX|</testcontext>
+		<sql>XXXXXXXXXXXXXXXX</sql>
+	</querynugget>
+	<querynugget>
+		<priority>100</priority>
+		<mode>LT</mode>
+		<rowcount>2</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|StepXX|</testcontext>
+		<sql>XXXXXXXXXXXXXXXX</sql>
+	</querynugget>
+	<querynugget>
+		<priority>100</priority>
+		<mode>LT</mode>
+		<rowcount>2</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|StepXX|</testcontext>
+		<sql>XXXXXXXXXXXXXXXX</sql>
+	</querynugget>
+	<querynugget>
+		<priority>100</priority>
+		<mode>LT</mode>
+		<rowcount>2</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|StepXX|</testcontext>
+		<sql>XXXXXXXXXXXXXXXX</sql>
+	</querynugget>
+</tbl>

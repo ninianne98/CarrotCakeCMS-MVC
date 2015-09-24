@@ -1,0 +1,27 @@
+﻿@model FileUpModel
+
+@{
+	ViewBag.Title = "Content Import";
+}
+
+<div style="display: none;">
+	<div id="formPrettyValidationSummary">
+		@Html.ValidationSummary(true, "")
+	</div>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" })) {
+	@Html.AntiForgeryToken()
+	<p>
+		Select a previously exported content to import:<br />
+		@Html.TextBoxFor(m => m.PostedFile, new { type = "file" })
+		@Html.ValidationMessageFor(m => m.PostedFile, "", new { @class = "validationError" })
+	</p>
+	<p>
+		You will be able to review the imported data before finalizing changes.
+		@CmsHelpers.DisplayErrorPopupButton()
+	</p>
+	<p>
+		<input type="submit" name="btnUpload" value="Upload" id="btnUpload" /><br />
+	</p>
+}

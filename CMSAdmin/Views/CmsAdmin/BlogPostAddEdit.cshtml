@@ -1,0 +1,782 @@
+﻿@model ContentPageModel
+
+@{
+	ViewBag.Title = "Post Add/Edit";
+
+	string editCSS = "mceEditor";
+
+	if (ViewBag.ContentEditMode == "raw") {
+		editCSS = "rawEditor";
+	}
+}
+
+@section scripts{
+
+	<script type="text/javascript">
+		var webSvc = cmsGetServiceAddress();
+
+		var thePageID = '@Model.ContentPage.Root_ContentID';
+
+		var tTitle = '#@Html.IdFor(m => m.ContentPage.TitleBar)';
+		var tNav = '#@Html.IdFor(m => m.ContentPage.NavMenuText)';
+		var tHead = '#@Html.IdFor(m => m.ContentPage.PageHead)';
+		var tValidFile = '#@Html.IdFor(m => m.ContentPage.FileName)';
+		var tValidSlug = '#@Html.IdFor(m => m.ContentPage.PageSlug)';
+		var tGoLive = '#@Html.IdFor(m => m.ContentPage.GoLiveDate)';
+
+		var thePage = '';
+
+		function exportPage() {
+			window.open('@String.Format("{0}?id={1}", SiteFilename.ContentExportURL, Model.ContentPage.Root_ContentID)');
+		}
+
+		function GenerateBlogFilePrefix() {
+			var sGoLiveDate = $(tGoLive).val();
+			var pageSlug = $(tValidSlug).val();
+			var mySlug = MakeStringSafe(pageSlug);
+
+			var webMthd = webSvc + "/GenerateBlogFilePrefix";
+
+			$.ajax({
+				type: "POST",
+				url: webMthd,
+				data: JSON.stringify({ ThePageSlug: mySlug, GoLiveDate: sGoLiveDate }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: editPrefixCallback,
+				error: cmsAjaxFailed
+			});
+		}
+
+		function editPrefixCallback(data, status) {
+			if (data.d != "FAIL") {
+				$(tValidFile).val(data.d);
+			} else {
+				$(tValidFile).val('/0000/00/00/file.aspx');
+			}
+			$('#lblPrefix').html($(tValidFile).val());
+		}
+
+		function AutoGeneratePageFilename() {
+			var theTitle = $(tTitle).val();
+			var theFile = $(tValidSlug).val();
+			var theNav = $(tNav).val();
+
+			if (theTitle.length > 0 && theFile.length < 1 && theNav.length < 1) {
+				GeneratePageFilename();
+			}
+		}
+
+		function GeneratePageFilename() {
+			var theTitle = $(tTitle).val();
+			var sGoLiveDate = $(tGoLive).val();
+
+			if (theTitle.length > 0) {
+				var webMthd = webSvc + "/GenerateNewFilename";
+				var myPageTitle = MakeStringSafe(theTitle);
+
+				$.ajax({
+					type: "POST",
+					url: webMthd,
+					data: JSON.stringify({ ThePageTitle: myPageTitle, GoLiveDate: sGoLiveDate, PageID: thePageID, Mode: 'blog' }),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: ajaxGeneratePageFilename,
+					error: cmsAjaxFailed
+				});
+			} else {
+				cmsAlertModalSmall("Cannot create a filename with there is no title value assigned.");
+			}
+		}
+
+		function ajaxGeneratePageFilename(data, status) {
+			//debugger;
+			if (data.d == "FAIL") {
+				cmsAlertModal(data.d);
+			} else {
+				var theTitle = $(tTitle).val();
+				var theFile = $(tValidSlug).val();
+				var theNav = $(tNav).val();
+				var theHead = $(tHead).val();
+
+				if (theFile.length < 3) {
+					$(tValidSlug).val(data.d);
+				}
+				if (theNav.length < 1) {
+					$(tNav).val(theTitle);
+				}
+				if (theHead.length < 1) {
+					$(tHead).val(theTitle);
+				}
+			}
+			CheckFileName();
+		}
+
+		function CheckFileName() {
+			GenerateBlogFilePrefix();
+
+			thePage = $(tValidSlug).val();
+			var sGoLiveDate = $(tGoLive).val();
+
+			var webMthd = webSvc + "/ValidateUniqueBlogFilename";
+			var myPage = MakeStringSafe(thePage);
+
+			$.ajax({
+				type: "POST",
+				url: webMthd,
+				data: JSON.stringify({ ThePageSlug: myPage, GoLiveDate: sGoLiveDate, PageID: thePageID }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: editFilenameCallback,
+				error: cmsAjaxFailed
+			});
+		}
+
+		$(document).ready(function () {
+			setTimeout("CheckFileName();", 250);
+
+			$('.date-picker').each(function () {
+				$(this).on('change textchange', function () {
+					setTimeout("CheckFileName();", 500);
+				});
+			});
+		});
+
+		function editFilenameCallback(data, status) {
+			if (data.d != "FAIL" && data.d != "OK") {
+				cmsAlertModal(data.d);
+			}
+
+			var act = true;
+			if (data.d == "OK") {
+				act = false;
+			}
+
+			cmsFlipValidationCss(tValidSlug, act, 'validationExclaimBox', 'validationExclaim', 'Filename not unique');
+		}
+
+		@if (Model.ContentPage.IsPageLocked) {
+			<text>
+		function EditHB() { }
+
+		function cancelEditing() { }
+
+		function deleteContent() { }
+
+		function cmsRecordCancellation() { }
+
+		function openPage() {
+			var theURL = $('#OriginalFileName').val();
+
+			if (theURL.length > 1) {
+				window.setTimeout("location.href = '" + theURL + "';", 250);
+			} else {
+				cmsAlertModalSmall("No saved page to show.");
+			}
+		}
+		</text>
+
+		} else {
+
+			<text>
+		function openPage() {
+			var theURL = $('#OriginalFileName').val();
+			cmsOpenPage(theURL);
+		}
+
+		function EditHB() {
+			var webMthd = webSvc + "/RecordHeartbeat";
+			setTimeout("EditHB();", 25 * 1000);
+
+			if(!cmsGetOKToLeaveStatus()){
+
+				$.ajax({
+					type: "POST",
+					url: webMthd,
+					data: JSON.stringify({ PageID: thePageID }),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: updateHeartbeat,
+					error: cmsAjaxFailedSwallow
+				});
+			}
+		}
+
+		function updateHeartbeat(data, status) {
+			var hb = $('#cmsHeartBeat');
+			hb.empty().append('HB:  ');
+			hb.append(data.d);
+		}
+
+		$(document).ready(function () {
+			setTimeout("EditHB();", 1500);
+		});
+
+		function cancelEditing() {
+
+			var opts = {
+				"No": function () { cmsAlertModalClose(); },
+				"Yes": function () {
+					cmsMakeOKToLeave();
+					cmsRecordCancellation();
+					window.setTimeout("location.href = '@SiteFilename.PageIndexURL';", 500);
+					cmsAlertModalClose();
+				}
+			};
+
+			cmsAlertModalSmallBtns('Are you sure you want to leave the editor? All changes will be lost!', opts);
+
+		}
+
+		function deleteContent() {
+
+			var opts = {
+				"No": function () { cmsAlertModalClose(); },
+				"Yes": function () {
+					cmsMakeOKToLeave();
+					$('#btnDelete').click();
+					cmsAlertModalClose();
+				}
+			};
+
+			cmsAlertModalSmallBtns('Are you sure you want to delete this content? All version history and widget data will be lost!', opts);
+
+		}
+
+		function cmsRecordCancellation() {
+
+			if (thePageID != '@Guid.Empty') {
+
+				var webMthd = webSvc + "/CancelEditing";
+
+				$.ajax({
+					type: "POST",
+					url: webMthd,
+					data: JSON.stringify({ ThisPage: thePageID }),
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: cmsAjaxGeneralCallback,
+					error: cmsAjaxFailed
+				});
+			}
+		}
+		</text>
+		}
+
+		var cmsIsPageLocked = @Model.ContentPage.IsPageLocked.ToString().ToLower();
+
+		$(window).bind('beforeunload', function () {
+			//cmsConfirmLeavingPage = false;
+			if (!cmsIsPageLocked) {
+				if (cmsGetPageStatus()) {
+					return '>>Are you sure you want to navigate away<<';
+				}
+			}
+		});
+
+		$(document).ready(function () {
+			if (!cmsIsPageLocked) {
+				// these click events because of stoopid IE9 navigate away behavior
+				$('#nav-menu a.lnkPopup').each(function (i) {
+					$(this).click(function () {
+						cmsMakeOKToLeave();
+						setTimeout("cmsMakeNotOKToLeave();", 500);
+					});
+				});
+
+				$('#PageContents a').each(function (i) {
+					$(this).click(function () {
+						cmsMakeOKToLeave();
+						setTimeout("cmsMakeNotOKToLeave();", 500);
+					});
+				});
+			}
+		});
+	</script>
+
+	<script type="text/javascript">
+		var webSvc = cmsGetServiceAddress();
+		var thisPageID = '@Model.ContentPage.Root_ContentID';
+
+		function cmsGetWidgetText(val) {
+
+			var webMthd = webSvc + "/GetWidgetLatestText";
+
+			$.ajax({
+				type: "POST",
+				url: webMthd,
+				data: JSON.stringify({ DBKey: val, ThisPage: thisPageID }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: cmsReqContentCallback,
+				error: cmsAjaxFailed
+			});
+		}
+
+		function cmsDoToolTipDataRequest(val) {
+			cmsGetWidgetText(val);
+		}
+
+		function cmsReqContentCallback(data, status) {
+			if (data.d == "FAIL") {
+				cmsSetHTMLMessage('<i>An error occurred. Please try again.</i>');
+			} else {
+				cmsSetTextMessage(data.d);
+			}
+		}
+	</script>
+
+	<script src="~/Assets/Admin/includes/FindUsers.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			initFindUsersMethod("@Html.IdFor(m => m.ContentPage.CreditUserId)", "txtSearchUser", "FindCreditUsers");
+		});
+	</script>
+
+	<link href="~/Assets/Admin/includes/tooltiphelper.css" rel="stylesheet" type="text/css" />
+	<script src="~/Assets/Admin/includes/tooltiphelper.js" type="text/javascript"></script>
+}
+
+<div>
+	@CmsHelpers.DisplayErrorPopupButton()
+	<br />
+	<br />
+</div>
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div id="PageContents">
+		<table style="width: 700px;">
+			<tr>
+				<td style="width: 125px;" class="tablecaption">
+					last updated:
+				</td>
+				<td style="width: 575px;">
+					@Model.ContentPage.EditDate
+					@Html.HiddenFor(m => m.ContentPage.EditDate)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					create date:
+				</td>
+				<td>
+					@Model.ContentPage.CreateDate
+					@Html.HiddenFor(m => m.ContentPage.CreateDate)
+					<br />
+					<br />
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					release date:
+				</td>
+				<td>
+					@{
+	SplitDateTime gld = new SplitDateTime();
+	gld.CombinedDateTime = Model.ContentPage.GoLiveDate;
+	gld.FieldName = Html.NameFor(model => model.ContentPage.GoLiveDate).ToString();
+					}
+
+					@Html.Partial("_datetime", gld)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					retire date:
+				</td>
+				<td>
+					@{
+	SplitDateTime rdt = new SplitDateTime();
+	rdt.CombinedDateTime = Model.ContentPage.RetireDate;
+	rdt.FieldName = Html.NameFor(model => model.ContentPage.RetireDate).ToString();
+					}
+
+					@Html.Partial("_datetime", rdt)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					titlebar:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.ContentPage.TitleBar, new { size = "60", @class = "form-control-xlg", onblur = "AutoGeneratePageFilename()" })
+					@Html.ValidationMessageFor(m => m.ContentPage.TitleBar, "", new { @class = "validationError" })
+					<a href="javascript:void(0)" onclick="GeneratePageFilename()" class="lnkPopup">
+						<img class="imgNoBorder" src="~/Assets/Admin/Images/page_white_wrench.png" title="Generate Filename and other Title fields" alt="Generate Filename and other Title fields" />
+					</a>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="tablecaption">
+					<br>
+				</td>
+				<td>
+					<div class="ui-widget-content ui-corner-all " style="padding: 3px;">
+						<span id="lblPrefix">@Html.Raw(Model.ContentPage.FileName)</span>
+						@Html.HiddenFor(m => m.ContentPage.FileName)
+					</div>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="tablecaption">
+					filename:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.ContentPage.PageSlug, new { size = "60", @class = "form-control-xlg", onblur = "CheckFileName()" })
+					@Html.ValidationMessageFor(m => m.ContentPage.PageSlug, "", new { @class = "validationError" })
+					<a href="javascript:void(0)" onclick="openPage();">
+						<img class="imgNoBorder" src="~/Assets/Admin/Images/html2.png" title="Visit page" alt="Visit page" />
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					navigation:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.ContentPage.NavMenuText, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.ContentPage.NavMenuText, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					page head:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.ContentPage.PageHead, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.ContentPage.PageHead, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					thumbnail:
+					<br />
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.ContentPage.Thumbnail, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.ContentPage.Thumbnail, "", new { @class = "validationError" })
+					<input type="button" id="btnThumb" value="Browse" onclick="cmsFileBrowserOpenReturn('@Html.IdFor(m => m.ContentPage.Thumbnail)');return false;" />
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					&nbsp;
+				</td>
+				<td>
+					@Html.CheckBoxFor(m => m.ContentPage.PageActive)
+					<label for="chkActive">Show publicly</label>
+					&nbsp;&nbsp;&nbsp;
+					@Html.CheckBoxFor(m => m.ContentPage.BlockIndex)
+					<label for="chkHide">Hide from Search Engines</label>
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					credit author:
+				</td>
+				<td>
+					<b>find:</b> <span id="spanResults"></span>
+					<br />
+					@{
+	var usr = Model.CreditUser;
+	string usrCap = String.Empty;
+	if (usr != null) {
+		usrCap = String.Format("{0} ({1})", usr.UserName, usr.Email);
+	}
+					}
+
+					@Html.TextBox("txtSearchUser", usrCap, new { maxlength = "100", @class = "form-control-lg", style = "width:350px;" })
+					@Html.HiddenFor(m => m.ContentPage.CreditUserId)
+				</td>
+			</tr>
+		</table>
+
+		<table style="width: 700px; min-height:75px;">
+			<tr>
+				<td>
+					<div class="ui-widget ui-widget-content ui-corner-all clear">
+						<div class="picker-area ui-widget-header ui-state-default ui-corner-top">
+							categories
+						</div>
+						<div class="picker-area ui-widget-content ui-corner-bottom">
+							<div>
+
+								@*@for (int j = 0; j < Model.CategoryOptions.Count; j++) {
+										@Html.CheckBoxFor(m => Model.CategoryOptions[j].Selected)
+										@Html.HiddenFor(m => Model.CategoryOptions[j].Value)
+										@Html.HiddenFor(m => Model.CategoryOptions[j].Text)
+										<label>@Html.Raw(Model.CategoryOptions[j].Text)</label><br />
+									}*@
+
+								@Html.ListBoxFor(m => m.SelectedCategories,
+									new MultiSelectList(Model.CategoryOptions, "Value", "Text", Model.SelectedCategories),
+									new { @class = "chosen-select", size = 2, @data_placeholder = "select categories" })
+							</div>
+						</div>
+					</div>
+					<div class="clear">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="ui-widget ui-widget-content ui-corner-all clear">
+						<div class="picker-area ui-widget-header ui-state-default ui-corner-top">
+							tags
+						</div>
+						<div class="picker-area ui-widget-content ui-corner-bottom">
+							<div>
+								@*@for (int j = 0; j < Model.TagOptions.Count; j++) {
+										@Html.CheckBoxFor(m => Model.TagOptions[j].Selected)
+										@Html.HiddenFor(m => Model.TagOptions[j].Value)
+										@Html.HiddenFor(m => Model.TagOptions[j].Text)
+										<label>@Html.Raw(Model.TagOptions[j].Text)</label><br />
+									}*@
+
+								@Html.ListBoxFor(m => m.SelectedTags,
+									new MultiSelectList(Model.TagOptions, "Value", "Text", Model.SelectedTags),
+									new { @class = "chosen-select", size = 2, @data_placeholder = "select tags" })
+							</div>
+						</div>
+					</div>
+					<div class="clear">
+					</div>
+				</td>
+			</tr>
+		</table>
+
+		<table style="width: 700px;">
+			<tr>
+				<td style="width: 125px;" class="tablecaption">
+					meta keywords:
+				</td>
+				<td>
+					@Html.TextAreaFor(m => m.ContentPage.MetaKeyword, new { rows = "4", cols = "60", style = "width: 475px;" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					meta description:
+				</td>
+				<td>
+					@Html.TextAreaFor(m => m.ContentPage.MetaDescription, new { rows = "4", cols = "60", style = "width: 475px;" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					template:
+				</td>
+				<td>
+					@Html.DropDownListFor(m => m.ContentPage.TemplateFile, new SelectList(Model.SiteTemplates, "TemplatePath", "Caption"))
+					@Html.ValidationMessageFor(m => m.ContentPage.TemplateFile, "", new { @class = "validationError" })
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" onclick="cmsPreviewTemplate()" value="Preview" />
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption"></td>
+				<td align="right">
+					<input type="button" id="btnBrowseSvr" value="Browse Server Files" onclick="cmsFileBrowserOpen('not-a-real-file');" />
+				</td>
+			</tr>
+		</table>
+
+		<br />
+		<div id="jqtabs" style="height: 425px; width: 900px; margin-bottom: 10px;">
+			<ul>
+				<li><a href="#pagecontent-tabs-0">Left</a></li>
+				<li><a href="#pagecontent-tabs-1">Center</a></li>
+				<li><a href="#pagecontent-tabs-3">Right</a></li>
+				<li><a href="#pagecontent-tabs-5">Text Controls</a></li>
+			</ul>
+			<div style="margin-bottom: 25px; height: 400px; width: 890px;">
+				<div id="pagecontent-tabs-0">
+					<div style="margin-bottom: 25px;">
+						<div id="divLeft">
+							body (left)<br />
+							@*<a href="javascript:cmsToggleTinyMCE('@Html.IdFor(m=> m.LeftPageText)');">Show/Hide Editor</a>*@
+						</div>
+						@Html.TextAreaFor(m => m.ContentPage.LeftPageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 300px; width: 850px;" })
+						<br />
+					</div>
+				</div>
+				<div id="pagecontent-tabs-1">
+					<div style="margin-bottom: 25px;">
+						<div id="divCenter">
+							body (main/center)<br />
+							@*<a href="javascript:cmsToggleTinyMCE('@Html.IdFor(m => m.ContentPage.PageText)');">Show/Hide Editor</a>*@
+						</div>
+						@Html.TextAreaFor(m => m.ContentPage.PageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 300px; width: 850px;" })
+						<br />
+					</div>
+				</div>
+				<div id="pagecontent-tabs-3">
+					<div style="margin-bottom: 25px;">
+						<div id="divRight">
+							body (right)<br />
+							@*<a href="javascript:cmsToggleTinyMCE('@Html.IdFor(m => m.ContentPage.RightPageText)');">Show/Hide Editor</a>*@
+						</div>
+						@Html.TextAreaFor(m => m.ContentPage.RightPageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 300px; width: 850px;" })
+						<br />
+					</div>
+				</div>
+				<div id="pagecontent-tabs-5">
+					<div class="scroll-container" style="height: 325px; width: 780px;">
+						<div class="scroll-area" style="height: 310px; width: 775px;">
+							<div class="SortableGrid">
+								<div>
+									<h3>
+										HTML Rich Text Widgets
+									</h3>
+									<div>
+									</div>
+								</div>
+								<br />
+								<div>
+									<h3>
+										Plain Text Widgets
+									</h3>
+									<div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<table style="width: 800px;">
+			<tr>
+				<td align="left">
+					<div id="cmsHeartBeat" style="clear: both; padding: 2px; margin: 2px; min-height: 22px;">
+						&nbsp;
+					</div>
+				</td>
+				<td>
+					&nbsp;&nbsp;
+				</td>
+			</tr>
+		</table>
+
+		<table style="width: 1100px;">
+			<tr>
+				<td>
+					<input type="button" name="btnSaveButton" value="Save" onclick="return SubmitPage();" id="btnSaveButton" />
+					&nbsp;&nbsp;
+					<input type="button" name="btnSaveButtonVisit" value="Save and Visit" onclick="return SubmitPageVisit();" id="btnSaveButtonVisit" />
+					&nbsp;&nbsp;
+					<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing();" />
+					&nbsp;&nbsp;
+					@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
+						<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
+					}
+				</td>
+				<td></td>
+				<td>
+					&nbsp;&nbsp;
+				</td>
+			</tr>
+		</table>
+	</div>
+	<br />
+
+	<div style="display: none">
+		<input type="submit" name="btnSave" value="Save" id="btnSave" />
+		@Html.HiddenFor(m => m.ContentPage.Root_ContentID)
+		@Html.HiddenFor(m => m.ContentPage.ContentType)
+		@Html.HiddenFor(m => m.ContentPage.SiteID)
+		@Html.HiddenFor(m => m.Mode)
+		@Html.HiddenFor(m => m.ImportID)
+		@Html.HiddenFor(m => m.VersionID)
+		@Html.HiddenFor(m => m.VisitPage)
+
+		@Html.TextBoxFor(m => m.OriginalFileName)
+
+		<div id="formPrettyValidationSummary">
+			@Html.ValidationSummary(true, "")
+		</div>
+	</div>
+
+}
+
+<div style="display: none">
+	@using (Html.BeginForm("DeleteContentPage", RouteConfig.AdminCtrlr)) {
+		@Html.AntiForgeryToken()
+
+		@Html.HiddenFor(m => m.ContentPage.Root_ContentID)
+
+		<input type="submit" name="btnDelete" value="Delete" id="btnDelete" />
+	}
+</div>
+
+<script type="text/javascript">
+
+	function cmsPageVersionNav() {
+		var qs = $('#ddlVersions').val();
+
+		if (qs != '00000') {
+
+			var opts = {
+				"No": function () { cmsAlertModalClose(); },
+				"Yes": function () {
+					cmsMakeOKToLeave();
+					window.setTimeout('location.href = \'./PageAddEdit?versionid=' + qs + '\'', 500);
+					cmsAlertModalClose();
+				}
+			};
+
+			cmsAlertModalSmallBtns('Are you sure you want to open this older version of the content? All unsaved changes will be lost.', opts);
+		}
+	}
+
+	var cmsTemplateDDL = '#@Html.IdFor(m => m.ContentPage.TemplateFile)';
+	var cmsTemplatePreview = '@SiteData.PreviewTemplateFilePage';
+
+	function cmsPreviewTemplate() {
+		var tmpl = $(cmsTemplateDDL).val();
+
+		tmpl = MakeStringSafe(tmpl);
+
+		ShowWindowNoRefresh(cmsTemplatePreview + "@String.Format("?{0}=", SiteData.TemplatePreviewParameter)" + tmpl);
+	}
+
+	$(document).ready(function () {
+		cmsInputEnterBlock();
+	});
+</script>
+<script type="text/javascript">
+
+	function SubmitPage() {
+		var sc = SaveCommon();
+		$('#@Html.IdFor(m => m.VisitPage)').val('false');
+		setTimeout("ClickSaveBtn();", 500);
+		return true;
+	}
+
+	function SubmitPageVisit() {
+		var sc = SaveCommon();
+		$('#@Html.IdFor(m => m.VisitPage)').val('true');
+		setTimeout("ClickSaveBtn();", 500);
+		return true;
+	}
+
+	function ClickSaveBtn() {
+		$('#btnSave').click();
+	}
+
+	function SaveCommon() {
+		var ret = tinyMCE.triggerSave();
+		cmsSaveMakeOKAndCancelLeave();
+		return true;
+	}
+</script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$(".chosen-select").chosen({width: "695px"});
+
+		setTimeout("$('#jqtabs').tabs('option', 'active', 1);", 500);
+	});
+</script>

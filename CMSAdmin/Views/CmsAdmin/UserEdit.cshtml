@@ -1,0 +1,187 @@
+﻿@model UserModel
+
+@{
+	ViewBag.Title = "User Edit";
+}
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div style="display: none">
+		<div id="formPrettyValidationSummary">
+			@Html.ValidationSummary(true, "")
+		</div>
+	</div>
+
+	<fieldset style="width: 550px;">
+		<legend>
+			<label>
+				User Profile
+				@CmsHelpers.DisplayErrorPopupButton()
+			</label>
+		</legend>
+		<table style="width: 550px;">
+			<tr>
+				<td style="width: 125px;">
+					<b class="caption">
+						<label for="lblUserName" id="UserNameLabel">User Name</label>
+					</b>
+				</td>
+				<td style="width: 425px;">
+					<div style="height: 30px;">
+						<span id="lblUserName">@Model.User.UserName</span>
+						@Html.HiddenFor(m => m.User.UserKey)
+						@Html.HiddenFor(m => m.User.UserName)
+						@Html.HiddenFor(m => m.User.UserId)
+						@Html.HiddenFor(m => m.User.Id)
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					@Html.LabelFor(m => m.User.Email, htmlAttributes: new { @class = "caption" })
+				</td>
+				<td>
+					@Html.EditorFor(m => m.User.Email, new { htmlAttributes = new { @class = "form-control-lg" } })
+					@Html.ValidationMessageFor(m => m.User.Email, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecontents">
+					@Html.LabelFor(m => m.User.UserNickName, htmlAttributes: new { @class = "caption" })
+				</td>
+				<td class="tablecontents">
+					@Html.EditorFor(m => m.User.UserNickName, new { htmlAttributes = new { @class = "form-control-lg" } })
+					@Html.ValidationMessageFor(m => m.User.UserNickName, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecontents">
+					@Html.LabelFor(m => m.User.FirstName, htmlAttributes: new { @class = "caption" })
+				</td>
+				<td class="tablecontents">
+					@Html.EditorFor(m => m.User.FirstName, new { htmlAttributes = new { @class = "form-control-lg" } })
+					@Html.ValidationMessageFor(m => m.User.FirstName, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecontents">
+					@Html.LabelFor(m => m.User.LastName, htmlAttributes: new { @class = "caption" })
+				</td>
+				<td class="tablecontents">
+					@Html.EditorFor(m => m.User.LastName, new { htmlAttributes = new { @class = "form-control-lg" } })
+					@Html.ValidationMessageFor(m => m.User.LastName, "", new { @class = "validationError" })
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+	<div>
+		<fieldset style="width: 650px;">
+			<legend>
+				@Html.LabelFor(m => m.User.UserBio, htmlAttributes: new { @class = "control-label" })
+			</legend>
+			@Html.TextAreaFor(m => m.User.UserBio, new { rows = "20", cols = "60", @class = "mceEditor", style = "height: 250px; width: 550px;" })
+			<br />
+		</fieldset>
+	</div>
+
+	<table>
+		<tr>
+			<td>
+				<fieldset style="width: 300px;">
+					<legend>
+						<label>
+							Roles
+						</label>
+					</legend>
+
+					<table class="datatable">
+						<thead class="tablehead">
+							<tr>
+								<th scope="col">&nbsp;</th>
+								<th scope="col">Role Name</th>
+							</tr>
+						</thead>
+						<tbody>
+							@for (int j = 0; j < Model.RoleOptions.Count; j++) {
+								<tr>
+									<td>
+										@Html.CheckBoxFor(x => Model.RoleOptions[j].Selected)
+										@Html.HiddenFor(x => Model.RoleOptions[j].Value)
+										@Html.HiddenFor(x => Model.RoleOptions[j].Text)
+									</td>
+									<td>@Model.RoleOptions[j].Text</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</fieldset>
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td>
+				<fieldset style="width: 400px;">
+					<legend>
+						<label>
+							Sites
+						</label>
+					</legend>
+
+					<table class="datatable">
+						<thead class="tablehead">
+							<tr>
+								<th scope="col">&nbsp;</th>
+								<th scope="col">Site</th>
+								<th scope="col">URL</th>
+							</tr>
+						</thead>
+						<tbody>
+							@for (int j = 0; j < Model.SiteOptions.Count; j++) {
+								var site = Model.AllSites.Where(m => m.SiteID.ToString().ToLower() == Model.SiteOptions[j].Value).FirstOrDefault();
+
+								<tr>
+									<td>
+										@Html.CheckBoxFor(x => Model.SiteOptions[j].Selected)
+										@Html.HiddenFor(x => Model.SiteOptions[j].Value)
+										@Html.HiddenFor(x => Model.SiteOptions[j].Text)
+									</td>
+									<td>@site.SiteName</td>
+									<td>@site.MainURL</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</fieldset>
+			</td>
+		</tr>
+	</table>
+
+	<div>
+		<input type="button" value="Save" id="btnSaveButton" onclick="SubmitPage()" />
+		<input type="button" name="CancelButtonButton" value="Cancel" id="CancelButtonButton" onclick="location.href = '@SiteFilename.UserIndexURL';" />
+	</div>
+
+	<div style="display: none">
+		<input type="submit" name="btnSave" value="btnSave" id="btnSave" />
+	</div>
+
+	<script type="text/javascript">
+
+		function SubmitPage() {
+			var sc = SaveCommon();
+			setTimeout("ClickSaveBtn();", 500);
+			return true;
+		}
+
+		function ClickSaveBtn() {
+			$('#btnSave').click();
+		}
+
+		function SaveCommon() {
+			var ret = tinyMCE.triggerSave();
+			return true;
+		}
+	</script>
+
+}

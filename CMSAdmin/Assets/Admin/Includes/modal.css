@@ -1,0 +1,79 @@
+﻿/*
+ * SimpleModal Basic Modal Dialog
+ * http://www.ericmmartin.com/projects/simplemodal/
+ * http://code.google.com/p/simplemodal/
+ *
+ * Copyright (c) 2010 Eric Martin - http://ericmmartin.com
+ *
+ * Licensed under the MIT license:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *
+ * Revision: $Id: basic.css 257 2010-07-27 23:06:56Z emartin24 $
+ */
+
+#cms-basic-modal-content {
+	display: none;
+}
+
+/* Overlay */
+#cms-simplemodal-overlay, .cms-simplemodal-overlay {
+	background-color: #000;
+	cursor: wait;
+}
+
+/* Container */
+#cms-simplemodal-container, .cms-simplemodal-container {
+	height: 500px;
+	width: 890px;
+	color: #000;
+	background-color: #fff;
+	border: 4px solid #444;
+	padding: 10px;
+}
+
+	#cms-simplemodal-container .cms-cms-simplemodal-data {
+		padding: 5px;
+	}
+
+	#cms-simplemodal-container a.modalCloseImg, a.modalCloseImg {
+		background: url(../images/x.png) no-repeat;
+		width: 30px;
+		height: 30px;
+		display: inline;
+		z-index: 3200;
+		position: absolute;
+		top: -15px;
+		right: -15px;
+		cursor: pointer;
+	}
+
+#cms-basic-modal-content {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+#cms-simplemodal-container {
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-radius: 6px 6px 6px 6px;
+	box-shadow: 0 0 32px #000000;
+	-webkit-border-top-left-radius: 6px;
+	-webkit-border-top-right-radius: 6px;
+	-moz-border-radius-topleft: 6px;
+	-moz-border-radius-topright: 6px;
+	-webkit-border-bottom-right-radius: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-moz-border-radius-bottomright: 6px;
+	-moz-border-radius-bottomleft: 6px;
+}
+
+#cms-simplemodal-overlay, .cms-simplemodal-overlay {
+	z-index: 9950005;
+	background: #eeeeee url(../glossyseagreen/images/ui-bg_hexagon_90_eeeeee_12x10.png) 50% 50% repeat !important;
+	opacity: .8 !important;
+	filter: Alpha(Opacity=80) !important;
+}

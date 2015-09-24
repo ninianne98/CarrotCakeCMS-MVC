@@ -1,0 +1,149 @@
+﻿@model RoleModel
+
+@{
+	ViewBag.Title = "Role Add/Edit";
+}
+
+<div style="display: none">
+	<div id="formPrettyValidationSummary">
+		@Html.ValidationSummary(true, "")
+	</div>
+</div>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(model => model.Role.RoleId)
+
+	<fieldset style="width: 400px;">
+		<legend>
+			<label>
+				Role @CmsHelpers.DisplayErrorPopupButton()
+			</label>
+		</legend>
+		<p>
+			name:
+			@if (Model.CanEditRoleName) {
+				@Html.TextBoxFor(model => model.Role.RoleName, new { @class = "form-control-lg" })
+				@Html.ValidationMessageFor(model => model.Role.RoleName, "", new { @class = "validationError" })
+			} else {
+				@Model.Role.RoleName
+				@Html.HiddenFor(model => model.Role.RoleName)
+			}
+		</p>
+		<p>
+			<br />
+			@if (Model.CanEditRoleName) {
+				<input name="btnSave" type="submit" id="btnSave" value="Save" />
+			}
+			<input name="btnCancel" type="button" id="btnCancel" value="Cancel" onclick="javascript:window.location='@SiteFilename.RoleIndexURL';" />
+			<br />
+		</p>
+	</fieldset>
+}
+
+@if (Model.Role.RoleId != Guid.Empty.ToString().ToLower()) {
+	<div id="pnlUsers">
+		<table>
+			<tr>
+				<td>
+					@using (Html.BeginForm("RoleRemoveUsers", RouteConfig.AdminCtrlr)) {
+						@Html.AntiForgeryToken()
+						@Html.HiddenFor(model => model.Role.RoleId)
+						@Html.HiddenFor(model => model.Role.RoleName)
+						<fieldset style="width: 450px;">
+							<legend>
+								<label>
+									Users @CmsHelpers.DisplayErrorPopupButton()
+								</label>
+							</legend>
+							<br />
+							<div>
+
+								@{
+						var grid = CarrotWeb.CarrotWebGrid<UserModel>(Model.Users);
+
+						grid.TableAttributes = new { @class = "datatable" };
+						grid.THeadAttributes = new { @class = "tablehead" };
+						grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+						grid.UseDataPage = false;
+						grid.ConfigName(Html.NameFor(x => x.Users));
+
+						grid
+						.AddColumn(new CarrotGridTemplateColumn<UserModel> {
+							HasHeadingText = false,
+							FormatTemplate = @<text> @grid.FormFieldFor(m => m.Selected, GridFormFieldType.Checkbox)
+							@grid.FormFieldFor(m => m.User.UserName, GridFormFieldType.Hidden)
+							@grid.FormFieldFor(m => m.User.UserKey, GridFormFieldType.Hidden)
+							@grid.FormFieldFor(m => m.User.UserId, GridFormFieldType.Hidden)
+							@grid.FormFieldFor(m => m.User.Email, GridFormFieldType.Hidden)
+							@grid.FormFieldFor(m => m.User.FullName_FirstLast, GridFormFieldType.Hidden)</text>
+						})
+						.AddColumn(x => x.User.UserName, new CarrotGridColumn())
+						.AddColumn(x => x.User.FullName_FirstLast, new CarrotGridColumn())
+						.AddColumn(x => x.User.Email, new CarrotGridColumn());
+
+						@grid.OutputHtmlBody()
+
+								}
+							</div>
+
+							@if (Model.Users.Any()) {
+								<br />
+								<p>
+									<input type="submit" name="btnRemove" value="Remove Selected" id="btnRemove" />
+								</p>
+							}
+						</fieldset>
+
+					}
+				</td>
+				<td>
+					&nbsp;&nbsp;&nbsp;
+				</td>
+				<td>
+					@using (Html.BeginForm("RoleAddUser", RouteConfig.AdminCtrlr)) {
+						@Html.AntiForgeryToken()
+						@Html.HiddenFor(model => model.Role.RoleId)
+						@Html.HiddenFor(model => model.Role.RoleName)
+
+						<fieldset style="width: 400px;">
+							<legend>
+								<label>
+									Add Users @CmsHelpers.DisplayErrorPopupButton()
+								</label>
+							</legend>
+
+							<script src="~/Assets/Admin/Includes/FindUsers.js" type="text/javascript"></script>
+							<script type="text/javascript">
+								$(document).ready(function () {
+									initFindUsers("@Html.IdFor(m => m.NewUserId)", "txtSearch");
+								});
+							</script>
+
+							<div style="width: 400px;">
+								<p>
+									Search for users to add to this group. Search by either username or email address.
+								</p>
+								<p>
+									<b>Search:</b> <span id="spanResults"></span><br />
+									<input name="txtSearch" type="text" maxlength="100" id="txtSearch" class="form-control-lg" />
+									@Html.ValidationMessageFor(m => m.NewUserId, "", new { @class = "validationError" })
+									@Html.HiddenFor(m => m.NewUserId)
+								</p>
+								<p style="text-align: right;">
+									<input type="submit" name="btnAddUsers" value="Add User" id="btnAddUsers" />
+								</p>
+							</div>
+						</fieldset>
+					}
+				</td>
+			</tr>
+		</table>
+	</div>
+}
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		cmsInputEnterBlock();
+	});
+</script>

@@ -1,0 +1,101 @@
+﻿@model ExtendedUserData
+@{
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+
+	ViewBag.Title = "User Preferences";
+}
+
+@using (Html.BeginForm("UserProfile", RouteConfig.AdminCtrlr)) {
+	@Html.AntiForgeryToken()
+
+	<div style="width: 700px;">
+		<fieldset style="width: 525px;">
+			<legend>
+				<label>
+					Edit Profile
+				</label>
+			</legend>
+
+			@Html.ValidationSummary("", new { @class = "text-danger" })
+
+			@Html.HiddenFor(m => m.UserKey)
+			@Html.HiddenFor(m => m.UserName)
+			@Html.HiddenFor(m => m.UserId)
+			@Html.HiddenFor(m => m.Id)
+
+			<table style="width: 500px;">
+				<tr>
+					<td class="tablecontents" style="width: 100px;">
+						@Html.LabelFor(m => m.Email, new { @class = "caption" })
+					</td>
+					<td class="tablecontents">
+						@Html.TextBoxFor(m => m.Email, new { @class = "form-control-lg" })
+						@Html.ValidationMessageFor(m => m.Email, "", new { @class = "validationError" })
+					</td>
+				</tr>
+				<tr>
+					<td class="tablecontents">
+						@Html.LabelFor(m => m.UserNickName, new { @class = "caption" })
+					</td>
+					<td class="tablecontents">
+						@Html.TextBoxFor(m => m.UserNickName, new { @class = "form-control-lg" })
+						@Html.ValidationMessageFor(m => m.UserNickName, "", new { @class = "validationError" })
+					</td>
+				</tr>
+				<tr>
+					<td class="tablecontents">
+						@Html.LabelFor(m => m.FirstName, new { @class = "caption" })
+					</td>
+					<td class="tablecontents">
+						@Html.TextBoxFor(m => m.FirstName, new { @class = "form-control-lg" })
+						@Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "validationError" })
+					</td>
+				</tr>
+				<tr>
+					<td class="tablecontents">
+						@Html.LabelFor(m => m.LastName, new { @class = "caption" })
+					</td>
+					<td class="tablecontents">
+						@Html.TextBoxFor(m => m.LastName, new { @class = "form-control-lg" })
+						@Html.ValidationMessageFor(m => m.LastName, "", new { @class = "validationError" })
+					</td>
+				</tr>
+			</table>
+		</fieldset>
+		<div>
+			<fieldset style="width: 650px;">
+				<legend>
+					@Html.LabelFor(m => m.UserBio, htmlAttributes: new { @class = "control-label" })
+				</legend>
+				@Html.TextAreaFor(m => m.UserBio, new { rows = "20", cols = "60", @class = "mceEditor", style = "height: 250px; width: 550px;" })
+				<br />
+			</fieldset>
+		</div>
+		<p>
+			<input type="button" name="btnSaveButton" value="Save" id="btnSaveButton" onclick="SubmitPage();" />
+		</p>
+		<div style="display: none">
+			<input type="submit" name="btnSaveEmail" value="Submit" id="btnSaveEmail" />
+		</div>
+	</div>
+}
+
+<script type="text/javascript">
+
+	function SubmitPage() {
+		var sc = SaveCommon();
+		setTimeout("ClickSaveBtn();", 500);
+		return ret;
+	}
+
+	function ClickSaveBtn() {
+		$('#btnSaveEmail').click();
+	}
+
+	function SaveCommon() {
+		var ret = tinyMCE.triggerSave();
+
+		return true;
+	}
+</script>
+

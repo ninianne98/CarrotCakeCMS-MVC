@@ -1,0 +1,77 @@
+﻿@model Carrotware.CMS.Security.Models.RegisterViewModel
+
+@{
+	ViewBag.Title = "Create First Admin";
+
+	Layout = "~/Views/CmsAdmin/_LayoutPublic.cshtml";
+}
+
+<div style="height: 20px; width: 18px; float: right; border: 1px solid #ffffff; clear: both;">
+	<a href="~/">
+		<img class="imgNoBorder" src="~/Assets/Admin/Images/house_go.png" alt="Homepage" title="Homepage" />
+	</a>
+</div>
+
+@if (!ViewData.ModelState.IsValid) {
+	<div class="ui-widget">
+		<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+			<p>
+				<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+				<span id="FailureText">
+					@Html.ValidationSummary(true, "")
+				</span>
+			</p>
+		</div>
+	</div>
+}
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<table style="width: 450px;">
+		<tr>
+			<td style="width: 180px;">
+				<b class="caption">
+					<label for="UserName" id="UserNameLabel">User Name</label>
+				</b>
+			</td>
+			<td style="width: 300px;">
+				@Html.TextBoxFor(m => m.UserName, new { @class = "form-control-md" })
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b class="caption">
+					<label for="Email" id="EmailLabel">E-mail </label>
+				</b>
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.Email, new { @class = "form-control-md" })
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b class="caption">
+					<label for="Password" id="PasswordLabel">Password </label>
+				</b>
+			</td>
+			<td>
+				@Html.PasswordFor(m => m.Password, new { @class = "form-control-md" })
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b class="caption">
+					<label for="ConfirmPassword" id="ConfirmPasswordLabel">Password (confirm) </label>
+				</b>
+			</td>
+			<td>
+				@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control-md" })
+			</td>
+		</tr>
+	</table>
+	<p>
+		<input type="submit" name="btnCreate" value="Create User" id="btnCreate" />
+	</p>
+
+}

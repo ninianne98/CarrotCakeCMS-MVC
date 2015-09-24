@@ -1,0 +1,104 @@
+﻿/* table stylings */
+
+.datatable {
+	border-collapse: collapse;
+	border: 1px solid #000;
+	font-size: 12px;
+	margin: 1em 1em 1em 0;
+	padding: 0;
+	display: inline-block;
+	clear: both;
+}
+
+	.datatable tr, .datatable td, .datatable th {
+		border: 1px solid #000;
+		font-size: 12px;
+		padding: 5px;
+		margin: 5px;
+	}
+
+	.datatable thead, .datatable .tablehead {
+		font-weight: bolder;
+		background-color: #468B5E;
+		color: #fff;
+		border: 1px solid #000;
+	}
+
+		.datatable thead a {
+			color: #fff;
+			cursor: pointer;
+			font-weight: bolder;
+		}
+
+	.datatable tbody tr:nth-child(odd) {
+		background-color: #efefef;
+		border: 1px solid #000;
+		font-size: 12px;
+		font-weight: normal;
+	}
+
+	.datatable tbody tr:nth-child(even) {
+		background-color: #fff;
+		border: 1px solid #000;
+		font-size: 12px;
+		font-weight: normal;
+	}
+
+	.datatable input.inputFld, .datatable td .dateRegion {
+		background: #fff;
+	}
+
+	.datatable input.inputBlocked {
+		background: #808080;
+		cursor: crosshair;
+	}
+
+	.datatable img {
+		padding: 2px;
+		vertical-align: middle;
+		text-align: center;
+		display: block;
+		margin: 2px auto;
+		border-width: 0;
+		margin: auto;
+		padding: 2px;
+		border: none;
+		outline: none;
+	}
+
+.tablezone {
+	clear: both;
+	display: inline-block;
+}
+
+.tablepager {
+	display: block;
+	margin: 1em 1em 1em 0;
+	padding: 0.25em;
+}
+
+	.tablepager li {
+		cursor: pointer;
+		float: left;
+		list-style: outside none none;
+		margin: 2px;
+		padding: 4px 0;
+		position: relative;
+	}
+
+	.tablepager a {
+		margin: 5px;
+		padding: 5px 8px;
+	}
+
+.dataentrytable {
+	border-collapse: collapse;
+	border: 0 solid #000;
+	padding: 5px;
+}
+
+	.dataentrytable tr, .dataentrytable td, .dataentrytable th {
+		border: 0 solid #000;
+		padding: 4px;
+		margin: 2px;
+	}

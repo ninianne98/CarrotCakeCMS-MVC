@@ -1,0 +1,22 @@
+﻿<h1>This site is under construction</h1>
+<h2>This is the homepage</h2>
+
+<p>This website is being built with CarrotCake CMS, an open source c# project. CarrotCake is a 
+	<a href="http://www.carrotware.com/carrotcake-templates.aspx">template-based</a> ASP.Net CMS 
+	(<a href="http://en.wikipedia.org/wiki/Content_management_system" target="_blank">content management system</a>) 
+	built with C#, SQL server, <a href="http://jqueryui.com/" target="_blank">jQueryUI</a>, and 
+	<a href="http://www.tinymce.com/" target="_blank">TinyMCE</a>. If you have found this software useful or have
+	published a site with CarrotCake, we'd love to <a href="http://www.carrotware.com/contact.aspx" target="_blank">hear</a> from you.</p>
+
+<p>Source code and documentation is available on <a href="http://carrotcakecms.codeplex.com/" target="_blank">Microsoft CodePlex</a>, 
+		<a href="http://sourceforge.net/projects/carrotcakecms/" target="_blank">SourceForge</a>, and 
+		<a href="https://github.com/ninianne98/CarrotCakeCMS" target="_blank">GitHub</a>. 
+		Documentation and assemblies can be found <a href="http://www.carrotware.com/carrotcake-download.aspx">here</a>.</p>
+
+<p>Some features include: blogging engine, configurable date based blog post URLs, blog post content association with categories and tags, 
+		assignment/customization of category and tag URL patterns, simple content feedback collection and review, blog post pagination/indexes 
+		(with templating support), designation of default blog page (required to make search, category links, or tag links function), URL date 
+		formatting patterns, RSS feed support for posts and pages, import and export of site content, and import of content from WordPress XML 
+		export files (tested against versions 2.9, 3.0, 3.4, and 3.5).</p>
+
+<p>To learn more about CarrotCake CMS, visit <a href="http://www.carrotware.com/carrotcake-cms.aspx" target="_blank">carrotcake cms</a>.</p>

@@ -1,0 +1,390 @@
+﻿@model CarrotCake.CMS.Plugins.PhotoGallery.Models.EditPhotoGalleryModel
+
+@{
+	Layout = Carrotware.CMS.Interface.CarrotLayout.Main;
+	ViewBag.Title = String.Format("Photo Gallery : {0} ", Model.Gallery.GalleryTitle);
+
+	ImageSizer img = new ImageSizer {
+		ScaleImage = true,
+		ThumbSize = 100
+	};
+
+	ImageSizer img2 = new ImageSizer {
+		ScaleImage = false,
+		ThumbSize = 55
+	};
+
+}
+
+<h3>@ViewBag.Title</h3>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	@Html.HiddenFor(m => m.GalleryID)
+	@Html.HiddenFor(m => m.SiteID)
+	@Html.HiddenFor(m => m.SaveGallery)
+
+	<div id="imgWrapperMain" style="display: none;">
+		<div style="padding: 5px; min-height: 20px; min-width: 20px;">
+			<img alt="" id="imgThmbnail" src="~/Assets/Admin/Images/document.png" />
+		</div>
+	</div>
+
+	<div style="clear: both">
+	</div>
+	<br />
+	<style type="text/css">
+		#galleryTarget, #gallerySource {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			float: left;
+			margin-right: 10px;
+			padding: 5px;
+			min-height: 40px;
+			min-width: 300px;
+		}
+
+			#galleryTarget li, #gallerySource li {
+				margin: 5px;
+				padding: 5px;
+				font-size: 11px;
+				width: 350px;
+				height: 60px;
+			}
+
+				#galleryTarget li img, #gallerySource li img {
+					margin: 3px;
+				}
+
+		.fileInfo {
+			margin: 8px;
+		}
+
+		div.galleryScroll {
+			height: 300px;
+			width: 420px;
+			overflow: auto;
+			border: 1px solid #666;
+			padding: 2px;
+			float: left;
+			margin-right: 25px;
+			margin-top: 10px;
+			margin-bottom: 25px;
+		}
+
+		div.galleryScrollHead {
+			padding: 2px;
+			margin-right: 25px;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			width: 420px;
+			float: left;
+		}
+
+			div.galleryScrollHead strong, div.galleryScrollHead b {
+				font-size: 16px;
+				font-weight: bold;
+			}
+
+		.HighlightPH {
+			height: 25px !important;
+			margin: 5px;
+			padding: 5px;
+			background: #FFFFAA !important;
+			border: 2px dashed #676F6A !important;
+		}
+
+		#galleryTarget .icoDel {
+			display: block;
+			float: right;
+			padding: 4px;
+		}
+
+		#gallerySource .icoDel {
+			display: none;
+		}
+
+		#galleryTarget .editMetaData {
+			display: block;
+			float: right;
+			padding: 4px;
+		}
+
+		#gallerySource .editMetaData {
+			display: none;
+		}
+
+		.inputFields {
+			display: none;
+		}
+
+		#imgWrapperMain {
+			display: block;
+			min-height: 2px;
+			min-width: 2px;
+			width: 850px;
+			padding: 8px;
+			margin: 0px;
+			position: absolute;
+			z-index: 2000;
+			text-align: center;
+			margin: 10px auto;
+		}
+
+			#imgWrapperMain #imgThmbnail {
+				min-height: 2px;
+				min-width: 2px;
+				max-height: 105px;
+				width: auto;
+			}
+
+		.thumbpreview {
+			display: block;
+			min-height: 2px;
+			min-width: 2px;
+			padding: 8px;
+			color: #000000;
+			background-color: #B7D7C4;
+			margin: 10px auto;
+			text-align: center;
+		}
+	</style>
+
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			updateGallery();
+		});
+
+		function saveGallery() {
+			galleryOrder();
+
+			$('#@Html.IdFor(m => m.SaveGallery)').val('true');
+
+			setTimeout("$('#btnSave').click();", 1000);
+		}
+
+		var imgPreview = 'imgWrapperMain';
+
+		function hideImg(obj) {
+			var theNode = $(obj).parent();
+
+			var theImgLayer = $('#' + imgPreview);
+			$(theImgLayer).attr('style', 'display:none;');
+			$(theImgLayer).attr('class', '');
+
+			var img = $(theImgLayer).find('img');
+			img.attr('src', '/Assets/Admin/Images/document.png');
+		}
+
+		function showImg(obj) {
+			var theNode = $(obj).parent();
+
+			var key = $(theNode).find('#imgName').text();
+
+			var newImgSrc = '@Html.Raw(img.ThumbUrl)' + encodeURIComponent(key);
+
+			var theImgLayer = $('#' + imgPreview);
+			$(theImgLayer).attr('style', '');
+			$(theImgLayer).attr('class', 'thumbpreview ui-corner-all');
+
+			var img = $(theImgLayer).find('img');
+			img.attr('src', '/Assets/Admin/Images/document.png');
+			img.attr('src', newImgSrc);
+		}
+
+		function galleryOrder() {
+
+			$('#srcGalleryCount').text($("#gallerySource").find('li').length);
+			$('#tgtGalleryCount').text($("#galleryTarget").find('li').length);
+
+			var OrderField = "@Html.IdFor(m => m.GalleryOrder)";
+			$("#" + OrderField).val('');
+
+			$("#galleryTarget").find('li').each(function (i) {
+
+				var liImg = $(this);
+				var id = liImg.attr('id');
+				var key = liImg.find('#imgName').text();
+				var img = liImg.find('#imgThumb').first();
+
+				var newImgSrc = '@Html.Raw(img2.ThumbUrl)' + encodeURIComponent(key);
+				$(img).attr('src', newImgSrc);
+
+				//alert($(img).attr('src'));
+
+				var keys = (i + '\t' + key);
+
+				$("#" + OrderField).val($("#" + OrderField).val() + '\r\n ' + keys);
+			});
+		}
+
+		function updateGallery() {
+
+			$(document).ready(function () {
+				setTimeout("galleryOrder();", 800);
+
+				$(function () {
+
+					$("#galleryTarget").sortable({
+						revert: true,
+						dropOnEmpty: true,
+						handle: "img",
+						placeholder: "HighlightPH ui-state-highlight ui-corner-all",
+						hoverClass: "HighlightPH ui-state-highlight ui-corner-all"
+					});
+
+					$("#gallerySource li").draggable({
+						connectToSortable: "#galleryTarget",
+						helper: "clone",
+						revert: "invalid",
+						handle: "img",
+						placeholder: "HighlightPH ui-state-highlight ui-corner-all"
+					});
+
+					$("#galleryTarget").bind("sortupdate", function (event, ui) {
+						setTimeout("galleryOrder();", 500);
+					});
+
+					$("#galleryTarget, #gallerySource").disableSelection();
+
+					$("#galleryTarget a").enableSelection();
+
+				});
+
+			});
+		}
+
+		function clearFolderContents() {
+			$("#galleryTarget").find('li').each(function (i) {
+				$(this).remove();
+			});
+
+			galleryOrder();
+		}
+
+		function copyFolderContents() {
+			var ulTgt = $("#galleryTarget");
+
+			$("#gallerySource").find('li').each(function (i) {
+				$(this).clone().appendTo(ulTgt);
+			});
+
+			galleryOrder();
+		}
+
+		function galleryRemoveItem(a) {
+			var tgt = $(a);
+			if (tgt.is("a")) {
+				var p = $($(tgt).parent().parent());
+				//alert(p.attr('id'));
+				var txt = p.find('#imgName');
+				p.remove();
+			}
+
+			//alert("clicked");
+			setTimeout("galleryOrder();", 500);
+			return false;
+		}
+	</script>
+	<br />
+	<table>
+		<tr>
+			<td style="width: 225px">
+				@Html.CheckBoxFor(m => m.RestrictDate)
+				Restrict images to +/- 14 days
+			</td>
+			<td style="width: 225px">
+				@Html.TextBoxFor(m => m.Date, "{0:MM/dd/yyyy}", new { @class = "dateRegion" })
+			</td>
+			<td style="width: 100px">
+				<input type="submit" name="btnApply" value="Apply" id="btnApply" />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				@Html.CheckBoxFor(m => m.RestrictFolder)
+				Restrict images to selected folder
+			</td>
+			<td colspan="2">
+				@Html.DropDownListFor(m => m.SelectedFolder, new SelectList(Model.FileFolders, "FolderPath", "FileName"))
+			</td>
+		</tr>
+	</table>
+	<div style="clear: both">
+	</div>
+	<div style="width: 960px">
+		<div class="galleryScrollHead">
+			<b>Site Images (<span id="srcGalleryCount">0</span> items)</b> &nbsp;&nbsp;&nbsp;
+			<input type="button" value="copy all" onclick="javascript:copyFolderContents()" />
+		</div>
+		<div class="galleryScrollHead">
+			<b>Gallery Images (<span id="tgtGalleryCount">0</span> items)</b> &nbsp;&nbsp;&nbsp;
+			<input type="button" value="clear all" onclick="javascript:clearFolderContents()" />
+		</div>
+		<div style="clear: both">
+		</div>
+
+		<div class="galleryScroll">
+			<ul id="gallerySource" class='ui-state-default photoSource'>
+				@foreach (var srcImage in Model.SiteImages) {
+					<li class="ui-widget ui-widget-content" id="ID_0000000000">
+						<img id="imgThumb" height="50" width="50" onmouseout="hideImg(this)" onmouseover="showImg(this)" style="float: left"
+							 src="~/Assets/prettyPhoto/PhotoIcon.png" title="@srcImage.FileName" alt="@HttpUtility.UrlEncode(srcImage.FileName)" />
+						<div style="float: left; max-width: 240px" class="fileInfo">
+							<span id="imgName">@srcImage.FullFileName</span>
+							<br />
+							@String.Format("{0:d}  ", srcImage.FileDate)
+							@srcImage.FileSizeFriendly
+						</div>
+						<span class="icoDel ui-state-default ui-corner-all">
+							<a href='javascript:void(0);' onclick='galleryRemoveItem(this);' title='Delete'>
+								<span class="ui-icon ui-icon-closethick">
+								</span>
+							</a>
+						</span>
+						<a class="editMetaData" href="javascript:@Carrotware.CMS.Interface.CarrotLayout.WritePopupLink( Url.Action("EditImageMetaData", null, new { path = Carrotware.CMS.Core.CMSConfigHelper.EncodeBase64(srcImage.FullFileName) }))">
+							<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
+						</a>
+					</li>
+				}
+			</ul>
+		</div>
+
+		<div class="galleryScroll">
+			<ul id="galleryTarget" class='ui-state-default photoTarget'>
+				@foreach (var galImage in Model.ImageFiles) {
+					<li class="ui-widget ui-widget-content" id="ID_0000000000">
+						@CarrotWeb.ImageSizer(galImage.FullFileName, galImage.FileName, 50, true, new { @style = "float: left", @id = "imgThumb", @onmouseout = "hideImg(this)", @onmouseover = "showImg(this)" })
+
+						<div style="float: left; max-width: 240px" class="fileInfo">
+							<span id="imgName">@galImage.FullFileName</span>
+							<br />
+							@String.Format("{0:d}  ", galImage.FileDate)
+							@galImage.FileSizeFriendly
+						</div>
+						<span class="icoDel ui-state-default ui-corner-all">
+							<a href='javascript:void(0);' onclick='galleryRemoveItem(this);' title='Delete'>
+								<span class="ui-icon ui-icon-closethick">
+								</span>
+							</a>
+						</span>
+						<a class="editMetaData" href="javascript:ShowWindowNoRefresh('@Url.Action("EditImageMetaData", null, new { path = Carrotware.CMS.Core.CMSConfigHelper.EncodeBase64(galImage.FullFileName) })');">
+							<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
+						</a>
+					</li>
+				}
+			</ul>
+		</div>
+		<div style="clear: both">
+		</div>
+	</div>
+
+	@Html.TextAreaFor(m => m.GalleryOrder, new { @class = "inputFields", rows = "8", cols = "60" })
+
+	<input type="button" name="btnSaveClick" value="Save" id="btnSaveClick" onclick="saveGallery()" />
+
+	<input type="submit" name="btnSave" value="Save" id="btnSave" style="display:none;" />
+}

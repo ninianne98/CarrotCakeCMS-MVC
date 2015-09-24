@@ -1,0 +1,144 @@
+﻿<p><img title="" src="Carrotware.CMS.Core.SiteContent.Mock.sample1.png" alt="" align="left" /> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mi arcu, lacinia scelerisque blandit nec, mattis non nibh. Curabitur quis urna at massa placerat auctor. Quisque et mauris sapien, a consectetur nulla. Cum <a title="" href="#">sociis natoque penatibus et magnis dis</a> parturient montes, nascetur ridiculus mus. Nullam pellentesque, turpis a gravida porta, nibh libero feugiat augue, vel interdum erat lectus nec lorem. </p>
+
+<fieldset style="width: 75%px;">
+	<legend>
+		<label>
+			Nullam sit amet ligula vitae tellus laoreet
+		</label>
+	</legend>
+	<p>Phasellus vel odio felis, a venenatis tellus. Nullam sit amet ligula vitae tellus laoreet accumsan eu nec odio. Sed tincidunt congue euismod. Pellentesque sollicitudin erat massa. <a title="" href="#">Quisque lacinia</a>, metus in pretium lobortis, ipsum leo semper mauris, at gravida est nisl sit amet metus. Pellentesque quis massa eget odio lobortis pharetra.</p>
+</fieldset>
+
+<ul>
+<li>This is an nordered list Item 1</li>
+<li>This is an nordered list Item 2</li>
+<li>This is an nordered list Item 3</li>
+<li>This is an nordered list Item 4</li>
+</ul>
+
+<h2>Vivamus urna libero, blandit nec eleifend at</h2>
+
+<p><img title="" src="Carrotware.CMS.Core.SiteContent.Mock.sample4.png" alt="" align="left" /> Vivamus urna libero, blandit nec eleifend at, porta id ante. Proin vitae turpis lacus. Sed ultrices vulputate dictum. Cras porttitor nibh sed eros suscipit quis pellentesque urna feugiat. Fusce <a title="" href="#">interdum mattis ullamcorper</a>. Aliquam non nibh arcu. Donec mollis, libero eget tempor facilisis, libero erat viverra lorem, et porta neque elit ornare arcu. Sed a ipsum diam. Ut pellentesque egestas lacus, <a title="" href="#">non ultrices dui</a> molestie non. Vivamus venenatis pharetra massa vitae tincidunt. Nulla quis lorem lacus, quis sagittis urna.</p>
+
+<blockquote>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mi arcu, lacinia scelerisque blandit nec, mattis non nibh. Curabitur quis urna at massa placerat auctor. Quisque et mauris sapien, a consectetur nulla. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</blockquote>
+
+<ol>
+<li>This is an ordered list Item 1</li>
+<li>This is an ordered list Item 2</li>
+<li>This is an ordered list Item 3</li>
+<li>This is an ordered list Item 4</li>
+</ol>
+
+<br />
+
+<table>
+<tbody>
+<tr>
+	<th>Column 1</th>
+	<th>Column 2</th>
+	<th>Column 3</th>
+	<th>Column 4</th>
+</tr>
+<tr>
+	<td>Row 2, 1</td>
+	<td>Row 2, 2</td>
+	<td>Row 2, 3</td>
+	<td>Row 2, 4</td>
+</tr>
+<tr>
+	<td>Row 3, 1</td>
+	<td>Row 3, 2</td>
+	<td>Row 3, 3</td>
+	<td>Row 3, 4</td>
+</tr>
+<tr>
+	<td>Row 4, 1</td>
+	<td>Row 4, 2</td>
+	<td>Row 4, 3</td>
+	<td>Row 4, 4</td>
+</tr>
+</tbody>
+</table>
+
+<div style="clear: both;">
+</div>
+
+<!--
+<p><img title="" src="Carrotware.CMS.Core.SiteContent.Mock.sample3.png" alt="" align="right" /> Aliquam rhoncus, massa eget congue accumsan, turpis ante vestibulum ligula, sed auctor ligula quam at quam. Integer fringilla, diam vitae egestas elementum, erat tellus lacinia neque, posuere eleifend turpis quam quis mi. Cras bibendum varius lacus, a varius quam lacinia non. Duis ac purus id dolor aliquam interdum. Sed nec luctus nunc. In id felis vitae massa adipiscing lacinia. Aenean placerat massa sit amet tortor porttitor adipiscing. Donec iaculis nisi fringilla mi pretium at sodales tellus suscipit. Maecenas ac sollicitudin urna. Suspendisse sed purus a libero fermentum rhoncus. </p>
+
+<blockquote>  Maecenas sit amet neque lectus. Nullam non mi non sapien dignissim dapibus at ac turpis. 
+Morbi diam orci, volutpat sed cursus vel, ultrices eu dolor. Nullam et magna non ante sagittis euismod sed at erat.</blockquote>
+-->
+
+<h2>Form Elements</h2>
+
+<p>Morbi diam orci, volutpat sed cursus vel, ultrices eu dolor. Nullam et magna non ante sagittis euismod sed at erat.</p>
+
+<p><label for="text_field">Text Field:</label><br />
+<input type="text" id="text_field" /></p>
+<div style="clear: both;">
+</div>
+
+<p><label for="text_area">Text Area:</label><br />
+<textarea id="text_area"></textarea></p>
+<div style="clear: both;">
+</div>
+
+<p>
+<label for="select_element">Select Element:</label>
+<select name="select_element">
+		<optgroup label="Option Group 1">
+			<option value="1">Option 1</option>
+			<option value="2">Option 2</option>
+			<option value="3">Option 3</option>
+		</optgroup>
+		<optgroup label="Option Group 2">
+			<option value="1">Option 1</option>
+			<option value="2">Option 2</option>
+			<option value="3">Option 3</option>
+		</optgroup>
+</select>
+</p>
+<div style="clear: both;">
+</div>
+
+<p><label for="radio_buttons">Radio Buttons:</label><br />
+<input type="radio" class="radio" name="radio_button" value="radio_1" /> Radio 1  &nbsp;&nbsp;&nbsp;
+<input type="radio" class="radio" name="radio_button" value="radio_2" /> Radio 2  &nbsp;&nbsp;&nbsp;
+<input type="radio" class="radio" name="radio_button" value="radio_3" /> Radio 3  
+</p>
+<div style="clear: both;">
+</div>
+
+<p><label for="checkboxes">Checkboxes:</label><br />
+<input type="checkbox" class="checkbox" name="checkboxes" value="check_1" /> Radio 1  &nbsp;&nbsp;&nbsp;
+<input type="checkbox" class="checkbox" name="checkboxes" value="check_2" /> Radio 2  &nbsp;&nbsp;&nbsp;
+<input type="checkbox" class="checkbox" name="checkboxes" value="check_3" /> Radio 3  
+</p>
+<div style="clear: both;">
+</div>
+
+<p>
+<label for="password">Password:</label><br />
+<input type="password" class="password" name="password" />
+</p>
+<div style="clear: both;">
+</div>
+
+<p>
+<label for="file">File Input:</label><br />
+<input type="file" class="file" name="file" />
+</p>
+<div style="clear: both;">
+</div>
+
+<p>
+	<input type="reset" value="Clear Unstyled" /> 
+	<input type="submit" value="Submit Unstyled" /> 
+	<input type="button" value="Button Unstyled" /> <br />
+	<input class="button" type="reset" value="Clear Styled" /> 
+	<input class="button" type="submit" value="Submit Styled" />
+	<input class="button" type="button" value="Button Styled" />
+</p>
+<div style="clear: both;">
+</div>

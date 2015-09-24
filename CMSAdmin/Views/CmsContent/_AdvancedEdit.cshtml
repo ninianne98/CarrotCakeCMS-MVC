@@ -1,0 +1,283 @@
+﻿@inherits CmsWebViewPage
+
+<!-- CarrotCake CMS Editor Control BEGIN -->
+@{
+	string lockStatus = CmsPage.IsPageLocked.ToString().ToLower();
+	var lockUser = CmsPage.LockUser;
+	string lockUsername = lockUser != null ? lockUser.UserName : String.Empty;
+
+	var EditorPrefs = UserEditState.cmsUserEditState;
+	if (EditorPrefs == null) {
+		EditorPrefs = new UserEditState();
+		EditorPrefs.Init();
+	}
+
+	string clickJsEditInfo = "cmsShowEditPageInfo();";
+
+	if (CmsPage.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+		clickJsEditInfo = "cmsShowEditPostInfo();";
+	}
+}
+
+<script type="text/javascript">
+	var cmsPageInit2 = false;
+	var cmsPageLocked = @lockStatus;
+
+	$(document).ready(function () {
+		cmsToolbarPageInit2();
+	});
+
+	function cmsToolbarPageInit2() {
+		if (!cmsPageInit2) {
+
+			if(!cmsPageLocked){
+				setTimeout('cmsEditHB();', 1500);
+			} else{
+				cmsAlertModal('The content is already being edited by @lockUsername');
+			}
+
+			cmsPageInit2 = true;
+		}
+
+		$(".cmsGlossySeaGreen input:button, .cmsGlossySeaGreen input:submit, .cmsGlossySeaGreen input:reset").button();
+		$("#cmsGlossySeaGreenID input:button, #cmsGlossySeaGreenID input:submit, #cmsGlossySeaGreenID input:reset").button();
+	}
+
+	var cmsPageInit1 = false;
+
+	$(document).ready(function () {
+		cmsToolbarPageInit1();
+	});
+
+	function cmsToolbarPageInit1() {
+
+		var cmsWebSvc = "/Assets/Admin/CMS.asmx";
+
+		var cmsThisPage = "@CmsPage.ThePage.FileName";
+		var cmsThisPageID = "@CmsPage.ThePage.Root_ContentID";
+
+		var cmsMargin = '@EditorPrefs.EditorMargin';
+		var cmsTabIdx = parseInt('@EditorPrefs.EditorSelectedTabIdx');
+		var cmsScrollPos = parseInt('@EditorPrefs.EditorScrollPosition');
+		var cmsScrollWPos = parseInt('@EditorPrefs.EditorWidgetScrollPosition');
+		var cmsOpenStat = @String.Format("{0};", EditorPrefs.EditorOpen.ToString().ToLower())
+
+		cmsSetPageStatus(cmsPageLocked);
+
+		cmsSetPrefs(cmsTabIdx, cmsMargin, cmsScrollPos, cmsScrollWPos, cmsOpenStat);
+
+		cmsSetServiceParms(cmsWebSvc, cmsThisPage, cmsThisPageID);
+
+		cmsSetTemplateDDL('#ddlCmsTemplateList');
+
+		cmsSetPreviewFileName('@SiteData.PreviewTemplateFilePage');
+
+		cmsOverridePageName('@CmsPage.ThePage.FileName');
+
+		if (!cmsPageInit1) {
+
+			cmsInitWidgets();
+
+			cmsPageLockCheck();
+
+			cmsResetToolbarScroll();
+
+			setTimeout("cmsBuildOrder();", 250);
+
+			cmsPageInit1 = true;
+		}
+	}
+</script>
+<div class="cmsMainAdvControls">
+	<div id="cmsGlossySeaGreenID" class="cmsGlossySeaGreen">
+
+		<div style="display: none">
+			<div id="cms-basic-modal-content" class="cmsGlossySeaGreen">
+				<div id="cmsModalFrame">
+				</div>
+			</div>
+		</div>
+		<div id="cmsToolBoxWrap" class="cmsToolbarAlignmentL">
+			<div id="cmsAdminToolbox" class="cmsGlossySeaGreen cmsToolbox2 cmsToolbox3">
+				<div class="cmsInsideArea">
+					<div class="ui-widget-header ui-corner-all cmsToolboxHead">
+						<div class="cmsFloatLeft">
+							<p class="cmsToolboxHeadCaption">
+								CarrotCake CMS
+							</p>
+						</div>
+						<div class='cmsFloatRight'>
+							<div onclick="cmsShiftPosition('L')" id="cmsMnuLeft" class="ui-icon ui-icon-circle-triangle-w cmsFloatLeft" title="L">
+								L
+							</div>
+							<div onclick="cmsShiftPosition('R')" id="cmsMnuRight" class="ui-icon ui-icon-circle-triangle-e cmsFloatLeft" title="R">
+								R
+							</div>
+							<div onclick="cmsToggleMenu();" id="cmsMnuToggle" class="ui-icon ui-icon-minusthick cmsFloatLeft" title="toggle">
+								T
+							</div>
+						</div>
+						<div style="clear: both;">
+						</div>
+					</div>
+					<div id="cmsDivActive" class="cmsGlossySeaGreen">
+
+						<div id="cmsMainToolbox" class="cmsGlossySeaGreen">
+							<div id="pnlCMSEditZone">
+
+								<div id="cmsJQTabedToolbox">
+									<ul>
+										<li><a href="#cmsTabIdx-tabs-1">Widgets</a></li>
+										<li><a href="#cmsTabIdx-tabs-2">Templates</a></li>
+										<li><a href="#cmsTabIdx-tabs-3">Page Info</a></li>
+									</ul>
+									<div id="cmsTabIdx-tabs-1">
+										<div style="display: none;">
+											cmsFullOrder<br />
+											<textarea rows="5" cols="30" id="cmsFullOrder" style="width: 310px; height: 50px;"></textarea><br />
+											cmsMovedItem<br />
+											<input type="text" id="cmsMovedItem" style="width: 310px;" /><br />
+										</div>
+										<div class="cmsCenter5px">
+											<input type="button" id="btnToolboxSave1" value="Save" onclick="cmsApplyChanges();" />
+											&nbsp;&nbsp;&nbsp;
+											<input type="button" id="btnToolboxCancel1" value="Cancel" onclick="cmsCancelEdit();" />
+										</div>
+
+										<div id="cmsToolBox" class="ui-widget-content ui-corner-all" style="overflow: auto; height: 290px; width: 240px; padding: 5px; margin: 5px; float: left;
+													border: solid 1px #000;">
+
+											@foreach (var widget in CmsPage.Plugins) {
+
+												<div id="cmsToolItemDiv" class="cmsToolItem cmsToolItemWrapper cmsGlossySeaGreen">
+													<div class="cmsWidgetControlItem cmsWidgetToolboxItem cmsWidgetCtrlPath cmsGlossySeaGreen" id="cmsControl">
+														<p class="cmsToolItem ui-widget-header cmsGlossySeaGreen">
+															@Html.Raw(widget.Caption)
+															@if (widget.SystemPlugin) {
+																<span style="float:right;" class="ui-icon ui-icon-star"></span>
+															} else {
+																<span style="float:right;" class="ui-icon ui-icon-tag"></span>
+															}
+														</p>
+														<p class="cmsWidgetToolboxPath">
+															@String.Format("{0}", widget.FilePath).Replace(".", ". ").Replace("/", "/ ")
+															<br />
+														</p>
+														<input type="hidden" id="cmsCtrlID" value="@widget.FilePath" />
+														<input type="hidden" id="cmsCtrlOrder" value="0" />
+													</div>
+												</div>
+											}
+										</div>
+										<div style="clear: both;">
+										</div>
+									</div>
+									<div id="cmsTabIdx-tabs-2">
+										<div class="cmsLeft5px">
+											<p>
+												Templates / Skins<br />
+												@Html.DropDownList("ddlCmsTemplateList", new SelectList(CmsPage.Templates, "TemplatePath", "Caption", CmsPage.ThePage.TemplateFile.ToLower()), new { @class = "cmsAdvEditTemplatePicker" })
+											</p>
+											<p class="cmsCenter5px">
+												<input name="btnTemplate" type="button" id="btnTemplate" value="Apply" onclick="cmsUpdateTemplate();" />
+												&nbsp;&nbsp;&nbsp;
+												<input name="btnPreview" type="button" id="btnPreview" value="Preview" onclick="cmsPreviewTemplate();" />
+												<br />
+											</p>
+											<p class="cmsCenter5px">
+											</p>
+											<div class="cmsCenter5px">
+												<input type="button" id="btnToolboxSave2" value="Save" onclick="cmsApplyChanges();" />
+												&nbsp;&nbsp;&nbsp;
+												<input type="button" id="btnToolboxCancel2" value="Cancel" onclick="cmsCancelEdit();" />
+											</div>
+										</div>
+										<div style="clear: both;">
+										</div>
+									</div>
+									<div id="cmsTabIdx-tabs-3">
+										<div class="cmsLeft5px">
+											<p>
+												<input name="btnEditCoreInfo" type="button" id="btnEditCoreInfo" value="Edit Core Page Info" onclick="@clickJsEditInfo" />
+											</p>
+											<p>
+												<input name="btnAddPage" type="button" id="btnAddPage" value="Add New Page" onclick="cmsShowAddPage();" />
+											</p>
+											@if (CmsPage.ThePage.ContentType == ContentPageType.PageType.ContentEntry) {
+												<p>
+													<input name="btnSortChildPages" type="button" id="btnSortChildPages" value="Sort Child/Sub Pages" onclick="cmsSortChildren();" />
+												</p>
+											}
+											<p>
+												<input name="btnSiteMap" type="button" id="btnSiteMap" value="Site Map" onclick="cmsEditSiteMap();" />
+											</p>
+											<p>
+												<input name="btnAllWidgets" type="button" id="btnAllWidgets" value="View Full Widget List" onclick="cmsShowWidgetList();" />
+											</p>
+										</div>
+										<div class="cmsCenter5px">
+											<input type="button" id="btnToolboxSave3" value="Save" onclick="cmsApplyChanges();" />
+											&nbsp;&nbsp;&nbsp;
+											<input type="button" id="btnToolboxCancel3" value="Cancel" onclick="cmsCancelEdit();" />
+										</div>
+										<div style="clear: both;">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div style="height: 2px; width: 100px; clear: both;">
+					</div>
+					<div class="cmsVersion">
+						@SiteData.CarrotCakeCMSVersion
+					</div>
+					<div id="cmsHeartBeat" style="clear: both; padding: 2px; margin: 2px; height: 20px;">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="display: none" class="cmsGlossySeaGreen">
+		<div id="CMSmodalalert" title="CarrotCake CMS" class="cmsGlossySeaGreen">
+			<p id="CMSmodalalertmessage">
+				&nbsp;
+			</p>
+		</div>
+		<div id="CMSremoveconfirm" title="Remove Widget?" class="cmsGlossySeaGreen">
+			<p id="CMSremoveconfirmmsg">
+				Are you sure you want to remove this widget?
+			</p>
+		</div>
+		<div id="CMSsavedconfirm" title="Page Saved!" class="cmsGlossySeaGreen">
+			<p id="CMSsavedconfirmmsg">
+				The page has been saved. Click OK to return to browse mode. Redirecting in <span id="cmsSaveCountdown">10</span> seconds...
+			</p>
+		</div>
+		<div id="CMScancelconfirm" title="Quit Editor?" class="cmsGlossySeaGreen">
+			<p id="CMScancelconfirmmsg">
+				Are you sure you want to leave the editor? All changes will be lost!
+			</p>
+		</div>
+	</div>
+	<div style="width: 1024px; height: 2px; clear: both; left: 0; border: 0px dotted #c0c0c0; z-index: 5000;">
+	</div>
+	<div style="width: 2px; height: 1024px; clear: both; left: 0; border: 0px dotted #c0c0c0; z-index: 5000;">
+	</div>
+	<div style="clear: both;">
+		&nbsp;
+	</div>
+</div>
+
+<div style="display: none;">
+	<img src="~/Assets/Admin/Images/cog.png" alt="" />
+	<img src="~/Assets/Admin/Images/cross.png" alt="" />
+	<img src="~/Assets/Admin/Images/pencil.png" alt="" />
+	<img src="~/Assets/Admin/Images/application_view_tile.png" alt="" />
+	<img src="~/Assets/Admin/Images/layout.png" alt="" />
+	<img src="~/Assets/Admin/Images/arrow_in.png" alt="" />
+	<img src="~/Assets/Admin/Images/dragbg.png" alt="" />
+	<img src="~/Assets/Admin/Images/x.png" alt="x" />
+</div>
+
+<!-- CarrotCake CMS Editor Control END -->
