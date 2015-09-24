@@ -1,0 +1,57 @@
+﻿@model PagedData<Product>
+
+@{
+	ViewBag.Title = "Products";
+}
+
+<p>
+	@Html.ActionLink("Create New", "CreateProduct")
+</p>
+
+@*@Html.TextBox("")*@
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	var grid = CarrotWeb.CarrotWebGrid<Product>(Model);
+
+	grid.TableAttributes = new { @class = "datatable table" };
+	grid.THeadAttributes = new { @class = "tablehead header" };
+	//grid.ConfigName(Html.NameFor(x => x));
+
+	//grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
+	grid.SetupFooter("ul", new { @class = "pagination" }, "li", new { @class = "active" }, null);
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<Product> {
+			HasHeadingText = false,
+			FormatTemplate = @<text> @CarrotWeb.ActionImage("EditProduct", "Admin", new { @id = @item.ProductID }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
+		})
+		.AddColumn(new CarrotGridTemplateColumn<Product> {
+			HeaderText = "SUP",
+			FormatTemplate = @<text> @grid.DropDownFor(m => m.SupplierID, new SelectList(ViewBag.SupplierList, "SupplierID", "CompanyName"), String.Empty, new { @class = "form-control" }) </text>
+		})
+		.AddColumn(x => x.Supplier.CompanyName, new CarrotGridColumn { Sortable = true })		
+		.AddColumn(new CarrotGridTemplateColumn<Product> {
+			HeaderText = "TXT",
+			FormatTemplate = @<text> @grid.FormFieldFor(m => m.ProductName, GridFormFieldType.TextBox, new { maxlength = "64", @class = "form-control" }) </text>
+		})
+		.AddColumn(x => x.ProductName, new CarrotGridColumn { Sortable = true })
+		.AddColumn(new CarrotGridTemplateColumn<Product> {
+			HeaderText = "CHK",
+			FormatTemplate = @<text>
+				@grid.FormFieldFor(m => m.Discontinued, GridFormFieldType.Checkbox)
+				@grid.FormFieldFor(m => m.ProductID, GridFormFieldType.Hidden)
+			</text>
+		})
+		.AddColumn(x => x.Discontinued, new CarrotGridBooleanImageColumn {
+			Sortable = true
+		})
+		.AddColumn(x => x.QuantityPerUnit, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.UnitPrice, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:C}" })
+		.AddColumn(x => x.UnitsInStock, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.UnitsOnOrder, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.ReorderLevel, new CarrotGridColumn { Sortable = true });
+
+		@grid.Write()
+}

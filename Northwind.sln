@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMSInterfaces", "CMSInterfaces\CMSInterfaces.csproj", "{33D1EA6C-65EA-4234-9861-C1C88317B78A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebComponents", "WebComponents\WebComponents.csproj", "{5AD0FFF2-6700-41AC-85BD-4F7452FDB7B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind", "Northwind\Northwind.csproj", "{9FE5E596-39A5-4B3F-9248-FE67AF0784BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33D1EA6C-65EA-4234-9861-C1C88317B78A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33D1EA6C-65EA-4234-9861-C1C88317B78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33D1EA6C-65EA-4234-9861-C1C88317B78A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33D1EA6C-65EA-4234-9861-C1C88317B78A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AD0FFF2-6700-41AC-85BD-4F7452FDB7B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AD0FFF2-6700-41AC-85BD-4F7452FDB7B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AD0FFF2-6700-41AC-85BD-4F7452FDB7B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AD0FFF2-6700-41AC-85BD-4F7452FDB7B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FE5E596-39A5-4B3F-9248-FE67AF0784BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FE5E596-39A5-4B3F-9248-FE67AF0784BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FE5E596-39A5-4B3F-9248-FE67AF0784BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FE5E596-39A5-4B3F-9248-FE67AF0784BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

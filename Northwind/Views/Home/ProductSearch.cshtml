@@ -1,0 +1,30 @@
+﻿@model Northwind.Models.ProductSearch
+
+@using Northwind.Models
+
+<div id="divResults">
+
+	@using (Ajax.BeginForm("ProductSearch", "Home",
+	new { area = "Northwind" },
+	new AjaxOptions {
+		HttpMethod = "POST",
+		InsertionMode = InsertionMode.Replace,
+		UpdateTargetId = "divResults",
+		OnFailure = "__OnAjaxRequestFailure"
+	})) {
+
+		<div>
+			@Html.DropDownListFor(m => m.SelectedCat, new SelectList(Model.Options, "CategoryID", "CategoryName", Model.SelectedCat), "[select]")
+		</div>
+		@Html.HiddenFor(m => m.AltViewName)
+		<br />
+		<div>
+			<input type="submit" value="Submit" />
+		</div>
+	}
+
+	<br />
+	<div>
+		@Html.Partial("Products", Model.Results)
+	</div>
+</div>

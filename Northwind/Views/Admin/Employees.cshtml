@@ -1,0 +1,51 @@
+﻿@model PagedData<Employee>
+
+@{
+	ViewBag.Title = "Employees";
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "sortTable" })) {
+	@Html.AntiForgeryToken()
+
+	var grid = CarrotWeb.CarrotWebGrid<Employee>(Model);
+
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.ConfigName(Html.NameFor(x => x));
+
+	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix ui-widget-content ui-corner-all" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<Employee> {
+			HeaderText = "ID",
+			FormatTemplate = @<text> @CarrotWeb.ActionImage("ViewEmployee", "Admin", new { @id = @item.EmployeeID }, "~/assets/admin/images/pencil.png", @item.EmployeeID.ToString(), null, null) </text>
+		})
+		.AddColumn(new CarrotGridTemplateColumn<Employee> {
+			HeaderText = "LN",
+			FormatTemplate = @<text> @grid.FormFieldFor(m => m.LastName, GridFormFieldType.TextBox, new { maxlength = "64", @class = "form-control" }) </text>
+		})
+		.AddColumn(new CarrotGridTemplateColumn<Employee> {
+			HeaderText = "FN",
+			FormatTemplate = @<text> @grid.FormFieldFor(m => m.FirstName, GridFormFieldType.TextBox, new { maxlength = "64", @class = "form-control" }) </text>
+		})
+		.AddColumn(new CarrotGridTemplateColumn<Employee> {
+			HeaderText = "Territory",
+			FormatTemplate = @<text>
+				@grid.CheckBoxListFor(m => m.EmployeeTerritories,
+									new MultiSelectList(ViewBag.TerritoryList, "TerritoryID", "TerritoryDescription", item.EmployeeTerritories.Select(x => x.TerritoryID).ToList()),
+									"Selected")
+			</text>
+		})
+		.AddColumn(x => x.LastName, new CarrotGridColumn { HeaderText = "Last Name", Sortable = true })
+		.AddColumn(x => x.FirstName, new CarrotGridColumn { HeaderText = "First Name", Sortable = true })
+		.AddColumn(x => x.Notes, new CarrotGridColumn { Sortable = true });
+
+		@grid.OutputHtmlBody()
+
+		<nav>
+			@{
+				@grid.OutputFooter()
+			}
+		</nav>
+
+}

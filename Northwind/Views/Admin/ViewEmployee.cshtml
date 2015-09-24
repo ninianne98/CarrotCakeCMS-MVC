@@ -1,0 +1,142 @@
+﻿@model Northwind.Employee
+
+@{
+	ViewBag.Title = "View Employee";
+}
+
+<div>
+	<h4>Employee</h4>
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.LastName)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.LastName)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.FirstName)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.FirstName)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Title)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Title)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.TitleOfCourtesy)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.TitleOfCourtesy)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.BirthDate)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.BirthDate)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.HireDate)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.HireDate)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Address)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Address)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.City)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.City)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Region)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Region)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.PostalCode)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.PostalCode)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Country)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Country)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.HomePhone)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.HomePhone)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Extension)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Extension)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.Notes)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.Notes)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.ReportsTo)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.ReportsTo)
+		</dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.PhotoPath)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.PhotoPath)
+		</dd>
+	</dl>
+</div>
+<p>
+	@Html.ActionLink("Back to List", "Employees")
+</p>
