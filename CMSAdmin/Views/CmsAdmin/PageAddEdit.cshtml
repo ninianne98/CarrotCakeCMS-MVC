@@ -453,7 +453,7 @@
 	}
 					}
 
-					@Html.TextBox("txtSearchUser", usrCap, new { maxlength = "100", @class = "form-control-lg", style = "width:350px;" })
+					@Html.TextBox("txtSearchUser", usrCap, new { maxlength = "256", @class = "form-control-lg" })
 					@Html.HiddenFor(m => m.ContentPage.CreditUserId)
 				</td>
 			</tr>
@@ -462,7 +462,7 @@
 					meta keywords:
 				</td>
 				<td>
-					@Html.TextAreaFor(m => m.ContentPage.MetaKeyword, new { rows = "4", cols = "60", style = "width: 475px;" })
+					@Html.TextAreaFor(m => m.ContentPage.MetaKeyword, new { rows = "4", cols = "60", @class = "form-control-xlg" })
 				</td>
 			</tr>
 			<tr>
@@ -470,7 +470,7 @@
 					meta description:
 				</td>
 				<td>
-					@Html.TextAreaFor(m => m.ContentPage.MetaDescription, new { rows = "4", cols = "60", style = "width: 475px;" })
+					@Html.TextAreaFor(m => m.ContentPage.MetaDescription, new { rows = "4", cols = "60", @class = "form-control-xlg" })
 				</td>
 			</tr>
 			<tr style="display: none">
@@ -610,10 +610,20 @@
 						<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
 					}
 				</td>
-				<td></td>
-				<td>
-					&nbsp;&nbsp;
-				</td>
+				@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
+					<td>
+						&nbsp;&nbsp;
+					</td>
+					<td align="right">
+						@Html.DropDownList("ddlVersions", new SelectList(Model.VersionHistory, "Key", "Value"), "[Select Version]")
+					</td>
+					<td>
+						&nbsp;&nbsp;
+					</td>
+					<td align="left">
+						<input type="button" onclick="javascript:cmsPageVersionNav();" name="btnReview" value="Review / Revert" />
+					</td>
+				}
 			</tr>
 		</table>
 	</div>
@@ -653,18 +663,19 @@
 	function cmsPageVersionNav() {
 		var qs = $('#ddlVersions').val();
 
-		if (qs != '00000') {
+		if (qs != '') {
 
 			var opts = {
 				"No": function () { cmsAlertModalClose(); },
 				"Yes": function () {
 					cmsMakeOKToLeave();
-					window.setTimeout('location.href = \'./PageAddEdit?versionid=' + qs + '\'', 500);
+					window.setTimeout('location.href = \'@String.Format("{0}?versionid=", SiteFilename.PageAddEditURL)' + qs + '\'', 500);
 					cmsAlertModalClose();
 				}
 			};
 
 			cmsAlertModalSmallBtns('Are you sure you want to open this older version of the content? All unsaved changes will be lost.', opts);
+
 		}
 	}
 

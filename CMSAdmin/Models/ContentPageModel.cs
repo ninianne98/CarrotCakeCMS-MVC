@@ -24,6 +24,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.Mode = "html";
 			this.VisitPage = false;
 
+			this.VersionHistory = new Dictionary<string, string>();
+
 			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 				this.SiteTemplates = cmsHelper.Templates;
 			}
@@ -36,6 +38,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public Guid? ParentID { get; set; }
 		public string Mode { get; set; }
 		public bool VisitPage { get; set; }
+
+		public Dictionary<string, string> VersionHistory { get; set; }
 
 		public List<CMSTemplate> SiteTemplates { get; set; }
 
@@ -119,30 +123,39 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.SelectedTags = this.ContentPage.ContentTags.Select(x => x.ContentTagID.ToString().ToLower()).ToList();
 			this.InitSelections();
 
-			if (this.ContentPage != null && this.ContentPage.Root_ContentID == Guid.Empty) {
-				this.ContentPage.CreateDate = DateTime.UtcNow.Date;
-				this.ContentPage.EditDate = DateTime.UtcNow.Date;
-				this.ContentPage.ContentID = Guid.NewGuid();
-
+			if (this.ContentPage != null) {
 				using (ContentPageHelper pageHelper = new ContentPageHelper()) {
-					if (this.ContentPage.ContentType == ContentPageType.PageType.ContentEntry) {
-						this.ContentPage.NavOrder = pageHelper.GetSitePageCount(this.ContentPage.SiteID, this.ContentPage.ContentType) + 1;
+					if (this.ContentPage.Root_ContentID != Guid.Empty) {
+						this.VersionHistory = (from v in pageHelper.GetVersionHistory(this.ContentPage.SiteID, this.ContentPage.Root_ContentID)
+											   join u in ExtendedUserData.GetUserList() on v.EditUserId equals u.UserId
+											   orderby v.EditDate descending
+											   select new KeyValuePair<string, string>(v.ContentID.ToString(),
+																		String.Format("{0} ({1}) {2}", v.EditDate, u.UserName, (v.IsLatestVersion ? " [**] " : " ")))
+																		).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 					} else {
-						this.ContentPage.Parent_ContentID = null;
-						this.ContentPage.NavOrder = SiteData.BlogSortOrderNumber;
-					}
+						this.ContentPage.CreateDate = DateTime.UtcNow.Date;
+						this.ContentPage.EditDate = DateTime.UtcNow.Date;
+						this.ContentPage.ContentID = Guid.NewGuid();
 
-					DateTime dtSite = CMSConfigHelper.CalcNearestFiveMinTime(SiteData.CurrentSite.Now);
-					this.ContentPage.GoLiveDate = dtSite;
-					this.ContentPage.RetireDate = dtSite.AddYears(200);
+						if (this.ContentPage.ContentType == ContentPageType.PageType.ContentEntry) {
+							this.ContentPage.NavOrder = pageHelper.GetSitePageCount(this.ContentPage.SiteID, this.ContentPage.ContentType) + 1;
+						} else {
+							this.ContentPage.Parent_ContentID = null;
+							this.ContentPage.NavOrder = SiteData.BlogSortOrderNumber;
+						}
 
-					float iThird = (float)(this.ContentPage.NavOrder - 1) / (float)3;
+						DateTime dtSite = CMSConfigHelper.CalcNearestFiveMinTime(SiteData.CurrentSite.Now);
+						this.ContentPage.GoLiveDate = dtSite;
+						this.ContentPage.RetireDate = dtSite.AddYears(200);
 
-					Dictionary<string, float> dictTemplates = pageHelper.GetPopularTemplateList(this.ContentPage.SiteID, this.ContentPage.ContentType);
-					if (dictTemplates.Any() && dictTemplates.First().Value >= iThird) {
-						try {
-							this.ContentPage.TemplateFile = dictTemplates.First().Key;
-						} catch { }
+						float iThird = (float)(this.ContentPage.NavOrder - 1) / (float)3;
+
+						Dictionary<string, float> dictTemplates = pageHelper.GetPopularTemplateList(this.ContentPage.SiteID, this.ContentPage.ContentType);
+						if (dictTemplates.Any() && dictTemplates.First().Value >= iThird) {
+							try {
+								this.ContentPage.TemplateFile = dictTemplates.First().Key;
+							} catch { }
+						}
 					}
 				}
 			}

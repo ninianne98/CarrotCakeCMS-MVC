@@ -820,6 +820,8 @@
     </None>
     <Content Include="Assets\Admin\tiny_mce\classes\firebug\FIREBUG.LICENSE" />
     <Content Include="Assets\Admin\tiny_mce\tiny_mce.zip" />
+    <Content Include="GPL-LICENSE.txt" />
+    <Content Include="MIT-LICENSE.txt" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Views\Templates\oilpainting\page.cshtml" />
     <Content Include="Views\Templates\oilpainting\list.cshtml" />

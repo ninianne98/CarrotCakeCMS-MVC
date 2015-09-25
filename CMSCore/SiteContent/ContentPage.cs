@@ -31,10 +31,12 @@ namespace Carrotware.CMS.Core {
 			this.VersionCount = 0;
 			this.NavOrder = -1;
 
-			this.CreateDate = SiteData.GetSiteByID(siteID).Now;
-			this.EditDate = this.CreateDate;
-			this.GoLiveDate = this.CreateDate.AddMinutes(-5);
-			this.RetireDate = this.CreateDate.AddYears(200);
+			DateTime siteTime = SiteData.GetSiteByID(siteID).Now;
+
+			this.CreateDate = siteTime;
+			this.EditDate = siteTime;
+			this.GoLiveDate = siteTime.AddMinutes(-5);
+			this.RetireDate = siteTime.AddYears(200);
 
 			//this.NavMenuText = "PAGE " + this.Root_ContentID.ToString().ToLower();
 			//this.FileName = "/" + this.Root_ContentID.ToString().ToLower();
@@ -114,7 +116,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string PageContentEmpty {
-			get { return "<p>&nbsp;</p>"; }
+			get { return "<p>  </p>"; }
 		}
 
 		public SiteNav GetSiteNav() {
