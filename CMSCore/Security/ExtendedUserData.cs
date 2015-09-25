@@ -134,6 +134,7 @@ namespace Carrotware.CMS.Core {
 
 			return usr;
 		}
+
 		public static ExtendedUserData FindByEmail(string Email) {
 			ExtendedUserData usr = new ExtendedUserData();
 
@@ -144,6 +145,7 @@ namespace Carrotware.CMS.Core {
 
 			return usr;
 		}
+
 		public static ExtendedUserData FindByUserID(Guid UserID) {
 			ExtendedUserData usr = new ExtendedUserData();
 
@@ -323,6 +325,7 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		[Display(Name = "Is Admin")]
 		public bool IsAdmin {
 			get {
 				try {
@@ -333,6 +336,7 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		[Display(Name = "Is Editor")]
 		public bool IsEditor {
 			get {
 				try {

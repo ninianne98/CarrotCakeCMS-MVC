@@ -893,6 +893,74 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
+		public ActionResult SiteDetail(Guid id) {
+			SiteModel model = new SiteModel(id);
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult SiteDetail(SiteModel model) {
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult SiteAddUser(SiteModel model) {
+			ModelState.Clear();
+
+			if (String.IsNullOrEmpty(model.NewUserId)) {
+				ModelState.AddModelError("NewUserId", "The New User field is required.");
+			}
+
+			SiteData site = model.Site;
+			Helper.ForceValidation(ModelState, model);
+
+			if (ModelState.IsValid) {
+				if (!String.IsNullOrEmpty(model.NewUserId)) {
+					ExtendedUserData exUsr = new ExtendedUserData(new Guid(model.NewUserId));
+					exUsr.AddToSite(site.SiteID);
+
+					if (model.NewUserAsEditor) {
+						exUsr.AddToRole(SecurityData.CMSGroup_Editors);
+					}
+				}
+
+				return RedirectToAction("SiteDetail", new { @id = site.SiteID });
+			}
+
+			Helper.HandleErrorDict(ModelState);
+
+			model.LoadUsers();
+
+			return View("SiteDetail", model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult SiteRemoveUsers(SiteModel model) {
+			ModelState.Clear();
+
+			SiteData site = model.Site;
+
+			if (ModelState.IsValid) {
+				List<UserModel> usrs = model.Users.Where(x => x.Selected).ToList();
+
+				foreach (var u in usrs) {
+					ExtendedUserData exUsr = new ExtendedUserData(u.User.UserId);
+					exUsr.RemoveFromSite(site.SiteID);
+				}
+
+				return RedirectToAction("SiteDetail", new { @id = site.SiteID });
+			}
+
+			Helper.HandleErrorDict(ModelState);
+
+			return View("SiteDetail", model);
+		}
+
+		[HttpGet]
 		public ActionResult SiteInfo() {
 			LoadTimeZoneInfo();
 			LoadDatePattern();

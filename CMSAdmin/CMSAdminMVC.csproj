@@ -861,6 +861,7 @@
     <Content Include="Views\CmsAdmin\SiteMapPop.cshtml" />
     <Content Include="Views\CmsAdmin\PageChildSort.cshtml" />
     <Content Include="Views\CmsAdmin\PageAddChild.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteDetail.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -889,6 +890,7 @@
     <Compile Include="Models\PageChildSortModel.cs" />
     <Compile Include="Models\PostIndexModel.cs" />
     <Compile Include="Models\PageIndexModel.cs" />
+    <Compile Include="Models\SiteModel.cs" />
     <Compile Include="Models\RoleModel.cs" />
     <Compile Include="Models\SiteDataModel.cs" />
     <Compile Include="Models\SiteImportWordpressModel.cs" />
