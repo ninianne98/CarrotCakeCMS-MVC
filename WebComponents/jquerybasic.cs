@@ -50,6 +50,7 @@ namespace Carrotware.Web.UI.Components {
 		public override string GetHtml() {
 			string sJQFile = String.Empty;
 			StringBuilder sb = new StringBuilder();
+			sb.AppendLine(String.Empty);
 
 			if (!this.StylesheetOnly) {
 				_jq.JQVersion = this.JQVersion;

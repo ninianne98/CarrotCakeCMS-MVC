@@ -94,6 +94,7 @@
     <Compile Include="EmailEscapeInBody.cs" />
     <Compile Include="IFrameWidgetWrapper.cs" />
     <Compile Include="LiteralMessage.cs" />
+    <Compile Include="OpenGraph.cs" />
     <Compile Include="PostCalendar.cs" />
     <Compile Include="SpecialForms.cs" />
     <Compile Include="ICmsComponent.cs" />

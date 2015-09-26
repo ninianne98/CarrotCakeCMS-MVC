@@ -267,6 +267,18 @@ namespace Carrotware.CMS.UI.Components {
 			return new HtmlString(sb.ToString());
 		}
 
+		public static HtmlString RenderOpenGraph(OpenGraph.OpenGraphTypeDef type = Components.OpenGraph.OpenGraphTypeDef.Default, bool showExpire = false) {
+			OpenGraph og = new OpenGraph();
+			og.ShowExpirationDate = showExpire;
+			og.OpenGraphType = type;
+
+			if (og.CmsPage == null) {
+				og.CmsPage = CmsPage;
+			}
+
+			return new HtmlString(og.ToHtmlString());
+		}
+
 		public static string CurrentViewName {
 			get {
 				//return System.IO.Path.GetFileNameWithoutExtension(((RazorView)Html.ViewContext.View).ViewPath);
