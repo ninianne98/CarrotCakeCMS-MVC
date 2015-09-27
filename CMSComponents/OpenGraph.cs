@@ -93,6 +93,10 @@ namespace Carrotware.CMS.UI.Components {
 						sb.AppendLine(CarrotWeb.MetaTag("og:title", this.CmsPage.ThePage.TitleBar).ToString());
 					}
 
+					if (!String.IsNullOrEmpty(this.CmsPage.ThePage.Thumbnail)) {
+						sb.AppendLine(CarrotWeb.MetaTag("og:image", String.Format("{0}/{1}", this.CmsPage.TheSite.MainCanonicalURL, this.CmsPage.ThePage.Thumbnail).Replace(@"//", @"/").Replace(@"//", @"/").Replace(@":/", @"://")).ToString());
+					}
+
 					if (!String.IsNullOrEmpty(this.CmsPage.TheSite.SiteName)) {
 						sb.AppendLine(CarrotWeb.MetaTag("og:site_name", this.CmsPage.TheSite.SiteName).ToString());
 					}

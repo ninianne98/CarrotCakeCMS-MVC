@@ -19,7 +19,6 @@ using System.Web;
 namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 	public class FileBrowserModel : AjaxFileUploadModel {
-		private FileDataHelper helpFile = new FileDataHelper();
 		private string defaultBrowseMode = "file";
 
 		public FileBrowserModel() {
@@ -53,13 +52,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.ReturnMode = returnVal == "1" || returnVal.ToLower() == "true";
 			this.Thumbnails = this.ViewMode.ToLower() != defaultBrowseMode;
 
+			string linkPatt = "{0}?fldrpath={1}&useTiny={2}&returnvalue={3}&viewmode={4}";
+
 			if (this.UpLinkVisible) {
 				string sUrlUp = this.QueryPath.Substring(0, this.QueryPath.Substring(0, this.QueryPath.Length - 2).LastIndexOf('/')) + @"/";
-				this.UpLink = String.Format("{0}?fldrpath={1}&useTiny={2}&returnvalue={3}&viewmode={4}", SiteData.CurrentScriptName, HttpUtility.UrlEncode(sUrlUp), this.UseTinyMCE, this.ReturnMode, this.ViewMode);
+				this.UpLink = String.Format(linkPatt, SiteData.CurrentScriptName, HttpUtility.UrlEncode(sUrlUp), this.UseTinyMCE, this.ReturnMode, this.ViewMode);
 			}
 
-			this.ThumbViewLink = String.Format("{0}?fldrpath={1}&useTiny={2}&returnvalue={3}&viewmode=thumb", SiteData.CurrentScriptName, HttpUtility.UrlEncode(this.QueryPath), this.UseTinyMCE, this.ViewMode);
-			this.FileViewLink = String.Format("{0}?fldrpath={1}&useTiny={2}&returnvalue={3}&viewmode=file", SiteData.CurrentScriptName, HttpUtility.UrlEncode(this.QueryPath), this.UseTinyMCE, this.ViewMode);
+			this.ThumbViewLink = String.Format(linkPatt, SiteData.CurrentScriptName, HttpUtility.UrlEncode(this.QueryPath), this.UseTinyMCE, this.ReturnMode, "thumb");
+			this.FileViewLink = String.Format(linkPatt, SiteData.CurrentScriptName, HttpUtility.UrlEncode(this.QueryPath), this.UseTinyMCE, this.ReturnMode, "file");
 
 			this.Dirs = helpFile.GetFolders(this.QueryPath);
 			this.Files = helpFile.GetFiles(this.QueryPath);
