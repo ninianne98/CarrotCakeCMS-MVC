@@ -1,9 +1,9 @@
 /********************************************
-	AUTHOR:           Erwin Aligam 
+	AUTHOR:           Erwin Aligam
 	WEBSITE:          http://www.styleshout.com/
 	TEMPLATE NAME:    Citrus Island
 	TEMPLATE CODE:    S-0004
-	VERSION:          1.1          	
+	VERSION:          1.1
 *******************************************/
 
 /********************************************
@@ -181,7 +181,7 @@ form.search {
 	}
 
 /**************************************
-   LAYOUT 
+   LAYOUT
 ***************************************/
 #wrap {
 	margin: 0 auto;
@@ -263,7 +263,6 @@ form.search {
 				color: #333;
 				background: url(menu-current-bg.gif) repeat-x;
 			}
-
 
 /* sidebar */
 #sidebar {
@@ -446,7 +445,6 @@ img.rssimage, .rssimage img {
 	float: right;
 }
 
-
 /* additional classes */
 .clear {
 	clear: both;
@@ -459,4 +457,57 @@ img.rssimage, .rssimage img {
 .text-danger {
 	color: #880000;
 	font-weight: bold;
+}
+
+/*
+comments
+*/
+
+.comment-border.top:after {
+	border-width: 0 18px 18px;
+	bottom: auto;
+	right: auto;
+	left: 47px;
+	top: -14px;
+}
+
+.comment-border:after {
+	border-color: #FAFAFA transparent;
+	border-style: solid;
+	border-width: 12px 12px 0;
+	bottom: -10px;
+	content: "";
+	display: block;
+	right: 47px;
+	position: absolute;
+	width: 0;
+}
+
+.comment-border.top:before {
+	border-width: 0 15px 15px;
+	bottom: auto;
+	right: auto;
+	left: 50px;
+	top: -15px;
+}
+
+.comment-border:before {
+	border-color: #F2F2F2 transparent;
+	border-style: solid;
+	border-width: 15px 15px 0;
+	bottom: -15px;
+	content: "";
+	display: block;
+	right: 50px;
+	position: absolute;
+	width: 0;
+}
+
+.comment-border {
+	background: none repeat scroll 0 0 #FAFAFA;
+	border: 1px solid #F2F2F2;
+	color: #333333;
+	margin: 1.1em 0 1.8em;
+	padding: 7px;
+	position: relative;
 }

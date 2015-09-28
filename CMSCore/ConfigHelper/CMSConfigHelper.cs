@@ -949,21 +949,24 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static ContentPage IdentifyLinkAsInactive(ContentPage cp) {
-			if (!cp.PageActive) {
-				cp.NavMenuText = InactivePagePrefix + cp.NavMenuText;
-				cp.PageHead = InactivePagePrefix + cp.PageHead;
-				cp.TitleBar = InactivePagePrefix + cp.TitleBar;
+			if (cp != null) {
+				if (!cp.PageActive) {
+					cp.NavMenuText = InactivePagePrefix + cp.NavMenuText;
+					cp.PageHead = InactivePagePrefix + cp.PageHead;
+					cp.TitleBar = InactivePagePrefix + cp.TitleBar;
+				}
+				if (cp.IsRetired) {
+					cp.NavMenuText = RetiredPagePrefix + cp.NavMenuText;
+					cp.PageHead = RetiredPagePrefix + cp.PageHead;
+					cp.TitleBar = RetiredPagePrefix + cp.TitleBar;
+				}
+				if (cp.IsUnReleased) {
+					cp.NavMenuText = UnreleasedPagePrefix + cp.NavMenuText;
+					cp.PageHead = UnreleasedPagePrefix + cp.PageHead;
+					cp.TitleBar = UnreleasedPagePrefix + cp.TitleBar;
+				}
 			}
-			if (cp.IsRetired) {
-				cp.NavMenuText = RetiredPagePrefix + cp.NavMenuText;
-				cp.PageHead = RetiredPagePrefix + cp.PageHead;
-				cp.TitleBar = RetiredPagePrefix + cp.TitleBar;
-			}
-			if (cp.IsUnReleased) {
-				cp.NavMenuText = UnreleasedPagePrefix + cp.NavMenuText;
-				cp.PageHead = UnreleasedPagePrefix + cp.PageHead;
-				cp.TitleBar = UnreleasedPagePrefix + cp.TitleBar;
-			}
+
 			return cp;
 		}
 

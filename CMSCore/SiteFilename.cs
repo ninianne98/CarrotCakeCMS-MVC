@@ -144,8 +144,8 @@ namespace Carrotware.CMS.Core {
 			get { return SiteData.AdminFolderPath + "PageCommentIndex"; }
 		}
 
-		public static string PostCommentIndexURL {
-			get { return SiteData.AdminFolderPath + "PostCommentIndex"; }
+		public static string BlogPostCommentIndexURL {
+			get { return SiteData.AdminFolderPath + "BlogPostCommentIndex"; }
 		}
 
 		public static string UserEditURL {

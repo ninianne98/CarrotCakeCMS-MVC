@@ -135,7 +135,7 @@
 						</ul>
 					}
 
-					using (CarrotWeb.BeginWrappedItem("li", "BlogPostIndex;BlogPostAddEdit;BlogPostTemplateUpdate;CategoryIndex;CategoryAddEdit;TagIndex;TagAddEdit;PostCommentIndex", RouteConfig.AdminCtrlr, new { @id = "tabBlogTop", @class = "current sub" }, new { @id = "tabBlogTop", @class = "sub" })) {
+					using (CarrotWeb.BeginWrappedItem("li", "BlogPostIndex;BlogPostAddEdit;BlogPostTemplateUpdate;CategoryIndex;CategoryAddEdit;TagIndex;TagAddEdit;BlogPostCommentIndex", RouteConfig.AdminCtrlr, new { @id = "tabBlogTop", @class = "current sub" }, new { @id = "tabBlogTop", @class = "sub" })) {
 						<a href="javascript:void(0)" class="lnkPopup">Posts </a>
 						<ul class="children">
 							<li id="tabBlogContent"><a href="@SiteFilename.BlogPostIndexURL">Blog Post Index</a> </li>
@@ -143,7 +143,7 @@
 							<li id="tabBlogTemplate"><a href="./BlogPostTemplateUpdate">Bulk Apply Templates</a> </li>
 							<li id="tabBlogCategoryIndex"><a href="@SiteFilename.CategoryIndexURL">Blog Category Index</a> </li>
 							<li id="tabBlogTagIndex"><a href="@SiteFilename.TagIndexURL">Blog Tag Index</a> </li>
-							<li id="tabBlogCommentIndex"><a href="@SiteFilename.PostCommentIndexURL">Blog Comment Index</a> </li>
+							<li id="tabBlogCommentIndex"><a href="@SiteFilename.BlogPostCommentIndexURL">Blog Comment Index</a> </li>
 						</ul>
 					}
 

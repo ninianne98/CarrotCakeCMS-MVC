@@ -1949,7 +1949,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
-		public ActionResult PostCommentIndex(Guid? id) {
+		public ActionResult BlogPostCommentIndex(Guid? id) {
 			CommentIndexModel model = new CommentIndexModel();
 			model.PageType = ContentPageType.PageType.BlogEntry;
 			model.Root_ContentID = id;
@@ -1959,7 +1959,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult PostCommentIndex(CommentIndexModel model) {
+		public ActionResult BlogPostCommentIndex(CommentIndexModel model) {
 			model.PageType = ContentPageType.PageType.BlogEntry;
 
 			return CommentIndex(model);

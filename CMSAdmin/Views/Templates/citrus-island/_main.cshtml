@@ -20,6 +20,11 @@
 		BackColor = System.Drawing.ColorTranslator.FromHtml("#F4845A"),
 		ElementId = "nav"
 	};
+
+	var comments = new PagedComments();
+	comments.PageSize = 10;
+	comments.FetchData();
+
 }
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -106,21 +111,37 @@
 
 			<hr />
 
-			@*<p class="post-footer align-right">
-					<a class="readmore" href="@CmsPage.ThePage.FileName">
-						Read more
-					</a>
-					<span class="comments">
-						@String.Format(" Comments ({0}) ", CmsPage.ThePage.CommentCount)
-					</span><span class="date">
-						@String.Format("{0:MMMM d, yyyy}", CmsPage.ThePage.GoLiveDate)
-					</span>
-				</p>
-
-				<hr />*@
-
 			@Html.Partial("_contactform")
 			<br />
+			@if (comments != null) {
+				<hr />
+				<div>
+					@foreach (var item in comments.DataSource) {
+						<div>
+							<p>
+								<b>
+									@String.Format("{0} on {1:d}", item.CommenterName, item.CreateDate)
+								</b>
+							</p>
+							<div class="comment-border top">
+								<p>
+									@Html.Raw(item.PostCommentText)
+								</p>
+							</div>
+						</div>
+					}
+
+					<div class="pagerfooterlinks">
+						@foreach (var i in comments.PageNumbers) {
+							using (CarrotWeb.BeginWrappedItem("div", i, comments.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+								using (CarrotWeb.BeginWrappedItem("a", i, comments.PageNumber, new { @class = "selected", @href = comments.GetUrl(i) }, new { @href = comments.GetUrl(i) })) {
+									@String.Format(" {0} ", i)
+								}
+							}
+						}
+					</div>
+				</div>
+			}
 		</div>
 		<div id="rightbar">
 			<div class="rsszone">
