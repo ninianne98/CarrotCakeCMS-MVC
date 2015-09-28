@@ -90,7 +90,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				LoadPage();
 			}
 
-			if (_page != null && _page.ThePage.ContentID != Guid.Empty) {
+			if (_page != null && _page.ThePage.Root_ContentID != Guid.Empty) {
 				return View(DisplayTemplateFile);
 			} else {
 				string sFileRequested = HttpContext.Request.Path;
@@ -157,10 +157,32 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public PartialViewResult Contact(ContactInfo model) {
 			this.ViewData["CMS_contactform"] = model;
+			model.IsSaved = false;
 
 			LoadPage(model.Uri);
 
-			//TODO: log the comment
+			//TODO: log the comment and B64 encode some of the settings (TBD)
+			if (ModelState.IsValid) {
+				string sIP = Request.ServerVariables["REMOTE_ADDR"].ToString();
+
+				PostComment pc = new PostComment();
+				pc.ContentCommentID = Guid.NewGuid();
+				pc.Root_ContentID = _page.ThePage.Root_ContentID;
+				pc.CreateDate = SiteData.CurrentSite.Now;
+				pc.IsApproved = false;
+				pc.IsSpam = false;
+				pc.CommenterIP = sIP;
+				pc.CommenterName = model.CommenterName;
+				pc.CommenterEmail = model.CommenterEmail ?? String.Empty;
+				pc.PostCommentText = model.PostCommentText;
+				pc.CommenterURL = model.CommenterURL ?? String.Empty;
+
+				pc.Save();
+
+				model.IsSaved = true;
+				this.ViewData["CMS_contactform"] = model;
+				ModelState.Clear();
+			}
 
 			return PartialView(model.PostPartialName);
 		}

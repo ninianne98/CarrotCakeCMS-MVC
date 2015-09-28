@@ -93,6 +93,7 @@
     <Compile Include="ControlUtilities.cs" />
     <Compile Include="EmailEscapeInBody.cs" />
     <Compile Include="IFrameWidgetWrapper.cs" />
+    <Compile Include="IPagedContent.cs" />
     <Compile Include="LiteralMessage.cs" />
     <Compile Include="OpenGraph.cs" />
     <Compile Include="PagedComments.cs" />

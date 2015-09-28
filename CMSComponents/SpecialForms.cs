@@ -223,7 +223,7 @@ namespace Carrotware.CMS.UI.Components {
 		public string CommenterEmail { get; set; }
 
 		[StringLength(256)]
-		[Required]
+		//[Required]
 		[Display(Name = "URL")]
 		public string CommenterURL { get; set; }
 
@@ -231,6 +231,8 @@ namespace Carrotware.CMS.UI.Components {
 		[Required]
 		[Display(Name = "Comment")]
 		public string PostCommentText { get; set; }
+
+		public bool IsSaved { get; set; }
 	}
 
 	//======================

@@ -17,7 +17,7 @@ using System.Web;
 
 namespace Carrotware.CMS.UI.Components {
 
-	public class PagedDataSummary : PagedData<SiteNav> {
+	public class PagedDataSummary : PagedData<SiteNav>, IPagedContent {
 
 		public PagedDataSummary() {
 			this.SelectedCategorySlugs = new List<string>();

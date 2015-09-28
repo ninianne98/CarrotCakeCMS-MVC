@@ -5,7 +5,7 @@
 		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" }, Model)) {
 			var cmt = cmtFrm.GetModelHelper("_contactform");
 
-			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+			@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
 			<div>
 				<label>Name</label><br />
 				@cmt.TextBoxFor(m => m.CommenterName)
