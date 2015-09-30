@@ -143,6 +143,10 @@
 			padding: 20px 0px 0px 0px;
 		}
 
+		.text-danger {
+			color: #990000;
+		}
+
 		.post {
 			margin-bottom: 15px;
 		}
@@ -368,10 +372,10 @@
 								@*<h2>Recent Updates</h2>
 
 									<ul id="MostRecentUpdated1">
-										<li class="child-nav"><a href="/maps/directions-to-st.-john-s-lutheran-church.aspx">Directions to St. John’s Lutheran Church (Rehearsal Location for June/July 2013)</a></li>
-										<li class="child-nav"><a href="/maps/directions-to-mt-juliet-high-school.aspx">Directions to Mt Juliet High School</a></li>
-										<li class="child-nav"><a href="/photos/first-baptist-of-fairview-pre-fourth-of-july-2011.aspx">First Baptist of Fairview - Pre Fourth of July 2011</a></li>
-										<li class="child-nav"><a href="/photos/pops-in-the-park-2011.aspx">Pops in the Park - 2011</a></li>
+										<li class="child-nav"><a href="/maps/directions-to-st.-john-s-lutheran-church">Directions to St. John’s Lutheran Church (Rehearsal Location for June/July 2013)</a></li>
+										<li class="child-nav"><a href="/maps/directions-to-mt-juliet-high-school">Directions to Mt Juliet High School</a></li>
+										<li class="child-nav"><a href="/photos/first-baptist-of-fairview-pre-fourth-of-july-2011">First Baptist of Fairview - Pre Fourth of July 2011</a></li>
+										<li class="child-nav"><a href="/photos/pops-in-the-park-2011">Pops in the Park - 2011</a></li>
 									</ul>*@
 							</li>
 						</ul>
@@ -391,6 +395,9 @@
 								</div>
 								<div>
 									@CarrotCakeHtml.RenderWidget("phCenterBottom")
+								</div>
+								<div>
+									@Html.Partial("_plaincontact")
 								</div>
 							</div>
 							<div style="clear: both;">

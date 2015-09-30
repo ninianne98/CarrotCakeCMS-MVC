@@ -160,14 +160,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			this.ViewData["CMS_contactform"] = model;
 			model.IsSaved = false;
 
-			LoadPage(model.SettingsObject.Uri);
+			LoadPage(model.Settings.Uri);
 
-			var settings = model.SettingsObject;
+			var settings = model.Settings;
 
 			if (settings.UseValidateHuman) {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
-					ModelState.AddModelError("ValidationValue", "Failed to validate as a human.");
+					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
 				}
 			}
 
@@ -194,7 +194,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				ModelState.Clear();
 			}
 
-			return PartialView(model.SettingsObject.PostPartialName);
+			return PartialView(model.Settings.PostPartialName);
 		}
 
 		//====================================

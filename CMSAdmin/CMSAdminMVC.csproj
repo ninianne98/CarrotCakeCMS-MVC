@@ -862,6 +862,7 @@
     <Content Include="Views\CmsAdmin\PageChildSort.cshtml" />
     <Content Include="Views\CmsAdmin\PageAddChild.cshtml" />
     <Content Include="Views\CmsAdmin\SiteDetail.cshtml" />
+    <Content Include="Views\CmsContent\_plaincontact.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

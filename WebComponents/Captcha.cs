@@ -25,6 +25,20 @@ namespace Carrotware.Web.UI.Components {
 			this.Instructions = "Please enter the code from the image above in the box below.";
 			this.IsValidMessage = "Code correct!";
 			this.IsNotValidMessage = "Code incorrect, try again!";
+
+			this.AltValidationFailText = "Failed to validate CAPTCHA.";
+		}
+
+		public void SetNoiseColor(string colorCode) {
+			this.NoiseColor = ColorTranslator.FromHtml(colorCode);
+		}
+
+		public void SetForeColor(string colorCode) {
+			this.ForeColor = ColorTranslator.FromHtml(colorCode);
+		}
+
+		public void SetBackColor(string colorCode) {
+			this.BackColor = ColorTranslator.FromHtml(colorCode);
 		}
 
 		public string CaptchaText { get; set; }
@@ -92,5 +106,7 @@ namespace Carrotware.Web.UI.Components {
 			this.CaptchaText = testValue;
 			return Validate();
 		}
+
+		public string AltValidationFailText { get; set; }
 	}
 }
