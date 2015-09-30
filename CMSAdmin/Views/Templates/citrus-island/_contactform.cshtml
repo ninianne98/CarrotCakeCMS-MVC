@@ -2,8 +2,10 @@
 
 <div id="contactForm">
 	@{
+		var cap = new Captcha();
+
 		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" }, Model)) {
-			var cmt = cmtFrm.GetModelHelper("_contactform");
+			var cmt = cmtFrm.GetModelHelper("_contactform", cap);
 			if (!cmt.ViewData.Model.IsSaved) {
 				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -16,6 +18,14 @@
 				<label>Your Comments</label>
 				@cmt.ValidationMessageFor(m => m.PostCommentText, "", new { @class = "text-danger" })
 				@cmt.TextAreaFor(m => m.PostCommentText, new { rows = "5", cols = "50" })
+				<br />
+				<div>
+					@cap<br />
+					@cap.Instructions <br />
+					@cmt.TextBoxFor(m => m.ValidationValue)
+					@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
+				</div>
+
 				<br />
 				<input class="button" type="submit" />
 				<input class="button" type="reset" value="Clear form" />

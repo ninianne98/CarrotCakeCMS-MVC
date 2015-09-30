@@ -44,6 +44,8 @@ namespace Carrotware.CMS.UI.Components {
 				}
 			}
 
+			lstContents.ToList().ForEach(q => CMSConfigHelper.IdentifyLinkAsInactive(q));
+
 			this.DataSource = lstContents;
 		}
 	}

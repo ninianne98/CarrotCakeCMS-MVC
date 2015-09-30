@@ -7,9 +7,19 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
+/*
+* CarrotCake CMS (MVC5)
+* http://www.carrotware.com/
+*
+* Copyright 2015, Samantha Copeland
+* Dual licensed under the MIT or GPL Version 2 licenses.
+*
+* Date: August 2015
+*/
 
 namespace Carrotware.Web.UI.Components {
-	public class CaptchaImage {
+
+	public static class CaptchaImage {
 
 		public static string EncodeColor(string ColorCode) {
 			string sColor = "";
@@ -55,17 +65,27 @@ namespace Carrotware.Web.UI.Components {
 			}
 		}
 
-		public static bool Validate(string TestValue) {
+		public static string SessionKey {
+			get {
+				return "carrot_captcha_key";
+			}
+		}
+
+		public static bool Validate(string testValue) {
+			if (String.IsNullOrEmpty(testValue)) {
+				return false;
+			}
+
 			bool bValid = false;
 			string guid = GetKey();
 
-			if (TestValue.ToLower() == guid.ToLower()) {
+			if (testValue.ToLower() == guid.ToLower()) {
 				bValid = true;
 			}
 
 			if (HttpContext.Current != null) {
 				guid = Guid.NewGuid().ToString().Substring(0, 6);
-				HttpContext.Current.Session["captcha_key"] = guid;
+				HttpContext.Current.Session[SessionKey] = guid;
 			}
 			return bValid;
 		}
@@ -80,15 +100,15 @@ namespace Carrotware.Web.UI.Components {
 			string guid = "ABCXYZ";
 			if (HttpContext.Current != null) {
 				try {
-					if (HttpContext.Current.Session["captcha_key"] != null) {
-						guid = HttpContext.Current.Session["captcha_key"].ToString();
+					if (HttpContext.Current.Session[SessionKey] != null) {
+						guid = HttpContext.Current.Session[SessionKey].ToString();
 					} else {
 						guid = Guid.NewGuid().ToString().Substring(0, 6);
-						HttpContext.Current.Session["captcha_key"] = guid;
+						HttpContext.Current.Session[SessionKey] = guid;
 					}
 				} catch {
 					guid = Guid.NewGuid().ToString().Substring(0, 6);
-					HttpContext.Current.Session["captcha_key"] = guid;
+					HttpContext.Current.Session[SessionKey] = guid;
 				}
 			}
 			return guid.ToUpper();
@@ -139,6 +159,5 @@ namespace Carrotware.Web.UI.Components {
 
 			return bmpCaptcha;
 		}
-
 	}
 }

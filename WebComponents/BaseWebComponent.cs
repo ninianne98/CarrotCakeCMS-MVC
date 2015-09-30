@@ -43,7 +43,7 @@ namespace Carrotware.Web.UI.Components {
 			return new HtmlString(GetHtml());
 		}
 
-		public string ToHtmlString() {
+		public virtual string ToHtmlString() {
 			return GetHtml();
 		}
 	}

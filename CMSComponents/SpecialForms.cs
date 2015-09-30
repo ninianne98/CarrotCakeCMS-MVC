@@ -1,12 +1,15 @@
 ﻿using Carrotware.CMS.Core;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
+using System.Xml.Serialization;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -135,6 +138,8 @@ namespace Carrotware.CMS.UI.Components {
 	public class AjaxContactForm : IDisposable {
 		protected AjaxHelper _helper;
 		protected MvcForm frm = null;
+		protected ContactInfo model = null;
+		protected ContactInfoSettings settings = null;
 
 		public AjaxContactForm(AjaxHelper ajaxHelper, PagePayload page, AjaxOptions ajaxOptions, object formAttributes = null) {
 			_helper = ajaxHelper;
@@ -160,8 +165,25 @@ namespace Carrotware.CMS.UI.Components {
 			frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = "Contact.ashx" }, ajaxOptions, formAttributes);
 		}
 
+		public HtmlHelper<ContactInfo> GetModelHelper(string partialName, IValidateHuman validateHuman) {
+			model = InitContactInfo(partialName);
+
+			settings.UseValidateHuman = true;
+			settings.ValidateHumanClass = validateHuman.GetType().AssemblyQualifiedName;
+			//validateHuman.GetType().FullName
+
+			return InitHelp();
+		}
+
 		public HtmlHelper<ContactInfo> GetModelHelper(string partialName) {
+			model = InitContactInfo(partialName);
+
+			return InitHelp();
+		}
+
+		protected ContactInfo InitContactInfo(string partialName) {
 			ContactInfo model = new ContactInfo();
+			settings = new ContactInfoSettings();
 
 			if (_helper.ViewData["CMS_contactform"] != null) {
 				model = _helper.ViewData["CMS_contactform"] as ContactInfo;
@@ -169,18 +191,31 @@ namespace Carrotware.CMS.UI.Components {
 				model = new ContactInfo();
 			}
 
-			var hlp = new HtmlHelper<ContactInfo>(_helper.ViewContext, new WrapperForHtmlHelper<ContactInfo>(model, _helper.ViewData));
+			settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
+			settings.PostPartialName = partialName;
+			model.SettingsObject = settings;
 
-			//TODO: figure out a way to binhex and include/parse
-			model.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
-			model.PostPartialName = partialName;
+			return model;
+		}
+
+		protected HtmlHelper<ContactInfo> InitHelp() {
+			XmlSerializer xmlSerializer = new XmlSerializer(typeof(ContactInfoSettings));
+			string sXML = String.Empty;
+			using (StringWriter stringWriter = new StringWriter()) {
+				xmlSerializer.Serialize(stringWriter, settings);
+				sXML = stringWriter.ToString();
+				sXML = CMSConfigHelper.EncodeBase64(sXML);
+			}
+
+			model.SettingsObject = settings;
+			model.Settings = sXML;
+
+			var hlp = new HtmlHelper<ContactInfo>(_helper.ViewContext, new WrapperForHtmlHelper<ContactInfo>(model, _helper.ViewData));
 
 			string frmTag = Environment.NewLine
 						+ hlp.AntiForgeryToken().ToString()
 						+ Environment.NewLine
-						+ hlp.HiddenFor(x => x.Uri).ToString()
-						+ Environment.NewLine
-						+ hlp.HiddenFor(x => x.PostPartialName).ToString()
+						+ hlp.HiddenFor(x => x.Settings).ToString()
 						+ Environment.NewLine;
 
 			_helper.ViewContext.Writer.Write(frmTag);
@@ -200,7 +235,27 @@ namespace Carrotware.CMS.UI.Components {
 
 	public class ContactInfo {
 
-		public ContactInfo() { }
+		public ContactInfo() {
+			ReconstructSettings();
+		}
+
+		public void ReconstructSettings() {
+			this.SettingsObject = null;
+
+			if (!String.IsNullOrEmpty(this.Settings)) {
+				string sXML = CMSConfigHelper.DecodeBase64(this.Settings);
+				XmlSerializer xmlSerializer = new XmlSerializer(typeof(ContactInfoSettings));
+				using (StringReader stringReader = new StringReader(sXML)) {
+					this.SettingsObject = (ContactInfoSettings)xmlSerializer.Deserialize(stringReader);
+				}
+
+				if (this.SettingsObject != null && !String.IsNullOrEmpty(this.SettingsObject.ValidateHumanClass)) {
+					Type objType = Type.GetType(this.SettingsObject.ValidateHumanClass);
+					Object obj = Activator.CreateInstance(objType);
+					this.ValidateHuman = (IValidateHuman)obj;
+				}
+			}
+		}
 
 		public Guid Root_ContentID { get; set; }
 		public DateTime CreateDate { get; set; }
@@ -213,9 +268,6 @@ namespace Carrotware.CMS.UI.Components {
 		[Required]
 		[Display(Name = "Name")]
 		public string CommenterName { get; set; }
-
-		public string PostPartialName { get; set; }
-		public string Uri { get; set; }
 
 		[StringLength(256)]
 		[Required]
@@ -232,7 +284,21 @@ namespace Carrotware.CMS.UI.Components {
 		[Display(Name = "Comment")]
 		public string PostCommentText { get; set; }
 
+		public string Settings { get; set; }
+		public ContactInfoSettings SettingsObject { get; set; }
+		public IValidateHuman ValidateHuman { get; set; }
+		public string ValidationValue { get; set; }
 		public bool IsSaved { get; set; }
+	}
+
+	public class ContactInfoSettings {
+
+		public ContactInfoSettings() { }
+
+		public string PostPartialName { get; set; }
+		public string Uri { get; set; }
+		public bool UseValidateHuman { get; set; }
+		public string ValidateHumanClass { get; set; }
 	}
 
 	//======================

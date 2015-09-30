@@ -156,10 +156,20 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public PartialViewResult Contact(ContactInfo model) {
+			model.ReconstructSettings();
 			this.ViewData["CMS_contactform"] = model;
 			model.IsSaved = false;
 
-			LoadPage(model.Uri);
+			LoadPage(model.SettingsObject.Uri);
+
+			var settings = model.SettingsObject;
+
+			if (settings.UseValidateHuman) {
+				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
+				if (!IsValidated) {
+					ModelState.AddModelError("ValidationValue", "Failed to validate as a human.");
+				}
+			}
 
 			//TODO: log the comment and B64 encode some of the settings (TBD)
 			if (ModelState.IsValid) {
@@ -184,7 +194,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				ModelState.Clear();
 			}
 
-			return PartialView(model.PostPartialName);
+			return PartialView(model.SettingsObject.PostPartialName);
 		}
 
 		//====================================

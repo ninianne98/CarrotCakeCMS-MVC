@@ -20,7 +20,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 	public class HomeController : Controller {
 
 		[OutputCache(Duration = 360)]
-		public ActionResult ImageThumb(string thumb, bool? scale, int? square) {
+		public ActionResult GetImageThumb(string thumb, bool? scale, int? square) {
 			string sImageUri = thumb;
 			string sImgPath = thumb;
 
@@ -119,6 +119,32 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			}
 
 			return bmpNew;
+		}
+
+		public ActionResult GetCaptchaImage(string fgcolor, string bgcolor, string ncolor) {
+			Color f = ColorTranslator.FromHtml(CaptchaImage.FGColorDef);
+			Color b = ColorTranslator.FromHtml(CaptchaImage.BGColorDef);
+			Color n = ColorTranslator.FromHtml(CaptchaImage.NColorDef);
+
+			Bitmap bmpCaptcha = CaptchaImage.GetCaptchaImage(f, b, n);
+
+			if (bmpCaptcha == null) {
+				Response.StatusCode = 404;
+				Response.StatusDescription = "Not Found";
+				byte[] bb = new byte[0];
+
+				return File(bb, "image/png");
+			}
+
+			using (MemoryStream imgStream = new MemoryStream()) {
+				bmpCaptcha.Save(imgStream, ImageFormat.Png);
+				bmpCaptcha.Dispose();
+
+				Response.StatusCode = 200;
+				Response.StatusDescription = "OK";
+
+				return File(imgStream.ToArray(), "image/png");
+			}
 		}
 	}
 }

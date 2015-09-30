@@ -930,20 +930,22 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static SiteNav IdentifyLinkAsInactive(SiteNav nav) {
-			if (!nav.PageActive) {
-				nav.NavMenuText = InactivePagePrefix + nav.NavMenuText;
-				nav.PageHead = InactivePagePrefix + nav.PageHead;
-				nav.TitleBar = InactivePagePrefix + nav.TitleBar;
-			}
-			if (nav.IsRetired) {
-				nav.NavMenuText = RetiredPagePrefix + nav.NavMenuText;
-				nav.PageHead = RetiredPagePrefix + nav.PageHead;
-				nav.TitleBar = RetiredPagePrefix + nav.TitleBar;
-			}
-			if (nav.IsUnReleased) {
-				nav.NavMenuText = UnreleasedPagePrefix + nav.NavMenuText;
-				nav.PageHead = UnreleasedPagePrefix + nav.PageHead;
-				nav.TitleBar = UnreleasedPagePrefix + nav.TitleBar;
+			if (nav != null) {
+				if (!nav.PageActive) {
+					nav.NavMenuText = InactivePagePrefix + nav.NavMenuText;
+					nav.PageHead = InactivePagePrefix + nav.PageHead;
+					nav.TitleBar = InactivePagePrefix + nav.TitleBar;
+				}
+				if (nav.IsRetired) {
+					nav.NavMenuText = RetiredPagePrefix + nav.NavMenuText;
+					nav.PageHead = RetiredPagePrefix + nav.PageHead;
+					nav.TitleBar = RetiredPagePrefix + nav.TitleBar;
+				}
+				if (nav.IsUnReleased) {
+					nav.NavMenuText = UnreleasedPagePrefix + nav.NavMenuText;
+					nav.PageHead = UnreleasedPagePrefix + nav.PageHead;
+					nav.TitleBar = UnreleasedPagePrefix + nav.TitleBar;
+				}
 			}
 			return nav;
 		}
@@ -968,6 +970,19 @@ namespace Carrotware.CMS.Core {
 			}
 
 			return cp;
+		}
+
+		public static PostComment IdentifyLinkAsInactive(PostComment pc) {
+			if (pc != null) {
+				if (!pc.IsApproved) {
+					pc.CommenterName = InactivePagePrefix + pc.CommenterName;
+				}
+				if (pc.IsSpam) {
+					pc.CommenterName = RetiredPagePrefix + pc.CommenterName;
+				}
+			}
+
+			return pc;
 		}
 
 		//=====================

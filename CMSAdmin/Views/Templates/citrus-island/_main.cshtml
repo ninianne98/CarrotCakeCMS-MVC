@@ -120,7 +120,7 @@
 						<div>
 							<p>
 								<b>
-									@String.Format("{0} on {1:d}", item.CommenterName, item.CreateDate)
+									@Html.Raw(String.Format("{0} on {1:d}", item.CommenterName, item.CreateDate))
 								</b>
 							</p>
 							<div class="comment-border top">

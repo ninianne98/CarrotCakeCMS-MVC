@@ -140,6 +140,7 @@
     <Compile Include="Grid\CarrotGridColumnTypes.cs" />
     <Compile Include="Grid\ICarrotGridColumn.cs" />
     <Compile Include="ITwoPartWebComponent.cs" />
+    <Compile Include="IValidateHuman.cs" />
     <Compile Include="IWebComponent.cs" />
     <Compile Include="ReflectionUtilities.cs" />
     <Compile Include="SimpleStyle.cs" />

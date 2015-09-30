@@ -45,11 +45,19 @@ namespace Carrotware.Web.UI.Components {
 
 		public override void RegisterArea(AreaRegistrationContext context) {
 			context.MapRoute(
-						name: this.AreaName + "_Default",
+						name: this.AreaName + "_GetImageThumb",
 						url: "carrotwarethumb.ashx/{id}",
-						defaults: new { controller = "Home", action = "ImageThumb", id = UrlParameter.Optional },
+						defaults: new { controller = "Home", action = "GetImageThumb", id = UrlParameter.Optional },
 						namespaces: _namespaces.ToArray()
 					);
+
+			context.MapRoute(
+					name: this.AreaName + "_GetCaptchaImage",
+					url: "carrotwarecaptcha.ashx/{id}",
+					defaults: new { controller = "Home", action = "GetCaptchaImage", id = UrlParameter.Optional },
+					namespaces: _namespaces.ToArray()
+				);
 		}
+
 	}
 }
