@@ -71,12 +71,12 @@ function ajaxReturnCrumb(data, status) {
 
 	if (lstData.length > 0) {
 		$.each(lstData, function (i, v) {
-			var del = "<a href='javascript:void(0);' title='Remove' thevalue='" + val + "' onclick='selectDrillItem(this);'><div class='ui-icon ui-icon-closethick' style='float:left'></div></a>";
+			var del = "<a href='javascript:void(0);' title='Remove' data-rootcontent='" + val + "' onclick='selectDrillItem(this);'><div class='ui-icon ui-icon-closethick' style='float:left'></div></a>";
 			if (i != (lstData.length - 1)) {
 				del = '';
 			}
 			val = v.Root_ContentID;
-			var bc = "<div class='pageNodeDrillDown2' thevalue='" + v.Root_ContentID + "' id='node' >" + v.NavMenuText + " </div>";
+			var bc = "<div class='pageNodeDrillDown2' data-rootcontent='" + v.Root_ContentID + "' id='node' >" + v.NavMenuText + " </div>";
 			$(mnuName).append("<div class='ui-widget-header ui-corner-all pageNodeDrillDown3' >" + bc + del + "<div  style='clear: both;'></div></div>");
 		});
 	}
@@ -149,7 +149,7 @@ function ajaxReturnNode(data, status) {
 	$(mnuName).html('');
 
 	$.each(lstData, function (i, v) {
-		$(mnuName).append("<div><a href='javascript:void(0);' onclick='selectDrillItem(this);' thevalue='" + v.Root_ContentID + "' id='node' >" + v.NavMenuText + "</a></div>");
+		$(mnuName).append("<div><a href='javascript:void(0);' onclick='selectDrillItem(this);' data-rootcontent='" + v.Root_ContentID + "' id='node' >" + v.NavMenuText + "</a></div>");
 	});
 
 	if ($(mnuName).text().length < 2) {
@@ -165,7 +165,7 @@ function selectDrillItem(a) {
 	bMoused = false;
 
 	var tgt = $(a);
-	var v = tgt.attr('thevalue');
+	var v = tgt.data('rootcontent');
 
 	$('#' + menuValue).val(v);
 
