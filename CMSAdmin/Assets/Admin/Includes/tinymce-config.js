@@ -39,7 +39,7 @@ function TinyMCEParamInit(winWidth, winHeight, allowResize) {
 		setup: function (ed) {
 			ed.addButton('fileupbtn', {
 				title: 'File Upload',
-				image: '/Assets/Admin/tiny_mce/insertfile.gif',
+				image: '/Assets/tiny_mce/insertfile.gif',
 				onclick: function () {
 					ed.focus();
 					var x = cmsFileBrowserCallback(ed, '', '', this);
