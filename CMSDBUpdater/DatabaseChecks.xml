@@ -2,15 +2,28 @@
 <tbl>
 
 	<querynugget>
+		<priority>5</priority>
+		<mode>LT</mode>
+		<rowcount>25</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|AreCMSTablesIncomplete|AlterStep01|</testcontext>
+		<sql>
+			select distinct table_name, column_name
+			from [information_schema].[columns]
+			where table_name like 'vw_carrot_Comment'
+		</sql>
+	</querynugget>
+
+	<querynugget>
 		<priority>3</priority>
 		<mode>LT</mode>
 		<rowcount>6</rowcount>
 		<alwayscheck>False</alwayscheck>
-		<testcontext>|AreCMSTablesIncomplete|AlterStep01|</testcontext>
+		<testcontext>|AreCMSTablesIncomplete|AlterStep00|</testcontext>
 		<sql>
-			select [specific_name], [ordinal_position], [parameter_name]
-			from [information_schema].[parameters]
-			where [specific_name] like 'carrot%'
+			select distinct table_name
+			from [information_schema].[columns]
+			where table_name like 'carrot%'
 		</sql>
 	</querynugget>
 
@@ -19,7 +32,7 @@
 		<mode>GTE</mode>
 		<rowcount>4</rowcount>
 		<alwayscheck>False</alwayscheck>
-		<testcontext>|DoCMSTablesExist|AlterStep01|</testcontext>
+		<testcontext>|DoCMSTablesExist|AlterStep00|</testcontext>
 		<sql>
 			select distinct table_name
 			from [information_schema].[columns]

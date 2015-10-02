@@ -30,6 +30,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpGet]
 		public ActionResult Default() {
+			if (DatabaseUpdate.TablesIncomplete) {
+				return View("_EmptyHome");
+			}
+
 			try {
 				return DefaultView();
 			} catch (Exception ex) {
@@ -154,6 +158,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpPost]
+		[ValidateInput(false)]
 		[ValidateAntiForgeryToken]
 		public PartialViewResult Contact(ContactInfo model) {
 			model.ReconstructSettings();
@@ -184,7 +189,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				pc.CommenterIP = sIP;
 				pc.CommenterName = model.CommenterName;
 				pc.CommenterEmail = model.CommenterEmail ?? String.Empty;
-				pc.PostCommentText = model.PostCommentText;
+				pc.PostCommentText = Server.HtmlEncode(model.PostCommentText); //.Replace("<", "&lt;").Replace(">", "&gt;");
 				pc.CommenterURL = model.CommenterURL ?? String.Empty;
 
 				pc.Save();

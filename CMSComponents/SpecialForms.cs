@@ -274,6 +274,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		[StringLength(256)]
 		[Required]
+		[EmailAddress]
 		[Display(Name = "Email")]
 		public string CommenterEmail { get; set; }
 

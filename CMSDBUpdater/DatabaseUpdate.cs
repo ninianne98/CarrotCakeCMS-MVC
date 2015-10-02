@@ -25,9 +25,11 @@ namespace Carrotware.CMS.DBUpdater {
 	public class DatabaseUpdate {
 		public static SqlException LastSQLError { get; set; }
 
-		public static string CurrentDbVersion { get { return "20150829"; } }
+		public static string CurrentDbVersion { get { return "20151001"; } }
 
-		public static string DbVersion01 { get { return "20150829"; } }
+		public static string DbVersion00 { get { return "20150829"; } }
+
+		public static string DbVersion01 { get { return "20151001"; } }
 
 		public DatabaseUpdate() {
 			LastSQLError = null;
@@ -227,17 +229,21 @@ namespace Carrotware.CMS.DBUpdater {
 				if (ver.DataValue != DatabaseUpdate.CurrentDbVersion) {
 					ver = GetDbSchemaVersion();
 
-					//if (ver.DataValue != DatabaseUpdate.CurrentDbVersion) {
-					//	ver = GetDbSchemaVersion();
-					//	if (ver.DataValue == DatabaseUpdate.DbVersion01 || ver.DataValue.StartsWith("201507") || ver.DataValue.StartsWith("201508")) {
-					//		HandleResponse(lst, BuildUpdateString(iUpdate++), AlterStep01());
-					//	}
-					//}
+					if (ver.DataValue != DatabaseUpdate.CurrentDbVersion) {
+						ver = GetDbSchemaVersion();
+						if (ver.DataValue == DatabaseUpdate.DbVersion00 || ver.DataValue.StartsWith("201508") || ver.DataValue.StartsWith("201509")) {
+							HandleResponse(lst, BuildUpdateString(iUpdate++), AlterStep01());
+						}
+					}
 				} else {
 					HandleResponse(lst, "Database up-to-date [" + ver.DataValue + "] ");
 				}
 			} else {
 				HandleResponse(lst, "Database up-to-date [" + ver.DataValue + "] ");
+			}
+
+			if (HttpContext.Current.Cache[ContentSqlStateKey] != null) {
+				HttpContext.Current.Cache.Remove(ContentSqlStateKey);
 			}
 
 			bUpdate = DatabaseNeedsUpdate();
@@ -326,6 +332,26 @@ namespace Carrotware.CMS.DBUpdater {
 			return res;
 		}
 
+		private static string ContentSqlStateKey = "cms_SqlTablesIncomplete";
+
+		public static bool TablesIncomplete {
+			get {
+				string tablesIncomplete = String.Empty;
+				bool c = true;
+
+				if (HttpContext.Current.Cache[ContentSqlStateKey] != null) {
+					tablesIncomplete = HttpContext.Current.Cache[ContentSqlStateKey].ToString();
+				} else {
+					try { c = AreCMSTablesIncomplete(); } catch { }
+					tablesIncomplete = c.ToString();
+					HttpContext.Current.Cache.Insert(ContentSqlStateKey, tablesIncomplete, null, DateTime.Now.AddMinutes(3), Cache.NoSlidingExpiration);
+				}
+
+				c = Convert.ToBoolean(tablesIncomplete);
+				return c;
+			}
+		}
+
 		public static bool AreCMSTablesIncomplete() {
 			if (!FailedSQL) {
 				bool bTestResult = false;
@@ -389,22 +415,22 @@ namespace Carrotware.CMS.DBUpdater {
 			}
 		}
 
-		//public DatabaseUpdateResponse AlterStep01() {
-		//	DatabaseUpdateResponse res = new DatabaseUpdateResponse();
+		public DatabaseUpdateResponse AlterStep01() {
+			DatabaseUpdateResponse res = new DatabaseUpdateResponse();
 
-		//	bool bTestResult = SQLUpdateNugget.EvalNuggetKey("AlterStep01");
+			bool bTestResult = SQLUpdateNugget.EvalNuggetKey("AlterStep01");
 
-		//	if (bTestResult) {
-		//		res.LastException = ExecFileContents("Carrotware.CMS.DBUpdater.DataScripts.ALTER01.sql", false);
-		//		res.Response = "VERBIAGE";
-		//		res.RanUpdate = true;
-		//		SetDbSchemaVersion(DatabaseUpdate.DbVersion01);
-		//		return res;
-		//	}
+			if (bTestResult) {
+				res.LastException = ExecFileContents("Carrotware.CMS.DBUpdater.DataScripts.ALTER01.sql", false);
+				res.Response = "Update comment view";
+				res.RanUpdate = true;
+				SetDbSchemaVersion(DatabaseUpdate.DbVersion01);
+				return res;
+			}
 
-		//	res.Response = "VERBIAGE already exist";
-		//	return res;
-		//}
+			res.Response = "Comment view update already applied";
+			return res;
+		}
 
 		private string ReadEmbededScript(string filePath) {
 			string sFile = "";

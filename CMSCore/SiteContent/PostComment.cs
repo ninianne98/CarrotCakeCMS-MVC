@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
+using System.Web;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -29,46 +29,53 @@ namespace Carrotware.CMS.Core {
 		public DateTime CreateDate { get; set; }
 
 		[Display(Name = "IP Addy")]
+		[Required]
+		[StringLength(32)]
 		public string CommenterIP { get; set; }
 
 		[Display(Name = "Commenter Name")]
+		[Required]
+		[StringLength(256)]
 		public string CommenterName { get; set; }
 
 		[Display(Name = "Commenter Email")]
+		[Required]
+		[StringLength(256)]
 		public string CommenterEmail { get; set; }
 
 		[Display(Name = "Commenter URL")]
+		[StringLength(256)]
 		public string CommenterURL { get; set; }
 
 		[Display(Name = "Comment Text")]
+		[Required]
+		//[StringLength(4096)]
 		public string PostCommentText { get; set; }
 
 		private string _commentPlain = null;
 
-		public string PostCommentEscaped {
+		public HtmlString PostCommentEscaped {
 			get {
 				if (_commentPlain == null) {
-					StringBuilder sb = new StringBuilder();
-					sb.Append(this.PostCommentText);
-					sb.Replace("\r\n", "\n").Replace("<", " &lt; ").Replace(">", " &gt; ").Replace("\r", "\n").Replace("\n", "<br />");
-					_commentPlain = SiteData.CurrentSite.UpdateContentComment(sb.ToString());
+					string cmt = this.PostCommentText ?? String.Empty;
+					cmt = cmt.Replace("\r\n", "\n").Replace("<", " &lt; ").Replace(">", " &gt; ").Replace("\r", "\n").Replace("\n", "<br />");
+					_commentPlain = SiteData.CurrentSite.UpdateContentComment(cmt);
 				}
 
-				return _commentPlain;
+				return new HtmlString(_commentPlain);
 			}
 		}
 
 		private string _commentPr = null;
 
-		public string PostCommentProcessed {
+		public HtmlString PostCommentProcessed {
 			get {
 				if (_commentPr == null) {
-					StringBuilder sb = new StringBuilder();
-					sb.Append(this.PostCommentText);
-					_commentPr = SiteData.CurrentSite.UpdateContentComment(sb.ToString());
+					string cmt = this.PostCommentText ?? String.Empty;
+					_commentPr = SiteData.CurrentSite.UpdateContentComment(cmt);
 				}
 
-				return _commentPr;
+				return new HtmlString(_commentPr);
 			}
 		}
 
@@ -84,6 +91,8 @@ namespace Carrotware.CMS.Core {
 		[Display(Name = "Filename")]
 		public string FileName { get; set; }
 
+		public ContentPageType.PageType ContentType { get; set; }
+
 		internal PostComment(vw_carrot_Comment c) {
 			if (c != null) {
 				this.ContentCommentID = c.ContentCommentID;
@@ -98,6 +107,7 @@ namespace Carrotware.CMS.Core {
 				this.IsSpam = c.IsSpam;
 				this.NavMenuText = c.NavMenuText;
 				this.FileName = c.FileName;
+				this.ContentType = ContentPageType.GetTypeByID(c.ContentTypeID);
 			}
 		}
 
@@ -252,18 +262,18 @@ namespace Carrotware.CMS.Core {
 		public override bool Equals(Object obj) {
 			//Check for null and compare run-time types.
 			if (obj == null || GetType() != obj.GetType()) return false;
+
 			if (obj is PostComment) {
 				PostComment p = (PostComment)obj;
 				return (this.ContentCommentID == p.ContentCommentID)
-					&& (this.Root_ContentID == p.Root_ContentID)
-					&& (this.CommenterIP == p.CommenterIP);
+					&& (this.Root_ContentID == p.Root_ContentID);
 			} else {
 				return false;
 			}
 		}
 
 		public override int GetHashCode() {
-			return ContentCommentID.GetHashCode() ^ Root_ContentID.GetHashCode();
+			return this.ContentCommentID.GetHashCode() ^ this.Root_ContentID.GetHashCode();
 		}
 	}
 }

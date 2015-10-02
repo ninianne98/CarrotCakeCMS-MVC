@@ -36,7 +36,6 @@ using System.Web.UI;
 //  [assembly: AssemblyFileVersion("4.3.0.0")]
 
 [assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER01.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER01a.sql", "text/plain")]
 [assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER02.sql", "text/plain")]
 [assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER03.sql", "text/plain")]
 [assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER04.sql", "text/plain")]
@@ -48,5 +47,7 @@ using System.Web.UI;
 [assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER10.sql", "text/plain")]
 [assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER11.sql", "text/plain")]
 [assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER12.sql", "text/plain")]
+
 [assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.CREATE01.sql", "text/plain")]
+
 [assembly: WebResource("Carrotware.CMS.DBUpdater.DatabaseChecks.xml", "text/plain")]

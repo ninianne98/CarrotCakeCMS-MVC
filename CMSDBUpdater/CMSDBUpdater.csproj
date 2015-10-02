@@ -58,6 +58,7 @@
     <Compile Include="SQLUpdateNugget.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DataScripts\ALTER01.sql" />
     <EmbeddedResource Include="DataScripts\CREATE01.sql" />
   </ItemGroup>
   <ItemGroup>

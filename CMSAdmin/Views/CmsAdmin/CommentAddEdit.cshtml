@@ -1,0 +1,186 @@
+﻿@model Carrotware.CMS.Core.PostComment
+
+@{
+	ViewBag.Title = "Comment Add/Edit";
+	string cancelToUrl = Model.ContentType == ContentPageType.PageType.BlogEntry ?
+						SiteFilename.BlogPostCommentIndexURL : SiteFilename.PageCommentIndexURL;
+}
+<div>
+	@CmsHelpers.DisplayErrorPopupButton()
+	<br />
+	<br />
+</div>
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<fieldset style="width: 725px;">
+		<legend>
+			<label>
+				Page Info
+			</label>
+		</legend>
+		<table style="width: 700px;">
+			<tr>
+				<td style="width: 125px;" class="tablecaption">
+					title:
+				</td>
+				<td>
+					@Model.NavMenuText
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					filename:
+				</td>
+				<td>
+					@Model.FileName
+					&nbsp;&nbsp;
+					<a id="lnkPage" href="@Model.FileName" target="_blank">
+						<img class="imgNoBorder" src="~/Assets/Admin/Images/html2.png"
+							 title="Visit page" alt="Visit page" />
+					</a>
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+	<fieldset style="width: 725px;">
+		<legend>
+			<label>
+				Comment
+			</label>
+		</legend>
+		<table style="width: 700px;">
+			<tr>
+				<td style="width: 150px;" class="tablecaption">
+					IP address:
+				</td>
+				<td>
+					@Model.CommenterIP
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					date:
+				</td>
+				<td>
+					@Model.CreateDate
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					email:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.CommenterEmail, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.CommenterEmail, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					name:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.CommenterName, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.CommenterName, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					url:
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.CommenterURL, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.CommenterURL, "", new { @class = "validationError" })
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					&nbsp;
+				</td>
+				<td>
+					<div class="table-subblock">
+						<b class="caption">approved:</b>&nbsp;&nbsp;
+						@Html.CheckBoxFor(m => m.IsApproved)
+					</div>
+					<div class="table-subblock">
+						<b class="caption">spam:</b>&nbsp;&nbsp;
+						@Html.CheckBoxFor(m => m.IsSpam)
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					comment:
+				</td>
+				<td>
+					@Html.ValidationMessageFor(m => m.PostCommentText, "", new { @class = "validationError" })
+					@Html.TextAreaFor(m => m.PostCommentText, new { rows = "10", cols = "75", @class = "form-control-xxlg" })
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+
+	<input type="button" name="btnSaveButton" value="Save" onclick="SubmitPage();" id="btnSaveButton" /> <text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </text>
+	<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing()" /> <text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </text>
+	<input type="button" name="btnDeleteButton" value="Delete" onclick="return DeleteItem();" id="btnDeleteButton" />
+	<br />
+	<div style="display: none;">
+		@Html.HiddenFor(m => m.ContentCommentID)
+		@Html.HiddenFor(m => m.CommenterIP)
+		@Html.HiddenFor(m => m.CreateDate)
+
+		@Html.HiddenFor(m => m.NavMenuText)
+		@Html.HiddenFor(m => m.FileName)
+		@Html.HiddenFor(m => m.Root_ContentID)
+		@Html.HiddenFor(m => m.ContentType)
+
+		<input type="submit" name="btnSave" value="Save" id="btnSave" />
+
+		<div id="formPrettyValidationSummary">
+			@Html.ValidationSummary(true, "")
+		</div>
+	</div>
+
+}
+
+
+<div style="display: none;">
+	@using (Html.BeginForm("DeleteCommentAddEdit", RouteConfig.AdminCtrlr)) {
+		@Html.AntiForgeryToken()
+
+		@Html.HiddenFor(m => m.ContentCommentID)
+		@Html.HiddenFor(m => m.Root_ContentID)
+		@Html.HiddenFor(m => m.ContentType)
+
+		<input type="submit" name="btnDelete" value="Delete" id="btnDelete" />
+	}
+</div>
+
+<script type="text/javascript">
+
+	function DeleteItem() {
+		var opts = {
+			"No": function () { cmsAlertModalClose(); },
+			"Yes": function () { ClickDeleteItem(); }
+		};
+
+		cmsAlertModalSmallBtns('Are you sure you want to delete this comment?', opts);
+
+		return false;
+	}
+
+	function ClickDeleteItem() {
+		$('#btnDelete').click();
+	}
+
+	function SubmitPage() {
+		setTimeout("ClickBtn();", 250);
+	}
+	function ClickBtn() {
+		$('#btnSave').click();
+	}
+
+	function cancelEditing() {
+		window.setTimeout("location.href = '@cancelToUrl';", 250);
+	}
+</script>

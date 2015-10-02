@@ -37,7 +37,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			string action = vals["action"].ToString().ToLower();
 			string controller = vals["controller"].ToString().ToLower();
 
-			//TODO: non admin or siteman redirect to go here
+			//TODO: non admin or site editor redirect to go here
 			if (this.User.Identity.IsAuthenticated) {
 				List<string> lstOKNoSiteActions = new List<string>();
 				lstOKNoSiteActions.Add("siteinfo");
@@ -51,6 +51,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				try {
 					if (action != "databasesetup") {
 						if (!lstOKNoSiteActions.Contains(action) && !SiteData.CurretSiteExists) {
+							Response.Redirect(SiteFilename.SiteInfoURL);
+						}
+
+						if (DatabaseUpdate.TablesIncomplete) {
 							Response.Redirect(SiteFilename.SiteInfoURL);
 						}
 
@@ -1963,6 +1967,51 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.PageType = ContentPageType.PageType.BlogEntry;
 
 			return CommentIndex(model);
+		}
+
+		[HttpGet]
+		public ActionResult CommentAddEdit(Guid id) {
+			PostComment model = PostComment.GetContentCommentByID(id);
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateInput(false)]
+		[ValidateAntiForgeryToken]
+		public ActionResult CommentAddEdit(PostComment model) {
+			if (ModelState.IsValid) {
+				PostComment model2 = PostComment.GetContentCommentByID(model.ContentCommentID);
+				model2.CommenterEmail = model2.CommenterEmail;
+				model2.CommenterName = model2.CommenterName;
+				model2.CommenterURL = model2.CommenterURL;
+
+				model2.IsApproved = model2.IsApproved;
+				model2.IsSpam = model2.IsSpam;
+				model2.PostCommentText = model2.PostCommentText;
+
+				model2.Save();
+
+				return RedirectToAction("CommentAddEdit", new { @id = model.ContentCommentID });
+			}
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult DeleteCommentAddEdit(PostComment model) {
+			ModelState.Clear();
+
+			var model2 = PostComment.GetContentCommentByID(model.ContentCommentID);
+
+			model2.Delete();
+
+			if (model.ContentType == ContentPageType.PageType.BlogEntry) {
+				return RedirectToAction("BlogPostCommentIndex");
+			} else {
+				return RedirectToAction("PageCommentIndex");
+			}
 		}
 
 		protected ActionResult CommentIndex(CommentIndexModel model) {

@@ -6,6 +6,8 @@
 	are free to use and modify it for any purpose. All I ask is that you include a link back to my website in your credits.
 
 	http://www.styleshout.com/
+
+	Conversion to CarrotCake CMS MVC Template: Carrotware
 *@
 
 @{
@@ -125,7 +127,7 @@
 							</p>
 							<div class="comment-border top">
 								<p>
-									@Html.Raw(item.PostCommentText)
+									@item.PostCommentEscaped
 								</p>
 							</div>
 						</div>
