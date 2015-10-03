@@ -1,10 +1,14 @@
 ﻿@model System.Web.Mvc.HandleErrorInfo
 
 @{
+	Layout = "~/Views/CmsAdmin/_LayoutPublic.cshtml";
+
 	ViewBag.Title = "Locked Out";
 }
 
-<hgroup>
-	<h1 class="text-danger">Locked out.</h1>
-	<h2 class="text-danger">This account has been locked out, please try again later.</h2>
-</hgroup>
+<p>
+	This account has been locked out, please try again later.
+</p>
+<p>
+	<input type="button" name="cmdCancel" value="Try Again" id="cmdCancel" tabindex="2" onclick="location.href = './Login';" />
+</p>

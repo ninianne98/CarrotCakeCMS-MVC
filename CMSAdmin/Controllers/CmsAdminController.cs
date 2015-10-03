@@ -149,40 +149,61 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateInput(false)]
 		[ValidateAntiForgeryToken]
 		public ActionResult UserEdit(UserModel model) {
-			ExtendedUserData user = model.User;
+			ExtendedUserData userExt = model.User;
 
 			if (ModelState.IsValid) {
 				var manage = new ManageSecurity(this);
+				var user = manage.UserManager.FindByName(model.User.UserName);
 
-				IdentityResult result = manage.UserManager.SetEmail(user.UserKey, user.Email);
-				result = manage.UserManager.SetPhoneNumber(user.UserKey, user.PhoneNumber);
+				IdentityResult result = manage.UserManager.SetEmail(userExt.UserKey, userExt.Email);
+				result = manage.UserManager.SetPhoneNumber(userExt.UserKey, userExt.PhoneNumber);
 
-				ExtendedUserData exUsr = new ExtendedUserData(user.UserId);
+				if (userExt.LockoutEndDateUtc.HasValue) {
+					//DateTime utcDateTime = DateTime.SpecifyKind(userExt.LockoutEndDateUtc.Value, DateTimeKind.Utc);
+					//DateTimeOffset utcOffset = utcDateTime;
+					//result = manage.UserManager.SetLockoutEnabled(userExt.UserKey, true);
+					//result = manage.UserManager.SetLockoutEndDate(userExt.UserKey, utcOffset);
+					if (!user.LockoutEndDateUtc.HasValue) {
+						// set lockout
+						user.LockoutEndDateUtc = userExt.LockoutEndDateUtc.Value;
+						user.AccessFailedCount = 20;
+						manage.UserManager.Update(user);
+					}
+				} else {
+					if (user.LockoutEndDateUtc.HasValue) {
+						// unset lockout
+						user.LockoutEndDateUtc = null;
+						user.AccessFailedCount = 0;
+						manage.UserManager.Update(user);
+					}
+				}
 
-				exUsr.UserNickName = user.UserNickName;
-				exUsr.FirstName = user.FirstName;
-				exUsr.LastName = user.LastName;
-				exUsr.UserBio = user.UserBio;
+				ExtendedUserData exUsr = new ExtendedUserData(userExt.UserId);
+
+				exUsr.UserNickName = userExt.UserNickName;
+				exUsr.FirstName = userExt.FirstName;
+				exUsr.LastName = userExt.LastName;
+				exUsr.UserBio = userExt.UserBio;
 
 				exUsr.Save();
 
 				foreach (var s in model.SiteOptions) {
 					if (s.Selected) {
-						user.AddToSite(new Guid(s.Value));
+						userExt.AddToSite(new Guid(s.Value));
 					} else {
-						user.RemoveFromSite(new Guid(s.Value));
+						userExt.RemoveFromSite(new Guid(s.Value));
 					}
 				}
 
 				foreach (var r in model.RoleOptions) {
 					if (r.Selected) {
-						user.AddToRole(r.Text);
+						userExt.AddToRole(r.Text);
 					} else {
-						user.RemoveFromRole(r.Text);
+						userExt.RemoveFromRole(r.Text);
 					}
 				}
 
-				return RedirectToAction("UserEdit", new { @id = user.UserId });
+				return RedirectToAction("UserEdit", new { @id = userExt.UserId });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -201,14 +222,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				SecurityData sd = new SecurityData();
 				ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
 
-				IdentityResult result = sd.CreateApplicationUser(user, model.Password);
+				ExtendedUserData exUser = null;
+				var result = sd.CreateApplicationUser(user, model.Password, out exUser);
 
-				if (result.Succeeded) {
+				if (result == IdentityResult.Success && exUser != null) {
 					var manage = new ManageSecurity(this);
-
 					user = manage.UserManager.FindByName(model.UserName);
+					result = manage.UserManager.SetLockoutEnabled(user.Id, true);
 
-					return RedirectToAction("UserEdit", new { @id = user.Id });
+					return RedirectToAction("UserEdit", new { @id = exUser.UserId });
 				}
 
 				AddErrors(result);
@@ -612,15 +634,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				SecurityData sd = new SecurityData();
 				ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
 
-				IdentityResult result = sd.CreateApplicationUser(user, model.Password);
+				ExtendedUserData exUser = null;
+				var result = sd.CreateApplicationUser(user, model.Password, out exUser);
 
 				if (result.Succeeded) {
-					var manage = new ManageSecurity(this);
 
-					user = manage.UserManager.FindByName(model.UserName);
-
-					SecurityData.AddUserToRole(user.UserName, SecurityData.CMSGroup_Admins);
-					SecurityData.AddUserToRole(user.UserName, SecurityData.CMSGroup_Users);
+					SecurityData.AddUserToRole(model.UserName, SecurityData.CMSGroup_Admins);
+					SecurityData.AddUserToRole(model.UserName, SecurityData.CMSGroup_Users);
 
 					return RedirectToAction("Index");
 				}
@@ -657,15 +677,21 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			var manage = new ManageSecurity(this);
 
+			//TODO: make configurable
+			//manage.UserManager.UserLockoutEnabledByDefault = true;
+			//manage.UserManager.MaxFailedAccessAttemptsBeforeLockout = 5;
+			//manage.UserManager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(15);
+
 			// This doesn't count login failures towards account lockout
 			// To enable password failures to trigger account lockout, change to shouldLockout: true
-			//var user = await manage.UserManager.FindByNameAsync(model.UserName);
-			//var res = await manage.UserManager.CheckPasswordAsync(user, model.Password);
+			var user = await manage.UserManager.FindByNameAsync(model.UserName);
 
-			var result = await manage.SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+			var result = await manage.SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
 
 			switch (result) {
 				case SignInStatus.Success:
+					await manage.UserManager.ResetAccessFailedCountAsync(user.Id);
+
 					return RedirectToLocal(returnUrl);
 
 				case SignInStatus.LockedOut:
@@ -677,6 +703,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				case SignInStatus.Failure:
 				default:
 					ModelState.AddModelError(String.Empty, "Invalid login attempt.");
+
+					if (user.LockoutEndDateUtc.HasValue && user.LockoutEndDateUtc.Value < DateTime.UtcNow) {
+						user.LockoutEndDateUtc = null;
+						user.AccessFailedCount = 1;
+						manage.UserManager.Update(user);
+					}
+
 					return View(model);
 			}
 		}
@@ -1994,6 +2027,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				return RedirectToAction("CommentAddEdit", new { @id = model.ContentCommentID });
 			}
+
+			Helper.HandleErrorDict(ModelState);
 
 			return View(model);
 		}

@@ -1,10 +1,8 @@
 ﻿using Carrotware.CMS.Data;
+using Carrotware.CMS.Security;
 using Carrotware.CMS.Security.Models;
 using Carrotware.Web.UI.Components;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security.DataProtection;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -70,13 +68,11 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static List<ApplicationUser> GetUserSearch(string searchTerm) {
-			using (var db = SecurityDbContext.Create()) {
-				using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-					return (from u in db.Users
-							where u.UserName.ToLower().Contains(searchTerm.ToLower())
-									|| u.Email.ToLower().Contains(searchTerm.ToLower())
-							select userManager.FindByName(u.UserName)).Take(100).ToList();
-				}
+			using (var securityHelper = new SecurityHelper()) {
+				return (from u in securityHelper.DataContext.Users
+						where u.UserName.ToLower().Contains(searchTerm.ToLower())
+								|| u.Email.ToLower().Contains(searchTerm.ToLower())
+						select securityHelper.UserManager.FindByName(u.UserName)).Take(100).ToList();
 			}
 		}
 
@@ -130,14 +126,12 @@ namespace Carrotware.CMS.Core {
 						   select ud.UserKey.ToLower()).ToList();
 			}
 
-			using (var db = SecurityDbContext.Create()) {
-				using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-					usrs = (from u in db.Users
-							where (u.UserName.ToLower().Contains(searchTerm.ToLower())
-										|| u.Email.ToLower().Contains(searchTerm.ToLower()))
-									&& admins.Union(editors).Contains(u.Id.ToLower())
-							select userManager.FindByName(u.UserName)).Take(50).ToList();
-				}
+			using (var securityHelper = new SecurityHelper()) {
+				usrs = (from u in securityHelper.DataContext.Users
+						where (u.UserName.ToLower().Contains(searchTerm.ToLower())
+									|| u.Email.ToLower().Contains(searchTerm.ToLower()))
+								&& admins.Union(editors).Contains(u.Id.ToLower())
+						select securityHelper.UserManager.FindByName(u.UserName)).Take(50).ToList();
 			}
 
 			return usrs;
@@ -174,48 +168,40 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static List<ApplicationUser> GetUserListByEmail(string email) {
-			using (var db = SecurityDbContext.Create()) {
-				using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-					return (from u in db.Users
-							where u.Email.ToLower().Contains(email.ToLower())
-							select userManager.FindByName(u.UserName)).Take(50).ToList();
-				}
+			using (var securityHelper = new SecurityHelper()) {
+				return (from u in securityHelper.DataContext.Users
+						where u.Email.ToLower().Contains(email.ToLower())
+						select securityHelper.UserManager.FindByName(u.UserName)).Take(50).ToList();
 			}
 		}
 
 		public static List<ApplicationUser> GetUserListByName(string usrName) {
-			using (var db = SecurityDbContext.Create()) {
-				using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-					return (from u in db.Users
-							where (u.UserName.ToLower().Contains(usrName.ToLower()))
-							select userManager.FindByName(u.UserName)).Take(50).ToList();
-				}
+			using (var securityHelper = new SecurityHelper()) {
+				return (from u in securityHelper.DataContext.Users
+						where (u.UserName.ToLower().Contains(usrName.ToLower()))
+						select securityHelper.UserManager.FindByName(u.UserName)).Take(50).ToList();
 			}
 		}
 
 		public static List<ApplicationUser> GetUserList() {
-			using (var db = SecurityDbContext.Create()) {
-				using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-					return (from u in db.Users
-							select userManager.FindByName(u.UserName)).Take(1000).ToList();
-				}
+			using (var securityHelper = new SecurityHelper()) {
+				return (from u in securityHelper.DataContext.Users
+						select securityHelper.UserManager.FindByName(u.UserName)).Take(1000).ToList();
 			}
 		}
 
 		public static List<ApplicationUser> GetUsersInRole(string groupName) {
 			List<ApplicationUser> usrs = new List<ApplicationUser>();
 
-			using (var db = SecurityDbContext.Create()) {
-				using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-					var role = (from r in db.Roles
-								where r.Name.ToLower() == groupName.ToLower()
-								select r).FirstOrDefault();
+			using (var securityHelper = new SecurityHelper()) {
+				var role = (from r in securityHelper.DataContext.Roles
+							where r.Name.ToLower() == groupName.ToLower()
+							select r).FirstOrDefault();
 
-					if (role != null) {
-						usrs = (from ur in role.Users
-								join u in db.Users on ur.UserId equals u.Id
-								select userManager.FindByName(u.UserName)).Take(2500).ToList();
-					}
+				if (role != null) {
+					usrs = (from ur in role.Users
+							join u in securityHelper.DataContext.Users on ur.UserId equals u.Id
+							select securityHelper.UserManager.FindByName(u.UserName)).Take(2500).ToList();
 				}
 			}
 
@@ -283,24 +269,15 @@ namespace Carrotware.CMS.Core {
 			return IsUserInRole(SecurityData.CurrentUserIdentityName, groupName);
 		}
 
-		//using (var db = SecurityDbContext.Create()) {
-		//using (var roleMgr = new  RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db))) {
-		//}
-		//}
-
 		public static bool IsUserInRole(string userName, string groupName) {
 			if (SiteData.IsWebView && HttpContext.Current.User.Identity.IsAuthenticated) {
-				using (var db = SecurityDbContext.Create()) {
-					//using (var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db))) {
-					using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-						//var _role = roleManager.FindById(groupName);
-						var _user = userManager.FindByName(userName);
+				using (var securityHelper = new SecurityHelper()) {
+					var _user = securityHelper.UserManager.FindByName(userName);
 
-						return userManager.IsInRole(_user.Id, groupName);
-					}
-					//}
+					return securityHelper.UserManager.IsInRole(_user.Id, groupName);
 				}
 			}
+
 			return false;
 		}
 
@@ -402,10 +379,8 @@ namespace Carrotware.CMS.Core {
 			get {
 				ApplicationUser _currentUser = null;
 				if (!String.IsNullOrEmpty(SecurityData.CurrentUserIdentityName)) {
-					using (var db = SecurityDbContext.Create()) {
-						using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-							_currentUser = userManager.FindByName(SecurityData.CurrentUserIdentityName);
-						}
+					using (var securityHelper = new SecurityHelper()) {
+						_currentUser = securityHelper.UserManager.FindByName(SecurityData.CurrentUserIdentityName);
 					}
 				}
 				return _currentUser;
@@ -413,26 +388,20 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static ApplicationUser GetUserByID(string key) {
-			using (var db = SecurityDbContext.Create()) {
-				using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-					return userManager.FindById(key);
-				}
+			using (var securityHelper = new SecurityHelper()) {
+				return securityHelper.UserManager.FindById(key);
 			}
 		}
 
 		public static ApplicationUser GetUserByName(string username) {
-			using (var db = SecurityDbContext.Create()) {
-				using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-					return userManager.FindByName(username);
-				}
+			using (var securityHelper = new SecurityHelper()) {
+				return securityHelper.UserManager.FindByName(username);
 			}
 		}
 
 		public static ApplicationUser GetUserByEmail(string email) {
-			using (var db = SecurityDbContext.Create()) {
-				using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-					return userManager.FindByEmail(email);
-				}
+			using (var securityHelper = new SecurityHelper()) {
+				return securityHelper.UserManager.FindByEmail(email);
 			}
 		}
 
@@ -466,25 +435,27 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public IdentityResult CreateApplicationUser(ApplicationUser user) {
-			return CreateApplicationUser(user, SecurityData.GenerateSimplePassword());
+		public IdentityResult CreateApplicationUser(ApplicationUser user, out ExtendedUserData newusr) {
+			newusr = new ExtendedUserData();
+
+			return CreateApplicationUser(user, SecurityData.GenerateSimplePassword(), out newusr);
 		}
 
-		public IdentityResult CreateApplicationUser(ApplicationUser user, string password) {
-			IdentityResult result = new IdentityResult();
+		public IdentityResult CreateApplicationUser(ApplicationUser user, string password, out ExtendedUserData newusr) {
+			newusr = null;
+			var result = new IdentityResult();
 
 			if (user != null && !String.IsNullOrEmpty(user.Id)) {
-				using (var db = SecurityDbContext.Create()) {
-					using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-						result = userManager.Create(user, password);
-						if (result.Succeeded) {
-							user = userManager.FindByName(user.UserName);
+				using (var securityHelper = new SecurityHelper()) {
+					result = securityHelper.UserManager.Create(user, password);
 
-							ExtendedUserData newusr = new ExtendedUserData();
-							newusr.UserKey = user.Id;
-							newusr.Id = user.Id;
-							newusr.Save();
-						}
+					if (result.Succeeded) {
+						user = securityHelper.UserManager.FindByName(user.UserName);
+
+						newusr = new ExtendedUserData();
+						newusr.UserKey = user.Id;
+						newusr.Id = user.Id;
+						newusr.Save();
 					}
 				}
 			}
@@ -496,17 +467,10 @@ namespace Carrotware.CMS.Core {
 			IdentityResult result = new IdentityResult();
 
 			if (user != null && !String.IsNullOrEmpty(user.Id)) {
-				using (var db = SecurityDbContext.Create()) {
-					var provider = new DpapiDataProtectionProvider("CarrotCake CMS");
-					using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-						userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("UserToken")) {
-							TokenLifespan = TimeSpan.FromDays(7)
-						};
+				using (var securityHelper = new SecurityHelper()) {
+					result = securityHelper.UserManager.ResetPassword(user.Id, code, password);
 
-						result = userManager.ResetPassword(user.Id, code, password);
-
-						return result;
-					}
+					return result;
 				}
 			}
 
@@ -518,17 +482,11 @@ namespace Carrotware.CMS.Core {
 			string code = String.Empty;
 
 			if (!String.IsNullOrEmpty(Email)) {
-				using (var db = SecurityDbContext.Create()) {
-					var provider = new DpapiDataProtectionProvider("CarrotCake CMS");
-					using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db))) {
-						userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("UserToken")) {
-							TokenLifespan = TimeSpan.FromDays(7)
-						};
+				using (var securityHelper = new SecurityHelper()) {
+					user = securityHelper.UserManager.FindByEmail(Email);
 
-						user = userManager.FindByEmail(Email);
-						if (user != null) {
-							code = userManager.GeneratePasswordResetToken(user.Id);
-						}
+					if (user != null) {
+						code = securityHelper.UserManager.GeneratePasswordResetToken(user.Id);
 					}
 				}
 			}

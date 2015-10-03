@@ -1,5 +1,6 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Security.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -194,8 +195,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 				if (this.CreateUsers) {
 					if (seu.ImportUserID == Guid.Empty) {
 						ApplicationUser user = new ApplicationUser { UserName = seu.Login, Email = seu.Email };
-						var result = sd.CreateApplicationUser(user);
-						usr = ExtendedUserData.FindByUsername(seu.Login);
+						var result = sd.CreateApplicationUser(user, out usr);
+						if (usr == null) {
+							usr = ExtendedUserData.FindByUsername(seu.Login);
+						}
 						seu.ImportUserID = usr.UserId;
 					}
 

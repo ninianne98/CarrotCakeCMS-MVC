@@ -24,12 +24,8 @@
 				<br />
 				@Html.TextBoxFor(m => m.UserName, new { @class = "form-control-md", tabindex = "1" })
 			</td>
-			<td rowspan="2">
-				<div style="height: 50px; width: 75px; text-align: right; border: 1px solid #ffffff;">
-					<a href="~/">
-						<img class="imgNoBorder" src="~/Assets/Admin/Images/house_go.png" alt="Homepage" title="Homepage" />
-					</a>
-				</div>
+			<td>
+				&nbsp;
 			</td>
 		</tr>
 		<tr>
@@ -46,6 +42,9 @@
 				@Html.ValidationMessageFor(m => m.Password, "", new { @class = "validationError" })
 				<br />
 				@Html.PasswordFor(m => m.Password, new { @class = "form-control-md", tabindex = "2" })
+			</td>
+			<td>
+				&nbsp;
 			</td>
 		</tr>
 		<tr>
@@ -81,7 +80,7 @@
 		}
 		<div>
 			<p>
-				<a href="ForgotPassword" id="lnkForgot">Forgot Password?</a>
+				<a href="./ForgotPassword" id="lnkForgot">Forgot Password?</a>
 			</p>
 		</div>
 	</div>

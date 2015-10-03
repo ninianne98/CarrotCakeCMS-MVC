@@ -238,17 +238,25 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			var manage = new ManageSecurity(this);
 
+			//TODO: make configurable
+			//manage.UserManager.UserLockoutEnabledByDefault = true;
+			//manage.UserManager.MaxFailedAccessAttemptsBeforeLockout = 5;
+			//manage.UserManager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(15);
+
 			// This doesn't count login failures towards account lockout
 			// To enable password failures to trigger account lockout, change to shouldLockout: true
+			var user = await manage.UserManager.FindByNameAsync(model.UserName);
+
 			var result = await manage.SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
 
 			switch (result) {
 				case SignInStatus.Success:
+					await manage.UserManager.ResetAccessFailedCountAsync(user.Id);
 					if (String.IsNullOrEmpty(returnUrl)) {
 						Response.Redirect(SiteData.RefererScriptName);
 					}
+
 					return RedirectToLocal(returnUrl);
-					break;
 
 				case SignInStatus.LockedOut:
 					return View("Lockout");
@@ -258,7 +266,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				case SignInStatus.Failure:
 				default:
-					ModelState.AddModelError("", "Invalid login attempt.");
+					ModelState.AddModelError(String.Empty, "Invalid login attempt.");
+
+					if (user.LockoutEndDateUtc.HasValue && user.LockoutEndDateUtc.Value < DateTime.UtcNow) {
+						user.LockoutEndDateUtc = null;
+						user.AccessFailedCount = 1;
+						manage.UserManager.Update(user);
+					}
+
 					return View(model);
 			}
 		}

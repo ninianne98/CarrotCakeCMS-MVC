@@ -1,6 +1,19 @@
 ﻿@model Carrotware.CMS.Mvc.UI.Admin.Models.SplitDateTime
 
 @{
+	DateTime dtModel = DateTime.MinValue;
+	string dateAll = String.Empty;
+	string dateDate = String.Empty;
+	string dateTime = String.Empty;
+
+	if (Model.CombinedDateTime.HasValue) {
+		dtModel = Model.CombinedDateTime.Value;
+
+		dateAll = dtModel.ToString("MM/dd/yyyy hh:mm tt");
+		dateDate = dtModel.Date.ToString("MM/dd/yyyy");
+		dateTime = dtModel.ToString("hh:mm tt");
+	}
+
 	string dateID = String.Format("{0}_Date", Model.FieldName);
 	string timeID = String.Format("{0}_Time", Model.FieldName);
 }
@@ -22,13 +35,13 @@
 	});
 </script>
 
-@Html.Hidden(Model.FieldName, Model.CombinedDateTime.ToString("MM/dd/yyyy hh:mm tt"))
+@Html.Hidden(Model.FieldName, dateAll)
 
 <div style="padding: 0; margin: 0; border: 0; clear: both;">
 	<div style="float: left; padding-right: 10px;">
-		@Html.TextBox(dateID, Model.CombinedDateTime.Date.ToString("MM/dd/yyyy"), new { @dtfld = Model.FieldName, maxlength = "12", size = "16", @class = "date-picker dateRegion dyn-date form-control-sm" })
+		@Html.TextBox(dateID, dateDate, new { @dtfld = Model.FieldName, maxlength = "12", size = "16", @class = "date-picker dateRegion dyn-date form-control-sm" })
 	</div>
 	<div style="float: left; padding-right: 10px;">
-		@Html.TextBox(timeID, @Model.CombinedDateTime.ToString("hh:mm tt"), new { @dtfld = Model.FieldName, maxlength = "10", size = "16", @class = "time-picker timeRegion dyn-date form-control-sm" })
+		@Html.TextBox(timeID, dateTime, new { @dtfld = Model.FieldName, maxlength = "10", size = "16", @class = "time-picker timeRegion dyn-date form-control-sm" })
 	</div>
 </div>

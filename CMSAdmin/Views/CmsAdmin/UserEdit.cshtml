@@ -13,16 +13,16 @@
 		</div>
 	</div>
 
-	<fieldset style="width: 550px;">
+	<fieldset style="width: 625px;">
 		<legend>
 			<label>
 				User Profile
 				@CmsHelpers.DisplayErrorPopupButton()
 			</label>
 		</legend>
-		<table style="width: 550px;">
+		<table style="width: 600px;">
 			<tr>
-				<td style="width: 125px;">
+				<td style="width: 175px;">
 					<b class="caption">
 						<label for="lblUserName" id="UserNameLabel">User Name</label>
 					</b>
@@ -73,14 +73,30 @@
 					@Html.ValidationMessageFor(m => m.User.LastName, "", new { @class = "validationError" })
 				</td>
 			</tr>
+
+			<tr>
+				<td class="tablecontents">
+					@Html.LabelFor(m => m.User.LockoutEndDateUtc, htmlAttributes: new { @class = "caption" })
+				</td>
+				<td class="tablecontents">
+					@{
+	SplitDateTime rdt = new SplitDateTime();
+	rdt.CombinedDateTime = Model.User.LockoutEndDateUtc;
+	rdt.FieldName = Html.NameFor(model => Model.User.LockoutEndDateUtc).ToString();
+					}
+
+					@Html.Partial("_datetime", rdt)
+				</td>
+			</tr>
+
 		</table>
 	</fieldset>
 	<div>
-		<fieldset style="width: 650px;">
+		<fieldset style="width: 625px;">
 			<legend>
 				@Html.LabelFor(m => m.User.UserBio, htmlAttributes: new { @class = "control-label" })
 			</legend>
-			@Html.TextAreaFor(m => m.User.UserBio, new { rows = "20", cols = "60", @class = "mceEditor", style = "height: 250px; width: 550px;" })
+			@Html.TextAreaFor(m => m.User.UserBio, new { rows = "20", cols = "55", @class = "mceEditor", style = "height: 250px; width: 525px;" })
 			<br />
 		</fieldset>
 	</div>

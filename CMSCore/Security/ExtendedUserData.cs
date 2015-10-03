@@ -158,20 +158,32 @@ namespace Carrotware.CMS.Core {
 		}
 
 		internal void LoadUserData(vw_carrot_UserData c) {
+
 			this.UserId = Guid.Empty;
 			this.Email = String.Empty;
 			this.UserName = String.Empty;
 			this.UserKey = String.Empty;
 
 			if (c != null) {
-				this.UserId = c.UserId ?? Guid.Empty;
+				this.Id = c.Id;
+				this.Email = c.Email;
+				this.EmailConfirmed = c.EmailConfirmed;
+				this.PasswordHash = c.PasswordHash;
+				this.SecurityStamp = c.SecurityStamp;
+				this.PhoneNumber = c.PhoneNumber;
+				this.PhoneNumberConfirmed = c.PhoneNumberConfirmed;
+				this.TwoFactorEnabled = c.TwoFactorEnabled;
+				this.LockoutEndDateUtc = c.LockoutEndDateUtc;
+				this.LockoutEndDateBlank = !c.LockoutEndDateUtc.HasValue;
+				this.LockoutEnabled = c.LockoutEnabled;
+				this.AccessFailedCount = c.AccessFailedCount;
+				this.UserName = c.UserName;
+				this.UserId = c.UserId.HasValue ? c.UserId.Value : Guid.Empty;
+				this.UserKey = c.UserKey;
 				this.UserNickName = c.UserNickName;
 				this.FirstName = c.FirstName;
 				this.LastName = c.LastName;
 				this.UserBio = c.UserBio;
-				this.UserName = c.UserName;
-				this.Email = c.Email;
-				this.UserKey = c.UserKey;
 			}
 		}
 
@@ -302,27 +314,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		internal ExtendedUserData(vw_carrot_UserData c) {
-			if (c != null) {
-				this.Id = c.Id;
-				this.Email = c.Email;
-				this.EmailConfirmed = c.EmailConfirmed;
-				this.PasswordHash = c.PasswordHash;
-				this.SecurityStamp = c.SecurityStamp;
-				this.PhoneNumber = c.PhoneNumber;
-				this.PhoneNumberConfirmed = c.PhoneNumberConfirmed;
-				this.TwoFactorEnabled = c.TwoFactorEnabled;
-				this.LockoutEndDateUtc = c.LockoutEndDateUtc;
-				this.LockoutEndDateBlank = !c.LockoutEndDateUtc.HasValue;
-				this.LockoutEnabled = c.LockoutEnabled;
-				this.AccessFailedCount = c.AccessFailedCount;
-				this.UserName = c.UserName;
-				this.UserId = c.UserId.HasValue ? c.UserId.Value : Guid.Empty;
-				this.UserKey = c.UserKey;
-				this.UserNickName = c.UserNickName;
-				this.FirstName = c.FirstName;
-				this.LastName = c.LastName;
-				this.UserBio = c.UserBio;
-			}
+			LoadUserData(c);
 		}
 
 		[Display(Name = "Is Admin")]

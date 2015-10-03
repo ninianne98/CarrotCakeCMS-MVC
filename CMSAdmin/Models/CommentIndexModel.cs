@@ -12,7 +12,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public CommentIndexModel() {
 			this.Comments = new PagedData<PostComment>();
 			this.Comments.PageSize = 25;
-			this.Comments.InitOrderBy(x => x.CreateDate);
+			this.Comments.InitOrderBy(x => x.CreateDate, false);
 		}
 
 		public Guid? Root_ContentID { get; set; }

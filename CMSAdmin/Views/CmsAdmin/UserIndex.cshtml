@@ -30,7 +30,13 @@
 		.AddColumn(x => x.FirstName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.LastName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.Email, new CarrotGridColumn { Sortable = true })
-		.AddColumn(x => x.LockoutEndDateBlank, new CarrotGridBooleanImageColumn { Sortable = true })
+		.AddColumn(x => x.LockoutEndDateBlank, new CarrotGridBooleanImageColumn {
+			AlternateTextFalse = "Locked Out",
+			AlternateTextTrue = "Not locked",
+			ImagePathFalse = "~/assets/admin/images/lock.png",
+			ImagePathTrue = "~/assets/admin/images/user.png",
+			Sortable = true
+		})
 		.AddColumn(x => x.LockoutEndDateUtc, new CarrotGridColumn { Sortable = true });
 
 		@grid.Write()

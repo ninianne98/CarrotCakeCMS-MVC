@@ -20,6 +20,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public string FieldID { get { return this.FieldName.Replace(".", "_").Replace("[", "_").Replace("]", "_"); } }
 
-		public DateTime CombinedDateTime { get; set; }
+		public DateTime? CombinedDateTime { get; set; }
 	}
 }

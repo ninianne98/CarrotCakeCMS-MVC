@@ -18,6 +18,7 @@ namespace Carrotware.CMS.Security {
 		}
 	}
 
+	//====================================
 	public class SmsService : IIdentityMessageService {
 
 		public Task SendAsync(IdentityMessage message) {
@@ -26,6 +27,7 @@ namespace Carrotware.CMS.Security {
 		}
 	}
 
+	//====================================
 	// Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
 	public class ApplicationUserManager : UserManager<ApplicationUser> {
 
@@ -36,11 +38,25 @@ namespace Carrotware.CMS.Security {
 		public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) {
 			var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<SecurityDbContext>()));
 			// Configure validation logic for usernames
+
+			manager = Configure(manager);
+
+			var dataProtectionProvider = options.DataProtectionProvider;
+			if (dataProtectionProvider != null) {
+				manager.UserTokenProvider =
+					new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+			}
+			return manager;
+		}
+
+		public static ApplicationUserManager Configure(ApplicationUserManager manager) {
+			// Configure validation logic for usernames
 			manager.UserValidator = new UserValidator<ApplicationUser>(manager) {
-				AllowOnlyAlphanumericUserNames = false,
+				AllowOnlyAlphanumericUserNames = true,
 				RequireUniqueEmail = true
 			};
 
+			//TODO: make configurable
 			// Configure validation logic for passwords
 			manager.PasswordValidator = new PasswordValidator {
 				RequiredLength = 6,
@@ -50,31 +66,31 @@ namespace Carrotware.CMS.Security {
 				RequireUppercase = true,
 			};
 
+			//TODO: make configurable
 			// Configure user lockout defaults
 			manager.UserLockoutEnabledByDefault = true;
-			manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
 			manager.MaxFailedAccessAttemptsBeforeLockout = 5;
+			manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(15);
 
 			// Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
 			// You can write your own provider and plug it in here.
 			manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser> {
 				MessageFormat = "Your security code is {0}"
 			});
+
 			manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser> {
 				Subject = "Security Code",
 				BodyFormat = "Your security code is {0}"
 			});
+
 			manager.EmailService = new EmailService();
 			manager.SmsService = new SmsService();
-			var dataProtectionProvider = options.DataProtectionProvider;
-			if (dataProtectionProvider != null) {
-				manager.UserTokenProvider =
-					new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
-			}
+
 			return manager;
 		}
 	}
 
+	//====================================
 	// Configure the application sign-in manager which is used in this application.
 	public class ApplicationSignInManager : SignInManager<ApplicationUser, string> {
 
@@ -91,6 +107,7 @@ namespace Carrotware.CMS.Security {
 		}
 	}
 
+	//====================================
 	public class ApplicationRoleManager : RoleManager<IdentityRole> {
 
 		public ApplicationRoleManager(IRoleStore<IdentityRole, string> roleStore)
