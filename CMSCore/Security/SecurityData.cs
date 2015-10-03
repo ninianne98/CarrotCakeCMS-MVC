@@ -436,8 +436,6 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public IdentityResult CreateApplicationUser(ApplicationUser user, out ExtendedUserData newusr) {
-			newusr = new ExtendedUserData();
-
 			return CreateApplicationUser(user, SecurityData.GenerateSimplePassword(), out newusr);
 		}
 
@@ -456,6 +454,8 @@ namespace Carrotware.CMS.Core {
 						newusr.UserKey = user.Id;
 						newusr.Id = user.Id;
 						newusr.Save();
+
+						//newusr = ExtendedUserData.FindByUserID(newusr.UserId);
 					}
 				}
 			}

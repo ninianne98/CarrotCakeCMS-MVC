@@ -1,6 +1,5 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Security.Models;
-using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,7 +77,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public string Message { get; set; }
 
 		private void SetMsg(string sMessage) {
-			if (!string.IsNullOrEmpty(sMessage)) {
+			if (!String.IsNullOrEmpty(sMessage)) {
 				this.HasLoaded = true;
 				this.Message = sMessage;
 			}
@@ -196,7 +195,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					if (seu.ImportUserID == Guid.Empty) {
 						ApplicationUser user = new ApplicationUser { UserName = seu.Login, Email = seu.Email };
 						var result = sd.CreateApplicationUser(user, out usr);
-						if (usr == null) {
+						if (result.Succeeded) {
 							usr = ExtendedUserData.FindByUsername(seu.Login);
 						}
 						seu.ImportUserID = usr.UserId;
@@ -204,7 +203,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 					if (seu.ImportUserID != Guid.Empty) {
 						ExtendedUserData ud = new ExtendedUserData(seu.ImportUserID);
-						if (!string.IsNullOrEmpty(seu.FirstName) || !string.IsNullOrEmpty(seu.LastName)) {
+						if (!String.IsNullOrEmpty(seu.FirstName) || !String.IsNullOrEmpty(seu.LastName)) {
 							ud.FirstName = seu.FirstName;
 							ud.LastName = seu.LastName;
 							ud.Save();

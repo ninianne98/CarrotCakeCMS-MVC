@@ -80,6 +80,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 		}
 
+		protected SecurityHelper manage = new SecurityHelper();
 		protected ContentPageHelper pageHelper = new ContentPageHelper();
 		protected SiteData siteHelper = new SiteData();
 		protected WidgetHelper widgetHelper = new WidgetHelper();
@@ -100,7 +101,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult LogOff() {
-			var manage = new ManageSecurity(this);
 			manage.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
 			return RedirectToAction("Index");
@@ -117,10 +117,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult UserProfile(ExtendedUserData model) {
 			if (ModelState.IsValid) {
-				var manage = new ManageSecurity(this);
-
 				IdentityResult result = manage.UserManager.SetEmail(model.UserKey, model.Email);
-				//result = manage.UserManager.SetPhoneNumber(model.UserKey, model.PhoneNumber);
 
 				ExtendedUserData exUsr = new ExtendedUserData(SecurityData.CurrentUserIdentityName);
 
@@ -152,7 +149,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			ExtendedUserData userExt = model.User;
 
 			if (ModelState.IsValid) {
-				var manage = new ManageSecurity(this);
 				var user = manage.UserManager.FindByName(model.User.UserName);
 
 				IdentityResult result = manage.UserManager.SetEmail(userExt.UserKey, userExt.Email);
@@ -226,9 +222,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				var result = sd.CreateApplicationUser(user, model.Password, out exUser);
 
 				if (result == IdentityResult.Success && exUser != null) {
-					var manage = new ManageSecurity(this);
-					user = manage.UserManager.FindByName(model.UserName);
-					result = manage.UserManager.SetLockoutEnabled(user.Id, true);
+					result = manage.UserManager.SetLockoutEnabled(exUser.Id, true);
 
 					return RedirectToAction("UserEdit", new { @id = exUser.UserId });
 				}
@@ -536,7 +530,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (!ModelState.IsValid) {
 				return View(model);
 			}
-			var manage = new ManageSecurity(this);
 
 			var result = await manage.UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
 
@@ -547,6 +540,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 				return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
 			}
+
 			AddErrors(result);
 			return View(model);
 		}
@@ -558,7 +552,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			DatabaseUpdate du = new DatabaseUpdate();
 
 			if (!String.IsNullOrEmpty(signout)) {
-				var manage = new ManageSecurity(this);
 				manage.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 			}
 
@@ -608,7 +601,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[AllowAnonymous]
 		public ActionResult CreateFirstAdmin(string returnUrl) {
-			var manage = new ManageSecurity(this);
 			manage.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
 			DatabaseUpdate du = new DatabaseUpdate();
@@ -638,7 +630,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				var result = sd.CreateApplicationUser(user, model.Password, out exUser);
 
 				if (result.Succeeded) {
-
 					SecurityData.AddUserToRole(model.UserName, SecurityData.CMSGroup_Admins);
 					SecurityData.AddUserToRole(model.UserName, SecurityData.CMSGroup_Users);
 
@@ -674,8 +665,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				return View(model);
 			}
-
-			var manage = new ManageSecurity(this);
 
 			//TODO: make configurable
 			//manage.UserManager.UserLockoutEnabledByDefault = true;
@@ -728,8 +717,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				return View(model);
 			}
 
-			var manage = new ManageSecurity(this);
-
 			//var user = await UserManager.FindByNameAsync(model.Email);
 			var user = await manage.UserManager.FindByEmailAsync(model.Email);
 			if (user == null) {
@@ -770,8 +757,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model) {
-			var manage = new ManageSecurity(this);
-
 			if (ModelState.IsValid) {
 				var user = await manage.UserManager.FindByEmailAsync(model.Email);
 				if (user == null) {
@@ -2437,6 +2422,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		protected override void Dispose(bool disposing) {
+			base.Dispose(disposing);
+
+			if (manage != null) {
+				manage.Dispose();
+			}
 			if (pageHelper != null) {
 				pageHelper.Dispose();
 			}
@@ -2446,8 +2436,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (cmsHelper != null) {
 				cmsHelper.Dispose();
 			}
-
-			base.Dispose(disposing);
 		}
 	}
 }

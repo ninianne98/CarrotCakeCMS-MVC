@@ -158,7 +158,6 @@ namespace Carrotware.CMS.Core {
 		}
 
 		internal void LoadUserData(vw_carrot_UserData c) {
-
 			this.UserId = Guid.Empty;
 			this.Email = String.Empty;
 			this.UserName = String.Empty;
@@ -310,6 +309,10 @@ namespace Carrotware.CMS.Core {
 				_db.SubmitChanges();
 
 				this.UserId = usr.UserId;
+
+				//grab fresh copy from DB
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(_db, usr.UserId);
+				LoadUserData(rc);
 			}
 		}
 

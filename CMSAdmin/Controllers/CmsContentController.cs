@@ -27,6 +27,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 	public class CmsContentController : Controller {
 		private PagePayload _page = null;
+		protected SecurityHelper manage = new SecurityHelper();
 
 		[HttpGet]
 		public ActionResult Default() {
@@ -206,6 +207,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		protected override void Dispose(bool disposing) {
 			base.Dispose(disposing);
 
+			if (manage != null) {
+				manage.Dispose();
+			}
+
 			// only add the xtra lookup paths so long as needed to render the relative path partials from the template
 			List<CmsTemplateViewEngine> lst = this.ViewEngineCollection
 					.Where(x => x is CmsTemplateViewEngine).Cast<CmsTemplateViewEngine>().ToList();
@@ -222,7 +227,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult LogOff() {
-			var manage = new ManageSecurity(this);
 			manage.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
 			return RedirectToAction("Default");
@@ -235,8 +239,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (!ModelState.IsValid) {
 				return View(model);
 			}
-
-			var manage = new ManageSecurity(this);
 
 			//TODO: make configurable
 			//manage.UserManager.UserLockoutEnabledByDefault = true;
