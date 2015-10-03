@@ -1,8 +1,6 @@
 ﻿using Carrotware.CMS.Security.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.DataProtection;
 using System;
 using System.Web;
 
@@ -20,19 +18,28 @@ namespace Carrotware.CMS.Security {
 
 	public class SecurityHelper : IDisposable {
 		private SecurityDbContext _db = null;
-		private ApplicationUserManager _userManager;
-		private ApplicationRoleManager _roleManager;
-		private IAuthenticationManager _authnManager;
-		private ApplicationSignInManager _signInManager;
+		private ApplicationUserManager _userManager = null;
+		private ApplicationRoleManager _roleManager = null;
+		private IAuthenticationManager _authManager = null;
+		private ApplicationSignInManager _signInManager = null;
 
 		public SecurityHelper() {
-			_db = SecurityDbContext.Create();
+			if (_db == null) {
+				_db = SecurityDbContext.Create();
+			}
 
-			var provider = new DpapiDataProtectionProvider("CarrotCake CMS");
+			//var provider = new DpapiDataProtectionProvider("CarrotCake CMS");
 
-			this.UserToken = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("UserToken")) {
-				TokenLifespan = TimeSpan.FromDays(7)
-			};
+			//this.UserToken = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("UserToken")) {
+			//	TokenLifespan = TimeSpan.FromDays(7)
+			//};
+		}
+
+		public SecurityHelper(SecurityDbContext db)
+			: this() {
+			if (_db == null) {
+				_db = db;
+			}
 		}
 
 		public SecurityDbContext DataContext {
@@ -45,8 +52,8 @@ namespace Carrotware.CMS.Security {
 			get {
 				if (_userManager == null) {
 					_userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(_db));
-					_userManager.UserTokenProvider = this.UserToken;
-					_userManager = ApplicationUserManager.Configure(_userManager);
+					//_userManager.UserTokenProvider = this.UserToken;
+					//_userManager.Config();
 				}
 				return _userManager;
 			}
@@ -63,10 +70,10 @@ namespace Carrotware.CMS.Security {
 
 		public IAuthenticationManager AuthenticationManager {
 			get {
-				if (_authnManager == null) {
-					_authnManager = HttpContext.Current.GetOwinContext().Authentication;
+				if (_authManager == null) {
+					_authManager = HttpContext.Current.GetOwinContext().Authentication;
 				}
-				return _authnManager;
+				return _authManager;
 			}
 		}
 
@@ -79,7 +86,7 @@ namespace Carrotware.CMS.Security {
 			}
 		}
 
-		public DataProtectorTokenProvider<ApplicationUser> UserToken { get; set; }
+		//public DataProtectorTokenProvider<ApplicationUser> UserToken { get; set; }
 
 		public void Dispose() {
 			if (_userManager != null) {
@@ -91,8 +98,8 @@ namespace Carrotware.CMS.Security {
 			if (_signInManager != null) {
 				_signInManager.Dispose();
 			}
-			if (_authnManager != null && _authnManager is IDisposable) {
-				((IDisposable)_authnManager).Dispose();
+			if (_authManager != null && _authManager is IDisposable) {
+				((IDisposable)_authManager).Dispose();
 			}
 
 			if (_db != null) {

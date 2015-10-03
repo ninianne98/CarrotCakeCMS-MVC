@@ -26,8 +26,8 @@ using System.Web.Mvc;
 namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 	public class CmsContentController : Controller {
+		protected SecurityHelper securityHelper = new SecurityHelper();
 		private PagePayload _page = null;
-		protected SecurityHelper manage = new SecurityHelper();
 
 		[HttpGet]
 		public ActionResult Default() {
@@ -207,8 +207,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		protected override void Dispose(bool disposing) {
 			base.Dispose(disposing);
 
-			if (manage != null) {
-				manage.Dispose();
+			if (securityHelper != null) {
+				securityHelper.Dispose();
 			}
 
 			// only add the xtra lookup paths so long as needed to render the relative path partials from the template
@@ -227,7 +227,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult LogOff() {
-			manage.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
 			return RedirectToAction("Default");
 		}
@@ -247,13 +247,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			// This doesn't count login failures towards account lockout
 			// To enable password failures to trigger account lockout, change to shouldLockout: true
-			var user = await manage.UserManager.FindByNameAsync(model.UserName);
+			var user = await securityHelper.UserManager.FindByNameAsync(model.UserName);
 
-			var result = await manage.SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
+			var result = await securityHelper.SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
 
 			switch (result) {
 				case SignInStatus.Success:
-					await manage.UserManager.ResetAccessFailedCountAsync(user.Id);
+					await securityHelper.UserManager.ResetAccessFailedCountAsync(user.Id);
 					if (String.IsNullOrEmpty(returnUrl)) {
 						Response.Redirect(SiteData.RefererScriptName);
 					}
@@ -273,7 +273,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					if (user.LockoutEndDateUtc.HasValue && user.LockoutEndDateUtc.Value < DateTime.UtcNow) {
 						user.LockoutEndDateUtc = null;
 						user.AccessFailedCount = 1;
-						manage.UserManager.Update(user);
+						securityHelper.UserManager.Update(user);
 					}
 
 					return View(model);

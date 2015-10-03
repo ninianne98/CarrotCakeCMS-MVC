@@ -49,7 +49,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			get {
 				if (this.ContentPage.CreditUserId.HasValue) {
 					if (_usr == null) {
-						_usr = ContentPage.GetCreditUserInfo();
+						_usr = this.ContentPage.GetCreditUserInfo();
 					}
 				} else {
 					_usr = null;

@@ -5,8 +5,6 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using System;
-using System.Web.Hosting;
-using System.Xml;
 
 [assembly: OwinStartupAttribute(typeof(Carrotware.CMS.Security.Startup))]
 
@@ -29,21 +27,11 @@ namespace Carrotware.CMS.Security {
 			// Enable the application to use a cookie to store information for the signed in user
 			// and to use a cookie to temporarily store information about a user logging in with a third party login provider
 			// Configure the sign in cookie
-			string loginPath = "/Account/Login";
-			int expireTimeSpan = 30;
 
-			XmlDocument x = new XmlDocument();
-			x.Load(HostingEnvironment.MapPath("~/web.config"));
+			CarrotSecurityConfig config = CarrotSecurityConfig.GetConfig();
 
-			XmlNode node = x.SelectSingleNode("/configuration/system.web/authentication/forms");
-			if (node != null) {
-				if (node.Attributes["timeout"] != null) {
-					expireTimeSpan = int.Parse(node.Attributes["timeout"].Value, System.Globalization.CultureInfo.InvariantCulture.NumberFormat);
-				}
-				if (node.Attributes["defaultUrl"] != null) {
-					loginPath = node.Attributes["defaultUrl"].Value;
-				}
-			}
+			string loginPath = config.AdditionalSettings.LoginPath;
+			int expireTimeSpan = config.AdditionalSettings.ExpireTimeSpan;
 
 			app.UseCookieAuthentication(new CookieAuthenticationOptions {
 				AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,

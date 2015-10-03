@@ -184,6 +184,13 @@
 		}
 	</script>
 
+	<script src="~/Assets/Admin/includes/FindUsers.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			initFindUsersMethod("@Html.IdFor(m => m.ContentPage.CreditUserId)", "txtSearchUser", "FindCreditUsers");
+		});
+	</script>
+
 	<p>This creates a basic page with the specified filename and title etc. You will have the opportunity to update the appearance when you visit the new page. </p>
 
 	<div>
@@ -245,6 +252,25 @@
 			</tr>
 			<tr>
 				<td class="tablecaption">
+					credit author:
+				</td>
+				<td>
+					<b>find:</b> <span id="spanResults"></span>
+					<br />
+					@{
+		var usr = Model.CreditUser;
+		string usrCap = String.Empty;
+		if (usr != null) {
+			usrCap = String.Format("{0} ({1})", usr.UserName, usr.Email);
+		}
+					}
+
+					@Html.TextBox("txtSearchUser", usrCap, new { maxlength = "256", @class = "form-control-lg" })
+					@Html.HiddenFor(m => m.ContentPage.CreditUserId)
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
 					meta keywords:
 				</td>
 				<td>
@@ -295,8 +321,6 @@
 				<td>
 					@Html.DropDownListFor(m => m.ContentPage.TemplateFile, new SelectList(Model.SiteTemplates, "TemplatePath", "Caption"))
 					@Html.ValidationMessageFor(m => m.ContentPage.TemplateFile, "", new { @class = "validationError" })
-					@*&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="button" onclick="cmsPreviewTemplate()" value="Preview" />*@
 				</td>
 			</tr>
 		</table>

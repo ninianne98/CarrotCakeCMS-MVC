@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.DataProtection;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -33,60 +34,68 @@ namespace Carrotware.CMS.Security {
 
 		public ApplicationUserManager(IUserStore<ApplicationUser> store)
 			: base(store) {
+
+			Config();
 		}
 
 		public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) {
 			var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<SecurityDbContext>()));
-			// Configure validation logic for usernames
 
-			manager = Configure(manager);
+			//manager.Config();
 
-			var dataProtectionProvider = options.DataProtectionProvider;
-			if (dataProtectionProvider != null) {
-				manager.UserTokenProvider =
-					new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
-			}
+			//var dataProtectionProvider = options.DataProtectionProvider;
+			//if (dataProtectionProvider != null) {
+			//	manager.UserTokenProvider =
+			//		new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+			//}
+
 			return manager;
 		}
 
-		public static ApplicationUserManager Configure(ApplicationUserManager manager) {
+		public void Config() {
+			CarrotSecurityConfig config = CarrotSecurityConfig.GetConfig();
+
 			// Configure validation logic for usernames
-			manager.UserValidator = new UserValidator<ApplicationUser>(manager) {
-				AllowOnlyAlphanumericUserNames = true,
-				RequireUniqueEmail = true
+			this.UserValidator = new UserValidator<ApplicationUser>(this) {
+				AllowOnlyAlphanumericUserNames = config.UserValidator.AllowOnlyAlphanumericUserNames,
+				RequireUniqueEmail = config.UserValidator.RequireUniqueEmail
 			};
 
-			//TODO: make configurable
 			// Configure validation logic for passwords
-			manager.PasswordValidator = new PasswordValidator {
-				RequiredLength = 6,
-				RequireNonLetterOrDigit = true,
-				RequireDigit = true,
-				RequireLowercase = true,
-				RequireUppercase = true,
+			this.PasswordValidator = new PasswordValidator {
+				RequiredLength = config.PasswordValidator.RequiredLength,
+				RequireNonLetterOrDigit = config.PasswordValidator.RequireNonLetterOrDigit,
+				RequireDigit = config.PasswordValidator.RequireDigit,
+				RequireLowercase = config.PasswordValidator.RequireLowercase,
+				RequireUppercase = config.PasswordValidator.RequireUppercase,
 			};
 
-			//TODO: make configurable
 			// Configure user lockout defaults
-			manager.UserLockoutEnabledByDefault = true;
-			manager.MaxFailedAccessAttemptsBeforeLockout = 5;
-			manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(15);
+			this.UserLockoutEnabledByDefault = config.AdditionalSettings.UserLockoutEnabledByDefault;
+			this.MaxFailedAccessAttemptsBeforeLockout = config.AdditionalSettings.MaxFailedAccessAttemptsBeforeLockout;
+			this.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(config.AdditionalSettings.DefaultAccountLockoutTimeSpan);
 
 			// Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
 			// You can write your own provider and plug it in here.
-			manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser> {
+			this.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser> {
 				MessageFormat = "Your security code is {0}"
 			});
 
-			manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser> {
+			this.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser> {
 				Subject = "Security Code",
 				BodyFormat = "Your security code is {0}"
 			});
 
-			manager.EmailService = new EmailService();
-			manager.SmsService = new SmsService();
+			this.EmailService = new EmailService();
+			this.SmsService = new SmsService();
 
-			return manager;
+			var provider = new DpapiDataProtectionProvider(config.AdditionalSettings.DataProtectionProviderAppName);
+
+			if (provider != null) {
+				this.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("UserToken")) {
+					TokenLifespan = TimeSpan.FromDays(7)
+				};
+			}
 		}
 	}
 

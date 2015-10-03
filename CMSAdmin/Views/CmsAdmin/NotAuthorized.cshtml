@@ -1,5 +1,6 @@
 ﻿@{
 	ViewBag.Title = "Not Authorized";
+
 	Layout = "~/Views/CmsAdmin/_LayoutPublic.cshtml";
 }
 
@@ -18,5 +19,9 @@
 
 			<input type="submit" name="btnLogout" value="Logout" id="btnLogout" />
 		}
+	} else {
+		<p>
+			<a href="@SiteFilename.LoginURL">Login</a>
+		</p>
 	}
 </div>

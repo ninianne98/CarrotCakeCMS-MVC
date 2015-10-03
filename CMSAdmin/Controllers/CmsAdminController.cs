@@ -47,6 +47,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				lstOKNoSiteActions.Add("roleindex");
 				lstOKNoSiteActions.Add("userprofile");
 				lstOKNoSiteActions.Add("changepassword");
+				lstOKNoSiteActions.Add("login");
+				lstOKNoSiteActions.Add("logoff");
 
 				try {
 					if (action != "databasesetup") {
@@ -58,7 +60,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 							Response.Redirect(SiteFilename.SiteInfoURL);
 						}
 
-						if (!SecurityData.IsAuthEditor && action != "notauthorized") {
+						if (!SecurityData.IsAuthEditor &&
+							!(action == "notauthorized" || action == "login" || action == "logoff")) {
 							Response.Redirect(SiteFilename.NotAuthorizedURL);
 						}
 
@@ -80,7 +83,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 		}
 
-		protected SecurityHelper manage = new SecurityHelper();
+		protected SecurityHelper securityHelper = new SecurityHelper();
 		protected ContentPageHelper pageHelper = new ContentPageHelper();
 		protected SiteData siteHelper = new SiteData();
 		protected WidgetHelper widgetHelper = new WidgetHelper();
@@ -101,7 +104,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult LogOff() {
-			manage.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
 			return RedirectToAction("Index");
 		}
@@ -117,7 +120,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult UserProfile(ExtendedUserData model) {
 			if (ModelState.IsValid) {
-				IdentityResult result = manage.UserManager.SetEmail(model.UserKey, model.Email);
+				IdentityResult result = securityHelper.UserManager.SetEmail(model.UserKey, model.Email);
 
 				ExtendedUserData exUsr = new ExtendedUserData(SecurityData.CurrentUserIdentityName);
 
@@ -149,10 +152,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			ExtendedUserData userExt = model.User;
 
 			if (ModelState.IsValid) {
-				var user = manage.UserManager.FindByName(model.User.UserName);
+				var user = securityHelper.UserManager.FindByName(model.User.UserName);
 
-				IdentityResult result = manage.UserManager.SetEmail(userExt.UserKey, userExt.Email);
-				result = manage.UserManager.SetPhoneNumber(userExt.UserKey, userExt.PhoneNumber);
+				IdentityResult result = securityHelper.UserManager.SetEmail(userExt.UserKey, userExt.Email);
+				result = securityHelper.UserManager.SetPhoneNumber(userExt.UserKey, userExt.PhoneNumber);
 
 				if (userExt.LockoutEndDateUtc.HasValue) {
 					//DateTime utcDateTime = DateTime.SpecifyKind(userExt.LockoutEndDateUtc.Value, DateTimeKind.Utc);
@@ -163,14 +166,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						// set lockout
 						user.LockoutEndDateUtc = userExt.LockoutEndDateUtc.Value;
 						user.AccessFailedCount = 20;
-						manage.UserManager.Update(user);
+						securityHelper.UserManager.Update(user);
 					}
 				} else {
 					if (user.LockoutEndDateUtc.HasValue) {
 						// unset lockout
 						user.LockoutEndDateUtc = null;
 						user.AccessFailedCount = 0;
-						manage.UserManager.Update(user);
+						securityHelper.UserManager.Update(user);
 					}
 				}
 
@@ -222,7 +225,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				var result = sd.CreateApplicationUser(user, model.Password, out exUser);
 
 				if (result == IdentityResult.Success && exUser != null) {
-					result = manage.UserManager.SetLockoutEnabled(exUser.Id, true);
+					result = securityHelper.UserManager.SetLockoutEnabled(exUser.Id, true);
 
 					return RedirectToAction("UserEdit", new { @id = exUser.UserId });
 				}
@@ -231,7 +234,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 
 			Helper.HandleErrorDict(ModelState);
-
 			return View(model);
 		}
 
@@ -531,12 +533,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				return View(model);
 			}
 
-			var result = await manage.UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+			var result = await securityHelper.UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
 
 			if (result.Succeeded) {
-				var user = await manage.UserManager.FindByIdAsync(User.Identity.GetUserId());
+				var user = await securityHelper.UserManager.FindByIdAsync(User.Identity.GetUserId());
 				if (user != null) {
-					await manage.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+					await securityHelper.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 				}
 				return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
 			}
@@ -552,7 +554,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			DatabaseUpdate du = new DatabaseUpdate();
 
 			if (!String.IsNullOrEmpty(signout)) {
-				manage.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+				securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 			}
 
 			List<DatabaseUpdateMessage> lst = new List<DatabaseUpdateMessage>();
@@ -601,7 +603,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[AllowAnonymous]
 		public ActionResult CreateFirstAdmin(string returnUrl) {
-			manage.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
 			DatabaseUpdate du = new DatabaseUpdate();
 			if (du.UsersExist) {
@@ -640,7 +642,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 
 			Helper.HandleErrorDict(ModelState);
-
 			return View(model);
 		}
 
@@ -673,13 +674,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			// This doesn't count login failures towards account lockout
 			// To enable password failures to trigger account lockout, change to shouldLockout: true
-			var user = await manage.UserManager.FindByNameAsync(model.UserName);
+			var user = await securityHelper.UserManager.FindByNameAsync(model.UserName);
 
-			var result = await manage.SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
+			var result = await securityHelper.SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
 
 			switch (result) {
 				case SignInStatus.Success:
-					await manage.UserManager.ResetAccessFailedCountAsync(user.Id);
+					await securityHelper.UserManager.ResetAccessFailedCountAsync(user.Id);
 
 					return RedirectToLocal(returnUrl);
 
@@ -696,7 +697,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					if (user.LockoutEndDateUtc.HasValue && user.LockoutEndDateUtc.Value < DateTime.UtcNow) {
 						user.LockoutEndDateUtc = null;
 						user.AccessFailedCount = 1;
-						manage.UserManager.Update(user);
+						securityHelper.UserManager.Update(user);
 					}
 
 					return View(model);
@@ -714,11 +715,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model) {
 			if (!ModelState.IsValid) {
+				Helper.HandleErrorDict(ModelState);
+
 				return View(model);
 			}
 
 			//var user = await UserManager.FindByNameAsync(model.Email);
-			var user = await manage.UserManager.FindByEmailAsync(model.Email);
+			var user = await securityHelper.UserManager.FindByEmailAsync(model.Email);
 			if (user == null) {
 				// Don't reveal that the user does not exist
 				return RedirectToAction("ResetPasswordConfirmation");
@@ -730,6 +733,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				return RedirectToAction("ResetPasswordConfirmation");
 			}
 			AddErrors(result);
+
+			Helper.HandleErrorDict(ModelState);
 			return View();
 		}
 
@@ -758,7 +763,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model) {
 			if (ModelState.IsValid) {
-				var user = await manage.UserManager.FindByEmailAsync(model.Email);
+				var user = await securityHelper.UserManager.FindByEmailAsync(model.Email);
 				if (user == null) {
 					// Don't reveal that the user does not exist or is not confirmed
 					return View("ForgotPasswordConfirmation");
@@ -2424,8 +2429,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		protected override void Dispose(bool disposing) {
 			base.Dispose(disposing);
 
-			if (manage != null) {
-				manage.Dispose();
+			if (securityHelper != null) {
+				securityHelper.Dispose();
 			}
 			if (pageHelper != null) {
 				pageHelper.Dispose();
