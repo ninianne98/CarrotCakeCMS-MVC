@@ -1,0 +1,13 @@
+/* these created/updated for use in carrotcake */
+
+@import url("grey-alt1.css");
+
+@import url("grey-alt2.css");
+
+.icheckbox_grey-alt1, .iradio_grey-alt1 {
+	margin: 0 3px 2px 3px;
+}
+
+.icheckbox_grey-alt2, .iradio_grey-alt2 {
+	margin: 0 3px 2px 3px;
+}

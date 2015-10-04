@@ -161,6 +161,13 @@
     <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen-scoped.css" />
     <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen-scoped2.css" />
     <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen.css" />
+    <Content Include="Assets\iCheck\customized\grey-alt1%402x.png" />
+    <Content Include="Assets\iCheck\customized\grey-alt1.css" />
+    <Content Include="Assets\iCheck\customized\grey-alt1.png" />
+    <Content Include="Assets\iCheck\customized\grey-alt2%402x.png" />
+    <Content Include="Assets\iCheck\customized\grey-alt2.css" />
+    <Content Include="Assets\iCheck\customized\grey-alt2.png" />
+    <Content Include="Assets\iCheck\customized\_all.css" />
     <Content Include="Assets\iCheck\iCheck.css" />
     <Content Include="Assets\iCheck\flat\aero%402x.png" />
     <Content Include="Assets\iCheck\flat\aero.css" />
@@ -196,6 +203,7 @@
     <Content Include="Assets\iCheck\futurico\futurico%402x.png" />
     <Content Include="Assets\iCheck\futurico\futurico.css" />
     <Content Include="Assets\iCheck\futurico\futurico.png" />
+    <Content Include="Assets\Admin\Includes\icheck.init.js" />
     <Content Include="Assets\iCheck\icheck.min.js" />
     <Content Include="Assets\iCheck\line\aero.css" />
     <Content Include="Assets\iCheck\line\blue.css" />

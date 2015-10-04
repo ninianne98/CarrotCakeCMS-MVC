@@ -18,11 +18,11 @@
 	$("input:button, input:submit, input:reset").button();
 
 	$('input').iCheck({
-		checkboxClass: 'icheckbox_flat-grey',
-		radioClass: 'iradio_flat-grey'
+		checkboxClass: 'icheckbox_grey-alt2',
+		radioClass: 'iradio_grey-alt2'
 	});
 
-	$('.iradio_flat-grey, .icheckbox_flat-grey').each(function () {
+	$('.iradio_grey-alt2, .icheckbox_grey-alt2').each(function () {
 		var chk = $(this).find("input");
 		var onclick = $(chk).attr("onclick");
 
