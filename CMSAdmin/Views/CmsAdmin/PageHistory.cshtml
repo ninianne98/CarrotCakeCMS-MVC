@@ -1,0 +1,155 @@
+﻿@model PageHistoryModel
+
+@{
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+
+	ViewBag.Title = "Page History";
+}
+
+<style type="text/css">
+	.scrollingArea {
+		clear: both;
+		border: solid 0px #000000;
+		height: 300px;
+		width: 700px;
+		overflow-x: auto;
+		padding: 5px;
+	}
+</style>
+<script type="text/javascript">
+	function CheckTheBoxes() {
+		checkGridBoxes('divHistory');
+	}
+
+	function UncheckTheBoxes() {
+		uncheckGridBoxes('divHistory');
+	}
+</script>
+
+<h3>
+	@String.Format(" {0}   ", Model.ContentPage.FileName)
+
+	@if (Model.ContentPage.PageActive) {
+		<img src="~/Assets/Admin/Images/accept.png" alt="Active" title="Active" />
+	} else {
+		<img src="~/Assets/Admin/Images/cancel.png" alt="Inactive" title="Inactive" />
+	}
+
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Create Date: @String.Format(" {0} ", Model.ContentPage.CreateDate)
+</h3>
+
+@if (Model.VersionID.HasValue) {
+
+	<p>
+		<a href="@String.Format("{0}/{1}", SiteFilename.PageHistoryURL, Model.ContentPage.Root_ContentID)">
+			<img class="imgNoBorder" src="~/Assets/Admin/Images/table_go.png" alt="Return" title="Return" /> Return to list
+		</a>
+	</p>
+	<p>
+		Edited On:
+		@String.Format(" {0} ", Model.ContentPage.EditDate)
+	</p>
+	<div id="jqtabs" style="height: 380px; width: 750px;">
+		<ul>
+			<li><a href="#pagecontent-tabs-0">Left</a></li>
+			<li><a href="#pagecontent-tabs-1">Center</a></li>
+			<li><a href="#pagecontent-tabs-3">Right</a></li>
+		</ul>
+		<div id="pagecontent-tabs-0">
+			<div class="scrollingArea">
+				@Html.Raw(Model.ContentPage.LeftPageText)
+				<div style="clear: both">
+				</div>
+			</div>
+		</div>
+		<div id="pagecontent-tabs-1">
+			<div class="scrollingArea">
+				@Html.Raw(Model.ContentPage.PageText)
+				<div style="clear: both">
+				</div>
+			</div>
+		</div>
+		<div id="pagecontent-tabs-3">
+			<div class="scrollingArea">
+				@Html.Raw(Model.ContentPage.RightPageText)
+				<div style="clear: both">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			setTimeout("$('#jqtabs').tabs('option', 'active', 1);", 500);
+		});
+	</script>
+
+} else {
+	<p>
+		<input type="button" value="Check All" onclick="CheckTheBoxes()" />&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" value="Uncheck All" onclick="UncheckTheBoxes()" />
+	</p>
+
+	using (Html.BeginForm()) {
+		@Html.AntiForgeryToken()
+		@Html.HiddenFor(m => m.SiteID)
+		@Html.HiddenFor(m => m.Root_ContentID)
+		@Html.HiddenFor(m => m.ContentPage.Root_ContentID)
+		@Html.HiddenFor(m => m.ContentPage.FileName)
+		@Html.HiddenFor(m => m.ContentPage.PageActive)
+		@Html.HiddenFor(m => m.ContentPage.CreateDate)
+
+		<p>
+			<input type="submit" name="btnRemove" value="Remove Selected" id="btnRemove" /><br />
+		</p>
+
+		<div id="divHistory">
+
+			@{
+		var grid = CarrotWeb.CarrotWebGrid<ContentPage>(Model.History);
+
+		grid.TableAttributes = new { @class = "datatable" };
+		grid.THeadAttributes = new { @class = "tablehead" };
+		grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+		grid.UseDataPage = false;
+		grid.ConfigName(Html.NameFor(x => x.History.DataSource));
+
+		grid
+			.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+				HasHeadingText = false,
+				FormatTemplate = @<text>
+					@CarrotWeb.ActionImage("PageHistory", RouteConfig.AdminCtrlr, new { @versionid = @item.ContentID }, "~/Assets/Admin/Images/layout_content.png", "Inspect Version", null, null)
+				</text>
+			})
+			.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+				HasHeadingText = false,
+				FormatTemplate = @<text>
+					@if (!item.IsLatestVersion) {
+						@grid.FormFieldFor(m => m.Selected, GridFormFieldType.Checkbox)
+					} else {
+						@grid.FormFieldFor(m => m.Selected, GridFormFieldType.Hidden)
+						<text> &nbsp;&nbsp;&nbsp; </text>
+					}
+
+					@grid.FormFieldFor(m => m.IsLatestVersion, GridFormFieldType.Hidden)
+					@grid.FormFieldFor(m => m.ContentID, GridFormFieldType.Hidden)
+					@grid.FormFieldFor(m => m.TitleBar, GridFormFieldType.Hidden)
+					@grid.FormFieldFor(m => m.PageHead, GridFormFieldType.Hidden)
+					@grid.FormFieldFor(m => m.NavMenuText, GridFormFieldType.Hidden)
+					@grid.FormFieldFor(m => m.EditDate, GridFormFieldType.Hidden)
+				</text>
+			})
+			.AddColumn(x => x.EditUser.UserName, new CarrotGridColumn())
+			.AddColumn(x => x.TitleBar, new CarrotGridColumn())
+			.AddColumn(x => x.PageHead, new CarrotGridColumn())
+			.AddColumn(x => x.NavMenuText, new CarrotGridColumn())
+			.AddColumn(x => x.EditDate, new CarrotGridColumn());
+
+			@grid.OutputHtmlBody()
+			}
+		</div>
+
+	}
+}

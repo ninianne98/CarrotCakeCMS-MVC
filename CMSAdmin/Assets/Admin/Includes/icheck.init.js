@@ -5,17 +5,30 @@ $(document).ready(function () {
 	});
 
 	$('.iradio_grey-alt2, .icheckbox_grey-alt2').each(function () {
-		var chk = $(this).find("input");
-		var onclick = $(chk).attr("onclick");
+		var ipt = $(this).find("input");
 
-		if (chk.length > 0 && onclick != undefined && onclick.length > 0) {
-			$(chk).on('ifClicked', function (event) {
-				if ($(chk).attr("type") == 'radio') {
-					setTimeout(function () { $(chk).click(); }, 200);
-				} else {
-					$(chk).trigger("click");
+		if (ipt.length > 0) {
+			var onclick = $(ipt).attr("onclick");
+
+			$(ipt).on('ifClicked', function (event) {
+				if (onclick != undefined && onclick.length > 0) {
+					if ($(ipt).attr("type") == 'radio') {
+						setTimeout(function () { $(ipt).click(); }, 200);
+					} else {
+						$(ipt).trigger("click");
+					}
 				}
 			});
+		}
+	});
+
+	$('.icheckbox_grey-alt2 input[type=checkbox]').on('change', function () {
+		if ($(this).prop('checked')) {
+			$(this).parent().addClass("checked");
+			setTimeout(function () { $(this).iCheck('check'); }, 150);
+		} else {
+			$(this).parent().removeClass("checked");
+			setTimeout(function () { $(this).iCheck('uncheck'); }, 150);
 		}
 	});
 });

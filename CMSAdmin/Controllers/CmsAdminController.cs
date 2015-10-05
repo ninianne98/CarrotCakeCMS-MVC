@@ -1701,6 +1701,43 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
+		public ActionResult PageHistory(Guid? id, Guid? versionid, bool? saved) {
+			if (saved.HasValue) {
+				if (saved.Value) {
+					ShowSave("Selected items removed");
+				} else {
+					ShowSave("No items selected to remove");
+				}
+			}
+
+			PageHistoryModel model = new PageHistoryModel(this.SiteID);
+
+			if (id.HasValue) {
+				model.SetCurrent(id.Value);
+			}
+			if (versionid.HasValue) {
+				model.SetVersion(versionid.Value);
+			}
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult PageHistory(PageHistoryModel model) {
+			ModelState.Clear();
+			List<Guid> lstDel = model.History.DataSource.Where(x => x.Selected).Select(x => x.ContentID).ToList();
+
+			if (lstDel.Any()) {
+				pageHelper.RemoveVersions(this.SiteID, lstDel);
+
+				return RedirectToAction("PageHistory", new { @id = model.Root_ContentID, @saved = true });
+			} else {
+				return RedirectToAction("PageHistory", new { @id = model.Root_ContentID, @saved = false });
+			}
+		}
+
+		[HttpGet]
 		public ActionResult PageIndex() {
 			CMSConfigHelper.CleanUpSerialData();
 			PageIndexModel model = new PageIndexModel();

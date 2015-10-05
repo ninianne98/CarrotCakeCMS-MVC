@@ -541,6 +541,8 @@ namespace Carrotware.CMS.Core {
 
 		public string NewTrackBackURLs { get; set; }
 
+		public bool Selected { get; set; }
+
 		public bool IsPageLocked {
 			get {
 				bool bLock = false;
@@ -626,19 +628,31 @@ namespace Carrotware.CMS.Core {
 		private ExtendedUserData _user = null;
 
 		public ExtendedUserData GetUserInfo() {
-			if (_user == null && this.EditUserId.HasValue) {
-				_user = new ExtendedUserData(this.EditUserId.Value);
+			return this.EditUser;
+		}
+
+		public ExtendedUserData EditUser {
+			get {
+				if (_user == null && this.EditUserId.HasValue) {
+					_user = new ExtendedUserData(this.EditUserId.Value);
+				}
+				return _user;
 			}
-			return _user;
 		}
 
 		private ExtendedUserData _creditUser = null;
 
 		public ExtendedUserData GetCreditUserInfo() {
-			if (_creditUser == null && this.CreditUserId.HasValue) {
-				_creditUser = new ExtendedUserData(this.CreditUserId.Value);
+			return this.CreditUser;
+		}
+
+		public ExtendedUserData CreditUser {
+			get {
+				if (_creditUser == null && this.CreditUserId.HasValue) {
+					_creditUser = new ExtendedUserData(this.CreditUserId.Value);
+				}
+				return _creditUser;
 			}
-			return _creditUser;
 		}
 
 		public List<TrackBackEntry> GetTrackbacks() {

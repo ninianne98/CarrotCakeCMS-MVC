@@ -142,6 +142,14 @@
 				<img src="~/Assets/Admin/Images/overlays.png" alt="Advanced Editor" title="Advanced Editor" />
 			</a>
 		})
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+				<a href="javascript:void(0)" onclick="@String.Format("ShowWindowNoRefresh('{0}/{1}')", SiteFilename.PageHistoryURL, item.Root_ContentID)">
+					<img src="~/Assets/Admin/Images/hourglass.png" alt="View Page History" title="View Page History" />
+				</a>
+			</text>
+		})
 		.AddColumn(x => x.NavMenuText, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.FileName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
