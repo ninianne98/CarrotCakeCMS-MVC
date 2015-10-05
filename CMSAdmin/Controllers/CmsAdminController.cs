@@ -1995,6 +1995,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return View(model);
 		}
 
+		//[HttpGet]
+		//public ActionResult SinglePageCommentIndex(Guid? id) {
+		//	CommentIndexModel model = new CommentIndexModel();
+		//	model.PageType = ContentPageType.PageType.Unknown;
+		//	model.Root_ContentID = id;
+
+		//	return CommentIndex(model);
+		//}
+
 		[HttpGet]
 		public ActionResult PageCommentIndex(Guid? id) {
 			CommentIndexModel model = new CommentIndexModel();
@@ -2030,8 +2039,19 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
-		public ActionResult CommentAddEdit(Guid id) {
-			PostComment model = PostComment.GetContentCommentByID(id);
+		public ActionResult CommentAddEdit(Guid id, bool? pageComment) {
+			PostComment model1 = PostComment.GetContentCommentByID(id);
+			PostCommentModel model = null;
+
+			if (pageComment.HasValue && pageComment.Value) {
+				model = new PostCommentModel(model1, PostCommentModel.ViewType.PageView);
+			} else {
+				if (model1.ContentType == ContentPageType.PageType.BlogEntry) {
+					model = new PostCommentModel(model1, PostCommentModel.ViewType.BlogIndex);
+				} else {
+					model = new PostCommentModel(model1, PostCommentModel.ViewType.ContentIndex);
+				}
+			}
 
 			return View(model);
 		}
@@ -2039,20 +2059,26 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateInput(false)]
 		[ValidateAntiForgeryToken]
-		public ActionResult CommentAddEdit(PostComment model) {
-			if (ModelState.IsValid) {
-				PostComment model2 = PostComment.GetContentCommentByID(model.ContentCommentID);
-				model2.CommenterEmail = model2.CommenterEmail;
-				model2.CommenterName = model2.CommenterName;
-				model2.CommenterURL = model2.CommenterURL;
+		public ActionResult CommentAddEdit(PostCommentModel model) {
+			PostComment comment = model.Comment;
 
-				model2.IsApproved = model2.IsApproved;
-				model2.IsSpam = model2.IsSpam;
-				model2.PostCommentText = model2.PostCommentText;
+			if (ModelState.IsValid) {
+				PostComment model2 = PostComment.GetContentCommentByID(comment.ContentCommentID);
+				model2.CommenterEmail = comment.CommenterEmail;
+				model2.CommenterName = comment.CommenterName;
+				model2.CommenterURL = comment.CommenterURL ?? String.Empty;
+
+				model2.IsApproved = comment.IsApproved;
+				model2.IsSpam = comment.IsSpam;
+				model2.PostCommentText = comment.PostCommentText ?? String.Empty;
 
 				model2.Save();
 
-				return RedirectToAction("CommentAddEdit", new { @id = model.ContentCommentID });
+				if (model.ViewMode == PostCommentModel.ViewType.PageView) {
+					return RedirectToAction("CommentAddEdit", new { @id = comment.ContentCommentID, @pageComment = true });
+				}
+
+				return RedirectToAction("CommentAddEdit", new { @id = comment.ContentCommentID });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -2062,14 +2088,22 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult DeleteCommentAddEdit(PostComment model) {
+		public ActionResult DeleteCommentAddEdit(PostCommentModel model) {
 			ModelState.Clear();
 
-			var model2 = PostComment.GetContentCommentByID(model.ContentCommentID);
+			var model2 = PostComment.GetContentCommentByID(model.Comment.ContentCommentID);
 
 			model2.Delete();
 
-			if (model.ContentType == ContentPageType.PageType.BlogEntry) {
+			if (model.ViewMode == PostCommentModel.ViewType.PageView) {
+				if (model.Comment.ContentType == ContentPageType.PageType.BlogEntry) {
+					return RedirectToAction("BlogPostCommentIndex", new { @id = model.Root_ContentID });
+				} else {
+					return RedirectToAction("PageCommentIndex", new { @id = model.Root_ContentID });
+				}
+			}
+
+			if (model.Comment.ContentType == ContentPageType.PageType.BlogEntry) {
 				return RedirectToAction("BlogPostCommentIndex");
 			} else {
 				return RedirectToAction("PageCommentIndex");

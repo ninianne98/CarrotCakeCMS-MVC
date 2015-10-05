@@ -1,9 +1,19 @@
-﻿@model Carrotware.CMS.Core.PostComment
+﻿@model PostCommentModel
 
 @{
+
+	if (Model.ViewMode == PostCommentModel.ViewType.PageView) {
+		Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+	}
+
 	ViewBag.Title = "Comment Add/Edit";
-	string cancelToUrl = Model.ContentType == ContentPageType.PageType.BlogEntry ?
+
+	string cancelToUrl = Model.Comment.ContentType == ContentPageType.PageType.BlogEntry ?
 						SiteFilename.BlogPostCommentIndexURL : SiteFilename.PageCommentIndexURL;
+
+	if (Model.ViewMode == PostCommentModel.ViewType.PageView) {
+		cancelToUrl = String.Format("{0}/{1}", cancelToUrl, Model.Root_ContentID);
+	}
 }
 <div>
 	@CmsHelpers.DisplayErrorPopupButton()
@@ -25,7 +35,7 @@
 					title:
 				</td>
 				<td>
-					@Model.NavMenuText
+					@Model.Comment.NavMenuText
 				</td>
 			</tr>
 			<tr>
@@ -33,9 +43,9 @@
 					filename:
 				</td>
 				<td>
-					@Model.FileName
+					@Model.Comment.FileName
 					&nbsp;&nbsp;
-					<a id="lnkPage" href="@Model.FileName" target="_blank">
+					<a id="lnkPage" href="@Model.Comment.FileName" target="_blank">
 						<img class="imgNoBorder" src="~/Assets/Admin/Images/html2.png"
 							 title="Visit page" alt="Visit page" />
 					</a>
@@ -55,7 +65,7 @@
 					IP address:
 				</td>
 				<td>
-					@Model.CommenterIP
+					@Model.Comment.CommenterIP
 				</td>
 			</tr>
 			<tr>
@@ -63,7 +73,7 @@
 					date:
 				</td>
 				<td>
-					@Model.CreateDate
+					@Model.Comment.CreateDate
 				</td>
 			</tr>
 			<tr>
@@ -71,8 +81,8 @@
 					email:
 				</td>
 				<td>
-					@Html.TextBoxFor(m => m.CommenterEmail, new { size = "60", @class = "form-control-xlg" })
-					@Html.ValidationMessageFor(m => m.CommenterEmail, "", new { @class = "validationError" })
+					@Html.TextBoxFor(m => m.Comment.CommenterEmail, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.Comment.CommenterEmail, "", new { @class = "validationError" })
 				</td>
 			</tr>
 			<tr>
@@ -80,8 +90,8 @@
 					name:
 				</td>
 				<td>
-					@Html.TextBoxFor(m => m.CommenterName, new { size = "60", @class = "form-control-xlg" })
-					@Html.ValidationMessageFor(m => m.CommenterName, "", new { @class = "validationError" })
+					@Html.TextBoxFor(m => m.Comment.CommenterName, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.Comment.CommenterName, "", new { @class = "validationError" })
 				</td>
 			</tr>
 			<tr>
@@ -89,8 +99,8 @@
 					url:
 				</td>
 				<td>
-					@Html.TextBoxFor(m => m.CommenterURL, new { size = "60", @class = "form-control-xlg" })
-					@Html.ValidationMessageFor(m => m.CommenterURL, "", new { @class = "validationError" })
+					@Html.TextBoxFor(m => m.Comment.CommenterURL, new { size = "60", @class = "form-control-xlg" })
+					@Html.ValidationMessageFor(m => m.Comment.CommenterURL, "", new { @class = "validationError" })
 				</td>
 			</tr>
 			<tr>
@@ -100,11 +110,11 @@
 				<td>
 					<div class="table-subblock">
 						<b class="caption">approved:</b>&nbsp;&nbsp;
-						@Html.CheckBoxFor(m => m.IsApproved)
+						@Html.CheckBoxFor(m => m.Comment.IsApproved)
 					</div>
 					<div class="table-subblock">
 						<b class="caption">spam:</b>&nbsp;&nbsp;
-						@Html.CheckBoxFor(m => m.IsSpam)
+						@Html.CheckBoxFor(m => m.Comment.IsSpam)
 					</div>
 				</td>
 			</tr>
@@ -113,8 +123,8 @@
 					comment:
 				</td>
 				<td>
-					@Html.ValidationMessageFor(m => m.PostCommentText, "", new { @class = "validationError" })
-					@Html.TextAreaFor(m => m.PostCommentText, new { rows = "10", cols = "75", @class = "form-control-xxlg" })
+					@Html.ValidationMessageFor(m => m.Comment.PostCommentText, "", new { @class = "validationError" })
+					@Html.TextAreaFor(m => m.Comment.PostCommentText, new { rows = "10", cols = "75", @class = "form-control-xxlg" })
 				</td>
 			</tr>
 		</table>
@@ -125,14 +135,17 @@
 	<input type="button" name="btnDeleteButton" value="Delete" onclick="return DeleteItem();" id="btnDeleteButton" />
 	<br />
 	<div style="display: none;">
-		@Html.HiddenFor(m => m.ContentCommentID)
-		@Html.HiddenFor(m => m.CommenterIP)
-		@Html.HiddenFor(m => m.CreateDate)
+		@Html.HiddenFor(m => m.Comment.ContentCommentID)
+		@Html.HiddenFor(m => m.Comment.CommenterIP)
+		@Html.HiddenFor(m => m.Comment.CreateDate)
 
-		@Html.HiddenFor(m => m.NavMenuText)
-		@Html.HiddenFor(m => m.FileName)
+		@Html.HiddenFor(m => m.Comment.NavMenuText)
+		@Html.HiddenFor(m => m.Comment.FileName)
+		@Html.HiddenFor(m => m.Comment.Root_ContentID)
+		@Html.HiddenFor(m => m.Comment.ContentType)
+
+		@Html.HiddenFor(m => m.ViewMode)
 		@Html.HiddenFor(m => m.Root_ContentID)
-		@Html.HiddenFor(m => m.ContentType)
 
 		<input type="submit" name="btnSave" value="Save" id="btnSave" />
 
@@ -143,14 +156,16 @@
 
 }
 
-
 <div style="display: none;">
 	@using (Html.BeginForm("DeleteCommentAddEdit", RouteConfig.AdminCtrlr)) {
 		@Html.AntiForgeryToken()
 
-		@Html.HiddenFor(m => m.ContentCommentID)
+		@Html.HiddenFor(m => m.Comment.ContentCommentID)
+		@Html.HiddenFor(m => m.Comment.Root_ContentID)
+		@Html.HiddenFor(m => m.Comment.ContentType)
+
+		@Html.HiddenFor(m => m.ViewMode)
 		@Html.HiddenFor(m => m.Root_ContentID)
-		@Html.HiddenFor(m => m.ContentType)
 
 		<input type="submit" name="btnDelete" value="Delete" id="btnDelete" />
 	}

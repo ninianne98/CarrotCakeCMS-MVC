@@ -900,6 +900,7 @@
     <Compile Include="Models\FileUpModel.cs" />
     <Compile Include="Models\PageChildSortModel.cs" />
     <Compile Include="Models\PageHistoryModel.cs" />
+    <Compile Include="Models\PostCommentModel.cs" />
     <Compile Include="Models\PostIndexModel.cs" />
     <Compile Include="Models\PageIndexModel.cs" />
     <Compile Include="Models\SiteModel.cs" />

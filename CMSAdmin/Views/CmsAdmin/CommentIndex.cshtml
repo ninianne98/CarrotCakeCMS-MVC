@@ -1,6 +1,11 @@
 ﻿@model  CommentIndexModel
 
 @{
+
+	if (Model.Root_ContentID.HasValue) {
+		Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+	}
+
 	ViewBag.Title = "Comment Index";
 }
 
@@ -21,7 +26,13 @@
 	grid
 		.AddColumn(new CarrotGridTemplateColumn<PostComment> {
 			HasHeadingText = false,
-			FormatTemplate = @<text> @CarrotWeb.ActionImage("CommentAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.ContentCommentID }, "~/Assets/Admin/Images/pencil.png", "Edit", null, null) </text>
+			FormatTemplate = @<text>
+				@if (Model.Root_ContentID.HasValue) {
+					@CarrotWeb.ActionImage("CommentAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.ContentCommentID, @pageComment = true }, "~/Assets/Admin/Images/pencil.png", "Edit", null, null)
+				} else {
+					@CarrotWeb.ActionImage("CommentAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.ContentCommentID }, "~/Assets/Admin/Images/pencil.png", "Edit", null, null)
+				}
+			</text>
 		})
 		.AddColumn(x => x.CommenterName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.CommenterIP, new CarrotGridColumn { Sortable = true })

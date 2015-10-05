@@ -188,10 +188,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				pc.IsApproved = false;
 				pc.IsSpam = false;
 				pc.CommenterIP = sIP;
-				pc.CommenterName = model.CommenterName;
-				pc.CommenterEmail = model.CommenterEmail ?? String.Empty;
+				pc.CommenterName = Server.HtmlEncode(model.CommenterName);
+				pc.CommenterEmail = Server.HtmlEncode(model.CommenterEmail ?? String.Empty);
 				pc.PostCommentText = Server.HtmlEncode(model.PostCommentText); //.Replace("<", "&lt;").Replace(">", "&gt;");
-				pc.CommenterURL = model.CommenterURL ?? String.Empty;
+				pc.CommenterURL = Server.HtmlEncode(model.CommenterURL ?? String.Empty);
 
 				pc.Save();
 
