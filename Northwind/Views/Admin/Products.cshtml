@@ -4,17 +4,32 @@
 	ViewBag.Title = "Products";
 }
 
+<script type="text/javascript">
+	function CheckTheBoxes() {
+		checkGridBoxes('frmNorthwindProducts');
+	}
+
+	function UncheckTheBoxes() {
+		uncheckGridBoxes('frmNorthwindProducts');
+	}
+</script>
+
 <p>
 	@Html.ActionLink("Create New", "CreateProduct")
 </p>
 
+<p>
+	<input type="button" value="Check All" onclick="CheckTheBoxes()" />&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Uncheck All" onclick="UncheckTheBoxes()" />
+</p>
+
 @*@Html.TextBox("")*@
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frmNorthwindProducts" })) {
 	@Html.AntiForgeryToken()
 
 	var grid = CarrotWeb.CarrotWebGrid<Product>(Model);
-
+	grid.HtmlFormId = "frmNorthwindProducts";
 	grid.TableAttributes = new { @class = "datatable table" };
 	grid.THeadAttributes = new { @class = "tablehead header" };
 	//grid.ConfigName(Html.NameFor(x => x));
@@ -31,7 +46,7 @@
 			HeaderText = "SUP",
 			FormatTemplate = @<text> @grid.DropDownFor(m => m.SupplierID, new SelectList(ViewBag.SupplierList, "SupplierID", "CompanyName"), String.Empty, new { @class = "form-control" }) </text>
 		})
-		.AddColumn(x => x.Supplier.CompanyName, new CarrotGridColumn { Sortable = true })		
+		.AddColumn(x => x.Supplier.CompanyName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(new CarrotGridTemplateColumn<Product> {
 			HeaderText = "TXT",
 			FormatTemplate = @<text> @grid.FormFieldFor(m => m.ProductName, GridFormFieldType.TextBox, new { maxlength = "64", @class = "form-control" }) </text>
