@@ -68,6 +68,14 @@ namespace Carrotware.Web.UI.Components {
 			return new CarrotWebGrid<T>(Html, dp);
 		}
 
+		public static CarrotWebDataTable CarrotWebDataTable() {
+			return new CarrotWebDataTable(Html);
+		}
+
+		public static CarrotWebDataTable CarrotWebDataTable(PagedDataTable dp) {
+			return new CarrotWebDataTable(Html, dp);
+		}
+
 		public static CarrotWebGrid<T> CarrotWebGrid<T>(List<T> lst) where T : class {
 			PagedData<T> dp = new PagedData<T>();
 			dp.DataSource = lst;

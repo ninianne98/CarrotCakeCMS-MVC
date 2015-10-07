@@ -1,24 +1,41 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+	padding-top: 50px;
+	padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
+/* Override the default bootstrap behavior where horizontal description lists
+   will truncate terms that are too long to fit in the left column
 */
 .dl-horizontal dt {
-    white-space: normal;
+	white-space: normal;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+input[type='text'], input[type='hidden'], textarea, select {
+	min-width: 100px;
 }
+
+.tablepager {
+	display: block;
+	margin: 1em 1em 1em 0;
+	padding: 0.25em;
+}
+
+	.tablepager li {
+		cursor: pointer;
+		float: left;
+		list-style: outside none none;
+		margin: 2px;
+		padding: 4px 0;
+		position: relative;
+	}
+
+	.tablepager a {
+		margin: 5px;
+		padding: 5px 8px;
+	}

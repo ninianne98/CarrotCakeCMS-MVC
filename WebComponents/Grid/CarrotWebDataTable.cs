@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Mvc.Html;
 using System.Web.WebPages;
 
 /*
@@ -20,36 +19,44 @@ using System.Web.WebPages;
 
 namespace Carrotware.Web.UI.Components {
 
-	public class CarrotWebGrid<T> : CarrotWebGridBase where T : class {
-		public PagedData<T> DataPage { get; set; }
+	public class CarrotWebDataTable : CarrotWebGridBase {
+		public PagedDataTable DataPage { get; set; }
 
-		public CarrotWebGrid(HtmlHelper htmlHelper)
-			: this(htmlHelper, new PagedData<T>()) {
+		public bool AutoGenerateColumns { get; set; }
+
+		public bool AutoSort { get; set; }
+
+		public CarrotWebDataTable(HtmlHelper htmlHelper)
+			: this(htmlHelper, new PagedDataTable()) {
+			this.AutoGenerateColumns = false;
 			this.UseDataPage = false;
+			this.AutoSort = true;
 		}
 
-		public CarrotWebGrid(HtmlHelper htmlHelper, PagedData<T> dp) {
+		public CarrotWebDataTable(HtmlHelper htmlHelper, PagedDataTable dp) {
 			base.StandardInit(htmlHelper, dp);
 
-			this.HtmlClientId = "tbl" + typeof(T).Name;
+			this.AutoGenerateColumns = false;
+			this.AutoSort = true;
+			this.HtmlClientId = "tblDataTable";
 			this.DataPage = dp;
 			base.PagedDataBase = this.DataPage;
 		}
 
-		public CarrotWebGrid<T> AddColumn(Expression<Func<T, Object>> property) {
-			AddColumn(property, new CarrotGridColumn());
+		public CarrotWebDataTable AddColumn(string columnName) {
+			AddColumn(columnName, new CarrotGridColumn());
 
 			return this;
 		}
 
-		public CarrotWebGrid<T> AddColumn(Expression<Func<T, Object>> property, ICarrotGridColumn column) {
-			MemberExpression memberExpression = property.Body as MemberExpression ??
-												((UnaryExpression)property.Body).Operand as MemberExpression;
+		public CarrotWebDataTable AddColumn(string columnName, bool sortable) {
+			AddColumn(columnName, new CarrotGridColumn { Sortable = sortable });
 
+			return this;
+		}
+
+		public CarrotWebDataTable AddColumn(string columnName, ICarrotGridColumn column) {
 			if (column.Mode != CarrotGridColumnType.Template) {
-				//string columnName = memberExpression.Member.Name;
-				string columnName = ReflectionUtilities.BuildProp(property);
-
 				if (column is ICarrotGridColumnExt) {
 					var col = (ICarrotGridColumnExt)column;
 					col.ColumnName = columnName;
@@ -59,11 +66,6 @@ namespace Carrotware.Web.UI.Components {
 
 					if (String.IsNullOrEmpty(column.HeaderText) && column.HasHeadingText) {
 						column.HeaderText = col.ColumnName.Replace(".", " ").Replace("_", " ");
-
-						string displayName = CarrotWeb.DisplayNameFor<T>(property);
-						if (!String.IsNullOrEmpty(displayName)) {
-							column.HeaderText = displayName;
-						}
 					}
 					if (!column.HasHeadingText && !col.Sortable) {
 						column.HeaderText = "  ";
@@ -78,7 +80,7 @@ namespace Carrotware.Web.UI.Components {
 			return this;
 		}
 
-		public CarrotWebGrid<T> AddColumn(CarrotGridTemplateColumn<T> column) {
+		public CarrotWebDataTable AddColumn(CarrotGridTableTemplateColumn column) {
 			column.Order = this.Columns.Count();
 
 			this.Columns.Add(column);
@@ -86,27 +88,23 @@ namespace Carrotware.Web.UI.Components {
 			return this;
 		}
 
+		/*
 		protected string DataFieldName(string columnName) {
-			string fldName = String.Format("{0}DataSource[{1}].{2}", this.FieldNamePrefix, this.RowNumber, columnName);
+			string fldName = String.Format("{0}DataSource.Rows[{1}][\"{2}\"]", this.FieldNamePrefix, this.RowNumber, columnName);
 			if (!this.UseDataPage) {
 				if (String.IsNullOrEmpty(this.FieldNamePrefix)) {
-					//fldName = fldName.Replace(String.Format("DataSource[{0}]", this.RowNumber), String.Format("[{0}]", this.RowNumber));
-					fldName = String.Format("[{0}].{1}", this.RowNumber, columnName);
+					fldName = String.Format("Rows[{0}][\"{1}\"]", this.RowNumber, columnName);
 				} else {
-					//fldName = fldName.Replace(String.Format(".DataSource[{0}]", this.RowNumber), String.Format("[{0}]", this.RowNumber));
-					fldName = String.Format("{0}[{1}].{2}", this.FieldNamePrefix, this.RowNumber, columnName).Replace(".[", "[");
+					fldName = String.Format("{0}.Rows[{1}][\"{2}\"]", this.FieldNamePrefix, this.RowNumber, columnName).Replace(".[", "[");
 				}
 			}
 			return fldName;
 		}
 
-		public MvcHtmlString FormFieldFor(Expression<Func<T, Object>> property, GridFormFieldType fldType, object htmlAttribs = null) {
-			T row = this.DataPage.DataSource[this.RowNumber];
+		public MvcHtmlString FormFieldFor(string columnName, GridFormFieldType fldType, object htmlAttribs = null) {
+			DataRow row = this.DataPage.DataSource.Rows[this.RowNumber];
 
-			//PropertyInfo propInfo = row.PropInfoFromExpression<T>(property);
-			//Object val = propInfo.GetValue(row, null);
-			string columnName = ReflectionUtilities.BuildProp(property);
-			Object val = row.GetPropValueFromExpression(property);
+			Object val = row[columnName];
 
 			string fldName = DataFieldName(columnName);
 
@@ -142,13 +140,10 @@ namespace Carrotware.Web.UI.Components {
 			return formFld;
 		}
 
-		public MvcHtmlString DropDownFor(Expression<Func<T, Object>> property, SelectList selectList, string optionLabel, object htmlAttributes = null) {
-			T row = this.DataPage.DataSource[this.RowNumber];
+		public MvcHtmlString DropDownFor(string columnName, SelectList selectList, string optionLabel, object htmlAttributes = null) {
+			DataRow row = this.DataPage.DataSource.Rows[this.RowNumber];
 
-			//PropertyInfo propInfo = row.PropInfoFromExpression<T>(property);
-			//Object val = propInfo.GetValue(row, null);
-			string columnName = ReflectionUtilities.BuildProp(property);
-			Object val = row.GetPropValueFromExpression(property);
+			Object val = row[columnName];
 
 			string fldName = DataFieldName(columnName);
 
@@ -167,17 +162,10 @@ namespace Carrotware.Web.UI.Components {
 			return formFld;
 		}
 
-		public MvcHtmlString CheckBoxListFor(Expression<Func<T, Object>> property, MultiSelectList selectList, string selectedFieldName, object chkboxAttributes = null, object listAttributes = null) {
-			T row = this.DataPage.DataSource[this.RowNumber];
-			string columnName = String.Empty;
-			selectedFieldName = String.IsNullOrEmpty(selectedFieldName) ? "Selected" : selectedFieldName;
+		public MvcHtmlString CheckBoxListFor(string columnName, MultiSelectList selectList, string selectedFieldName, object chkboxAttributes = null, object listAttributes = null) {
+			DataRow row = this.DataPage.DataSource.Rows[this.RowNumber];
 
-			if (property.Body.NodeType == ExpressionType.Call) {
-				var methodCallExpression = (MethodCallExpression)property.Body;
-				columnName = GetInputName(methodCallExpression);
-			} else {
-				columnName = ReflectionUtilities.BuildProp(property);
-			}
+			selectedFieldName = String.IsNullOrEmpty(selectedFieldName) ? "Selected" : selectedFieldName;
 
 			string fldName = DataFieldName(columnName);
 
@@ -200,18 +188,23 @@ namespace Carrotware.Web.UI.Components {
 
 			return formFld;
 		}
-
-		protected string GetInputName(MethodCallExpression expression) {
-			var methodCallExpression = expression.Object as MethodCallExpression;
-			if (methodCallExpression != null) {
-				return GetInputName(methodCallExpression);
-			}
-			return expression.Object.ToString();
-		}
+	 */
 
 		protected override IHtmlString CreateBody() {
 			StringBuilder sb = new StringBuilder();
 			this.RowNumber = 0;
+
+			if (this.AutoGenerateColumns) {
+				foreach (DataColumn c in this.DataPage.DataSource.Columns) {
+					if (c.DataType == typeof(bool)) {
+						AddColumn(c.ColumnName, new CarrotGridBooleanImageColumn {
+							Sortable = this.AutoSort
+						});
+					} else {
+						AddColumn(c.ColumnName, this.AutoSort);
+					}
+				}
+			}
 
 			_sortDir = this.DataPage.ParseSort();
 
@@ -227,7 +220,7 @@ namespace Carrotware.Web.UI.Components {
 				var url = new UrlHelper(_htmlHelper.ViewContext.RequestContext);
 
 				using (new WrappedItem(sb, "tbody", this.TBodyAttributes)) {
-					foreach (var row in this.DataPage.DataSource) {
+					foreach (DataRow row in this.DataPage.DataSource.Rows) {
 						using (new WrappedItem(sb, "tr", new { rowNbr = this.RowNumber })) {
 							foreach (var col in this.Columns) {
 								using (new WrappedItem(sb, "td", col.BodyAttributes)) {
@@ -235,7 +228,7 @@ namespace Carrotware.Web.UI.Components {
 
 									if (col is ICarrotGridColumnExt) {
 										var colExt = (ICarrotGridColumnExt)col;
-										Object val = row.GetPropValueFromColumnName(colExt.ColumnName);
+										Object val = row[colExt.ColumnName];
 
 										string imgPath = String.Empty;
 										switch (col.Mode) {
@@ -306,8 +299,8 @@ namespace Carrotware.Web.UI.Components {
 										}
 									}
 
-									if (col is ICarrotGridColumnTemplate<T> && col.Mode == CarrotGridColumnType.Template) {
-										var colTmpl = (ICarrotGridColumnTemplate<T>)col;
+									if (col is ICarrotGridColumnTemplate<DataRow> && col.Mode == CarrotGridColumnType.Template) {
+										var colTmpl = (ICarrotGridColumnTemplate<DataRow>)col;
 										if (colTmpl.FormatTemplate != null) {
 											cellContents = (new HelperResult(writer => {
 												colTmpl.FormatTemplate(row).WriteTo(writer);

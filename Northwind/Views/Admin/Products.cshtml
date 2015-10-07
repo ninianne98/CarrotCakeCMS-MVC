@@ -59,9 +59,7 @@
 				@grid.FormFieldFor(m => m.ProductID, GridFormFieldType.Hidden)
 			</text>
 		})
-		.AddColumn(x => x.Discontinued, new CarrotGridBooleanImageColumn {
-			Sortable = true
-		})
+		.AddColumn(x => x.Discontinued, new CarrotGridBooleanImageColumn { Sortable = true })
 		.AddColumn(x => x.QuantityPerUnit, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.UnitPrice, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:C}" })
 		.AddColumn(x => x.UnitsInStock, new CarrotGridColumn { Sortable = true })

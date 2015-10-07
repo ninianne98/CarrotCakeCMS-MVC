@@ -1,0 +1,56 @@
+﻿@model PagedDataTable
+
+@{
+	ViewBag.Title = "Products";
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "sortTable" })) {
+	@Html.AntiForgeryToken()
+
+	var grid = CarrotWeb.CarrotWebDataTable(Model);
+
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.ConfigName(Html.NameFor(x => x));
+
+	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix ui-widget-content ui-corner-all" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
+
+	grid.AutoGenerateColumns = false;
+	//grid.AutoSort = false;
+
+	grid.AddColumn(new CarrotGridTableTemplateColumn {
+		HasHeadingText = false,
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("EditProduct", "Admin", new { @id = item["ProductID"] }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
+	})
+	@*.AddColumn(new CarrotGridTableTemplateColumn {
+		HeaderText = "SUP",
+		FormatTemplate = @<text> @grid.DropDownFor("SupplierID", new SelectList(ViewBag.SupplierList, "SupplierID", "CompanyName"), String.Empty, new { @class = "form-control" }) </text>
+	})
+	.AddColumn(new CarrotGridTableTemplateColumn {
+		HeaderText = "TXT",
+		FormatTemplate = @<text> @grid.FormFieldFor("ProductName", GridFormFieldType.TextBox, new { maxlength = "64", @class = "form-control" }) </text>
+	})
+	.AddColumn("ProductName", new CarrotGridColumn { Sortable = true })
+	.AddColumn(new CarrotGridTableTemplateColumn {
+		HeaderText = "CHK",
+		FormatTemplate = @<text>
+			@grid.FormFieldFor("Discontinued", GridFormFieldType.Checkbox)
+			@grid.FormFieldFor("ProductID", GridFormFieldType.Hidden)
+		</text>
+	})*@
+	.AddColumn("Discontinued", new CarrotGridBooleanImageColumn { Sortable = true })
+	.AddColumn("QuantityPerUnit", new CarrotGridColumn { Sortable = true })
+	.AddColumn("UnitPrice", new CarrotGridColumn { Sortable = true, CellFormatString = "{0:C}" })
+	.AddColumn("UnitsInStock", new CarrotGridColumn { Sortable = true })
+	.AddColumn("UnitsOnOrder", new CarrotGridColumn { Sortable = true })
+	.AddColumn("ReorderLevel", new CarrotGridColumn { Sortable = true });
+
+	@grid.OutputHtmlBody()
+
+	<nav>
+		@{
+			@grid.OutputFooter()
+		}
+	</nav>
+
+}

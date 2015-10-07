@@ -4,11 +4,12 @@ using Northwind.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Northwind.Controllers {
+
 	public class HomeController : BaseDataWidgetController {
+
 		public ActionResult Index() {
 			return View();
 		}
@@ -46,7 +47,6 @@ namespace Northwind.Controllers {
 			}
 		}
 
-
 		[HttpPost]
 		[WidgetActionSettingModel("Carrotware.CMS.Interface.WidgetActionSettingModel, Carrotware.CMS.Interface")]
 		public PartialViewResult ProductSearch(ProductSearch model) {
@@ -83,7 +83,5 @@ namespace Northwind.Controllers {
 
 			return model;
 		}
-
-
 	}
 }

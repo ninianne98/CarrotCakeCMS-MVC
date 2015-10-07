@@ -134,11 +134,16 @@
     <Compile Include="CarrotHttpHandler.cs" />
     <Compile Include="CarrotWeb.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Grid\CarrotWebDataTable.cs" />
+    <Compile Include="Grid\CarrotWebGridBase.cs" />
+    <Compile Include="Grid\CarrotWebGridEnums.cs" />
+    <Compile Include="Grid\PagedDataBase.cs" />
     <Compile Include="Grid\PagedData.cs" />
     <Compile Include="Email\EmailHelper.cs" />
     <Compile Include="Email\EMailSettings.cs" />
     <Compile Include="Grid\CarrotGridColumnTypes.cs" />
     <Compile Include="Grid\ICarrotGridColumn.cs" />
+    <Compile Include="Grid\PagedDataTable.cs" />
     <Compile Include="ITwoPartWebComponent.cs" />
     <Compile Include="IValidateHuman.cs" />
     <Compile Include="IWebComponent.cs" />

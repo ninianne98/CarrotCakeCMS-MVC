@@ -182,6 +182,7 @@
     <Content Include="northwind.sql" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Common.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -224,6 +225,8 @@
     <Content Include="Views\Admin\ViewSupplier.cshtml" />
     <Content Include="Views\Home\ProductSearchAlt.cshtml" />
     <Content Include="Views\Home\ProductSearchAlt2.cshtml" />
+    <Content Include="Views\Admin\Products2.cshtml" />
+    <Content Include="Views\Admin\Products3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

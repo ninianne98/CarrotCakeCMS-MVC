@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Web;
 using System.Web.WebPages;
 
@@ -14,13 +15,6 @@ using System.Web.WebPages;
 */
 
 namespace Carrotware.Web.UI.Components {
-
-	public enum CarrotGridColumnType {
-		Template,
-		Standard,
-		ImageEnum,
-		BooleanImage,
-	}
 
 	public class CarrotGridTemplateColumn<T> : ICarrotGridColumn, ICarrotGridColumnTemplate<T> where T : class {
 
@@ -38,6 +32,9 @@ namespace Carrotware.Web.UI.Components {
 		public object HeadAttributes { get; set; }
 		public object BodyAttributes { get; set; }
 		public Func<T, HelperResult> FormatTemplate { get; set; }
+	}
+
+	public class CarrotGridTableTemplateColumn : CarrotGridTemplateColumn<DataRow> {
 	}
 
 	public class CarrotGridColumn : ICarrotGridColumn, ICarrotGridColumnExt {
@@ -88,6 +85,7 @@ namespace Carrotware.Web.UI.Components {
 	}
 
 	public class CarrotImageColumnData {
+
 		public CarrotImageColumnData()
 			: this(String.Empty, String.Empty, String.Empty) {
 		}
