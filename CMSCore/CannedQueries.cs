@@ -402,6 +402,15 @@ namespace Carrotware.CMS.Core {
 					select r);
 		}
 
+		internal static IQueryable<vw_carrot_Comment> GetContentPageComments(CarrotCMSDataContext ctx, Guid rootContentID, bool? approved, bool? spam) {
+			return (from r in ctx.vw_carrot_Comments
+					orderby r.CreateDate descending
+					where r.Root_ContentID == rootContentID
+						   && (spam == null || r.IsSpam == spam)
+						   && (approved == null || r.IsApproved == approved)
+					select r);
+		}
+
 		internal static IQueryable<vw_carrot_Comment> FindCommentsByDate(CarrotCMSDataContext ctx, Guid siteID, Guid rootContentID, DateTime postDate, string postIP, string sCommentText) {
 			return (from r in ctx.vw_carrot_Comments
 					orderby r.CreateDate descending
@@ -429,6 +438,16 @@ namespace Carrotware.CMS.Core {
 			return (from r in ctx.vw_carrot_Comments
 					orderby r.CreateDate descending
 					where r.SiteID == siteID
+						&& r.ContentTypeID == ContentPageType.GetIDByType(contentEntry)
+					select r);
+		}
+
+		internal static IQueryable<vw_carrot_Comment> GetSiteContentCommentsByPostType(CarrotCMSDataContext ctx, Guid siteID, ContentPageType.PageType contentEntry, bool? approved, bool? spam) {
+			return (from r in ctx.vw_carrot_Comments
+					orderby r.CreateDate descending
+					where r.SiteID == siteID
+						   && (spam == null || r.IsSpam == spam)
+						   && (approved == null || r.IsApproved == approved)
 						&& r.ContentTypeID == ContentPageType.GetIDByType(contentEntry)
 					select r);
 		}

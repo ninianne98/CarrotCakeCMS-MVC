@@ -191,6 +191,26 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		public static List<PostComment> GetCommentsBySitePageNumber(Guid siteID, int iPageNbr, int iPageSize, string SortBy, ContentPageType.PageType pageType, bool? approved, bool? spam) {
+			int startRec = iPageNbr * iPageSize;
+			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
+				IQueryable<vw_carrot_Comment> lstComments = (from c in CannedQueries.GetSiteContentCommentsByPostType(_db, siteID, pageType, approved, spam)
+															 select c);
+
+				return PaginateComments(lstComments, iPageNbr, iPageSize, SortBy).ToList();
+			}
+		}
+
+		public static List<PostComment> GetCommentsByContentPageNumber(Guid rootContentID, int iPageNbr, int iPageSize, string SortBy, bool? approved, bool? spam) {
+			int startRec = iPageNbr * iPageSize;
+			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
+				IQueryable<vw_carrot_Comment> lstComments = (from c in CannedQueries.GetContentPageComments(_db, rootContentID, approved, spam)
+															 select c);
+
+				return PaginateComments(lstComments, iPageNbr, iPageSize, SortBy).ToList();
+			}
+		}
+
 		public static List<PostComment> PaginateComments(IQueryable<vw_carrot_Comment> lstComments, int iPageNbr, int iPageSize, string SortBy) {
 			int startRec = iPageNbr * iPageSize;
 
@@ -216,9 +236,23 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		public static int GetCommentCountBySiteAndType(Guid siteID, ContentPageType.PageType pageType, bool? approved, bool? spam) {
+			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
+				return (from c in CannedQueries.GetSiteContentCommentsByPostType(_db, siteID, pageType, approved, spam)
+						select c).Count();
+			}
+		}
+
 		public static int GetCommentCountByContent(Guid rootContentID, bool bActiveOnly) {
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
 				return (from c in CannedQueries.GetContentPageComments(_db, rootContentID, bActiveOnly)
+						select c).Count();
+			}
+		}
+
+		public static int GetCommentCountByContent(Guid rootContentID, bool? approved, bool? spam) {
+			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
+				return (from c in CannedQueries.GetContentPageComments(_db, rootContentID, approved, spam)
 						select c).Count();
 			}
 		}

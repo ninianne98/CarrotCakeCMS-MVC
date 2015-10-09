@@ -9,6 +9,9 @@
 	ViewBag.Title = "Comment Index";
 }
 
+
+
+
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 
@@ -21,7 +24,38 @@
 	grid.THeadAttributes = new { @class = "tablehead" };
 	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix ui-widget-content ui-corner-all" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
 	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.PageSizeExternal = true;
 	grid.ConfigName(Html.NameFor(x => x.Comments));
+
+	<table>
+		<tr>
+			<td class="tablecaption">
+				public:
+			</td>
+			<td>
+				@Html.DropDownListFor(m => m.IsApproved, new SelectList(Model.FilterOptions, "Key", "Value"), "[Choose One]")
+			</td>
+			<td class="tablecaption">
+				spam:
+			</td>
+			<td>
+				@Html.DropDownListFor(m => m.IsSpam, new SelectList(Model.FilterOptions, "Key", "Value"), "[Choose One]")
+			</td>
+			<td class="tablecaption">
+				page size:
+			</td>
+			<td>
+				@Html.DropDownListFor(m => m.Comments.PageSize, new SelectList(Model.PageSizes.Select(x => new { Value = x, Text = x }), "Value", "Text"))
+			</td>
+			<td>
+				<input type="submit" name="btnApply" value="Apply" id="btnApply" />
+			</td>
+		</tr>
+	</table>
+
+	<p>
+		@String.Format("{0} total records", grid.DataPage.TotalRecords)
+	</p>
 
 	grid
 		.AddColumn(new CarrotGridTemplateColumn<PostComment> {

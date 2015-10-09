@@ -2007,6 +2007,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public ActionResult PageCommentIndex(Guid? id) {
 			CommentIndexModel model = new CommentIndexModel();
+			model.Comments.PageSize = 25;
 			model.PageType = ContentPageType.PageType.ContentEntry;
 			model.Root_ContentID = id;
 
@@ -2024,6 +2025,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public ActionResult BlogPostCommentIndex(Guid? id) {
 			CommentIndexModel model = new CommentIndexModel();
+			model.Comments.PageSize = 25;
 			model.PageType = ContentPageType.PageType.BlogEntry;
 			model.Root_ContentID = id;
 
@@ -2116,15 +2118,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			pagedData.ToggleSort();
 
 			if (!model.Root_ContentID.HasValue) {
-				pagedData.TotalRecords = PostComment.GetCommentCountBySiteAndType(SiteData.CurrentSiteID, model.PageType);
+				pagedData.TotalRecords = PostComment.GetCommentCountBySiteAndType(SiteData.CurrentSiteID, model.PageType, model.IsApproved, model.IsSpam);
 			} else {
-				pagedData.TotalRecords = PostComment.GetCommentCountByContent(model.Root_ContentID.Value, false);
+				pagedData.TotalRecords = PostComment.GetCommentCountByContent(model.Root_ContentID.Value, model.IsApproved, model.IsSpam);
 			}
 
 			if (!model.Root_ContentID.HasValue) {
-				pagedData.DataSource = PostComment.GetCommentsBySitePageNumber(SiteData.CurrentSiteID, pagedData.PageNumberZeroIndex, pagedData.PageSize, pagedData.OrderBy, model.PageType);
+				pagedData.DataSource = PostComment.GetCommentsBySitePageNumber(SiteData.CurrentSiteID, pagedData.PageNumberZeroIndex, pagedData.PageSize, pagedData.OrderBy, model.PageType, model.IsApproved, model.IsSpam);
 			} else {
-				pagedData.DataSource = PostComment.GetCommentsByContentPageNumber(model.Root_ContentID.Value, pagedData.PageNumberZeroIndex, pagedData.PageSize, pagedData.OrderBy, false);
+				pagedData.DataSource = PostComment.GetCommentsByContentPageNumber(model.Root_ContentID.Value, pagedData.PageNumberZeroIndex, pagedData.PageSize, pagedData.OrderBy, model.IsApproved, model.IsSpam);
 			}
 
 			ModelState.Clear();
