@@ -197,6 +197,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				model.IsSaved = true;
 				this.ViewData["CMS_contactform"] = model;
+				model.SendMail(pc);
+
 				ModelState.Clear();
 			}
 

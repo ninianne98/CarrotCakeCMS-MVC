@@ -3,6 +3,7 @@ using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.IO;
 using System.Reflection;
 using System.Web;
@@ -177,6 +178,23 @@ namespace Carrotware.CMS.UI.Components {
 			return InitHelp();
 		}
 
+		public HtmlHelper<ContactInfo> GetModelHelper(ContactInfoConfig config) {
+			_model = InitContactInfo(config.PostPartialName);
+
+			if (config.ValidateHuman != null) {
+				_settings.UseValidateHuman = true;
+				_settings.ValidateHumanClass = config.ValidateHuman.GetType().AssemblyQualifiedName;
+				if (!String.IsNullOrEmpty(config.ValidateHuman.AltValidationFailText)) {
+					_settings.ValidationFailText = config.ValidateHuman.AltValidationFailText;
+				}
+			}
+
+			_settings.DirectEmailKeyName = config.DirectEmailKeyName;
+			_settings.NotifyEditors = config.NotifyEditors;
+
+			return InitHelp();
+		}
+
 		public HtmlHelper<ContactInfo> GetModelHelper(string partialName) {
 			_model = InitContactInfo(partialName);
 
@@ -293,6 +311,51 @@ namespace Carrotware.CMS.UI.Components {
 		public IValidateHuman ValidateHuman { get; set; }
 		public string ValidationValue { get; set; }
 		public bool IsSaved { get; set; }
+
+		public void SendMail(PostComment pc) {
+			HttpRequest request = HttpContext.Current.Request;
+
+			//TODO: NotifyEditors wire up
+			if (this.Settings.NotifyEditors || !String.IsNullOrEmpty(this.Settings.DirectEmailKeyName)) {
+				string sEmail = String.Empty;
+
+				//if (!String.IsNullOrEmpty(this.DirectEmail)) {
+				//	sEmail = this.DirectEmail.ToString();
+				//}
+				if (!String.IsNullOrEmpty(this.Settings.DirectEmailKeyName)) {
+					sEmail = ConfigurationManager.AppSettings[this.Settings.DirectEmailKeyName].ToString();
+				}
+
+				string mailSubject = "Comment Form " + request.ServerVariables["HTTP_HOST"];
+
+				string strHTTPHost = String.Empty;
+				try { strHTTPHost = request.ServerVariables["HTTP_HOST"] + String.Empty; } catch { strHTTPHost = String.Empty; }
+
+				string strHTTPProto = "http://";
+				try {
+					strHTTPProto = request.ServerVariables["SERVER_PORT_SECURE"] + String.Empty;
+					if (strHTTPProto == "1") {
+						strHTTPProto = "https://";
+					} else {
+						strHTTPProto = "http://";
+					}
+				} catch { }
+
+				strHTTPHost = String.Format("{0}{1}", strHTTPProto, strHTTPHost).ToLower();
+
+				string sBody = "Name:   " + pc.CommenterName
+					+ "\r\nEmail:   " + pc.CommenterEmail
+					+ "\r\nURL:   " + pc.CommenterURL
+					+ "\r\n-----------------\r\nComment:\r\n" + HttpUtility.HtmlEncode(pc.PostCommentText)
+					+ "\r\n=================\r\n\r\nIP:   " + pc.CommenterIP
+					//+ "\r\nSite Page:   " + request.ServerVariables["script_name"].ToString()
+					+ "\r\nSite URL:   " + String.Format("{0}{1}", strHTTPHost, request.ServerVariables["script_name"])
+					+ "\r\nSite Time:   " + SiteData.CurrentSite.Now.ToString()
+					+ "\r\nUTC Time:   " + DateTime.UtcNow.ToString();
+
+				EmailHelper.SendMail(null, sEmail, mailSubject, sBody, false);
+			}
+		}
 	}
 
 	//========
@@ -308,6 +371,35 @@ namespace Carrotware.CMS.UI.Components {
 		public bool UseValidateHuman { get; set; }
 		public string ValidateHumanClass { get; set; }
 		public string ValidationFailText { get; set; }
+		public string DirectEmailKeyName { get; set; }
+		public bool NotifyEditors { get; set; }
+	}
+
+	//========
+
+	public class ContactInfoConfig {
+
+		public ContactInfoConfig() {
+			this.ValidateHuman = null;
+			this.NotifyEditors = false;
+			this.PostPartialName = String.Empty;
+			this.DirectEmailKeyName = String.Empty;
+		}
+
+		public ContactInfoConfig(string partialName)
+			: this() {
+			this.PostPartialName = partialName;
+		}
+
+		public ContactInfoConfig(string partialName, IValidateHuman validateHuman)
+			: this(partialName) {
+			this.ValidateHuman = validateHuman;
+		}
+
+		public IValidateHuman ValidateHuman { get; set; }
+		public string PostPartialName { get; set; }
+		public string DirectEmailKeyName { get; set; }
+		public bool NotifyEditors { get; set; }
 	}
 
 	//======================

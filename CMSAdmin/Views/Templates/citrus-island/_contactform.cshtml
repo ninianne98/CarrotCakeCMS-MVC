@@ -3,9 +3,12 @@
 <div id="contactForm">
 	@{
 		var cap = new Captcha();
+		var cfg = new ContactInfoConfig("_contactform", cap);
+		cfg.NotifyEditors = true;
+		cfg.DirectEmailKeyName = "contact";
 
 		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" }, Model)) {
-			var cmt = cmtFrm.GetModelHelper("_contactform", cap);
+			var cmt = cmtFrm.GetModelHelper(cfg);
 			if (!cmt.ViewData.Model.IsSaved) {
 				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
 

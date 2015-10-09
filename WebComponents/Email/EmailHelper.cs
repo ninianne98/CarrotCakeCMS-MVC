@@ -19,7 +19,7 @@ using System.Web;
 
 namespace Carrotware.Web.UI.Components {
 
-	public class EmailHelper {
+	public static class EmailHelper {
 
 		private static Version CurrentDLLVersion {
 			get { return Assembly.GetExecutingAssembly().GetName().Version; }
