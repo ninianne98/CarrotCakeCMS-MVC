@@ -77,7 +77,7 @@ namespace Carrotware.Web.UI.Components {
 			}
 
 			bool bValid = false;
-			string guid = GetKey();
+			string guid = SessionKeyValue;
 
 			if (testValue.ToLower() == guid.ToLower()) {
 				bValid = true;
@@ -96,22 +96,24 @@ namespace Carrotware.Web.UI.Components {
 			return GetCaptchaImage(medGreen, Color.White, medOrange);
 		}
 
-		public static string GetKey() {
-			string guid = "ABCXYZ";
-			if (HttpContext.Current != null) {
-				try {
-					if (HttpContext.Current.Session[SessionKey] != null) {
-						guid = HttpContext.Current.Session[SessionKey].ToString();
-					} else {
+		public static string SessionKeyValue {
+			get {
+				string guid = "ABCXYZ";
+				if (HttpContext.Current != null) {
+					try {
+						if (HttpContext.Current.Session[SessionKey] != null) {
+							guid = HttpContext.Current.Session[SessionKey].ToString();
+						} else {
+							guid = Guid.NewGuid().ToString().Substring(0, 6);
+							HttpContext.Current.Session[SessionKey] = guid;
+						}
+					} catch {
 						guid = Guid.NewGuid().ToString().Substring(0, 6);
 						HttpContext.Current.Session[SessionKey] = guid;
 					}
-				} catch {
-					guid = Guid.NewGuid().ToString().Substring(0, 6);
-					HttpContext.Current.Session[SessionKey] = guid;
 				}
+				return guid.ToUpper();
 			}
-			return guid.ToUpper();
 		}
 
 		public static Bitmap GetCaptchaImage(Color fg, Color bg, Color n) {
@@ -121,7 +123,7 @@ namespace Carrotware.Web.UI.Components {
 			SolidBrush textBrush = new SolidBrush(fg);
 			Font font = new Font(FontFamily.GenericSansSerif, 32, FontStyle.Bold);
 
-			string guid = GetKey();
+			string guid = SessionKeyValue;
 
 			Bitmap bmpCaptcha = new Bitmap(500, 500);
 			Graphics graphics = Graphics.FromImage(bmpCaptcha);

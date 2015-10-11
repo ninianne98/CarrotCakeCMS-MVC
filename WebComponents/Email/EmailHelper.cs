@@ -26,8 +26,13 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public static bool SendMail(string fromEmail, string emailTo, string subjectLine, string bodyText, bool isHTML) {
-			var lst = new List<string>();
-			lst.Add(emailTo);
+			List<string> lst = new List<string>();
+
+			if (emailTo.Contains(";")) {
+				lst = emailTo.Split(';').Where(x => x.Length > 2).Select(x => x.Trim()).ToList();
+			} else {
+				lst.Add(emailTo);
+			}
 
 			return SendMail(fromEmail, lst, null, subjectLine, bodyText, isHTML, null);
 		}

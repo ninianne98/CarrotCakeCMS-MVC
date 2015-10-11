@@ -20,5 +20,7 @@ namespace Carrotware.Web.UI.Components {
 		bool ValidateValue(string testValue);
 
 		string AltValidationFailText { get; set; }
+
+		string Instructions { get; set; }
 	}
 }

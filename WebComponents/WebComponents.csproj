@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="BaseTwoPartWebComponent.cs" />
     <Compile Include="BaseWebComponent.cs" />
+    <Compile Include="Captcha2.cs" />
     <Compile Include="captcha\CAPTCHA2.aspx.cs">
       <DependentUpon>CAPTCHA2.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -322,6 +323,12 @@
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-bg_flat_25_fbf9ee_40x100.png" />
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-bg_flat_70_000000_40x100.png" />
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-bg_glass_100_f2f5f7_1x400.png" />
+    <EmbeddedResource Include="captcha2\bouquet.png" />
+    <EmbeddedResource Include="captcha2\pen.png" />
+    <EmbeddedResource Include="captcha2\pepper.png" />
+    <EmbeddedResource Include="captcha2\scissors.png" />
+    <EmbeddedResource Include="captcha2\snowflake.png" />
+    <EmbeddedResource Include="captcha2\web.png" />
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>

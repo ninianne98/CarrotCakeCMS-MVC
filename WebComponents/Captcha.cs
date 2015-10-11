@@ -78,7 +78,7 @@ namespace Carrotware.Web.UI.Components {
 		public object imageAttributes { get; set; }
 
 		public override string GetHtml() {
-			var key = CaptchaImage.GetKey();
+			var key = CaptchaImage.SessionKeyValue;
 
 			var imgBuilder = new TagBuilder("img");
 			imgBuilder.MergeAttribute("src", GetCaptchaImageURI());

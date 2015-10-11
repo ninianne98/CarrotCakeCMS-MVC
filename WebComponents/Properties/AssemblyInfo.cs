@@ -171,3 +171,10 @@ using System.Web.UI;
 [assembly: WebResource("Carrotware.Web.UI.Components.jquerybasic.lightgreen.ui-icons_468b5e_256x240.png", "image/png")]
 [assembly: WebResource("Carrotware.Web.UI.Components.jquerybasic.lightgreen.ui-icons_cd0a0a_256x240.png", "image/png")]
 [assembly: WebResource("Carrotware.Web.UI.Components.jquerybasic.lightgreen.ui-icons_ffffff_256x240.png", "image/png")]
+
+[assembly: WebResource("Carrotware.Web.UI.Components.captcha2.bouquet.png", "image/png")]
+[assembly: WebResource("Carrotware.Web.UI.Components.captcha2.pen.png", "image/png")]
+[assembly: WebResource("Carrotware.Web.UI.Components.captcha2.pepper.png", "image/png")]
+[assembly: WebResource("Carrotware.Web.UI.Components.captcha2.scissors.png", "image/png")]
+[assembly: WebResource("Carrotware.Web.UI.Components.captcha2.snowflake.png", "image/png")]
+[assembly: WebResource("Carrotware.Web.UI.Components.captcha2.web.png", "image/png")]
