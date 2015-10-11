@@ -2,7 +2,8 @@
 
 <div id="contactForm">
 	@{
-		var cap = new Captcha();
+		//var cap = new Captcha();
+		var cap = new Captcha2();
 		var cfg = new ContactInfoConfig("_contactform", cap);
 		cfg.NotifyEditors = true;
 		cfg.DirectEmailKeyName = "contact";
@@ -25,7 +26,8 @@
 				<div>
 					@cap<br />
 					@cap.Instructions <br />
-					@cmt.TextBoxFor(m => m.ValidationValue)
+					@*@cmt.TextBoxFor(m => m.ValidationValue)*@
+					@cmt.DropDownListFor(m => m.ValidationValue, new SelectList(cap.ImageOptions, "Value", "Value"), "[Select Image Title]")
 					@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
 				</div>
 

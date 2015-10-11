@@ -640,6 +640,21 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		private ExtendedUserData _crUser = null;
+
+		public ExtendedUserData GetCreateUserInfo() {
+			return this.CreateUser;
+		}
+
+		public ExtendedUserData CreateUser {
+			get {
+				if (_crUser == null) {
+					_crUser = new ExtendedUserData(this.CreateUserId);
+				}
+				return _crUser;
+			}
+		}
+
 		private ExtendedUserData _creditUser = null;
 
 		public ExtendedUserData GetCreditUserInfo() {

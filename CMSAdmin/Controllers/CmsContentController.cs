@@ -174,6 +174,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
 					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
+					model.ValidationValue = String.Empty;
 				}
 			}
 
@@ -196,8 +197,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				pc.Save();
 
 				model.IsSaved = true;
+
+				model.CommenterName = String.Empty;
+				model.CommenterEmail = String.Empty;
+				model.PostCommentText = String.Empty;
+				model.CommenterURL = String.Empty;
+				model.ValidationValue = String.Empty;
+
 				this.ViewData["CMS_contactform"] = model;
-				model.SendMail(pc);
+				model.SendMail(pc, _page.ThePage);
 
 				ModelState.Clear();
 			}

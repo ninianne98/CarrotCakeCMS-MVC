@@ -312,18 +312,27 @@ namespace Carrotware.CMS.UI.Components {
 		public string ValidationValue { get; set; }
 		public bool IsSaved { get; set; }
 
-		public void SendMail(PostComment pc) {
+		public void SendMail(PostComment pc, ContentPage page) {
 			HttpRequest request = HttpContext.Current.Request;
 
 			//TODO: NotifyEditors wire up
 			if (this.Settings.NotifyEditors || !String.IsNullOrEmpty(this.Settings.DirectEmailKeyName)) {
-				string sEmail = String.Empty;
+				List<string> emails = new List<string>();
 
-				//if (!String.IsNullOrEmpty(this.DirectEmail)) {
-				//	sEmail = this.DirectEmail.ToString();
-				//}
+				if (this.Settings.NotifyEditors && page != null) {
+					emails.Add(page.CreateUser.Email);
+
+					if (page.EditUser.UserId != page.CreateUser.UserId) {
+						emails.Add(page.EditUser.Email);
+					}
+
+					if (page.CreditUserId.HasValue) {
+						emails.Add(page.CreditUser.Email);
+					}
+				}
+
 				if (!String.IsNullOrEmpty(this.Settings.DirectEmailKeyName)) {
-					sEmail = ConfigurationManager.AppSettings[this.Settings.DirectEmailKeyName].ToString();
+					emails.Add(ConfigurationManager.AppSettings[this.Settings.DirectEmailKeyName].ToString());
 				}
 
 				string mailSubject = "Comment Form " + request.ServerVariables["HTTP_HOST"];
@@ -331,27 +340,23 @@ namespace Carrotware.CMS.UI.Components {
 				string strHTTPHost = String.Empty;
 				try { strHTTPHost = request.ServerVariables["HTTP_HOST"] + String.Empty; } catch { strHTTPHost = String.Empty; }
 
-				string strHTTPProto = "http://";
+				string strHTTPPrefix = "http://";
 				try {
-					strHTTPProto = request.ServerVariables["SERVER_PORT_SECURE"] + String.Empty;
-					if (strHTTPProto == "1") {
-						strHTTPProto = "https://";
-					} else {
-						strHTTPProto = "http://";
-					}
-				} catch { }
+					strHTTPPrefix = request.ServerVariables["SERVER_PORT_SECURE"] == "1" ? "https://" : "http://";
+				} catch { strHTTPPrefix = "http://"; }
 
-				strHTTPHost = String.Format("{0}{1}", strHTTPProto, strHTTPHost).ToLower();
+				strHTTPHost = String.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLower();
 
 				string sBody = "Name:   " + pc.CommenterName
 					+ "\r\nEmail:   " + pc.CommenterEmail
 					+ "\r\nURL:   " + pc.CommenterURL
 					+ "\r\n-----------------\r\nComment:\r\n" + HttpUtility.HtmlEncode(pc.PostCommentText)
 					+ "\r\n=================\r\n\r\nIP:   " + pc.CommenterIP
-					//+ "\r\nSite Page:   " + request.ServerVariables["script_name"].ToString()
 					+ "\r\nSite URL:   " + String.Format("{0}{1}", strHTTPHost, request.ServerVariables["script_name"])
 					+ "\r\nSite Time:   " + SiteData.CurrentSite.Now.ToString()
 					+ "\r\nUTC Time:   " + DateTime.UtcNow.ToString();
+
+				string sEmail = String.Join(";", emails);
 
 				EmailHelper.SendMail(null, sEmail, mailSubject, sBody, false);
 			}
