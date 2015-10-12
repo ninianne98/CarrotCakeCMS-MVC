@@ -417,6 +417,40 @@ namespace Carrotware.CMS.UI.Components {
 			}
 		}
 
+		public static ContentPageNext GetContentPageNext(ContentPageNext.NavDirection direction) {
+			return new ContentPageNext {
+				NavigationDirection = direction,
+				ContentPage = CmsPage.ThePage
+			};
+		}
+
+		public static ContentPageNext GetContentPageNext(ContentPageNext.NavDirection direction, ContentPageNext.CaptionSource caption) {
+			return new ContentPageNext {
+				NavigationDirection = direction,
+				CaptionDataField = caption,
+				ContentPage = CmsPage.ThePage
+			};
+		}
+
+		public static ContentPageImageThumb GetContentPageImageThumb() {
+			return new ContentPageImageThumb {
+				ContentPage = CmsPage.ThePage
+			};
+		}
+
+		public static SiteCanonicalURL GetSiteCanonicalURL() {
+			return new SiteCanonicalURL {
+				ContentPage = CmsPage.ThePage
+			};
+		}
+
+		public static SiteCanonicalURL GetSiteCanonicalURL(bool enable301) {
+			return new SiteCanonicalURL {
+				Enable301Redirect = enable301,
+				ContentPage = CmsPage.ThePage
+			};
+		}
+
 		public static SearchForm BeginSearchForm(object formAttributes = null) {
 			return new SearchForm(Html, CmsPage, formAttributes);
 		}

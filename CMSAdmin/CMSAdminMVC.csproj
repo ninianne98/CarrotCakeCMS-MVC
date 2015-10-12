@@ -873,6 +873,7 @@
     <Content Include="Views\CmsContent\_plaincontact.cshtml" />
     <Content Include="Views\CmsAdmin\CommentAddEdit.cshtml" />
     <Content Include="Views\CmsAdmin\PageHistory.cshtml" />
+    <Content Include="Views\Templates\citrus-island\post.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

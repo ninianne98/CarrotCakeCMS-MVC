@@ -1,0 +1,104 @@
+@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	var cats = CmsPage.GetSiteCategories(10, true);
+	var tags = CmsPage.GetSiteTags(10, true);
+
+	var dates = CmsPage.GetSiteDates(12);
+
+	var comments = new PagedComments();
+	comments.PageSize = 10;
+	comments.FetchData();
+}
+
+@section SideBar {
+
+	@(new PostCalendar())
+
+	@if (dates.Any()) {
+		<h1>Dates</h1>
+		<ul class="sidemenu">
+			@foreach (var itm in dates) {
+				<li><a href="@itm.Uri">@itm.Text</a></li>
+			}
+		</ul>
+	}
+
+	@if (cats.Any()) {
+		<h1>Categories</h1>
+		<ul class="sidemenu">
+			@foreach (var itm in cats) {
+				<li><a href="@itm.Uri">@itm.Text</a></li>
+			}
+		</ul>
+	}
+
+	@if (tags.Any()) {
+		<h1>Tags</h1>
+		<ul class="sidemenu">
+			@foreach (var itm in tags) {
+				<li><a href="@itm.Uri">@itm.Text</a></li>
+			}
+		</ul>
+	}
+}
+
+@section RightSideBar {
+	@{
+		var next = CarrotCakeHtml.GetContentPageNext(ContentPageNext.NavDirection.Next);
+		var prev = CarrotCakeHtml.GetContentPageNext(ContentPageNext.NavDirection.Prev);
+
+		next.UseDefaultText = false;
+		next.NavigateText = "Next <span class=\"meta-nav\">&rarr;</span>";
+
+		prev.UseDefaultText = false;
+		prev.NavigateText = "<span class=\"meta-nav\">&larr;</span> Previous";
+	}
+
+	<div class="previous-next">
+		<span class="nav-previous">
+			@prev
+		</span>
+		<span class="nav-next">
+			@next
+		</span>
+	</div>
+
+}
+
+@section SubContent {
+	@Html.Partial("_contactform")
+
+	<br />
+	@if (comments != null) {
+		<hr />
+		<div>
+			@foreach (var item in comments.DataSource) {
+				<div>
+					<p>
+						<b>
+							@Html.Raw(String.Format("{0} on {1:d}", item.CommenterName, item.CreateDate))
+						</b>
+					</p>
+					<div class="comment-border top">
+						<p>
+							@item.PostCommentEscaped
+						</p>
+					</div>
+				</div>
+			}
+
+			<div class="pagerfooterlinks">
+				@foreach (var i in comments.PageNumbers) {
+					using (CarrotWeb.BeginWrappedItem("div", i, comments.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+						using (CarrotWeb.BeginWrappedItem("a", i, comments.PageNumber, new { @class = "selected", @href = comments.GetUrl(i) }, new { @href = comments.GetUrl(i) })) {
+							@String.Format(" {0} ", i)
+						}
+					}
+				}
+			</div>
+		</div>
+	}
+}

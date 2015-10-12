@@ -445,6 +445,25 @@ img.rssimage, .rssimage img {
 	float: right;
 }
 
+
+.previous-next {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.nav-previous {
+	padding-left: 15px;
+	padding-right: 15px;
+	float: left;
+}
+
+.nav-next {
+	padding-left: 15px;
+	padding-right: 15px;
+	float: right;
+}
+
 /* additional classes */
 .clear {
 	clear: both;

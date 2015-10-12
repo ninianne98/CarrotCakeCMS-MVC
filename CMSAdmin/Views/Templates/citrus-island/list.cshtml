@@ -9,10 +9,21 @@
 	pager.IgnoreSitePath = false;
 	pager.FetchData();
 
+	var dates = CmsPage.GetSiteDates(12);
+
 }
 
 @section SideBar {
 	@(new PostCalendar())
+
+	@if (dates.Any()) {
+		<h1>Dates</h1>
+		<ul class="sidemenu">
+			@foreach (var itm in dates) {
+				<li><a href="@itm.Uri">@itm.Text</a></li>
+			}
+		</ul>
+	}
 }
 
 @section PagedDataSection {

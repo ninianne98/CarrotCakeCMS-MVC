@@ -23,10 +23,6 @@
 		ElementId = "nav"
 	};
 
-	var comments = new PagedComments();
-	comments.PageSize = 10;
-	comments.FetchData();
-
 }
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -71,24 +67,6 @@
 		</div>
 		<div id="sidebar">
 			<div>
-				@if (CmsPage.ChildNav.Any()) {
-					<h1>Child Pages</h1>
-					<ul class="sidemenu">
-						@foreach (var itm in CmsPage.ChildNav) {
-							<li><a href="@itm.FileName">@itm.NavigationText</a></li>
-						}
-					</ul>
-				}
-
-				@if (CmsPage.SiblingNav.Any()) {
-					<h1>Sibling Pages</h1>
-					<ul class="sidemenu">
-						@foreach (var itm in CmsPage.SiblingNav) {
-							<li><a href="@itm.FileName">@itm.NavigationText</a></li>
-						}
-					</ul>
-				}
-
 				@RenderSection("SideBar", required: false)
 			</div>
 			<div>
@@ -113,43 +91,16 @@
 
 			<hr />
 
-			@Html.Partial("_contactform")
-			<br />
-			@if (comments != null) {
-				<hr />
-				<div>
-					@foreach (var item in comments.DataSource) {
-						<div>
-							<p>
-								<b>
-									@Html.Raw(String.Format("{0} on {1:d}", item.CommenterName, item.CreateDate))
-								</b>
-							</p>
-							<div class="comment-border top">
-								<p>
-									@item.PostCommentEscaped
-								</p>
-							</div>
-						</div>
-					}
-
-					<div class="pagerfooterlinks">
-						@foreach (var i in comments.PageNumbers) {
-							using (CarrotWeb.BeginWrappedItem("div", i, comments.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
-								using (CarrotWeb.BeginWrappedItem("a", i, comments.PageNumber, new { @class = "selected", @href = comments.GetUrl(i) }, new { @href = comments.GetUrl(i) })) {
-									@String.Format(" {0} ", i)
-								}
-							}
-						}
-					</div>
-				</div>
-			}
+			@RenderSection("SubContent", required: false)
 		</div>
 		<div id="rightbar">
 			<div class="rsszone">
 				@CarrotCakeHtml.RssLink(SiteData.RSSFeedInclude.BlogOnly, null, "Blog RSS", new { @class = "rssimage" })
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				@CarrotCakeHtml.RssLink(SiteData.RSSFeedInclude.PageOnly, null, "Page RSS", new { @class = "rssimage" })
+			</div>
+			<div>
+				@RenderSection("RightSideBar", required: false)
 			</div>
 			<div>
 				@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextRight)

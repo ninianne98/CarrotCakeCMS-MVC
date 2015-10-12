@@ -3,3 +3,23 @@
 @{
 	Layout = "_main.cshtml";
 }
+
+@section SideBar {
+	@if (CmsPage.ChildNav.Any()) {
+		<h1>Child Pages</h1>
+		<ul class="sidemenu">
+			@foreach (var itm in CmsPage.ChildNav) {
+				<li><a href="@itm.FileName">@itm.NavigationText</a></li>
+			}
+		</ul>
+	}
+
+	@if (CmsPage.SiblingNav.Any()) {
+		<h1>Sibling Pages</h1>
+		<ul class="sidemenu">
+			@foreach (var itm in CmsPage.SiblingNav) {
+				<li><a href="@itm.FileName">@itm.NavigationText</a></li>
+			}
+		</ul>
+	}
+}
