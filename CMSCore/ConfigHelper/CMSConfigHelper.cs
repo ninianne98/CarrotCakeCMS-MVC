@@ -136,7 +136,7 @@ namespace Carrotware.CMS.Core {
 		public static string DomainName {
 			get {
 				var domName = HttpContext.Current.Request.ServerVariables["HTTP_HOST"];
-				if (domName.IndexOf(":") > 0) {
+				if ((domName.IndexOf(":") > 0) && (domName.EndsWith(":80") || domName.EndsWith(":443"))) {
 					domName = domName.Substring(0, domName.IndexOf(":"));
 				}
 

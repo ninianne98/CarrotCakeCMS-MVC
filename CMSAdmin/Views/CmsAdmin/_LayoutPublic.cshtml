@@ -32,13 +32,11 @@
 
 			$('.validationError').each(function () {
 
-				if ($(this).text().length > 0) {
+				if ($(this).text().length > 2) {
 					$(this).prop('title', $(this).text());
 					$(this).text('**');
 				}
-
 			});
-
 		});
 	</script>
 	<meta name="robots" content="noindex,nofollow,noarchive" />

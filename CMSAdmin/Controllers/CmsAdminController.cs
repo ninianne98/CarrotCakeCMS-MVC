@@ -774,6 +774,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 			}
 
+			Helper.HandleErrorDict(ModelState);
 			// If we got this far, something failed, redisplay form
 			return View(model);
 		}

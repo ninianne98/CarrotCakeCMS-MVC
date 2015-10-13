@@ -1,0 +1,15 @@
+﻿@if (!ViewData.ModelState.IsValid) {
+	<div class="ui-widget">
+		<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+			<div>
+				<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
+				<span class="publicError">
+					@Html.ValidationSummary(true, "")
+				</span>
+
+				<div style="display: none;">
+				</div>
+			</div>
+		</div>
+	</div>
+}

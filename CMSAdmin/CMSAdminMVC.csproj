@@ -874,6 +874,7 @@
     <Content Include="Views\CmsAdmin\CommentAddEdit.cshtml" />
     <Content Include="Views\CmsAdmin\PageHistory.cshtml" />
     <Content Include="Views\Templates\citrus-island\post.cshtml" />
+    <Content Include="Views\CmsAdmin\_PublicValidError.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

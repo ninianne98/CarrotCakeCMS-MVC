@@ -372,6 +372,13 @@ table.centered {
 	padding: 0;
 }
 
+	.publicError .validation-summary-errors ul, .publicError .validation-summary-errors li {
+		list-style: none;
+		margin-left: 12px;
+		display: block;
+		padding: 0;
+	}
+
 #divCMSModalMsg .validation-summary-errors ul, #divCMSModalMsg .validation-summary-errors li {
 	list-style: disc;
 	margin-left: 10px;

@@ -66,18 +66,7 @@
 		</tr>
 	</table>
 	<div style="width: 400px; text-align: left; clear: both;">
-		@if (!ViewData.ModelState.IsValid) {
-			<div class="ui-widget">
-				<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-					<p>
-						<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-						<span id="FailureText">
-							@Html.ValidationSummary(true, "")
-						</span>
-					</p>
-				</div>
-			</div>
-		}
+		@Html.Partial("_PublicValidError")
 		<div>
 			<p>
 				<a href="./ForgotPassword" id="lnkForgot">Forgot Password?</a>

@@ -225,7 +225,7 @@ namespace Carrotware.CMS.UI.Components {
 				pageUri = SiteData.DefaultDirectoryFilename;
 			}
 
-			string lnk = String.Format("<link rel=\"canonical\" href=\"{0}\" />\r\n", pageUri);
+			string lnk = String.Format("<link rel=\"canonical\" href=\"{0}\" />", pageUri);
 
 			if (this.Enable301Redirect) {
 				HttpContext ctx = HttpContext.Current;

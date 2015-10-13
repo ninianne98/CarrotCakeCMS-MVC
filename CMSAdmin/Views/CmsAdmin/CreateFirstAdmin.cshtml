@@ -51,18 +51,7 @@
 			</td>
 		</tr>
 	</table>
-	if (!ViewData.ModelState.IsValid) {
-		<div class="ui-widget">
-			<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
-				<p>
-					<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>
-					<span id="FailureText">
-						@Html.ValidationSummary(true, "")
-					</span>
-				</p>
-			</div>
-		</div>
-	}
+	@Html.Partial("_PublicValidError")
 
 	<p>
 		<input type="submit" name="btnCreate" value="Create User" id="btnCreate" />
