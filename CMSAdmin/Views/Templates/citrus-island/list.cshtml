@@ -10,6 +10,7 @@
 	pager.FetchData();
 
 	var dates = CmsPage.GetSiteDates(12);
+	var cats = CmsPage.GetSiteCategories(10, true);
 
 }
 
@@ -20,6 +21,15 @@
 		<h1>Dates</h1>
 		<ul class="sidemenu">
 			@foreach (var itm in dates) {
+				<li><a href="@itm.Uri">@itm.Text</a></li>
+			}
+		</ul>
+	}
+
+	@if (cats.Any()) {
+		<h1>Categories</h1>
+		<ul class="sidemenu">
+			@foreach (var itm in cats) {
 				<li><a href="@itm.Uri">@itm.Text</a></li>
 			}
 		</ul>

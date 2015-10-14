@@ -66,7 +66,10 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public PagePayload() { }
+		public PagePayload() {
+			this.TypeLabelPrefixes = new List<TypeHeadingOption>();
+			this.TheWidgets = new List<Widget>();
+		}
 
 		public ContentPage ThePage { get; set; }
 		public SiteData TheSite { get; set; }
@@ -76,6 +79,8 @@ namespace Carrotware.CMS.Core {
 
 		public MvcHtmlString Titlebar {
 			get {
+				LoadHeadCaption();
+
 				if (String.IsNullOrEmpty(_pageTitle)) {
 					string sPrefix = String.Empty;
 
@@ -99,9 +104,46 @@ namespace Carrotware.CMS.Core {
 
 		public MvcHtmlString Heading {
 			get {
+				LoadHeadCaption();
+
 				return new MvcHtmlString(this.ThePage.PageHead);
 			}
 		}
+
+		private string _headingText = null;
+
+		private void LoadHeadCaption() {
+			if (_headingText == null && this.TypeLabelPrefixes.Any()) {
+				_headingText = String.Empty;
+				using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+					PageViewType pvt = pageHelper.GetBlogHeadingFromURL(this.TheSite, SiteData.CurrentScriptName);
+					_headingText = pvt.ExtraTitle;
+
+					TypeHeadingOption titleOpts = this.TypeLabelPrefixes.Where(x => x.KeyValue == pvt.CurrentViewType).FirstOrDefault();
+
+					if (titleOpts == null
+						&& (pvt.CurrentViewType == PageViewType.ViewType.DateDayIndex
+						|| pvt.CurrentViewType == PageViewType.ViewType.DateMonthIndex
+						|| pvt.CurrentViewType == PageViewType.ViewType.DateYearIndex)) {
+						titleOpts = this.TypeLabelPrefixes.Where(x => x.KeyValue == PageViewType.ViewType.DateIndex).FirstOrDefault();
+					}
+
+					if (titleOpts != null) {
+						if (!String.IsNullOrEmpty(titleOpts.FormatText)) {
+							pvt.ExtraTitle = string.Format(titleOpts.FormatText, pvt.RawValue);
+							_headingText = pvt.ExtraTitle;
+						}
+						if (!String.IsNullOrEmpty(titleOpts.LabelText)) {
+							this.ThePage.PageHead = String.Format("{0} {1}", titleOpts.LabelText, _headingText);
+							this.ThePage.TitleBar = this.ThePage.PageHead;
+							_headingText = this.ThePage.PageHead;
+						}
+					}
+				}
+			}
+		}
+
+		public List<TypeHeadingOption> TypeLabelPrefixes { get; set; }
 
 		private List<SiteNav> _top2nav = null;
 

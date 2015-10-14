@@ -357,7 +357,7 @@ namespace Carrotware.CMS.Core {
 
 		public PageViewType GetBlogHeadingFromURL(SiteData currentSite, string sFilterPath) {
 			Guid siteID = currentSite.SiteID;
-			PageViewType pvt = new PageViewType { ExtraTitle = "", CurrentViewType = PageViewType.ViewType.SinglePage, RawValue = null };
+			PageViewType pvt = new PageViewType { ExtraTitle = String.Empty, CurrentViewType = PageViewType.ViewType.SinglePage, RawValue = null };
 
 			string sTitle = String.Empty;
 
