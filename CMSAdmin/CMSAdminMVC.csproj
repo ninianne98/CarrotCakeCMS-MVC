@@ -875,6 +875,7 @@
     <Content Include="Views\CmsAdmin\PageHistory.cshtml" />
     <Content Include="Views\Templates\citrus-island\post.cshtml" />
     <Content Include="Views\CmsAdmin\_PublicValidError.cshtml" />
+    <Content Include="Views\CmsAdmin\WidgetTime.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -915,6 +916,7 @@
     <Compile Include="Models\SplitDateTime.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\WidgetListModel.cs" />
+    <Compile Include="Models\WidgetEditModel.cs" />
     <Compile Include="Models\WidgetProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,0 +1,70 @@
+﻿@model WidgetEditModel
+
+@{
+	ViewBag.Title = "Widget Time";
+
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+}
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	@Html.HiddenFor(m => m.Root_ContentID)
+	@Html.HiddenFor(m => m.Root_WidgetID)
+	@Html.HiddenFor(m => m.WidgetCaption)
+
+	@Html.HiddenFor(m => m.Widget.Root_WidgetID)
+	@Html.HiddenFor(m => m.Widget.ControlPath)
+	@Html.HiddenFor(m => m.Widget.PlaceholderName)
+	@Html.HiddenFor(m => m.Widget.IsWidgetPendingDelete)
+
+	<p>
+		<b>@Model.WidgetCaption </b>
+		<br />
+		@Model.Widget.ControlPath
+		<br />
+	</p>
+	<table style="width: 700px;">
+		<tr>
+			<td class="tablecaption">
+				release date:
+			</td>
+			<td>
+				@{
+	SplitDateTime gld = new SplitDateTime();
+	gld.CombinedDateTime = Model.Widget.GoLiveDate;
+	gld.FieldName = Html.NameFor(m => m.Widget.GoLiveDate).ToString();
+				}
+
+				@Html.Partial("_datetime", gld)
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				retire date:
+			</td>
+			<td>
+				@{
+	SplitDateTime rdt = new SplitDateTime();
+	rdt.CombinedDateTime = Model.Widget.RetireDate;
+	rdt.FieldName = Html.NameFor(m => m.Widget.RetireDate).ToString();
+				}
+
+				@Html.Partial("_datetime", rdt)
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				enabled:
+			</td>
+			<td>
+				@Html.CheckBoxFor(m => m.Widget.IsWidgetActive)
+			</td>
+		</tr>
+	</table>
+
+	<p>
+		<input type="submit" name="btnSave" value="Apply" id="btnSave" />
+	</p>
+
+}

@@ -113,7 +113,8 @@ namespace Carrotware.CMS.Core {
 		private string _headingText = null;
 
 		private void LoadHeadCaption() {
-			if (_headingText == null && this.TypeLabelPrefixes.Any()) {
+			if (this.TheSite.Blog_Root_ContentID == this.ThePage.Root_ContentID
+				&& _headingText == null && this.TypeLabelPrefixes.Any()) {
 				_headingText = String.Empty;
 				using (ContentPageHelper pageHelper = new ContentPageHelper()) {
 					PageViewType pvt = pageHelper.GetBlogHeadingFromURL(this.TheSite, SiteData.CurrentScriptName);

@@ -1225,6 +1225,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		public ActionResult ContentSnippetAddEdit(Guid? id, Guid? versionid, string mode) {
 			ViewBag.ContentEditMode = (String.IsNullOrEmpty(mode) || mode.Trim().ToLower() != "raw") ? "html" : "raw";
+
 			ContentSnippet model = null;
 			if (id.HasValue) {
 				model = ContentSnippet.Get(id.Value);
@@ -1901,6 +1902,29 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.DataSource = query.ToList();
 
 			ModelState.Clear();
+
+			return View(model);
+		}
+
+		[HttpGet]
+		public ActionResult WidgetTime(Guid? id, Guid widgetid, bool? saved) {
+			WidgetEditModel model = new WidgetEditModel(id, widgetid);
+
+			if (saved.HasValue && saved.Value) {
+				ShowSave();
+			}
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult WidgetTime(WidgetEditModel model) {
+			if (ModelState.IsValid) {
+				model.Save();
+
+				return RedirectToAction("WidgetTime", new { @id = model.Root_ContentID, @widgetid = model.Root_WidgetID, @saved = true });
+			}
 
 			return View(model);
 		}
