@@ -2258,6 +2258,60 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
+		public ActionResult BlogPostTemplateUpdate() {
+			CMSConfigHelper.CleanUpSerialData();
+			PostTemplateUpdateModel model = new PostTemplateUpdateModel();
+			model.SelectedSearch = PostTemplateUpdateModel.SearchBy.Filtered;
+
+			PagedData<ContentPage> pagedData = new PagedData<ContentPage>();
+			pagedData.PageSize = 10;
+			pagedData.InitOrderBy(x => x.GoLiveDate, false);
+			model.Page = pagedData;
+
+			return BlogPostTemplateUpdate(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult BlogPostTemplateUpdate(PostTemplateUpdateModel model) {
+			PagedData<ContentPage> pagedData = model.Page;
+
+			if (!String.IsNullOrEmpty(model.SelectedTemplate)) {
+				List<Guid> lstUpd = pagedData.DataSource.Where(x => x.Selected).Select(x => x.Root_ContentID).ToList();
+
+				if (lstUpd.Any()) {
+					pageHelper.BulkUpdateTemplate(this.SiteID, lstUpd, model.SelectedTemplate);
+
+					//return RedirectToAction("BlogPostTemplateUpdate");
+				}
+
+				model.SelectedTemplate = String.Empty;
+			}
+
+			pagedData.InitOrderBy(x => x.GoLiveDate, false);
+			pagedData.ToggleSort();
+			var srt = pagedData.ParseSort();
+
+			IQueryable<ContentPage> query = null;
+
+			if (model.SelectedSearch == PostTemplateUpdateModel.SearchBy.AllPages) {
+				query = pageHelper.GetAllLatestBlogList(this.SiteID).AsQueryable();
+			} else {
+				query = pageHelper.GetPostsByDateRange(this.SiteID, model.SearchDate, model.SelectedRange, false).AsQueryable();
+			}
+
+			query = query.SortByParm<ContentPage>(srt.SortField, srt.SortDirection);
+			pagedData.DataSource = query.ToList();
+
+			pagedData.TotalRecords = pagedData.DataSource.Count();
+			pagedData.PageSize = 1 + (pagedData.TotalRecords * 2);
+
+			ModelState.Clear();
+
+			return View(model);
+		}
+
+		[HttpGet]
 		public ActionResult UserIndex() {
 			PagedData<ExtendedUserData> model = new PagedData<ExtendedUserData>();
 			model.PageSize = -1;

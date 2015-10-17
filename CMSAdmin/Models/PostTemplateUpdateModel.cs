@@ -14,9 +14,9 @@ using System.Collections.Generic;
 
 namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
-	public class PageTemplateUpdateModel : PageIndexModel {
+	public class PostTemplateUpdateModel : PostIndexModel {
 
-		public PageTemplateUpdateModel()
+		public PostTemplateUpdateModel()
 			: base() {
 			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 				this.SiteTemplateList = cmsHelper.Templates;

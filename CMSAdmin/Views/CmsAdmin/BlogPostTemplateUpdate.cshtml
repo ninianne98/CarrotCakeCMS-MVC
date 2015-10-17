@@ -1,7 +1,7 @@
-﻿@model PageTemplateUpdateModel
+﻿@model PostTemplateUpdateModel
 
 @{
-	ViewBag.Title = "Bulk Apply Templates/Skins - Pages";
+	ViewBag.Title = "Bulk Apply Templates/Skins - Posts";
 }
 
 <script type="text/javascript">
@@ -14,7 +14,7 @@
 	}
 </script>
 
-@Html.Partial("_pageIndexLinks")
+@Html.Partial("_blogIndexLinks")
 
 <br />
 
@@ -53,26 +53,24 @@
 		<table>
 			<tr>
 				<td class="tablecaption">
-					page filter:
+					go live date post filter:
 					<br />
-				</td>
-				<td>
-					<input type="submit" name="btnFilter" value="Filter" id="btnFilter" />
 				</td>
 				<td>
 					&nbsp;&nbsp;
 				</td>
 				<td>
-					<!-- parent page plugin-->
-					@{
-		var drill = new SitePageDrillDownModel {
-			FieldName = Html.NameFor(m => m.ParentPageID).ToString(),
-			CurrentPageID = Guid.Empty,
-			SelectedPageID = Model.ParentPageID
-		};
-					}
+					@Html.TextBoxFor(m => m.SearchDate, "{0:MM/dd/yyyy}", new { @class = "dateRegion form-control-sm", maxlength = "16", size = "12" })
 
-					@Html.Partial("_SitePageDrillDown", drill)
+					@Html.DropDownListFor(m => m.SelectedRange, new SelectList(Model.DateRanges, "Key", "Value"))
+					<div style="clear: both; height: 2px;">
+					</div>
+				</td>
+				<td>
+					&nbsp;&nbsp;
+				</td>
+				<td>
+					<input type="submit" name="btnFilter" value="Apply" id="btnFilter" />
 				</td>
 			</tr>
 		</table>
@@ -81,6 +79,7 @@
 			<input id="btnChangePage" type="submit" value="Change Page Size" name="btnChangePage">
 			@Html.DropDownListFor(m => m.Page.PageSize, new SelectList(Model.PageSizes.Select(x => new { Value = x, Text = x }), "Value", "Text"))
 		</p>
+		@Html.HiddenFor(m => m.SelectedRange)
 	}
 
 	<table>

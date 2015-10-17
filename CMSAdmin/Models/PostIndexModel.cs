@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+
 using System.Linq;
 
 /*
@@ -21,7 +22,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public PostIndexModel()
 			: base() {
 			this.SearchDate = SiteData.CurrentSite.Now.Date;
-			this.SelectedRange = 7;
+			this.SelectedRange = 30;
+
 			this.DateRanges = new Dictionary<int, string>();
 			this.DateRanges.Add(1, "1 Days +/-");
 			this.DateRanges.Add(7, "7 Days +/-");

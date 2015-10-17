@@ -877,6 +877,9 @@
     <Content Include="Views\CmsAdmin\_PublicValidError.cshtml" />
     <Content Include="Views\CmsAdmin\WidgetTime.cshtml" />
     <Content Include="Views\CmsAdmin\PageTemplateUpdate.cshtml" />
+    <Content Include="Views\CmsAdmin\BlogPostTemplateUpdate.cshtml" />
+    <Content Include="Views\CmsAdmin\_blogIndexLinks.cshtml" />
+    <Content Include="Views\CmsAdmin\_pageIndexLinks.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -906,6 +909,7 @@
     <Compile Include="Models\PageHistoryModel.cs" />
     <Compile Include="Models\PageTemplateUpdateModel.cs" />
     <Compile Include="Models\PostCommentModel.cs" />
+    <Compile Include="Models\PostTemplateUpdateModel.cs" />
     <Compile Include="Models\PostIndexModel.cs" />
     <Compile Include="Models\PageIndexModel.cs" />
     <Compile Include="Models\SiteModel.cs" />

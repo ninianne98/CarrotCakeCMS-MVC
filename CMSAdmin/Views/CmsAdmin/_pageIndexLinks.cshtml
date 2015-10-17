@@ -1,0 +1,39 @@
+﻿<div>
+	<table style="width: 625px;">
+		<tr>
+			<td style="width: 48%;">
+				<a href="@SiteFilename.PageIndexURL">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/table.png" alt="View Page Index" title="View Page Index" />
+					View Page Index
+				</a>
+			</td>
+			<td>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+			<td style="width: 48%;">
+				<a href="@SiteFilename.PageTemplateUpdateURL">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/overlays.png" alt="Apply Skins" title="Bulk Apply Templates/Skins" />
+					Bulk Apply Templates/Skins
+				</a>
+			</td>
+		</tr>
+
+		<tr>
+			<td style="width: 48%;">
+				<a href="@SiteFilename.PageAddEditURL">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add as WYSIWYG" />
+					Add Page (with HTML editor)
+				</a>
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td style="width: 48%;">
+				<a href="@String.Format("{0}?mode=raw", SiteFilename.PageAddEditURL)">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/script_add.png" alt="Add" title="Add as Plain Text" />
+					Add Page (as plain text)
+				</a>
+			</td>
+		</tr>
+	</table>
+</div>
