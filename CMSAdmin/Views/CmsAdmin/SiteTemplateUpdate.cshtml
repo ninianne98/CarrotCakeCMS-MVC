@@ -19,25 +19,25 @@
 			<b>Home Page</b>&nbsp;&nbsp;&nbsp;&nbsp;
 			@String.Format("{0}  [{1}] ", Model.HomePageTitle, Model.HomePageLink)
 			<br />
-			@Html.DropDownListFor(model => Model.HomePage, new SelectList(ViewBag.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
+			@Html.DropDownListFor(model => Model.HomePage, new SelectList(Model.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
 			<br />
 		</p>
 		<p>
 			<b>All Content Pages (only)</b>
 			<br />
-			@Html.DropDownListFor(model => Model.AllPages, new SelectList(ViewBag.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
+			@Html.DropDownListFor(model => Model.AllPages, new SelectList(Model.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
 			<br />
 		</p>
 		<p>
 			<b>All Top Level Pages (only)</b>
 			<br />
-			@Html.DropDownListFor(model => Model.TopPages, new SelectList(ViewBag.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
+			@Html.DropDownListFor(model => Model.TopPages, new SelectList(Model.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
 			<br />
 		</p>
 		<p>
 			<b>All Sub Level Pages (only)</b>
 			<br />
-			@Html.DropDownListFor(model => Model.SubPages, new SelectList(ViewBag.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
+			@Html.DropDownListFor(model => Model.SubPages, new SelectList(Model.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
 			<br />
 		</p>
 	</fieldset>
@@ -64,14 +64,14 @@
 			</div>
 			<div style="clear: both; display: block; ">
 				<br />
-				@Html.DropDownListFor(model => Model.IndexPage, new SelectList(ViewBag.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
+				@Html.DropDownListFor(model => Model.IndexPage, new SelectList(Model.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
 				<br />
 			</div>
 		</p>
 		<p>
 			<b>All Blog Posts (only)</b>
 			<br />
-			@Html.DropDownListFor(model => Model.BlogPages, new SelectList(ViewBag.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
+			@Html.DropDownListFor(model => Model.BlogPages, new SelectList(Model.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
 			<br />
 		</p>
 	</fieldset>
@@ -84,7 +84,7 @@
 		<p>
 			<b>All Content (Content Pages and Blog Posts)</b>
 			<br />
-			@Html.DropDownListFor(model => Model.AllContent, new SelectList(ViewBag.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
+			@Html.DropDownListFor(model => Model.AllContent, new SelectList(Model.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
 			<br />
 		</p>
 	</fieldset>

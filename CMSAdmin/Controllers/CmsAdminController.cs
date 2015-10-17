@@ -1845,6 +1845,64 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
+		public ActionResult PageTemplateUpdate() {
+			CMSConfigHelper.CleanUpSerialData();
+			PageTemplateUpdateModel model = new PageTemplateUpdateModel();
+			model.SelectedSearch = PageTemplateUpdateModel.SearchBy.Filtered;
+
+			PagedData<ContentPage> pagedData = new PagedData<ContentPage>();
+			pagedData.PageSize = 10;
+			pagedData.InitOrderBy(x => x.NavMenuText);
+			model.Page = pagedData;
+
+			return PageTemplateUpdate(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult PageTemplateUpdate(PageTemplateUpdateModel model) {
+			PagedData<ContentPage> pagedData = model.Page;
+
+			if (!String.IsNullOrEmpty(model.SelectedTemplate)) {
+				List<Guid> lstUpd = pagedData.DataSource.Where(x => x.Selected).Select(x => x.Root_ContentID).ToList();
+
+				if (lstUpd.Any()) {
+					pageHelper.BulkUpdateTemplate(this.SiteID, lstUpd, model.SelectedTemplate);
+
+					//return RedirectToAction("PageTemplateUpdate");
+				}
+
+				model.SelectedTemplate = String.Empty;
+			}
+
+			pagedData.InitOrderBy(x => x.NavMenuText);
+			pagedData.ToggleSort();
+			var srt = pagedData.ParseSort();
+
+			IQueryable<ContentPage> query = null;
+
+			if (model.SelectedSearch == PageTemplateUpdateModel.SearchBy.AllPages) {
+				query = pageHelper.GetAllLatestContentList(this.SiteID).AsQueryable();
+			} else {
+				if (!model.ParentPageID.HasValue) {
+					query = pageHelper.GetTopNavigation(this.SiteID, false).AsQueryable();
+				} else {
+					query = pageHelper.GetParentWithChildNavigation(this.SiteID, model.ParentPageID.Value, false).AsQueryable();
+				}
+			}
+
+			query = query.SortByParm<ContentPage>(srt.SortField, srt.SortDirection);
+			pagedData.DataSource = query.ToList();
+
+			pagedData.TotalRecords = pagedData.DataSource.Count();
+			pagedData.PageSize = 1 + (pagedData.TotalRecords * 2);
+
+			ModelState.Clear();
+
+			return View(model);
+		}
+
+		[HttpGet]
 		public ActionResult CategoryIndex() {
 			PagedData<ContentCategory> model = new PagedData<ContentCategory>();
 			model.PageSize = -1;
@@ -2349,14 +2407,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return View("RoleAddEdit", model);
 		}
 
-		protected void LoadSiteTemplateList() {
-			ViewBag.SiteTemplateList = cmsHelper.Templates;
-		}
-
 		[HttpGet]
 		public ActionResult SiteTemplateUpdate() {
 			SiteTemplateUpdateModel model = new SiteTemplateUpdateModel();
-			LoadSiteTemplateList();
 
 			ContentPage pageHome = pageHelper.FindHome(this.SiteID, true);
 			ContentPage pageIndex = null;
@@ -2379,8 +2432,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult SiteTemplateUpdate(SiteTemplateUpdateModel model) {
-			LoadSiteTemplateList();
-
 			ContentPage pageHome = pageHelper.FindHome(this.SiteID, true);
 			ContentPage pageIndex = null;
 

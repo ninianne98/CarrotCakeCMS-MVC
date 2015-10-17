@@ -1,0 +1,174 @@
+﻿@model PageTemplateUpdateModel
+
+@{
+	ViewBag.Title = "PBulk Apply Templates/Skins - Pages ";
+}
+
+<script type="text/javascript">
+	function CheckTheBoxes() {
+		checkGridBoxes('contentIndex');
+	}
+
+	function UncheckTheBoxes() {
+		uncheckGridBoxes('contentIndex');
+	}
+</script>
+
+<div>
+	<table style="width: 625px;">
+		<tr>
+			<td style="width: 48%;">
+				<a href="@SiteFilename.PageIndexURL">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/table.png" alt="View Page Index" title="View Page Index" />
+					View Page Index
+				</a>
+			</td>
+			<td>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+			<td style="width: 48%;">
+				<a href="@SiteFilename.PageTemplateUpdateURL">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/overlays.png" alt="Apply Skins" title="Bulk Apply Templates/Skins" />
+					Bulk Apply Templates/Skins
+				</a>
+			</td>
+		</tr>
+
+		<tr>
+			<td style="width: 48%;">
+				<a href="@SiteFilename.PageAddEditURL">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add as WYSIWYG" />
+					Add Page (with HTML editor)
+				</a>
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td style="width: 48%;">
+				<a href="@String.Format("{0}?mode=raw", SiteFilename.PageAddEditURL)">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/script_add.png" alt="Add" title="Add as Plain Text" />
+					Add Page (as plain text)
+				</a>
+			</td>
+		</tr>
+	</table>
+</div>
+<br />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "contentIndex" })) {
+	@Html.AntiForgeryToken()
+
+	var grid = CarrotWeb.CarrotWebGrid<ContentPage>(Model.Page);
+
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix ui-widget-content ui-corner-all" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.HtmlFormId = "contentIndex";
+	grid.PageSizeExternal = true;
+	grid.UseDataPage = false;
+	grid.ConfigName(Html.NameFor(x => x.Page.DataSource));
+
+	<table>
+		<tr>
+			<td class="tablecaption">
+				show content:
+			</td>
+			<td>
+				<div class="jqradioset">
+					@Html.RadioButtonFor(i => i.SelectedSearch, PageIndexModel.SearchBy.Filtered, new { GroupName = "rdoSelectedSearch", id = "rdoSelectedSearch1", onclick = "this.form.submit();" })
+					<label for="rdoSelectedSearch1">Show Filtered</label>
+
+					@Html.RadioButtonFor(i => i.SelectedSearch, PageIndexModel.SearchBy.AllPages, new { GroupName = "rdoSelectedSearch", id = "rdoSelectedSearch2", onclick = "this.form.submit();" })
+					<label for="rdoSelectedSearch2">Show All</label>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+	if (Model.SelectedSearch == PageIndexModel.SearchBy.Filtered) {
+		<table>
+			<tr>
+				<td class="tablecaption">
+					page filter:
+					<br />
+				</td>
+				<td>
+					<input type="submit" name="btnFilter" value="Filter" id="btnFilter" />
+				</td>
+				<td>
+					&nbsp;&nbsp;
+				</td>
+				<td>
+					<!-- parent page plugin-->
+					@{
+		var drill = new SitePageDrillDownModel {
+			FieldName = Html.NameFor(m => m.ParentPageID).ToString(),
+			CurrentPageID = Guid.Empty,
+			SelectedPageID = Model.ParentPageID
+		};
+					}
+
+					@Html.Partial("_SitePageDrillDown", drill)
+				</td>
+			</tr>
+		</table>
+	} else {
+		<p>
+			<input id="btnChangePage" type="submit" value="Change Page Size" name="btnChangePage">
+			@Html.DropDownListFor(m => m.Page.PageSize, new SelectList(Model.PageSizes.Select(x => new { Value = x, Text = x }), "Value", "Text"))
+		</p>
+	}
+
+	<table>
+		<tr>
+			<td class="tablecaption">
+				template to apply to selected pages:
+			</td>
+			<td>
+				@Html.DropDownListFor(model => Model.SelectedTemplate, new SelectList(Model.SiteTemplateList, "TemplatePath", "Caption"), "[Select Template]")
+			</td>
+		</tr>
+	</table>
+	<br />
+	<div>
+		<input type="submit" name="btnSaveMapping" value="Save" id="btnSaveMapping" />
+	</div>
+
+	<p>
+		<br />
+	</p>
+	<p>
+		<input type="button" value="Check All" onclick="CheckTheBoxes()" />&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" value="Uncheck All" onclick="UncheckTheBoxes()" />
+	</p>
+
+	<p>
+		@String.Format("{0} total records", grid.DataPage.TotalRecords)
+	</p>
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+
+				@grid.FormFieldFor(i => i.Selected, GridFormFieldType.Checkbox)
+				@grid.FormFieldFor(i => i.Root_ContentID, GridFormFieldType.Hidden)
+			</text>
+		})
+		.AddColumn(x => x.TemplateFile, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.NavMenuText, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.FileName, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+
+		.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Active",
+			AlternateTextFalse = "Inactive",
+			Sortable = true
+		});
+
+		<div class="tablezone">
+			@grid.OutputHtmlBody()
+		</div>
+}

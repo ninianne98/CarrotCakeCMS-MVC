@@ -876,6 +876,7 @@
     <Content Include="Views\Templates\citrus-island\post.cshtml" />
     <Content Include="Views\CmsAdmin\_PublicValidError.cshtml" />
     <Content Include="Views\CmsAdmin\WidgetTime.cshtml" />
+    <Content Include="Views\CmsAdmin\PageTemplateUpdate.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -903,6 +904,7 @@
     <Compile Include="Models\FileUpModel.cs" />
     <Compile Include="Models\PageChildSortModel.cs" />
     <Compile Include="Models\PageHistoryModel.cs" />
+    <Compile Include="Models\PageTemplateUpdateModel.cs" />
     <Compile Include="Models\PostCommentModel.cs" />
     <Compile Include="Models\PostIndexModel.cs" />
     <Compile Include="Models\PageIndexModel.cs" />

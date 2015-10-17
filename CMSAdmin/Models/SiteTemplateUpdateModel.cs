@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Carrotware.CMS.Core;
+using System;
+using System.Collections.Generic;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -13,6 +15,15 @@
 namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 	public class SiteTemplateUpdateModel {
+
+		public SiteTemplateUpdateModel() {
+			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+				this.SiteTemplateList = cmsHelper.Templates;
+			}
+		}
+
+		public List<CMSTemplate> SiteTemplateList { get; set; }
+
 		public string HomePageLink { get; set; }
 		public string HomePageTitle { get; set; }
 		public string HomePage { get; set; }
