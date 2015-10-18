@@ -241,10 +241,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					string uploadedFileName = postedFile.FileName;
 
 					if (!(from b in helpFile.BlockedTypes
-						  where uploadedFileName.ToLower().Contains("." + b.ToLower())
-						  select b).Any()) {
+						 where uploadedFileName.ToLower().EndsWith(String.Format(".{0}", b).ToLower())
+						 select b).Any()) {
 						if (this.EscapeSpaces) {
 							uploadedFileName = uploadedFileName.Replace(" ", "-");
+							uploadedFileName = uploadedFileName.Replace("_", "-");
 							uploadedFileName = uploadedFileName.Replace("+", "-");
 							uploadedFileName = uploadedFileName.Replace("%20", "-");
 						}
@@ -258,7 +259,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 				}
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("fileupload", ex);
-				throw ex;
+				throw;
 			}
 
 			return String.Empty;
