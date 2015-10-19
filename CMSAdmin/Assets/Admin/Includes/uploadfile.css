@@ -83,7 +83,7 @@
 	margin-right: 5px;
 }
 
-.ajax-file-upload {
+.ajax-file-upload, .ajax-file-upload-none {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 16px;
 	font-weight: bold;
@@ -111,7 +111,6 @@
 	-webkit-box-shadow: 0 2px 0 0 #468b5e;
 	box-shadow: 0 2px 0 0 #468b5e;
 	vertical-align: middle;
-	display: none;
 }
 
 	.ajax-file-upload:hover {
@@ -120,6 +119,10 @@
 		-webkit-box-shadow: 0 2px 0 0 #7dad8e;
 		box-shadow: 0 2px 0 0 #7dad8e;
 	}
+
+.ajax-file-upload-none {
+	display: none;
+}
 
 .ajax-upload-dragdrop {
 	border: 2px dotted #A5A5C7;
@@ -130,11 +133,23 @@
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
-	margin: 5px 0;
-	padding: 10px 15px;
+	margin: 10px 0;
+	background: url('../images/cloud-up.png') no-repeat left center;
+	padding: 10px 5px 25px 64px;
+	font-size: 14pt;
 }
 
 	.ajax-upload-dragdrop:hover, .state-hover {
 		border: 2px solid #7dad8e;
 		color: #468b5e;
+	}
+
+	.ajax-upload-dragdrop span {
+		display: inline-block;
+		vertical-align: middle;
+		margin: 2px;
+		padding: 4px 0;
+		line-height: normal;
+		font-size: 14pt;
+		font-weight: bolder;
 	}

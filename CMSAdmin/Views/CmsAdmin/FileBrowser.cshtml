@@ -59,10 +59,14 @@
 			$("#fileuploader").uploadFile({
 				url: "@Url.Action("AjaxFileUpload", RouteConfig.AdminCtrlr)",
 				fileName: "@Html.IdFor(m => m.PostedFiles)",
-				maxFileSize: 10 * 1024 * 1024,
 				dragDrop: true,
 				multiple: true,
 				maxFileCount: -1,
+				maxFileSize: 8 * 1024 * 1024,
+
+				uploadButtonClass: "ajax-file-upload-none",
+				uploadStr: "  ",
+				dragDropStr: "<span>Drag files here to upload</span>",
 				statusBarWidth: 400,
 				dragdropWidth: 400,
 				showPreview: true,
@@ -75,15 +79,11 @@
 						'__RequestVerificationToken': $("[name='__RequestVerificationToken']").val(),
 						'@Html.NameFor(m => m.EscapeSpaces)': $('#@Html.IdFor(m => m.EscapeSpaces)').prop("checked")
 					};
-					//alert(JSON.stringify(data));
 					return data;
 				},
 
 				returnType: "json",
-				showDone: true /*,
-				afterUploadAll: function () {
-					alert("Done!");
-				}*/
+				showDone: true
 			});
 		});
 	</script>
@@ -226,12 +226,12 @@
 			<p>
 				@Html.CheckBoxFor(m => m.EscapeSpaces)
 				@Html.LabelFor(m => m.EscapeSpaces)
+				<text> &nbsp;&nbsp;&nbsp;&nbsp; </text>
 				@if (Model.Thumbnails) {
 					<text>  [<a href="@Model.ThumbViewLink" id="lnkThumbView">Refresh</a>] <br /></text>
 				} else {
 					<text>  [<a href="@Model.FileViewLink" id="lnkFileview">Refresh</a>] <br /></text>
 				}
-				Drag files to upload here:<br />
 				<div id="fileuploader">Upload</div>
 				@Html.HiddenFor(m => m.QueryPath)
 			</p>

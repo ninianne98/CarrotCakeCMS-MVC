@@ -161,12 +161,16 @@
     <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen-scoped.css" />
     <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen-scoped2.css" />
     <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen.css" />
+    <Content Include="Assets\Admin\Images\cloud-up.png" />
     <Content Include="Assets\iCheck\customized\grey-alt1%402x.png" />
     <Content Include="Assets\iCheck\customized\grey-alt1.css" />
     <Content Include="Assets\iCheck\customized\grey-alt1.png" />
     <Content Include="Assets\iCheck\customized\grey-alt2%402x.png" />
     <Content Include="Assets\iCheck\customized\grey-alt2.css" />
     <Content Include="Assets\iCheck\customized\grey-alt2.png" />
+    <Content Include="Assets\iCheck\customized\grey-alt3%402x.png" />
+    <Content Include="Assets\iCheck\customized\grey-alt3.css" />
+    <Content Include="Assets\iCheck\customized\grey-alt3.png" />
     <Content Include="Assets\iCheck\customized\_all.css" />
     <Content Include="Assets\iCheck\iCheck.css" />
     <Content Include="Assets\iCheck\flat\aero%402x.png" />
@@ -880,6 +884,8 @@
     <Content Include="Views\CmsAdmin\BlogPostTemplateUpdate.cshtml" />
     <Content Include="Views\CmsAdmin\_blogIndexLinks.cshtml" />
     <Content Include="Views\CmsAdmin\_pageIndexLinks.cshtml" />
+    <Content Include="Assets\iCheck\customized\grey-alt2%402x.pdn" />
+    <Content Include="Assets\iCheck\customized\grey-alt3%402x.pdn" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
