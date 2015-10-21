@@ -33,12 +33,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					Dictionary<string, float> dictTemplates = null;
 
 					dictTemplates = pageHelper.GetPopularTemplateList(SiteData.CurrentSiteID, ContentPageType.PageType.ContentEntry);
-					if (dictTemplates.Count > 0 && dictTemplates.First().Value >= iThird) {
+					if (dictTemplates.Any() && dictTemplates.First().Value >= iThird) {
 						try { this.PageTemplate = dictTemplates.First().Key; } catch { }
 					}
 
 					dictTemplates = pageHelper.GetPopularTemplateList(SiteData.CurrentSiteID, ContentPageType.PageType.BlogEntry);
-					if (dictTemplates.Count > 0) {
+					if (dictTemplates.Any()) {
 						try { this.PostTemplate = dictTemplates.First().Key; } catch { }
 					}
 				}
@@ -375,7 +375,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		private int iAccessCounter = 0;
 
 		protected BasicContentData GetFileInfoFromList(SiteData site, string sFilename) {
-			if (this.Content == null || this.Content.Count < 1 || iAccessCounter % 25 == 0) {
+			if (this.Content == null || !this.Content.Any() || iAccessCounter % 25 == 0) {
 				this.Content = site.GetFullSiteFileList();
 				iAccessCounter = 0;
 			}

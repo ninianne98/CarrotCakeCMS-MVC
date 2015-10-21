@@ -146,7 +146,7 @@ namespace Carrotware.CMS.Core {
 
 		public static bool HasAdminModules() {
 			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
-				return cmsHelper.AdminModules.Count > 0;
+				return cmsHelper.AdminModules.Any();
 			}
 		}
 
@@ -804,7 +804,7 @@ namespace Carrotware.CMS.Core {
 					bCached = false;
 				}
 
-				if ((SiteList.Count > 0) && !bCached) {
+				if ((SiteList.Any()) && !bCached) {
 					_site = (from ss in SiteList
 							 where ss.DomainName == DomainName
 							 select ss).FirstOrDefault();

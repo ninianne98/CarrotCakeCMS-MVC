@@ -20,7 +20,7 @@ namespace Carrotware.CMS.Interface {
 		public static string GetParmValue(Dictionary<string, string> parmDictionary, string sKey) {
 			string ret = null;
 
-			if (parmDictionary.Count > 0) {
+			if (parmDictionary.Any()) {
 				ret = (from c in parmDictionary
 					   where c.Key.ToLower() == sKey.ToLower()
 					   select c.Value).FirstOrDefault();
@@ -32,7 +32,7 @@ namespace Carrotware.CMS.Interface {
 		public static string GetParmValue(Dictionary<string, string> parmDictionary, string sKey, string sDefault) {
 			string ret = null;
 
-			if (parmDictionary.Count > 0) {
+			if (parmDictionary.Any()) {
 				ret = (from c in parmDictionary
 					   where c.Key.ToLower() == sKey.ToLower()
 					   select c.Value).FirstOrDefault();
@@ -57,7 +57,7 @@ namespace Carrotware.CMS.Interface {
 
 			List<string> ret = new List<string>();
 
-			if (parmDictionary.Count > 0) {
+			if (parmDictionary.Any()) {
 				ret = (from c in parmDictionary
 					   where c.Key.ToLower().StartsWith(sKey)
 					   select c.Value).ToList();

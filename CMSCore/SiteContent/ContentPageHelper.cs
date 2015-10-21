@@ -892,7 +892,7 @@ namespace Carrotware.CMS.Core {
 													 && ct.IsLatestVersion != true
 													select ct);
 
-			if (lstDel.Count > 0) {
+			if (lstDel.Any()) {
 				db.carrot_Contents.DeleteBatch(queryCont);
 				db.SubmitChanges();
 			}

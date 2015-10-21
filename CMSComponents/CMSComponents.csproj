@@ -87,6 +87,7 @@
     <Compile Include="BaseToolboxComponent.cs" />
     <Compile Include="BaseTwoPartCmsComponent.cs" />
     <Compile Include="BaseCmsComponent.cs" />
+    <Compile Include="BreadCrumbNavigation.cs" />
     <Compile Include="CarrotCakeHtml.cs" />
     <Compile Include="ContentPageComponents.cs" />
     <Compile Include="ContentPlainText.cs" />

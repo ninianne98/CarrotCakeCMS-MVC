@@ -75,8 +75,13 @@
 			<h1 id="logo"><a href="~/">@ViewBag.SiteName</a> </h1>
 			<h2 id="slogan">@CmsPage.TheSite.SiteTagline</h2>
 		</div>
-		<div id="menu-wrapper">
-			@CarrotWeb.RenderTwoPartControlBody(nav)
+		<div>
+			<div id="menu-wrapper">
+				@CarrotWeb.RenderTwoPartControlBody(nav)
+			</div>
+			<div>
+				@CarrotCakeHtml.GetBreadCrumbNavigation("green")
+			</div>
 		</div>
 		<div id="sidebar">
 			<div>

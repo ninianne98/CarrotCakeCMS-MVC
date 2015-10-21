@@ -255,6 +255,7 @@ namespace Carrotware.CMS.Core {
 			if (!(SecurityData.IsSiteEditor || SecurityData.IsAdmin)) {
 				return false;
 			}
+
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
 				// by this point, the user is probably an editor, make sure they have rights to this site
 				IQueryable<Guid> lstSiteIDs = (from l in _db.carrot_UserSiteMappings
@@ -262,9 +263,7 @@ namespace Carrotware.CMS.Core {
 													&& l.SiteID == siteID
 											   select l.SiteID);
 
-				if (lstSiteIDs.Count() > 0) {
-					return true;
-				}
+				return lstSiteIDs.Any();
 			}
 
 			return false;

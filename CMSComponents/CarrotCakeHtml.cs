@@ -438,6 +438,19 @@ namespace Carrotware.CMS.UI.Components {
 			};
 		}
 
+		public static BreadCrumbNavigation GetBreadCrumbNavigation() {
+			return new BreadCrumbNavigation {
+				ContentPage = CmsPage.ThePage
+			};
+		}
+
+		public static BreadCrumbNavigation GetBreadCrumbNavigation(string selectedClass) {
+			return new BreadCrumbNavigation {
+				ContentPage = CmsPage.ThePage,
+				CssSelected = selectedClass
+			};
+		}
+
 		public static SiteCanonicalURL GetSiteCanonicalURL() {
 			return new SiteCanonicalURL {
 				ContentPage = CmsPage.ThePage

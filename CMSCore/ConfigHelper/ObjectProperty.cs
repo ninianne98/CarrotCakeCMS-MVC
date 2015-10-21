@@ -157,7 +157,7 @@ namespace Carrotware.CMS.Core {
 							// since this is a multi selected capable field, look for anything that starts with the
 							// field name and has the delimeter trailing
 
-							if (lstItmVals.Count > 0) {
+							if (lstItmVals.Any()) {
 								foreach (var v in dp.Options) {
 									v.Selected = (from p in lstItmVals
 												  where p.KeyValue == v.Value

@@ -151,7 +151,7 @@ namespace Carrotware.Web.UI.Components {
 						IEnumerable<DateTime> copyRows = (from c in dates
 														  where c == cellDate.Date
 														  select c);
-						if (copyRows.Count() > 0) {
+						if (copyRows.Any()) {
 							sClass = sClass + "sel";
 						}
 					}

@@ -25,7 +25,7 @@ namespace Carrotware.CMS.UI.Components {
 			if (!String.IsNullOrEmpty(TextContent)) {
 				List<EmailReplace> _mail = FindEmails(TextContent);
 
-				if (_mail.Count > 0) {
+				if (_mail.Any()) {
 					StringBuilder sb = new StringBuilder(TextContent);
 					foreach (EmailReplace m in _mail.OrderByDescending(x => x.Length)) {
 						sb.Replace(m.Email, m.MungedEmail);

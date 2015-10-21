@@ -49,7 +49,7 @@ namespace Carrotware.CMS.UI.Components {
 		public override void LoadData() {
 			base.LoadData();
 
-			if (this.PublicParmValues.Count > 0) {
+			if (this.PublicParmValues.Any()) {
 				this.SnippetID = new Guid(GetParmValue("SnippetID", Guid.Empty.ToString()));
 			}
 		}

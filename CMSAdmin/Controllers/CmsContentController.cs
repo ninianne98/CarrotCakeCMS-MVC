@@ -96,13 +96,37 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 
 			if (_page != null && _page.ThePage.Root_ContentID != Guid.Empty) {
+				DateTime dtModified = _page.TheSite.ConvertSiteTimeToLocalServer(_page.ThePage.EditDate);
+				string strModifed = dtModified.ToString("r");
+				Response.AppendHeader("Last-Modified", strModifed);
+				Response.Cache.SetLastModified(dtModified);
+
+				DateTime dtExpire = DateTime.Now.AddSeconds(15);
+
+				if (User.Identity.IsAuthenticated) {
+					Response.Cache.SetNoServerCaching();
+					Response.Cache.SetCacheability(HttpCacheability.NoCache);
+					dtExpire = DateTime.Now.AddMinutes(-10);
+					Response.Cache.SetExpires(dtExpire);
+				} else {
+					Response.Cache.SetExpires(dtExpire);
+				}
+
 				return View(DisplayTemplateFile);
 			} else {
-				string sFileRequested = HttpContext.Request.Path;
+				string sFileRequested = Request.Path;
+
+				DateTime dtModified = DateTime.Now.Date;
+				string strModifed = dtModified.ToString("r");
+				Response.AppendHeader("Last-Modified", strModifed);
+				Response.Cache.SetLastModified(dtModified);
 
 				if (sFileRequested.Length < 2 || sFileRequested.ToLower() == SiteData.DefaultDirectoryFilename) {
 					return View("_EmptyHome");
 				} else {
+					Response.StatusCode = 404;
+					Response.AppendHeader("Status", "HTTP/1.1 404 Object Not Found");
+
 					return HttpNotFound();
 				}
 			}

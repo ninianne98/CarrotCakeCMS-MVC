@@ -122,7 +122,7 @@ namespace Carrotware.CMS.Core {
 		public List<SiteMapOrder> GetChildPages(Guid siteID, Guid? parentID, Guid contentID) {
 			List<vw_carrot_Content> lstOtherPages = CompiledQueries.GetOtherNotPage(db, siteID, contentID, parentID).ToList();
 
-			if (lstOtherPages.Count < 1 && parentID == Guid.Empty) {
+			if (!lstOtherPages.Any() && parentID == Guid.Empty) {
 				lstOtherPages = CompiledQueries.TopLevelPages(db, siteID, false).ToList();
 			}
 

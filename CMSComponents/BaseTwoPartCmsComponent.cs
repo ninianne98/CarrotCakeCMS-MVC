@@ -15,7 +15,7 @@ using System.Web;
 
 namespace Carrotware.CMS.UI.Components {
 
-	public abstract class BaseTwoPartCmsComponent : BaseCmsComponent, ICmsComponent, ITwoPartWebComponent {
+	public abstract class BaseTwoPartCmsComponent : BaseCmsComponent, ICmsChildrenComponent, ICmsMainComponent, ITwoPartWebComponent {
 
 		public virtual string GetBody() {
 			TweakData();

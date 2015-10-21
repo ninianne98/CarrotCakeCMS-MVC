@@ -2,7 +2,6 @@
 using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -18,7 +17,7 @@ using System.Text;
 
 namespace Carrotware.CMS.UI.Components {
 
-	public abstract class BaseCmsComponent : BaseWebComponent, ICmsComponent {
+	public abstract class BaseCmsComponent : BaseWebComponent, ICmsChildrenComponent, ICmsMainComponent {
 		protected SiteNavHelper navHelper = new SiteNavHelper();
 
 		public BaseCmsComponent()
@@ -31,7 +30,6 @@ namespace Carrotware.CMS.UI.Components {
 			this.CssHasChildren = "sub";
 		}
 
-		[DefaultValue(false)]
 		public virtual bool MultiLevel {
 			get {
 				return false;
@@ -94,65 +92,18 @@ namespace Carrotware.CMS.UI.Components {
 			return output;
 		}
 
-		protected string GetParentPageName() {
-			SiteNav nav = GetParentPage();
-
-			return nav.FileName.ToLower();
-		}
-
-		protected bool AreFilenamesSame(string sParm1, string sParm2) {
-			if (sParm1 == null || sParm2 == null) {
-				return false;
-			}
-
-			return (sParm1.ToLower() == sParm2.ToLower()) ? true : false;
-		}
-
-		protected List<SiteNav> GetPageNavTree() {
-			return navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, SiteData.AlternateCurrentScriptName, !SecurityData.IsAuthEditor);
-		}
-
-		protected SiteNav GetParentPage() {
-			SiteNav pageNav = navHelper.GetParentPageNavigation(SiteData.CurrentSiteID, SiteData.AlternateCurrentScriptName);
-
-			//assign bogus page name for comp purposes
-			if (pageNav == null) {
-				pageNav = new SiteNav();
-				pageNav.Root_ContentID = Guid.Empty;
-				pageNav.FileName = "/##/";
-				pageNav.TemplateFile = "/##/";
-			}
-
-			return pageNav;
-		}
-
-		protected SiteNav GetCurrentPage() {
-			SiteNav pageNav = navHelper.FindByFilename(SiteData.CurrentSiteID, SiteData.AlternateCurrentScriptName);
-			//assign bogus page name for comp purposes
-			if (pageNav == null) {
-				pageNav = new SiteNav();
-				pageNav.Root_ContentID = Guid.Empty;
-				pageNav.FileName = "/##/##/";
-				pageNav.TemplateFile = "/##/##/";
-			}
-
-			pageNav.SiteID = SiteData.CurrentSiteID;
-
-			return pageNav;
-		}
-
 		protected string ParentFileName { get; set; }
 
 		private int iItemNumber = 0;
 
 		protected virtual StringBuilder WriteTopLevel(StringBuilder output) {
 			List<SiteNav> lstNav = GetTopNav();
-			SiteNav parentPageNav = GetParentPage();
-			List<SiteNav> lstNavTree = GetPageNavTree().OrderByDescending(x => x.NavOrder).ToList();
+			SiteNav parentPageNav = ControlUtilities.GetParentPage();
+			List<SiteNav> lstNavTree = ControlUtilities.GetPageNavTree().OrderByDescending(x => x.NavOrder).ToList();
 
 			this.ParentFileName = parentPageNav.FileName.ToLower();
 
-			if (lstNav != null && lstNav.Count > 0) {
+			if (lstNav != null && lstNav.Any()) {
 				output.AppendLine();
 				WriteListPrefix(output);
 
@@ -168,7 +119,7 @@ namespace Carrotware.CMS.UI.Components {
 
 					string sChild = " ";
 					if (this.MultiLevel) {
-						if (cc != null && cc.Count > 0) {
+						if (cc != null && cc.Any()) {
 							sChild = " level1-haschildren " + this.CssHasChildren + " ";
 						}
 						sThis1CSS = " level1 " + sItemCSS + sChild;
@@ -178,7 +129,7 @@ namespace Carrotware.CMS.UI.Components {
 					if (SiteData.IsFilenameCurrentPage(c1.FileName)
 						|| (c1.NavOrder == 0 && SiteData.CurrentScriptName.Length < 2)
 						|| (IsContained(lstNavTree, c1.Root_ContentID) != null)
-						|| AreFilenamesSame(c1.FileName, this.ParentFileName)) {
+						|| ControlUtilities.AreFilenamesSame(c1.FileName, this.ParentFileName)) {
 						sThis1CSS = sThis1CSS + " " + this.CssSelected;
 					}
 					if (lstNav.Where(x => x.NavOrder < 0).Count() > 0) {
@@ -193,7 +144,7 @@ namespace Carrotware.CMS.UI.Components {
 					iItemNumber++;
 					output.AppendLine("<li id=\"listitem" + iItemNumber.ToString() + "\" class=\"" + sThis1CSS + "\"><a href=\"" + c1.FileName + "\">" + c1.NavMenuText + "</a>");
 
-					if (this.MultiLevel && cc != null && cc.Count > 0) {
+					if (this.MultiLevel && cc != null && cc.Any()) {
 						LoadChildren(output, c1.Root_ContentID, sItemCSS, iItemNumber, 2);
 					}
 
@@ -213,7 +164,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			string sThis2CSS = sItemCSS;
 
-			if (lstNav != null && lstNav.Count > 0) {
+			if (lstNav != null && lstNav.Any()) {
 				output.AppendLine();
 				output.AppendLine("<ul id=\"listitem" + iParent.ToString() + "-childlist\" class=\"childlist childlevel" + iLevel + " " + this.CssULClassLower + "\">");
 
@@ -222,7 +173,7 @@ namespace Carrotware.CMS.UI.Components {
 
 					if (this.MultiLevel) {
 						string sChild = " ";
-						if (cc != null && cc.Count > 0) {
+						if (cc != null && cc.Any()) {
 							sChild = " level" + iLevel + "-haschildren " + this.CssHasChildren + " ";
 						}
 						sThis2CSS = " level" + iLevel + " " + sItemCSS + sChild;
@@ -230,7 +181,8 @@ namespace Carrotware.CMS.UI.Components {
 						sThis2CSS = sItemCSS;
 					}
 
-					if (SiteData.IsFilenameCurrentPage(c2.FileName) || AreFilenamesSame(c2.FileName, this.ParentFileName)) {
+					if (SiteData.IsFilenameCurrentPage(c2.FileName)
+							|| ControlUtilities.AreFilenamesSame(c2.FileName, this.ParentFileName)) {
 						sThis2CSS = sThis2CSS + " " + this.CssSelected;
 					}
 					sThis2CSS = (sThis2CSS + " child-nav").Replace("   ", " ").Replace("  ", " ").Trim();
@@ -238,7 +190,7 @@ namespace Carrotware.CMS.UI.Components {
 					iItemNumber++;
 					output.AppendLine("<li id=\"listitem" + iItemNumber.ToString() + "\" class=\"" + sThis2CSS + "\"><a href=\"" + c2.FileName + "\">" + c2.NavMenuText + "</a>");
 
-					if (cc != null && cc.Count > 0) {
+					if (cc != null && cc.Any()) {
 						LoadChildren(output, c2.Root_ContentID, sItemCSS, iItemNumber, iLevel + 1);
 					}
 

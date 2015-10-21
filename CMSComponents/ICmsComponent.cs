@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Carrotware.CMS.Core;
+using System;
+using System.Collections.Generic;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -12,22 +14,26 @@
 
 namespace Carrotware.CMS.UI.Components {
 
-	public interface ICmsComponent {
-		string CssClass { get; set; }
+	public interface ICmsChildrenComponent {
 		string CssHasChildren { get; set; }
 		string CssItem { get; set; }
-		string CssSelected { get; set; }
 		string CssULClassLower { get; set; }
 		string CssULClassTop { get; set; }
-		string ElementId { get; set; }
-
-		System.Collections.Generic.List<Carrotware.CMS.Core.SiteNav> GetChildren(Guid rootContentID);
-
-		string GetHtml();
-
-		System.Collections.Generic.List<Carrotware.CMS.Core.SiteNav> GetTopNav();
 
 		bool MultiLevel { get; }
-		System.Collections.Generic.List<Carrotware.CMS.Core.SiteNav> NavigationData { get; set; }
+
+		List<SiteNav> GetChildren(Guid rootContentID);
+
+		List<SiteNav> GetTopNav();
+
+		List<SiteNav> NavigationData { get; set; }
+	}
+
+	//==============
+
+	public interface ICmsMainComponent {
+		string ElementId { get; set; }
+		string CssClass { get; set; }
+		string CssSelected { get; set; }
 	}
 }

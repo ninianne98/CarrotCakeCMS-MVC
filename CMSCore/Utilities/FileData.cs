@@ -172,7 +172,7 @@ namespace Carrotware.CMS.Core {
 				try {
 					if ((from b in MimeTypes
 						 where b.Key.ToLower() == f.FileExtension.ToLower()
-						 select b).Count() > 0) {
+						 select b).Any()) {
 						f.MimeType = (from b in MimeTypes
 									  where b.Key.ToLower() == f.FileExtension.ToLower()
 									  select b.Value).FirstOrDefault();
@@ -235,9 +235,9 @@ namespace Carrotware.CMS.Core {
 						f = GetFileInfo(sQuery, myFile);
 
 						try {
-							if ((from b in BlockedTypes
-								 where b.ToLower().Replace(".", "") == f.FileExtension.Replace(".", "")
-								 select b).Count() < 1) {
+							if (!(from b in BlockedTypes
+								  where b.ToLower().Replace(".", "") == f.FileExtension.Replace(".", "")
+								  select b).Any()) {
 								dsID.Add(f);
 							}
 						} catch (Exception ex) { }

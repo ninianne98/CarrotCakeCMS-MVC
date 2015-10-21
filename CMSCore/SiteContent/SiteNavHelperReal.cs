@@ -140,7 +140,7 @@ namespace Carrotware.CMS.Core {
 			SiteNav home = FindHome(siteID, false);
 			home.NavOrder = 0;
 
-			if (lstContent.Where(x => x.Root_ContentID == home.Root_ContentID).Count() < 1) {
+			if (!lstContent.Where(x => x.Root_ContentID == home.Root_ContentID).Any()) {
 				lstContent.Add(home);
 			}
 

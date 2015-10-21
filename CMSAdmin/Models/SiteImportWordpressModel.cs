@@ -38,12 +38,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					Dictionary<string, float> dictTemplates = null;
 
 					dictTemplates = pageHelper.GetPopularTemplateList(SiteData.CurrentSiteID, ContentPageType.PageType.ContentEntry);
-					if (dictTemplates.Count > 0 && dictTemplates.First().Value >= iThird) {
+					if (dictTemplates.Any() && dictTemplates.First().Value >= iThird) {
 						try { this.PageTemplate = dictTemplates.First().Key; } catch { }
 					}
 
 					dictTemplates = pageHelper.GetPopularTemplateList(SiteData.CurrentSiteID, ContentPageType.PageType.BlogEntry);
-					if (dictTemplates.Count > 0) {
+					if (dictTemplates.Any()) {
 						try { this.PostTemplate = dictTemplates.First().Key; } catch { }
 					}
 				}
@@ -338,7 +338,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 			this.Site.Comments.RemoveAll(r => r.ImportRootID == Guid.Empty);
 
-			if (this.Site.Comments.Count > 0) {
+			if (this.Site.Comments.Any()) {
 				sMsg += "<li>Imported Comments</li>";
 			}
 

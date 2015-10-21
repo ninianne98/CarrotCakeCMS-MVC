@@ -1,5 +1,6 @@
 ﻿using Carrotware.CMS.Core;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Web;
@@ -60,6 +61,59 @@ namespace Carrotware.CMS.UI.Components {
 
 		public static SiteNav IdentifyLinkAsInactive(SiteNav nav) {
 			return CMSConfigHelper.IdentifyLinkAsInactive(nav);
+		}
+
+		public static List<SiteNav> GetPageNavTree() {
+			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+				return navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, SiteData.AlternateCurrentScriptName, !SecurityData.IsAuthEditor);
+			}
+		}
+
+		public static SiteNav GetParentPage() {
+			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+				SiteNav pageNav = navHelper.GetParentPageNavigation(SiteData.CurrentSiteID, SiteData.AlternateCurrentScriptName);
+
+				//assign bogus page name for comp purposes
+				if (pageNav == null) {
+					pageNav = new SiteNav();
+					pageNav.Root_ContentID = Guid.Empty;
+					pageNav.FileName = "/##/";
+					pageNav.TemplateFile = "/##/";
+				}
+
+				return pageNav;
+			}
+		}
+
+		public static SiteNav GetCurrentPage() {
+			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+				SiteNav pageNav = navHelper.FindByFilename(SiteData.CurrentSiteID, SiteData.AlternateCurrentScriptName);
+				//assign bogus page name for comp purposes
+				if (pageNav == null) {
+					pageNav = new SiteNav();
+					pageNav.Root_ContentID = Guid.Empty;
+					pageNav.FileName = "/##/##/";
+					pageNav.TemplateFile = "/##/##/";
+				}
+
+				pageNav.SiteID = SiteData.CurrentSiteID;
+
+				return pageNav;
+			}
+		}
+
+		public static string GetParentPageName() {
+			SiteNav nav = ControlUtilities.GetParentPage();
+
+			return nav.FileName.ToLower();
+		}
+
+		public static bool AreFilenamesSame(string sParm1, string sParm2) {
+			if (sParm1 == null || sParm2 == null) {
+				return false;
+			}
+
+			return (sParm1.ToLower() == sParm2.ToLower()) ? true : false;
 		}
 	}
 

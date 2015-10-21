@@ -138,7 +138,7 @@ namespace Carrotware.CMS.DBUpdater {
 				lstMsgs2 = new List<DatabaseUpdateMessage>();
 			}
 
-			if (lstMsgs2.Count > 0) {
+			if (lstMsgs2.Any()) {
 				int iPad = lstMsgs1.Count;
 				lstMsgs2.ToList().ForEach(x => x.Order = (x.Order + iPad));
 
