@@ -49,7 +49,7 @@ namespace Carrotware.CMS.UI.Components {
 					lstNav = navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, SiteData.CurrentSite.Blog_Root_ContentID.Value, !SecurityData.IsAuthEditor);
 
 					if (lstNav != null && lstNav.Any()) {
-						pageNav.NavOrder = lstNav.Count + 10;
+						pageNav.NavOrder = lstNav.Max(x => x.NavOrder) + 100;
 						lstNav.Add(pageNav);
 					}
 				} else {

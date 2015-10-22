@@ -225,6 +225,36 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		private List<SiteNav> _breadcrumbs = null;
+
+		public List<SiteNav> BreadCrumbs {
+			get {
+				if (_breadcrumbs == null) {
+					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+						SiteNav pageNav = this.ThePage.GetSiteNav();
+
+						if (SiteData.CurretSiteExists && SiteData.CurrentSite.Blog_Root_ContentID.HasValue &&
+							pageNav.ContentType == ContentPageType.PageType.BlogEntry) {
+							_breadcrumbs = navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, SiteData.CurrentSite.Blog_Root_ContentID.Value, !SecurityData.IsAuthEditor);
+
+							if (_breadcrumbs != null && _breadcrumbs.Any()) {
+								pageNav.NavOrder = _breadcrumbs.Max(x => x.NavOrder) + 100;
+								_breadcrumbs.Add(pageNav);
+							}
+						} else {
+							_breadcrumbs = navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, pageNav.Root_ContentID, !SecurityData.IsAuthEditor);
+						}
+						_breadcrumbs.RemoveAll(x => x.ShowInSiteNav == false && x.ContentType == ContentPageType.PageType.ContentEntry);
+					}
+					if (_breadcrumbs != null) {
+						_breadcrumbs = TweakData(_breadcrumbs);
+					}
+				}
+
+				return _breadcrumbs;
+			}
+		}
+
 		public bool NavIsCurrentPage(SiteNav nav) {
 			return this.ThePage.Root_ContentID == nav.Root_ContentID;
 		}
