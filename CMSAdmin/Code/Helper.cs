@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Carrotware.CMS.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -16,7 +17,34 @@ using System.Web.Mvc;
 
 namespace Carrotware.CMS.Mvc.UI.Admin {
 
-	public class Helper {
+	public static class Helper {
+
+		public enum ControlLocation {
+			PublicFooter,
+			PopupFooter,
+			MainFooter,
+		}
+
+		public static string GetAdminFooterView(ControlLocation CtrlKey) {
+			string sControlPath = String.Empty;
+			CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+
+			switch (CtrlKey) {
+				case ControlLocation.PublicFooter:
+					sControlPath = config.AdminFooterControls.ControlPathPublic;
+					break;
+
+				case ControlLocation.PopupFooter:
+					sControlPath = config.AdminFooterControls.ControlPathPopup;
+					break;
+
+				case ControlLocation.MainFooter:
+					sControlPath = config.AdminFooterControls.ControlPathMain;
+					break;
+			}
+
+			return sControlPath;
+		}
 
 		public static void HandleErrorDict(ModelStateDictionary stateDictionary, Dictionary<string, string> validationsDictionary) {
 			if (validationsDictionary.Any()) {

@@ -83,5 +83,14 @@
 			</div>
 		</div>
 	</div>
+
+	<div>
+		@{
+			string partialView = Helper.GetAdminFooterView(Helper.ControlLocation.PublicFooter);
+			if (!String.IsNullOrEmpty(partialView)) {
+				@Html.Partial(partialView)
+			}
+		}
+	</div>
 </body>
 </html>

@@ -278,5 +278,14 @@
 		</div>
 	</div>
 	@RenderSection("footer", required: false)
+
+	<div>
+		@{
+			string partialView = Helper.GetAdminFooterView(Helper.ControlLocation.MainFooter);
+			if (!String.IsNullOrEmpty(partialView)) {
+				@Html.Partial(partialView)
+			}
+		}
+	</div>
 </body>
 </html>
