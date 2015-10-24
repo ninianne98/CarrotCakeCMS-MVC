@@ -377,9 +377,11 @@ namespace Carrotware.CMS.UI.Components {
 
 			if (SecurityData.IsAdmin || SecurityData.IsSiteEditor) {
 				if (SecurityData.AdvancedEditMode) {
-					sb.AppendLine(RenderPartialToString(SiteFilename.AdvancedEditHeadControlPath));
+					sb.AppendLine(RenderPartialToString(SiteFilename.AdvancedEditHeadViewPath));
 				}
 			}
+
+			sb.AppendLine(RenderPartialToString(SiteFilename.MainSiteSpecialViewHead));
 
 			return new HtmlString(sb.ToString());
 		}
@@ -391,17 +393,19 @@ namespace Carrotware.CMS.UI.Components {
 
 			if (SecurityData.IsAdmin || SecurityData.IsSiteEditor) {
 				if (SecurityData.AdvancedEditMode) {
-					sb.AppendLine(RenderPartialToString(SiteFilename.AdvancedEditControlPath));
+					sb.AppendLine(RenderPartialToString(SiteFilename.AdvancedEditViewPath));
 				} else {
 					if (CmsPage.ThePage.Root_ContentID == SiteData.CurrentSiteID && SiteData.IsPageReal) {
 						IsPageTemplate = true;
 					}
 
 					if (!SiteData.IsPageSampler && !IsPageTemplate) {
-						sb.AppendLine(RenderPartialToString(SiteFilename.EditNotifierControlPath));
+						sb.AppendLine(RenderPartialToString(SiteFilename.EditNotifierViewPath));
 					}
 				}
 			}
+
+			sb.AppendLine(RenderPartialToString(SiteFilename.MainSiteSpecialViewFoot));
 
 			return new HtmlString(sb.ToString());
 		}

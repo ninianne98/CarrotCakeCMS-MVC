@@ -188,20 +188,28 @@ namespace Carrotware.CMS.Core {
 			get { return SiteData.AdminFolderPath + "SiteImportWP"; }
 		}
 
-		public static string AdminModuleControlPath {
+		public static string AdminModuleViewPath {
 			get { return "~/Views/CmsContent/_AdminModule.cshtml"; }
 		}
 
-		public static string EditNotifierControlPath {
+		public static string EditNotifierViewPath {
 			get { return "~/Views/CmsContent/_EditNotifier.cshtml"; }
 		}
 
-		public static string AdvancedEditControlPath {
+		public static string AdvancedEditViewPath {
 			get { return "~/Views/CmsContent/_AdvancedEdit.cshtml"; }
 		}
 
-		public static string AdvancedEditHeadControlPath {
+		public static string AdvancedEditHeadViewPath {
 			get { return "~/Views/CmsContent/_AdvancedEditHead.cshtml"; }
+		}
+
+		public static string MainSiteSpecialViewHead {
+			get { return "~/Views/CmsContent/_SpecialHead.cshtml"; }
+		}
+
+		public static string MainSiteSpecialViewFoot {
+			get { return "~/Views/CmsContent/_SpecialFoot.cshtml"; }
 		}
 	}
 }

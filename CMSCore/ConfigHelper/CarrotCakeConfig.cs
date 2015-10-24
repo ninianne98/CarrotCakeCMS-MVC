@@ -67,6 +67,16 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		[ConfigurationProperty("PublicSite")]
+		public PublicSiteElement PublicSiteControls {
+			get {
+				return (PublicSiteElement)this["PublicSite"];
+			}
+			set {
+				this["PublicSite"] = value;
+			}
+		}
+
 		[ConfigurationProperty("OverrideConfigFile")]
 		public ConfigFileElement ConfigFileLocation {
 			get {
@@ -128,13 +138,6 @@ namespace Carrotware.CMS.Core {
 			get { return (bool)this["WriteErrorLog"]; }
 			set { this["WriteErrorLog"] = value; }
 		}
-
-		[Description("Parameter to aid/assist migration from older CMSs that used querystring parameters")]
-		[ConfigurationProperty("OldSiteQuerystring", DefaultValue = null, IsRequired = false)]
-		public String OldSiteQuerystring {
-			get { return (String)this["OldSiteQuerystring"]; }
-			set { this["OldSiteQuerystring"] = value; }
-		}
 	}
 
 	//==============================
@@ -168,22 +171,38 @@ namespace Carrotware.CMS.Core {
 	//==============================
 	public class AdminFooterElement : ConfigurationElement {
 
-		[ConfigurationProperty("ControlPathMain", DefaultValue = null, IsRequired = false)]
-		public String ControlPathMain {
-			get { return (String)this["ControlPathMain"]; }
-			set { this["ControlPathMain"] = value; }
+		[ConfigurationProperty("ViewPathMain", DefaultValue = null, IsRequired = false)]
+		public String ViewPathMain {
+			get { return (String)this["ViewPathMain"]; }
+			set { this["ViewPathMain"] = value; }
 		}
 
-		[ConfigurationProperty("ControlPathPopup", DefaultValue = null, IsRequired = false)]
-		public String ControlPathPopup {
-			get { return (String)this["ControlPathPopup"]; }
-			set { this["ControlPathPopup"] = value; }
+		[ConfigurationProperty("ViewPathPopup", DefaultValue = null, IsRequired = false)]
+		public String ViewPathPopup {
+			get { return (String)this["ViewPathPopup"]; }
+			set { this["ViewPathPopup"] = value; }
 		}
 
-		[ConfigurationProperty("ControlPathPublic", DefaultValue = null, IsRequired = false)]
-		public String ControlPathPublic {
-			get { return (String)this["ControlPathPublic"]; }
-			set { this["ControlPathPublic"] = value; }
+		[ConfigurationProperty("ViewPathPublic", DefaultValue = null, IsRequired = false)]
+		public String ViewPathPublic {
+			get { return (String)this["ViewPathPublic"]; }
+			set { this["ViewPathPublic"] = value; }
+		}
+	}
+
+	//==============================
+	public class PublicSiteElement : ConfigurationElement {
+
+		[ConfigurationProperty("ViewPathHeader", DefaultValue = null, IsRequired = false)]
+		public String ViewPathHeader {
+			get { return (String)this["ViewPathHeader"]; }
+			set { this["ViewPathHeader"] = value; }
+		}
+
+		[ConfigurationProperty("ViewPathFooter", DefaultValue = null, IsRequired = false)]
+		public String ViewPathFooter {
+			get { return (String)this["ViewPathFooter"]; }
+			set { this["ViewPathFooter"] = value; }
 		}
 	}
 }

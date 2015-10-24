@@ -38,7 +38,7 @@
 				longname: 'Insert Source Code',
 				author: 'CarrotWare',
 				authorurl: 'http://www.carrotware.com',
-				infourl: 'http://www.carrotware.com/carrotcake-cms.aspx',
+				infourl: 'http://www.carrotcakecms.com/',
 				version: "0.2"
 			};
 		}

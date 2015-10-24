@@ -886,6 +886,8 @@
     <Content Include="Views\CmsAdmin\_pageIndexLinks.cshtml" />
     <Content Include="Assets\iCheck\customized\grey-alt2%402x.pdn" />
     <Content Include="Assets\iCheck\customized\grey-alt3%402x.pdn" />
+    <Content Include="Views\CmsContent\_SpecialHead.cshtml" />
+    <Content Include="Views\CmsContent\_SpecialFoot.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

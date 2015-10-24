@@ -29,21 +29,27 @@
 							<xs:element name="Options">
 								<xs:complexType>
 									<xs:attribute name="WriteErrorLog" type="xs:boolean" use="optional" />
-									<xs:attribute name="OldSiteQuerystring" type="xs:string" use="optional" />
 								</xs:complexType>
 							</xs:element>
 							<xs:element name="AdminFooter">
 								<xs:complexType>
-									<xs:attribute name="ControlPathMain" type="xs:string" use="optional" />
-									<xs:attribute name="ControlPathPopup" type="xs:string" use="optional" />
-									<xs:attribute name="ControlPathPublic" type="xs:string" use="optional" />
+									<xs:attribute name="ViewPathMain" type="xs:string" use="optional" />
+									<xs:attribute name="ViewPathPopup" type="xs:string" use="optional" />
+									<xs:attribute name="ViewPathPublic" type="xs:string" use="optional" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PublicSite">
+								<xs:complexType>
+									<xs:attribute name="ViewPathHeader" type="xs:string" use="optional" />
+									<xs:attribute name="ViewPathFooter" type="xs:string" use="optional" />
 								</xs:complexType>
 							</xs:element>
 							<xs:element name="OverrideConfigFile">
 								<xs:complexType>
-									<xs:attribute name="TextContentProcessors" type="xs:string" use="optional" />
 									<xs:attribute name="SiteMapping" type="xs:string" use="optional" />
+									<xs:attribute name="TextContentProcessors" type="xs:string" use="optional" />
 									<xs:attribute name="TemplatePath" type="xs:string" use="optional" />
+									<xs:attribute name="PluginPath" type="xs:string" use="optional" />
 								</xs:complexType>
 							</xs:element>
 						</xs:sequence>

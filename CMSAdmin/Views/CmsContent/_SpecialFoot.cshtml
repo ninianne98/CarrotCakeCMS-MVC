@@ -1,0 +1,7 @@
+﻿@{
+	string partialView = Helper.InsertSpecialView(Helper.ViewLocation.PublicMainFooter);
+	if (!String.IsNullOrEmpty(partialView)) {
+		@Html.Partial(partialView)
+	}
+}
+

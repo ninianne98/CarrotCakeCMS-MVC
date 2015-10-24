@@ -19,31 +19,41 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 
 	public static class Helper {
 
-		public enum ControlLocation {
-			PublicFooter,
-			PopupFooter,
-			MainFooter,
+		public enum ViewLocation {
+			AdminPublicFooter,
+			AdminPopupFooter,
+			AdminMainFooter,
+			PublicMainFooter,
+			PublicMainHeader,
 		}
 
-		public static string GetAdminFooterView(ControlLocation CtrlKey) {
-			string sControlPath = String.Empty;
+		public static string InsertSpecialView(ViewLocation CtrlKey) {
+			string sViewPath = String.Empty;
 			CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
 
 			switch (CtrlKey) {
-				case ControlLocation.PublicFooter:
-					sControlPath = config.AdminFooterControls.ControlPathPublic;
+				case ViewLocation.AdminPublicFooter:
+					sViewPath = config.AdminFooterControls.ViewPathPublic;
 					break;
 
-				case ControlLocation.PopupFooter:
-					sControlPath = config.AdminFooterControls.ControlPathPopup;
+				case ViewLocation.AdminPopupFooter:
+					sViewPath = config.AdminFooterControls.ViewPathPopup;
 					break;
 
-				case ControlLocation.MainFooter:
-					sControlPath = config.AdminFooterControls.ControlPathMain;
+				case ViewLocation.AdminMainFooter:
+					sViewPath = config.AdminFooterControls.ViewPathMain;
+					break;
+
+				case ViewLocation.PublicMainHeader:
+					sViewPath = config.PublicSiteControls.ViewPathHeader;
+					break;
+
+				case ViewLocation.PublicMainFooter:
+					sViewPath = config.PublicSiteControls.ViewPathFooter;
 					break;
 			}
 
-			return sControlPath;
+			return sViewPath;
 		}
 
 		public static void HandleErrorDict(ModelStateDictionary stateDictionary, Dictionary<string, string> validationsDictionary) {

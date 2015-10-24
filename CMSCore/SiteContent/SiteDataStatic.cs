@@ -337,22 +337,6 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		private static string _siteQS = null;
-
-		public static string OldSiteQuerystring {
-			get {
-				if (_siteQS == null) {
-					_siteQS = String.Empty;
-					CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
-					if (config.ExtraOptions != null
-						&& !String.IsNullOrEmpty(config.ExtraOptions.OldSiteQuerystring)) {
-						_siteQS = config.ExtraOptions.OldSiteQuerystring.ToLower();
-					}
-				}
-				return _siteQS;
-			}
-		}
-
 		public static AspNetHostingPermissionLevel CurrentTrustLevel {
 			get {
 				foreach (AspNetHostingPermissionLevel trustLevel in

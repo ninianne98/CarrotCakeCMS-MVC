@@ -19,4 +19,4 @@
 		formatting patterns, RSS feed support for posts and pages, import and export of site content, and import of content from WordPress XML 
 		export files (tested against versions 2.9, 3.0, 3.4, and 3.5).</p>
 
-<p>To learn more about CarrotCake CMS, visit <a href="http://www.carrotware.com/carrotcake-cms.aspx" target="_blank">carrotcake cms</a>.</p>
+<p>To learn more about CarrotCake CMS, visit <a href="http://www.carrotcakecms.com/" target="_blank">carrotcake cms</a>.</p>

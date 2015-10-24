@@ -86,7 +86,7 @@
 
 	<div>
 		@{
-			string partialView = Helper.GetAdminFooterView(Helper.ControlLocation.PublicFooter);
+			string partialView = Helper.InsertSpecialView(Helper.ViewLocation.AdminPublicFooter);
 			if (!String.IsNullOrEmpty(partialView)) {
 				@Html.Partial(partialView)
 			}
