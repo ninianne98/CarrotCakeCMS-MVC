@@ -827,6 +827,9 @@
     <Content Include="Assets\telephasic\fonts\fontawesome-webfont.woff2" />
     <Content Include="Assets\telephasic\fonts\FontAwesome.otf" />
     <Content Include="App_Code\CmsHelpers.cshtml" />
+    <None Include="Assets\Admin\Includes\C3WebSecurityConfigSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Assets\Admin\Includes\C3WebConfigSchema.xsd">
       <SubType>Designer</SubType>
     </None>

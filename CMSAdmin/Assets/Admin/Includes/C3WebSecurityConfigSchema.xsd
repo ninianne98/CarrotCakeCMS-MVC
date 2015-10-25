@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"
+           elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<xs:element name="CarrotSecurity">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Settings">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="UserValidator">
+								<xs:complexType>
+									<xs:attribute name="AllowOnlyAlphanumericUserNames" type="xs:boolean" use="optional" />
+									<xs:attribute name="RequireUniqueEmail" type="xs:boolean" use="optional" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PasswordValidator">
+								<xs:complexType>
+									<xs:attribute name="RequiredLength" type="xs:int" use="optional" />
+									<xs:attribute name="RequireNonLetterOrDigit" type="xs:boolean" use="optional" />
+									<xs:attribute name="RequireDigit" type="xs:boolean" use="optional" />
+									<xs:attribute name="RequireLowercase" type="xs:boolean" use="optional" />
+									<xs:attribute name="RequireUppercase" type="xs:boolean" use="optional" />
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AdditionalSettings">
+								<xs:complexType>
+									<xs:attribute name="MaxFailedAccessAttemptsBeforeLockout" type="xs:int" use="optional" />
+									<xs:attribute name="DefaultAccountLockoutTimeSpan" type="xs:int" use="optional" />
+									<xs:attribute name="UserLockoutEnabledByDefault" type="xs:boolean" use="optional" />
+									<xs:attribute name="DataProtectionProviderAppName" type="xs:string" use="optional" />
+									<xs:attribute name="LoginPath" type="xs:string" use="optional" />
+									<xs:attribute name="ExpireTimeSpan" type="xs:int" use="optional" />
+									<xs:attribute name="ValidateInterval" type="xs:int" use="optional" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

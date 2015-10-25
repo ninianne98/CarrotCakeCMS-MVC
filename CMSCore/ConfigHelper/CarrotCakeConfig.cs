@@ -20,6 +20,17 @@ namespace Carrotware.CMS.Core {
 
 	[AspNetHostingPermissionAttribute(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 	[AspNetHostingPermissionAttribute(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
+	public class CarrotCakeSectionGroup : ConfigurationSectionGroup {
+
+		[ConfigurationProperty("Settings", IsRequired = true)]
+		public CarrotCakeConfig Settings {
+			get { return (CarrotCakeConfig)this.Sections["Settings"]; }
+		}
+	}
+
+	//===============
+	[AspNetHostingPermissionAttribute(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
+	[AspNetHostingPermissionAttribute(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal)]
 	[SecuritySafeCritical]
 	public class CarrotCakeConfig : ConfigurationSection {
 
