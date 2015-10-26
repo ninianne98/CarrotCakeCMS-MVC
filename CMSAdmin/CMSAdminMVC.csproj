@@ -171,6 +171,9 @@
     <Content Include="Assets\iCheck\customized\grey-alt3%402x.png" />
     <Content Include="Assets\iCheck\customized\grey-alt3.css" />
     <Content Include="Assets\iCheck\customized\grey-alt3.png" />
+    <Content Include="Assets\iCheck\customized\grey-alt4%402x.png" />
+    <Content Include="Assets\iCheck\customized\grey-alt4.css" />
+    <Content Include="Assets\iCheck\customized\grey-alt4.png" />
     <Content Include="Assets\iCheck\customized\_all.css" />
     <Content Include="Assets\iCheck\iCheck.css" />
     <Content Include="Assets\iCheck\flat\aero%402x.png" />
@@ -891,6 +894,7 @@
     <Content Include="Assets\iCheck\customized\grey-alt3%402x.pdn" />
     <Content Include="Views\CmsContent\_SpecialHead.cshtml" />
     <Content Include="Views\CmsContent\_SpecialFoot.cshtml" />
+    <Content Include="Assets\iCheck\customized\grey-alt4%402x.pdn" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

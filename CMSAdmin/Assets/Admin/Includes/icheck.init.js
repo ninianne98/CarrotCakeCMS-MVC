@@ -1,10 +1,10 @@
-$(document).ready(function () {
+function initCheckboxStyle() {
 	$('input').iCheck({
-		checkboxClass: 'icheckbox_grey-alt3',
-		radioClass: 'iradio_grey-alt3'
+		checkboxClass: 'icheckbox_grey-alt4',
+		radioClass: 'iradio_grey-alt4'
 	});
 
-	$('.iradio_grey-alt3, .icheckbox_grey-alt3').each(function () {
+	$('.iradio_grey-alt4, .icheckbox_grey-alt4').each(function () {
 		var ipt = $(this).find("input");
 
 		if (ipt.length > 0) {
@@ -22,7 +22,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$('.icheckbox_grey-alt3 input[type=checkbox]').on('change', function () {
+	$('.icheckbox_grey-alt4 input[type=checkbox]').on('change', function () {
 		if ($(this).prop('checked')) {
 			$(this).parent().addClass("checked");
 			setTimeout(function () { $(this).iCheck('check'); }, 150);
@@ -31,4 +31,8 @@ $(document).ready(function () {
 			setTimeout(function () { $(this).iCheck('uncheck'); }, 150);
 		}
 	});
+}
+
+$(document).ready(function () {
+	initCheckboxStyle();
 });
