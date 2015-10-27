@@ -1740,6 +1740,74 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
+		public ActionResult SiteContentStatusChange() {
+			SiteContentStatusChangeModel model = new SiteContentStatusChangeModel();
+
+			return SiteContentStatusChange(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult SiteContentStatusChange(SiteContentStatusChangeModel model) {
+			List<ContentPage> lstContent = null;
+			int dateRangeDays = model.SelectedRange;
+
+			if (!model.UseDate) {
+				dateRangeDays = -1;
+			}
+
+			if (model.PerformSave && model.Pages != null && model.Pages.Any()) {
+				List<Guid> lstUpd = model.Pages.Where(x => x.Selected).Select(x => x.Root_ContentID).ToList();
+
+				if (lstUpd.Any()) {
+					string sAct = model.SelectedAction.ToLower();
+
+					if (sAct != "none") {
+						ContentPageHelper.UpdateField fieldDev = ContentPageHelper.UpdateField.MarkActive;
+
+						if (sAct == "inactive") {
+							fieldDev = ContentPageHelper.UpdateField.MarkInactive;
+						}
+
+						if (sAct == "searchengine") {
+							fieldDev = ContentPageHelper.UpdateField.MarkAsIndexable;
+						}
+						if (sAct == "sitemap") {
+							fieldDev = ContentPageHelper.UpdateField.MarkIncludeInSiteMap;
+						}
+						if (sAct == "navigation") {
+							fieldDev = ContentPageHelper.UpdateField.MarkIncludeInSiteNav;
+						}
+
+						if (sAct == "searchengine-no") {
+							fieldDev = ContentPageHelper.UpdateField.MarkAsIndexableNo;
+						}
+						if (sAct == "sitemap-no") {
+							fieldDev = ContentPageHelper.UpdateField.MarkIncludeInSiteMapNo;
+						}
+						if (sAct == "navigation-no") {
+							fieldDev = ContentPageHelper.UpdateField.MarkIncludeInSiteNavNo;
+						}
+
+						pageHelper.MarkSelectedPublished(SiteData.CurrentSiteID, lstUpd, fieldDev);
+					}
+
+					ModelState.Clear();
+					//return RedirectToAction("SiteContentStatusChange");
+				}
+			}
+
+			model.SelectedAction = String.Empty;
+
+			lstContent = pageHelper.GetContentByDateRange(this.SiteID, model.SearchDate, dateRangeDays, model.PageType,
+							model.PageActive, model.ShowInSiteMap, model.ShowInSiteNav, model.BlockIndex);
+
+			model.Pages = lstContent;
+
+			return View(model);
+		}
+
+		[HttpGet]
 		public ActionResult PageIndex() {
 			CMSConfigHelper.CleanUpSerialData();
 			PageIndexModel model = new PageIndexModel();

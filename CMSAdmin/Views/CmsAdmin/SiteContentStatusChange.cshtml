@@ -1,0 +1,263 @@
+﻿@model SiteContentStatusChangeModel
+
+@{
+	ViewBag.Title = "Site Content Status Change";
+}
+
+<script type="text/javascript">
+	function CheckTheBoxes() {
+		checkGridBoxes('contentIndex');
+	}
+
+	function UncheckTheBoxes() {
+		uncheckGridBoxes('contentIndex');
+	}
+
+	function setFormMode(v) {
+		$('#@Html.IdFor(m => m.PerformSave)').val(v);
+		$('#contentIndex')[0].submit();
+	}
+
+	function doDateClick(obj) {
+		doDateTable();
+	}
+
+	function doDateTable() {
+		var tbl = $('#dateFilterTable');
+		var rdo1 = $('#rdoFilterResults1');
+
+		if (rdo1.prop('checked')) {
+			tbl.css('display', '');
+		} else {
+			tbl.css('display', 'none');
+		}
+	}
+
+	$(document).ready(function () {
+		doDateTable();
+	});
+</script>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "contentIndex" })) {
+	@Html.AntiForgeryToken()
+
+	@Html.HiddenFor(m => m.PerformSave)
+
+	<fieldset style="width: 500px;">
+		<legend>
+			<label>
+				Filter Content
+			</label>
+		</legend>
+		<div style="clear: both;">
+			<table>
+				<tr>
+					<td class="tablecaption">
+						show publicly:
+					</td>
+					<td>
+						@Html.DropDownListFor(m => m.PageActive, new SelectList(Model.FilterOptions, "Key", "Value"), "[Choose One]")
+					</td>
+				</tr>
+				<tr>
+					<td class="tablecaption">
+						include in site navigation:
+					</td>
+					<td>
+						@Html.DropDownListFor(m => m.ShowInSiteNav, new SelectList(Model.FilterOptions, "Key", "Value"), "[Choose One]")
+					</td>
+				</tr>
+				<tr>
+					<td class="tablecaption">
+						include in sitemap:
+					</td>
+					<td>
+						@Html.DropDownListFor(m => m.ShowInSiteMap, new SelectList(Model.FilterOptions, "Key", "Value"), "[Choose One]")
+					</td>
+				</tr>
+				<tr>
+					<td class="tablecaption">
+						hide from search engines:
+					</td>
+					<td>
+						@Html.DropDownListFor(m => m.BlockIndex, new SelectList(Model.FilterOptions, "Key", "Value"), "[Choose One]")
+					</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td class="tablecaption">
+						content type:
+					</td>
+					<td colspan="3">
+						<div class="jqradioset">
+							@Html.RadioButtonFor(i => i.PageType, ContentPageType.PageType.Unknown, new { GroupName = "rdoPageType", id = "rdoPageType1" })
+							<label for="rdoPageType1">All</label>
+							@Html.RadioButtonFor(i => i.PageType, ContentPageType.PageType.ContentEntry, new { GroupName = "rdoPageType", id = "rdoPageType2" })
+							<label for="rdoPageType2">Pages</label>
+							@Html.RadioButtonFor(i => i.PageType, ContentPageType.PageType.BlogEntry, new { GroupName = "rdoPageType", id = "rdoPageType3" })
+							<label for="rdoPageType3">Posts</label>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td class="tablecaption">
+						use date range:
+					</td>
+					<td colspan="3">
+						<div class="jqradioset">
+							@Html.RadioButtonFor(i => i.UseDate, true, new { GroupName = "rdoFilterResults", id = "rdoFilterResults1", onclick = "doDateClick(this);" })
+							<label for="rdoFilterResults1">Yes</label>
+							@Html.RadioButtonFor(i => i.UseDate, false, new { GroupName = "rdoFilterResults", id = "rdoFilterResults2", onclick = "doDateClick(this);" })
+							<label for="rdoFilterResults2">No</label>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<table id="dateFilterTable" style="display: none;">
+				<tr>
+					<td class="tablecaption">
+						go live date filter:
+						<br />
+					</td>
+					<td>
+						&nbsp;&nbsp;
+					</td>
+					<td>
+						@Html.TextBoxFor(m => m.SearchDate, "{0:MM/dd/yyyy}", new { @class = "dateRegion form-control-sm", maxlength = "16", size = "12" })
+
+						@Html.DropDownListFor(m => m.SelectedRange, new SelectList(Model.DateRanges, "Key", "Value"))
+
+						<div style="clear: both; height: 2px;">
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div style="float: right; clear: both;">
+			<input type="button" name="btnFilter" value="Filter" id="btnFilter" onclick="setFormMode('false')" />
+		</div>
+	</fieldset>
+	<fieldset style="width: 500px;">
+		<legend>
+			<label>
+				Update to Selected Status
+			</label>
+		</legend>
+		<div style="clear: both;">
+			<table>
+				<tr>
+					<td class="tablecaption">
+						mark selected items as:
+					</td>
+					<td>
+						@Html.DropDownListFor(m => m.SelectedAction, new SelectList(Model.ActionOptions, "Key", "Value"), "[Choose One]")
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div style="float: right; clear: both;">
+			<input type="button" name="btnSaveMapping" value="Save" id="btnSaveMapping" onclick="setFormMode('true')" />
+		</div>
+	</fieldset>
+	<p>
+		<input type="button" value="Check All" onclick="CheckTheBoxes()" />&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="button" value="Uncheck All" onclick="UncheckTheBoxes()" />
+	</p>
+
+	var grid = CarrotWeb.CarrotWebGrid<ContentPage>(Model.Pages);
+
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix ui-widget-content ui-corner-all" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.HtmlFormId = "contentIndex";
+	grid.PageSizeExternal = true;
+	grid.UseDataPage = false;
+	grid.ConfigName(Html.NameFor(x => x.Pages));
+
+	List<CarrotImageColumnData> typeImgs = new List<CarrotImageColumnData>();
+	typeImgs.Add(new CarrotImageColumnData(ContentPageType.PageType.ContentEntry, "~/Assets/Admin/Images/page_world.png", "Page"));
+	typeImgs.Add(new CarrotImageColumnData(ContentPageType.PageType.BlogEntry, "~/Assets/Admin/Images/blogger.png", "Post"));
+
+	<p>
+		@String.Format("{0} total records", Model.Pages.Count)
+	</p>
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+
+				@grid.FormFieldFor(i => i.Selected, GridFormFieldType.Checkbox)
+				@grid.FormFieldFor(i => i.Root_ContentID, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(i => i.ContentType, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(i => i.ContentID, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(i => i.SiteID, GridFormFieldType.Hidden)
+			</text>
+		})
+		.AddColumn(x => x.NavMenuText, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.FileName, new CarrotGridColumn { Sortable = true })
+
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<a target="_blank" href="@item.FileName">
+				<img src="~/Assets/Admin/Images/html.png" alt="Visit Page" title="Visit Page" />
+			</a>
+		})
+
+		.AddColumn(x => x.ContentType, new CarrotGridImageColumn {
+			Sortable = true,
+			ImagePairs = typeImgs
+		})
+		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+
+		.AddColumn(x => x.IsRetired, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Retired",
+			AlternateTextFalse = "Active",
+			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
+			ImagePathFalse = "~/Assets/Admin/Images/clock.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.IsUnReleased, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Unreleased",
+			AlternateTextFalse = "Active",
+			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
+			ImagePathFalse = "~/Assets/Admin/Images/clock.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.ShowInSiteNav, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Yes",
+			AlternateTextFalse = "No",
+			ImagePathTrue = "~/Assets/Admin/Images/lightbulb.png",
+			ImagePathFalse = "~/Assets/Admin/Images/lightbulb_off.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.ShowInSiteMap, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Yes",
+			AlternateTextFalse = "No",
+			ImagePathTrue = "~/Assets/Admin/Images/lightbulb.png",
+			ImagePathFalse = "~/Assets/Admin/Images/lightbulb_off.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.BlockIndex, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Yes",
+			AlternateTextFalse = "No",
+			ImagePathTrue = "~/Assets/Admin/Images/zoom_out.png",
+			ImagePathFalse = "~/Assets/Admin/Images/magnifier.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Active",
+			AlternateTextFalse = "Inactive",
+			Sortable = true
+		});
+
+		<div class="tablezone">
+			@grid.OutputHtmlBody()
+		</div>
+
+}

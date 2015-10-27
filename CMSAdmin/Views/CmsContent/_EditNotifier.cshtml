@@ -1,10 +1,12 @@
 ﻿@inherits CmsWebViewPage
 
 @{
-	string ContentIxPage = SiteFilename.PageIndexURL;
+	string indexPage = SiteFilename.PageIndexURL;
+	string editPage = SiteFilename.PageAddEditURL;
 
 	if (CmsPage.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
-		ContentIxPage = SiteFilename.BlogPostIndexURL;
+		indexPage = SiteFilename.BlogPostIndexURL;
+		editPage = SiteFilename.BlogPostAddEditURL;
 	}
 
 }
@@ -19,9 +21,9 @@
 
 <div class="cmsNavFooterBox">
 	<p class="cmsFooterP">
-		<a class="cmsFooterLinks" target="_blank" href="@String.Format("{0}PageAddEdit/{1}", SiteData.AdminFolderPath, CmsPage.ThePage.Root_ContentID)">EDIT</a>
+		<a class="cmsFooterLinks" target="_blank" href="@String.Format("{0}/{1}", editPage, CmsPage.ThePage.Root_ContentID)">EDIT</a>
 		<a class="cmsFooterLinks" target="_top" href="@String.Format("{0}?{1}=true", CmsPage.ThePage.FileName, SiteData.AdvancedEditParameter)">ADVANCED EDIT</a>
-		<a class="cmsFooterLinks" target="_top" href="@ContentIxPage">CONTENT INDEX</a>
+		<a class="cmsFooterLinks" target="_top" href="@indexPage">CONTENT INDEX</a>
 		<a class="cmsFooterLinks" target="_top" href="@SiteFilename.ModuleIndexURL">MODULE INDEX</a>
 	</p>
 	<p class="cmsFooterP">
@@ -81,7 +83,7 @@
 <div id="cmsAdminToolbox1" class="cmsNavigationBlock">
 	<div class="cmsNavBox2">
 		<div class="cmsNavBox1">
-			<a class="cmsNavImageLink" target="_blank" href="@String.Format("{0}PageAddEdit/{1}", SiteData.AdminFolderPath, CmsPage.ThePage.Root_ContentID)">
+			<a class="cmsNavImageLink" target="_blank" href="@String.Format("{0}/{1}", editPage, CmsPage.ThePage.Root_ContentID)">
 				<img alt="EDIT" title="EDIT" src="~/Assets/Admin/Images/application_edit.png" />
 			</a>
 		</div>
@@ -91,7 +93,7 @@
 			</a>
 		</div>
 		<div class="cmsNavBox1">
-			<a title="CONTENT INDEX" class="cmsNavImageLink" target="_top" href="@ContentIxPage">
+			<a title="CONTENT INDEX" class="cmsNavImageLink" target="_top" href="@indexPage">
 				<img alt="CONTENT INDEX" title="CONTENT INDEX" src="~/Assets/Admin/Images/table.png" />
 			</a>
 		</div>
@@ -106,7 +108,7 @@
 <div id="cmsAdminToolbox2" class="cmsNavigationBlock">
 	<div class="cmsNavBox2">
 		<div class="cmsNavBox1">
-			<a class="cmsNavImageLink" target="_blank" href="@String.Format("{0}PageAddEdit/{1}", SiteData.AdminFolderPath, CmsPage.ThePage.Root_ContentID)">
+			<a class="cmsNavImageLink" target="_blank" href="@String.Format("{0}/{1}", editPage, CmsPage.ThePage.Root_ContentID)">
 				<img alt="EDIT" title="EDIT" src="~/Assets/Admin/Images/application_edit.png" />
 			</a>
 		</div>
@@ -116,7 +118,7 @@
 			</a>
 		</div>
 		<div class="cmsNavBox1">
-			<a title="CONTENT INDEX" class="cmsNavImageLink" target="_top" href="@ContentIxPage">
+			<a title="CONTENT INDEX" class="cmsNavImageLink" target="_top" href="@indexPage">
 				<img alt="CONTENT INDEX" title="CONTENT INDEX" src="~/Assets/Admin/Images/table.png" />
 			</a>
 		</div>

@@ -56,6 +56,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			return sViewPath;
 		}
 
+		public static Dictionary<bool, string> CreateBoolFilter() {
+			var option = new Dictionary<bool, string>();
+			option.Add(true, "Yes");
+			option.Add(false, "No");
+
+			return option;
+		}
+
 		public static void HandleErrorDict(ModelStateDictionary stateDictionary, Dictionary<string, string> validationsDictionary) {
 			if (validationsDictionary.Any()) {
 				stateDictionary.AddModelError(String.Empty, "Please review and correct the noted errors.");

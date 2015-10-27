@@ -24,9 +24,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.PageSizes.Add(50);
 			this.PageSizes.Add(100);
 
-			this.FilterOptions = new Dictionary<bool, string>();
-			this.FilterOptions.Add(true, "Yes");
-			this.FilterOptions.Add(false, "No");
+			this.FilterOptions = Helper.CreateBoolFilter();
 
 			this.Comments = new PagedData<PostComment>();
 			this.Comments.InitOrderBy(x => x.CreateDate, false);

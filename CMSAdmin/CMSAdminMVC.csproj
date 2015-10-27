@@ -895,6 +895,7 @@
     <Content Include="Views\CmsContent\_SpecialHead.cshtml" />
     <Content Include="Views\CmsContent\_SpecialFoot.cshtml" />
     <Content Include="Assets\iCheck\customized\grey-alt4%402x.pdn" />
+    <Content Include="Views\CmsAdmin\SiteContentStatusChange.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -927,6 +928,7 @@
     <Compile Include="Models\PostTemplateUpdateModel.cs" />
     <Compile Include="Models\PostIndexModel.cs" />
     <Compile Include="Models\PageIndexModel.cs" />
+    <Compile Include="Models\SiteContentStatusChangeModel.cs" />
     <Compile Include="Models\SiteModel.cs" />
     <Compile Include="Models\RoleModel.cs" />
     <Compile Include="Models\SiteDataModel.cs" />
