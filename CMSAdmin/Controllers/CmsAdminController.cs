@@ -1104,6 +1104,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 			}
 
+			if (pageContents.ContentType != ContentPageType.PageType.ContentEntry) {
+				return RedirectToAction("BlogPostAddEdit", new { @id = pageContents.Root_ContentID, @mode = model.Mode });
+			}
+
 			model.SetPage(pageContents);
 
 			return View(model);
@@ -1216,6 +1220,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				if (id.HasValue && pageContents == null) {
 					pageContents = pageHelper.FindContentByID(this.SiteID, id.Value);
 				}
+			}
+
+			if (pageContents.ContentType != ContentPageType.PageType.BlogEntry) {
+				return RedirectToAction("PageAddEdit", new { @id = pageContents.Root_ContentID, @mode = model.Mode });
 			}
 
 			model.SetPage(pageContents);
