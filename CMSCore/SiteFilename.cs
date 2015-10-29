@@ -143,7 +143,9 @@ namespace Carrotware.CMS.Core {
 		public static string PageCommentIndexURL {
 			get { return SiteData.AdminFolderPath + "PageCommentIndex"; }
 		}
-
+		public static string PageChildSortURL {
+			get { return SiteData.AdminFolderPath + "PageChildSort"; }
+		}
 		public static string BlogPostCommentIndexURL {
 			get { return SiteData.AdminFolderPath + "BlogPostCommentIndex"; }
 		}

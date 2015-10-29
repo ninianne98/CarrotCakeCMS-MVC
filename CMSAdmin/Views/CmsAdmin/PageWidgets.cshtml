@@ -1,0 +1,125 @@
+﻿@model WidgetListModel
+
+@{
+	ViewBag.Title = "Page Widgets";
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+}
+
+<script type="text/javascript">
+	var webSvc = cmsGetServiceAddress();
+	var thisPageID = '@Model.Root_ContentID';
+
+	function cmsGetWidgetText(val) {
+
+		var webMthd = webSvc + "/GetWidgetText";
+
+		$.ajax({
+			type: "POST",
+			url: webMthd,
+			data: JSON.stringify({ DBKey: val, ThisPage: thisPageID }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: cmsReqContentCallback,
+			error: cmsAjaxFailed
+		});
+	}
+
+	function cmsDoToolTipDataRequest(val) {
+		cmsGetWidgetText(val);
+	}
+
+	function cmsReqContentCallback(data, status) {
+		if (data.d == "FAIL") {
+			cmsSetHTMLMessage('<i>An error occurred. Please try again.</i>');
+		} else {
+			cmsSetTextMessage(data.d);
+		}
+	}
+</script>
+
+<link href="~/Assets/Admin/includes/tooltiphelper.css" rel="stylesheet" type="text/css" />
+<script src="~/Assets/Admin/includes/tooltiphelper.js" type="text/javascript"></script>
+<p>
+	Leave checked the widgets you want to have enabled, and uncheck the ones that do not want to load in the page, click the button to apply changes. You can also edit the Go Live and Retire date/time by selecting the edit icon.
+</p>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div>
+		<input type="submit" name="btnApply" value="Update" id="btnApply" />
+	</div>
+
+	@Html.HiddenFor(x => x.Root_ContentID)
+	@Html.HiddenFor(x => x.PlaceholderName)
+
+	var grid = CarrotWeb.CarrotWebGrid<Widget>(Model.Controls);
+
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.UseDataPage = false;
+	grid.ConfigName(Html.NameFor(x => x.Controls));
+
+	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix ui-widget-content ui-corner-all" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<Widget> {
+			HasHeadingText = false,
+			BodyAttributes = new { @class = "centerItem" },
+			FormatTemplate = @<text>
+				@grid.FormFieldFor(x => x.IsWidgetActive, GridFormFieldType.Checkbox, new { @class = "centerItem" })
+
+				@grid.FormFieldFor(x => x.ControlPath, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(x => x.Root_WidgetID, GridFormFieldType.Hidden)
+			</text>
+		})
+		.AddColumn(x => x.IsWidgetActive, new CarrotGridBooleanImageColumn())
+
+		.AddColumn(new CarrotGridTemplateColumn<Widget> {
+			HasHeadingText = false,
+			BodyAttributes = new { @class = "centerItem" },
+			FormatTemplate = @<text>
+				<a class="dataPopupTrigger" rel="@item.Root_WidgetID" href="javascript:void(0)">
+					<img src="~/Assets/Admin/images/doc.png" alt="text" title="text" style="margin:0;" />
+				</a>
+			</text>
+		})
+
+		.AddColumn(new CarrotGridTemplateColumn<Widget> {
+			HeaderText = "Control Path",
+			FormatTemplate = @<text>
+				<div style="float:left;clear:both;display:block;">
+					@item.ControlPath
+				</div>
+				<div style="float:left;clear:both;display:block;">
+					<div style="float:left">
+						@Model.GetCaption(item.ControlPath)
+					</div>
+				</div>
+			</text>
+		})
+		.AddColumn(x => x.PlaceholderName, new CarrotGridColumn())
+		.AddColumn(x => x.EditDate, new CarrotGridColumn())
+
+		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+
+		.AddColumn(x => x.RetireDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.IsRetired, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Retired",
+			AlternateTextFalse = "Active",
+			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
+			ImagePathFalse = "~/Assets/Admin/Images/clock.png"
+		})
+		.AddColumn(x => x.IsUnReleased, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Unreleased",
+			AlternateTextFalse = "Active",
+			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
+			ImagePathFalse = "~/Assets/Admin/Images/clock.png"
+		});
+
+		<div>
+			@grid.OutputHtmlBody()
+		</div>
+
+}

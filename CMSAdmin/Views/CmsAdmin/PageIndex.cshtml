@@ -109,6 +109,14 @@
 		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
 			HasHeadingText = false,
 			FormatTemplate = @<text>
+				<a href="javascript:void(0)" onclick="@String.Format("ShowWindowNoRefresh('{0}/{1}')", SiteFilename.PageCommentIndexURL, item.Root_ContentID)">
+					<img src="~/Assets/Admin/Images/comments.png" alt="View Comments" title="View Comments" />
+				</a>
+			</text>
+		})
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
 				<a href="javascript:void(0)" onclick="@String.Format("ShowWindowNoRefresh('{0}/{1}')", SiteFilename.PageHistoryURL, item.Root_ContentID)">
 					<img src="~/Assets/Admin/Images/hourglass.png" alt="View Page History" title="View Page History" />
 				</a>
@@ -117,11 +125,20 @@
 		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
 			HasHeadingText = false,
 			FormatTemplate = @<text>
-				<a href="javascript:void(0)" onclick="@String.Format("ShowWindowNoRefresh('{0}/{1}')", SiteFilename.PageCommentIndexURL, item.Root_ContentID)">
-					<img src="~/Assets/Admin/Images/comments.png" alt="View Comments" title="View Comments" />
+				<a href="javascript:void(0)" onclick="@String.Format("ShowWindowNoRefresh('{0}/{1}')", SiteFilename.PageWidgetsURL, item.Root_ContentID)">
+					<img src="~/Assets/Admin/Images/shape_ungroup.png" alt="Page Widgets" title="Page Widgets" />
 				</a>
 			</text>
 		})
+		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+				<a href="javascript:void(0)" onclick="@String.Format("ShowWindowNoRefresh('{0}/{1}')", SiteFilename.PageChildSortURL, item.Root_ContentID)">
+					<img src="~/Assets/Admin/Images/chart_organisation.png" alt="Sort Sub Pages" title="Sort Sub Pages" />
+				</a>
+			</text>
+		})
+
 		.AddColumn(x => x.NavMenuText, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.FileName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })

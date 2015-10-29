@@ -541,6 +541,7 @@ namespace Carrotware.CMS.Core {
 
 		public string NewTrackBackURLs { get; set; }
 
+		[Display(Name = "Selected Item")]
 		public bool Selected { get; set; }
 
 		public bool IsPageLocked {

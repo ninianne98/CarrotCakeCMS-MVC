@@ -21,6 +21,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.Controls = new List<Widget>();
 		}
 
+		public WidgetListModel(Guid guidContentID) {
+			this.Root_ContentID = guidContentID;
+			this.PlaceholderName = String.Empty;
+
+			using (WidgetHelper widgetHelper = new WidgetHelper()) {
+				this.Controls = widgetHelper.GetWidgets(guidContentID, false);
+			}
+		}
+
 		public Guid Root_ContentID { get; set; }
 
 		public string PlaceholderName { get; set; }

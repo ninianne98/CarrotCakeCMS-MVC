@@ -67,27 +67,40 @@ namespace Carrotware.CMS.Core {
 
 		[Display(Name = "Control Path")]
 		public string ControlPath { get; set; }
+
 		[Display(Name = "Control Properties")]
 		public string ControlProperties { get; set; }
+
 		public Guid WidgetDataID { get; set; }
 		public Guid Root_WidgetID { get; set; }
 
 		[Display(Name = "PlaceholderName")]
 		public string PlaceholderName { get; set; }
+
 		public Guid Root_ContentID { get; set; }
 		public int WidgetOrder { get; set; }
+
 		[Display(Name = "Latest Version")]
 		public bool IsLatestVersion { get; set; }
+
 		[Display(Name = "Active")]
 		public bool IsWidgetActive { get; set; }
+
 		[Display(Name = "Pending Delete")]
 		public bool IsWidgetPendingDelete { get; set; }
+
+		[Display(Name = "Selected Item")]
+		public bool Selected { get; set; }
+
 		[Display(Name = "Pending Change")]
 		public bool IsPendingChange { get; set; }
+
 		[Display(Name = "Edit Date")]
 		public DateTime EditDate { get; set; }
+
 		[Display(Name = "Go Live Date")]
 		public DateTime GoLiveDate { get; set; }
+
 		[Display(Name = "Retire Date")]
 		public DateTime RetireDate { get; set; }
 

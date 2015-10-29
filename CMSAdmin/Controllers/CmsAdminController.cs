@@ -2123,6 +2123,34 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
+		public ActionResult PageWidgets(Guid id, bool? saved) {
+			WidgetListModel model = new WidgetListModel(id);
+			model.PlaceholderName = String.Empty;
+
+			if (saved.HasValue && saved.Value) {
+				ShowSave();
+			}
+
+			return PageWidgets(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult PageWidgets(WidgetListModel model) {
+			List<Guid> lsActive = model.Controls.Where(x => x.IsWidgetActive).Select(x => x.Root_WidgetID).ToList();
+			widgetHelper.SetStatusList(model.Root_ContentID, lsActive, true);
+
+			List<Guid> lsInactive = model.Controls.Where(x => !x.IsWidgetActive).Select(x => x.Root_WidgetID).ToList();
+			widgetHelper.SetStatusList(model.Root_ContentID, lsInactive, false);
+
+			model = new WidgetListModel(model.Root_ContentID);
+
+			ModelState.Clear();
+
+			return View(model);
+		}
+
+		[HttpGet]
 		public ActionResult ContentEditHistory() {
 			ContentHistoryModel model = new ContentHistoryModel();
 			PagedData<EditHistory> history = new PagedData<EditHistory>();

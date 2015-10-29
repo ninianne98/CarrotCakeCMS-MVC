@@ -896,6 +896,7 @@
     <Content Include="Views\CmsContent\_SpecialFoot.cshtml" />
     <Content Include="Assets\iCheck\customized\grey-alt4%402x.pdn" />
     <Content Include="Views\CmsAdmin\SiteContentStatusChange.cshtml" />
+    <Content Include="Views\CmsAdmin\PageWidgets.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
