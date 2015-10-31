@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.WebPages;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -18,9 +19,17 @@ namespace Carrotware.CMS.Core {
 	public class PagePayload {
 		public static string ViewDataKey = "CmsWebViewPage_PagePayload_ViewData";
 
-		public static PagePayload GetCurrentContent() {
-			Guid guidContentID = Guid.Empty;
+		public PagePayload() {
+			this.ThePage = new ContentPage();
+			this.TypeLabelPrefixes = new List<TypeHeadingOption>();
+			this.TheWidgets = new List<Widget>();
 
+			if (SiteData.CurretSiteExists) {
+				this.TheSite = SiteData.CurrentSite;
+			}
+		}
+
+		public static PagePayload GetCurrentContent() {
 			PagePayload page = new PagePayload();
 			page.ThePage = SiteData.GetCurrentPage();
 
@@ -34,6 +43,25 @@ namespace Carrotware.CMS.Core {
 
 			page.Load();
 			return page;
+		}
+
+		public static PagePayload GetContentFromViewData() {
+			if (WebPageContext.Current != null) {
+				WebViewPage page = ((WebViewPage)WebPageContext.Current.Page);
+				if (page != null) {
+					if (page.ViewData[PagePayload.ViewDataKey] != null) {
+						return (PagePayload)page.ViewData[PagePayload.ViewDataKey];
+					}
+					if (page is CmsWebViewPage) {
+						return ((CmsWebViewPage)page).CmsPage;
+					}
+				}
+			} else {
+				// because this is probably a widget edit context
+				return new PagePayload();
+			}
+
+			return null;
 		}
 
 		public void Load() {
@@ -66,10 +94,6 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public PagePayload() {
-			this.TypeLabelPrefixes = new List<TypeHeadingOption>();
-			this.TheWidgets = new List<Widget>();
-		}
 
 		public ContentPage ThePage { get; set; }
 		public SiteData TheSite { get; set; }
@@ -145,6 +169,21 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public List<TypeHeadingOption> TypeLabelPrefixes { get; set; }
+
+		private List<SiteNav> _topnav = null;
+
+		public List<SiteNav> TopNav {
+			get {
+				if (_topnav == null) {
+					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+						_topnav = navHelper.GetTopNavigation(this.TheSite.SiteID, !SecurityData.IsAuthEditor);
+					}
+					_topnav = TweakData(_topnav);
+				}
+
+				return _topnav;
+			}
+		}
 
 		private List<SiteNav> _top2nav = null;
 

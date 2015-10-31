@@ -7,7 +7,7 @@
 		cap.SetForeColor("#333333");
 		cap.SetNoiseColor("#999999");
 
-		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" }, Model)) {
+		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" })) {
 			var cmt = cmtFrm.GetModelHelper("_plaincontact", cap);
 			if (!cmt.ViewData.Model.IsSaved) {
 				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })

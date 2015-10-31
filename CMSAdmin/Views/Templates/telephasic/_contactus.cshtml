@@ -2,7 +2,7 @@
 
 <div id="contactUsForm">
 	@{
-		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactUsForm" }, Model)) {
+		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactUsForm" })) {
 			var cmt = cmtFrm.GetModelHelper("_contactus");
 			if (!cmt.ViewData.Model.IsSaved) {
 				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })

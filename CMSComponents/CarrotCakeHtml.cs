@@ -468,6 +468,18 @@ namespace Carrotware.CMS.UI.Components {
 			};
 		}
 
+		public static ChildNavigation GetChildNavigation() {
+			return new ChildNavigation {
+				CmsPage = CmsPage
+			};
+		}
+
+		public static SecondLevelNavigation GetSecondLevelNavigation() {
+			return new SecondLevelNavigation {
+				CmsPage = CmsPage
+			};
+		}
+
 		public static SearchForm BeginSearchForm(object formAttributes = null) {
 			return new SearchForm(Html, CmsPage, formAttributes);
 		}

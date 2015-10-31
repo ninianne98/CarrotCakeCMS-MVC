@@ -115,9 +115,9 @@
 						<li id="tabMain"><a href="@SiteFilename.SiteInfoURL">Site Info</a> </li>
 						@if (siteExists) {
 							<li id="tabHistory"><a href="@SiteFilename.ContentEditHistoryURL">Content Edit History</a> </li>
-							<li id="tabContentSkin"><a href="./SiteSkinIndex">Site Skin Index</a> </li>
+							@*<li id="tabContentSkin"><a href="./SiteSkinIndex">Site Skin Index</a> </li>*@
 							<li id="tabMainTemplate"><a href="@SiteFilename.SiteTemplateUpdateURL">Bulk Apply Templates</a> </li>
-							<li id="tabStatusChange"><a href="./SiteContentStatusChange">Bulk Change Status</a> </li>
+							<li id="tabStatusChange"><a href="@SiteFilename.SiteContentStatusChangeURL">Bulk Change Status</a> </li>
 							<li id="tabExportSite"><a href="@SiteFilename.SiteExportURL">Export Site</a> </li>
 							<li id="tabImportContent"><a href="@SiteFilename.ContentImportURL">Import Content</a> </li>
 						}
@@ -130,7 +130,7 @@
 						<ul class="children">
 							<li id="tabContent"><a href="@SiteFilename.PageIndexURL">Page Index</a> </li>
 							<li id="tabAddContent"><a href="@SiteFilename.PageAddEditURL">Add Page</a> </li>
-							<li id="tabContentTemplate"><a href="./PageTemplateUpdate">Bulk Apply Templates</a> </li>
+							<li id="tabContentTemplate"><a href="@SiteFilename.PageTemplateUpdateURL">Bulk Apply Templates</a> </li>
 							<li id="tabContentSiteMap"><a href="@SiteFilename.SiteMapURL">Edit Site Map</a> </li>
 							<li id="tabContentCommentIndex"><a href="@SiteFilename.PageCommentIndexURL">Page Comment Index</a> </li>
 						</ul>
@@ -141,7 +141,7 @@
 						<ul class="children">
 							<li id="tabBlogContent"><a href="@SiteFilename.BlogPostIndexURL">Blog Post Index</a> </li>
 							<li id="tabAddBlogContent"><a href="@SiteFilename.BlogPostAddEditURL">Add Blog Post</a> </li>
-							<li id="tabBlogTemplate"><a href="./BlogPostTemplateUpdate">Bulk Apply Templates</a> </li>
+							<li id="tabBlogTemplate"><a href="@SiteFilename.BlogPostTemplateUpdateURL">Bulk Apply Templates</a> </li>
 							<li id="tabBlogCategoryIndex"><a href="@SiteFilename.CategoryIndexURL">Blog Category Index</a> </li>
 							<li id="tabBlogTagIndex"><a href="@SiteFilename.TagIndexURL">Blog Tag Index</a> </li>
 							<li id="tabBlogCommentIndex"><a href="@SiteFilename.BlogPostCommentIndexURL">Blog Comment Index</a> </li>
@@ -152,7 +152,7 @@
 						<a href="javascript:void(0)" class="lnkPopup">Extensions </a>
 						<ul class="children">
 							<li id="tabModules"><a href="@SiteFilename.ModuleIndexURL">Modules</a> </li>
-							<li id="tabTxtWidgets"><a href="./TextWidgetIndex">Text Widgets</a> </li>
+							<li id="tabTxtWidgets"><a href="@SiteFilename.TextWidgetIndexURL">Text Widgets</a> </li>
 							<li id="tabSnippets"><a href="@SiteFilename.ContentSnippetIndexURL">Content Snippets</a> </li>
 						</ul>
 						@*@Html.ActionLink("Module Index", "ModuleIndex", RouteConfig.AdminCtrlr, new { area = "", @id = "" }, null)*@

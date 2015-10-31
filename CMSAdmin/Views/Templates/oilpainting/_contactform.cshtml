@@ -5,7 +5,7 @@
 		var cap = new Captcha();
 		cap.AltValidationFailText = null; // trigger default text
 
-		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" }, Model)) {
+		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" })) {
 			var cmt = cmtFrm.GetModelHelper("_contactform", cap);
 			if (!cmt.ViewData.Model.IsSaved) {
 				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })

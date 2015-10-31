@@ -3,8 +3,6 @@ using Carrotware.Web.UI.Components;
 using System;
 using System.Text;
 using System.Web;
-using System.Web.Mvc;
-using System.Web.WebPages;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -24,15 +22,7 @@ namespace Carrotware.CMS.UI.Components {
 			this.OpenGraphType = OpenGraphTypeDef.Default;
 			this.ShowExpirationDate = false;
 
-			WebViewPage page = ((WebViewPage)WebPageContext.Current.Page);
-			if (page != null) {
-				if (page.ViewData[PagePayload.ViewDataKey] != null) {
-					this.CmsPage = (PagePayload)page.ViewData[PagePayload.ViewDataKey];
-				}
-				if (page is CmsWebViewPage) {
-					this.CmsPage = ((CmsWebViewPage)page).CmsPage;
-				}
-			}
+			this.CmsPage = PagePayload.GetContentFromViewData();
 		}
 
 		public OpenGraph(PagePayload pp)

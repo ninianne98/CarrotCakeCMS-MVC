@@ -51,6 +51,10 @@ namespace Carrotware.CMS.UI.Components {
 			if (this.PublicParmValues == null) {
 				this.PublicParmValues = new Dictionary<string, string>();
 			}
+
+			if (!String.IsNullOrEmpty(this.AlternateViewFile)) {
+				throw new Exception("AlternateViewFile is not a valid assignment for this widget.");
+			}
 		}
 
 		#region Common Parser Routines

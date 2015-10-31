@@ -107,7 +107,7 @@ namespace Carrotware.CMS.UI.Components {
 				output.AppendLine();
 				WriteListPrefix(output);
 
-				string sItemCSS = "";
+				string sItemCSS = String.Empty;
 				if (!String.IsNullOrEmpty(this.CssItem)) {
 					sItemCSS = String.Format(" {0} ", this.CssItem);
 				}

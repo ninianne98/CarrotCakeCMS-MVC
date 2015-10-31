@@ -88,12 +88,20 @@ namespace Carrotware.CMS.Core {
 			get { return SiteData.AdminFolderPath + "SiteTemplateUpdate"; }
 		}
 
+		public static string SiteContentStatusChangeURL {
+			get { return SiteData.AdminFolderPath + "SiteContentStatusChange"; }
+		}
+
 		public static string ContentEditHistoryURL {
 			get { return SiteData.AdminFolderPath + "ContentEditHistory"; }
 		}
 
 		public static string ModuleIndexURL {
 			get { return SiteData.AdminFolderPath + "ModuleIndex"; }
+		}
+
+		public static string TextWidgetIndexURL {
+			get { return SiteData.AdminFolderPath + "TextWidgetIndex"; }
 		}
 
 		public static string PageHistoryURL {
@@ -143,9 +151,11 @@ namespace Carrotware.CMS.Core {
 		public static string PageCommentIndexURL {
 			get { return SiteData.AdminFolderPath + "PageCommentIndex"; }
 		}
+
 		public static string PageChildSortURL {
 			get { return SiteData.AdminFolderPath + "PageChildSort"; }
 		}
+
 		public static string BlogPostCommentIndexURL {
 			get { return SiteData.AdminFolderPath + "BlogPostCommentIndex"; }
 		}
