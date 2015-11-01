@@ -615,9 +615,6 @@ namespace Carrotware.CMS.UI.Components {
 								w.IsDynamicInserted = true;
 								w.IsBeingEdited = SecurityData.AdvancedEditMode;
 								w.WidgetClientID = widgetKey;
-								if (!String.IsNullOrEmpty(altView)) {
-									w.AlternateViewFile = altView;
-								}
 
 								List<WidgetProps> lstProp = widget.ParseDefaultControlProperties();
 								w.PublicParmValues = lstProp.ToDictionary(t => t.KeyName, t => t.KeyValue);
@@ -626,6 +623,14 @@ namespace Carrotware.CMS.UI.Components {
 
 								if (!lstMenus.Any() && w.EnableEdit) {
 									lstMenus.Add("Edit", "cmsGenericEdit('" + widget.Root_ContentID.ToString() + "','" + widget.Root_WidgetID.ToString() + "')");
+								}
+							}
+
+							if (settings is IWidgetView) {
+								IWidgetView w = (IWidgetView)settings;
+
+								if (!String.IsNullOrEmpty(altView)) {
+									w.AlternateViewFile = altView;
 								}
 							}
 

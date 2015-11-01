@@ -121,6 +121,7 @@
     <Compile Include="IAdminModuleLoad.cs" />
     <Compile Include="IWidgetDataObject.cs" />
     <Compile Include="CarrotLayout.cs" />
+    <Compile Include="IWidgetView.cs" />
     <Compile Include="ParmParser.cs" />
     <Compile Include="ITextBodyUpdate.cs" />
     <Compile Include="IWidgetLimitedProperties.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="IWidget.cs" />
     <Compile Include="IWidgetRawData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WidgetBase.cs" />
     <Compile Include="WidgetActionSettingModel.cs" />
     <Compile Include="WidgetActionSettingModelAttribute.cs" />
     <Compile Include="WidgetAttribute.cs" />

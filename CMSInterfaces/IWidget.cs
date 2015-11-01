@@ -22,8 +22,6 @@ namespace Carrotware.CMS.Interface {
 
 		string WidgetClientID { get; set; }
 
-		string AlternateViewFile { get; set; }
-
 		bool EnableEdit { get; }
 
 		bool IsBeingEdited { get; set; }

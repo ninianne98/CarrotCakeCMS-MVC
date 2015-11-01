@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -12,12 +14,7 @@
 
 namespace Carrotware.CMS.Interface {
 
-	public class WidgetActionSettingModel : WidgetBase, IWidgetView {
-
-		#region IWidgetView Attributes
-
-		public virtual string AlternateViewFile { get; set; }
-
-		#endregion IWidgetView Attributes
+	public interface IWidgetView {
+		string AlternateViewFile { get; set; }
 	}
 }
