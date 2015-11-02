@@ -572,6 +572,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				bUpdate = du.DatabaseNeedsUpdate();
 
+				try {
+					model.CreateUser = !du.UsersExist;
+				} catch { }
+
 				if (bUpdate) {
 					DatabaseUpdateStatus status = du.PerformUpdates();
 					lst = du.MergeMessages(lst, status.Messages);

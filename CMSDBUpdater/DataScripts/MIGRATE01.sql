@@ -445,6 +445,39 @@ END
 
 GO
 
+IF EXISTS (SELECT * FROM sys.schemas WHERE name like 'aspnet%' )
+BEGIN
+
+DROP SCHEMA [aspnet_Roles_ReportingAccess]
+DROP SCHEMA [aspnet_Roles_FullAccess]
+DROP SCHEMA [aspnet_Roles_BasicAccess]
+DROP SCHEMA [aspnet_Membership_ReportingAccess]
+DROP SCHEMA [aspnet_Membership_FullAccess]
+DROP SCHEMA [aspnet_Membership_BasicAccess]
+
+END
+
+GO
+
+--======================
+
+GO
+
+IF  EXISTS(select * from sys.database_principals where name LIKE 'aspnet%' and is_fixed_role = 0)
+BEGIN
+
+DROP ROLE [aspnet_Membership_BasicAccess]
+DROP ROLE [aspnet_Membership_FullAccess]
+DROP ROLE [aspnet_Membership_ReportingAccess]
+DROP ROLE [aspnet_Roles_BasicAccess]
+DROP ROLE [aspnet_Roles_FullAccess]
+DROP ROLE [aspnet_Roles_ReportingAccess]
+
+END
+
+GO
+
+--======================
 
 GO
 ALTER VIEW [dbo].[vw_carrot_Comment]

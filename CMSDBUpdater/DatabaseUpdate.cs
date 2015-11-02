@@ -231,7 +231,8 @@ namespace Carrotware.CMS.DBUpdater {
 
 					if (ver.DataValue != DatabaseUpdate.CurrentDbVersion) {
 						ver = GetDbSchemaVersion();
-						if (ver.DataValue == DatabaseUpdate.DbVersion00 || ver.DataValue.StartsWith("201508") || ver.DataValue.StartsWith("201509")) {
+						if (ver.DataValue == DatabaseUpdate.DbVersion00 || ver.DataValue.StartsWith("201508")
+									|| ver.DataValue.StartsWith("201509") || ver.DataValue.StartsWith("201510")) {
 							HandleResponse(lst, BuildUpdateString(iUpdate++), AlterStep01());
 						}
 					}
@@ -426,6 +427,14 @@ namespace Carrotware.CMS.DBUpdater {
 				res.RanUpdate = true;
 				SetDbSchemaVersion(DatabaseUpdate.DbVersion01);
 				return res;
+			} else {
+				// if the db version is off, check leading tidbit against current and immediate prior
+				DataInfo ver = GetDbSchemaVersion();
+				if (DatabaseUpdate.DbVersion00.Substring(0, 6) == ver.DataValue.Substring(0, 6)
+					|| "201510" == ver.DataValue.Substring(0, 6) || "201509" == ver.DataValue.Substring(0, 6) || "201508" == ver.DataValue.Substring(0, 6)
+					|| DatabaseUpdate.DbVersion01.Substring(0, 6) == ver.DataValue.Substring(0, 6)) {
+					SetDbSchemaVersion(DatabaseUpdate.DbVersion01);
+				}
 			}
 
 			res.Response = "Comment view update already applied";
