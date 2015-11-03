@@ -156,7 +156,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		protected string DisplayTemplateFile {
 			get {
-				if (System.IO.File.Exists(Server.MapPath(_page.ThePage.TemplateFile))) {
+				if (!String.IsNullOrEmpty(_page.ThePage.TemplateFile) && System.IO.File.Exists(Server.MapPath(_page.ThePage.TemplateFile))) {
 					return _page.ThePage.TemplateFile;
 				} else {
 					return SiteData.DefaultTemplateFilename;

@@ -267,6 +267,12 @@ update [dbo].[carrot_RootContent]
 set [FileName] = REPLACE([FileName], '.aspx',''),
 	[PageSlug] = REPLACE([PageSlug], '.aspx','')
 
+
+update [dbo].[carrot_RootContent]
+set [FileName] = REPLACE([FileName], '.','-'),
+	[PageSlug] = REPLACE([PageSlug], '.','-')
+
+
 --=====================
 -- environment specific changes BEGIN
 update [dbo].[carrot_Content]

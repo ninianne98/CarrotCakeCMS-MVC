@@ -1065,6 +1065,72 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
+		public ActionResult PageEdit(Guid id, bool? saved) {
+			ContentPageModel model = new ContentPageModel();
+
+			cmsHelper.OverrideKey(id);
+			ContentPage pageContents = cmsHelper.cmsAdminContent;
+
+			model.SetPage(pageContents);
+
+			if (saved.HasValue && saved.Value) {
+				ShowSave();
+			}
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult PageEdit(ContentPageModel model) {
+			cmsHelper.OverrideKey(model.ContentPage.Root_ContentID);
+
+			ContentPage page = model.ContentPage;
+
+			var pageContents = pageHelper.FindContentByID(this.SiteID, page.Root_ContentID);
+
+			pageContents.GoLiveDate = page.GoLiveDate;
+			pageContents.RetireDate = page.RetireDate;
+
+			pageContents.IsLatestVersion = true;
+			pageContents.Thumbnail = page.Thumbnail;
+
+			pageContents.TitleBar = page.TitleBar;
+			pageContents.NavMenuText = page.NavMenuText;
+			pageContents.PageHead = page.PageHead;
+			pageContents.PageSlug = null;
+
+			pageContents.MetaDescription = page.MetaDescription;
+			pageContents.MetaKeyword = page.MetaKeyword;
+
+			pageContents.EditDate = SiteData.CurrentSite.Now;
+			pageContents.NavOrder = page.NavOrder;
+
+			pageContents.PageActive = page.PageActive;
+			pageContents.ShowInSiteNav = page.ShowInSiteNav;
+			pageContents.ShowInSiteMap = page.ShowInSiteMap;
+			pageContents.BlockIndex = page.BlockIndex;
+
+			pageContents.CreditUserId = page.CreditUserId;
+
+			pageContents.EditUserId = SecurityData.CurrentUserGuid;
+
+			model.SetPage(pageContents);
+
+			Helper.ForceValidation(ModelState, model);
+
+			if (ModelState.IsValid) {
+				cmsHelper.cmsAdminContent = pageContents;
+
+				return RedirectToAction("PageEdit", new { @id = model.ContentPage.Root_ContentID, @saved = true });
+			}
+
+			Helper.HandleErrorDict(ModelState);
+
+			return View(model);
+		}
+
+		[HttpGet]
 		public ActionResult PageAddEdit(Guid? id, Guid? versionid, Guid? importid, string mode) {
 			ContentPageModel model = new ContentPageModel();
 			model.ImportID = importid;

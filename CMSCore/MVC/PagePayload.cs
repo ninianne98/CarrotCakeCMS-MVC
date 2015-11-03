@@ -81,6 +81,10 @@ namespace Carrotware.CMS.Core {
 
 		public void HandleTemplatePath(Controller controller) {
 			string templateFile = this.ThePage.TemplateFile;
+			if (String.IsNullOrEmpty(templateFile)) {
+				templateFile = SiteData.DefaultTemplateFilename;
+			}
+
 			string folderPath = templateFile.Substring(0, templateFile.LastIndexOf("/"));
 
 			List<CmsTemplateViewEngine> lst = controller.ViewEngineCollection
@@ -93,7 +97,6 @@ namespace Carrotware.CMS.Core {
 				controller.ViewEngineCollection.Add(ve);
 			}
 		}
-
 
 		public ContentPage ThePage { get; set; }
 		public SiteData TheSite { get; set; }

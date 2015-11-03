@@ -287,6 +287,10 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static void HandleTemplatePath(Controller controller, string templateFile) {
+			if (String.IsNullOrEmpty(templateFile)) {
+				templateFile = SiteData.DefaultTemplateFilename;
+			}
+
 			string folderPath = templateFile.Substring(0, templateFile.LastIndexOf("/"));
 
 			List<CmsTemplateViewEngine> lst = controller.ViewEngineCollection
