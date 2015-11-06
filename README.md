@@ -1,9 +1,9 @@
 # CarrotCakeCMS-MVC
 Source code for CarrotCakeCMS (MVC)
 
-Welcome to the GitHub project for CarrotCake CMS MVC, an open source c# project. CarrotCake is a [template-based](http://www.carrotware.com/carrotcake-templates.aspx) MVC5 ASP.Net CMS (content management system) built with C#, SQL server, jQueryUI, and TinyMCE. This content management system supports multi-tenant webroots with shared databases. 
+Welcome to the GitHub project for CarrotCake CMS MVC, an open source c# project. CarrotCake is a [template-based](http://www.carrotware.com/carrotcake-templates.aspx?from=github-mvc) MVC5 ASP.Net CMS (content management system) built with C#, SQL server, jQueryUI, and TinyMCE. This content management system supports multi-tenant webroots with shared databases. 
 
-Source code and documentation is available on  [SourceForge](http://sourceforge.net/projects/carrotcakecmsmvc/), and [GitHub](https://github.com/ninianne98/CarrotCakeCMS-MVC/). 
+Source code and documentation is available on  [SourceForge](http://sourceforge.net/projects/carrotcakecmsmvc/),  [GitHub](https://github.com/ninianne98/CarrotCakeCMS-MVC/), and [CodePlex](http://carrotcakecmsmvc.codeplex.com/). 
 
 Some features include: blogging engine, configurable date based blog post URLs, blog post content association with categories and tags, assignment/customization of category and tag URL patterns, simple content feedback collection and review, blog post pagination/indexes (with templating support), designation of default blog page (required to make search, category links, or tag links function), URL date formatting patterns, RSS feed support for posts and pages, import and export of site content, and import of content from WordPress XML export files (tested against versions 2.9, 3.0, 3.4, and 3.5).
 
