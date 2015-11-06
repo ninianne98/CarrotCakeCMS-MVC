@@ -39,7 +39,20 @@ namespace Carrotware.CMS.Core {
 
 		public static PagePayload GetContent(string uri) {
 			PagePayload page = new PagePayload();
-			page.ThePage = SiteData.GetPage(uri);
+
+			if (SecurityData.AdvancedEditMode) {
+				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+					cmsHelper.OverrideKey(uri);
+					if (cmsHelper.cmsAdminContent == null) {
+						page.ThePage = SiteData.GetPage(uri);
+						cmsHelper.cmsAdminContent = page.ThePage;
+					} else {
+						page.ThePage = cmsHelper.cmsAdminContent;
+					}
+				}
+			} else {
+				page.ThePage = SiteData.GetPage(uri);
+			}
 
 			page.Load();
 			return page;
@@ -76,25 +89,6 @@ namespace Carrotware.CMS.Core {
 			} else {
 				this.ThePage = new ContentPage();
 				this.TheWidgets = new List<Widget>();
-			}
-		}
-
-		public void HandleTemplatePath(Controller controller) {
-			string templateFile = this.ThePage.TemplateFile;
-			if (String.IsNullOrEmpty(templateFile)) {
-				templateFile = SiteData.DefaultTemplateFilename;
-			}
-
-			string folderPath = templateFile.Substring(0, templateFile.LastIndexOf("/"));
-
-			List<CmsTemplateViewEngine> lst = controller.ViewEngineCollection
-				.Where(x => x is CmsTemplateViewEngine).Cast<CmsTemplateViewEngine>()
-				.Where(x => x.ThemeFile.ToLower() == templateFile.ToLower()
-					|| x.ThemeFile.ToLower().StartsWith(folderPath.ToLower())).ToList();
-
-			if (!lst.Any()) {
-				CmsTemplateViewEngine ve = new CmsTemplateViewEngine(templateFile);
-				controller.ViewEngineCollection.Add(ve);
 			}
 		}
 
@@ -378,9 +372,55 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		private int _pageCt = -10;
+
+		public int SitePageCount {
+			get {
+				if (_pageCt < 0) {
+					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+						_pageCt = navHelper.GetSitePageCount(this.TheSite.SiteID, ContentPageType.PageType.ContentEntry);
+					}
+				}
+
+				return _pageCt;
+			}
+		}
+
+		private int _postCt = -10;
+
+		public int SitePostCount {
+			get {
+				if (_postCt < 0) {
+					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+						_postCt = navHelper.GetSitePageCount(this.TheSite.SiteID, ContentPageType.PageType.BlogEntry);
+					}
+				}
+
+				return _postCt;
+			}
+		}
+
+		public double GetRoundedMetaPercentage(IMetaDataLinks meta) {
+			return GetRoundedMetaPercentage(meta, 5);
+		}
+
+		public double GetRoundedMetaPercentage(IMetaDataLinks meta, int nearestNumber) {
+			if (nearestNumber > 100 || nearestNumber < 1) {
+				nearestNumber = 5;
+			}
+
+			double percUsed = Math.Ceiling(100 * (float)meta.Count / (((float)this.SitePostCount + 0.000001)));
+			percUsed = Math.Round(percUsed / nearestNumber) * nearestNumber;
+			if (percUsed < 1 && meta.Count > 0) {
+				percUsed = 1;
+			}
+
+			return percUsed;
+		}
+
 		public List<ContentCategory> GetPageCategories(int iTakeTop) {
 			if (iTakeTop < 0) {
-				iTakeTop = 100000;
+				iTakeTop = 300000;
 			}
 			using (SiteNavHelper navHelper = new SiteNavHelper()) {
 				return navHelper.GetCategoryListForPost(this.TheSite.SiteID, iTakeTop, this.ThePage.Root_ContentID);

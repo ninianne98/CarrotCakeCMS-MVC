@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -13,10 +14,13 @@
 namespace Carrotware.CMS.Interface {
 
 	public class CarrotViewEngine : RazorViewEngine {
+		public Guid RequestKey { get; set; }
+
 		public string AssemblyKey { get; set; }
 
-		public CarrotViewEngine(string key) {
-			this.AssemblyKey = key;
+		public CarrotViewEngine(string assemblyKey, Guid request) {
+			this.AssemblyKey = assemblyKey;
+			this.RequestKey = request;
 
 			string[] partials = new[] {
 					"~/Views/" + this.AssemblyKey + "/{0}.cshtml",
@@ -37,19 +41,14 @@ namespace Carrotware.CMS.Interface {
 			this.LoadPaths(partials, areas);
 		}
 
-		public CarrotViewEngine(string key, string[] partials, string[] areas) {
-			this.AssemblyKey = key;
-			this.LoadPaths(partials, areas);
-		}
-
 		public void LoadPaths(string[] partials, string[] areas) {
 			this.MasterLocationFormats = partials;
 			this.ViewLocationFormats = partials;
 			this.PartialViewLocationFormats = partials;
 
 			this.AreaMasterLocationFormats = areas;
-			this.AreaPartialViewLocationFormats = areas;
 			this.AreaViewLocationFormats = areas;
+			this.AreaPartialViewLocationFormats = areas;
 		}
 	}
 }

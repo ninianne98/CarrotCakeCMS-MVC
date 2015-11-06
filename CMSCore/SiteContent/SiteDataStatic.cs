@@ -123,6 +123,23 @@ namespace Carrotware.CMS.Core {
 			get { return (HttpContext.Current != null); }
 		}
 
+		public static bool IsCurrentLikelyHomePage {
+			get {
+				if (!IsWebView) {
+					return false;
+				}
+				return IsLikelyHomePage(CurrentScriptName);
+			}
+		}
+
+		public static bool IsLikelyHomePage(string filePath) {
+			if (!IsWebView) {
+				return false;
+			}
+
+			return String.Format("{0}", filePath).Length < 2;
+		}
+
 		private static string SiteKeyPrefix = "cms_SiteData_";
 
 		public static void RemoveSiteFromCache(Guid siteID) {

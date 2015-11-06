@@ -51,5 +51,13 @@ namespace Carrotware.CMS.Interface {
 		public static HtmlString WritePopupLink(string Uri) {
 			return new HtmlString(String.Format("{0}('{1}')", PopupFunction, Uri));
 		}
+
+		public static string CurrentScriptName {
+			get {
+				string sPath = "/";
+				try { sPath = HttpContext.Current.Request.ServerVariables["script_name"].ToString(); } catch { }
+				return sPath;
+			}
+		}
 	}
 }

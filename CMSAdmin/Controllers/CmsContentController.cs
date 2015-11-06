@@ -25,9 +25,17 @@ using System.Web.Mvc;
 
 namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
-	public class CmsContentController : Controller {
+	public class CmsContentController : Controller, IContentController {
 		protected SecurityHelper securityHelper = new SecurityHelper();
+		protected CMSConfigHelper cmsHelper = new CMSConfigHelper();
 		private PagePayload _page = null;
+
+		public CmsContentController()
+			: base() {
+			this.TemplateFile = String.Empty;
+		}
+
+		public string TemplateFile { get; set; }
 
 		[HttpGet]
 		public ActionResult Default() {
@@ -40,9 +48,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			} catch (Exception ex) {
 				//assumption is database is probably empty / needs updating, so trigger the under construction view
 				if (DatabaseUpdate.SystemNeedsChecking(ex) || DatabaseUpdate.AreCMSTablesIncomplete()) {
+					SiteData.WriteDebugException("cmscontentcontroller_defaultview", ex);
+
 					return View("_EmptyHome");
 				} else {
 					//something bad has gone down, toss back the error
+					SiteData.WriteDebugException("cmscontentcontroller_defaultview throw", ex);
+
 					throw;
 				}
 			}
@@ -91,9 +103,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		public ActionResult DefaultView() {
-			if (_page == null) {
-				LoadPage();
-			}
+			LoadPage();
 
 			if (_page != null && _page.ThePage.Root_ContentID != Guid.Empty) {
 				DateTime dtModified = _page.TheSite.ConvertSiteTimeToLocalServer(_page.ThePage.EditDate);
@@ -112,7 +122,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					Response.Cache.SetExpires(dtExpire);
 				}
 
-				return View(DisplayTemplateFile);
+				return View(this.DisplayTemplateFile);
 			} else {
 				string sFileRequested = Request.Path;
 
@@ -121,7 +131,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				Response.AppendHeader("Last-Modified", strModifed);
 				Response.Cache.SetLastModified(dtModified);
 
-				if (sFileRequested.Length < 2 || sFileRequested.ToLower() == SiteData.DefaultDirectoryFilename) {
+				if (SiteData.IsLikelyHomePage(sFileRequested)) {
 					return View("_EmptyHome");
 				} else {
 					Response.StatusCode = 404;
@@ -133,30 +143,30 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		protected void LoadPage() {
-			if (this.ViewData[PagePayload.ViewDataKey] == null) {
-				_page = PagePayload.GetCurrentContent();
-				this.ViewData[PagePayload.ViewDataKey] = _page;
-			} else {
-				_page = (PagePayload)this.ViewData[PagePayload.ViewDataKey];
+			if (_page == null) {
+				if (this.ViewData[PagePayload.ViewDataKey] == null) {
+					_page = PagePayload.GetCurrentContent();
+					this.ViewData[PagePayload.ViewDataKey] = _page;
+				} else {
+					_page = (PagePayload)this.ViewData[PagePayload.ViewDataKey];
+				}
 			}
 
-			if (_page != null && _page.ThePage.ContentID != Guid.Empty) {
-				_page.HandleTemplatePath(this);
-			}
+			this.TemplateFile = this.DisplayTemplateFile;
 		}
 
 		protected void LoadPage(string Uri) {
 			_page = PagePayload.GetContent(Uri);
+
 			this.ViewData[PagePayload.ViewDataKey] = _page;
 
-			if (_page != null && _page.ThePage.ContentID != Guid.Empty) {
-				_page.HandleTemplatePath(this);
-			}
+			this.TemplateFile = this.DisplayTemplateFile;
 		}
 
 		protected string DisplayTemplateFile {
 			get {
-				if (!String.IsNullOrEmpty(_page.ThePage.TemplateFile) && System.IO.File.Exists(Server.MapPath(_page.ThePage.TemplateFile))) {
+				if (_page != null && _page.ThePage != null && !String.IsNullOrEmpty(_page.ThePage.TemplateFile)
+					&& System.IO.File.Exists(Server.MapPath(_page.ThePage.TemplateFile))) {
 					return _page.ThePage.TemplateFile;
 				} else {
 					return SiteData.DefaultTemplateFilename;
@@ -245,14 +255,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				securityHelper.Dispose();
 			}
 
-			// only add the xtra lookup paths so long as needed to render the relative path partials from the template
-			List<CmsTemplateViewEngine> lst = this.ViewEngineCollection
-					.Where(x => x is CmsTemplateViewEngine).Cast<CmsTemplateViewEngine>().ToList();
-
-			if (lst.Any()) {
-				for (int j = (lst.Count - 1); j >= 0; j--) {
-					this.ViewEngineCollection.Remove(lst[j]);
-				}
+			if (cmsHelper != null) {
+				cmsHelper.Dispose();
 			}
 		}
 

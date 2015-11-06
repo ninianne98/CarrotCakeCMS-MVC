@@ -113,12 +113,16 @@
   <ItemGroup>
     <Compile Include="AdminModuleData.cs" />
     <Compile Include="BaseWidgetAreaReg.cs" />
-    <Compile Include="CarrotViewEngine.cs" />
+    <Compile Include="ViewEngines\CarrotViewEngineWidget.cs" />
+    <Compile Include="ViewEngines\CarrotViewEngineBase.cs" />
+    <Compile Include="ViewEngines\CarrotViewEngineDyn.cs" />
+    <Compile Include="ViewEngines\CarrotViewEngine.cs" />
     <Compile Include="CmsTestControllerFactory.cs" />
     <Compile Include="Controllers\BaseAdminWidgetController.cs" />
     <Compile Include="Controllers\BaseWidgetController.cs" />
     <Compile Include="Controllers\BaseDataWidgetController.cs" />
     <Compile Include="IAdminModuleLoad.cs" />
+    <Compile Include="IWidgetController.cs" />
     <Compile Include="IWidgetDataObject.cs" />
     <Compile Include="CarrotLayout.cs" />
     <Compile Include="IWidgetView.cs" />

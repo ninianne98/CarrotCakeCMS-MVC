@@ -127,7 +127,7 @@ namespace Carrotware.CMS.UI.Components {
 						sThis1CSS = sItemCSS;
 					}
 					if (SiteData.IsFilenameCurrentPage(c1.FileName)
-						|| (c1.NavOrder == 0 && SiteData.CurrentScriptName.Length < 2)
+						|| (c1.NavOrder == 0 && SiteData.IsCurrentLikelyHomePage)
 						|| (IsContained(lstNavTree, c1.Root_ContentID) != null)
 						|| ControlUtilities.AreFilenamesSame(c1.FileName, this.ParentFileName)) {
 						sThis1CSS = sThis1CSS + " " + this.CssSelected;

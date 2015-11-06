@@ -151,7 +151,7 @@
   <ItemGroup>
     <Compile Include="CannedQueries.cs" />
     <Compile Include="MVC\CmsWebViewPage.cs" />
-    <Compile Include="MVC\CmsTemplateViewEngine.cs" />
+    <Compile Include="MVC\CarrotViewEngineTemplate.cs" />
     <Compile Include="ConfigHelper\CarrotCakeConfig.cs" />
     <Compile Include="ConfigHelper\CMSConfigHelper.cs" />
     <Compile Include="ConfigHelper\ConfigTypes.cs" />
@@ -169,6 +169,7 @@
     <Compile Include="ImportExport\WordPressSite.cs" />
     <Compile Include="ImportExport\WordPressUser.cs" />
     <Compile Include="ImportExport\WPBlogReader.cs" />
+    <Compile Include="MVC\IContentController.cs" />
     <Compile Include="SearchParameterObject.cs" />
     <Compile Include="Security\UserRole.cs" />
     <Compile Include="Security\UserProfile.cs" />

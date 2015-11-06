@@ -66,7 +66,7 @@ namespace Carrotware.CMS.Core {
 					bool bIgnorePublishState = SecurityData.AdvancedEditMode || SecurityData.IsAdmin || SecurityData.IsSiteEditor;
 
 					using (SiteNavHelper navHelper = new SiteNavHelper()) {
-						if (requestedUri.Length < 2 || requestedUri == SiteData.DefaultDirectoryFilename) {
+						if (SiteData.IsLikelyHomePage(requestedUri)) {
 							navData = navHelper.FindHome(SiteData.CurrentSiteID, !bIgnorePublishState);
 
 							if (navData != null) {
@@ -79,7 +79,7 @@ namespace Carrotware.CMS.Core {
 							navData = navHelper.GetLatestVersion(SiteData.CurrentSiteID, !bIgnorePublishState, requestedUri);
 						}
 
-						if ((requestedUri.Length < 2 || requestedUri == SiteData.DefaultDirectoryFilename) && navData == null) {
+						if ((SiteData.IsLikelyHomePage(requestedUri)) && navData == null) {
 							navData = SiteNavHelper.GetEmptyHome();
 						}
 
@@ -91,7 +91,6 @@ namespace Carrotware.CMS.Core {
 						}
 						requestCtx.RouteData.Values["id"] = null;
 					}
-
 				} catch (Exception ex) {
 					if (DatabaseUpdate.SystemNeedsChecking(ex) || DatabaseUpdate.AreCMSTablesIncomplete()) {
 						requestCtx.RouteData.Values["controller"] = ContentCtrlr;

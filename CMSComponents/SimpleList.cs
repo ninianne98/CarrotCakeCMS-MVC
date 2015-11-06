@@ -84,7 +84,6 @@ namespace Carrotware.CMS.UI.Components {
 					this.CssSelected = sFoundVal;
 				}
 			} catch (Exception ex) { }
-
 		}
 
 		protected virtual void TweakData() { }
@@ -110,7 +109,7 @@ namespace Carrotware.CMS.UI.Components {
 			if (this.NavigationData != null) {
 				foreach (var n in this.NavigationData) {
 					if (SiteData.IsFilenameCurrentPage(n.FileName)
-								|| (n.NavOrder == 0 && SiteData.CurrentScriptName.Length < 2)
+								|| (n.NavOrder == 0 && SiteData.IsCurrentLikelyHomePage)
 								|| ControlUtilities.AreFilenamesSame(n.FileName, this.CmsPage.ThePage.FileName)) {
 						sThis1CSS = String.Format(" {0} {1} ", this.CssItem, this.CssSelected).Trim();
 					} else {

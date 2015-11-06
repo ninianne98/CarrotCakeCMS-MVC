@@ -1,9 +1,11 @@
 ﻿using Carrotware.CMS.Core;
+using Carrotware.CMS.Interface;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -109,6 +111,16 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 					}
 				}
 			}
+		}
+
+		public static void RegisterCmsComponents() {
+			AreaRegistration.RegisterAllAreas();
+			RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+			ViewEngines.Engines.Add(new CarrotViewEngineTemplate());
+			ViewEngines.Engines.Add(new CarrotViewEngineWidget());
+
+			ControllerBuilder.Current.SetControllerFactory(CmsControllerFactory.GetFactory());
 		}
 	}
 }

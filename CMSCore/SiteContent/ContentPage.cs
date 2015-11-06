@@ -787,7 +787,7 @@ namespace Carrotware.CMS.Core {
 
 				theFileName = ContentPageHelper.CreateFileNameFromSlug(SiteData.CurrentSite.SiteID, dateGoLive, thePageSlug);
 
-				if (SiteData.IsPageSpecial(theFileName) || theFileName.Length < 2) {
+				if (SiteData.IsPageSpecial(theFileName) || SiteData.IsLikelyHomePage(theFileName)) {
 					return false;
 				}
 
@@ -812,7 +812,7 @@ namespace Carrotware.CMS.Core {
 
 			theFileName = theFileName.ToLower();
 
-			if (SiteData.IsPageSpecial(theFileName) || theFileName.Length < 2) {
+			if (SiteData.IsPageSpecial(theFileName) || SiteData.IsLikelyHomePage(theFileName)) {
 				return false;
 			}
 

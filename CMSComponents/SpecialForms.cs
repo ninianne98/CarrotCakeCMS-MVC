@@ -136,6 +136,34 @@ namespace Carrotware.CMS.UI.Components {
 
 	//======================
 
+	internal class FormRouteValue {
+
+		internal FormRouteValue() {
+			this.controller = String.Empty;
+			this.action = String.Empty;
+			this.carrotedit = null;
+		}
+
+		internal FormRouteValue(string c, string a)
+			: this() {
+			this.controller = c;
+			this.action = a;
+		}
+
+		internal FormRouteValue(string c, string a, bool ce)
+			: this() {
+			this.controller = c;
+			this.action = a;
+			this.carrotedit = ce;
+		}
+
+		internal string controller { get; set; }
+		internal string action { get; set; }
+		internal bool? carrotedit { get; set; }
+	}
+
+	//======================
+
 	public class AjaxContactForm : IDisposable {
 		protected AjaxHelper _helper;
 		protected MvcForm frm = null;
@@ -163,7 +191,35 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 
-			frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = "Contact.ashx" }, ajaxOptions, formAttributes);
+			string formAction = "Contact.ashx";
+
+			//try #3
+			//RouteValueDictionary dic = new RouteValueDictionary();
+			//dic.Add("controller", "CmsAjaxForms");
+			//dic.Add("action", formAction);
+			//if (SecurityData.AdvancedEditMode) {
+			//	dic.Add(SiteData.AdvancedEditParameter, true);
+			//}
+			//frm = ajaxHelper.BeginRouteForm("Default", dic, ajaxOptions, formAttributes);
+
+			//try #2
+			if (SecurityData.AdvancedEditMode) {
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
+			} else {
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction }, ajaxOptions, formAttributes);
+			}
+
+			/*
+			//try #1
+			string formAction = "Contact.ashx";
+			FormRouteValue frv = new FormRouteValue("CmsAjaxForms", formAction);
+
+			if (SecurityData.AdvancedEditMode) {
+				frv = new FormRouteValue("CmsAjaxForms", formAction, true);
+			}
+
+			frm = ajaxHelper.BeginRouteForm("Default", frv, ajaxOptions, formAttributes);
+			 */
 		}
 
 		public HtmlHelper<ContactInfo> GetModelHelper(string partialName, IValidateHuman validateHuman) {

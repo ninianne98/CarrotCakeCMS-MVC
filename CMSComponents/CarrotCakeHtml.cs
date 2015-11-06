@@ -61,13 +61,26 @@ namespace Carrotware.CMS.UI.Components {
 			}
 		}
 
+		private static Controller HydrateController(Object obj) {
+			Controller controller = null;
+			if (obj is Controller) {
+				controller = (Controller)obj;
+				controller.ControllerContext = new ControllerContext(Html.ViewContext.Controller.ControllerContext.RequestContext, controller);
+			} else {
+				controller = (Controller)Html.ViewContext.Controller;
+			}
+			return controller;
+		}
+
 		public static HtmlString RenderPartialFromController(string partialViewName, string controllerClass, Object model) {
 			Type type = Type.GetType(controllerClass);
 			Object obj = Activator.CreateInstance(type);
 
 			if (obj is Controller) {
-				Controller controller = (Controller)obj;
-				controller.ControllerContext = Html.ViewContext.Controller.ControllerContext;
+				Controller controller = HydrateController(obj);
+				//Controller controller = (Controller)obj;
+				//controller.ControllerContext = new ControllerContext(Html.ViewContext.Controller.ControllerContext.RequestContext, controller);
+				//controller.ControllerContext = Html.ViewContext.Controller.ControllerContext;
 
 				if (model != null) {
 					controller.ViewData.Model = model;
@@ -113,8 +126,11 @@ namespace Carrotware.CMS.UI.Components {
 
 			if (obj is Controller) {
 				MethodInfo methodInfo = null;
-				Controller controller = (Controller)obj;
-				controller.ControllerContext = Html.ViewContext.Controller.ControllerContext;
+				Controller controller = HydrateController(obj);
+				//Controller controller = (Controller)obj;
+				//controller.ControllerContext = new ControllerContext(Html.ViewContext.Controller.ControllerContext.RequestContext, controller);
+				//controller.ControllerContext = Html.ViewContext.Controller.ControllerContext;
+
 				RouteData routeData = controller.ControllerContext.RouteData;
 				string areaName = type.Assembly.ManifestModule.Name;
 				areaName = areaName.Substring(0, areaName.Length - 4);
@@ -283,24 +299,6 @@ namespace Carrotware.CMS.UI.Components {
 			get {
 				//return System.IO.Path.GetFileNameWithoutExtension(((RazorView)Html.ViewContext.View).ViewPath);
 				return ((RazorView)Html.ViewContext.View).ViewPath;
-			}
-		}
-
-		public static void HandleTemplatePath(Controller controller, string templateFile) {
-			if (String.IsNullOrEmpty(templateFile)) {
-				templateFile = SiteData.DefaultTemplateFilename;
-			}
-
-			string folderPath = templateFile.Substring(0, templateFile.LastIndexOf("/"));
-
-			List<CmsTemplateViewEngine> lst = controller.ViewEngineCollection
-				.Where(x => x is CmsTemplateViewEngine).Cast<CmsTemplateViewEngine>()
-				.Where(x => x.ThemeFile.ToLower() == templateFile.ToLower()
-					|| x.ThemeFile.ToLower().StartsWith(folderPath.ToLower())).ToList();
-
-			if (!lst.Any()) {
-				CmsTemplateViewEngine ve = new CmsTemplateViewEngine(templateFile);
-				controller.ViewEngineCollection.Add(ve);
 			}
 		}
 

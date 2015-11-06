@@ -2740,8 +2740,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			_page.TheSite = SiteData.CurrentSite;
 			_page.TheWidgets = new List<Widget>();
 
-			_page.HandleTemplatePath(this);
-
 			this.ViewData[PagePayload.ViewDataKey] = _page;
 
 			return View(SiteData.PreviewTemplateFile);

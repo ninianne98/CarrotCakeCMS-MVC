@@ -12,7 +12,7 @@
 
 namespace Carrotware.CMS.Core {
 
-	internal interface IMetaDataLinks {
+	public interface IMetaDataLinks {
 		IHtmlString Text { get; }
 		string Uri { get; }
 		int Count { get; }
