@@ -50,7 +50,7 @@ namespace Carrotware.CMS.Interface {
 		}
 
 		protected override string ReplacePath(ControllerContext ctrlCtx, string viewPath) {
-			string newViewPath = "~/Views/__";
+			string newViewPath = "~/Views/Shared/__";
 
 #if DEBUG
 			Debug.WriteLine(String.Format("CarrotViewEngineDyn: n:{0}   c:{1}   v:{2}   a:{3}", ctrlCtx.Controller.GetType().Namespace, ctrlCtx.Controller.GetType().Name, viewPath, this.AssemblyKey));

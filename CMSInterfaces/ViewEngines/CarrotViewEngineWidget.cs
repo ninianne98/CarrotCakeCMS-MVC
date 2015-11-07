@@ -43,11 +43,13 @@ namespace Carrotware.CMS.Interface {
 			string assemblyName = String.Empty;
 			var controller = ctrlCtx.Controller;
 
-			if (controller is IWidgetController) {
-				assemblyName = (controller as IWidgetController).AssemblyName;
-			} else {
-				if (controller.ViewData[CarrotViewEngineWidget.Key] != null) {
-					assemblyName = controller.ViewData[CarrotViewEngineWidget.Key].ToString();
+			if (!(controller is IAdminModule)) {
+				if (controller is IWidgetController) {
+					assemblyName = (controller as IWidgetController).AssemblyName;
+				} else {
+					if (controller.ViewData[CarrotViewEngineWidget.Key] != null) {
+						assemblyName = controller.ViewData[CarrotViewEngineWidget.Key].ToString();
+					}
 				}
 			}
 
@@ -55,7 +57,7 @@ namespace Carrotware.CMS.Interface {
 		}
 
 		protected override string ReplacePath(ControllerContext ctrlCtx, string viewPath) {
-			string newViewPath = "~/Views/__";
+			string newViewPath = "~/Views/Shared/__";
 			string assemblyName = GetAssemblyKey(ctrlCtx);
 
 #if DEBUG

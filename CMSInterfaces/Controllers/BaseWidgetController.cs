@@ -4,11 +4,20 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 
+/*
+* CarrotCake CMS (MVC5)
+* http://www.carrotware.com/
+*
+* Copyright 2015, Samantha Copeland
+* Dual licensed under the MIT or GPL Version 2 licenses.
+*
+* Date: August 2015
+*/
+
 namespace Carrotware.CMS.Interface.Controllers {
 
 	public class BaseWidgetController : Controller, IWidgetController {
 		protected string assemblyName = String.Empty;
-		//protected Guid requestKey = Guid.NewGuid();
 
 		public BaseWidgetController()
 			: base() {
@@ -19,31 +28,10 @@ namespace Carrotware.CMS.Interface.Controllers {
 
 			this.ViewData[CarrotViewEngineWidget.Key] = assemblyName;
 			this.AssemblyName = assemblyName;
-
-			//List<CarrotViewEngine> lst = this.ViewEngineCollection
-			//					.Where(x => x is CarrotViewEngine).Cast<CarrotViewEngine>()
-			//					.Where(x => x.RequestKey == requestKey).ToList();
-
-			//if (!lst.Any()) {
-			//	CarrotViewEngine ve = new CarrotViewEngine(assemblyName, requestKey);
-
-			//	this.ViewEngineCollection.Add(ve);
-			//}
 		}
 
 		protected override void Dispose(bool disposing) {
 			base.Dispose(disposing);
-
-			//// only add the xtra lookup paths so long as needed to render the relative path partials from the template
-			//List<CarrotViewEngine> lst = this.ViewEngineCollection
-			//					.Where(x => x is CarrotViewEngine).Cast<CarrotViewEngine>()
-			//					.Where(x => x.RequestKey == requestKey).ToList();
-
-			//if (lst.Any()) {
-			//	for (int j = (lst.Count - 1); j >= 0; j--) {
-			//		this.ViewEngineCollection.Remove(lst[j]);
-			//	}
-			//}
 		}
 
 		public string AssemblyName { get; set; }

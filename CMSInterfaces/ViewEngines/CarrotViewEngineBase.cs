@@ -26,7 +26,7 @@ namespace Carrotware.CMS.Interface {
 		}
 
 		protected virtual string ReplacePath(ControllerContext controllerContext, string viewPath) {
-			return "~/Views/__";
+			return "~/Views/Shared/__";
 		}
 
 		protected override IView CreatePartialView(ControllerContext controllerContext, string partialPath) {
