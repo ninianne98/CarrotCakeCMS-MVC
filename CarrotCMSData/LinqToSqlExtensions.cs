@@ -14,11 +14,18 @@ using System.Text;
 
 /*
  * Terry Aney
- http://www.aneyfamily.com/terryandann/post/2008/04/Batch-Updates-and-Deletes-with-LINQ-to-SQL.aspx
+ * http://www.aneyfamily.com/terryandann/post/2008/04/Batch-Updates-and-Deletes-with-LINQ-to-SQL.aspx
+ * https://terryaney.wordpress.com/2008/04/14/batch-updates-and-deletes-with-linq-to-sql/
+ *
+ * Where can I get the source for this?
+ * Download the source code and give it a go.  Let me know if you find any issues or have any suggestions.
+ * Disclaimer: I’m not responsible for anything! ;)  I’ve given the code a good run through and use it in my day to day ‘maintenance queries’ against production data so I’m fairly confident that everything will be in working order.  However, when looking at the source, you’ll see some TODO’s for me to polish up the documentation and/or find better ways of parsing the little bit of SQL text I need to process.  It currently behaves itself for my needs, but rest assured, as soon as I address those…actually I should say, as soon as I can get Chris to explain in layman’s terms what is going on, I’ll update the documentation and the provided source code!
 */
 
 namespace Carrotware.CMS.Data {
+
 	public static class LinqToSqlExtensions {
+
 		/// <summary>
 		/// Creates a *.csv file from an IQueryable query, dumping out the 'simple' properties/fields.
 		/// </summary>
@@ -144,7 +151,6 @@ namespace Carrotware.CMS.Data {
 					   && type.IsGenericType && type.Name.Contains("AnonymousType")
 					   && (type.Name.StartsWith("<>") || type.Name.StartsWith("VB$"))
 					   && (type.Attributes & TypeAttributes.NotPublic) == TypeAttributes.NotPublic;
-
 		}
 
 		/// <summary>
@@ -179,7 +185,7 @@ namespace Carrotware.CMS.Data {
 		}
 
 		/// <summary>
-		/// Combines multiple SELECT commands into a single SqlCommand so that all statements can be executed in a 
+		/// Combines multiple SELECT commands into a single SqlCommand so that all statements can be executed in a
 		/// single roundtrip to the database and return multiple result sets.
 		/// </summary>
 		/// <param name="commandList">Represents a collection of commands to be batched together.</param>
@@ -563,10 +569,10 @@ namespace Carrotware.CMS.Data {
 
 				if (forTransactSQL) {
 					output.AppendFormat("DECLARE {0} {1}{2}; SET {0} = {3}\r\n",
-						new object[] { 
-								parameter.ParameterName, 
-								( parameter2 == null ) ? parameter.DbType.ToString() : parameter2.SqlDbType.ToString(), 
-								( parameter.Size > 0 ) ? "( " + parameter.Size.ToString( CultureInfo.CurrentCulture ) + " )" : "", 
+						new object[] {
+								parameter.ParameterName,
+								( parameter2 == null ) ? parameter.DbType.ToString() : parameter2.SqlDbType.ToString(),
+								( parameter.Size > 0 ) ? "( " + parameter.Size.ToString( CultureInfo.CurrentCulture ) + " )" : "",
 								GetParameterTransactValue( parameter, parameter2 ) });
 				} else {
 					output.AppendFormat("-- {0}: {1} {2} (Size = {3}; Prec = {4}; Scale = {5}) [{6}]\r\n", new object[] { parameter.ParameterName, parameter.Direction, (parameter2 == null) ? parameter.DbType.ToString() : parameter2.SqlDbType.ToString(), parameter.Size.ToString(CultureInfo.CurrentCulture), num, num2, (parameter2 == null) ? parameter.Value : parameter2.SqlValue });
@@ -705,7 +711,7 @@ namespace Carrotware.CMS.Data {
 
 					// Create a MethodCallExpression which represents a 'simple' select of *only* the assignment part (right hand operator) of
 					// of the MemberInitExpression.MemberAssignment so that we can let the Linq Provider do all the 'sql syntax' generation for
-					// us. 
+					// us.
 					//
 					// For Example: TEntity.Property1 = TEntity.Property1 + " Hello"
 					// This selectExpression will be only dealing with TEntity.Property1 + " Hello"
@@ -731,25 +737,25 @@ namespace Carrotware.CMS.Data {
 		}
 
 		/// <summary>
-		/// Some LINQ Query syntax is invalid because SQL (or whomever the provider is) can not translate it to its native language.  
-		/// DataContext.GetCommand() does not detect this, only IProvider.Execute or IProvider.Compile call the necessary code to 
+		/// Some LINQ Query syntax is invalid because SQL (or whomever the provider is) can not translate it to its native language.
+		/// DataContext.GetCommand() does not detect this, only IProvider.Execute or IProvider.Compile call the necessary code to
 		/// check this.  This function invokes the IProvider.Compile to make sure the provider can translate the expression.
 		/// </summary>
 		/// <remarks>
 		/// An example of a LINQ query that previously 'worked' in the *Batch methods but needs to throw an exception is something
 		/// like the following:
-		/// 
-		/// var pay = 
+		///
+		/// var pay =
 		///		from h in HistoryData
 		///		where h.his.Groups.gName == "Ochsner" && h.hisType == "pay"
 		///		select h;
-		///		
+		///
 		/// HistoryData.UpdateBatchPreview( pay, h => new HistoryData { hisIndex = ( int.Parse( h.hisIndex ) - 1 ).ToString() } ).Dump();
-		/// 
-		/// The int.Parse is not valid and needs to throw an exception like: 
-		/// 
+		///
+		/// The int.Parse is not valid and needs to throw an exception like:
+		///
 		///		Could not translate expression '(Parse(p.hisIndex) - 1).ToString()' into SQL and could not treat it as a local expression.
-		///		
+		///
 		///	Unfortunately, the IProvider.Compile is internal and I need to use Reflection to call it (ugh).  I've several e-mails sent into
 		///	MS LINQ team members and am waiting for a response and will correct/improve code as soon as possible.
 		/// </remarks>
@@ -769,8 +775,8 @@ namespace Carrotware.CMS.Data {
 			// Convert the selectExpression into an IQueryable query so that I can get the CommandText
 			var selectQuery = (table as IQueryable).Provider.CreateQuery(selectExpression);
 
-			// Get the DbCommand so I can grab relavent parts of CommandText to construct a field 
-			// assignment and based on the 'current TEntity row'.  Additionally need to massage parameter 
+			// Get the DbCommand so I can grab relavent parts of CommandText to construct a field
+			// assignment and based on the 'current TEntity row'.  Additionally need to massage parameter
 			// names from temporary command when adding to the final update command.
 			var selectCmd = table.Context.GetCommand(selectQuery);
 			var selectStmt = selectCmd.CommandText;
@@ -783,7 +789,7 @@ namespace Carrotware.CMS.Data {
 			foreach (var selectParam in selectCmd.Parameters.Cast<DbParameter>()) {
 				var paramName = String.Format("@p{0}", updateCommand.Parameters.Count);
 
-				// DataContext.ExecuteCommand ultimately just takes a object array of parameters and names them p0-N.  
+				// DataContext.ExecuteCommand ultimately just takes a object array of parameters and names them p0-N.
 				// So I need to now do replaces on the massaged value to get it in proper format.
 				selectStmt = selectStmt.Replace(
 									selectParam.ParameterName.Replace("@p", "@p" + bindingName),
@@ -823,12 +829,14 @@ namespace Carrotware.CMS.Data {
 			}
 
 			join = join.Substring(0, join.Length - 5);											// Remove last ' AND '
+
 			#region - Better ExpressionTree Handling Needed -
+
 			/*
-			
+
 			Below is a sample query where the let statement was used to simply the 'where clause'.  However, it produced an extra level
 			in the query.
-			 
+
 			var manage =
 				from u in User
 				join g in Groups on u.User_Group_id equals g.gKey into groups
@@ -836,12 +844,12 @@ namespace Carrotware.CMS.Data {
 				let correctGroup = groupsToManage.Contains( g.gName ) || ( groupsToManage.Contains( "_GLOBAL" ) && g.gKey == null )
 				where correctGroup && ( users.Contains( u.User_Authenticate_id ) || userEmails.Contains( u.User_Email ) ) || userKeys.Contains( u.User_id )
 				select u;
-			 
+
 			Produces this SQL:
 			SELECT [t2].[User_id] AS [uKey], [t2].[User_Authenticate_id] AS [uAuthID], [t2].[User_Email] AS [uEmail], [t2].[User_Pin] AS [uPin], [t2].[User_Active] AS [uActive], [t2].[uAdminAuthID], [t2].[uFailureCount]
 			FROM (
-				SELECT [t0].[User_id], [t0].[User_Authenticate_id], [t0].[User_Email], [t0].[User_Pin], [t0].[User_Active], [t0].[uFailureCount], [t0].[uAdminAuthID], 
-					(CASE 
+				SELECT [t0].[User_id], [t0].[User_Authenticate_id], [t0].[User_Email], [t0].[User_Pin], [t0].[User_Active], [t0].[uFailureCount], [t0].[uAdminAuthID],
+					(CASE
 						WHEN [t1].[gName] IN (@p0) THEN 1
 						WHEN NOT ([t1].[gName] IN (@p0)) THEN 0
 						ELSE NULL
@@ -849,24 +857,26 @@ namespace Carrotware.CMS.Data {
 				FROM [User] AS [t0]
 				LEFT OUTER JOIN [Groups] AS [t1] ON [t0].[User_Group_id] = ([t1].[gKey])
 				) AS [t2]
-			WHERE (([t2].[value] = 1) AND (([t2].[User_Authenticate_id] IN (@p1)) OR ([t2].[User_Email] IN (@p2)))) OR ([t2].[User_id] IN (@p3))			 
-			
+			WHERE (([t2].[value] = 1) AND (([t2].[User_Authenticate_id] IN (@p1)) OR ([t2].[User_Email] IN (@p2)))) OR ([t2].[User_id] IN (@p3))
+
 			If I put the entire where in one line...
-			where 	( groupsToManage.Contains( g.gName ) || ( groupsToManage.Contains( "_GLOBAL" ) && g.gKey == null ) ) && 
+			where 	( groupsToManage.Contains( g.gName ) || ( groupsToManage.Contains( "_GLOBAL" ) && g.gKey == null ) ) &&
 					( users.Contains( u.User_Authenticate_id ) || userEmails.Contains( u.User_Email ) ) || userKeys.Contains ( u.User_id )
 
 			I get this SQL:
 			SELECT [t0].[User_id] AS [uKey], [t0].[User_Authenticate_id] AS [uAuthID], [t0].[User_Email] AS [uEmail], [t0].[User_Pin] AS [uPin], [t0].[User_Active] AS [uActive], [t0].[uAdminAuthID], [t0].[uFailureCount]
 			FROM [User] AS [t0]
 			LEFT OUTER JOIN [Groups] AS [t1] ON [t0].[User_Group_id] = ([t1].[gKey])
-			WHERE (([t1].[gName] IN (@p0)) AND (([t0].[User_Authenticate_id] IN (@p1)) OR ([t0].[User_Email] IN (@p2)))) OR ([t0].[User_id] IN (@p3))			
-			
+			WHERE (([t1].[gName] IN (@p0)) AND (([t0].[User_Authenticate_id] IN (@p1)) OR ([t0].[User_Email] IN (@p2)))) OR ([t0].[User_id] IN (@p3))
+
 			The second 'cleaner' SQL worked with my original 'string parsing' of simply looking for [t0] and stripping everything before it
 			to get rid of the SELECT and any 'TOP' clause if present.  But the first SQL introduced a layer which caused [t2] to be used.  So
 			I have to do a bit different string parsing.  There is probably a more efficient way to examine the ExpressionTree and figure out
 			if something like this is going to happen.  I will explore it later.
 			*/
-			#endregion
+
+			#endregion - Better ExpressionTree Handling Needed -
+
 			var endSelect = select.IndexOf("[t");													// Get 'SELECT ' and any TOP clause if present
 			var selectClause = select.Substring(0, endSelect);
 			var selectTableNameStart = endSelect + 1;												// Get the table name LINQ to SQL used in query generation
@@ -969,10 +979,12 @@ namespace Carrotware.CMS.Data {
 	}
 
 	public class ChangedItems<TEntity> {
+
 		public ChangedItems(TEntity Current, TEntity Original) {
 			this.Current = Current;
 			this.Original = Original;
 		}
+
 		public TEntity Current { get; set; }
 		public TEntity Original { get; set; }
 	}
