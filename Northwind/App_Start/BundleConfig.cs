@@ -23,6 +23,7 @@ namespace Northwind {
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 					  "~/Content/bootstrap.css",
+					  "~/Content/violet.css",
 					  "~/Content/themes/base/all.css",
 					  "~/Content/site.css"));
 		}

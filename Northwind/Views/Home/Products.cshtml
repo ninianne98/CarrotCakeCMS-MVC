@@ -1,65 +1,65 @@
 ﻿@model IEnumerable<Northwind.Product>
 
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ProductName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SupplierID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.QuantityPerUnit)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UnitPrice)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UnitsInStock)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UnitsOnOrder)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReorderLevel)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Discontinued)
-        </th>
-    </tr>
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.ProductName)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.SupplierID)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.CategoryID)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.QuantityPerUnit)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.UnitPrice)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.UnitsInStock)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.UnitsOnOrder)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.ReorderLevel)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Discontinued)
+		</th>
+	</tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SupplierID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.QuantityPerUnit)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UnitPrice)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UnitsInStock)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UnitsOnOrder)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReorderLevel)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Discontinued)
-        </td>
-    </tr>
-}
+	@foreach (var item in Model) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.ProductName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.SupplierID)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.CategoryID)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.QuantityPerUnit)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.UnitPrice)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.UnitsInStock)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.UnitsOnOrder)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.ReorderLevel)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Discontinued)
+			</td>
+		</tr>
+	}
 </table>

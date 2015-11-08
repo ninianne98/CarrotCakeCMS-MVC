@@ -1,0 +1,16 @@
+﻿@model Northwind.Models.ProductSearch
+
+@using Northwind.Models
+
+<div id="divResults1" style="border: 5px solid thistle; padding: 5px;">
+
+	<h3>Alt 1 Multi List</h3>
+
+	<div>
+		@Html.Partial("Categories", Model.Options)
+	</div>
+
+	<div>
+		@Html.Partial("Products", Model.Results)
+	</div>
+</div>

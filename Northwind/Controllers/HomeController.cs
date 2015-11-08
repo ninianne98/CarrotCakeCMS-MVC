@@ -31,8 +31,8 @@ namespace Northwind.Controllers {
 		public PartialViewResult ProductSearch() {
 			WidgetActionSettingModel settings = new WidgetActionSettingModel();
 
-			if (WidgetPayload is WidgetActionSettingModel) {
-				settings = (WidgetActionSettingModel)WidgetPayload;
+			if (this.WidgetPayload is WidgetActionSettingModel) {
+				settings = (WidgetActionSettingModel)this.WidgetPayload;
 				settings.LoadData();
 			}
 
@@ -52,8 +52,8 @@ namespace Northwind.Controllers {
 		public PartialViewResult ProductSearch(ProductSearch model) {
 			WidgetActionSettingModel settings = new WidgetActionSettingModel();
 
-			if (WidgetPayload is WidgetActionSettingModel) {
-				settings = (WidgetActionSettingModel)WidgetPayload;
+			if (this.WidgetPayload is WidgetActionSettingModel) {
+				settings = (WidgetActionSettingModel)this.WidgetPayload;
 				settings.LoadData();
 			}
 
@@ -66,6 +66,38 @@ namespace Northwind.Controllers {
 			}
 		}
 
+		[HttpGet]
+		[WidgetActionSettingModel("Northwind.MultiOptions, Northwind")]
+		public PartialViewResult ProductSearchMulti() {
+			MultiOptions settings = new MultiOptions();
+
+			if (this.WidgetPayload is MultiOptions) {
+				settings = (MultiOptions)this.WidgetPayload;
+				settings.LoadData();
+			}
+
+			ProductSearch model = new ProductSearch();
+
+			using (var db = new NorthwindDataContext()) {
+				if (settings.CategoryIDs.Any()) {
+					model.Options = (from c in db.Categories
+									 where settings.CategoryIDs.Contains(c.CategoryID)
+									 select c).ToList();
+
+					model.Results = (from p in db.Products
+									 where settings.CategoryIDs.Contains(p.CategoryID.Value)
+									 select p).ToList();
+				}
+			}
+
+			if (String.IsNullOrEmpty(settings.AlternateViewFile)) {
+				return PartialView(model);
+			} else {
+				model.AltViewName = settings.AlternateViewFile;
+				return PartialView(settings.AlternateViewFile, model);
+			}
+		}
+
 		public ProductSearch InitProductSearch(ProductSearch model) {
 			if (model == null) {
 				model = new ProductSearch();
@@ -74,7 +106,6 @@ namespace Northwind.Controllers {
 
 			using (var db = new NorthwindDataContext()) {
 				model.Options = db.Categories.ToList();
-				model.Results = new List<Product>();
 
 				if (model.SelectedCat.HasValue) {
 					model.Results = db.Products.Where(x => x.CategoryID == model.SelectedCat.Value).ToList();

@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace Northwind.Models {
+
 	public class ProductSearch {
 
 		public ProductSearch() {
 			this.AltViewName = String.Empty;
+
+			this.Options = new List<Category>();
+			this.Results = new List<Product>();
 		}
 
 		public List<Category> Options { get; set; }
@@ -17,6 +20,5 @@ namespace Northwind.Models {
 		public List<Product> Results { get; set; }
 
 		public string AltViewName { get; set; }
-
 	}
 }

@@ -111,6 +111,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Code\MultiOptions.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Models\ProductSearch.cs" />
@@ -163,6 +164,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\violet.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -227,6 +229,10 @@
     <Content Include="Views\Home\ProductSearchAlt2.cshtml" />
     <Content Include="Views\Admin\Products2.cshtml" />
     <Content Include="Views\Admin\Products3.cshtml" />
+    <Content Include="Views\Home\ProductSearchMulti.cshtml" />
+    <Content Include="Views\Home\ProductSearchAltMulti.cshtml" />
+    <Content Include="Views\Home\ProductSearchAlt2Multi.cshtml" />
+    <Content Include="Views\Home\Categories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

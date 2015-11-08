@@ -1,0 +1,14 @@
+﻿@model Northwind.Models.ProductSearch
+
+@using Northwind.Models
+
+<div id="divResults">
+
+	<div>
+		@Html.Partial("Categories", Model.Options)
+	</div>
+
+	<div>
+		@Html.Partial("Products", Model.Results)
+	</div>
+</div>
