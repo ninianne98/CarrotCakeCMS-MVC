@@ -17,13 +17,12 @@ using System.Web.Mvc;
 namespace Carrotware.CMS.Interface.Controllers {
 
 	public class BaseWidgetController : Controller, IWidgetController {
-		protected string assemblyName = String.Empty;
 
 		public BaseWidgetController()
 			: base() {
 			Assembly asmbly = this.GetType().Assembly;
 
-			assemblyName = asmbly.ManifestModule.Name;
+			string assemblyName = asmbly.ManifestModule.Name;
 			assemblyName = assemblyName.Substring(0, assemblyName.Length - 4);
 
 			this.ViewData[CarrotViewEngineWidget.Key] = assemblyName;

@@ -19,7 +19,7 @@ namespace Carrotware.CMS.Core {
 
 		public CarrotViewEngineTemplate()
 			: base() {
-			string[] partials = new[] {
+			string[] views = new[] {
 					"::FILEPATH::/{0}.cshtml",
 					"::FILEPATH::/{0}.vbhtml",
 					"::FILEPATH::/Shared/{0}.cshtml",
@@ -31,7 +31,7 @@ namespace Carrotware.CMS.Core {
 
 			string[] areas = new[] { String.Empty };
 
-			this.LoadPaths(partials, areas);
+			this.LoadPaths(views, areas);
 		}
 
 		protected string GetTemplateFile(ControllerContext ctrlCtx) {
@@ -70,7 +70,7 @@ namespace Carrotware.CMS.Core {
 				string themePath = String.Format("{0}{1}", templatePath, folderName).ToLower();
 
 #if DEBUG
-				Debug.WriteLine(String.Format("CmsTemplateViewEngine: n:{0}   c:{1}   v:{2}   f:{3}   t:{4}", ctrlCtx.Controller.GetType().Namespace, ctrlCtx.Controller.GetType().Name, viewPath, folderPath, themePath));
+				Debug.WriteLine(String.Format("CarrotViewEngineTemplate: n:{0}   c:{1}   v:{2}   f:{3}   t:{4}", ctrlCtx.Controller.GetType().Namespace, ctrlCtx.Controller.GetType().Name, viewPath, folderPath, themePath));
 #endif
 
 				newViewPath = viewPath.ToLower().Replace("::filepath::", folderPath).Replace("::themepath::", themePath);
@@ -83,6 +83,7 @@ namespace Carrotware.CMS.Core {
 			// since these all go together, register at the same time
 			ViewEngines.Engines.Add(new CarrotViewEngineTemplate());
 			ViewEngines.Engines.Add(new CarrotViewEngineWidget());
+			// ViewEngines.Engines.Add(new CarrotViewEngineWidgetAdmin());
 		}
 	}
 }

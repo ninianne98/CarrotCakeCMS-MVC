@@ -34,7 +34,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			} else {
 				IController ctrl = base.CreateController(requestContext, controllerName);
 
-				if (ctrl is IAdminModule || ctrl is IAdminModuleLoad) {
+				if (ctrl is IAdminModule) {
 					var principal = requestContext.HttpContext.User;
 
 					if (principal.Identity.IsAuthenticated) {
@@ -42,14 +42,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 							IAdminModule m = ((IAdminModule)ctrl);
 							m.SiteID = SiteData.CurrentSiteID;
 							m.ModuleID = Guid.Empty;
-						}
-
-						if (ctrl is IAdminModuleLoad) {
-							IAdminModule data = new AdminModuleData();
-							data.SiteID = SiteData.CurrentSiteID;
-							data.ModuleID = Guid.Empty;
-
-							((IAdminModuleLoad)ctrl).LoadData(data);
 						}
 					} else {
 						ctrl = new CmsAdminController();

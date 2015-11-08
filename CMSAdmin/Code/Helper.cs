@@ -119,6 +119,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 
 			ViewEngines.Engines.Add(new CarrotViewEngineTemplate());
 			ViewEngines.Engines.Add(new CarrotViewEngineWidget());
+			// ViewEngines.Engines.Add(new CarrotViewEngineWidgetAdmin());
 
 			ControllerBuilder.Current.SetControllerFactory(CmsControllerFactory.GetFactory());
 		}

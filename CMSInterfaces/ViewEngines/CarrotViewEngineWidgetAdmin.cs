@@ -14,9 +14,9 @@ using System.Web.Mvc;
 
 namespace Carrotware.CMS.Interface {
 
-	public class CarrotViewEngineWidget : CarrotViewEngineBase {
+	public class CarrotViewEngineWidgetAdmin : CarrotViewEngineBase {
 
-		public CarrotViewEngineWidget()
+		public CarrotViewEngineWidgetAdmin()
 			: base() {
 			string[] views = new[] {
 					"~/Views/::KEY::/{0}.cshtml",
@@ -37,21 +37,13 @@ namespace Carrotware.CMS.Interface {
 			this.LoadPaths(views, areas);
 		}
 
-		public static string Key { get { return "CMS_Widget_AssemblyKey"; } }
-
 		public string GetAssemblyKey(ControllerContext ctrlCtx) {
 			string assemblyName = String.Empty;
 			var controller = ctrlCtx.Controller;
 
-			//if (!(controller is IAdminModule)) {
-			if (controller is IWidgetController) {
+			if (controller is IAdminModule && controller is IWidgetController) {
 				assemblyName = (controller as IWidgetController).AssemblyName;
-			} else {
-				if (controller.ViewData[CarrotViewEngineWidget.Key] != null) {
-					assemblyName = controller.ViewData[CarrotViewEngineWidget.Key].ToString();
-				}
 			}
-			//}
 
 			return assemblyName;
 		}
@@ -61,7 +53,7 @@ namespace Carrotware.CMS.Interface {
 			string assemblyName = GetAssemblyKey(ctrlCtx);
 
 #if DEBUG
-			Debug.WriteLine(String.Format("CarrotViewEngineWidget: n:{0}   c:{1}   v:{2}   a:{3}", ctrlCtx.Controller.GetType().Namespace, ctrlCtx.Controller.GetType().Name, viewPath, assemblyName));
+			Debug.WriteLine(String.Format("CarrotViewEngineWidgetAdmin: n:{0}   c:{1}   v:{2}   a:{3}", ctrlCtx.Controller.GetType().Namespace, ctrlCtx.Controller.GetType().Name, viewPath, assemblyName));
 #endif
 
 			if (!String.IsNullOrEmpty(viewPath) && !String.IsNullOrEmpty(assemblyName)) {

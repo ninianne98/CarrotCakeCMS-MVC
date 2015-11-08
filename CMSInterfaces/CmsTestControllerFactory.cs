@@ -37,19 +37,11 @@ namespace Carrotware.CMS.Interface {
 			} else {
 				IController ctrl = base.CreateController(requestContext, controllerName);
 
-				if (ctrl is IAdminModule || ctrl is IAdminModuleLoad) {
+				if (ctrl is IAdminModule) {
 					if (ctrl is IAdminModule) {
 						IAdminModule m = ((IAdminModule)ctrl);
 						m.SiteID = new Guid(this.TestSiteID);
 						m.ModuleID = Guid.Empty;
-					}
-
-					if (ctrl is IAdminModuleLoad) {
-						IAdminModule data = new AdminModuleData();
-						data.SiteID = new Guid(this.TestSiteID);
-						data.ModuleID = Guid.Empty;
-
-						((IAdminModuleLoad)ctrl).LoadData(data);
 					}
 				}
 

@@ -5,7 +5,7 @@ using System.Web.Mvc;
 
 /*
 * CarrotCake CMS (MVC5)
-* http:/www.carrotware.com/
+* http://www.carrotware.com/
 *
 * Copyright 2015, Samantha Copeland
 * Dual licensed under the MIT or GPL Version 2 licenses.
@@ -30,7 +30,7 @@ namespace Carrotware.CMS.Interface {
 
 		public CarrotViewEngineDyn()
 			: base() {
-			string[] partials = new[] {
+			string[] views = new[] {
 					"~/Views/::KEY::/{0}.cshtml",
                     "~/Views/::KEY::/{0}.vbhtml",
                     "~/Views/::KEY::/{1}/{0}.cshtml",
@@ -46,7 +46,7 @@ namespace Carrotware.CMS.Interface {
                     "~/Areas/::KEY::/Views/Shared/{0}.cshtml",
                     "~/Areas/::KEY::/Views/Shared/{0}.vbhtml"};
 
-			this.LoadPaths(partials, areas);
+			this.LoadPaths(views, areas);
 		}
 
 		protected override string ReplacePath(ControllerContext ctrlCtx, string viewPath) {
