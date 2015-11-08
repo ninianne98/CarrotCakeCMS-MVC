@@ -1502,14 +1502,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					case WidgetAttribute.FieldMode.CheckBoxList:
 						//multiple selections are possible, since dictionary is used, insure key is unique by appending the ordinal with a | delimeter.
 						p = null;
-						int checkedPosition = 0;
+						int CheckedPosition = 0;
 						foreach (var v in itm.Options) {
 							if (v.Selected) {
 								var pp = new WidgetProps();
-								pp.KeyName = String.Format("{0}|{1}", itm.Name, checkedPosition);
-								pp.KeyValue = v.Key.ToString();
+								pp.KeyName = v.Value + "|" + CheckedPosition.ToString();
+								pp.KeyValue = v.Value.ToString();
 								props.Add(pp);
-								checkedPosition++;
+								CheckedPosition++;
 							}
 						}
 
