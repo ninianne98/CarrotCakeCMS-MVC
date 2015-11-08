@@ -132,6 +132,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				Response.Cache.SetLastModified(dtModified);
 
 				if (SiteData.IsLikelyHomePage(sFileRequested)) {
+					SiteData.WriteDebugException("cmscontentcontroller_defaultview", new Exception("Empty _page"));
 					return View("_EmptyHome");
 				} else {
 					Response.StatusCode = 404;

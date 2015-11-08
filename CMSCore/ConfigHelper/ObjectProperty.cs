@@ -124,7 +124,7 @@ namespace Carrotware.CMS.Core {
 				string sName = dp.Name.ToLower();
 				List<WidgetProps> lstItmVals = lstProps.Where(x => x.KeyName.ToLower().StartsWith(sName + "|") || x.KeyName.ToLower() == sName).ToList();
 
-				ObjectProperty ListSourceProperty = new ObjectProperty();
+				ObjectProperty sourceProperty = new ObjectProperty();
 
 				string sListSourcePropertyName = (from p in lstDefProps
 												  where p.Name.ToLower() == sName.ToLower()
@@ -135,11 +135,11 @@ namespace Carrotware.CMS.Core {
 					sListSourcePropertyName = String.Empty;
 				}
 
-				ListSourceProperty = (from p in lstDefProps
-									  where p.CanRead == true
-										 && p.CanWrite == false
-										 && p.Name.ToLower() == sListSourcePropertyName.ToLower()
-									  select p).FirstOrDefault();
+				sourceProperty = (from p in lstDefProps
+								  where p.CanRead == true
+									 && p.CanWrite == false
+									 && p.Name.ToLower() == sListSourcePropertyName.ToLower()
+								  select p).FirstOrDefault();
 
 				if (lstItmVals != null && lstItmVals.Any() && dp.FieldMode != WidgetAttribute.FieldMode.CheckBoxList) {
 					dp.TextValue = lstItmVals != null ? lstItmVals.FirstOrDefault().KeyValue : String.Empty;
@@ -148,19 +148,19 @@ namespace Carrotware.CMS.Core {
 
 				Type pt = dp.PropertyType;
 
-				if (ListSourceProperty != null) {
-					if (ListSourceProperty.DefValue is Dictionary<string, string>) {
-						dp.Options = OptionSelections.GetOptionsFromDictionary((Dictionary<string, string>)ListSourceProperty.DefValue);
+				if (sourceProperty != null) {
+					if (sourceProperty.DefValue is Dictionary<string, string>) {
+						dp.Options = OptionSelections.GetOptionsFromDictionary((Dictionary<string, string>)sourceProperty.DefValue);
 
 						// work with a checkbox list, allow more than one value
 						if (dp.FieldMode == WidgetAttribute.FieldMode.CheckBoxList) {
 							// since this is a multi selected capable field, look for anything that starts with the
-							// field name and has the delimeter trailing
+							// field name and has the delimiter trailing
 
-							if (lstItmVals.Any()) {
+							if (lstItmVals.Any() && dp.Options.Any()) {
 								foreach (var v in dp.Options) {
 									v.Selected = (from p in lstItmVals
-												  where p.KeyValue == v.Value
+												  where p.KeyValue == v.Key
 												  select p.KeyValue).Any();
 								}
 							}
