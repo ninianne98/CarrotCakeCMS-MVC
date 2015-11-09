@@ -58,6 +58,5 @@ namespace Carrotware.Web.UI.Components {
 					namespaces: _namespaces.ToArray()
 				);
 		}
-
 	}
 }

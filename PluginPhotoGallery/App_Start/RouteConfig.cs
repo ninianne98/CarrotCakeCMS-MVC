@@ -23,7 +23,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+				defaults: new { controller = "Admin", action = "Index", id = UrlParameter.Optional },
 				namespaces: _namespaces.ToArray()
             );
         }

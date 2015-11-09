@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-//using Carrotware.CMS.Core;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 

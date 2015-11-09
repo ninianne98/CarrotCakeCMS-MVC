@@ -300,7 +300,7 @@
 				@Html.TextBoxFor(m => m.Date, "{0:MM/dd/yyyy}", new { @class = "dateRegion" })
 			</td>
 			<td style="width: 100px">
-				<input type="submit" name="btnApply" value="Apply" id="btnApply" />
+				<input type="submit" name="btnApply" value="Apply" id="btnApply" class="btn btn-primary" />
 			</td>
 		</tr>
 		<tr>
@@ -318,11 +318,11 @@
 	<div style="width: 960px">
 		<div class="galleryScrollHead">
 			<b>Site Images (<span id="srcGalleryCount">0</span> items)</b> &nbsp;&nbsp;&nbsp;
-			<input type="button" value="copy all" onclick="javascript:copyFolderContents()" />
+			<input type="button" value="copy all" onclick="javascript:copyFolderContents()" class="btn btn-primary" />
 		</div>
 		<div class="galleryScrollHead">
 			<b>Gallery Images (<span id="tgtGalleryCount">0</span> items)</b> &nbsp;&nbsp;&nbsp;
-			<input type="button" value="clear all" onclick="javascript:clearFolderContents()" />
+			<input type="button" value="clear all" onclick="javascript:clearFolderContents()" class="btn btn-primary" />
 		</div>
 		<div style="clear: both">
 		</div>
@@ -345,7 +345,7 @@
 								</span>
 							</a>
 						</span>
-						<a class="editMetaData" href="javascript:@Carrotware.CMS.Interface.CarrotLayout.WritePopupLink( Url.Action("EditImageMetaData", null, new { path = Carrotware.CMS.Core.CMSConfigHelper.EncodeBase64(srcImage.FullFileName) }))">
+						<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink( Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(srcImage.FullFileName) }))">
 							<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
 						</a>
 					</li>
@@ -371,7 +371,8 @@
 								</span>
 							</a>
 						</span>
-						<a class="editMetaData" href="javascript:ShowWindowNoRefresh('@Url.Action("EditImageMetaData", null, new { path = Carrotware.CMS.Core.CMSConfigHelper.EncodeBase64(galImage.FullFileName) })');">
+
+						<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink(Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(galImage.FullFileName) }))">
 							<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
 						</a>
 					</li>
@@ -384,7 +385,7 @@
 
 	@Html.TextAreaFor(m => m.GalleryOrder, new { @class = "inputFields", rows = "8", cols = "60" })
 
-	<input type="button" name="btnSaveClick" value="Save" id="btnSaveClick" onclick="saveGallery()" />
+	<input type="button" name="btnSaveClick" value="Save" id="btnSaveClick" onclick="saveGallery()" class="btn btn-primary" />
 
-	<input type="submit" name="btnSave" value="Save" id="btnSave" style="display:none;" />
+	<input type="submit" name="btnSave" value="Save" id="btnSave" style="display:none;" class="btn btn-primary" />
 }

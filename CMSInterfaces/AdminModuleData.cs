@@ -19,10 +19,6 @@ namespace Carrotware.CMS.Interface {
 
 		public string ModuleName { get; set; }
 
-		public virtual string QueryStringFragment { get; set; }
-
-		public virtual string QueryStringPattern { get; set; }
-
 		public virtual void LoadData(IAdminModule data) { }
 	}
 }

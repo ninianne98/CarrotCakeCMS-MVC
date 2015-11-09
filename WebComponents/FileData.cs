@@ -14,7 +14,7 @@ using System.Web;
 * Date: August 2015
 */
 
-namespace Carrotware.CMS.Core {
+namespace Carrotware.Web.UI.Components {
 
 	public class FileData {
 
@@ -39,7 +39,7 @@ namespace Carrotware.CMS.Core {
 
 		public string FullFileName {
 			get {
-				return String.Format("/{0}/{1}", this.FolderPath, this.FileName).Replace(@"//", @"/");
+				return String.Format("/{0}/{1}", this.FolderPath, this.FileName).Replace(@"///", @"/").Replace(@"//", @"/").Replace(@"//", @"/");
 			}
 		}
 	}
@@ -47,6 +47,10 @@ namespace Carrotware.CMS.Core {
 	public class FileDataHelper {
 
 		public FileDataHelper() { }
+
+		public FileDataHelper(string blockedExts) {
+			_FileTypes = blockedExts;
+		}
 
 		private static string _wwwpath = null;
 
@@ -67,13 +71,7 @@ namespace Carrotware.CMS.Core {
 		public List<string> BlockedTypes {
 			get {
 				if (_FileTypes == null) {
-					CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
-					if (config.FileManagerConfig != null && !String.IsNullOrEmpty(config.FileManagerConfig.BlockedExtensions)) {
-						_FileTypes = config.FileManagerConfig.BlockedExtensions;
-					}
-				}
-				if (_FileTypes == null) {
-					_FileTypes = "asp;aspx;ascx;asmx;asax;axd;dll;pdb;exe;cs;vb;cshtml;vbhtml;master;config;xml;user;csproj;sln";
+					_FileTypes = "asp;aspx;ascx;asmx;svc;asax;axd;ashx;dll;pdb;exe;cs;vb;cshtml;vbhtml;master;config;xml;user;csproj;vbproj;sln";
 				}
 				return _FileTypes.Split(';').ToList();
 			}
@@ -235,7 +233,7 @@ namespace Carrotware.CMS.Core {
 						f = GetFileInfo(sQuery, myFile);
 
 						try {
-							if (!(from b in BlockedTypes
+							if (!(from b in this.BlockedTypes
 								  where b.ToLower().Replace(".", "") == f.FileExtension.Replace(".", "")
 								  select b).Any()) {
 								dsID.Add(f);

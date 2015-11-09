@@ -51,36 +51,37 @@
 
 		<td>
 			<!--   @SelMenu   -->
+
+			<script type="text/javascript">
+
+				$(document).ready(function () {
+					moduleLoader();
+				});
+
+				$(document).ajaxComplete(function (event, xhr, settings) {
+					moduleLoader();
+				});
+
+				setTimeout("moduleLoader();", 250);
+
+				function moduleLoader() {
+					modulePageLoad();
+				}
+
+				function modulePageLoad() {
+					$("#module-accordion").accordion({
+						heightStyle: "content",
+						active: parseInt('@selTab')
+					});
+
+					$('#tabExtensions').attr('class', "current sub");
+				}
+			</script>
+
 			@RenderBody()
 		</td>
 	</tr>
 </table>
-
-<script type="text/javascript">
-
-	$(document).ready(function () {
-		moduleLoader();
-	});
-
-	$(document).ajaxComplete(function (event, xhr, settings) {
-		moduleLoader();
-	});
-
-	setTimeout("moduleLoader();", 250);
-
-	function moduleLoader() {
-		modulePageLoad();
-	}
-
-	function modulePageLoad() {
-		$("#module-accordion").accordion({
-			heightStyle: "content",
-			active: parseInt('@selTab')
-		});
-
-		$('#tabExtensions').attr('class', "current sub");
-	}
-</script>
 
 @section footer {
 

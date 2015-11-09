@@ -1,5 +1,6 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Security.Models;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;

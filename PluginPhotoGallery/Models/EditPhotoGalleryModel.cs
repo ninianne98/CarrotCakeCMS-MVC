@@ -1,7 +1,6 @@
-﻿using Carrotware.CMS.Core;
+﻿using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -20,7 +19,6 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 
 		public EditPhotoGalleryModel(Guid siteId, Guid galleryId)
 			: this() {
-
 			this.SiteID = siteId;
 			this.GalleryID = galleryId;
 
@@ -87,7 +85,6 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 				}
 			}
 
-			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith(SiteData.AdminFolderPath));
 			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/app_code/"));
 			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/app_data/"));
 			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/app_start/"));
@@ -193,7 +190,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 				flsWorking = flsWorking.Union(imgs).ToList();
 			}
 
-			flsWorking = flsWorking.Where(x => x.MimeType.StartsWith("image") && (x.FolderPath.ToLower().StartsWith(SiteData.AdminFolderPath) == false)).ToList();
+			flsWorking = flsWorking.Where(x => x.MimeType.StartsWith("image")).ToList();
 
 			if (dtFilter.HasValue) {
 				DateTime dtFlt = dtFilter.Value;

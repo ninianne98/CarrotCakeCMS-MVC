@@ -98,10 +98,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\prettyPhoto\PhotoIcon.png" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Assets\prettyPhoto\dark_rounded\btnNext.png" />
     <Content Include="Assets\prettyPhoto\dark_rounded\btnPrevious.png" />
     <Content Include="Assets\prettyPhoto\dark_rounded\contentPattern.png" />
@@ -142,7 +138,12 @@
     <Content Include="Assets\prettyPhoto\light_square\loader.gif" />
     <Content Include="Assets\prettyPhoto\light_square\sprite.png" />
     <Content Include="Assets\prettyPhoto\prettyPhoto.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\violet.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -151,9 +152,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <None Include="Scripts\jquery-1.11.3.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-1.11.3.intellisense.js" />
     <Content Include="Scripts\jquery-1.11.3.js" />
     <Content Include="Scripts\jquery-1.11.3.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -164,7 +165,6 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\modernizr-2.8.3.js" />
     <EmbeddedResource Include="tblGallery.sql" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -231,10 +231,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CMSCore\CMSCore.csproj">
-      <Project>{83b39b26-ec55-4d23-aae7-0eb3b76bb965}</Project>
-      <Name>CMSCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\CMSDBUpdater\CMSDBUpdater.csproj">
       <Project>{18b29bf3-d8de-4bf4-ac22-2dd5ae389dec}</Project>
       <Name>CMSDBUpdater</Name>

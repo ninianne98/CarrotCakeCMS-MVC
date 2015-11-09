@@ -135,6 +135,7 @@
     <Compile Include="CarrotHttpHandler.cs" />
     <Compile Include="CarrotWeb.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="FileData.cs" />
     <Compile Include="Grid\CarrotWebDataTable.cs" />
     <Compile Include="Grid\CarrotWebGridBase.cs" />
     <Compile Include="Grid\CarrotWebGridEnums.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SizeUnit.cs" />
     <Compile Include="Grid\CarrotWebGrid.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="WrappedItem.cs" />
   </ItemGroup>
   <ItemGroup>

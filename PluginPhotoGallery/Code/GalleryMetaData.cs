@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-//using Carrotware.CMS.Core;
 
 namespace CarrotCake.CMS.Plugins.PhotoGallery {
 

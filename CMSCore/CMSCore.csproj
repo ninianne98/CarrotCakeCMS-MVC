@@ -209,7 +209,6 @@
     <Compile Include="SiteContent\Widget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteContent\SiteData.cs" />
-    <Compile Include="Utilities\FileData.cs" />
     <Compile Include="Utilities\SiteTimeZone.cs" />
     <Compile Include="Utilities\TrackbackHelper.cs" />
   </ItemGroup>

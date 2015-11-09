@@ -1,4 +1,5 @@
 ﻿using Carrotware.CMS.Data;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,7 +7,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Web;
 using System.Web.Caching;
 using System.Web.UI;
@@ -148,6 +148,17 @@ namespace Carrotware.CMS.Core {
 			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 				return cmsHelper.AdminModules.Any();
 			}
+		}
+
+		public static FileDataHelper GetFileDataHelper() {
+			string fileTypes = null;
+
+			CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+			if (config.FileManagerConfig != null && !String.IsNullOrEmpty(config.FileManagerConfig.BlockedExtensions)) {
+				fileTypes = config.FileManagerConfig.BlockedExtensions;
+			}
+
+			return new FileDataHelper(fileTypes);
 		}
 
 		private static DataSet ReadDataSetConfig(CMSConfigFileType cfg, string sPath) {
@@ -991,22 +1002,11 @@ namespace Carrotware.CMS.Core {
 		//=====================
 
 		public static string DecodeBase64(string ValIn) {
-			string val = String.Empty;
-			if (!String.IsNullOrEmpty(ValIn)) {
-				ASCIIEncoding encoding = new ASCIIEncoding();
-				val = encoding.GetString(Convert.FromBase64String(ValIn));
-			}
-			return val;
+			return Utils.DecodeBase64(ValIn);
 		}
 
 		public static string EncodeBase64(string ValIn) {
-			string val = String.Empty;
-			if (!String.IsNullOrEmpty(ValIn)) {
-				ASCIIEncoding encoding = new ASCIIEncoding();
-				byte[] toEncodeAsBytes = ASCIIEncoding.ASCII.GetBytes(ValIn);
-				val = System.Convert.ToBase64String(toEncodeAsBytes);
-			}
-			return val;
+			return Utils.EncodeBase64(ValIn);
 		}
 
 		public void OverrideKey(Guid guidContentID) {

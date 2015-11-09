@@ -1,5 +1,4 @@
 ﻿using CarrotCake.CMS.Plugins.PhotoGallery.Models;
-using Carrotware.CMS.Core;
 using Carrotware.CMS.DBUpdater;
 using Carrotware.CMS.Interface.Controllers;
 using Carrotware.Web.UI.Components;
@@ -133,7 +132,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			string imageFile = String.Empty;
 
 			if (!String.IsNullOrEmpty(path)) {
-				imageFile = CMSConfigHelper.DecodeBase64(path);
+				imageFile = Utils.DecodeBase64(path);
 			}
 
 			GalleryMetaData model = gh.GalleryMetaDataGetByFilename(imageFile);
@@ -166,7 +165,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			meta.ImageTitle = model.ImageTitle;
 			meta.Save();
 
-			return RedirectToAction("EditImageMetaData", new { @path = CMSConfigHelper.EncodeBase64(meta.GalleryImage) });
+			return RedirectToAction("EditImageMetaData", new { @path = Utils.EncodeBase64(meta.GalleryImage) });
 		}
 	}
 }

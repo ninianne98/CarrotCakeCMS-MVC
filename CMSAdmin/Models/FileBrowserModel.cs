@@ -1,4 +1,5 @@
 ﻿using Carrotware.CMS.Core;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -217,7 +218,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 	//==================
 
 	public class AjaxFileUploadModel {
-		protected FileDataHelper helpFile = new FileDataHelper();
+		protected FileDataHelper helpFile = CMSConfigHelper.GetFileDataHelper();
 
 		public AjaxFileUploadModel() { }
 
@@ -241,8 +242,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					string uploadedFileName = postedFile.FileName;
 
 					if (!(from b in helpFile.BlockedTypes
-						 where uploadedFileName.ToLower().EndsWith(String.Format(".{0}", b).ToLower())
-						 select b).Any()) {
+						  where uploadedFileName.ToLower().EndsWith(String.Format(".{0}", b).ToLower())
+						  select b).Any()) {
 						if (this.EscapeSpaces) {
 							uploadedFileName = uploadedFileName.Replace(" ", "-");
 							uploadedFileName = uploadedFileName.Replace("_", "-");
