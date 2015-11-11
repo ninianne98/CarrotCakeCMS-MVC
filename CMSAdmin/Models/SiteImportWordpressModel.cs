@@ -91,7 +91,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		protected SiteNav GetHomePage(SiteData site) {
 			if (_navHome == null) {
-				using (SiteNavHelper navHelper = new SiteNavHelper()) {
+				using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 					_navHome = navHelper.FindHome(site.SiteID, false);
 				}
 			}
@@ -219,7 +219,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 			this.Site.Comments.ForEach(r => r.ImportRootID = Guid.Empty);
 
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				if (this.ImportPages) {
 					sMsg += "<li>Imported Pages</li>";
 

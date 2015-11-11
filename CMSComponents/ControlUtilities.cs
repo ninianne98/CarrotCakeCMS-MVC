@@ -64,13 +64,13 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static List<SiteNav> GetPageNavTree() {
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				return navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, SiteData.AlternateCurrentScriptName, !SecurityData.IsAuthEditor);
 			}
 		}
 
 		public static SiteNav GetParentPage() {
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				SiteNav pageNav = navHelper.GetParentPageNavigation(SiteData.CurrentSiteID, SiteData.AlternateCurrentScriptName);
 
 				//assign bogus page name for comp purposes
@@ -86,7 +86,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static SiteNav GetCurrentPage() {
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				SiteNav pageNav = navHelper.FindByFilename(SiteData.CurrentSiteID, SiteData.AlternateCurrentScriptName);
 				//assign bogus page name for comp purposes
 				if (pageNav == null) {

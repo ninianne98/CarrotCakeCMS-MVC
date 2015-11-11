@@ -637,7 +637,7 @@ namespace Carrotware.CMS.Core {
 		public static SiteNav SiteBlogPage {
 			get {
 				if (CurrentSite.Blog_Root_ContentID.HasValue) {
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						return navHelper.GetLatestVersion(CurrentSite.SiteID, CurrentSite.Blog_Root_ContentID.Value);
 					}
 				}
@@ -845,7 +845,7 @@ namespace Carrotware.CMS.Core {
 					if (sFileRequested.ToLower().StartsWith(site.BlogFolderPath.ToLower())) {
 						if (site.GetSpecialFilePathPrefixes().Where(x => sFileRequested.ToLower().StartsWith(x)).Count() > 0) {
 							if (site.Blog_Root_ContentID.HasValue) {
-								using (SiteNavHelper navHelper = new SiteNavHelper()) {
+								using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 									SiteNav blogNavPage = navHelper.GetLatestVersion(site.SiteID, site.Blog_Root_ContentID.Value);
 									if (blogNavPage != null) {
 										sRequestedURL = blogNavPage.FileName;

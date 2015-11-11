@@ -625,7 +625,7 @@ namespace Carrotware.CMS.Core {
 
 			ContentPageType PageType = new ContentPageType();
 
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				if (feedData == RSSFeedInclude.PageOnly || feedData == RSSFeedInclude.BlogAndPages) {
 					List<SiteNav> lst1 = navHelper.GetLatest(this.SiteID, 8, true);
 					lst = lst.Union(lst1).ToList();

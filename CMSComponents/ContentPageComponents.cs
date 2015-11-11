@@ -64,7 +64,7 @@ namespace Carrotware.CMS.UI.Components {
 			SiteNav navNext = new SiteNav();
 
 			if (this.NavigationDirection != NavDirection.Unknown) {
-				using (SiteNavHelper navHelper = new SiteNavHelper()) {
+				using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 					if (NavigationDirection == NavDirection.Prev) {
 						navNext = navHelper.GetPrevPost(SiteData.CurrentSiteID, this.ContentPage.Root_ContentID, !SecurityData.IsAuthEditor);
 					}

@@ -124,8 +124,8 @@ namespace Carrotware.CMS.Core {
 			if (SiteData.IsPageSampler || !SiteData.IsWebView) {
 				sd = SiteNavHelper.GetSamplerView();
 			} else {
-				using (SiteNavHelper sdh = new SiteNavHelper()) {
-					sd = sdh.GetLatestVersion(this.SiteID, this.Root_ContentID);
+				using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
+					sd = navHelper.GetLatestVersion(this.SiteID, this.Root_ContentID);
 				}
 			}
 			return sd;

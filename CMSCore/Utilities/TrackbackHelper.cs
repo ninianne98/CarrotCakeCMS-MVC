@@ -171,8 +171,8 @@ namespace Carrotware.CMS.Core {
 
 		public void GenerateSuccessResponse(HttpRequest request, XmlWriter writer, TrackBackInfo tb) {
 			SiteNav navData = null;
-			using (SiteNavHelper snh = new SiteNavHelper()) {
-				navData = snh.FindByFilename(SiteData.CurrentSiteID, tb.BlogPostID);
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
+				navData = navHelper.FindByFilename(SiteData.CurrentSiteID, tb.BlogPostID);
 			}
 			string sReferer = null;
 			string sIP = request.ServerVariables["REMOTE_ADDR"].ToString();
@@ -285,8 +285,8 @@ namespace Carrotware.CMS.Core {
 			this.DestinationUrl = new Uri(sTgtURL);
 			this.BlogSite = SiteData.GetSiteFromCache(siteID);
 
-			using (SiteNavHelper snh = new SiteNavHelper()) {
-				this.SourcePage = snh.GetLatestVersion(siteID, sourceGuid);
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
+				this.SourcePage = navHelper.GetLatestVersion(siteID, sourceGuid);
 			}
 
 			return SendTrackback();
@@ -296,8 +296,8 @@ namespace Carrotware.CMS.Core {
 			this.DestinationUrl = new Uri(sTgtURL);
 			this.BlogSite = SiteData.GetSiteFromCache(siteID);
 
-			using (SiteNavHelper snh = new SiteNavHelper()) {
-				this.SourcePage = snh.FindByFilename(siteID, sourceURL);
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
+				this.SourcePage = navHelper.FindByFilename(siteID, sourceURL);
 			}
 
 			return SendTrackback();

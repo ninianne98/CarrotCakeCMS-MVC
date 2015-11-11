@@ -348,5 +348,7 @@ namespace Carrotware.CMS.Core {
 		public List<SiteNav> PerformDataPagingQueryableContent(Guid siteID, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir, IQueryable<Data.vw_carrot_Content> QueryInput) {
 			return SiteNavHelper.GetSamplerFakeNav(pageSize);
 		}
+
+		public void Dispose() { }
 	}
 }

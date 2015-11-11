@@ -30,7 +30,7 @@ namespace Carrotware.CMS.UI.Components {
 			base.ReadPageNbr();
 			List<PostComment> lstContents = new List<PostComment>();
 
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				if (SiteData.IsWebView) {
 					SiteNav sn = navHelper.FindByFilename(SiteData.CurrentSiteID, SiteData.CurrentScriptName);
 

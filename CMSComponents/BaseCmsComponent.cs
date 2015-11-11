@@ -18,7 +18,7 @@ using System.Text;
 namespace Carrotware.CMS.UI.Components {
 
 	public abstract class BaseCmsComponent : BaseWebComponent, ICmsChildrenComponent, ICmsMainComponent {
-		protected SiteNavHelper navHelper = new SiteNavHelper();
+		protected ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper();
 
 		public BaseCmsComponent()
 			: base() {

@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace Carrotware.CMS.Core {
 
-	public interface ISiteNavHelper {
+	public interface ISiteNavHelper : IDisposable {
 
 		SiteNav FindByFilename(Guid siteID, string urlFileName);
 

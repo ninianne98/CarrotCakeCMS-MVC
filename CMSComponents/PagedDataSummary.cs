@@ -100,7 +100,7 @@ namespace Carrotware.CMS.UI.Components {
 				this.PageNumber = 1;
 			}
 
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				if (SiteData.IsWebView) {
 					switch (this.ContentType) {
 						case SummaryContentType.Blog:

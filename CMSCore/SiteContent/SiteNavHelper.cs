@@ -19,271 +19,39 @@ using System.Web.UI;
 
 namespace Carrotware.CMS.Core {
 
-	public class SiteNavHelper : IDisposable, ISiteNavHelper {
-		private ISiteNavHelper _navHelper = null;
+	public enum SiteNavMode {
+		RealNav,
+		MockupNav,
+	}
 
-		public SiteNavHelper() {
+	//=============
+	public static class SiteNavFactory {
+
+		public static ISiteNavHelper GetSiteNavHelper() {
 			if (SiteData.IsWebView) {
 				if ((SiteData.IsPageSampler || SiteData.IsPageReal) && !SiteData.IsCurrentPageSpecial) {
-					_navHelper = new SiteNavHelperMock();
+					return new SiteNavHelperMock();
 				} else {
-					_navHelper = new SiteNavHelperReal();
+					return new SiteNavHelperReal();
 				}
 			} else {
-				_navHelper = new SiteNavHelperMock();
+				return new SiteNavHelperMock();
 			}
 		}
 
-		public enum SiteNavMode {
-			RealNav,
-			MockupNav,
-		}
-
-		public SiteNavHelper(SiteNavMode navMode) {
+		public static ISiteNavHelper GetSiteNavHelper(SiteNavMode navMode) {
 			if (navMode == SiteNavMode.RealNav) {
-				_navHelper = new SiteNavHelperReal();
+				return new SiteNavHelperReal();
 			} else {
-				_navHelper = new SiteNavHelperMock();
+				return new SiteNavHelperMock();
 			}
 		}
+	}
 
-		#region ISiteNavHelper Members
+	//=============
+	public class SiteNavHelper {
 
-		public SiteNav FindByFilename(Guid siteID, string urlFileName) {
-			return _navHelper.FindByFilename(siteID, urlFileName);
-		}
-
-		public SiteNav FindHome(Guid siteID) {
-			return _navHelper.FindHome(siteID);
-		}
-
-		public SiteNav FindHome(Guid siteID, bool bActiveOnly) {
-			return _navHelper.FindHome(siteID, bActiveOnly);
-		}
-
-		public List<SiteNav> GetChildNavigation(Guid siteID, Guid? ParentID, bool bActiveOnly) {
-			return _navHelper.GetChildNavigation(siteID, ParentID, bActiveOnly);
-		}
-
-		public List<SiteNav> GetChildNavigation(Guid siteID, string sParentID, bool bActiveOnly) {
-			return _navHelper.GetChildNavigation(siteID, sParentID, bActiveOnly);
-		}
-
-		public int GetChildNavigationCount(Guid siteID, Guid? ParentID, bool bActiveOnly) {
-			return _navHelper.GetChildNavigationCount(siteID, ParentID, bActiveOnly);
-		}
-
-		public int GetChildNavigationCount(Guid siteID, string sParentID, bool bActiveOnly) {
-			return _navHelper.GetChildNavigationCount(siteID, sParentID, bActiveOnly);
-		}
-
-		public List<SiteNav> GetLatest(Guid siteID, int iUpdates, bool bActiveOnly) {
-			return _navHelper.GetLatest(siteID, iUpdates, bActiveOnly);
-		}
-
-		public List<SiteNav> GetLatestPosts(Guid siteID, int iUpdates, bool bActiveOnly) {
-			return _navHelper.GetLatestPosts(siteID, iUpdates, bActiveOnly);
-		}
-
-		public List<SiteNav> GetLatestUpdates(Guid siteID, int iUpdates, bool bActiveOnly) {
-			return _navHelper.GetLatestUpdates(siteID, iUpdates, bActiveOnly);
-		}
-
-		public List<SiteNav> GetLatestPostUpdates(Guid siteID, int iUpdates, bool bActiveOnly) {
-			return _navHelper.GetLatestPostUpdates(siteID, iUpdates, bActiveOnly);
-		}
-
-		public List<ContentDateTally> GetMonthBlogUpdateList(Guid siteID, int iUpdates, bool bActiveOnly) {
-			return _navHelper.GetMonthBlogUpdateList(siteID, iUpdates, bActiveOnly);
-		}
-
-		public List<ContentDateLinks> GetSingleMonthBlogUpdateList(SiteData currentSite, DateTime monthDate, bool bActiveOnly) {
-			return _navHelper.GetSingleMonthBlogUpdateList(currentSite, monthDate, bActiveOnly);
-		}
-
-		public List<ContentCategory> GetCategoryList(Guid siteID, int iUpdates) {
-			return _navHelper.GetCategoryList(siteID, iUpdates);
-		}
-
-		public List<ContentTag> GetTagList(Guid siteID, int iUpdates) {
-			return _navHelper.GetTagList(siteID, iUpdates);
-		}
-
-		public List<ContentTag> GetTagListForPost(Guid siteID, int iUpdates, string urlFileName) {
-			return _navHelper.GetTagListForPost(siteID, iUpdates, urlFileName);
-		}
-
-		public List<ContentCategory> GetCategoryListForPost(Guid siteID, int iUpdates, string urlFileName) {
-			return _navHelper.GetCategoryListForPost(siteID, iUpdates, urlFileName);
-		}
-
-		public List<ContentTag> GetTagListForPost(Guid siteID, int iUpdates, Guid rootContentID) {
-			return _navHelper.GetTagListForPost(siteID, iUpdates, rootContentID);
-		}
-
-		public List<ContentCategory> GetCategoryListForPost(Guid siteID, int iUpdates, Guid rootContentID) {
-			return _navHelper.GetCategoryListForPost(siteID, iUpdates, rootContentID);
-		}
-
-		public SiteNav GetLatestVersion(Guid siteID, Guid rootContentID) {
-			return _navHelper.GetLatestVersion(siteID, rootContentID);
-		}
-
-		public SiteNav GetPrevPost(Guid siteID, Guid rootContentID, bool bActiveOnly) {
-			return _navHelper.GetPrevPost(siteID, rootContentID, bActiveOnly);
-		}
-
-		public SiteNav GetNextPost(Guid siteID, Guid rootContentID, bool bActiveOnly) {
-			return _navHelper.GetNextPost(siteID, rootContentID, bActiveOnly);
-		}
-
-		public SiteNav GetLatestVersion(Guid siteID, bool bActiveOnly, string sPage) {
-			return _navHelper.GetLatestVersion(siteID, bActiveOnly, sPage);
-		}
-
-		public List<SiteNav> GetMasterNavigation(Guid siteID, bool bActiveOnly) {
-			return _navHelper.GetMasterNavigation(siteID, bActiveOnly);
-		}
-
-		public SiteNav GetPageNavigation(Guid siteID, Guid rootContentID) {
-			return _navHelper.GetPageNavigation(siteID, rootContentID);
-		}
-
-		public SiteNav GetPageNavigation(Guid siteID, string sPage) {
-			return _navHelper.GetPageNavigation(siteID, sPage);
-		}
-
-		public SiteNav GetParentPageNavigation(Guid siteID, Guid rootContentID) {
-			return _navHelper.GetParentPageNavigation(siteID, rootContentID);
-		}
-
-		public SiteNav GetParentPageNavigation(Guid siteID, string sPage) {
-			return _navHelper.GetParentPageNavigation(siteID, sPage);
-		}
-
-		public List<SiteNav> GetSiblingNavigation(Guid siteID, Guid PageID, bool bActiveOnly) {
-			return _navHelper.GetSiblingNavigation(siteID, PageID, bActiveOnly);
-		}
-
-		public List<SiteNav> GetSiblingNavigation(Guid siteID, string sPage, bool bActiveOnly) {
-			return _navHelper.GetSiblingNavigation(siteID, sPage, bActiveOnly);
-		}
-
-		public List<SiteNav> GetTopNavigation(Guid siteID, bool bActiveOnly) {
-			return _navHelper.GetTopNavigation(siteID, bActiveOnly);
-		}
-
-		public List<SiteNav> GetTwoLevelNavigation(Guid siteID, bool bActiveOnly) {
-			return _navHelper.GetTwoLevelNavigation(siteID, bActiveOnly);
-		}
-
-		public List<SiteNav> GetLevelDepthNavigation(Guid siteID, int iDepth, bool bActiveOnly) {
-			return _navHelper.GetLevelDepthNavigation(siteID, iDepth, bActiveOnly);
-		}
-
-		public List<SiteNav> GetPageCrumbNavigation(Guid siteID, Guid rootContentID, bool bActiveOnly) {
-			return _navHelper.GetPageCrumbNavigation(siteID, rootContentID, bActiveOnly);
-		}
-
-		public List<SiteNav> GetPageCrumbNavigation(Guid siteID, string sPage, bool bActiveOnly) {
-			return _navHelper.GetPageCrumbNavigation(siteID, sPage, bActiveOnly);
-		}
-
-		public int GetFilteredContentPagedCount(SiteData currentSite, string sFilterPath, bool bActiveOnly) {
-			return _navHelper.GetFilteredContentPagedCount(currentSite, sFilterPath, bActiveOnly);
-		}
-
-		public int GetFilteredContentByIDPagedCount(SiteData currentSite, List<Guid> lstCategories, bool bActiveOnly) {
-			return _navHelper.GetFilteredContentByIDPagedCount(currentSite, lstCategories, bActiveOnly);
-		}
-
-		public int GetFilteredContentByIDPagedCount(SiteData currentSite, List<Guid> lstCategoryGUIDs, List<string> lstCategorySlugs, bool bActiveOnly) {
-			return _navHelper.GetFilteredContentByIDPagedCount(currentSite, lstCategoryGUIDs, lstCategorySlugs, bActiveOnly);
-		}
-
-		public string GetBlogHeadingFromURL(SiteData currentSite, string sFilterPath) {
-			return _navHelper.GetBlogHeadingFromURL(currentSite, sFilterPath);
-		}
-
-		public List<SiteNav> GetFilteredContentPagedList(SiteData currentSite, string sFilterPath, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir) {
-			return _navHelper.GetFilteredContentPagedList(currentSite, sFilterPath, bActiveOnly, pageSize, pageNumber, sortField, sortDir);
-		}
-
-		public List<SiteNav> GetFilteredContentByIDPagedList(SiteData currentSite, List<Guid> lstCategories, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir) {
-			return _navHelper.GetFilteredContentByIDPagedList(currentSite, lstCategories, bActiveOnly, pageSize, pageNumber, sortField, sortDir);
-		}
-
-		public List<SiteNav> GetFilteredContentByIDPagedList(SiteData currentSite, List<Guid> lstCategoryGUIDs, List<string> lstCategorySlugs, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir) {
-			return _navHelper.GetFilteredContentByIDPagedList(currentSite, lstCategoryGUIDs, lstCategorySlugs, bActiveOnly, pageSize, pageNumber, sortField, sortDir);
-		}
-
-		public List<SiteNav> GetLatestBlogPagedList(Guid siteID, bool bActiveOnly, int pageNumber) {
-			return _navHelper.GetLatestBlogPagedList(siteID, bActiveOnly, pageNumber);
-		}
-
-		public List<SiteNav> GetLatestBlogPagedList(Guid siteID, bool bActiveOnly, int pageNumber, string sortField, string sortDir) {
-			return _navHelper.GetLatestBlogPagedList(siteID, bActiveOnly, pageNumber, sortField, sortDir);
-		}
-
-		public List<SiteNav> GetLatestBlogPagedList(Guid siteID, bool bActiveOnly, int pageSize, int pageNumber) {
-			return _navHelper.GetLatestBlogPagedList(siteID, bActiveOnly, pageSize, pageNumber);
-		}
-
-		public List<SiteNav> GetLatestBlogPagedList(Guid siteID, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir) {
-			return _navHelper.GetLatestBlogPagedList(siteID, bActiveOnly, pageSize, pageNumber, sortField, sortDir);
-		}
-
-		public List<SiteNav> GetLatestContentPagedList(Guid siteID, ContentPageType.PageType postType, bool bActiveOnly, int pageNumber) {
-			return _navHelper.GetLatestContentPagedList(siteID, postType, bActiveOnly, pageNumber);
-		}
-
-		public List<SiteNav> GetLatestContentPagedList(Guid siteID, ContentPageType.PageType postType, bool bActiveOnly, int pageNumber, string sortField, string sortDir) {
-			return _navHelper.GetLatestContentPagedList(siteID, postType, bActiveOnly, pageNumber, sortField, sortDir);
-		}
-
-		public List<SiteNav> GetLatestContentPagedList(Guid siteID, ContentPageType.PageType postType, bool bActiveOnly, int pageSize, int pageNumber) {
-			return _navHelper.GetLatestContentPagedList(siteID, postType, bActiveOnly, pageSize, pageNumber);
-		}
-
-		public List<SiteNav> GetLatestContentPagedList(Guid siteID, ContentPageType.PageType postType, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir) {
-			return _navHelper.GetLatestContentPagedList(siteID, postType, bActiveOnly, pageSize, pageNumber, sortField, sortDir);
-		}
-
-		public List<SiteNav> GetLatestContentSearchList(Guid siteID, string searchTerm, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir) {
-			return _navHelper.GetLatestContentSearchList(siteID, searchTerm, bActiveOnly, pageSize, pageNumber, sortField, sortDir);
-		}
-
-		public List<SiteNav> GetLatestChildContentPagedList(Guid siteID, Guid? parentContentID, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir) {
-			return _navHelper.GetLatestChildContentPagedList(siteID, parentContentID, bActiveOnly, pageSize, pageNumber, sortField, sortDir);
-		}
-
-		public List<SiteNav> GetLatestChildContentPagedList(Guid siteID, string sParentPage, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir) {
-			return _navHelper.GetLatestChildContentPagedList(siteID, sParentPage, bActiveOnly, pageSize, pageNumber, sortField, sortDir);
-		}
-
-		public int GetSiteContentCount(Guid siteID) {
-			return _navHelper.GetSiteContentCount(siteID);
-		}
-
-		public int GetSitePageCount(Guid siteID, ContentPageType.PageType entryType) {
-			return _navHelper.GetSitePageCount(siteID, entryType);
-		}
-
-		public int GetSitePageCount(Guid siteID, ContentPageType.PageType entryType, bool bActiveOnly) {
-			return _navHelper.GetSitePageCount(siteID, entryType, bActiveOnly);
-		}
-
-		public int GetSiteSearchCount(Guid siteID, string searchTerm, bool bActiveOnly) {
-			return _navHelper.GetSiteSearchCount(siteID, searchTerm, bActiveOnly);
-		}
-
-		public List<SiteNav> PerformDataPagingQueryableContent(Guid siteID, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir, IQueryable<vw_carrot_Content> QueryInput) {
-			return _navHelper.PerformDataPagingQueryableContent(siteID, bActiveOnly, pageSize, pageNumber, sortField, sortDir, QueryInput);
-		}
-
-		#endregion ISiteNavHelper Members
-
-		public static List<string> GetSiteDirectoryPaths() {
+		internal static List<string> GetSiteDirectoryPaths() {
 			List<string> lstContent = null;
 
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
@@ -296,7 +64,7 @@ namespace Carrotware.CMS.Core {
 			return lstContent;
 		}
 
-		public static SiteNav GetEmptyHome() {
+		internal static SiteNav GetEmptyHome() {
 			SiteNav navData = new SiteNav();
 			navData.ContentID = Guid.Empty;
 			navData.Root_ContentID = Guid.Empty;
@@ -316,19 +84,19 @@ namespace Carrotware.CMS.Core {
 			return navData;
 		}
 
-		public static List<SiteNav> GetSamplerFakeNav() {
+		internal static List<SiteNav> GetSamplerFakeNav() {
 			return GetSamplerFakeNav(4, null);
 		}
 
-		public static List<SiteNav> GetSamplerFakeNav(int iCount) {
+		internal static List<SiteNav> GetSamplerFakeNav(int iCount) {
 			return GetSamplerFakeNav(iCount, null);
 		}
 
-		public static List<SiteNav> GetSamplerFakeNav(Guid? rootParentID) {
+		internal static List<SiteNav> GetSamplerFakeNav(Guid? rootParentID) {
 			return GetSamplerFakeNav(4, rootParentID);
 		}
 
-		public static List<SiteNav> GetSamplerFakeNav(int iCount, Guid? rootParentID) {
+		internal static List<SiteNav> GetSamplerFakeNav(int iCount, Guid? rootParentID) {
 			List<SiteNav> navList = new List<SiteNav>();
 			int n = 0;
 
@@ -362,7 +130,7 @@ namespace Carrotware.CMS.Core {
 			return navList;
 		}
 
-		public static SiteNav GetSamplerView(Guid rootParentID) {
+		internal static SiteNav GetSamplerView(Guid rootParentID) {
 			var sn = GetSamplerView();
 
 			sn.Parent_ContentID = rootParentID;
@@ -405,7 +173,7 @@ namespace Carrotware.CMS.Core {
 			return sFile2;
 		}
 
-		public static SiteNav GetSamplerView() {
+		internal static SiteNav GetSamplerView() {
 			string sFile2 = GetSampleBody();
 
 			SiteNav navNew = new SiteNav();
@@ -444,15 +212,5 @@ namespace Carrotware.CMS.Core {
 
 			return navNew;
 		}
-
-		#region IDisposable Members
-
-		public void Dispose() {
-			if (_navHelper != null && _navHelper is IDisposable) {
-				((IDisposable)_navHelper).Dispose();
-			}
-		}
-
-		#endregion IDisposable Members
 	}
 }

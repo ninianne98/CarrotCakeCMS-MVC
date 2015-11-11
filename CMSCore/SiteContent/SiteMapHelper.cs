@@ -28,7 +28,7 @@ namespace Carrotware.CMS.Core {
 			SiteData site = SiteData.CurrentSite;
 			List<SiteNav> lstNav = new List<SiteNav>();
 
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				//lstNav = navHelper.GetTwoLevelNavigation(SiteData.CurrentSiteID, true);
 				lstNav = navHelper.GetLevelDepthNavigation(SiteData.CurrentSiteID, 4, true);
 			}
@@ -81,7 +81,7 @@ namespace Carrotware.CMS.Core {
 			SiteData site = SiteData.CurrentSite;
 			List<SiteNav> lstNav = new List<SiteNav>();
 
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				//lstNav = navHelper.GetTwoLevelNavigation(SiteData.CurrentSiteID, true);
 				lstNav = navHelper.GetLevelDepthNavigation(SiteData.CurrentSiteID, 4, true);
 			}

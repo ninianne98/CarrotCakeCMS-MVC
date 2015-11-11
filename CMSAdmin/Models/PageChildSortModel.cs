@@ -39,7 +39,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public void SortChildren() {
 			List<SiteNav> lstNav = null;
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				lstNav = navHelper.GetChildNavigation(SiteData.CurrentSiteID, this.Root_ContentID, !SecurityData.IsAuthEditor);
 			}
 

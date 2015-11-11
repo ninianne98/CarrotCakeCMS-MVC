@@ -172,7 +172,7 @@ namespace Carrotware.CMS.Core {
 		public List<SiteNav> TopNav {
 			get {
 				if (_topnav == null) {
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						_topnav = navHelper.GetTopNavigation(this.TheSite.SiteID, !SecurityData.IsAuthEditor);
 					}
 					_topnav = TweakData(_topnav);
@@ -187,7 +187,7 @@ namespace Carrotware.CMS.Core {
 		public List<SiteNav> Top2Nav {
 			get {
 				if (_top2nav == null) {
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						_top2nav = navHelper.GetTwoLevelNavigation(this.TheSite.SiteID, !SecurityData.IsAuthEditor);
 					}
 					_top2nav = TweakData(_top2nav);
@@ -202,7 +202,7 @@ namespace Carrotware.CMS.Core {
 		public List<SiteNav> ChildNav {
 			get {
 				if (_childnav == null) {
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						_childnav = navHelper.GetChildNavigation(this.TheSite.SiteID, this.ThePage.Root_ContentID, !SecurityData.IsAuthEditor);
 					}
 					_childnav = TweakData(_childnav);
@@ -217,7 +217,7 @@ namespace Carrotware.CMS.Core {
 		public List<SiteNav> SiblingNav {
 			get {
 				if (_sibnav == null) {
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						_sibnav = navHelper.GetSiblingNavigation(this.TheSite.SiteID, this.ThePage.Root_ContentID, !SecurityData.IsAuthEditor);
 					}
 					_sibnav = TweakData(_sibnav);
@@ -232,7 +232,7 @@ namespace Carrotware.CMS.Core {
 		public SiteNav ParentNav {
 			get {
 				if (_parentnav == null) {
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						_parentnav = navHelper.GetParentPageNavigation(this.TheSite.SiteID, this.ThePage.Root_ContentID);
 					}
 					if (_parentnav != null) {
@@ -250,7 +250,7 @@ namespace Carrotware.CMS.Core {
 			get {
 				if (_blogidxnav == null) {
 					if (this.TheSite.Blog_Root_ContentID.HasValue) {
-						using (SiteNavHelper navHelper = new SiteNavHelper()) {
+						using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 							_blogidxnav = navHelper.GetLatestVersion(this.TheSite.SiteID, this.TheSite.Blog_Root_ContentID.Value);
 						}
 						_blogidxnav = IdentifyLinkAsInactive(_blogidxnav);
@@ -266,7 +266,7 @@ namespace Carrotware.CMS.Core {
 		public List<SiteNav> BreadCrumbs {
 			get {
 				if (_breadcrumbs == null) {
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						SiteNav pageNav = this.ThePage.GetSiteNav();
 
 						if (SiteData.CurretSiteExists && SiteData.CurrentSite.Blog_Root_ContentID.HasValue &&
@@ -308,7 +308,7 @@ namespace Carrotware.CMS.Core {
 		public List<SiteNav> ChildEditNav {
 			get {
 				if (_childeditnav == null) {
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						_childeditnav = navHelper.GetChildNavigation(this.TheSite.SiteID, this.ThePage.Root_ContentID, !SecurityData.IsAuthEditor);
 					}
 				}
@@ -367,7 +367,7 @@ namespace Carrotware.CMS.Core {
 				iTakeTop = 100000;
 			}
 
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				return navHelper.GetTagListForPost(this.TheSite.SiteID, iTakeTop, this.ThePage.Root_ContentID);
 			}
 		}
@@ -377,7 +377,7 @@ namespace Carrotware.CMS.Core {
 		public int SitePageCount {
 			get {
 				if (_pageCt < 0) {
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						_pageCt = navHelper.GetSitePageCount(this.TheSite.SiteID, ContentPageType.PageType.ContentEntry);
 					}
 				}
@@ -391,7 +391,7 @@ namespace Carrotware.CMS.Core {
 		public int SitePostCount {
 			get {
 				if (_postCt < 0) {
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						_postCt = navHelper.GetSitePageCount(this.TheSite.SiteID, ContentPageType.PageType.BlogEntry);
 					}
 				}
@@ -422,7 +422,7 @@ namespace Carrotware.CMS.Core {
 			if (iTakeTop < 0) {
 				iTakeTop = 300000;
 			}
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				return navHelper.GetCategoryListForPost(this.TheSite.SiteID, iTakeTop, this.ThePage.Root_ContentID);
 			}
 		}
@@ -432,7 +432,7 @@ namespace Carrotware.CMS.Core {
 			if (iTakeTop < 0) {
 				iTakeTop = 100000;
 			}
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				lstNav = navHelper.GetTagList(this.TheSite.SiteID, iTakeTop);
 			}
 
@@ -447,7 +447,7 @@ namespace Carrotware.CMS.Core {
 			if (iTakeTop < 0) {
 				iTakeTop = 100000;
 			}
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				lstNav = navHelper.GetCategoryList(this.TheSite.SiteID, iTakeTop);
 			}
 
@@ -462,7 +462,7 @@ namespace Carrotware.CMS.Core {
 			if (iTakeTop < 0) {
 				iTakeTop = 100000;
 			}
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				lstNav = navHelper.GetMonthBlogUpdateList(SiteData.CurrentSiteID, iTakeTop, !SecurityData.IsAuthEditor);
 			}
 

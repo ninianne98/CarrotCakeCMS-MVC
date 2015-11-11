@@ -43,7 +43,7 @@ namespace Carrotware.CMS.UI.Components {
 			SiteNav pageNav = this.ContentPage.GetSiteNav();
 			string sParent = pageNav.FileName.ToLower();
 
-			using (SiteNavHelper navHelper = new SiteNavHelper()) {
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				if (SiteData.CurretSiteExists && SiteData.CurrentSite.Blog_Root_ContentID.HasValue &&
 					pageNav.ContentType == ContentPageType.PageType.BlogEntry) {
 					lstNav = navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, SiteData.CurrentSite.Blog_Root_ContentID.Value, !SecurityData.IsAuthEditor);

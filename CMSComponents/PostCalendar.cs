@@ -24,7 +24,7 @@ namespace Carrotware.CMS.UI.Components {
 			this.ElementId = "cal";
 		}
 
-		protected SiteNavHelper navHelper = new SiteNavHelper();
+		protected ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper();
 
 		public string CalendarHead { get; set; }
 

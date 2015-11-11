@@ -65,7 +65,7 @@ namespace Carrotware.CMS.Core {
 					bool bIsHomePage = false;
 					bool bIgnorePublishState = SecurityData.AdvancedEditMode || SecurityData.IsAdmin || SecurityData.IsSiteEditor;
 
-					using (SiteNavHelper navHelper = new SiteNavHelper()) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						if (SiteData.IsLikelyHomePage(requestedUri)) {
 							navData = navHelper.FindHome(SiteData.CurrentSiteID, !bIgnorePublishState);
 
