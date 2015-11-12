@@ -651,7 +651,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[AllowAnonymous]
 		public ActionResult Login(string returnUrl) {
-			if (DatabaseUpdate.AreCMSTablesIncomplete()) {
+			DatabaseUpdate du = new DatabaseUpdate();
+
+			if (DatabaseUpdate.AreCMSTablesIncomplete() || !du.UsersExist) {
 				return RedirectToAction("DatabaseSetup");
 			}
 
@@ -784,7 +786,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		public ActionResult Index() {
-			if (DatabaseUpdate.AreCMSTablesIncomplete()) {
+			DatabaseUpdate du = new DatabaseUpdate();
+
+			if (DatabaseUpdate.AreCMSTablesIncomplete() || !du.UsersExist) {
 				return RedirectToAction("DatabaseSetup");
 			}
 

@@ -254,6 +254,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			using (var sw = new StringWriter()) {
 				var viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, partialViewName);
+
 				var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, viewData, tempData, sw);
 				viewResult.View.Render(viewContext, sw);
 				return sw.GetStringBuilder().ToString();
@@ -576,18 +577,18 @@ namespace Carrotware.CMS.UI.Components {
 				string widgetKey = String.Format("Widget_{0}_{1}", placeHolderName, iWidgetCount);
 				iWidgetCount++;
 
+				string widgetText = String.Empty;
+				string widgetWrapper = String.Empty;
+				Dictionary<string, string> lstMenus = new Dictionary<string, string>();
+
 				if (widget.ControlPath.Contains(":")) {
 					string[] path = widget.ControlPath.Split(':');
 					string objectPrefix = path[0];
 					string objectClass = path[1];
 					string altView = path.Length >= 3 ? path[2] : String.Empty;
 
-					string widgetText = String.Empty;
-					string widgetWrapper = String.Empty;
-
-					Object settings = null;
 					Object obj = null;
-					Dictionary<string, string> lstMenus = new Dictionary<string, string>();
+					Object settings = null;
 
 					try {
 						Type objType = Type.GetType(objectClass);
@@ -656,62 +657,113 @@ namespace Carrotware.CMS.UI.Components {
 						obj = msg;
 						widgetText = msg.ToHtmlString();
 					}
+				}
 
-					if (SecurityData.AdvancedEditMode) {
-						if (widget.IsWidgetActive) {
-							sStatusTemplate = "<a href=\"javascript:cmsRemoveWidgetLink('[[ITEM_ID]]');\" id=\"cmsContentRemoveLink\" class=\"cmsWidgetBarLink cmsWidgetBarIconCross\" alt=\"Remove\" title=\"Remove\">  Disable</a>";
-						} else {
-							sStatusTemplate = "<a href=\"javascript:cmsActivateWidgetLink('[[ITEM_ID]]');\" id=\"cmsActivateWidgetLink\" class=\"cmsWidgetBarLink cmsWidgetBarIconActive\" alt=\"Activate\" title=\"Activate\">  Enable</a>";
-						}
-
-						widgetWrapper = masterWidgetWrapper;
-						widgetWrapper = widgetWrapper.Replace("[[STATUS_LINK]]", sStatusTemplate);
-						widgetWrapper = widgetWrapper.Replace("[[WIDGET_PATH]]", widget.ControlPath);
-						widgetWrapper = widgetWrapper.Replace("[[sequence]]", widget.WidgetOrder.ToString());
-						widgetWrapper = widgetWrapper.Replace("[[ITEM_ID]]", widget.Root_WidgetID.ToString());
-
-						CMSPlugin plug = (from p in CmsPage.Plugins
-										  where p.FilePath.ToLower() == widget.ControlPath.ToLower()
-										  select p).FirstOrDefault();
-
-						string captionPrefix = String.Empty;
-
-						if (!widget.IsWidgetActive) {
-							captionPrefix = String.Format("{0} {1}", CMSConfigHelper.InactivePagePrefix, captionPrefix);
-						}
-						if (widget.IsRetired) {
-							captionPrefix = String.Format("{0} {1}", CMSConfigHelper.RetiredPagePrefix, captionPrefix);
-						}
-						if (widget.IsUnReleased) {
-							captionPrefix = String.Format("{0} {1}", CMSConfigHelper.UnreleasedPagePrefix, captionPrefix);
-						}
-						if (widget.IsWidgetPendingDelete) {
-							captionPrefix = String.Format("{0} {1}", CMSConfigHelper.PendingDeletePrefix, captionPrefix);
-						}
-
-						if (plug != null) {
-							string sysControl = (plug.SystemPlugin ? "[CMS]" : String.Empty);
-							widgetWrapper = widgetWrapper.Replace("[[WIDGET_CAPTION]]", String.Format("{0}  {1}  {2}", captionPrefix, plug.Caption, sysControl).Trim());
-						} else {
-							widgetWrapper = widgetWrapper.Replace("[[WIDGET_CAPTION]]", String.Format("{0}  UNTITLED", captionPrefix).Trim());
-						}
-
-						StringBuilder sbMenu = new StringBuilder();
-						sbMenu.AppendLine();
-						if (lstMenus != null) {
-							foreach (var d in lstMenus) {
-								sbMenu.AppendLine(widgetMenuTemplate.Replace("[[JS_CALL]]", d.Value).Replace("[[CAP]]", d.Key));
-							}
-						}
-
-						widgetWrapper = widgetWrapper.Replace("[[MENU_ITEMS]]", sbMenu.ToString().Trim());
-						widgetWrapper = widgetWrapper.Replace("[[WIDGET_CAPTION]]", widget.ControlPath + captionPrefix);
-
-						widgetWrapper = widgetWrapper.Replace("[[CONTENT]]", widgetText);
-					} else {
-						widgetWrapper = widgetText;
+				if (!widget.ControlPath.Contains(":") && String.IsNullOrEmpty(widgetText)) {
+					string[] path = widget.ControlPath.Split('|');
+					string viewPath = path[0];
+					string modelClass = String.Empty;
+					if (path.Length > 1) {
+						modelClass = path[1];
 					}
 
+					try {
+						if (viewPath.EndsWith(".cshtml") || viewPath.EndsWith(".vbhtml")) {
+							if (String.IsNullOrEmpty(modelClass)) {
+								widgetText = RenderPartialToString(viewPath);
+							} else {
+								Type objType = Type.GetType(modelClass);
+								Object model = Activator.CreateInstance(objType);
+
+								if (model is IWidgetRawData) {
+									IWidgetRawData w = model as IWidgetRawData;
+									w.RawWidgetData = widget.ControlProperties;
+								}
+
+								if (model is IWidget) {
+									IWidget w = (IWidget)model;
+									w.SiteID = CmsPage.TheSite.SiteID;
+									w.RootContentID = widget.Root_ContentID;
+									w.PageWidgetID = widget.Root_WidgetID;
+									w.IsDynamicInserted = true;
+									w.IsBeingEdited = SecurityData.AdvancedEditMode;
+									w.WidgetClientID = widgetKey;
+
+									List<WidgetProps> lstProp = widget.ParseDefaultControlProperties();
+									w.PublicParmValues = lstProp.ToDictionary(t => t.KeyName, t => t.KeyValue);
+
+									lstMenus = w.JSEditFunctions;
+
+									if (!lstMenus.Any() && w.EnableEdit) {
+										lstMenus.Add("Edit", "cmsGenericEdit('" + widget.Root_ContentID.ToString() + "','" + widget.Root_WidgetID.ToString() + "')");
+									}
+								}
+
+								widgetText = RenderPartialToString(viewPath, model);
+							}
+						}
+					} catch (Exception ex) {
+						LiteralMessage msg = new LiteralMessage(ex, widgetKey, widget.ControlPath);
+						widgetText = msg.ToHtmlString();
+					}
+				}
+
+				if (SecurityData.AdvancedEditMode && !String.IsNullOrEmpty(widgetText)) {
+					if (widget.IsWidgetActive) {
+						sStatusTemplate = "<a href=\"javascript:cmsRemoveWidgetLink('[[ITEM_ID]]');\" id=\"cmsContentRemoveLink\" class=\"cmsWidgetBarLink cmsWidgetBarIconCross\" alt=\"Remove\" title=\"Remove\">  Disable</a>";
+					} else {
+						sStatusTemplate = "<a href=\"javascript:cmsActivateWidgetLink('[[ITEM_ID]]');\" id=\"cmsActivateWidgetLink\" class=\"cmsWidgetBarLink cmsWidgetBarIconActive\" alt=\"Activate\" title=\"Activate\">  Enable</a>";
+					}
+
+					widgetWrapper = masterWidgetWrapper;
+					widgetWrapper = widgetWrapper.Replace("[[STATUS_LINK]]", sStatusTemplate);
+					widgetWrapper = widgetWrapper.Replace("[[WIDGET_PATH]]", widget.ControlPath);
+					widgetWrapper = widgetWrapper.Replace("[[sequence]]", widget.WidgetOrder.ToString());
+					widgetWrapper = widgetWrapper.Replace("[[ITEM_ID]]", widget.Root_WidgetID.ToString());
+
+					CMSPlugin plug = (from p in CmsPage.Plugins
+									  where p.FilePath.ToLower() == widget.ControlPath.ToLower()
+									  select p).FirstOrDefault();
+
+					string captionPrefix = String.Empty;
+
+					if (!widget.IsWidgetActive) {
+						captionPrefix = String.Format("{0} {1}", CMSConfigHelper.InactivePagePrefix, captionPrefix);
+					}
+					if (widget.IsRetired) {
+						captionPrefix = String.Format("{0} {1}", CMSConfigHelper.RetiredPagePrefix, captionPrefix);
+					}
+					if (widget.IsUnReleased) {
+						captionPrefix = String.Format("{0} {1}", CMSConfigHelper.UnreleasedPagePrefix, captionPrefix);
+					}
+					if (widget.IsWidgetPendingDelete) {
+						captionPrefix = String.Format("{0} {1}", CMSConfigHelper.PendingDeletePrefix, captionPrefix);
+					}
+
+					if (plug != null) {
+						string sysControl = (plug.SystemPlugin ? "[CMS]" : String.Empty);
+						widgetWrapper = widgetWrapper.Replace("[[WIDGET_CAPTION]]", String.Format("{0}  {1}  {2}", captionPrefix, plug.Caption, sysControl).Trim());
+					} else {
+						widgetWrapper = widgetWrapper.Replace("[[WIDGET_CAPTION]]", String.Format("{0}  UNTITLED", captionPrefix).Trim());
+					}
+
+					StringBuilder sbMenu = new StringBuilder();
+					sbMenu.AppendLine();
+					if (lstMenus != null) {
+						foreach (var d in lstMenus) {
+							sbMenu.AppendLine(widgetMenuTemplate.Replace("[[JS_CALL]]", d.Value).Replace("[[CAP]]", d.Key));
+						}
+					}
+
+					widgetWrapper = widgetWrapper.Replace("[[MENU_ITEMS]]", sbMenu.ToString().Trim());
+					widgetWrapper = widgetWrapper.Replace("[[WIDGET_CAPTION]]", widget.ControlPath + captionPrefix);
+
+					widgetWrapper = widgetWrapper.Replace("[[CONTENT]]", widgetText);
+				} else {
+					widgetWrapper = widgetText;
+				}
+
+				if (!String.IsNullOrEmpty(widgetWrapper)) {
 					sb.AppendLine(widgetWrapper);
 				}
 			}

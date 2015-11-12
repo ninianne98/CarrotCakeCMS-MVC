@@ -87,6 +87,19 @@ namespace Carrotware.CMS.Core {
 						}
 					} catch (Exception ex) { }
 				}
+			} else {
+				if (w.ControlPath.Contains("|")) {
+					try {
+						string[] path = w.ControlPath.Split('|');
+						string viewPath = path[0];
+						string modelClass = String.Empty;
+						if (path.Length > 1) {
+							modelClass = path[1];
+							Type objType = Type.GetType(modelClass);
+							widget = Activator.CreateInstance(objType);
+						}
+					} catch (Exception ex) { }
+				}
 			}
 
 			if (widget is IAdminModule) {

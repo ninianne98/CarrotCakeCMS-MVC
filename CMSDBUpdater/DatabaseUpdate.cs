@@ -70,6 +70,10 @@ namespace Carrotware.CMS.DBUpdater {
 			}
 		}
 
+		public static void ResetFailedSQL() {
+			HttpContext.Current.Cache.Insert(ContentKey, "False", null, DateTime.Now.AddMilliseconds(3), Cache.NoSlidingExpiration);
+		}
+
 		public static bool SystemNeedsChecking(Exception ex) {
 			//assumption is database is probably empty / needs updating, so trigger the under construction view
 
@@ -243,9 +247,9 @@ namespace Carrotware.CMS.DBUpdater {
 				HandleResponse(lst, "Database up-to-date [" + ver.DataValue + "] ");
 			}
 
-			if (HttpContext.Current.Cache[ContentSqlStateKey] != null) {
-				HttpContext.Current.Cache.Remove(ContentSqlStateKey);
-			}
+			ResetFailedSQL();
+
+			ResetSQLState();
 
 			bUpdate = DatabaseNeedsUpdate();
 
@@ -353,6 +357,12 @@ namespace Carrotware.CMS.DBUpdater {
 			}
 		}
 
+		public static void ResetSQLState() {
+			if (HttpContext.Current.Cache[ContentSqlStateKey] != null) {
+				HttpContext.Current.Cache.Remove(ContentSqlStateKey);
+			}
+		}
+
 		public static bool AreCMSTablesIncomplete() {
 			if (!FailedSQL) {
 				bool bTestResult = false;
@@ -404,12 +414,11 @@ namespace Carrotware.CMS.DBUpdater {
 		public bool UsersExist {
 			get {
 				if (!FailedSQL) {
-					string query = "select top 3 * from [dbo].[membership_User]";
-					DataTable table1 = GetTestData(query);
+					try {
+						bool bTestResult = SQLUpdateNugget.EvalNuggetKey("DoUsersExist");
 
-					if (table1.Rows.Count > 0) {
-						return true;
-					}
+						return bTestResult;
+					} catch (Exception ex) { }
 				}
 
 				return false;
