@@ -76,19 +76,20 @@ namespace Northwind.Controllers {
 				settings.LoadData();
 			}
 
-			ProductSearch model = new ProductSearch();
+			//ProductSearch model = new ProductSearch();
+			//using (var db = new NorthwindDataContext()) {
+			//	if (settings.CategoryIDs.Any()) {
+			//		model.Options = (from c in db.Categories
+			//						 where settings.CategoryIDs.Contains(c.CategoryID)
+			//						 select c).ToList();
 
-			using (var db = new NorthwindDataContext()) {
-				if (settings.CategoryIDs.Any()) {
-					model.Options = (from c in db.Categories
-									 where settings.CategoryIDs.Contains(c.CategoryID)
-									 select c).ToList();
+			//		model.Results = (from p in db.Products
+			//						 where settings.CategoryIDs.Contains(p.CategoryID.Value)
+			//						 select p).ToList();
+			//	}
+			//}
 
-					model.Results = (from p in db.Products
-									 where settings.CategoryIDs.Contains(p.CategoryID.Value)
-									 select p).ToList();
-				}
-			}
+			ProductSearch model = settings.GetData();
 
 			if (String.IsNullOrEmpty(settings.AlternateViewFile)) {
 				return PartialView(model);

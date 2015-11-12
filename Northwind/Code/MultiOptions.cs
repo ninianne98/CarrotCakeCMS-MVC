@@ -1,4 +1,5 @@
 ﻿using Carrotware.CMS.Interface;
+using Northwind.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,24 @@ namespace Northwind {
 					this.CategoryIDs = foundValues.Select(x => int.Parse(x)).ToList();
 				}
 			} catch (Exception ex) { }
+		}
+
+		public ProductSearch GetData() {
+			ProductSearch model = new ProductSearch();
+			LoadData();
+
+			using (var db = new NorthwindDataContext()) {
+				if (this.CategoryIDs.Any()) {
+					model.Options = (from c in db.Categories
+									 where this.CategoryIDs.Contains(c.CategoryID)
+									 select c).ToList();
+
+					model.Results = (from p in db.Products
+									 where this.CategoryIDs.Contains(p.CategoryID.Value)
+									 select p).ToList();
+				}
+			}
+			return model;
 		}
 	}
 }

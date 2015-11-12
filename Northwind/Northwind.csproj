@@ -233,6 +233,8 @@
     <Content Include="Views\Home\ProductSearchAltMulti.cshtml" />
     <Content Include="Views\Home\ProductSearchAlt2Multi.cshtml" />
     <Content Include="Views\Home\Categories.cshtml" />
+    <Content Include="Views\Home\Hello.cshtml" />
+    <Content Include="Views\Home\MultiProdList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

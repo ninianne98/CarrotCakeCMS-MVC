@@ -1,0 +1,11 @@
+﻿@model Northwind.MultiOptions
+
+@{
+	var lst = Model.GetData();
+}
+
+@foreach (var v in lst.Options) {
+	<h2>
+		@v.CategoryName
+	</h2>
+}
