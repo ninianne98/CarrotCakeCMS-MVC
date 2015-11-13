@@ -13,7 +13,7 @@ using System.Xml.Serialization;
 * http://www.carrotware.com/
 *
 * Copyright 2015, Samantha Copeland
-* Dual licensed under the MIT or GPL Version 2 licenses.
+* Dual licensed under the MIT or GPL Version 3 licenses.
 *
 * Date: August 2015
 */
