@@ -68,151 +68,146 @@
 <script src="~/Assets/Admin/Includes/jquery.ui.nestedSortable.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-		var handleCssClass = 'img.image-handle';
+	var handleCssClass = 'img.image-handle';
 
-		$(document).ready(function () {
+	$(document).ready(function () {
 
-			$("ol.sortable").bind("sortupdate", function (event, ui) {
-				//alert("sortupdate");
-				var id = $(ui.item).attr('id');
-				var p = $(ui.item).parent().parent().attr('id');
-				//alert(p + '  ->  ' + id);
+		$("ol.sortable").bind("sortupdate", function (event, ui) {
+			//alert("sortupdate");
+			var id = $(ui.item).attr('id');
+			var p = $(ui.item).parent().parent().attr('id');
+			//alert(p + '  ->  ' + id);
 
-				setTimeout("itterateTree();", 250);
-				setTimeout("BuildOrder();", 500);
-				setTimeout("FindArrowAndOpen('" + p + "');", 750);
-
-			});
-
-			$("ol.sortable").nestedSortable({
-				disableNesting: 'no-nest',
-				forcePlaceholderSize: true,
-				handle: handleCssClass,
-				helper: 'clone',
-				items: 'li',
-				maxLevels: 5,
-				opacity: .6,
-				placeholder: 'HighlightPH',
-				revert: 250,
-				tabSize: 25,
-				tolerance: 'pointer',
-				toleranceElement: '> span'
-			});
-
-			itterateTree();
-			itterateTreeSetToggle();
+			setTimeout("itterateTree();", 250);
+			setTimeout("BuildOrder();", 500);
+			setTimeout("FindArrowAndOpen('" + p + "');", 750);
 
 		});
 
-		function itterateTree() {
-			$("#cmsSiteMap li").each(function (i) {
-				setListItem(this);
-			});
-		}
+		$("ol.sortable").nestedSortable({
+			disableNesting: 'no-nest',
+			forcePlaceholderSize: true,
+			handle: handleCssClass,
+			helper: 'clone',
+			items: 'li',
+			maxLevels: 5,
+			opacity: .6,
+			placeholder: 'HighlightPH',
+			revert: 250,
+			tabSize: 25,
+			tolerance: 'pointer',
+			toleranceElement: '> span'
+		});
 
-		function itterateTreeSetToggle() {
-			$("#cmsSiteMap li span.page-status").each(function (i) {
-				setDblClickSpan(this);
-			});
-		}
+		itterateTree();
+		itterateTreeSetToggle();
 
-		function setDblClickSpan(elm) {
-			$(elm).dblclick(function () {
-				var target = $(elm).parent();
-				var h = target.html();
+	});
 
-				if (h.indexOf("ToggleTree") > 0) {
-					var lnk = $(target).find("a");
-					ToggleTree(lnk);
-				}
-			});
-		}
+	function itterateTree() {
+		$("#cmsSiteMap li").each(function (i) {
+			setListItem(this);
+		});
+	}
 
-		function setListItem(item) {
+	function itterateTreeSetToggle() {
+		$("#cmsSiteMap li span.page-status").each(function (i) {
+			setDblClickSpan(this);
+		});
+	}
 
-			var imgNode = $(item).find(handleCssClass).first();
-			var id = $(imgNode).attr('id');
-			//alert(id);
-			var node = $(imgNode).parent();
-			var nodeNav = $(node).find("span.handle-expand");
-			var nodeStat = $(node).find("span.page-status");
+	function setDblClickSpan(elm) {
+		$(elm).dblclick(function () {
+			var target = $(elm).parent();
+			var h = target.html();
 
-			var h = nodeNav.html();
-			//var t = nodeNav.text();
-			var lst = $(item).find("ol").first();
-			var blankField = '&nbsp;&#9671;&nbsp; ';
+			if (h.indexOf("ToggleTree") > 0) {
+				var lnk = $(target).find("a");
+				ToggleTree(lnk);
+			}
+		});
+	}
 
+	function setListItem(item) {
+
+		var imgNode = $(item).find(handleCssClass).first();
+		var id = $(imgNode).attr('id');
+		//alert(id);
+		var node = $(imgNode).parent();
+		var nodeNav = $(node).find("span.handle-expand");
+		var nodeStat = $(node).find("span.page-status");
+
+		var h = nodeNav.html();
+		//var t = nodeNav.text();
+		var lst = $(item).find("ol").first();
+		var blankField = '&nbsp;&#9671;&nbsp; ';
+		//alert($(item).find("ol li").length + '  : ' + h);
+
+		if ($(item).find("ol li").length < 1) {
+			var lnk = nodeNav.find("a").first();
+			lnk.remove();
+			nodeNav.html(blankField);
+		} else {
 			if (h.indexOf("ToggleTree") < 0) {
-				if (lst.length > 0) {
-					//nodeNav.html('<a state="close" id="menu-lnk-' + id + '" onclick="ToggleTree(this);" href="javascript:void(0);">&#9658;</a>  ' + t); // &#9660;
-					nodeNav.html('&nbsp;<a state="close" id="menu-lnk-' + id + '" onclick="ToggleTree(this);" href="javascript:void(0);">&#9658;</a>&nbsp; '); // &#9660;
-					lst.attr('style', 'display:none;');
-				} else {
-					var lnk = nodeNav.find("a").first();
-					lnk.remove();
-					nodeNav.html(blankField);
-				}
-			} else {
-				if (lst.length < 1) {
-					var lnk = nodeNav.find("a").first();
-					lnk.remove();
-					nodeNav.html(blankField);
-				}
-			}
-		}
-
-		function FindArrowAndOpen(n) {
-			if (n.length > 28) {
-				var node = $('#' + n);
-				//alert(n)
-				var a = node.find(handleCssClass).parent().find("a").first();
-				if (a != null) {
-					//alert(a.attr('state'));
-					a.attr('state', 'close');
-					ToggleTree(a);
-				}
-			}
-		}
-
-		function ToggleTree(arrow) {
-			var a = $(arrow);
-			//alert($(arrow).text() + '  ' + $(arrow).parent().parent().attr('id'));
-			var lst = a.parent().parent().parent().find("ol").first();
-			if (a.attr('state') != 'open') {
-				a.html("&#9660;");
-				lst.attr('style', 'display:block;');
-				a.attr('state', 'open');
-			} else {
-				a.html("&#9658;");
+				//nodeNav.html('<a state="close" id="menu-lnk-' + id + '" onclick="ToggleTree(this);" href="javascript:void(0);">&#9658;</a>  ' + t); // &#9660;
+				nodeNav.html('&nbsp;<a state="close" id="menu-lnk-' + id + '" onclick="ToggleTree(this);" href="javascript:void(0);">&#9658;</a>&nbsp; '); // &#9660;
 				lst.attr('style', 'display:none;');
-				a.attr('state', 'close');
 			}
 		}
+	}
 
-		function BuildOrder() {
-
-			$("#cmsSiteMap li").each(function (i) {
-				var itm = $(this);
-				var id = itm.prop('id');
-				var fn = itm.attr('fn');
-
-				var p = itm.parent().parent().attr('id');
-
-				if (p.length < 28) {
-					p = '@Guid.Empty';
-				}
-
-				$("[name='[" + i + "].NavOrder']").val(i * 5);
-				$("[name='[" + i + "].FileName']").val(fn);
-				$("[name='[" + i + "].Root_ContentID']").val(id);
-				$("[name='[" + i + "].Parent_ContentID']").val(p);
-
-			});
+	function FindArrowAndOpen(n) {
+		if (n.length > 28) {
+			var node = $('#' + n);
+			//alert(n)
+			var a = node.find(handleCssClass).parent().find("a").first();
+			if (a != null) {
+				//alert(a.attr('state'));
+				a.attr('state', 'close');
+				ToggleTree(a);
+			}
 		}
+	}
 
-		$(document).ready(function () {
-			setTimeout("BuildOrder();", 250);
+	function ToggleTree(arrow) {
+		var a = $(arrow);
+		//alert($(arrow).text() + '  ' + $(arrow).parent().parent().attr('id'));
+		var lst = a.parent().parent().parent().find("ol").first();
+		if (a.attr('state') != 'open') {
+			a.html("&#9660;");
+			lst.attr('style', 'display:block;');
+			a.attr('state', 'open');
+		} else {
+			a.html("&#9658;");
+			lst.attr('style', 'display:none;');
+			a.attr('state', 'close');
+		}
+	}
+
+	function BuildOrder() {
+
+		$("#cmsSiteMap li").each(function (i) {
+			var itm = $(this);
+			var id = itm.prop('id');
+			var fn = itm.attr('fn');
+
+			var p = itm.parent().parent().attr('id');
+
+			if (p.length < 28) {
+				p = '@Guid.Empty';
+			}
+
+			$("[name='[" + i + "].NavOrder']").val(i * 5);
+			$("[name='[" + i + "].FileName']").val(fn);
+			$("[name='[" + i + "].Root_ContentID']").val(id);
+			$("[name='[" + i + "].Parent_ContentID']").val(p);
+
 		});
+	}
+
+	$(document).ready(function () {
+		setTimeout("BuildOrder();", 250);
+	});
 </script>
 
 @helper DisplayMapping(Guid? parentId) {
@@ -231,23 +226,23 @@
 					</a> &nbsp;&nbsp;&nbsp;&nbsp;
 
 					@if (!mo.PageActive) {
-					<img alt="status" title="no" class="image-status-icon" src="~/Assets/Admin/Images/cancel.png" />
+						<img alt="status" title="no" class="image-status-icon" src="~/Assets/Admin/Images/cancel.png" />
 					} else {
-					<img alt="status" title="yes" class="image-status-icon" src="~/Assets/Admin/Images/accept.png" />
+						<img alt="status" title="yes" class="image-status-icon" src="~/Assets/Admin/Images/accept.png" />
 					}
 
 					@if (!mo.ShowInSiteNav) {
-					<img alt="navstatus" title="no" class="image-navstatus-icon" src="~/Assets/Admin/Images/lightbulb_off.png" />
+						<img alt="navstatus" title="no" class="image-navstatus-icon" src="~/Assets/Admin/Images/lightbulb_off.png" />
 					} else {
-					<img alt="navstatus" title="yes" class="image-navstatus-icon" src="~/Assets/Admin/Images/lightbulb.png" />
+						<img alt="navstatus" title="yes" class="image-navstatus-icon" src="~/Assets/Admin/Images/lightbulb.png" />
 					}
 				</span>
 			</span>
 
 			@if (Model.Where(x => x.Parent_ContentID == mo.Root_ContentID).Any()) {
-			<ol>
-				@DisplayMapping(mo.Root_ContentID)
-			</ol>
+				<ol>
+					@DisplayMapping(mo.Root_ContentID)
+				</ol>
 			}
 		</li>
 	}
