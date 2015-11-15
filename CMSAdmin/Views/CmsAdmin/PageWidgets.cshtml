@@ -37,8 +37,8 @@
 	}
 </script>
 
-<link href="~/Assets/Admin/includes/tooltiphelper.css" rel="stylesheet" type="text/css" />
-<script src="~/Assets/Admin/includes/tooltiphelper.js" type="text/javascript"></script>
+<link href="~/Assets/Admin/includes/tooltipster.css" rel="stylesheet" type="text/css" />
+<script src="~/Assets/Admin/includes/jquery.tooltipster.min.js" type="text/javascript"></script>
 <p>
 	Leave checked the widgets you want to have enabled, and uncheck the ones that do not want to load in the page, click the button to apply changes. You can also edit the Go Live and Retire date/time by selecting the edit icon.
 </p>
@@ -81,7 +81,7 @@
 			BodyAttributes = new { @class = "centerItem" },
 			FormatTemplate = @<text>
 				<a class="dataPopupTrigger" rel="@item.Root_WidgetID" href="javascript:void(0)">
-					<img src="~/Assets/Admin/images/doc.png" alt="text" title="text" style="margin:0;" />
+					<img src="~/Assets/Admin/images/doc.png" alt="text" style="margin:0;" />
 				</a>
 			</text>
 		})

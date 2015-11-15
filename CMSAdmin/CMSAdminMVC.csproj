@@ -163,6 +163,8 @@
     <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen-scoped2.css" />
     <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen.css" />
     <Content Include="Assets\Admin\Images\cloud-up.png" />
+    <Content Include="Assets\Admin\Includes\jquery.tooltipster.min.js" />
+    <Content Include="Assets\Admin\Includes\tooltipster.css" />
     <Content Include="Assets\iCheck\customized\grey-alt1%402x.png" />
     <Content Include="Assets\iCheck\customized\grey-alt1.css" />
     <Content Include="Assets\iCheck\customized\grey-alt1.png" />
@@ -306,15 +308,6 @@
     <Content Include="Assets\Admin\Images\arrow_in.png" />
     <Content Include="Assets\Admin\Images\audio.png" />
     <Content Include="Assets\Admin\Images\back.png" />
-    <Content Include="Assets\Admin\Images\balloons\balloon_bottom.png" />
-    <Content Include="Assets\Admin\Images\balloons\balloon_bottomLeft.png" />
-    <Content Include="Assets\Admin\Images\balloons\balloon_bottomRight.png" />
-    <Content Include="Assets\Admin\Images\balloons\balloon_left.png" />
-    <Content Include="Assets\Admin\Images\balloons\balloon_right.png" />
-    <Content Include="Assets\Admin\Images\balloons\balloon_tail.png" />
-    <Content Include="Assets\Admin\Images\balloons\balloon_top.png" />
-    <Content Include="Assets\Admin\Images\balloons\balloon_topLeft.png" />
-    <Content Include="Assets\Admin\Images\balloons\balloon_topRight.png" />
     <Content Include="Assets\Admin\Images\blogger.png" />
     <Content Include="Assets\Admin\Images\BlogIndex.png" />
     <Content Include="Assets\Admin\Images\book_next.png" />
@@ -488,8 +481,6 @@
     <Content Include="Assets\Admin\Includes\richedit.css" />
     <Content Include="Assets\Admin\Includes\TableStyles.css" />
     <Content Include="Assets\Admin\Includes\tinymce-config.js" />
-    <Content Include="Assets\Admin\Includes\tooltiphelper.css" />
-    <Content Include="Assets\Admin\Includes\tooltiphelper.js" />
     <Content Include="Assets\Admin\Includes\uploadfile.css" />
     <Content Include="Assets\tiny_mce\classes\adapter\jquery\adapter.js" />
     <Content Include="Assets\tiny_mce\classes\adapter\jquery\jquery.tinymce.js" />

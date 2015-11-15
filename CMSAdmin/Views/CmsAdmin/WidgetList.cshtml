@@ -37,8 +37,8 @@
 	}
 </script>
 
-<link href="~/Assets/Admin/includes/tooltiphelper.css" rel="stylesheet" type="text/css" />
-<script src="~/Assets/Admin/includes/tooltiphelper.js" type="text/javascript"></script>
+<link href="~/Assets/Admin/includes/tooltipster.css" rel="stylesheet" type="text/css" />
+<script src="~/Assets/Admin/includes/jquery.tooltipster.min.js" type="text/javascript"></script>
 
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
@@ -66,7 +66,7 @@
 				<div style="float:left;clear:both;display:block;">
 					<div style="float:left;margin-right:5px;">
 						<a class="dataPopupTrigger" rel="@item.Root_WidgetID" href="javascript:void(0)">
-							<img src="~/Assets/Admin/images/doc.png" alt="text" title="text" style="margin:0;" />
+							<img src="~/Assets/Admin/images/doc.png" alt="text" style="margin:0;" />
 						</a>
 					</div>
 					<div style="float:left">
