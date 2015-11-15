@@ -88,7 +88,6 @@
 					@Html.Partial("_datetime", rdt)
 				</td>
 			</tr>
-
 		</table>
 	</fieldset>
 	<div>
@@ -195,7 +194,7 @@
 		}
 
 		function SaveCommon() {
-			var ret = tinyMCE.triggerSave();
+			var ret = cmsPreSaveTrigger();
 			return true;
 		}
 	</script>

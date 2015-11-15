@@ -377,7 +377,7 @@
 	}
 
 	function SaveCommon() {
-		var ret = tinyMCE.triggerSave();
+		var ret = cmsPreSaveTrigger();
 		cmsSaveMakeOKAndCancelLeave();
 		return true;
 	}

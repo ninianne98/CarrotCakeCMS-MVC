@@ -83,6 +83,11 @@ function tinyResetFileBrowserOpenStatus() {
 	tinyMCE.selectedInstance.fileBrowserAlreadyOpen = false;
 }
 
+function cmsPreSaveTrigger() {
+	var tgr = tinyMCE.triggerSave();
+	return true;
+}
+
 function cmsToggleTinyMCE(id) {
 	if (!tinyMCE.get(id)) {
 		$('#' + id).addClass("mceEditor");

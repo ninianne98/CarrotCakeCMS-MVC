@@ -109,8 +109,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return RedirectToAction("Index");
 		}
 
-		public ActionResult UserProfile() {
+		public ActionResult UserProfile(bool? saved) {
 			ExtendedUserData model = new ExtendedUserData(SecurityData.CurrentUserIdentityName);
+
+			if (saved.HasValue && saved.Value) {
+				ShowSave("Profile Updated");
+			}
 
 			return View(model);
 		}
@@ -132,9 +136,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				exUsr.Save();
 
 				if (result.Succeeded) {
-					return RedirectToAction("UserProfile");
+					return RedirectToAction("UserProfile", new { @saved = true }); ;
 				}
 			}
+
+			Helper.HandleErrorDict(ModelState);
 
 			return View(model);
 		}

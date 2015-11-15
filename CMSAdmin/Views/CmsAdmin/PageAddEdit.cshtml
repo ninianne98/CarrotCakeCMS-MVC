@@ -607,22 +607,22 @@
 					<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing();" />
 					&nbsp;&nbsp;
 					@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
-					<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
+						<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
 					}
 				</td>
 				@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
-				<td>
-					&nbsp;&nbsp;
-				</td>
-				<td align="right">
-					@Html.DropDownList("ddlVersions", new SelectList(Model.VersionHistory, "Key", "Value"), "[Select Version]")
-				</td>
-				<td>
-					&nbsp;&nbsp;
-				</td>
-				<td align="left">
-					<input type="button" onclick="javascript:cmsPageVersionNav();" name="btnReview" value="Review / Revert" />
-				</td>
+					<td>
+						&nbsp;&nbsp;
+					</td>
+					<td align="right">
+						@Html.DropDownList("ddlVersions", new SelectList(Model.VersionHistory, "Key", "Value"), "[Select Version]")
+					</td>
+					<td>
+						&nbsp;&nbsp;
+					</td>
+					<td align="left">
+						<input type="button" onclick="javascript:cmsPageVersionNav();" name="btnReview" value="Review / Revert" />
+					</td>
 				}
 			</tr>
 		</table>
@@ -715,7 +715,7 @@
 	}
 
 	function SaveCommon() {
-		var ret = tinyMCE.triggerSave();
+		var ret = cmsPreSaveTrigger();
 		cmsSaveMakeOKAndCancelLeave();
 		return true;
 	}

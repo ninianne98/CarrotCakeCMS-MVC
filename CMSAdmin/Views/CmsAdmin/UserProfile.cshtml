@@ -8,15 +8,21 @@
 @using (Html.BeginForm("UserProfile", RouteConfig.AdminCtrlr)) {
 	@Html.AntiForgeryToken()
 
+	<div style="display: none">
+		<div id="formPrettyValidationSummary">
+			@Html.ValidationSummary(true, "")
+		</div>
+	</div>
+
 	<div style="width: 700px;">
 		<fieldset style="width: 525px;">
 			<legend>
 				<label>
 					Edit Profile
+
+					@CmsHelpers.DisplayErrorPopupButton()
 				</label>
 			</legend>
-
-			@Html.ValidationSummary("", new { @class = "text-danger" })
 
 			@Html.HiddenFor(m => m.UserKey)
 			@Html.HiddenFor(m => m.UserName)
@@ -93,9 +99,8 @@
 	}
 
 	function SaveCommon() {
-		var ret = tinyMCE.triggerSave();
+		var ret = cmsPreSaveTrigger();
 
 		return true;
 	}
 </script>
-
