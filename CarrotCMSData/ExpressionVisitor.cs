@@ -4,90 +4,22 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 
-/*
- * Terry Aney
- * http://www.aneyfamily.com/terryandann/post/2008/04/Batch-Updates-and-Deletes-with-LINQ-to-SQL.aspx
- * https://terryaney.wordpress.com/2008/04/14/batch-updates-and-deletes-with-linq-to-sql/
- *
- * Where can I get the source for this?
- * Download the source code and give it a go.  Let me know if you find any issues or have any suggestions.
- * Disclaimer: I’m not responsible for anything! ;)  I’ve given the code a good run through and use it in my day to day ‘maintenance queries’ against production data so I’m fairly confident that everything will be in working order.  However, when looking at the source, you’ll see some TODO’s for me to polish up the documentation and/or find better ways of parsing the little bit of SQL text I need to process.  It currently behaves itself for my needs, but rest assured, as soon as I address those…actually I should say, as soon as I can get Chris to explain in layman’s terms what is going on, I’ll update the documentation and the provided source code!
-*/
+// Copyright (c) Microsoft Corporation
+// ﻿The MIT License (MIT)
+// https://github.com/Microsoft/referencesource/blob/master/System.Core/System/Linq/Expressions/ExpressionVisitor.cs
+// https://github.com/Microsoft/referencesource/blob/master/LICENSE.txt
 
 namespace Carrotware.CMS.Data {
 
-	public static class ExpressionExtensions {
-
-		public static Expression Visit<T>(
-			this Expression exp,
-			Func<T, Expression> visitor) where T : Expression {
-			return ExpressionVisitor<T>.Visit(exp, visitor);
-		}
-
-		public static TExp Visit<T, TExp>(
-			this TExp exp,
-			Func<T, Expression> visitor)
-			where T : Expression
-			where TExp : Expression {
-			return (TExp)ExpressionVisitor<T>.Visit(exp, visitor);
-		}
-
-		public static Expression<TDelegate> Visit<T, TDelegate>(
-			this Expression<TDelegate> exp,
-			Func<T, Expression> visitor) where T : Expression {
-			return ExpressionVisitor<T>.Visit<TDelegate>(exp, visitor);
-		}
-
-		public static IQueryable<TSource> Visit<T, TSource>(
-			this IQueryable<TSource> source,
-			Func<T, Expression> visitor) where T : Expression {
-			return source.Provider.CreateQuery<TSource>(ExpressionVisitor<T>.Visit(source.Expression, visitor));
-		}
-	}
-
-	/// <summary>
-	/// This class visits every Parameter expression in an expression tree and calls a delegate
-	/// to optionally replace the parameter.  This is useful where two expression trees need to
-	/// be merged (and they don't share the same ParameterExpressions).
-	/// </summary>
-	public class ExpressionVisitor<T> : ExpressionVisitor where T : Expression {
-		private Func<T, Expression> visitor;
-
-		public ExpressionVisitor(Func<T, Expression> visitor) {
-			this.visitor = visitor;
-		}
-
-		public static Expression Visit(
-			Expression exp,
-			Func<T, Expression> visitor) {
-			return new ExpressionVisitor<T>(visitor).Visit(exp);
-		}
-
-		public static Expression<TDelegate> Visit<TDelegate>(
-			Expression<TDelegate> exp,
-			Func<T, Expression> visitor) {
-			return (Expression<TDelegate>)new ExpressionVisitor<T>(visitor).Visit(exp);
-		}
-
-		protected override Expression Visit(Expression exp) {
-			if (exp is T && visitor != null) exp = visitor((T)exp);
-
-			return base.Visit(exp);
-		}
-	}
-
-	/// <summary>
-	/// Expression visitor
-	/// (from http://blogs.msdn.com/mattwar/archive/2007/07/31/linq-building-an-iqueryable-provider-part-ii.aspx)
-	/// </summary>
 	public abstract class ExpressionVisitor {
 
-		protected ExpressionVisitor() { }
+		public ExpressionVisitor() { }
 
-		protected virtual Expression Visit(Expression exp) {
+		public virtual Expression Visit(Expression exp) {
 			if (exp == null)
 				return exp;
 			switch (exp.NodeType) {
+				case ExpressionType.UnaryPlus:
 				case ExpressionType.Negate:
 				case ExpressionType.NegateChecked:
 				case ExpressionType.Not:
@@ -106,6 +38,7 @@ namespace Carrotware.CMS.Data {
 				case ExpressionType.MultiplyChecked:
 				case ExpressionType.Divide:
 				case ExpressionType.Modulo:
+				case ExpressionType.Power:
 				case ExpressionType.And:
 				case ExpressionType.AndAlso:
 				case ExpressionType.Or:
@@ -177,7 +110,7 @@ namespace Carrotware.CMS.Data {
 					return this.VisitMemberListBinding((MemberListBinding)binding);
 
 				default:
-					throw new Exception(String.Format("Unhandled binding type '{0}'", binding.BindingType));
+					throw new Exception(String.Format("Unhandled binding type: '{0}'", binding.BindingType));
 			}
 		}
 
@@ -267,9 +200,8 @@ namespace Carrotware.CMS.Data {
 					list.Add(p);
 				}
 			}
-			if (list != null) {
-				return list.AsReadOnly();
-			}
+			if (list != null)
+				return list.ToReadOnlyCollection();
 			return original;
 		}
 
@@ -391,6 +323,30 @@ namespace Carrotware.CMS.Data {
 				return Expression.Invoke(expr, args);
 			}
 			return iv;
+		}
+	}
+
+	public static class ReadOnlyCollectionExtensions {
+
+		public static ReadOnlyCollection<T> ToReadOnlyCollection<T>(this IEnumerable<T> sequence) {
+			if (sequence == null)
+				return DefaultReadOnlyCollection<T>.Empty;
+			ReadOnlyCollection<T> col = sequence as ReadOnlyCollection<T>;
+			if (col != null)
+				return col;
+			return new ReadOnlyCollection<T>(sequence.ToArray());
+		}
+
+		private static class DefaultReadOnlyCollection<T> {
+			private static volatile ReadOnlyCollection<T> _defaultCollection;
+
+			public static ReadOnlyCollection<T> Empty {
+				get {
+					if (_defaultCollection == null)
+						_defaultCollection = new ReadOnlyCollection<T>(new T[] { });
+					return _defaultCollection;
+				}
+			}
 		}
 	}
 }

@@ -66,7 +66,7 @@ CarrotCakeCMS is maintained by Samantha Copeland
 
 1. Click the **Play** button in the main toolbar to launch CarrotCakeCMS
 
-1. The if you run the website with an empty user database, you will be prompted to create the first user
+1. When you run the website with an empty user database, you will be prompted to create the first user
 
 1. Once you have created a user, you can go to the login screen, enter the credentials
 

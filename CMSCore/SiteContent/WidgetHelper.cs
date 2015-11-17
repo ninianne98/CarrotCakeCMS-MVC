@@ -52,7 +52,7 @@ namespace Carrotware.CMS.Core {
 												  && w.IsLatestVersion != true
 												  select w);
 
-			db.carrot_WidgetDatas.DeleteBatch(oldW);
+			db.carrot_WidgetDatas.BatchDelete(oldW);
 			db.SubmitChanges();
 		}
 
@@ -80,7 +80,7 @@ namespace Carrotware.CMS.Core {
 															&& w.WidgetActive != widgetStatus
 													  select w);
 
-			db.carrot_Widgets.UpdateBatch(queryWidgets, p => new carrot_Widget { WidgetActive = widgetStatus });
+			db.carrot_Widgets.BatchUpdate(queryWidgets, p => new carrot_Widget { WidgetActive = widgetStatus });
 
 			db.SubmitChanges();
 		}
@@ -93,7 +93,7 @@ namespace Carrotware.CMS.Core {
 			bool bPendingDel = false;
 
 			if (w1 != null) {
-				db.carrot_WidgetDatas.DeleteBatch(w1);
+				db.carrot_WidgetDatas.BatchDelete(w1);
 				bPendingDel = true;
 			}
 

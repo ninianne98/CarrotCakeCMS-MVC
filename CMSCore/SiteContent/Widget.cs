@@ -196,7 +196,7 @@ namespace Carrotware.CMS.Core {
 			bool bPendingDel = false;
 
 			if (w1 != null) {
-				db.carrot_WidgetDatas.DeleteBatch(w1);
+				db.carrot_WidgetDatas.BatchDelete(w1);
 				bPendingDel = true;
 			}
 

@@ -1190,7 +1190,7 @@ namespace Carrotware.CMS.Core {
 													  where c.EditDate < DateTime.UtcNow.AddHours(-6)
 													  select c);
 
-				_db.carrot_SerialCaches.DeleteBatch(lst);
+				_db.carrot_SerialCaches.BatchDelete(lst);
 				_db.SubmitChanges();
 			}
 		}

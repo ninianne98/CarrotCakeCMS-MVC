@@ -355,7 +355,6 @@
     <Content Include="Assets\Admin\Images\flag_red.png" />
     <Content Include="Assets\Admin\Images\flag_yellow.png" />
     <Content Include="Assets\Admin\Images\folder.png" />
-    <Content Include="Assets\Admin\Images\folder_up.png" />
     <Content Include="Assets\Admin\Images\group.png" />
     <Content Include="Assets\Admin\Images\GroupList.png" />
     <Content Include="Assets\Admin\Images\heading-gradient.png" />

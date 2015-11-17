@@ -223,7 +223,7 @@ namespace Carrotware.CMS.Core {
 																	 where m.ContentCategoryID == s.ContentCategoryID
 																	 select m);
 
-					_db.carrot_CategoryContentMappings.DeleteBatch(lst);
+					_db.carrot_CategoryContentMappings.BatchDelete(lst);
 					_db.carrot_ContentCategories.DeleteOnSubmit(s);
 					_db.SubmitChanges();
 				}

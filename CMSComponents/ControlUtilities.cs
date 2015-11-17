@@ -74,7 +74,7 @@ namespace Carrotware.CMS.UI.Components {
 				SiteNav pageNav = navHelper.GetParentPageNavigation(SiteData.CurrentSiteID, SiteData.AlternateCurrentScriptName);
 
 				//assign bogus page name for comp purposes
-				if (pageNav == null) {
+				if (pageNav == null || pageNav.SiteID == Guid.Empty) {
 					pageNav = new SiteNav();
 					pageNav.Root_ContentID = Guid.Empty;
 					pageNav.FileName = "/##/";

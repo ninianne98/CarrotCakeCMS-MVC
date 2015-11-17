@@ -90,13 +90,23 @@ namespace Carrotware.CMS.Core {
 
 			lstIDs = lstContent.Select(x => x.Root_ContentID).ToList();
 
-			IQueryable<carrot_Content> querySite = (from ct in db.carrot_Contents
-													where ct.IsLatestVersion == true
-														&& ct.Parent_ContentID != null
-														&& lstIDs.Contains(ct.Root_ContentID)
-													select ct);
+			IQueryable<carrot_Content> querySite = (from c in db.carrot_Contents
+													where c.IsLatestVersion == true
+														&& c.Parent_ContentID != null
+														&& lstIDs.Contains(c.Root_ContentID)
+													select c);
 
-			db.carrot_Contents.UpdateBatch(querySite, p => new carrot_Content { Parent_ContentID = null });
+			db.carrot_Contents.BatchUpdate(querySite, p => new carrot_Content { Parent_ContentID = null });
+
+			IQueryable<carrot_Content> querySite2 = (from c in db.carrot_Contents
+													 join rc in db.carrot_RootContents on c.Root_ContentID equals rc.Root_ContentID
+													 where c.IsLatestVersion == true
+														&& c.Parent_ContentID != null
+														&& rc.SiteID == siteID
+														&& rc.ContentTypeID == ContentPageType.GetIDByType(ContentPageType.PageType.BlogEntry)
+													 select c);
+
+			db.carrot_Contents.BatchUpdate(querySite2, p => new carrot_Content { Parent_ContentID = null });
 
 			db.SubmitChanges();
 		}

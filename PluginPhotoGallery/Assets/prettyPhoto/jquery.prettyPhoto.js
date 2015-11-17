@@ -6,6 +6,14 @@ function InitPrettyPhoto(galleryid, skinName) {
 	});
 }
 
+function InitPrettyPhoto2(galleryid, skinName, width) {
+	$(galleryid).prettyPhoto({
+		theme: skinName,
+		default_width: width,
+		social_tools: ''
+	});
+}
+
 /* ------------------------------------------------------------------------
 	Class: prettyPhoto
 	Use: Lightbox clone for jQuery

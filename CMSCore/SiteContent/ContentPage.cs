@@ -213,8 +213,8 @@ namespace Carrotware.CMS.Core {
 				}
 			}
 
-			_db.carrot_TagContentMappings.DeleteBatch(oldContentTags);
-			_db.carrot_CategoryContentMappings.DeleteBatch(oldContentCategories);
+			_db.carrot_TagContentMappings.BatchDelete(oldContentTags);
+			_db.carrot_CategoryContentMappings.BatchDelete(oldContentCategories);
 		}
 
 		private void PerformCommonSaveRoot(SiteData pageSite, carrot_RootContent rc) {

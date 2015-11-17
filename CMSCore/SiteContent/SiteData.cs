@@ -276,7 +276,7 @@ namespace Carrotware.CMS.Core {
 													  && c.SiteID == CurrentSiteID
 													  select c);
 
-				_db.carrot_SerialCaches.DeleteBatch(lst);
+				_db.carrot_SerialCaches.BatchDelete(lst);
 				_db.SubmitChanges();
 			}
 		}

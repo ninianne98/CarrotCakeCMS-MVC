@@ -35,7 +35,7 @@ namespace Carrotware.CMS.Core {
 														   && ct.IsLatestVersion == true
 													select ct);
 
-			db.carrot_Contents.UpdateBatch(queryCont, p => new carrot_Content { TemplateFile = sTemplateFile });
+			db.carrot_Contents.BatchUpdate(queryCont, p => new carrot_Content { TemplateFile = sTemplateFile });
 
 			db.SubmitChanges();
 		}
@@ -49,7 +49,7 @@ namespace Carrotware.CMS.Core {
 		public void UpdateAllBlogTemplates(Guid siteID, string sTemplateFile) {
 			IQueryable<carrot_Content> queryBlog = CannedQueries.GetBlogAllContentTbl(db, siteID);
 
-			db.carrot_Contents.UpdateBatch(queryBlog, p => new carrot_Content { TemplateFile = sTemplateFile });
+			db.carrot_Contents.BatchUpdate(queryBlog, p => new carrot_Content { TemplateFile = sTemplateFile });
 
 			db.SubmitChanges();
 		}
@@ -57,7 +57,7 @@ namespace Carrotware.CMS.Core {
 		public void UpdateAllPageTemplates(Guid siteID, string sTemplateFile) {
 			IQueryable<carrot_Content> queryContent = CannedQueries.GetContentAllContentTbl(db, siteID);
 
-			db.carrot_Contents.UpdateBatch(queryContent, p => new carrot_Content { TemplateFile = sTemplateFile });
+			db.carrot_Contents.BatchUpdate(queryContent, p => new carrot_Content { TemplateFile = sTemplateFile });
 
 			db.SubmitChanges();
 		}
@@ -65,7 +65,7 @@ namespace Carrotware.CMS.Core {
 		public void UpdateTopPageTemplates(Guid siteID, string sTemplateFile) {
 			IQueryable<carrot_Content> queryContent = CannedQueries.GetContentTopContentTbl(db, siteID);
 
-			db.carrot_Contents.UpdateBatch(queryContent, p => new carrot_Content { TemplateFile = sTemplateFile });
+			db.carrot_Contents.BatchUpdate(queryContent, p => new carrot_Content { TemplateFile = sTemplateFile });
 
 			db.SubmitChanges();
 		}
@@ -73,7 +73,7 @@ namespace Carrotware.CMS.Core {
 		public void UpdateSubPageTemplates(Guid siteID, string sTemplateFile) {
 			IQueryable<carrot_Content> queryContent = CannedQueries.GetContentSubContentTbl(db, siteID);
 
-			db.carrot_Contents.UpdateBatch(queryContent, p => new carrot_Content { TemplateFile = sTemplateFile });
+			db.carrot_Contents.BatchUpdate(queryContent, p => new carrot_Content { TemplateFile = sTemplateFile });
 
 			db.SubmitChanges();
 		}
@@ -135,8 +135,8 @@ namespace Carrotware.CMS.Core {
 			IQueryable<carrot_Content> queryCont = CannedQueries.GetBlogAllContentTbl(db, siteID);
 			IQueryable<carrot_RootContent> queryContRoot = CannedQueries.GetBlogAllRootTbl(db, siteID);
 
-			db.carrot_Contents.UpdateBatch(queryCont, p => new carrot_Content { NavOrder = SiteData.BlogSortOrderNumber, Parent_ContentID = null });
-			db.carrot_RootContents.UpdateBatch(queryContRoot, p => new carrot_RootContent { ShowInSiteMap = false, ShowInSiteNav = false });
+			db.carrot_Contents.BatchUpdate(queryCont, p => new carrot_Content { NavOrder = SiteData.BlogSortOrderNumber, Parent_ContentID = null });
+			db.carrot_RootContents.BatchUpdate(queryContRoot, p => new carrot_RootContent { ShowInSiteMap = false, ShowInSiteNav = false });
 
 			db.SubmitChanges();
 		}
@@ -214,35 +214,35 @@ namespace Carrotware.CMS.Core {
 
 			switch (selField) {
 				case UpdateField.MarkActive:
-					db.carrot_RootContents.UpdateBatch(queryCont, p => new carrot_RootContent { PageActive = true });
+					db.carrot_RootContents.BatchUpdate(queryCont, p => new carrot_RootContent { PageActive = true });
 					break;
 
 				case UpdateField.MarkInactive:
-					db.carrot_RootContents.UpdateBatch(queryCont, p => new carrot_RootContent { PageActive = false });
+					db.carrot_RootContents.BatchUpdate(queryCont, p => new carrot_RootContent { PageActive = false });
 					break;
 
 				case UpdateField.MarkAsIndexable:
-					db.carrot_RootContents.UpdateBatch(queryCont, p => new carrot_RootContent { BlockIndex = false });
+					db.carrot_RootContents.BatchUpdate(queryCont, p => new carrot_RootContent { BlockIndex = false });
 					break;
 
 				case UpdateField.MarkAsIndexableNo:
-					db.carrot_RootContents.UpdateBatch(queryCont, p => new carrot_RootContent { BlockIndex = true });
+					db.carrot_RootContents.BatchUpdate(queryCont, p => new carrot_RootContent { BlockIndex = true });
 					break;
 
 				case UpdateField.MarkIncludeInSiteMap:
-					db.carrot_RootContents.UpdateBatch(queryCont, p => new carrot_RootContent { ShowInSiteMap = true });
+					db.carrot_RootContents.BatchUpdate(queryCont, p => new carrot_RootContent { ShowInSiteMap = true });
 					break;
 
 				case UpdateField.MarkIncludeInSiteMapNo:
-					db.carrot_RootContents.UpdateBatch(queryCont, p => new carrot_RootContent { ShowInSiteMap = false });
+					db.carrot_RootContents.BatchUpdate(queryCont, p => new carrot_RootContent { ShowInSiteMap = false });
 					break;
 
 				case UpdateField.MarkIncludeInSiteNav:
-					db.carrot_RootContents.UpdateBatch(queryCont, p => new carrot_RootContent { ShowInSiteNav = true });
+					db.carrot_RootContents.BatchUpdate(queryCont, p => new carrot_RootContent { ShowInSiteNav = true });
 					break;
 
 				case UpdateField.MarkIncludeInSiteNavNo:
-					db.carrot_RootContents.UpdateBatch(queryCont, p => new carrot_RootContent { ShowInSiteNav = false });
+					db.carrot_RootContents.BatchUpdate(queryCont, p => new carrot_RootContent { ShowInSiteNav = false });
 					break;
 			}
 
@@ -893,7 +893,7 @@ namespace Carrotware.CMS.Core {
 													select ct);
 
 			if (lstDel.Any()) {
-				db.carrot_Contents.DeleteBatch(queryCont);
+				db.carrot_Contents.BatchDelete(queryCont);
 				db.SubmitChanges();
 			}
 		}
@@ -937,19 +937,19 @@ namespace Carrotware.CMS.Core {
 					IQueryable<carrot_TagContentMapping> oldContentTags = CannedQueries.GetContentTagMapByContentID(db, rootContentID);
 					IQueryable<carrot_CategoryContentMapping> oldContentCategories = CannedQueries.GetContentCategoryMapByContentID(db, rootContentID);
 
-					db.carrot_Contents.UpdateBatch(queryChildPages, p => new carrot_Content { Parent_ContentID = null });
+					db.carrot_Contents.BatchUpdate(queryChildPages, p => new carrot_Content { Parent_ContentID = null });
 
-					db.carrot_TagContentMappings.DeleteBatch(oldContentTags);
-					db.carrot_CategoryContentMappings.DeleteBatch(oldContentCategories);
+					db.carrot_TagContentMappings.BatchDelete(oldContentTags);
+					db.carrot_CategoryContentMappings.BatchDelete(oldContentCategories);
 
-					db.carrot_WidgetDatas.DeleteBatch(queryWidgetData);
-					db.carrot_Widgets.DeleteBatch(queryWidget);
+					db.carrot_WidgetDatas.BatchDelete(queryWidgetData);
+					db.carrot_Widgets.BatchDelete(queryWidget);
 
-					db.carrot_ContentComments.DeleteBatch(queryComment);
-					db.carrot_TrackbackQueues.DeleteBatch(queryTrack);
+					db.carrot_ContentComments.BatchDelete(queryComment);
+					db.carrot_TrackbackQueues.BatchDelete(queryTrack);
 
-					db.carrot_Contents.DeleteBatch(queryCont);
-					db.carrot_RootContents.DeleteBatch(queryRootContent);
+					db.carrot_Contents.BatchDelete(queryCont);
+					db.carrot_RootContents.BatchDelete(queryRootContent);
 
 					Guid? newHomeID = (from ct in db.carrot_Contents
 									   join r in db.carrot_RootContents on ct.Root_ContentID equals r.Root_ContentID
@@ -978,7 +978,7 @@ namespace Carrotware.CMS.Core {
 																		&& ct.IsLatestVersion == true
 																  select ct);
 
-						db.carrot_Contents.UpdateBatch(queryContNH, p => new carrot_Content { NavOrder = 0 });
+						db.carrot_Contents.BatchUpdate(queryContNH, p => new carrot_Content { NavOrder = 0 });
 					}
 
 					db.SubmitChanges();
