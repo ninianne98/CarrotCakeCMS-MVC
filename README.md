@@ -35,9 +35,9 @@ CarrotCakeCMS is maintained by Samantha Copeland
 
 ### Get the Source Code
 
-1. Download either a GIT or ZIP archive or connect using either a GIT or SVN client
-
 1. Go to the [repository][REPO_GH] in a browser
+
+1. Download either a GIT or ZIP archive or connect using either a GIT or SVN client
 
 ### Open the Project
 
@@ -48,21 +48,23 @@ CarrotCakeCMS is maintained by Samantha Copeland
 	Note: If your file extensions are hidden, you will not see the ".sln"
 	Other SLN files are demo widgets for how to wire in custom code/extensions
 
-1. Edit **Web.config** under **CMSAdmin** root directory
+1. Edit **Web.config** under **CMSAdmin** root directory (this coresponds to the **CMSAdminMVC** project)
 
 	- In the connectionStrings section, configure the CarrotwareCMSConnectionString value to point to your server and the name of your database.
 		Note: the credentials require database owner/dbo level as it will create the database artifacts for you.
 	- In the mailSettings, configure the pickupDirectoryLocation to a directory on your development machine (for testing purposes).
 
-1. Right-click on **CMSAdmin** and select **Set as StartUp Project**
+1. Right-click on **CMSAdminMVC** and select **Set as StartUp Project**
 
-1. Right-click on **CMSAdmin** and select **Rebuild**. The project should download all required NuGet packages and compile successfully
+1. Right-click on **CMSAdminMVC** and select **Rebuild**. The project should download all required NuGet packages and compile successfully
 
-	There will be some warnings, you can ignore them
+	There may be some warnings, you can ignore them
 
-1. The SQL Server database should be running and an empty database matching the name in the connection string. If you are running the code a second or later time, it will auto update if there are schema changes.
+1. The SQL Server database should be running and an empty database matching the one specified in the connection string. If you are running the code a second or later time, it will auto update if there are schema changes.
 
-1. The first time you start up the system, it will create the required artifacts in the database (tables/views/sprocs etc.)
+1. if the database is empty or has pending database changes, you will be greeted with a maintenance screen, follow the link provided.
+
+1. The first time you start up the website, it will create the required artifacts in the database (tables/views/sprocs etc.)
 
 1. Click the **Play** button in the main toolbar to launch CarrotCakeCMS
 
