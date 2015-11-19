@@ -41,6 +41,45 @@
 	#cmsToolBoxWrap input[type="submit"], #cmsToolBoxWrap input[type="reset"], #cmsToolBoxWrap input[type="button"], #cmsToolBoxWrap .button {
 		min-width: 4em;
 		padding: 0.6em;
+		border: 1px solid #478C5F;
+		background-color: #DFF6E8;
+		border-radius: 6px;
+		-moz-border-radius: 6px;
+		-webkit-border-radius: 6px;
+	}
+
+	#cmsToolBoxWrap input[type="submit"], #cmsToolBoxWrap input[type="reset"], #cmsToolBoxWrap input[type="button"],
+	#cmsToolBoxWrap .button, #cmsToolBoxWrap .ui-dialog-buttonpane button {
+		min-width: 4em;
+		padding: 0.6em;
+		border: 1px solid #8E908E;
+		background-color: #CEE4D7;
+		color: #676F6A;
+		border-radius: 6px;
+		-moz-border-radius: 6px;
+		-webkit-border-radius: 6px;
+	}
+
+.cmsGlossySeaGreen input[type="submit"], .cmsGlossySeaGreen input[type="reset"], .cmsGlossySeaGreen input[type="button"],
+.cmsGlossySeaGreen .button, .cmsGlossySeaGreen .ui-dialog-buttonpane button {
+	min-width: 3em;
+	padding: 0.6em;
+	border: 1px solid #8E908E;
+	background-color: #CEE4D7;
+	color: #676F6A;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+}
+
+#cmsToolBoxWrap .btn, .cmsGlossySeaGreen button, .cmsGlossySeaGreen .btn, #cmsGlossySeaGreenID .btn {
+	color: #676F6A;
+}
+
+	#cmsToolBoxWrap .btn-primary, .cmsGlossySeaGreen .btn-primary, .cmsGlossySeaGreen button.btn-primary,
+	#cmsGlossySeaGreenID .btn-primary, #cmsGlossySeaGreenID input.btn-primary {
+		font-weight: bold;
+		background-color: #ECFAF1;
 	}
 
 .cmsGlossySeaGreen .ui-widget P {

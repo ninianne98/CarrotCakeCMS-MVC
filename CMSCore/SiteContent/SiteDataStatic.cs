@@ -251,6 +251,14 @@ namespace Carrotware.CMS.Core {
 			return pageContents;
 		}
 
+		public static ContentPage GetPage(Guid guidContentID) {
+			ContentPage pageContents = null;
+			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+				pageContents = pageHelper.FindContentByID(CurrentSiteID, guidContentID);
+			}
+			return pageContents;
+		}
+
 		public static List<Widget> GetCurrentPageWidgets(Guid guidContentID) {
 			List<Widget> pageWidgets = new List<Widget>();
 

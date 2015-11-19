@@ -245,7 +245,6 @@ namespace Carrotware.CMS.UI.Components {
 
 		private static string RenderPartialToString(string partialViewName, Object model) {
 			var controller = Html.ViewContext.Controller;
-			var viewData = Html.ViewData;
 			var tempData = Html.ViewContext.TempData;
 
 			if (model != null) {
@@ -255,7 +254,7 @@ namespace Carrotware.CMS.UI.Components {
 			using (var sw = new StringWriter()) {
 				var viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, partialViewName);
 
-				var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, viewData, tempData, sw);
+				var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, tempData, sw);
 				viewResult.View.Render(viewContext, sw);
 				return sw.GetStringBuilder().ToString();
 			}

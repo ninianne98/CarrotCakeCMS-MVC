@@ -1007,8 +1007,37 @@ function cmsFixDialog(dialogname) {
 	$(d).wrap("<div class=\"cmsGlossySeaGreen\" />");
 	$(d).css('zIndex', 9950005);
 
+	//alert($(dilg).prop('id'));
+
+	var dialogWrapper = 'cmsDlgWrap_' + dialogname;
+
+	if ($(dilg).prop('id').length < 1) {
+		$(dilg).prop('id', dialogWrapper);
+	}
+
+	dialogWrapper = '#' + dialogWrapper;
+
 	//$(dilg).find('.ui-dialog-titlebar').addClass("cmsGlossySeaGreen");
 	//$(dilg).find('ui-dialog-title').addClass("cmsGlossySeaGreen");
+
+	if ($(dialogWrapper + " .ui-dialog-titlebar .ui-dialog-titlebar-close .ui-icon-closethick").length < 1) {
+		var closeBtn = $(dialogWrapper + ' .ui-dialog-titlebar-close');
+		closeBtn.addClass('ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only');
+		closeBtn.append('<span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text"> </span>');
+
+		closeBtn.hover(function () {
+			$(this).addClass("ui-state-hover");
+		}, function () {
+			$(this).removeClass("ui-state-hover");
+		});
+	}
+
+	if ($(dialogWrapper + " .ui-dialog-buttonpane .ui-dialog-buttonset btn").length < 1) {
+		var btns = $(dialogWrapper + ' .ui-dialog-buttonset button');
+		btns.addClass('btn btn-default');
+		var btn = $(dialogWrapper + ' .ui-dialog-buttonset button:first-child');
+		btn.removeClass('btn-default').addClass('btn-primary');
+	}
 }
 
 function cmsOverrideCSSScope(elm, xtra) {

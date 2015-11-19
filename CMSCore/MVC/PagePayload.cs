@@ -37,6 +37,30 @@ namespace Carrotware.CMS.Core {
 			return page;
 		}
 
+		public static PagePayload GetContent(Guid id) {
+			PagePayload page = new PagePayload();
+			page.ThePage = SiteData.GetPage(id);
+
+			page.Load();
+			return page;
+		}
+
+		public static PagePayload GetContent(SiteNav nav) {
+			PagePayload page = new PagePayload();
+			page.ThePage = nav.GetContentPage();
+
+			page.Load();
+			return page;
+		}
+
+		public static PagePayload GetContent(ContentPage cp) {
+			PagePayload page = new PagePayload();
+			page.ThePage = cp;
+
+			page.Load();
+			return page;
+		}
+
 		public static PagePayload GetContent(string uri) {
 			PagePayload page = new PagePayload();
 
@@ -241,6 +265,23 @@ namespace Carrotware.CMS.Core {
 				}
 
 				return _parentnav;
+			}
+		}
+
+		private SiteNav _hometnav = null;
+
+		public SiteNav HomeNav {
+			get {
+				if (_hometnav == null) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
+						_hometnav = navHelper.FindHome(this.TheSite.SiteID);
+					}
+					if (_hometnav != null) {
+						_hometnav = IdentifyLinkAsInactive(_hometnav);
+					}
+				}
+
+				return _hometnav;
 			}
 		}
 

@@ -29,6 +29,16 @@ namespace Carrotware.CMS.Core {
 				}
 			}
 		}
+
+		public void OverridePage(PagePayload page) {
+			this.CmsPage = page;
+			this.ViewData[PagePayload.ViewDataKey] = this.CmsPage;
+		}
+
+		public void OverridePage(SiteNav nav) {
+			this.CmsPage = PagePayload.GetContent(nav);
+			this.ViewData[PagePayload.ViewDataKey] = this.CmsPage;
+		}
 	}
 
 	//=====================
