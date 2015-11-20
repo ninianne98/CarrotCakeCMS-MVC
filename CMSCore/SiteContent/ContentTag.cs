@@ -62,15 +62,14 @@ namespace Carrotware.CMS.Core {
 
 			if (obj is ContentTag) {
 				ContentTag p = (ContentTag)obj;
-				return (this.SiteID == p.SiteID
-						&& this.TagSlug.ToLower() == p.TagSlug.ToLower());
+				return (this.SiteID == p.SiteID && this.ContentTagID == p.ContentTagID);
 			} else {
 				return false;
 			}
 		}
 
 		public override int GetHashCode() {
-			return this.TagSlug.GetHashCode() ^ this.SiteID.GetHashCode();
+			return this.ContentTagID.GetHashCode() ^ this.SiteID.GetHashCode();
 		}
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {

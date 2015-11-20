@@ -62,15 +62,14 @@ namespace Carrotware.CMS.Core {
 
 			if (obj is ContentCategory) {
 				ContentCategory p = (ContentCategory)obj;
-				return (this.SiteID == p.SiteID
-						&& this.CategorySlug.ToLower() == p.CategorySlug.ToLower());
+				return (this.SiteID == p.SiteID && this.ContentCategoryID == p.ContentCategoryID);
 			} else {
 				return false;
 			}
 		}
 
 		public override int GetHashCode() {
-			return this.CategorySlug.GetHashCode() ^ this.SiteID.GetHashCode();
+			return this.ContentCategoryID.GetHashCode() ^ this.SiteID.GetHashCode();
 		}
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
@@ -179,7 +178,7 @@ namespace Carrotware.CMS.Core {
 			List<ContentCategory> _types = null;
 
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<carrot_ContentCategory> query = CompiledQueries.cqGetContentCategoryByContentID(_db, rootContentID);
+				IQueryable<vw_carrot_CategoryURL> query = CompiledQueries.cqGetContentCategoryByContentID(_db, rootContentID);
 
 				_types = (from d in query.ToList()
 						  select new ContentCategory(d)).ToList();
