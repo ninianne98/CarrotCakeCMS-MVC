@@ -49,6 +49,10 @@
 		$(document).ready(function () {
 			$("input:button, input:submit, input:reset").button();
 		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			$("input:button, input:submit, input:reset").button();
+		});
 	</script>
 
 	<title>@CmsPage.Titlebar</title>
@@ -327,7 +331,8 @@
 		</div>
 		<!-- end #menu -->
 		<div id="page">
-			<div id="BreadCrumbNavigation1">
+			<div id="BreadCrumbNavigation">
+				@CarrotCakeHtml.GetBreadCrumbNavigation()
 			</div>
 
 			<div id="page-bgtop">
@@ -403,6 +408,22 @@
 								<div>
 									@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
 								</div>
+								@if (CmsPage.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+									var pagecat = CmsPage.GetPageCategories(25);
+									var pagetag = CmsPage.GetPageTags(25);
+
+									<div class="meta">
+										@foreach (var itm in pagecat) {
+											<span class="meta-item @String.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
+										}
+									</div>
+
+									<div class="meta">
+										@foreach (var itm in pagetag) {
+											<span class="meta-item @String.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
+										}
+									</div>
+								}
 								<div>
 									@CarrotCakeHtml.RenderWidget("phCenterBottom")
 								</div>
@@ -496,6 +517,7 @@
 			All rights reserved.
 		</p>
 	</div>
+
 	<!-- end #footer -->
 	@CarrotCakeHtml.IncludeFooter()
 </body>

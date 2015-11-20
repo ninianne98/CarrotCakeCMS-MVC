@@ -102,6 +102,24 @@
 				@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
 				@RenderBody()
 			</div>
+
+			@if (CmsPage.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+				var pagecat = CmsPage.GetPageCategories(25);
+				var pagetag = CmsPage.GetPageTags(25);
+
+				<div class="meta">
+					@foreach (var itm in pagecat) {
+						<span class="meta-item @String.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
+					}
+				</div>
+
+				<div class="meta">
+					@foreach (var itm in pagetag) {
+						<span class="meta-item @String.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
+					}
+				</div>
+			}
+
 			@RenderSection("PagedDataSection", required: false)
 			<div>
 				@CarrotCakeHtml.RenderWidget("phCenterBottom")
