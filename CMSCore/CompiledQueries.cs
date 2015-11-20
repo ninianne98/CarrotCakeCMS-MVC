@@ -826,10 +826,10 @@ namespace Carrotware.CMS.Core {
 				 where c.Root_ContentID == rootContentID
 				 select r));
 
-		internal static readonly Func<CarrotCMSDataContext, Guid, IQueryable<carrot_ContentCategory>> cqGetContentCategoryByContentID =
+		internal static readonly Func<CarrotCMSDataContext, Guid, IQueryable<vw_carrot_CategoryURL>> cqGetContentCategoryByContentID =
 		CompiledQuery.Compile(
 			(CarrotCMSDataContext ctx, Guid rootContentID) =>
-				(from r in ctx.carrot_ContentCategories
+				(from r in ctx.vw_carrot_CategoryURLs
 				 join c in ctx.carrot_CategoryContentMappings on r.ContentCategoryID equals c.ContentCategoryID
 				 where c.Root_ContentID == rootContentID
 				 select r));

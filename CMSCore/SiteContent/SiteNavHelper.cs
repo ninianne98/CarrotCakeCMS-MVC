@@ -30,6 +30,7 @@ namespace Carrotware.CMS.Core {
 		public static ISiteNavHelper GetSiteNavHelper() {
 			if (SiteData.IsWebView) {
 				if ((SiteData.IsPageSampler || SiteData.IsPageReal) && !SiteData.IsCurrentPageSpecial) {
+					SiteNavHelper.SeqGuid = null;
 					return new SiteNavHelperMock();
 				} else {
 					return new SiteNavHelperReal();
@@ -43,6 +44,7 @@ namespace Carrotware.CMS.Core {
 			if (navMode == SiteNavMode.RealNav) {
 				return new SiteNavHelperReal();
 			} else {
+				SiteNavHelper.SeqGuid = null;
 				return new SiteNavHelperMock();
 			}
 		}
@@ -99,6 +101,7 @@ namespace Carrotware.CMS.Core {
 		internal static List<SiteNav> GetSamplerFakeNav(int iCount, Guid? rootParentID) {
 			List<SiteNav> navList = new List<SiteNav>();
 			int n = 0;
+			SeqGuid = null;
 
 			while (n < iCount) {
 				SiteNav nav = GetSamplerView();
@@ -113,7 +116,7 @@ namespace Carrotware.CMS.Core {
 				nav.ShowInSiteMap = true;
 
 				if (n > 0 || rootParentID != null) {
-					nav.Root_ContentID = Guid.NewGuid();
+					nav.Root_ContentID = SeqGuid.NextGuid;
 					nav.ContentID = Guid.NewGuid();
 					//nav.FileName = nav.FileName.Replace(".aspx", nav.NavOrder.ToString() + ".aspx");
 					nav.FileName = "/#";
@@ -139,7 +142,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string GetSampleBody() {
-			return GetSampleBody(null, "");
+			return GetSampleBody(null, String.Empty);
 		}
 
 		public static string GetSampleBody(string sContentSampleNumber) {
@@ -173,11 +176,26 @@ namespace Carrotware.CMS.Core {
 			return sFile2;
 		}
 
+		private static SequentialGuid _seq = new SequentialGuid();
+
+		internal static SequentialGuid SeqGuid {
+			get {
+				if (_seq == null) {
+					_seq = new SequentialGuid();
+				}
+
+				return _seq;
+			}
+			set {
+				_seq = value;
+			}
+		}
+
 		internal static SiteNav GetSamplerView() {
 			string sFile2 = GetSampleBody();
 
 			SiteNav navNew = new SiteNav();
-			navNew.Root_ContentID = Guid.NewGuid();
+			navNew.Root_ContentID = SeqGuid.NextGuid;
 			navNew.ContentID = Guid.NewGuid();
 
 			navNew.NavOrder = -1;
@@ -211,6 +229,41 @@ namespace Carrotware.CMS.Core {
 			navNew.EditUserId = SecurityData.CurrentUserGuid;
 
 			return navNew;
+		}
+	}
+
+	//=====================
+	internal class SequentialGuid {
+		private int _b0 = 1;
+		private int _b1 = 1;
+		private int _b2 = 1;
+		private int _b3 = 1;
+		private int _b4 = 1;
+		private int _b5 = 1;
+
+		internal SequentialGuid() { }
+
+		internal Guid NextGuid {
+			get {
+				var tempGuid = Guid.Empty;
+				var bytes = tempGuid.ToByteArray();
+
+				bytes[0] = (byte)_b0;
+				bytes[1] = (byte)_b1;
+				bytes[2] = (byte)_b2;
+				bytes[3] = (byte)_b3;
+				bytes[4] = (byte)_b4;
+				bytes[5] = (byte)_b5;
+
+				_b0 = _b0 + 3;
+				_b1 = _b1 + 5;
+				_b2 = _b2 + 11;
+				_b3 = _b3 + 9;
+				_b4 = _b4 + 7;
+				_b5 = _b5 + 13;
+
+				return new Guid(bytes);
+			}
 		}
 	}
 }

@@ -30,6 +30,11 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		public void RefreshPayload() {
+			this.CmsPage = PagePayload.GetCurrentContent();
+			this.ViewData[PagePayload.ViewDataKey] = this.CmsPage;
+		}
+
 		public void OverridePage(PagePayload page) {
 			this.CmsPage = page;
 			this.ViewData[PagePayload.ViewDataKey] = this.CmsPage;

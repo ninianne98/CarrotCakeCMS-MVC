@@ -11,13 +11,13 @@ using System.Reflection;
 using System.Text;
 
 /*
-* CarrotCake CMS
+* CarrotCake CMS (MVC5)
 * http://www.carrotware.com/
 *
-* Copyright 2011, Samantha Copeland
+* Copyright 2015, Samantha Copeland
 * Dual licensed under the MIT or GPL Version 3 licenses.
 *
-* Date: October 2011
+* Date: August 2015
 */
 
 // portions derived from https://terryaney.wordpress.com/2008/04/14/batch-updates-and-deletes-with-linq-to-sql/
