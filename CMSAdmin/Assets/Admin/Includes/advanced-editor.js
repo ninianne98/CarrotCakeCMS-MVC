@@ -1,4 +1,8 @@
-﻿var cmsIsPageLocked = true;
+﻿if (typeof jQuery === 'undefined') {
+	throw new Error('Advanced Editor JavaScript requires jQuery')
+}
+
+var cmsIsPageLocked = true;
 
 function cmsSetPageStatus(stat) {
 	cmsIsPageLocked = stat;

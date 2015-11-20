@@ -38,7 +38,8 @@
 	z-index: 99100;
 }
 
-	#cmsToolBoxWrap input[type="submit"], #cmsToolBoxWrap input[type="reset"], #cmsToolBoxWrap input[type="button"], #cmsToolBoxWrap .button {
+	#cmsToolBoxWrap input[type="submit"], #cmsToolBoxWrap input[type="reset"], #cmsToolBoxWrap input[type="button"], #cmsToolBoxWrap .button,
+	#cmsModalFrame input[type="button"], #cmsModalFrame button, #cmsModalFrame .button {
 		min-width: 4em;
 		padding: 0.6em;
 		border: 1px solid #478C5F;

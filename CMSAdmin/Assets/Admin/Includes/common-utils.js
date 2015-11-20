@@ -1,4 +1,8 @@
-﻿function AjaxBtnLoad() {
+﻿if (typeof jQuery === 'undefined') {
+	throw new Error('Common Utils JavaScript requires jQuery')
+}
+
+function AjaxBtnLoad() {
 	$(function () {
 		$('#jqtabs, .jqtabs').tabs();
 	});
