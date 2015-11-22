@@ -82,24 +82,7 @@ namespace Carrotware.CMS.UI.Components {
 				//controller.ControllerContext = new ControllerContext(Html.ViewContext.Controller.ControllerContext.RequestContext, controller);
 				//controller.ControllerContext = Html.ViewContext.Controller.ControllerContext;
 
-				if (model != null) {
-					controller.ViewData.Model = model;
-				}
-
-				using (var sw = new StringWriter()) {
-					ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, partialViewName);
-					ViewContext viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, controller.TempData, sw);
-
-					// copy model state items to the html helper
-					foreach (var item in viewContext.Controller.ViewData.ModelState)
-						if (!viewContext.ViewData.ModelState.Keys.Contains(item.Key)) {
-							viewContext.ViewData.ModelState.Add(item);
-						}
-
-					viewResult.View.Render(viewContext, sw);
-
-					return new HtmlString(sw.GetStringBuilder().ToString());
-				}
+				return new HtmlString(RenderPartialToString((ControllerBase)controller, controller.TempData, partialViewName, model));
 			}
 
 			return new HtmlString(String.Empty);
@@ -244,18 +227,36 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		private static string RenderPartialToString(string partialViewName, Object model) {
-			var controller = Html.ViewContext.Controller;
-			var tempData = Html.ViewContext.TempData;
+			ControllerBase controller = Html.ViewContext.Controller;
+			TempDataDictionary tempData = Html.ViewContext.TempData;
+
+			return RenderPartialToString(controller, tempData, partialViewName, model);
+		}
+
+		private static string RenderPartialToString(ControllerBase controller, TempDataDictionary tempData, string partialViewName, Object model) {
+			bool bNullModel = controller.ViewData.Model == null;
 
 			if (model != null) {
 				controller.ViewData.Model = model;
 			}
 
 			using (var sw = new StringWriter()) {
-				var viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, partialViewName);
+				ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, partialViewName);
+				ViewContext viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, tempData, sw);
 
-				var viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, tempData, sw);
+				// copy model state items to the html helper
+				foreach (var item in viewContext.Controller.ViewData.ModelState) {
+					if (!viewContext.ViewData.ModelState.Keys.Contains(item.Key)) {
+						viewContext.ViewData.ModelState.Add(item);
+					}
+				}
+
 				viewResult.View.Render(viewContext, sw);
+
+				if (bNullModel) {
+					controller.ViewData.Model = null;
+				}
+
 				return sw.GetStringBuilder().ToString();
 			}
 		}
