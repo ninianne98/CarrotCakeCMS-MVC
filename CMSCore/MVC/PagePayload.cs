@@ -312,14 +312,14 @@ namespace Carrotware.CMS.Core {
 
 						if (SiteData.CurretSiteExists && SiteData.CurrentSite.Blog_Root_ContentID.HasValue &&
 							pageNav.ContentType == ContentPageType.PageType.BlogEntry) {
-							_breadcrumbs = navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, SiteData.CurrentSite.Blog_Root_ContentID.Value, !SecurityData.IsAuthEditor);
+							_breadcrumbs = navHelper.GetPageCrumbNavigation(this.TheSite.SiteID, SiteData.CurrentSite.Blog_Root_ContentID.Value, !SecurityData.IsAuthEditor);
 
 							if (_breadcrumbs != null && _breadcrumbs.Any()) {
 								pageNav.NavOrder = _breadcrumbs.Max(x => x.NavOrder) + 100;
 								_breadcrumbs.Add(pageNav);
 							}
 						} else {
-							_breadcrumbs = navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, pageNav.Root_ContentID, !SecurityData.IsAuthEditor);
+							_breadcrumbs = navHelper.GetPageCrumbNavigation(this.TheSite.SiteID, pageNav.Root_ContentID, !SecurityData.IsAuthEditor);
 						}
 						_breadcrumbs.RemoveAll(x => x.ShowInSiteNav == false && x.ContentType == ContentPageType.PageType.ContentEntry);
 					}
@@ -403,13 +403,79 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public List<ContentTag> GetPageTags(int iTakeTop) {
-			if (iTakeTop < 0) {
-				iTakeTop = 100000;
+		public List<SiteNav> GetSiteUpdates(ListContentType contentType, List<string> lstCategorySlugs) {
+			return GetSiteUpdates(contentType, -1, null, lstCategorySlugs);
+		}
+
+		public List<SiteNav> GetSiteUpdates(ListContentType contentType, List<Guid> lstCategories) {
+			return GetSiteUpdates(contentType, -1, lstCategories, null);
+		}
+
+		public List<SiteNav> GetSiteUpdates(ListContentType contentType, int takeTop, List<string> lstCategorySlugs) {
+			return GetSiteUpdates(contentType, takeTop, null, lstCategorySlugs);
+		}
+
+		public List<SiteNav> GetSiteUpdates(ListContentType contentType, int takeTop, List<Guid> lstCategories) {
+			return GetSiteUpdates(contentType, takeTop, lstCategories, null);
+		}
+
+		public List<SiteNav> GetSiteUpdates(ListContentType contentType, int takeTop) {
+			return GetSiteUpdates(contentType, takeTop, null, null);
+		}
+
+		public List<SiteNav> GetSiteUpdates(int takeTop) {
+			return GetSiteUpdates(ListContentType.Blog, takeTop, null, null);
+		}
+
+		internal List<SiteNav> GetSiteUpdates(ListContentType contentType, int takeTop, List<Guid> lstCategories, List<string> lstCategorySlugs) {
+			List<SiteNav> _siteUpdates = new List<SiteNav>();
+			if (lstCategories == null) {
+				lstCategories = new List<Guid>();
+			}
+			if (lstCategorySlugs == null) {
+				lstCategorySlugs = new List<string>();
+			}
+
+			if (lstCategories.Any() || lstCategorySlugs.Any()) {
+				contentType = ListContentType.SpecifiedCategories;
 			}
 
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-				return navHelper.GetTagListForPost(this.TheSite.SiteID, iTakeTop, this.ThePage.Root_ContentID);
+				switch (contentType) {
+					case ListContentType.Blog:
+						_siteUpdates = navHelper.GetLatestPosts(this.TheSite.SiteID, takeTop, !SecurityData.IsAuthEditor);
+						break;
+
+					case ListContentType.ContentPage:
+						_siteUpdates = navHelper.GetLatest(this.TheSite.SiteID, takeTop, !SecurityData.IsAuthEditor);
+						break;
+
+					case ListContentType.SpecifiedCategories:
+						if (takeTop > 0) {
+							_siteUpdates = navHelper.GetFilteredContentByIDPagedList(SiteData.CurrentSite, lstCategories, lstCategorySlugs, !SecurityData.IsAuthEditor, takeTop, 0, "GoLiveDate", "DESC");
+						} else {
+							_siteUpdates = navHelper.GetFilteredContentByIDPagedList(SiteData.CurrentSite, lstCategories, lstCategorySlugs, !SecurityData.IsAuthEditor, 250000, 0, "NavMenuText", "ASC");
+						}
+						break;
+				}
+			}
+
+			if (_siteUpdates == null) {
+				_siteUpdates = new List<SiteNav>();
+			}
+
+			_siteUpdates = TweakData(_siteUpdates);
+
+			return _siteUpdates;
+		}
+
+		public List<ContentTag> GetPageTags(int takeTop) {
+			if (takeTop < 0) {
+				takeTop = 100000;
+			}
+
+			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
+				return navHelper.GetTagListForPost(this.TheSite.SiteID, takeTop, this.ThePage.Root_ContentID);
 			}
 		}
 
@@ -459,22 +525,22 @@ namespace Carrotware.CMS.Core {
 			return percUsed;
 		}
 
-		public List<ContentCategory> GetPageCategories(int iTakeTop) {
-			if (iTakeTop < 0) {
-				iTakeTop = 300000;
+		public List<ContentCategory> GetPageCategories(int takeTop) {
+			if (takeTop < 0) {
+				takeTop = 300000;
 			}
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-				return navHelper.GetCategoryListForPost(this.TheSite.SiteID, iTakeTop, this.ThePage.Root_ContentID);
+				return navHelper.GetCategoryListForPost(this.TheSite.SiteID, takeTop, this.ThePage.Root_ContentID);
 			}
 		}
 
-		public List<ContentTag> GetSiteTags(int iTakeTop, bool ShowNonZeroCountOnly) {
+		public List<ContentTag> GetSiteTags(int takeTop, bool ShowNonZeroCountOnly) {
 			List<ContentTag> lstNav = new List<ContentTag>();
-			if (iTakeTop < 0) {
-				iTakeTop = 100000;
+			if (takeTop < 0) {
+				takeTop = 100000;
 			}
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-				lstNav = navHelper.GetTagList(this.TheSite.SiteID, iTakeTop);
+				lstNav = navHelper.GetTagList(this.TheSite.SiteID, takeTop);
 			}
 
 			lstNav.RemoveAll(x => x.Count < 1 && ShowNonZeroCountOnly);
@@ -483,13 +549,13 @@ namespace Carrotware.CMS.Core {
 			return lstNav;
 		}
 
-		public List<ContentCategory> GetSiteCategories(int iTakeTop, bool ShowNonZeroCountOnly) {
+		public List<ContentCategory> GetSiteCategories(int takeTop, bool ShowNonZeroCountOnly) {
 			List<ContentCategory> lstNav = new List<ContentCategory>();
-			if (iTakeTop < 0) {
-				iTakeTop = 100000;
+			if (takeTop < 0) {
+				takeTop = 100000;
 			}
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-				lstNav = navHelper.GetCategoryList(this.TheSite.SiteID, iTakeTop);
+				lstNav = navHelper.GetCategoryList(this.TheSite.SiteID, takeTop);
 			}
 
 			lstNav.RemoveAll(x => x.Count < 1 && ShowNonZeroCountOnly);
@@ -498,13 +564,13 @@ namespace Carrotware.CMS.Core {
 			return lstNav;
 		}
 
-		public List<ContentDateTally> GetSiteDates(int iTakeTop) {
+		public List<ContentDateTally> GetSiteDates(int takeTop) {
 			List<ContentDateTally> lstNav = new List<ContentDateTally>();
-			if (iTakeTop < 0) {
-				iTakeTop = 100000;
+			if (takeTop < 0) {
+				takeTop = 100000;
 			}
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-				lstNav = navHelper.GetMonthBlogUpdateList(SiteData.CurrentSiteID, iTakeTop, !SecurityData.IsAuthEditor);
+				lstNav = navHelper.GetMonthBlogUpdateList(this.TheSite.SiteID, takeTop, !SecurityData.IsAuthEditor);
 			}
 
 			lstNav.RemoveAll(x => x.Count < 1);
@@ -528,5 +594,13 @@ namespace Carrotware.CMS.Core {
 
 			return nav;
 		}
+	}
+
+	//==================
+	public enum ListContentType {
+		Unknown,
+		Blog,
+		ContentPage,
+		SpecifiedCategories
 	}
 }
