@@ -372,6 +372,7 @@ function cmsPreviewTemplate() {
 	$('#cmsAjaxMainDiv2').attr('id', 'cmsAjaxMainDiv3');
 
 	setTimeout("cmsSetIframeRealSrc('cmsFrameEditorPreview');", 1500);
+	cmsStyleButtons();
 }
 
 function cmsLateBtnStyle() {
@@ -997,6 +998,27 @@ function cmsMoveWidgetResizer(key, state) {
 	}
 }
 
+setTimeout("cmsStyleButtons();", 500);
+
+function cmsStyleButtons() {
+	cmsDoStyleButtons('.cmsGlossySeaGreen input[type="button"]');
+	cmsDoStyleButtons('.cmsGlossySeaGreen input[type="submit"]');
+	cmsDoStyleButtons('.cmsGlossySeaGreen button');
+	cmsDoStyleButtons('.ui-dialog-buttonpane button');
+}
+
+function cmsDoStyleButtons(fltPrefix) {
+	if ($(fltPrefix + ' .ui-button').length < 1) {
+		$(fltPrefix).addClass('ui-button ui-widget ui-state-default ui-corner-all');
+
+		$(fltPrefix).hover(function () {
+			$(this).addClass("ui-state-hover");
+		}, function () {
+			$(this).removeClass("ui-state-hover");
+		});
+	}
+}
+
 function cmsFixDialog(dialogname) {
 	var dilg = $("#" + dialogname).parent().parent();
 
@@ -1040,8 +1062,10 @@ function cmsFixDialog(dialogname) {
 		var btns = $(dialogWrapper + ' .ui-dialog-buttonset button');
 		btns.addClass('btn btn-default');
 		var btn = $(dialogWrapper + ' .ui-dialog-buttonset button:first-child');
-		btn.removeClass('btn-default').addClass('btn-primary');
+		btn.removeClass('btn-default').addClass('btn-primary ui-state-focus');
 	}
+
+	cmsStyleButtons();
 }
 
 function cmsOverrideCSSScope(elm, xtra) {
@@ -1078,6 +1102,7 @@ function cmsLoadWindow() {
 	});
 
 	$('#cms-basic-modal-content').modal();
+	cmsStyleButtons();
 	return false;
 }
 
@@ -1100,6 +1125,8 @@ function cmsSetiFrameSource(theURL) {
 		timeout: 1200,
 		overlayCSS: { backgroundColor: '#FFFFFF', opacity: 0.6, border: '0px solid #000000' }
 	});
+
+	cmsStyleButtons();
 }
 
 function cmsLaunchWindowOnly(theURL) {
@@ -1123,6 +1150,7 @@ function cmsLoadWindowOnly() {
 	});
 
 	$('#cms-basic-modal-content').modal();
+	cmsStyleButtons();
 	return false;
 }
 

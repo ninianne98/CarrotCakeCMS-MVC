@@ -1,7 +1,6 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
 using System;
-using System.ComponentModel;
 using System.Drawing;
 
 /*
@@ -49,56 +48,40 @@ namespace Carrotware.CMS.UI.Components {
 			this.SubFGColor = this.SubFGColor == Color.Empty ? this.ForeColor : this.SubFGColor;
 		}
 
-		[DefaultValue(true)]
 		public override bool MultiLevel {
 			get {
 				return true;
 			}
 		}
 
-		[DefaultValue(false)]
 		public bool AutoStylingDisabled { get; set; }
 
-		[DefaultValue(null)]
 		public SizeUnit FontSize { get; set; }
 
-		[DefaultValue(null)]
 		public SizeUnit MenuFontSize { get; set; }
 
-		[DefaultValue(null)]
 		public string CssTopBackground { get; set; }
 
-		[DefaultValue(null)]
 		public Color ForeColor { get; set; }
 
-		[DefaultValue(null)]
 		public Color BGColor { get; set; }
 
-		[DefaultValue(null)]
 		public Color BackColor { get; set; }
 
-		[DefaultValue(null)]
 		public Color HoverBGColor { get; set; }
 
-		[DefaultValue(null)]
 		public Color HoverFGColor { get; set; }
 
-		[DefaultValue(null)]
 		public Color UnSelBGColor { get; set; }
 
-		[DefaultValue(null)]
 		public Color UnSelFGColor { get; set; }
 
-		[DefaultValue(null)]
 		public Color SelBGColor { get; set; }
 
-		[DefaultValue(null)]
 		public Color SelFGColor { get; set; }
 
-		[DefaultValue(null)]
 		public Color SubBGColor { get; set; }
 
-		[DefaultValue(null)]
 		public Color SubFGColor { get; set; }
 
 		protected override void LoadData() {
