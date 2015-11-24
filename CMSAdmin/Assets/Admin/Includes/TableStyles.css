@@ -19,10 +19,14 @@
 
 	.datatable thead, .datatable .tablehead {
 		font-weight: bolder;
-		background-color: #468B5E;
+		background-color: #6f997d;
 		color: #fff;
 		border: 1px solid #000;
 	}
+
+		.datatable thead th {
+			text-align: center;
+		}
 
 		.datatable thead a {
 			color: #fff;

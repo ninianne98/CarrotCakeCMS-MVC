@@ -57,7 +57,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						}
 
 						if (DatabaseUpdate.TablesIncomplete) {
-							Response.Redirect(SiteFilename.SiteInfoURL);
+							Response.Redirect(SiteFilename.DatabaseSetupURL);
 						}
 
 						if (!SecurityData.IsAuthEditor &&

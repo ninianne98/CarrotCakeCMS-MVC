@@ -40,6 +40,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public ActionResult Default() {
 			if (DatabaseUpdate.TablesIncomplete) {
+				if (DatabaseUpdate.LastSQLError != null) {
+					SiteData.WriteDebugException("cmscontentcontroller_default_inc", DatabaseUpdate.LastSQLError);
+				} else {
+					SiteData.WriteDebugException("cmscontentcontroller_default_inc", new Exception(String.Format("Requesting: {0} {1}", Request.Path, this.DisplayTemplateFile)));
+				}
+
 				return View("_EmptyHome");
 			}
 
@@ -98,7 +104,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public PartialViewResult Default(ContactInfo model, bool contact) {
+		public PartialViewResult Default2(ContactInfo model, bool contact) {
 			return PartialView();
 		}
 
@@ -122,9 +128,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					Response.Cache.SetExpires(dtExpire);
 				}
 
+				SiteData.WriteDebugException("cmscontentcontroller_defaultview _page != null", new Exception(String.Format("Loading: {0} {1} {2}", _page.ThePage.FileName, _page.ThePage.TemplateFile, this.DisplayTemplateFile)));
+
 				return View(this.DisplayTemplateFile);
 			} else {
 				string sFileRequested = Request.Path;
+
+				SiteData.WriteDebugException("cmscontentcontroller_defaultview _page == null", new Exception(String.Format("Requesting: {0} {1}", sFileRequested, this.DisplayTemplateFile)));
 
 				DateTime dtModified = DateTime.Now.Date;
 				string strModifed = dtModified.ToString("r");
@@ -137,7 +147,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				} else {
 					Response.StatusCode = 404;
 					Response.AppendHeader("Status", "HTTP/1.1 404 Object Not Found");
-
+					SiteData.WriteDebugException("cmscontentcontroller_httpnotfound", new Exception("HttpNotFound"));
 					return HttpNotFound();
 				}
 			}
