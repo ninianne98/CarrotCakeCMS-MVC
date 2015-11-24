@@ -1122,6 +1122,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 							IsWidgetActive = true,
 							IsWidgetPendingDelete = false,
 							WidgetOrder = w.WidgetOrder,
+							GoLiveDate = w.GoLiveDate,
+							RetireDate = w.RetireDate,
 							EditDate = SiteData.CurrentSite.Now
 						};
 
