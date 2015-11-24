@@ -521,6 +521,8 @@ namespace Carrotware.CMS.UI.Components {
 					break;
 			}
 
+			bodyText = bodyText ?? String.Empty;
+
 			bodyText = SiteData.CurrentSite.UpdateContent(bodyText);
 
 			if (SecurityData.AdvancedEditMode) {
@@ -546,7 +548,7 @@ namespace Carrotware.CMS.UI.Components {
 				sTextZone = sTextZone.Replace("[[AREA_NAME]]", m.AreaName.ToString());
 				sTextZone = sTextZone.Replace("[[zone]]", m.Zone);
 
-				bodyText = sTextZone;
+				bodyText = sTextZone ?? String.Empty;
 			}
 
 			return new HtmlString(bodyText);
@@ -659,6 +661,8 @@ namespace Carrotware.CMS.UI.Components {
 					}
 				}
 
+				widgetText = widgetText ?? String.Empty;
+
 				if (!widget.ControlPath.Contains(":") && String.IsNullOrEmpty(widgetText)) {
 					string[] path = widget.ControlPath.Split('|');
 					string viewPath = path[0];
@@ -708,7 +712,9 @@ namespace Carrotware.CMS.UI.Components {
 					}
 				}
 
-				if (SecurityData.AdvancedEditMode && !String.IsNullOrEmpty(widgetText)) {
+				widgetText = widgetText ?? String.Empty;
+
+				if (SecurityData.AdvancedEditMode) {
 					if (widget.IsWidgetActive) {
 						sStatusTemplate = "<a href=\"javascript:cmsRemoveWidgetLink('[[ITEM_ID]]');\" id=\"cmsContentRemoveLink\" class=\"cmsWidgetBarLink cmsWidgetBarIconCross\" alt=\"Remove\" title=\"Remove\">  Disable</a>";
 					} else {
