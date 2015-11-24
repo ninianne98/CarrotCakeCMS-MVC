@@ -50,6 +50,8 @@ namespace Carrotware.CMS.Core {
 				requestCtx.RouteData.Values["controller"] = "Carrotware.CMS.Core.CmsHome";
 				requestCtx.RouteData.Values["action"] = "Default_ashx";
 
+				SiteData.WriteDebugException("cmsroutehandler ashx not matched", new Exception(String.Format("RequestedUri: {0}", requestedUri)));
+
 				return base.GetHttpHandler(requestCtx);
 			} else {
 				string sCurrentPage = SiteData.CurrentScriptName;
@@ -85,19 +87,25 @@ namespace Carrotware.CMS.Core {
 
 						requestCtx.RouteData.Values["controller"] = ContentCtrlr;
 						if (navData != null) {
+							SiteData.WriteDebugException("cmsroutehandler != null", new Exception(String.Format("Default: {0}", navData.FileName)));
 							requestCtx.RouteData.Values["action"] = "Default";
 						} else {
+							SiteData.WriteDebugException("cmsroutehandler == null", new Exception(String.Format("_PageNotFound: {0}", sCurrentPage)));
 							requestCtx.RouteData.Values["action"] = "_PageNotFound";
 						}
 						requestCtx.RouteData.Values["id"] = null;
 					}
 				} catch (Exception ex) {
+					SiteData.WriteDebugException("cmsroutehandler_exception_uri", new Exception(String.Format("Exception: {0}", sCurrentPage)));
+
 					if (DatabaseUpdate.SystemNeedsChecking(ex) || DatabaseUpdate.AreCMSTablesIncomplete()) {
 						requestCtx.RouteData.Values["controller"] = ContentCtrlr;
 						requestCtx.RouteData.Values["action"] = "Default";
 						requestCtx.RouteData.Values["id"] = null;
+						SiteData.WriteDebugException("cmsroutehandler_exception_systemneedschecking", ex);
 					} else {
 						//something bad has gone down, toss back the error
+						SiteData.WriteDebugException("cmsroutehandler_exception", ex);
 						throw;
 					}
 				}

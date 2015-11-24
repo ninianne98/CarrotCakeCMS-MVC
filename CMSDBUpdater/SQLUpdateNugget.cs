@@ -43,32 +43,35 @@ namespace Carrotware.CMS.DBUpdater {
 			return c;
 		}
 
+		private static object nuggetLocker = new Object();
+
 		private static List<SQLUpdateNugget> _nuggets = null;
 
 		public static List<SQLUpdateNugget> SQLNuggets {
 			get {
 				if (_nuggets == null) {
-					_nuggets = new List<SQLUpdateNugget>();
+					lock (nuggetLocker) {
+						_nuggets = new List<SQLUpdateNugget>();
+						Assembly _assembly = Assembly.GetExecutingAssembly();
 
-					Assembly _assembly = Assembly.GetExecutingAssembly();
+						DataSet ds = new DataSet();
+						string filePath = "Carrotware.CMS.DBUpdater.DatabaseChecks.xml";
+						using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream(filePath))) {
+							ds.ReadXml(oTextStream);
+						}
 
-					DataSet ds = new DataSet();
-					string filePath = "Carrotware.CMS.DBUpdater.DatabaseChecks.xml";
-					using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream(filePath))) {
-						ds.ReadXml(oTextStream);
+						_nuggets = (from d in ds.Tables[0].AsEnumerable()
+									select new SQLUpdateNugget {
+										AssociatedWith = d.Field<string>("testcontext"),
+										SQLQuery = d.Field<string>("sql").Trim(),
+										AlwaysCheck = Convert.ToBoolean(d.Field<string>("alwayscheck")),
+										Mode = GetModeType(d.Field<string>("mode")),
+										Priority = int.Parse(d.Field<string>("priority")),
+										RowCount = int.Parse(d.Field<string>("rowcount"))
+									}).OrderBy(x => x.Priority).ToList();
+
+						_nuggets.RemoveAll(x => !x.SQLQuery.ToLower().Contains("select"));
 					}
-
-					_nuggets = (from d in ds.Tables[0].AsEnumerable()
-								select new SQLUpdateNugget {
-									AssociatedWith = d.Field<string>("testcontext"),
-									SQLQuery = d.Field<string>("sql").Trim(),
-									AlwaysCheck = Convert.ToBoolean(d.Field<string>("alwayscheck")),
-									Mode = GetModeType(d.Field<string>("mode")),
-									Priority = int.Parse(d.Field<string>("priority")),
-									RowCount = int.Parse(d.Field<string>("rowcount"))
-								}).OrderBy(x => x.Priority).ToList();
-
-					_nuggets.RemoveAll(x => !x.SQLQuery.ToLower().Contains("select"));
 				}
 
 				return _nuggets;

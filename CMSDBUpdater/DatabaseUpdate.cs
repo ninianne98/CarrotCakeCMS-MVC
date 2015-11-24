@@ -337,6 +337,45 @@ namespace Carrotware.CMS.DBUpdater {
 			return res;
 		}
 
+		private static object logLocker = new Object();
+
+		public static void WriteDebugException(string sSrc, Exception objErr) {
+			WriteDebugException(false, sSrc, objErr);
+		}
+
+		public static void WriteDebugException(bool bWriteError, string sSrc, Exception objErr) {
+#if DEBUG
+			bWriteError = true; // always write errors when debug build
+#endif
+
+			if (bWriteError && objErr != null) {
+				StringBuilder sb = new StringBuilder();
+
+				sb.AppendLine("----------------  " + sSrc.ToUpper() + " - " + DateTime.Now.ToString() + "  ----------------");
+
+				sb.AppendLine("[" + objErr.GetType().ToString() + "] " + objErr.Message);
+
+				if (objErr.StackTrace != null) {
+					sb.AppendLine(objErr.StackTrace);
+				}
+
+				if (objErr.InnerException != null) {
+					sb.AppendLine(objErr.InnerException.Message);
+				}
+
+				string filePath = HttpContext.Current.Server.MapPath("~/carrot_errors.txt");
+
+				Encoding encode = Encoding.Default;
+				lock (logLocker) {
+					using (FileStream fs = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite)) {
+						using (StreamWriter oWriter = new StreamWriter(fs, encode)) {
+							oWriter.Write(sb.ToString());
+						}
+					}
+				}
+			}
+		}
+
 		private static string ContentSqlStateKey = "cms_SqlTablesIncomplete";
 
 		public static bool TablesIncomplete {
@@ -347,7 +386,13 @@ namespace Carrotware.CMS.DBUpdater {
 				if (HttpContext.Current.Cache[ContentSqlStateKey] != null) {
 					tablesIncomplete = HttpContext.Current.Cache[ContentSqlStateKey].ToString();
 				} else {
-					try { c = AreCMSTablesIncomplete(); } catch { }
+					try {
+						c = AreCMSTablesIncomplete();
+					} catch (Exception ex) {
+						c = false;
+						WriteDebugException("tablesincomplete", ex);
+					}
+
 					tablesIncomplete = c.ToString();
 					HttpContext.Current.Cache.Insert(ContentSqlStateKey, tablesIncomplete, null, DateTime.Now.AddMinutes(3), Cache.NoSlidingExpiration);
 				}
@@ -501,8 +546,24 @@ namespace Carrotware.CMS.DBUpdater {
 
 		#region Work with data keys
 
+		private static object schemaCheckLocker = new Object();
+
+		//private static string SchemaKey = "cms_GetDbSchemaVersion";
+
 		public static DataInfo GetDbSchemaVersion() {
-			return GetDataKeyValue("DBSchema");
+			DataInfo di = null;
+			lock (schemaCheckLocker) {
+				//if (HttpContext.Current.Cache[ContentKey] != null) {
+				//	try { di = (DataInfo)HttpContext.Current.Cache[ContentKey]; } catch { }
+				//} else {
+				//	di = GetDataKeyValue("DBSchema");
+				//	HttpContext.Current.Cache.Insert(ContentKey, di, null, DateTime.Now.AddSeconds(5), Cache.NoSlidingExpiration);
+				//}
+
+				di = GetDataKeyValue("DBSchema");
+
+				return di;
+			}
 		}
 
 		public static void SetDbSchemaVersion(string dataKeyValue) {

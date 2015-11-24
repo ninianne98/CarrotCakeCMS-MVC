@@ -527,29 +527,7 @@ namespace Carrotware.CMS.Core {
 #if DEBUG
 			bWriteError = true; // always write errors when debug build
 #endif
-
-			if (bWriteError && objErr != null) {
-				StringBuilder sb = new StringBuilder();
-
-				sb.AppendLine("----------------  " + sSrc.ToUpper() + " - " + DateTime.Now.ToString() + "  ----------------");
-
-				sb.AppendLine("[" + objErr.GetType().ToString() + "] " + objErr.Message);
-
-				if (objErr.StackTrace != null) {
-					sb.AppendLine(objErr.StackTrace);
-				}
-
-				if (objErr.InnerException != null) {
-					sb.AppendLine(objErr.InnerException.Message);
-				}
-
-				string sDir = HttpContext.Current.Server.MapPath("~/carrot_errors.txt");
-
-				Encoding encode = Encoding.Default;
-				using (StreamWriter oWriter = new StreamWriter(sDir, true, encode)) {
-					oWriter.Write(sb.ToString());
-				}
-			}
+			DatabaseUpdate.WriteDebugException(bWriteError, sSrc, objErr);
 		}
 
 		public static void PerformRedirectToErrorPage(int ErrorKey, string sReqURL) {

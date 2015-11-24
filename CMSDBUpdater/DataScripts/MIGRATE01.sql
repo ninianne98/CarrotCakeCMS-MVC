@@ -290,6 +290,11 @@ set [PageText] = REPLACE([PageText], '.aspx','')
 where [IsLatestVersion] = 1
 and [PageText] like '%.aspx%'
 
+update [dbo].[carrot_Content]
+set [PageText] = REPLACE([PageText], '/carrotwarethumb.axd','/carrotwarethumb.ashx')
+where [IsLatestVersion] = 1
+and [PageText] like '%/carrotwarethumb.axd%'
+
 --=====================
 -- environment specific changes END
 

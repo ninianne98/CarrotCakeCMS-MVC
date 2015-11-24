@@ -60,6 +60,7 @@
   <ItemGroup>
     <EmbeddedResource Include="DataScripts\ALTER01.sql" />
     <EmbeddedResource Include="DataScripts\CREATE01.sql" />
+    <EmbeddedResource Include="DataScripts\MIGRATEWIDGETS01.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DatabaseChecks.xml">
