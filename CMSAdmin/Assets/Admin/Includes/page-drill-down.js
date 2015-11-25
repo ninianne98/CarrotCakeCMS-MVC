@@ -57,7 +57,7 @@ function getCrumbs() {
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
 			success: ajaxReturnCrumb,
-			error: cmsAjaxFailed
+			error: cmsAjaxFailedSwallow
 		});
 	}
 }
@@ -133,7 +133,7 @@ function mouseNode() {
 				contentType: "application/json; charset=utf-8",
 				dataType: "json",
 				success: ajaxReturnNode,
-				error: cmsAjaxFailed
+				error: cmsAjaxFailedSwallow
 			});
 		}
 	}

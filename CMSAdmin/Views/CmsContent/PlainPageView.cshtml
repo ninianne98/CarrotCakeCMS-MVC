@@ -385,11 +385,11 @@
 							</li>
 							<li>
 								@{
-									var lstUpd = CmsPage.GetSiteUpdates(10);
-									if (lstUpd.Any()) {
+									var updates = CmsPage.GetSiteUpdates(10);
+									if (updates.Any()) {
 										<h1>Recent Updates</h1>
 										<ul class="sidemenu">
-											@foreach (var itm in lstUpd) {
+											@foreach (var itm in updates) {
 												<li class="child-nav">
 													<a href="@itm.FileName">
 														@itm.NavigationText

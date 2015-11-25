@@ -144,18 +144,22 @@ function cmsMakeStringSafe(val) {
 }
 
 function cmsAjaxFailedSwallow(request) {
-	var s = String.Empty;
-	s = s + "status: " + request.status + ' \r\n';
-	s = s + "statusText:  " + request.statusText + ' \r\n';
-	s = s + "responseText:  " + request.responseText + ' \r\n';
-	if (typeof console != "undefined") {
-		console.log(s);
+	var s = "";
+	if (request.status > 0) {
+		s = s + "cmsAjaxFailedSwallow(request) \r\n";
+		s = s + "status: " + request.status + ' \r\n';
+		s = s + "statusText:  " + request.statusText + ' \r\n';
+		s = s + "responseText:  " + request.responseText + ' \r\n';
+		if (typeof (console) !== "undefined" && console.log) {
+			console.log(s);
+		}
 	}
 }
 
 function cmsAjaxFailed(request) {
-	var s = String.Empty;
+	var s = "";
 	if (request.status > 0) {
+		s = s + "cmsAjaxFailed(request) \r\n";
 		s = s + "<b>status: </b>" + request.status + '<br />\r\n';
 		s = s + "<b>statusText: </b>" + request.statusText + '<br />\r\n';
 		s = s + "<b>responseText: </b>" + request.responseText + '<br />\r\n';
@@ -659,26 +663,33 @@ function cmsSpinnerUnblock() {
 
 //===================
 
-function AjaxShowErrorMsg(x, status, error) {
-	if (x != undefined) {
+function AjaxShowErrorMsg(event, jqxhr, settings, exception) {
+	if (event != 'undefined' && jqxhr != 'undefined') {
 		//debugger;
 		var errorMessage = '';
-		var errorCode = x.status;
+		var errorCode = jqxhr.status;
 
-		if (errorCode == '200' || errorCode == '500') {
-			errorMessage = error;
+		if (errorCode != 'undefined' && errorCode != '0') {
+			if (errorCode == '200' || errorCode == '500') {
+				errorMessage = exception;
+			} else {
+				// Error occurred somewhere other than the server page.
+				errorMessage = 'An error occurred. ' + errorCode;
+			}
+
+			cmsSpinnerUnblock();
+			cmsAlertModal(errorMessage);
 		} else {
-			// Error occurred somewhere other than the server page.
-			errorMessage = 'An error occurred. ' + errorCode;
+			if (typeof (console) !== "undefined" && console.log) {
+				console.log('AjaxShowErrorMsg event: ' + JSON.stringify(event));
+				console.log('AjaxShowErrorMsg jqxhr: ' + JSON.stringify(jqxhr));
+			}
 		}
-
-		cmsSpinnerUnblock();
-		cmsAlertModal(errorMessage);
 	}
 }
 
-$(document).ajaxError(function (x, status, error) {
-	AjaxShowErrorMsg(x, status, error);
+$(document).ajaxError(function (event, jqxhr, settings, exception) {
+	AjaxShowErrorMsg(event, jqxhr, settings, exception);
 });
 
 //=======================
