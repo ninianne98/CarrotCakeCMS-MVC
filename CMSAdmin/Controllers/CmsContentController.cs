@@ -140,6 +140,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string strModifed = dtModified.ToString("r");
 				Response.AppendHeader("Last-Modified", strModifed);
 				Response.Cache.SetLastModified(dtModified);
+				Response.Cache.SetExpires(DateTime.Now.AddSeconds(30));
 
 				if (SiteData.IsLikelyHomePage(sFileRequested)) {
 					SiteData.WriteDebugException("cmscontentcontroller_defaultview", new Exception("Empty _page"));

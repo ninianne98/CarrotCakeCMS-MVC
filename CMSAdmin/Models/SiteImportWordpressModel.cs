@@ -202,6 +202,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 						var result = sd.CreateApplicationUser(user, out usr);
 						if (result.Succeeded) {
 							usr = ExtendedUserData.FindByUsername(wpu.Login);
+						} else {
+							throw new Exception(String.Format("Could not create user: {0} ({1}) \r\n{3}", wpu.Login, wpu.Email, String.Join("\r\n", result.Errors)));
 						}
 						wpu.ImportUserID = usr.UserId;
 					}
