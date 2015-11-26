@@ -1,0 +1,205 @@
+﻿@inherits CmsWebViewPage
+@*
+	Imagination by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+	http://templated.co/imagination
+
+	Conversion to CarrotCake CMS MVC Template: Carrotware
+*@
+
+@{
+	Layout = null;
+
+	string bodyCssClass = ViewBag.BodyCssClass ?? "not-homepage";
+	ViewBag.Title = CmsPage.Titlebar;
+	ViewBag.SiteName = CmsPage.TheSite.SiteName;
+
+	TwoLevelNavigation nav = new TwoLevelNavigation() {
+		CssSelected = "current active",
+		AutoStylingDisabled = true,
+		ElementId = "navmenu"
+	};
+
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 3;
+	pager.IgnoreSitePath = true;
+	pager.FetchData();
+
+	string imgPath = String.Empty;
+
+	List<string> imgs = new List<string>();
+	imgs.Add(@"/Assets/Imagination/images/pics01.jpg");
+	imgs.Add(@"/Assets/Imagination/images/pics03.jpg");
+	imgs.Add(@"/Assets/Imagination/images/pics04.jpg");
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	@CarrotCakeHtml.MetaTags()
+	@CarrotCakeHtml.Rss()
+
+	<title>@CmsPage.Titlebar</title>
+
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.NotUsed })
+
+	<link href='http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900' rel='stylesheet' type='text/css'>
+	<!--[if lte IE 8]><script src="~/Assets/Imagination/js/html5shiv.js"></script><![endif]-->
+
+	<script src="~/Assets/Imagination/js/jquery.dropotron.min.js"></script>
+	<script src="~/Assets/Imagination/js/skel.min.js"></script>
+	<script src="~/Assets/Imagination/js/skel-panels.min.js"></script>
+	<script src="~/Assets/Imagination/js/init.js"></script>
+
+	<noscript>
+		<link rel="stylesheet" href="~/Assets/Imagination/css/skel-noscript.css" />
+		<link rel="stylesheet" href="~/Assets/Imagination/css/style.css" />
+		<link rel="stylesheet" href="~/Assets/Imagination/css/style-desktop.css" />
+	</noscript>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			setTimeout("moveCMSZone();", 1250);
+
+			// Dropdowns.
+			$('#nav > ul').dropotron({
+				mode: 'fade',
+				speed: 300,
+				alignment: 'center',
+				noOpenerFade: true
+			});
+		});
+
+		var cmsHasMoved = false;
+
+		function moveCMSZone() {
+			if (!cmsHasMoved) {
+				$(document.body).append($('.cmsNavigationBlock').detach());
+				$(document.body).append($('.cmsMainAdvControls').detach());
+				cmsHasMoved = true;
+			}
+		}
+	</script>
+
+	@CarrotCakeHtml.GetSiteCanonicalURL()
+
+	@CarrotCakeHtml.RenderOpenGraph()
+
+	@CarrotCakeHtml.IncludeHead()
+</head>
+<body class="@bodyCssClass">
+
+	<div id="header-wrapper">
+		<!-- Header -->
+		<div id="header">
+			<div class="container">
+
+				<!-- Logo -->
+				<div id="logo">
+					<h1><a href="~/">@ViewBag.SiteName</a></h1>
+				</div>
+
+				<!-- Nav -->
+				<nav id="nav">
+					@nav
+				</nav>
+			</div>
+		</div>
+		<!-- Header -->
+		@RenderSection("Banner", required: false)
+	</div>
+
+	@RenderSection("Extra", required: false)
+
+	@RenderBody()
+
+	<!-- Featured -->
+	<div id="featured">
+		<div class="container">
+			<section>
+				<header>
+					<h2>Fusce ultrices fringilla metus</h2>
+					<span class="byline">Posuere eleifend odio quisque semper mattis</span>
+				</header>
+			</section>
+
+			<div class="row">
+				@foreach (var p in pager.DataSource) {
+					if (String.IsNullOrEmpty(p.Thumbnail)) {
+						imgPath = imgs.Where(x => x != imgPath).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+					} else {
+						imgPath = p.Thumbnail;
+					}
+
+					<section class="4u">
+						<a href="#" class="image full"><img src="@imgPath" alt=""></a>
+						<p>@p.PageTextPlainSummary</p>
+						<p><a href="@p.FileName" class="button">View Full Details</a></p>
+					</section>
+				}
+			</div>
+		</div>
+	</div>
+	<!-- /Featured -->
+	<!-- Footer -->
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<section class="4u">
+					<header>
+						<h2>Nulla eleifend</h2>
+					</header>
+					<ul class="default">
+						<li><a href="#">Pellentesque quis elit non gravida blandit.</a></li>
+						<li><a href="#">Lorem ipsum dolor sit consectetuer adipiscing elit.</a></li>
+						<li><a href="#">Phasellus nec erat sit nibh pellentesque congue.</a></li>
+						<li><a href="#">Cras vitae metus aliquam pellentesque pharetra.</a></li>
+						<li><a href="#">Duis non ante in metus commodo euismod lobortis.</a></li>
+					</ul>
+				</section>
+				<section class="4u">
+					<header>
+						<h2>Etiam posuere</h2>
+					</header>
+					<ul class="default">
+						<li><a href="#">Pellentesque quis elit non gravida blandit.</a></li>
+						<li><a href="#">Lorem ipsum dolor sit consectetuer adipiscing elit.</a></li>
+						<li><a href="#">Phasellus nec erat sit nibh pellentesque congue.</a></li>
+						<li><a href="#">Cras vitae metus aliquam pellentesque pharetra.</a></li>
+						<li><a href="#">Duis non ante in metus commodo euismod lobortis.</a></li>
+					</ul>
+				</section>
+				<section class="4u">
+					<header>
+						<h2>Mauris vulputate</h2>
+					</header>
+					<ul class="default">
+						<li><a href="#">Pellentesque quis elit non gravida blandit.</a></li>
+						<li><a href="#">Lorem ipsum dolor sit consectetuer adipiscing elit.</a></li>
+						<li><a href="#">Phasellus nec erat sit nibh pellentesque congue.</a></li>
+						<li><a href="#">Cras vitae metus aliquam pellentesque pharetra.</a></li>
+						<li><a href="#">Duis non ante in metus commodo euismod lobortis.</a></li>
+					</ul>
+				</section>
+			</div>
+		</div>
+	</div>
+	<!-- /Footer -->
+	<!-- Copyright -->
+	<div id="copyright">
+		<div class="container">
+			@Html.Raw(String.Format("&copy;  {0}, {1}. All rights reserved.", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
+			<br />
+			Design: <a target="_blank" href="http://templated.co">TEMPLATED</a>
+			Images: <a target="_blank" href="http://unsplash.com">Unsplash</a> (<a target="_blank" href="http://unsplash.com/cc0">CC0</a>)
+			Site built with <a target="_blank" href="http://www.carrotcakecms.com/">carrotcakecms</a>
+		</div>
+	</div>
+
+	@CarrotCakeHtml.IncludeFooter()
+</body>
+</html>

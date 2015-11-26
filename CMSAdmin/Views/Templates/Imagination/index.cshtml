@@ -1,0 +1,97 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	ViewBag.BodyCssClass = "homepage";
+}
+
+@section Banner {
+	<!-- Banner -->
+	<div id="banner">
+		<div class="container">
+			<section>
+				<span class="fa fa-cubes"></span>
+				<header>
+					<h2>@CmsPage.TheSite.SiteName</h2>
+					<span class="byline"> @CmsPage.TheSite.SiteTagline </span>
+				</header>
+				<a href="~/" class="button medium">More</a>
+			</section>
+		</div>
+	</div>
+	<!-- /Banner -->
+}
+
+@section Extra {
+	<!-- Extra -->
+	<div id="extra">
+		<div class="container">
+			<div class="row">
+				<section class="3u">
+					<header>
+						<h2>Mauris vulputate</h2>
+					</header>
+					<span class="fa fa-magic"></span>
+					<p>Integer nisl risus, sagittis convallis, rutrum id, elementum congue, nibh. Suspendisse dictum porta lectus.</p>
+				</section>
+				<section class="3u">
+					<header>
+						<h2>Fusce ultrices</h2>
+					</header>
+					<span class="fa fa-wrench"></span>
+					<p>Pellentesque tristique ante ut risus. Integer risus congue. Suspendisse dictum porta lectus.</p>
+				</section>
+				<section class="3u">
+					<header>
+						<h2>Maecenas luctus</h2>
+					</header>
+					<span class="fa fa-chain"></span>
+					<p>Suspendisse dictum porta lectus. Integer nisl risus, sagittis convallis, rutrum congue nibh. </p>
+				</section>
+				<section class="3u">
+					<header>
+						<h2>Donec dictum</h2>
+					</header>
+					<span class="fa fa-briefcase"></span>
+					<p>In posuere eleifend odio quisque semper augue mattis wisi maecenas ligula augue praesent.</p>
+				</section>
+			</div>
+			<a href="#" class="button medium">Etiam posuere augue</a>
+		</div>
+	</div>
+	<!-- /Extra -->
+}
+
+<!-- Main -->
+<div id="main">
+	<div class="container">
+
+		<section>
+			<header>
+				<h2>@CmsPage.Heading</h2>
+				@*<span class="byline">Augue praesent a lacus at urna congue rutrum</span>*@
+			</header>
+
+			@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+
+			<div>
+				@CarrotCakeHtml.RenderWidget("phCenterBottom")
+			</div>
+		</section>
+
+		<div class="row">
+			<section class="6u right">
+				<a href="#" class="image full"><img src="~/Assets/Imagination/images/pics05.jpg" alt=""></a>
+				<p>This is <strong>Imagination</strong>, a responsive HTML5 site template freebie by <a href="http://templated.co">TEMPLATED</a>. Released for free under the <a href="http://templated.co/license">Creative Commons Attribution</a> license, so use it for whatever (personal or commercial) &ndash; just give us credit! Check out more of our stuff at <a href="http://templated.co">our site</a> or follow us on <a href="http://twitter.com/templatedco">Twitter</a>.</p>
+			</section>
+			<section class="6u left">
+				<a href="#" class="image full"><img src="~/Assets/Imagination/images/pics06.jpg" alt=""></a>
+				<p>Duis pretium velit ac mauris. Proin eu wisi suscipit nulla suscipit interdum. Pellentesque adipiscing purus ac magna. Pellentesque habitant morbi tristique senectus aenean lectus lorem, imperdiet at, ultrices eget, ornare et, wisi purus ac magna. Pellentesque habitant morbi</p>
+			</section>
+		</div>
+		<div class="divider"></div>
+		<a href="#" class="button medium">View Full Details</a>
+	</div>
+</div>
+<!-- /Main -->
