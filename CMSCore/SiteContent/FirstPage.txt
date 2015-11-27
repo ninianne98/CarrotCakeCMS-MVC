@@ -8,10 +8,11 @@
 	<a href="http://www.tinymce.com/" target="_blank">TinyMCE</a>. If you have found this software useful or have
 	published a site with CarrotCake, we'd love to <a href="http://www.carrotware.com/contact.aspx" target="_blank">hear</a> from you.</p>
 
-<p>Source code and documentation is available on <a href="http://carrotcakecms.codeplex.com/" target="_blank">Microsoft CodePlex</a>, 
-		<a href="http://sourceforge.net/projects/carrotcakecms/" target="_blank">SourceForge</a>, and 
-		<a href="https://github.com/ninianne98/CarrotCakeCMS" target="_blank">GitHub</a>. 
-		Documentation and assemblies can be found <a href="http://www.carrotware.com/carrotcake-download.aspx">here</a>.</p>
+<p>Source code and documentation is available on 
+		<a href="https://github.com/ninianne98/CarrotCakeCMS-MVC" target="_blank">GitHub</a>,   
+		<a href="http://sourceforge.net/projects/carrotcakecmsmvc/" target="_blank">SourceForge</a>, and 
+		<a href="http://carrotcakecmsmvc.codeplex.com/" target="_blank">Microsoft CodePlex</a>.
+		Documentation and assemblies can be found <a href="http://www.carrotware.com/carrotcake-download.aspx">here</a>. </p>
 
 <p>Some features include: blogging engine, configurable date based blog post URLs, blog post content association with categories and tags, 
 		assignment/customization of category and tag URL patterns, simple content feedback collection and review, blog post pagination/indexes 
