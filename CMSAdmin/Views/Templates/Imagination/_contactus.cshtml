@@ -1,0 +1,57 @@
+﻿@inherits CmsWebViewPage
+
+<div id="contactUsForm">
+
+	@{
+		//var cap = new Captcha();
+		var cap = new Captcha2();
+		var cfg = new ContactInfoConfig("_contactus", cap);
+		cfg.NotifyEditors = true;
+		cfg.DirectEmailKeyName = "contact";
+
+		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactUsForm" })) {
+			var cmt = cmtFrm.GetModelHelper(cfg);
+
+			if (!cmt.ViewData.Model.IsSaved) {
+				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
+
+				<div class="row 50%">
+					<div class="6u 12u(mobile)">
+						@cmt.ValidationMessageFor(m => m.CommenterName, "", new { @class = "text-danger" }) <br />
+						@cmt.TextBoxFor(m => m.CommenterName, new { placeholder = "Name" })
+					</div>
+					<div class="6u 12u(mobile)">
+						@cmt.ValidationMessageFor(m => m.CommenterEmail, "", new { @class = "text-danger" }) <br />
+						@cmt.TextBoxFor(m => m.CommenterEmail, new { placeholder = "Email" })
+					</div>
+				</div>
+				<div class="row 50%">
+					<div class="12u">
+						@cmt.ValidationMessageFor(m => m.PostCommentText, "", new { @class = "text-danger" }) <br />
+						@cmt.TextAreaFor(m => m.PostCommentText, new { rows = "5", cols = "50", placeholder = "Message" })
+					</div>
+				</div>
+				<div class="row 50%">
+					<div class="6u 12u(mobile)">
+						@cap<br />
+						@cap.Instructions <br />
+						@*@cmt.TextBoxFor(m => m.ValidationValue)*@
+						@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" }) <br />
+						@cmt.DropDownListFor(m => m.ValidationValue, new SelectList(cap.ImageOptions, "Value", "Value"), "[Select Image Title]")
+					</div>
+				</div>
+				<div class="row 50%">
+					<div class="3u 12u(mobile)">
+						<input type="submit" value="Send Message" class="button" />
+					</div>
+					<div class="3u 12u(mobile)">
+						<input type="reset" value="Clear form" class="button" />
+					</div>
+					<div class=6u 12u(mobile)"> </div>
+				</div>
+			} else {
+				<p>Thank you for your comment.</p>
+			}
+		}
+	}
+</div>

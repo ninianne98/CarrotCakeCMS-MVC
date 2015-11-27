@@ -1,0 +1,96 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	ViewBag.BodyCssClass = "not-homepage";
+
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 10;
+	pager.IgnoreSitePath = false;
+	pager.FetchData();
+}
+
+@section Banner {
+	<!-- Banner -->
+	<div id="banner">
+		<div class="container">
+		</div>
+	</div>
+	<!-- /Banner -->
+}
+
+<!-- Main -->
+<div id="main">
+	<div class="container">
+		<div class="row">
+			<div class="3u">
+				@Html.Partial("_blogNav")
+			</div>
+
+			<div class="9u skel-cell-important">
+				<section>
+					<article>
+						<header>
+							<h2>@CmsPage.Heading</h2>
+							@*<span class="byline">Augue praesent a lacus at urna congue rutrum</span>*@
+						</header>
+
+						<div>
+							@CarrotCakeHtml.RenderWidget("phCenterTop")
+						</div>
+
+						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+
+						<div>
+							@CarrotCakeHtml.RenderWidget("phCenterBottom")
+						</div>
+					</article>
+				</section>
+				<section>
+					@if (pager != null) {
+
+						foreach (var item in pager.DataSource) {
+							<div>
+								<p>
+									<b class="green" style="font-size: 110%;">
+										<a class="green" href="@item.FileName">@item.NavigationText</a>
+										&nbsp;|&nbsp;
+										@String.Format("{0:d}", item.GoLiveDate)
+									</b>
+									<br />
+									by @{
+							var usr = item.GetUserInfo();
+									}
+									@usr.FullName_FirstLast
+									<br />
+									@item.PageTextPlainSummary
+								</p>
+
+								<p class="post-footer align-right">
+									<a class="button small" href="@item.FileName">
+										Read more
+									</a>
+								</p>
+							</div>
+
+						}
+
+						<div class="pagerfooterlinks">
+							@foreach (var i in pager.PageNumbers) {
+								using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+									using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+										@String.Format(" {0} ", i)
+									}
+								}
+							}
+						</div>
+
+					}
+				</section>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Main -->

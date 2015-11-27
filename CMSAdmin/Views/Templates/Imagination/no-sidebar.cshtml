@@ -19,20 +19,27 @@
 <div id="main">
 
 	<div class="container">
-
 		<div class="row">
-			<section>
-				<header>
-					<h2>@CmsPage.Heading</h2>
-					@*<span class="byline">Augue praesent a lacus at urna congue rutrum</span>*@
-				</header>
+			<div class="12u">
+				<section>
+					<article>
+						<header>
+							<h2>@CmsPage.Heading</h2>
+							@*<span class="byline">Augue praesent a lacus at urna congue rutrum</span>*@
+						</header>
 
-				@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+						<div>
+							@CarrotCakeHtml.RenderWidget("phCenterTop")
+						</div>
 
-				<div>
-					@CarrotCakeHtml.RenderWidget("phCenterBottom")
-				</div>
-			</section>
+						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+
+						<div>
+							@CarrotCakeHtml.RenderWidget("phCenterBottom")
+						</div>
+					</article>
+				</section>
+			</div>
 		</div>
 	</div>
 </div>

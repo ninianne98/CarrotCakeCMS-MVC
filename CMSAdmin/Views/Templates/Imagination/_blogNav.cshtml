@@ -1,0 +1,46 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	var cats = CmsPage.GetSiteCategories(10, true);
+	var tags = CmsPage.GetSiteTags(10, true);
+	var dates = CmsPage.GetSiteDates(12);
+}
+
+@if (dates.Any()) {
+	<section class="sidebar">
+		<header>
+			<h2>Dates</h2>
+		</header>
+		<ul class="default">
+			@foreach (var itm in dates) {
+				<li><a href="@itm.Uri">@itm.Text</a></li>
+			}
+		</ul>
+	</section>
+}
+
+@if (cats.Any()) {
+	<section class="sidebar">
+		<header>
+			<h2>Categories</h2>
+		</header>
+		<ul class="default">
+			@foreach (var itm in cats) {
+				<li><a href="@itm.Uri">@itm.Text</a></li>
+			}
+		</ul>
+	</section>
+}
+
+@if (tags.Any()) {
+	<section class="sidebar">
+		<header>
+			<h2>Tags</h2>
+		</header>
+		<ul class="default">
+			@foreach (var itm in tags) {
+				<li><a href="@itm.Uri">@itm.Text</a></li>
+			}
+		</ul>
+	</section>
+}

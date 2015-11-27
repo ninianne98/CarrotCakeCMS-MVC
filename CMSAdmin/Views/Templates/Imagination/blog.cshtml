@@ -4,6 +4,10 @@
 	Layout = "_main.cshtml";
 
 	ViewBag.BodyCssClass = "not-homepage";
+
+	var cats = CmsPage.GetSiteCategories(10, true);
+	var tags = CmsPage.GetSiteTags(10, true);
+	var dates = CmsPage.GetSiteDates(12);
 }
 
 @section Banner {
@@ -19,6 +23,9 @@
 <div id="main">
 	<div class="container">
 		<div class="row">
+			<div class="3u">
+				@Html.Partial("_blogNav")
+			</div>
 
 			<div class="9u skel-cell-important">
 				<section>
@@ -39,10 +46,9 @@
 						</div>
 					</article>
 				</section>
-			</div>
-
-			<div class="3u">
-				@Html.Partial("_pageNav")
+				<section>
+					@Html.Partial("_contactus")
+				</section>
 			</div>
 		</div>
 	</div>

@@ -925,6 +925,11 @@
     <Content Include="Assets\Imagination\fonts\fontawesome-webfont.woff" />
     <Content Include="Assets\Imagination\fonts\fontawesome-webfont.woff2" />
     <Content Include="Assets\Imagination\fonts\FontAwesome.otf" />
+    <Content Include="Views\Templates\Imagination\blog.cshtml" />
+    <Content Include="Views\Templates\Imagination\_contactus.cshtml" />
+    <Content Include="Views\Templates\Imagination\blog-index.cshtml" />
+    <Content Include="Views\Templates\Imagination\_blogNav.cshtml" />
+    <Content Include="Views\Templates\Imagination\_pageNav.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
