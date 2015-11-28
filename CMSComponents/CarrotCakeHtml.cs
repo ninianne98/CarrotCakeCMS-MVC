@@ -712,6 +712,11 @@ namespace Carrotware.CMS.UI.Components {
 					}
 				}
 
+				if (String.IsNullOrEmpty(widgetText) || widget.ControlPath.ToLower().EndsWith(".ascx")) {
+					LiteralMessage msg = new LiteralMessage("The widget is not supported.", widgetKey, widget.ControlPath);
+					widgetText = msg.ToHtmlString();
+				}
+
 				widgetText = widgetText ?? String.Empty;
 
 				if (SecurityData.AdvancedEditMode) {

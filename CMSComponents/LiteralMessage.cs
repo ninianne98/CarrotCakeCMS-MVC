@@ -35,6 +35,16 @@ namespace Carrotware.CMS.UI.Components {
 			this.Message = String.Format("<div>\r\n<p><b>{0}:</b>  {1}</p>\r\n{2}</div>", key, path, msg);
 		}
 
+		public LiteralMessage(string message, string key, string path) {
+			string msg = "<p>There was an error loading the widget.</p>";
+
+			if (message != null) {
+				msg = message;
+			}
+
+			this.Message = String.Format("<div>\r\n<p><b>{0}:</b>  {1}</p>\r\n{2}</div>", key, path, msg);
+		}
+
 		public string Message { get; set; }
 
 		public string ToHtmlString() {
