@@ -305,12 +305,23 @@ and [PageText] like '%/carrotwarethumb.axd%'
 update [dbo].[carrot_Content]
 set [TemplateFile] = '~/Views/Templates/citrus-island/page.cshtml'
 where [IsLatestVersion] = 1
-
+and [TemplateFile] not like '%.cshtml'
 
 update [dbo].[carrot_Content]
 set [TemplateFile] = '~/Views/Templates/citrus-island/list.cshtml'
 where [IsLatestVersion] = 1
+and [TemplateFile] like '%/citrus-island/page.cshtml'
 and Root_ContentID in (select Blog_Root_ContentID from dbo.carrot_Sites where Blog_Root_ContentID is not null)
+
+update [dbo].[carrot_Content]
+set [TemplateFile] = '~/Views/Templates/citrus-island/post.cshtml'
+where [IsLatestVersion] = 1
+and [TemplateFile] like '%/citrus-island/page.cshtml'
+and Root_ContentID in ( 
+			select rc.Root_ContentID
+			from carrot_ContentType AS ct 
+			inner join carrot_RootContent AS rc on ct.ContentTypeID = rc.ContentTypeID
+			where ct.ContentTypeValue like '%blog%' )
 
 --=================== starter views END
 
