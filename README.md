@@ -8,6 +8,8 @@ Source code for CarrotCakeCMS (MVC)
 [DOC]: http://www.carrotware.com/carrotcake-cms.aspx?from=github-mvc "CarrotCakeCMS User Documentation"
 [TMPLT]: http://www.carrotware.com/carrotcake-templates.aspx?from=github-mvc
 [IDE2013]: https://www.visualstudio.com/en-us/news/vs2013-community-vs.aspx
+[VWDISO2013]: https://go.microsoft.com/fwlink/?LinkId=532501&type=ISO&clcid=0x409
+[CEISO2013]: https://go.microsoft.com/fwlink/?LinkId=532496&type=ISO&clcid=0x409
 [SQL]: https://www.microsoft.com/en-us/download/details.aspx?id=22973
 [WEB]: http://visualstudiogallery.msdn.microsoft.com/56633663-6799-41d7-9df7-0f2a504ca361
 
@@ -30,7 +32,7 @@ CarrotCakeCMS is maintained by Samantha Copeland
 
 ### Install Development Tools and required libraries
 
-1. **[Visual Studio Community or Express 2013][IDE2013]** Professional (or higher) editions OK, VS 2012 mostly OK, the database project won't load, but that's OK because it's just there to maintain a schema history, it is not part of any build event
+1. **[Visual Studio Community or Express 2013][IDE2013]** ([ISO VWD 2013][VWDISO2013] and [ISO CE 2013][CEISO2013]) Professional (or higher) editions OK. VS 2012 mostly OK, the database project won't load, but that's OK because it's just there to maintain a schema history, it is not part of any build event
 1. **[SQL Server Express 2008 (or higher/later)][SQL]**
 
 ### Get the Source Code
