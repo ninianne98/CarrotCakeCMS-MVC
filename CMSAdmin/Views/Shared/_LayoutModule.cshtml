@@ -4,12 +4,36 @@
 	ViewBag.Title = "Modules";
 	int iOpenTab = 0;
 	int selTab = 0;
+	string selCssClass = "notSelectedModule";
 
 	string SelMenu = CMSConfigHelper.PluginAreaPath;
+	string SelAreaName = String.Empty;
+	string SelPluginAreaName = String.Empty;
+	string SelPluginActionName = String.Empty;
+	string CurrentAction = String.Empty;
+	string CurrentController = String.Empty;
 
 	List<CMSAdminModule> modules = new List<CMSAdminModule>();
 	using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 		modules = cmsHelper.AdminModules;
+	}
+
+	RouteValueDictionary vals = this.ViewContext.RouteData.Values;
+	if (vals["action"] != null) {
+		CurrentAction = vals["action"].ToString();
+	}
+	if (vals["controller"] != null) {
+		CurrentController = vals["controller"].ToString();
+	}
+
+	string CurrentActionFull = String.Format("{0}", CurrentAction);
+
+	string currentQueryString = String.Empty;
+	if (HttpContext.Current.Request.ServerVariables["QUERY_STRING"] != null) {
+		currentQueryString = HttpContext.Current.Request.ServerVariables["QUERY_STRING"].ToString();
+		if (!String.IsNullOrEmpty(currentQueryString)) {
+			CurrentActionFull = String.Format("{0}?{1}", CurrentAction, currentQueryString);
+		}
 	}
 }
 
@@ -27,6 +51,8 @@
 					@foreach (var mod in modules) {
 						if (mod.AreaKey.ToLower() == SelMenu.ToLower()) {
 							selTab = iOpenTab;
+							SelAreaName = mod.AreaKey;
+							SelPluginAreaName = mod.PluginName;
 						}
 						<h3>
 							<a href="#">
@@ -36,8 +62,13 @@
 						<div>
 							<input type="hidden" name="hdnID" id="hdnID" value="@mod.AreaKey" />
 							@foreach (var plug in mod.PluginMenus.OrderBy(x => x.SortOrder).Where(x => x.IsVisible)) {
+								selCssClass = "notSelectedModule";
+								if (plug.AreaKey == SelMenu && plug.Action == CurrentActionFull && plug.Controller == CurrentController) {
+									selCssClass = "selectedModule";
+									SelPluginActionName = plug.Caption;
+								}
 								<div class="moduleLink">
-									<a href="@String.Format("/{0}/{1}/{2}", plug.AreaKey, plug.Controller, plug.Action)">
+									<a class="@selCssClass" href="@String.Format("/{0}/{1}/{2}", plug.AreaKey, plug.Controller, plug.Action)">
 										@plug.Caption
 									</a>
 								</div>
@@ -50,7 +81,16 @@
 		</td>
 
 		<td>
-			<!--   @SelMenu   -->
+			@if (!String.IsNullOrEmpty(SelPluginAreaName)) {
+				<h2>
+					@if (!String.IsNullOrEmpty(SelPluginActionName)) {
+						@String.Format("{0} : {1}", SelPluginAreaName, SelPluginActionName)
+					} else {
+						@String.Format("{0}", SelPluginAreaName)
+					}
+				</h2>
+			}
+			<!--   @SelMenu  @SelAreaName  -->
 
 			<script type="text/javascript">
 
