@@ -218,7 +218,9 @@ namespace Carrotware.CMS.UI.Components {
 				result.View = ViewEngines.Engines.FindPartialView(ctrlCtx, result.ViewName).View;
 				ViewContext vc = new ViewContext(ctrlCtx, result.View, result.ViewData, result.TempData, sw);
 				result.View.Render(vc, sw);
-				return sw.GetStringBuilder().ToString();
+
+				//return String.Format("{0}{1}", sw.GetStringBuilder(), Environment.NewLine);
+				return String.Format("{0} ", sw.GetStringBuilder());
 			}
 		}
 
@@ -257,7 +259,8 @@ namespace Carrotware.CMS.UI.Components {
 					controller.ViewData.Model = null;
 				}
 
-				return sw.GetStringBuilder().ToString();
+				//return String.Format("{0}{1}", sw.GetStringBuilder(), Environment.NewLine);
+				return String.Format("{0} ", sw.GetStringBuilder());
 			}
 		}
 
@@ -712,7 +715,7 @@ namespace Carrotware.CMS.UI.Components {
 					}
 				}
 
-				if (String.IsNullOrEmpty(widgetText) || widget.ControlPath.ToLower().EndsWith(".ascx")) {
+				if (widgetText == null || widget.ControlPath.ToLower().EndsWith(".ascx")) {
 					LiteralMessage msg = new LiteralMessage("The widget is not supported.", widgetKey, widget.ControlPath);
 					widgetText = msg.ToHtmlString();
 				}
