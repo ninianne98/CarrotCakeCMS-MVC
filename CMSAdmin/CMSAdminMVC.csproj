@@ -846,7 +846,6 @@
     <Content Include="Assets\telephasic\fonts\fontawesome-webfont.woff" />
     <Content Include="Assets\telephasic\fonts\fontawesome-webfont.woff2" />
     <Content Include="Assets\telephasic\fonts\FontAwesome.otf" />
-    <Content Include="App_Code\CmsHelpers.cshtml" />
     <None Include="Assets\Admin\Includes\C3WebSecurityConfigSchema.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -930,6 +929,7 @@
     <Content Include="Views\Templates\Imagination\blog-index.cshtml" />
     <Content Include="Views\Templates\Imagination\_blogNav.cshtml" />
     <Content Include="Views\Templates\Imagination\_pageNav.cshtml" />
+    <Content Include="Views\CmsAdmin\_displayErrorPopupButton.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1042,6 +1042,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
     <Folder Include="Assets\tiny_mce\plugins\autosave\langs\" />
     <Folder Include="Assets\tiny_mce\plugins\spellchecker\classes\utils\" />

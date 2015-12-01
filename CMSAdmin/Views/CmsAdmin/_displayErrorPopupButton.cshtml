@@ -1,0 +1,19 @@
+﻿<button id="btnFormPrettyValidationSummary" class="pretty-validation-button" style="display: none;" onclick="return cmsClickPrettyValidationPopupMVC();">
+	Show Errors
+</button>
+
+<div style="display: none">
+	<div id="formPrettyValidationSummary">
+		@Html.ValidationSummary(true, "")
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+		$(".pretty-validation-button").button({
+			icons: {
+				primary: "ui-icon-newwin"
+			}
+		});
+	});
+</script>

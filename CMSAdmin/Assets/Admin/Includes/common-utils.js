@@ -19,7 +19,7 @@ function AjaxBtnLoad() {
 	//	$("#jqradioset, .jqradioset").buttonset();
 	//});
 
-	$("input:button, input:submit, input:reset").button();
+	$("input:button, input:submit, input:reset, button").button();
 
 	initCheckboxStyle();
 
@@ -363,28 +363,30 @@ function cmsLoadPrettyValidation(validSummary) {
 
 function cmsLoadPrettyValidationPopupMVC(validSummaryFld) {
 	if ($('#' + validSummaryFld).find('li')) {
-		var txt = $('#' + validSummaryFld).html();
+		var txt = $('#' + validSummaryFld + ':first').html();
 		cmsAlertModal(txt);
 	}
+	return false;
 }
 
 var cmsDefaultValidDivID = 'formPrettyValidationSummary';
 
 $(document).ready(function () {
-	$('.ui-error-alert').css('display', 'none');
+	$('.pretty-validation-button').css('display', 'none');
 
 	if ($('#' + cmsDefaultValidDivID + ' ul li').length > 0) {
-		$('.ui-error-alert').css('display', '');
+		$('.pretty-validation-button').css('display', '');
 		cmsLoadPrettyValidationPopupMVC(cmsDefaultValidDivID);
 	}
 });
 
 function cmsClickPrettyValidationPopupMVC() {
 	cmsLoadPrettyValidationPopupMVC(cmsDefaultValidDivID);
+	return false;
 }
 
 $(document).ready(function () {
-	$("input:button, input:submit, input:reset").button();
+	$("input:button, input:submit, input:reset, button").button();
 
 	cmsDecorateValidation();
 

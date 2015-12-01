@@ -33,9 +33,21 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public CmsContentController()
 			: base() {
 			this.TemplateFile = String.Empty;
+			this.WidgetCount = 0;
 		}
 
 		public string TemplateFile { get; set; }
+
+		private int _widgetCount = 0;
+
+		public int WidgetCount {
+			get {
+				return _widgetCount++;
+			}
+			set {
+				_widgetCount = value;
+			}
+		}
 
 		[HttpGet]
 		public ActionResult Default() {

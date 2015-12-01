@@ -14,7 +14,7 @@
 </script>
 
 <div>
-	@CmsHelpers.DisplayErrorPopupButton()
+	@Html.Partial("_displayErrorPopupButton")
 </div>
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()

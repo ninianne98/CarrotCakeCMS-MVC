@@ -140,7 +140,7 @@
 			<label>
 				Site Information
 				@Html.CheckBoxFor(m => m.ImportSite)
-				@CmsHelpers.DisplayErrorPopupButton()
+				@Html.Partial("_displayErrorPopupButton")
 			</label>
 		</legend>
 		<table style="width: 99%;">
@@ -193,7 +193,7 @@
 			<label>
 				Pages
 				@Html.CheckBoxFor(m => m.ImportPages)
-				@CmsHelpers.DisplayErrorPopupButton()
+				@Html.Partial("_displayErrorPopupButton")
 			</label>
 		</legend>
 		<table>
@@ -234,7 +234,7 @@
 			<label>
 				Blog Posts
 				@Html.CheckBoxFor(m => m.ImportPosts)
-				@CmsHelpers.DisplayErrorPopupButton()
+				@Html.Partial("_displayErrorPopupButton")
 			</label>
 		</legend>
 		<table>
