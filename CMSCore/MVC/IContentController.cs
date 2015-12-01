@@ -23,5 +23,7 @@ namespace Carrotware.CMS.Core {
 		ActionResult RSSFeed(string type);
 
 		ActionResult SiteMap();
+
+		int WidgetCount { get; set; }
 	}
 }

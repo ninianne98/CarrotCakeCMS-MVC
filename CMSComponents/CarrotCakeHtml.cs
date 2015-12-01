@@ -579,7 +579,13 @@ namespace Carrotware.CMS.UI.Components {
 				.OrderBy(x => x.WidgetOrder)) {
 				bool IsWidgetClass = false;
 
-				string widgetKey = String.Format("Widget_{0}_{1}", placeHolderName, iWidgetCount);
+				string widgetKey = String.Format("WidgetId_{0}_{1}", placeHolderName, iWidgetCount);
+				if (Html.ViewContext.Controller is IContentController) {
+					IContentController cc = (Html.ViewContext.Controller as IContentController);
+
+					widgetKey = String.Format("WidgetId_{0}", cc.WidgetCount);
+				}
+
 				iWidgetCount++;
 
 				string widgetText = String.Empty;
