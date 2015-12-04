@@ -1115,6 +1115,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			pageContents.TitleBar = page.TitleBar;
 			pageContents.NavMenuText = page.NavMenuText;
 			pageContents.PageHead = page.PageHead;
+			pageContents.TemplateFile = page.TemplateFile;
 			pageContents.PageSlug = null;
 
 			pageContents.MetaDescription = page.MetaDescription;
