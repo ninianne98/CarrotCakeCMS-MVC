@@ -564,6 +564,18 @@ namespace Carrotware.CMS.Core {
 			return lstNav;
 		}
 
+		public List<ContentDateTally> GetSiteDates(int takeTop, string dateFormat) {
+			var lst = GetSiteDates(takeTop);
+
+			if (String.IsNullOrEmpty(dateFormat)) {
+				dateFormat = "MMMM yyyy";
+			}
+
+			lst.ForEach(x => x.DateCaption = x.TallyDate.ToString(dateFormat));
+
+			return lst;
+		}
+
 		public List<ContentDateTally> GetSiteDates(int takeTop) {
 			List<ContentDateTally> lstNav = new List<ContentDateTally>();
 			if (takeTop < 0) {

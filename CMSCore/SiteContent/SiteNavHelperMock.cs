@@ -134,7 +134,7 @@ namespace Carrotware.CMS.Core {
 				dateNow = DateTime.UtcNow.Date.AddMonths(0 - n);
 
 				ContentDateTally cc = new ContentDateTally {
-					DateCaption = "#" + SiteData.PreviewTemplateFilePage,
+					DateCaption = dateNow.ToString("MMMM yyyy"),
 					TallyDate = Convert.ToDateTime(dateNow),
 					UseCount = Convert.ToInt32(n * 2),
 					TheSite = SiteData.CurrentSite
