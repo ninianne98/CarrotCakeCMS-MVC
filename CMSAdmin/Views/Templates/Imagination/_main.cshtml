@@ -33,6 +33,11 @@
 	imgs.Add(@"/Assets/Imagination/images/pics01.jpg");
 	imgs.Add(@"/Assets/Imagination/images/pics03.jpg");
 	imgs.Add(@"/Assets/Imagination/images/pics04.jpg");
+
+	var cats = CmsPage.GetSiteCategories(5, true);
+	var tags = CmsPage.GetSiteTags(5, true);
+	var dates = CmsPage.GetSiteDates(5);
+
 }
 
 <!DOCTYPE html>
@@ -150,40 +155,40 @@
 		<div class="container">
 			<div class="row">
 				<section class="4u">
-					<header>
-						<h2>Nulla eleifend</h2>
-					</header>
-					<ul class="default">
-						<li><a href="#">Pellentesque quis elit non gravida blandit.</a></li>
-						<li><a href="#">Lorem ipsum dolor sit consectetuer adipiscing elit.</a></li>
-						<li><a href="#">Phasellus nec erat sit nibh pellentesque congue.</a></li>
-						<li><a href="#">Cras vitae metus aliquam pellentesque pharetra.</a></li>
-						<li><a href="#">Duis non ante in metus commodo euismod lobortis.</a></li>
-					</ul>
+					@if (dates.Any()) {
+						<header>
+							<h2>Dates</h2>
+						</header>
+						<ul class="default">
+							@foreach (var itm in dates) {
+								<li><a href="@itm.Uri">@itm.Text</a></li>
+							}
+						</ul>
+					}
 				</section>
 				<section class="4u">
-					<header>
-						<h2>Etiam posuere</h2>
-					</header>
-					<ul class="default">
-						<li><a href="#">Pellentesque quis elit non gravida blandit.</a></li>
-						<li><a href="#">Lorem ipsum dolor sit consectetuer adipiscing elit.</a></li>
-						<li><a href="#">Phasellus nec erat sit nibh pellentesque congue.</a></li>
-						<li><a href="#">Cras vitae metus aliquam pellentesque pharetra.</a></li>
-						<li><a href="#">Duis non ante in metus commodo euismod lobortis.</a></li>
-					</ul>
+					@if (cats.Any()) {
+						<header>
+							<h2>Categories</h2>
+						</header>
+						<ul class="default">
+							@foreach (var itm in cats) {
+								<li><a href="@itm.Uri">@itm.Text</a></li>
+							}
+						</ul>
+					}
 				</section>
 				<section class="4u">
-					<header>
-						<h2>Mauris vulputate</h2>
-					</header>
-					<ul class="default">
-						<li><a href="#">Pellentesque quis elit non gravida blandit.</a></li>
-						<li><a href="#">Lorem ipsum dolor sit consectetuer adipiscing elit.</a></li>
-						<li><a href="#">Phasellus nec erat sit nibh pellentesque congue.</a></li>
-						<li><a href="#">Cras vitae metus aliquam pellentesque pharetra.</a></li>
-						<li><a href="#">Duis non ante in metus commodo euismod lobortis.</a></li>
-					</ul>
+					@if (tags.Any()) {
+						<header>
+							<h2>Tags</h2>
+						</header>
+						<ul class="default">
+							@foreach (var itm in tags) {
+								<li><a href="@itm.Uri">@itm.Text</a></li>
+							}
+						</ul>
+					}
 				</section>
 			</div>
 		</div>
