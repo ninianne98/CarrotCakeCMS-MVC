@@ -278,7 +278,7 @@
 		function galleryRemoveItem(a) {
 			var tgt = $(a);
 			if (tgt.is("a")) {
-				var p = $($(tgt).parent().parent());
+				var p = $($(tgt).parent().parent().parent());
 				//alert(p.attr('id'));
 				var txt = p.find('#imgName');
 				p.remove();
