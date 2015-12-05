@@ -371,6 +371,9 @@ namespace Carrotware.CMS.Core {
 				if (this.ContentID == Guid.Empty) {
 					this.ContentID = Guid.NewGuid();
 				}
+				if (this.Parent_ContentID == Guid.Empty) {
+					this.Parent_ContentID = null;
+				}
 
 				carrot_RootContent rc = CompiledQueries.cqGetRootContentTbl(_db, this.SiteID, this.Root_ContentID);
 

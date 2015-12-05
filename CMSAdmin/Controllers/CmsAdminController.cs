@@ -1104,7 +1104,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			ContentPage page = model.ContentPage;
 
-			var pageContents = pageHelper.FindContentByID(this.SiteID, page.Root_ContentID);
+			var pageContents = cmsHelper.cmsAdminContent;
 
 			pageContents.GoLiveDate = page.GoLiveDate;
 			pageContents.RetireDate = page.RetireDate;
@@ -1115,7 +1115,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			pageContents.TitleBar = page.TitleBar;
 			pageContents.NavMenuText = page.NavMenuText;
 			pageContents.PageHead = page.PageHead;
-			pageContents.TemplateFile = page.TemplateFile;
 			pageContents.PageSlug = null;
 
 			pageContents.MetaDescription = page.MetaDescription;
@@ -1649,8 +1648,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			ContentPageModel model = new ContentPageModel();
 
+			var pageContentsParent = pageHelper.FindContentByID(this.SiteID, id);
 			var pageContents = new ContentPage(this.SiteID, ContentPageType.PageType.ContentEntry);
-			pageContents.Parent_ContentID = id;
+
+			if (pageContentsParent != null && pageContentsParent.ContentType == ContentPageType.PageType.ContentEntry) {
+				pageContents.Parent_ContentID = id;
+			} else {
+				pageContents.Parent_ContentID = Guid.Empty;
+			}
+
 			model.SetPage(pageContents);
 
 			model.VisitPage = false;
