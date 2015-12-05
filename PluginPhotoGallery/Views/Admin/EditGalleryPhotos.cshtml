@@ -339,15 +339,17 @@
 							@String.Format("{0:d}  ", srcImage.FileDate)
 							@srcImage.FileSizeFriendly
 						</div>
-						<span class="icoDel ui-state-default ui-corner-all">
-							<a href='javascript:void(0);' onclick='galleryRemoveItem(this);' title='Delete'>
-								<span class="ui-icon ui-icon-closethick">
-								</span>
+						<div style="float: right; max-width: 32px; min-width: 16px;">
+							<span class="icoDel ui-state-default ui-corner-all">
+								<a href='javascript:void(0);' onclick='galleryRemoveItem(this);' title='Delete'>
+									<span class="ui-icon ui-icon-closethick">
+									</span>
+								</a>
+							</span>
+							<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink( Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(srcImage.FullFileName) }))">
+								<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
 							</a>
-						</span>
-						<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink( Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(srcImage.FullFileName) }))">
-							<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
-						</a>
+						</div>
 					</li>
 				}
 			</ul>
@@ -365,16 +367,17 @@
 							@String.Format("{0:d}  ", galImage.FileDate)
 							@galImage.FileSizeFriendly
 						</div>
-						<span class="icoDel ui-state-default ui-corner-all">
-							<a href='javascript:void(0);' onclick='galleryRemoveItem(this);' title='Delete'>
-								<span class="ui-icon ui-icon-closethick">
-								</span>
+						<div style="float: right; max-width: 32px; min-width: 16px;">
+							<span class="icoDel ui-state-default ui-corner-all">
+								<a href='javascript:void(0);' onclick='galleryRemoveItem(this);' title='Delete'>
+									<span class="ui-icon ui-icon-closethick">
+									</span>
+								</a>
+							</span>
+							<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink(Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(galImage.FullFileName) }))">
+								<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
 							</a>
-						</span>
-
-						<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink(Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(galImage.FullFileName) }))">
-							<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
-						</a>
+						</div>
 					</li>
 				}
 			</ul>
