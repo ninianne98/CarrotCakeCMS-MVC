@@ -328,6 +328,23 @@ function cmsPreviewTemplate2() {
 
 var cmsTemplateListPreviewer = "#cmsTemplateList"
 
+function cmsWideMobile() {
+	cmsWidePreview('475px');
+}
+
+function cmWideTablet() {
+	cmsWidePreview('760px');
+}
+
+function cmsWideDesk() {
+	cmsWidePreview('98%');
+}
+
+function cmsWidePreview(width) {
+	$('#cmsFrameEditorPreview').attr('width', width);
+	$('#cmsFrameEditorPreview').css('width', width);
+}
+
 function cmsPreviewTemplate() {
 	var tmplReal = $(cmsTemplateDDL).val();
 	tmpl = cmsMakeStringSafe(tmplReal);
@@ -337,8 +354,8 @@ function cmsPreviewTemplate() {
 	var editFrame = $('#cmsModalFrame');
 	var editIFrame = $('#cmsFrameEditor');
 
-	var frmHgt = 450;
-	var hgt = ($(window).height() * 0.75) - 90;
+	var frmHgt = 440;
+	var hgt = ($(window).height() * 0.75) - 95;
 
 	if (hgt > frmHgt) {
 		frmHgt = hgt;
@@ -353,13 +370,19 @@ function cmsPreviewTemplate() {
 		templateList += "<option value='" + this.value + "'>" + this.text + "</option>";
 	});
 
+	var btnWide1 = '<input type="radio" id="btnDeskTemplateCMS" name="btnWidthTemplateCMS" value="0" onclick="cmsWideDesk();" checked /><label for="btnDeskTemplateCMS">Desktop Size</label>';
+	var btnWide2 = '<input type="radio" id="btnTabletTemplateCMS" name="btnWidthTemplateCMS" value="1" onclick="cmWideTablet();" /><label for="btnTabletTemplateCMS">Tablet Size</label>';
+	var btnWide3 = '<input type="radio" id="btnMobileTemplateCMS" name="btnWidthTemplateCMS" value="2" onclick="cmsWideMobile();" /><label for="btnMobileTemplateCMS">Mobile Size</label>';
+
 	var ddlPreview = ' <select id="cmsTemplateList">' + templateList + '</select>  <input type="button" value="Preview" id="btnPreviewCMS" onclick="cmsPreviewTemplate2();" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ';
 
 	var btnClose = ' <input type="button" id="btnCloseTemplateCMS" value="Close" onclick="cmsCloseModalWin();" /> &nbsp;&nbsp;&nbsp; ';
 	var btnApply = ' <input type="button" id="btnApplyTemplateCMS" value="Apply Template" onclick="cmsUpdateTemplate();" /> &nbsp;&nbsp;&nbsp; ';
 
-	$(editFrame).append('<div id="cmsGlossySeaGreenID"><div id="cmsPreviewControls" class="cmsGlossySeaGreen cmsPreviewButtons"> ' + ddlPreview + btnClose + btnApply + ' </div></div>');
+	$(editFrame).append('<div id="cmsGlossySeaGreenID"><div id="cmsPreviewControls" class="cmsGlossySeaGreen cmsPreviewButtons"> ' + '<span class="jqradioset">' + btnWide1 + btnWide2 + btnWide3 + '</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' + ddlPreview + btnClose + btnApply + ' </div></div>');
 	window.setTimeout("cmsLateBtnStyle();", 500);
+
+	$("#cmsPreviewControls .jqradioset").buttonset();
 
 	//	var list = $(cmsTemplateListPreviewer);
 	//	$(cmsTemplateDDL + " > option").each(function () {
@@ -371,8 +394,9 @@ function cmsPreviewTemplate() {
 	$('#cmsFrameEditor').attr('id', 'cmsFrameEditorPreview');
 	$('#cmsAjaxMainDiv2').attr('id', 'cmsAjaxMainDiv3');
 
-	setTimeout("cmsSetIframeRealSrc('cmsFrameEditorPreview');", 1500);
+	setTimeout("cmsSetIframeRealSrc('cmsFrameEditorPreview');", 1000);
 	cmsStyleButtons();
+	cmsWideDesk();
 }
 
 function cmsLateBtnStyle() {
@@ -1120,7 +1144,7 @@ function cmsSetiFrameSource(theURL) {
 
 	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="90%" height="500" realsrc="' + TheURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
 
-	setTimeout("cmsSetIframeRealSrc('cmsFrameEditor');", 1500);
+	setTimeout("cmsSetIframeRealSrc('cmsFrameEditor');", 750);
 
 	$("#cmsAjaxMainDiv2").block({
 		message: '<table><tr><td><img class="cmsAjaxModalSpinner" src="/Assets/Admin/images/Ring-64px-A7B2A0.gif"/></td></tr></table>',

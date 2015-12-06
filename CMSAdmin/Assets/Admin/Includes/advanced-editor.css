@@ -14,6 +14,11 @@
 	width: 100%;
 }
 
+#cmsModalFrame {
+	display: block;
+	clear: both;
+}
+
 #cmsFrameEditor {
 	margin: 0;
 	padding: 0;
@@ -25,6 +30,13 @@
 	margin: 0;
 	padding: 0;
 	width: 100%;
+}
+
+#cmsFrameEditorPreview {
+	display: block;
+	text-align: center;
+	margin: 0 auto;
+	border: 1px solid #999;
 }
 
 #cmsToolBoxWrap {
@@ -84,6 +96,18 @@
 
 .cmsGlossySeaGreen .ui-front, #cmsGlossySeaGreenID .ui-front {
 	z-index: 10000000;
+}
+
+#cmsGlossySeaGreenID .jqradioset, #cmsGlossySeaGreenID .jqradioset .ui-button,
+#cmsGlossySeaGreenID .jqradioset label, #cmsGlossySeaGreenID .jqradioset span {
+	margin: 0 !important;
+	padding: 4px !important;
+}
+
+#cmsGlossySeaGreenID *, #cmsGlossySeaGreenID *:before, #cmsGlossySeaGreenID *:after {
+	box-sizing: unset;
+	-moz-box-sizing: unset;
+	-webkit-box-sizing: unset;
 }
 
 #cmsWidgetHead p, #cmsWidgetHead ul, #cmsWidgetHead ol, #cmsWidgetHead h1, #cmsWidgetHead h2, #cmsWidgetHead h3, #cmsWidgetHead div, #cmsWidgetHead span, #cmsWidgetHead input, #cmsWidgetHead select, #cmsWidgetHead button, #cmsWidgetHead textarea {
@@ -360,6 +384,14 @@ p.cmsToolItem {
 	margin: 0px 0px 2px 0px;
 	padding: 0px 0px 2px 0px;
 	clear: both;
+}
+
+.cmsAjaxModalSpinner {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -25px;
+	margin-left: -25px;
 }
 
 /* edit menu for widgets */
