@@ -1,0 +1,78 @@
+﻿@model SiteSkinModel
+
+@{
+	ViewBag.Title = "Site Skin Edit";
+}
+
+<h3>
+	@Model.TemplateFile
+
+	[<a href="@String.Format("{0}?path={1}", SiteFilename.SiteSkinEditURL, Model.EncodedPath)">
+		Edit
+	</a>]
+</h3>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	@Html.HiddenFor(m => m.EncodedPath)
+	@Html.HiddenFor(m => m.AltPath)
+
+	@Html.HiddenFor(m => m.FullFilePath)
+	@Html.HiddenFor(m => m.TemplateFile)
+	@Html.HiddenFor(m => m.TemplateFolder)
+
+	@Html.HiddenFor(m => m.EditFile)
+
+	@Html.HiddenFor(m => m.CreationTime)
+	@Html.HiddenFor(m => m.LastWriteTime)
+	@Html.HiddenFor(m => m.FullName)
+
+	<table style="width: 100%;">
+		<tr>
+			<td style="width: 250px;">
+				<p>
+					<b>Supporting Styles/Scripts</b>
+				</p>
+				<div style="border: solid 0 #000000; padding: 4px; width: 250px; height: 425px; overflow: auto;">
+					<ul>
+						@foreach (var f in Model.RelatedFiles) {
+							<li>
+								<a href="@String.Format("{0}?path={1}&alt={2}", SiteFilename.SiteSkinEditURL, Model.EncodedPath, Model.EncodePath(f.FullFileName))">
+									@f.FullFileName
+								</a>
+								<br />
+								<br />
+							</li>
+						}
+					</ul>
+				</div>
+			</td>
+			<td width="20px">
+				<p>
+					&nbsp;&nbsp;&nbsp;
+				</p>
+			</td>
+			<td>
+				<p>
+					<b>
+						Viewing file:
+						@Model.EditFile
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						@Model.CreationTime
+					</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					@Html.Partial("_displayErrorPopupButton")
+				</p>
+				<div>
+					@Html.TextAreaFor(m => m.FileContents, new { @style = "height: 450px; width: 790px;", @rows = "15", @cols = "100" })
+				</div>
+				<p>
+					<input type="submit" name="btnSubmit" value="Save" id="btnSubmit" />
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="button" id="btnCancel" value="Cancel" onclick="location.href='@SiteFilename.SiteSkinIndexURL';" />
+				</p>
+			</td>
+		</tr>
+	</table>
+
+}

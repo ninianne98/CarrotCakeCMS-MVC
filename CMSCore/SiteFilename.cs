@@ -96,6 +96,14 @@ namespace Carrotware.CMS.Core {
 			get { return SiteData.AdminFolderPath + "ContentEditHistory"; }
 		}
 
+		public static string SiteSkinIndexURL {
+			get { return SiteData.AdminFolderPath + "SiteSkinIndex"; }
+		}
+
+		public static string SiteSkinEditURL {
+			get { return SiteData.AdminFolderPath + "SiteSkinEdit"; }
+		}
+
 		public static string ModuleIndexURL {
 			get { return SiteData.AdminFolderPath + "ModuleIndex"; }
 		}

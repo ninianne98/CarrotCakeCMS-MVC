@@ -2349,6 +2349,67 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return View(model);
 		}
 
+		[HttpGet]
+		public ActionResult SiteSkinIndex() {
+			PagedData<CMSTemplate> model = new PagedData<CMSTemplate>();
+			model.PageSize = 1000;
+			model.InitOrderBy(x => x.Caption);
+
+			return SiteSkinIndex(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult SiteSkinIndex(PagedData<CMSTemplate> model) {
+			model.ToggleSort();
+			var templates = cmsHelper.Templates.Where(x => x.TemplatePath.ToLower() != SiteData.DefaultTemplateFilename.ToLower()).ToList();
+			var srt = model.ParseSort();
+
+			var query = ReflectionUtilities.SortByParm<CMSTemplate>(templates, srt.SortField, srt.SortDirection);
+
+			model.TotalRecords = -1;
+			model.DataSource = query.ToList();
+
+			ModelState.Clear();
+
+			return View(model);
+		}
+
+		[HttpGet]
+		public ActionResult SiteSkinEdit(string path, string alt) {
+			SiteSkinModel model = null;
+
+			if (String.IsNullOrEmpty(alt)) {
+				model = new SiteSkinModel(path);
+			} else {
+				model = new SiteSkinModel(path, alt);
+			}
+
+			model.ReadFile();
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[ValidateInput(false)]
+		public ActionResult SiteSkinEdit(SiteSkinModel model) {
+			if (ModelState.IsValid) {
+				model.SaveFile();
+
+				if (!String.IsNullOrEmpty(model.AltPath)) {
+					return RedirectToAction("SiteSkinEdit", new { @path = model.EncodedPath, @alt = model.EncodePath(model.AltPath) });
+				}
+				return RedirectToAction("SiteSkinEdit", new { @path = model.EncodedPath });
+			}
+
+			Helper.HandleErrorDict(ModelState);
+
+			model.ReadRelated();
+
+			return View(model);
+		}
+
 		//[HttpGet]
 		//public ActionResult SinglePageCommentIndex(Guid? id) {
 		//	CommentIndexModel model = new CommentIndexModel();

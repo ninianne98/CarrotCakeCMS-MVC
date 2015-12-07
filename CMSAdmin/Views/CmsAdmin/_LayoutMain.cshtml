@@ -109,13 +109,13 @@
 					</a>
 				</li>
 
-				@using (CarrotWeb.BeginWrappedItem("li", "Index;SiteInfo;ContentEditHistory;SiteSkinIndex;SiteTemplateUpdate;SiteDataExport;ContentImport;SiteContentStatusChange;SiteSkinIndex", RouteConfig.AdminCtrlr, new { @id = "tabMainTop", @class = "current sub" }, new { @id = "tabMainTop", @class = "sub" })) {
+				@using (CarrotWeb.BeginWrappedItem("li", "Index;SiteInfo;ContentEditHistory;SiteSkinIndex;SiteSkinEdit;SiteTemplateUpdate;SiteDataExport;ContentImport;SiteContentStatusChange;SiteSkinIndex", RouteConfig.AdminCtrlr, new { @id = "tabMainTop", @class = "current sub" }, new { @id = "tabMainTop", @class = "sub" })) {
 					<a href="javascript:void(0)" class="lnkPopup">Site </a>
 					<ul class="children">
 						<li id="tabMain"><a href="@SiteFilename.SiteInfoURL">Site Info</a> </li>
 						@if (siteExists) {
 							<li id="tabHistory"><a href="@SiteFilename.ContentEditHistoryURL">Content Edit History</a> </li>
-							@*<li id="tabContentSkin"><a href="./SiteSkinIndex">Site Skin Index</a> </li>*@
+							<li id="tabContentSkin"><a href="@SiteFilename.SiteSkinIndexURL">Site Skin Index</a> </li>
 							<li id="tabMainTemplate"><a href="@SiteFilename.SiteTemplateUpdateURL">Bulk Apply Templates</a> </li>
 							<li id="tabStatusChange"><a href="@SiteFilename.SiteContentStatusChangeURL">Bulk Change Status</a> </li>
 							<li id="tabExportSite"><a href="@SiteFilename.SiteExportURL">Export Site</a> </li>

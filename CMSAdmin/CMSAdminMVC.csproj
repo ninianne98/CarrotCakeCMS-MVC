@@ -931,6 +931,8 @@
     <Content Include="Views\Templates\Imagination\_pageNav.cshtml" />
     <Content Include="Views\CmsAdmin\_displayErrorPopupButton.cshtml" />
     <Content Include="Views\CmsAdmin\BlogPostEdit.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteSkinIndex.cshtml" />
+    <Content Include="Views\CmsAdmin\SiteSkinEdit.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -970,6 +972,7 @@
     <Compile Include="Models\SiteImportWordpressModel.cs" />
     <Compile Include="Models\SiteImportNativeModel.cs" />
     <Compile Include="Models\SitePageDrillDownModel.cs" />
+    <Compile Include="Models\SiteSkinModel.cs" />
     <Compile Include="Models\SiteTemplateUpdateModel.cs" />
     <Compile Include="Models\SplitDateTime.cs" />
     <Compile Include="Models\UserModel.cs" />
