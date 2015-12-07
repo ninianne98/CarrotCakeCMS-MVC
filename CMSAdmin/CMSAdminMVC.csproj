@@ -930,6 +930,7 @@
     <Content Include="Views\Templates\Imagination\_blogNav.cshtml" />
     <Content Include="Views\Templates\Imagination\_pageNav.cshtml" />
     <Content Include="Views\CmsAdmin\_displayErrorPopupButton.cshtml" />
+    <Content Include="Views\CmsAdmin\BlogPostEdit.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

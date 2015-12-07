@@ -1,0 +1,234 @@
+﻿@model ContentPageModel
+
+@{
+	ViewBag.Title = "Post Edit";
+
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+}
+
+<script src="~/Assets/Admin/includes/FindUsers.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		initFindUsersMethod("@Html.IdFor(m => m.ContentPage.CreditUserId)", "txtSearchUser", "FindCreditUsers");
+	});
+</script>
+
+<div>
+	@Html.Partial("_displayErrorPopupButton")
+</div>
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<h2>
+		@Model.ContentPage.FileName
+	</h2>
+	<table style="width: 700px;">
+		<tr>
+			<td style="width: 125px;" class="tablecaption">
+				last updated:
+			</td>
+			<td style="width: 575px;">
+				@Model.ContentPage.EditDate
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				release date:
+			</td>
+			<td>
+				@{
+	SplitDateTime gld = new SplitDateTime();
+	gld.CombinedDateTime = Model.ContentPage.GoLiveDate;
+	gld.FieldName = Html.NameFor(model => model.ContentPage.GoLiveDate).ToString();
+				}
+
+				@Html.Partial("_datetime", gld)
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				retire date:
+			</td>
+			<td>
+				@{
+	SplitDateTime rdt = new SplitDateTime();
+	rdt.CombinedDateTime = Model.ContentPage.RetireDate;
+	rdt.FieldName = Html.NameFor(model => model.ContentPage.RetireDate).ToString();
+				}
+
+				@Html.Partial("_datetime", rdt)
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				titlebar:
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.ContentPage.TitleBar, new { size = "60", @class = "form-control-xlg", onblur = "AutoGeneratePageFilename()" })
+				@Html.ValidationMessageFor(m => m.ContentPage.TitleBar, "", new { @class = "validationError" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				navigation:
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.ContentPage.NavMenuText, new { size = "60", @class = "form-control-xlg" })
+				@Html.ValidationMessageFor(m => m.ContentPage.NavMenuText, "", new { @class = "validationError" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				page head:
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.ContentPage.PageHead, new { size = "60", @class = "form-control-xlg" })
+				@Html.ValidationMessageFor(m => m.ContentPage.PageHead, "", new { @class = "validationError" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				thumbnail:
+				<br />
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.ContentPage.Thumbnail, new { size = "60", @class = "form-control-xlg" })
+				@Html.ValidationMessageFor(m => m.ContentPage.Thumbnail, "", new { @class = "validationError" })
+				<input type="button" id="btnThumb" value="Browse" onclick="cmsFileBrowserOpenReturn('@Html.IdFor(m => m.ContentPage.Thumbnail)');return false;" />
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				&nbsp;
+			</td>
+			<td>
+				@Html.CheckBoxFor(m => m.ContentPage.PageActive)
+				<label for="chkActive">Show publicly</label>
+				&nbsp;&nbsp;&nbsp;
+				@Html.CheckBoxFor(m => m.ContentPage.BlockIndex)
+				<label for="chkHide">Hide from Search Engines</label>
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				credit author:
+			</td>
+			<td>
+				<b>find:</b> <span id="spanResults"></span>
+				<br />
+				@{
+	var usr = Model.CreditUser;
+	string usrCap = String.Empty;
+	if (usr != null) {
+		usrCap = String.Format("{0} ({1})", usr.UserName, usr.Email);
+	}
+				}
+
+				@Html.TextBox("txtSearchUser", usrCap, new { maxlength = "256", @class = "form-control-lg" })
+				@Html.HiddenFor(m => m.ContentPage.CreditUserId)
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+
+				<table style="width: 100%; min-height:75px;">
+					<tr>
+						<td>
+							<div class="ui-widget ui-widget-content ui-corner-all clear">
+								<div class="picker-area ui-widget-header ui-state-default ui-corner-top">
+									categories
+								</div>
+								<div class="picker-area ui-widget-content ui-corner-bottom">
+									<div>
+										@Html.ListBoxFor(m => m.SelectedCategories,
+									new MultiSelectList(Model.CategoryOptions, "Value", "Text", Model.SelectedCategories),
+									new { @class = "chosen-select", size = 2, @data_placeholder = "select categories" })
+									</div>
+								</div>
+							</div>
+							<div class="clear">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="ui-widget ui-widget-content ui-corner-all clear">
+								<div class="picker-area ui-widget-header ui-state-default ui-corner-top">
+									tags
+								</div>
+								<div class="picker-area ui-widget-content ui-corner-bottom">
+									<div>
+										@Html.ListBoxFor(m => m.SelectedTags,
+									new MultiSelectList(Model.TagOptions, "Value", "Text", Model.SelectedTags),
+									new { @class = "chosen-select", size = 2, @data_placeholder = "select tags" })
+									</div>
+								</div>
+							</div>
+							<div class="clear">
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+
+		<tr>
+			<td class="tablecaption">
+				meta keywords:
+			</td>
+			<td>
+				@Html.TextAreaFor(m => m.ContentPage.MetaKeyword, new { rows = "4", cols = "60", @class = "form-control-xlg" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				meta description:
+			</td>
+			<td>
+				@Html.TextAreaFor(m => m.ContentPage.MetaDescription, new { rows = "4", cols = "60", @class = "form-control-xlg" })
+			</td>
+		</tr>
+	</table>
+
+	<input type="button" name="btnSaveButton" value="Apply" onclick="SubmitPage();" id="btnSaveButton" />
+	<br />
+
+	<script type="text/javascript">
+		function SubmitPage() {
+			$('#btnSave').click();
+
+			return true;
+		}
+	</script>
+
+	<div style="display: none">
+		<input type="submit" name="btnSave" value="Save" id="btnSave" />
+
+		@Html.HiddenFor(m => m.ContentPage.FileName)
+		@Html.HiddenFor(m => m.ContentPage.PageSlug)
+		@Html.HiddenFor(m => m.ContentPage.TemplateFile)
+		@Html.HiddenFor(m => m.ContentPage.EditDate)
+		@Html.HiddenFor(m => m.ContentPage.CreateDate)
+
+		@Html.HiddenFor(m => m.ContentPage.Root_ContentID)
+		@Html.HiddenFor(m => m.ContentPage.ContentType)
+		@Html.HiddenFor(m => m.ContentPage.SiteID)
+		@Html.HiddenFor(m => m.Mode)
+		@Html.HiddenFor(m => m.ImportID)
+		@Html.HiddenFor(m => m.VersionID)
+		@Html.HiddenFor(m => m.VisitPage)
+
+		@Html.TextBoxFor(m => m.OriginalFileName)
+
+		<div id="formPrettyValidationSummary">
+			@Html.ValidationSummary(true, "")
+		</div>
+	</div>
+
+}
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$(".chosen-select").chosen({ width: "695px" });
+	});
+</script>

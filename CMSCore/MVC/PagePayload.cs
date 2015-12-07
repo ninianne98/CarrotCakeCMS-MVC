@@ -69,6 +69,11 @@ namespace Carrotware.CMS.Core {
 					cmsHelper.OverrideKey(uri);
 					if (cmsHelper.cmsAdminContent == null) {
 						page.ThePage = SiteData.GetPage(uri);
+						if (page.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+							var c = page.ThePage.ContentCategories;
+							var t = page.ThePage.ContentTags;
+						}
+
 						cmsHelper.cmsAdminContent = page.ThePage;
 					} else {
 						page.ThePage = cmsHelper.cmsAdminContent;
@@ -386,6 +391,16 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		public string GeneratedFileName {
+			get {
+				if (this.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+					return ContentPageHelper.CreateFileNameFromSlug(this.TheSite.SiteID, this.ThePage.GoLiveDate, this.ThePage.PageSlug);
+				} else {
+					return this.ThePage.FileName;
+				}
+			}
+		}
+
 		public bool IsPageLocked {
 			get {
 				using (ContentPageHelper pageHelper = new ContentPageHelper()) {
@@ -474,9 +489,20 @@ namespace Carrotware.CMS.Core {
 				takeTop = 100000;
 			}
 
-			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-				return navHelper.GetTagListForPost(this.TheSite.SiteID, takeTop, this.ThePage.Root_ContentID);
+			if (SecurityData.AdvancedEditMode) {
+				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+					cmsHelper.OverrideKey(this.ThePage.FileName);
+					if (cmsHelper.cmsAdminContent != null) {
+						return cmsHelper.cmsAdminContent.ContentTags.Take(takeTop).ToList();
+					}
+				}
+			} else {
+				using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
+					return navHelper.GetTagListForPost(this.TheSite.SiteID, takeTop, this.ThePage.Root_ContentID);
+				}
 			}
+
+			return new List<ContentTag>();
 		}
 
 		private int _pageCt = -10;
@@ -529,9 +555,20 @@ namespace Carrotware.CMS.Core {
 			if (takeTop < 0) {
 				takeTop = 300000;
 			}
-			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-				return navHelper.GetCategoryListForPost(this.TheSite.SiteID, takeTop, this.ThePage.Root_ContentID);
+
+			if (SecurityData.AdvancedEditMode) {
+				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+					cmsHelper.OverrideKey(this.ThePage.FileName);
+					if (cmsHelper.cmsAdminContent != null) {
+						return cmsHelper.cmsAdminContent.ContentCategories.Take(takeTop).ToList();
+					}
+				}
+			} else {
+				using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
+					return navHelper.GetCategoryListForPost(this.TheSite.SiteID, takeTop, this.ThePage.Root_ContentID);
+				}
 			}
+			return new List<ContentCategory>();
 		}
 
 		public List<ContentTag> GetSiteTags(int takeTop, bool ShowNonZeroCountOnly) {
@@ -539,6 +576,7 @@ namespace Carrotware.CMS.Core {
 			if (takeTop < 0) {
 				takeTop = 100000;
 			}
+
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				lstNav = navHelper.GetTagList(this.TheSite.SiteID, takeTop);
 			}
