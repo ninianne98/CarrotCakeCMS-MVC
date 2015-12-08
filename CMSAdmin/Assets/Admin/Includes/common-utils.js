@@ -69,7 +69,7 @@ $(document).ready(function () {
 	AjaxBtnLoad();
 });
 
-var htmlAjaxSpinnerTable = '<table style="TableSpinner"><tr><td><img style="RingSpinner" src="/Assets/Admin/images/Ring-64px-A7B2A0.gif"/></td></tr></table>';
+var htmlAjaxSpinnerTable = '<table class="cmsTableSpinner"><tr><td><img class="cmsRingSpinner" src="/Assets/Admin/images/Ring-64px-A7B2A0.gif"/></td></tr></table>';
 
 function BlockUI(elementID) {
 	/*

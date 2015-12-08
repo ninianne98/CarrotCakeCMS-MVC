@@ -933,6 +933,7 @@
     <Content Include="Views\CmsAdmin\BlogPostEdit.cshtml" />
     <Content Include="Views\CmsAdmin\SiteSkinIndex.cshtml" />
     <Content Include="Views\CmsAdmin\SiteSkinEdit.cshtml" />
+    <Content Include="Views\CmsAdmin\_contentPageTextWidgets.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

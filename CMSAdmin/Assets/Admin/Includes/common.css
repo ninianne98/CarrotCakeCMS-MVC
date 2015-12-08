@@ -34,6 +34,14 @@ a .imgNoBorder {
 	outline: none;
 }
 
+.cmsRingSpinner {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -25px;
+	margin-left: -25px;
+}
+
 pre, tt, code, kbd, samp {
 	font-family: 'Lucida Console', 'Courier New', Courier, Monaco, monospace, sans-serif;
 }
@@ -372,12 +380,12 @@ table.centered {
 	padding: 0;
 }
 
-	.publicError .validation-summary-errors ul, .publicError .validation-summary-errors li {
-		list-style: none;
-		margin-left: 12px;
-		display: block;
-		padding: 0;
-	}
+.publicError .validation-summary-errors ul, .publicError .validation-summary-errors li {
+	list-style: none;
+	margin-left: 12px;
+	display: block;
+	padding: 0;
+}
 
 #divCMSModalMsg .validation-summary-errors ul, #divCMSModalMsg .validation-summary-errors li {
 	list-style: disc;

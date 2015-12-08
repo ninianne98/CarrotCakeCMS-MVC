@@ -168,6 +168,10 @@ namespace Carrotware.CMS.Core {
 			get { return SiteData.AdminFolderPath + "BlogPostCommentIndex"; }
 		}
 
+		public static string ContentEditURL {
+			get { return SiteData.AdminFolderPath + "ContentEdit"; }
+		}
+
 		public static string UserEditURL {
 			get { return SiteData.AdminFolderPath + "UserEdit"; }
 		}

@@ -25,6 +25,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.VisitPage = false;
 
 			this.VersionHistory = new Dictionary<string, string>();
+			this.WidgetListHtml = new List<Widget>();
+			this.WidgetListText = new List<Widget>();
 
 			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 				this.SiteTemplates = cmsHelper.Templates;
@@ -115,6 +117,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public string OriginalFileName { get; set; }
 
+		public List<Widget> WidgetListText { get; set; }
+
+		public List<Widget> WidgetListHtml { get; set; }
+
 		public void SetPage(ContentPage page) {
 			this.ContentPage = page;
 
@@ -157,6 +163,53 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 							} catch { }
 						}
 					}
+				}
+
+				RefreshWidgetList();
+			}
+		}
+
+		public void RefreshWidgetList() {
+			this.WidgetListHtml = new List<Widget>();
+			this.WidgetListText = new List<Widget>();
+
+			if (this.ContentPage != null && this.ContentPage.Root_ContentID != Guid.Empty) {
+				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+					cmsHelper.OverrideKey(this.ContentPage.Root_ContentID);
+
+					this.WidgetListHtml = (from w in cmsHelper.cmsAdminWidget
+										   where w.IsLatestVersion == true
+										   && w.ControlPath.StartsWith("CLASS:Carrotware.CMS.UI.Components.ContentRichText,")
+										   select w).ToList();
+
+					this.WidgetListText = (from w in cmsHelper.cmsAdminWidget
+										   where w.IsLatestVersion == true
+										   && w.ControlPath.StartsWith("CLASS:Carrotware.CMS.UI.Components.ContentPlainText,")
+										   select w).ToList();
+				}
+			}
+		}
+
+		public void SaveTextWidgets() {
+			if (this.ContentPage != null && this.ContentPage.Root_ContentID != Guid.Empty) {
+				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+					cmsHelper.OverrideKey(this.ContentPage.Root_ContentID);
+
+					if (cmsHelper.cmsAdminWidget != null) {
+						var ww = (from w in cmsHelper.cmsAdminWidget
+								  where w.IsLatestVersion == true
+								  && w.IsPendingChange == true
+								  && (w.ControlPath.StartsWith("CLASS:Carrotware.CMS.UI.Components.ContentRichText,")
+										|| w.ControlPath.StartsWith("CLASS:Carrotware.CMS.UI.Components.ContentPlainText,"))
+								  select w);
+
+						foreach (Widget w in ww) {
+							w.Save();
+						}
+					}
+
+					cmsHelper.cmsAdminContent = null;
+					cmsHelper.cmsAdminWidget = null;
 				}
 			}
 		}

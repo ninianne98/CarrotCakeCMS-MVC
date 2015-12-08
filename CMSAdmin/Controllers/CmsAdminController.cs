@@ -1195,6 +1195,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				return RedirectToAction("BlogPostAddEdit", new { @id = pageContents.Root_ContentID, @mode = model.Mode });
 			}
 
+			cmsHelper.OverrideKey(pageContents.Root_ContentID);
+			cmsHelper.cmsAdminContent = pageContents;
+			cmsHelper.cmsAdminWidget = pageContents.GetWidgetList();
+
 			model.SetPage(pageContents);
 
 			return View(model);
@@ -1326,6 +1330,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				pageContents.EditUserId = SecurityData.CurrentUserGuid;
 
 				pageContents.SavePageEdit();
+				model.SaveTextWidgets();
 
 				if (model.VisitPage) {
 					Response.Redirect(pageContents.FileName);
@@ -1335,6 +1340,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 
 			Helper.HandleErrorDict(ModelState);
+			model.RefreshWidgetList();
 
 			return View(model);
 		}
@@ -1385,6 +1391,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (pageContents.ContentType != ContentPageType.PageType.BlogEntry) {
 				return RedirectToAction("PageAddEdit", new { @id = pageContents.Root_ContentID, @mode = model.Mode });
 			}
+
+			cmsHelper.OverrideKey(pageContents.Root_ContentID);
+			cmsHelper.cmsAdminContent = pageContents;
+			cmsHelper.cmsAdminWidget = pageContents.GetWidgetList();
 
 			model.SetPage(pageContents);
 
@@ -1524,6 +1534,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				pageContents.ContentTags = lstTag;
 
 				pageContents.SavePageEdit();
+				model.SaveTextWidgets();
 
 				if (model.VisitPage) {
 					Response.Redirect(pageContents.FileName);
@@ -1533,6 +1544,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 
 			Helper.HandleErrorDict(ModelState);
+			model.RefreshWidgetList();
 
 			return View(model);
 		}
