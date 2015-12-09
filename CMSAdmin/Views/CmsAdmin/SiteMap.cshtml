@@ -1,5 +1,9 @@
 ﻿@model IList<SiteMapOrder>
 
+@{
+	ViewBag.Title = "Site Map";
+}
+
 <p>
 	@using (Html.BeginForm("FixOrphan", RouteConfig.AdminCtrlr, FormMethod.Post)) {
 		@Html.AntiForgeryToken()
