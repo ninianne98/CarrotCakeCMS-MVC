@@ -21,6 +21,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.Root_WidgetID = Guid.Empty;
 			this.Root_ContentID = null;
 			this.Widget = null;
+			this.CachedWidget = false;
 		}
 
 		public WidgetEditModel(Guid widgetid)
@@ -33,6 +34,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public WidgetEditModel(Guid? rootcontentid, Guid widgetid) {
 			this.Root_WidgetID = widgetid;
 			this.Root_ContentID = rootcontentid;
+			this.CachedWidget = rootcontentid.HasValue;
 
 			LoadData();
 		}
@@ -41,7 +43,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 				Widget ww = null;
 
-				if (this.Root_ContentID.HasValue) {
+				if (this.CachedWidget) {
 					cmsHelper.OverrideKey(this.Root_ContentID.Value);
 					this.Widgets = cmsHelper.cmsAdminWidget;
 
@@ -63,7 +65,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					ww.GoLiveDate = this.Widget.GoLiveDate;
 					ww.RetireDate = this.Widget.RetireDate;
 
-					if (this.Root_ContentID.HasValue) {
+					if (this.CachedWidget) {
 						this.Widgets.RemoveAll(x => x.Root_WidgetID == this.Root_WidgetID);
 						this.Widgets.Add(ww);
 						cmsHelper.cmsAdminWidget = this.Widgets.OrderBy(x => x.WidgetOrder).ToList();
@@ -84,11 +86,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public Guid? Root_ContentID { get; set; }
 
+		public bool CachedWidget { get; set; }
+
 		protected void LoadData() {
 			if (this.Root_ContentID.HasValue) {
 				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 					cmsHelper.OverrideKey(this.Root_ContentID.Value);
 					this.Widgets = cmsHelper.cmsAdminWidget;
+					this.CachedWidget = true;
 
 					if (this.Widget == null) {
 						this.Widget = (from w in this.Widgets
@@ -100,6 +105,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 				using (WidgetHelper widgetHelper = new WidgetHelper()) {
 					if (this.Widget == null) {
 						this.Widget = widgetHelper.Get(this.Root_WidgetID);
+						this.Root_ContentID = this.Widget.Root_ContentID;
 					}
 				}
 			}

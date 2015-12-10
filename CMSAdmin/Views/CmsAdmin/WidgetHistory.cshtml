@@ -1,0 +1,143 @@
+﻿@model  WidgetHistoryModel
+
+@{
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+
+	ViewBag.Title = "Widget History";
+}
+
+<script type="text/javascript">
+	var webSvc = cmsGetServiceAddress();
+	var thisPageID = '@Model.Root_ContentID';
+
+	function cmsGetWidgetText(val) {
+
+		var webMthd = webSvc + "/GetWidgetVersionText";
+
+		$.ajax({
+			type: "POST",
+			url: webMthd,
+			data: JSON.stringify({ DBKey: val, ThisPage: thisPageID }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: cmsReqContentCallback,
+			error: cmsAjaxFailed
+		});
+	}
+
+	function cmsDoToolTipDataRequest(val) {
+		cmsGetWidgetText(val);
+	}
+
+	function cmsReqContentCallback(data, status) {
+		if (data.d == "FAIL") {
+			cmsSetHTMLMessage('<i>An error occurred. Please try again.</i>');
+		} else {
+			cmsSetTextMessage(data.d);
+		}
+	}
+</script>
+<link href="~/Assets/Admin/Includes/tooltipster.css" rel="stylesheet" type="text/css" />
+<script src="~/Assets/Admin/Includes/jquery.tooltipster.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+	function CheckTheBoxes() {
+		checkGridBoxes('divHistory');
+	}
+
+	function UncheckTheBoxes() {
+		uncheckGridBoxes('divHistory');
+	}
+</script>
+
+<h3>
+	@String.Format(" {0}   ", Model.WidgetCaption)
+
+	@if (Model.Widget.IsWidgetActive) {
+		<img src="~/Assets/Admin/Images/accept.png" alt="Active" title="Active" />
+	} else {
+		<img src="~/Assets/Admin/Images/cancel.png" alt="Inactive" title="Inactive" />
+	}
+
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	Go Live: @String.Format(" {0} ", Model.Widget.GoLiveDate) <br />
+
+	@Model.Widget.ControlPath
+</h3>
+
+<p>
+	<a href="@String.Format("{0}/{1}", SiteFilename.PageWidgetsURL, Model.Root_ContentID)">
+		<img src="~/Assets/Admin/Images/back.png" alt="Return" title="Return" />
+		Return to widget list
+	</a>
+</p>
+
+<p>
+	<input type="button" value="Check All" onclick="CheckTheBoxes()" />&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="Uncheck All" onclick="UncheckTheBoxes()" />
+</p>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	@Html.HiddenFor(m => m.Root_ContentID)
+	@Html.HiddenFor(m => m.Root_WidgetID)
+	@Html.HiddenFor(m => m.Widget.Root_ContentID)
+	@Html.HiddenFor(m => m.WidgetCaption)
+	@Html.HiddenFor(m => m.Widget.IsWidgetActive)
+	@Html.HiddenFor(m => m.Widget.GoLiveDate)
+
+	<p>
+		<input type="submit" name="btnRemove" value="Remove Selected" id="btnRemove" /><br />
+	</p>
+
+	<div id="divHistory">
+
+		@{
+	var grid = CarrotWeb.CarrotWebGrid<Widget>(Model.History);
+
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.UseDataPage = false;
+	grid.ConfigName(Html.NameFor(x => x.History.DataSource));
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<Widget> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+				@if (!item.IsLatestVersion) {
+					@grid.FormFieldFor(m => m.Selected, GridFormFieldType.Checkbox)
+				} else {
+					@grid.FormFieldFor(m => m.Selected, GridFormFieldType.Hidden)
+					<text> &nbsp;&nbsp;&nbsp; </text>
+				}
+
+				@grid.FormFieldFor(m => m.IsLatestVersion, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(m => m.WidgetDataID, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(m => m.Root_WidgetID, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(m => m.PlaceholderName, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(m => m.RetireDate, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(m => m.EditDate, GridFormFieldType.Hidden)
+			</text>
+		})
+
+		.AddColumn(new CarrotGridTemplateColumn<Widget> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+				<a class="dataPopupTrigger" rel="@item.WidgetDataID" href="javascript:void(0)">
+					<img src="~/Assets/Admin/images/doc.png" alt="text" style="margin:0;" />
+				</a>
+
+				@grid.FormFieldFor(x => x.ControlPath, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(x => x.Root_WidgetID, GridFormFieldType.Hidden)
+			</text>
+		})
+
+		.AddColumn(x => x.EditDate, new CarrotGridColumn());
+
+		@grid.OutputHtmlBody()
+		}
+	</div>
+
+}

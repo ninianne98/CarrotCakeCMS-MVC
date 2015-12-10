@@ -100,11 +100,29 @@
 			</text>
 		})
 		.AddColumn(x => x.PlaceholderName, new CarrotGridColumn())
-		.AddColumn(x => x.EditDate, new CarrotGridColumn())
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+
+		.AddColumn(new CarrotGridTemplateColumn<Widget> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+				<a href="@String.Format("{0}/{1}", SiteFilename.WidgetHistoryURL, item.Root_WidgetID)">
+					<img src="~/Assets/Admin/Images/hourglass.png" alt="History" title="History" />
+				</a>
+			</text>
+		})
 
 		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
-
 		.AddColumn(x => x.RetireDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+
+		.AddColumn(new CarrotGridTemplateColumn<Widget> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+				<a href="@String.Format("{0}?widgetid={1}", SiteFilename.WidgetTimeURL, item.Root_WidgetID)">
+					<img src="~/Assets/Admin/Images/pencil.png" alt="Edit Time" title="Edit Time" />
+				</a>
+			</text>
+		})
+
 		.AddColumn(x => x.IsRetired, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Retired",
 			AlternateTextFalse = "Active",

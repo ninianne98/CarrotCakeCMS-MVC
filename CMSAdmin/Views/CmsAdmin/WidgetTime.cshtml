@@ -12,6 +12,7 @@
 	@Html.HiddenFor(m => m.Root_ContentID)
 	@Html.HiddenFor(m => m.Root_WidgetID)
 	@Html.HiddenFor(m => m.WidgetCaption)
+	@Html.HiddenFor(m => m.CachedWidget)
 
 	@Html.HiddenFor(m => m.Widget.Root_WidgetID)
 	@Html.HiddenFor(m => m.Widget.ControlPath)
@@ -66,5 +67,19 @@
 	<p>
 		<input type="submit" name="btnSave" value="Apply" id="btnSave" />
 	</p>
-
 }
+
+@if (!Model.CachedWidget) {
+	<p>
+		<a href="@String.Format("{0}/{1}", SiteFilename.PageWidgetsURL, Model.Root_ContentID)">
+			<img src="~/Assets/Admin/Images/back.png" alt="Return" title="Return" />
+			Return to widget list
+		</a>
+	</p>
+}
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		cmsInputEnterBlock();
+	});
+</script>

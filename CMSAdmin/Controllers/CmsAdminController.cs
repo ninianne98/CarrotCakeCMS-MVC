@@ -2236,10 +2236,37 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (ModelState.IsValid) {
 				model.Save();
 
-				return RedirectToAction("WidgetTime", new { @id = model.Root_ContentID, @widgetid = model.Root_WidgetID, @saved = true });
+				if (model.CachedWidget) {
+					return RedirectToAction("WidgetTime", new { @id = model.Root_ContentID, @widgetid = model.Root_WidgetID, @saved = true });
+				}
+
+				return RedirectToAction("WidgetTime", new { @widgetid = model.Root_WidgetID, @saved = true });
 			}
 
 			return View(model);
+		}
+
+		[HttpGet]
+		public ActionResult WidgetHistory(Guid id, bool? saved) {
+			if (saved.HasValue) {
+				if (saved.Value) {
+					ShowSave("Selected items removed");
+				} else {
+					ShowSave("No items selected to remove");
+				}
+			}
+
+			WidgetHistoryModel model = new WidgetHistoryModel(id);
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult WidgetHistory(WidgetHistoryModel model) {
+			ModelState.Clear();
+
+			return RedirectToAction("WidgetHistory", new { @id = model.Root_WidgetID, @saved = model.Remove() });
 		}
 
 		[HttpGet]
