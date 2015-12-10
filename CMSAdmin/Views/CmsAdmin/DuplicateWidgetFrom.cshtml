@@ -1,0 +1,239 @@
+﻿@model DuplicateWidgetFromModel
+
+@{
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+
+	ViewBag.Title = "Duplicate Widget From?";
+
+	List<CarrotImageColumnData> typeImgs = new List<CarrotImageColumnData>();
+	typeImgs.Add(new CarrotImageColumnData(ContentPageType.PageType.ContentEntry, "~/Assets/Admin/Images/page_world.png", "Page"));
+	typeImgs.Add(new CarrotImageColumnData(ContentPageType.PageType.BlogEntry, "~/Assets/Admin/Images/blogger.png", "Post"));
+}
+<script type="text/javascript">
+	function RunSearch() {
+		$('#@Html.IdFor(x => x.SelectedItem)').val('@Guid.Empty');
+		$('#@Html.IdFor(x => x.StepNumber)').val('1');
+		$('#btnPost').click();
+	}
+
+	function ClickRdo(item) {
+		$('#@Html.IdFor(x => x.SelectedItem)').val(item.value);
+		$('#@Html.IdFor(x => x.StepNumber)').val('2');
+		$('#btnPost').click();
+	}
+
+	function DuplicateItems() {
+		$('#@Html.IdFor(x => x.StepNumber)').val('3');
+		$('#btnPost').click();
+	}
+</script>
+
+<script type="text/javascript">
+	var webSvc = cmsGetServiceAddress();
+	var thisPageID = '';
+
+	function cmsGetWidgetText(val) {
+		thisPageID = $('#@Html.IdFor(x => x.SelectedItem)').val();
+
+		var webMthd = webSvc + "/GetWidgetText";
+
+		$.ajax({
+			type: "POST",
+			url: webMthd,
+			data: JSON.stringify({ DBKey: val, ThisPage: thisPageID }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: cmsReqContentCallback,
+			error: cmsAjaxFailed
+		});
+	}
+
+	function cmsDoToolTipDataRequest(val) {
+		cmsGetWidgetText(val);
+	}
+
+	function cmsReqContentCallback(data, status) {
+		if (data.d == "FAIL") {
+			cmsSetHTMLMessage('<i>An error occurred. Please try again.</i>');
+		} else {
+			cmsSetTextMessage(data.d);
+		}
+	}
+</script>
+
+<link href="~/Assets/Admin/includes/tooltipster.css" rel="stylesheet" type="text/css" />
+<script src="~/Assets/Admin/includes/jquery.tooltipster.min.js" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div style="display: none">
+		@Html.HiddenFor(m => m.PlaceholderName)
+		@Html.HiddenFor(m => m.Root_ContentID)
+		@Html.HiddenFor(m => m.SelectedItem)
+		@Html.HiddenFor(m => m.StepNumber)
+		<input type="submit" name="btnPost" id="btnPost" />
+	</div>
+
+	<fieldset style="width: 680px;">
+		<legend>
+			<label>
+				Search
+
+				@Html.Partial("_displayErrorPopupButton")
+			</label>
+		</legend>
+
+		<div>
+			<b class="caption">search for: </b>
+			@Html.TextBoxFor(m => m.SearchFor, new { maxlength = "256", @class = "form-control-xlg" })
+			@Html.ValidationMessageFor(m => m.SearchFor, "", new { @class = "validationError" })
+
+			<input type="button" name="btnSearch" value="Search" id="btnSearch" onclick="RunSearch()" />
+		</div>
+		<div>
+			<b class="caption">hide inactive results: </b>
+			@Html.CheckBoxFor(m => m.HideInactive)
+		</div>
+		<br />
+
+		@if (!String.IsNullOrEmpty(Model.SearchFor) && Model.StepNumber >= 1) {
+
+			if (Model.SelectedItem == Guid.Empty && Model.StepNumber == 1) {
+				// step 1 results
+
+				var gridOne = CarrotWeb.CarrotWebGrid<SiteNav>
+					(Model.Pages);
+
+				gridOne.TableAttributes = new { @class = "datatable" };
+				gridOne.THeadAttributes = new { @class = "tablehead" };
+				gridOne.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+				gridOne.UseDataPage = false;
+				gridOne.ConfigName(Html.NameFor(x => x.Pages));
+
+				gridOne
+				.AddColumn(new CarrotGridTemplateColumn<SiteNav> {
+					HasHeadingText = false,
+					FormatTemplate = @<text>
+						<input type="radio" id="rdoContent" name="rdoContent" onclick="ClickRdo(this)" value="@item.Root_ContentID" />
+
+						@gridOne.FormFieldFor(m => m.FileName, GridFormFieldType.Hidden)
+						@gridOne.FormFieldFor(m => m.Root_ContentID, GridFormFieldType.Hidden)
+					</text>
+				})
+
+				.AddColumn(new CarrotGridTemplateColumn<SiteNav> {
+					HasHeadingText = false,
+					FormatTemplate = @<text>
+						@if (item.Root_ContentID == Model.Root_ContentID) {
+							<img src="~/Assets/Admin/Images/flag_blue.png" />
+						} else {
+							<text> &nbsp;&nbsp;&nbsp; </text>
+						}
+					</text>
+				})
+
+					.AddColumn(x => x.NavMenuText, new CarrotGridColumn())
+					.AddColumn(x => x.FileName, new CarrotGridColumn())
+
+					.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+					.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+					.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+
+					.AddColumn(x => x.ContentType, new CarrotGridImageColumn {
+						ImagePairs = typeImgs
+					})
+					.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn {
+						AlternateTextTrue = "Active",
+						AlternateTextFalse = "Inactive",
+						Sortable = true
+					});
+
+					<div>
+						@if (Model.TotalPages > Model.Pages.Count) {
+							@String.Format("Showing {0} of {1} total results", Model.Pages.Count, Model.TotalPages);
+						} else {
+							@String.Format("Showing {0} results", Model.Pages.Count);
+						}
+					</div>
+					<div>
+						@gridOne.OutputHtmlBody()
+					</div>
+			}
+
+			if (Model.SelectedItem != Guid.Empty && Model.StepNumber == 2) {
+				// step 2 results
+
+				<h3>
+					@String.Format("{0}  [{1}]", Model.SelectedPage.NavMenuText, Model.SelectedPage.FileName)
+				</h3>
+
+				@*
+					@Html.HiddenFor(m => m.SelectedPage.NavMenuText)
+					@Html.HiddenFor(m => m.SelectedPage.FileName)
+				*@
+
+				if (Model.Widgets != null && Model.Widgets.Any()) {
+					<input type="button" name="btnSave" value="Duplicate" id="btnSave" onclick="DuplicateItems()" /> <br />
+				}
+
+				var gridTwo = CarrotWeb.CarrotWebGrid<Widget>
+						(Model.Widgets);
+
+				gridTwo.TableAttributes = new { @class = "datatable" };
+				gridTwo.THeadAttributes = new { @class = "tablehead" };
+				gridTwo.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+				gridTwo.UseDataPage = false;
+				gridTwo.ConfigName(Html.NameFor(x => x.Widgets));
+
+				gridTwo
+				.AddColumn(new CarrotGridTemplateColumn<Widget> {
+					HasHeadingText = false,
+					FormatTemplate = @<text>
+						@gridTwo.FormFieldFor(m => m.Selected, GridFormFieldType.Checkbox)
+
+						@gridTwo.FormFieldFor(m => m.Root_WidgetID, GridFormFieldType.Hidden)
+						@gridTwo.FormFieldFor(m => m.Root_ContentID, GridFormFieldType.Hidden)
+					</text>
+				})
+
+							.AddColumn(new CarrotGridTemplateColumn<Widget> {
+								HasHeadingText = false,
+								BodyAttributes = new { @class = "centerItem" },
+								FormatTemplate = @<text>
+									<a class="dataPopupTrigger" rel="@item.Root_WidgetID" href="javascript:void(0)">
+										<img src="~/Assets/Admin/images/doc.png" alt="text" style="margin:0;" />
+									</a>
+								</text>
+							})
+
+								.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+								.AddColumn(x => x.PlaceholderName, new CarrotGridColumn())
+								.AddColumn(x => x.ControlPath, new CarrotGridColumn())
+								.AddColumn(x => x.IsWidgetActive, new CarrotGridBooleanImageColumn {
+									AlternateTextTrue = "Active",
+									AlternateTextFalse = "Inactive",
+									Sortable = true
+								});
+
+								<div>
+									@gridTwo.OutputHtmlBody()
+								</div>
+			}
+
+			if (Model.StepNumber >= 3) {
+				<p>
+					@String.Format("Copied {0} widget(s) into the current page and placeholder.", Model.CopyCount)
+				</p>
+			}
+		}
+
+	</fieldset>
+
+}
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		cmsInputEnterBlock();
+	});
+</script>

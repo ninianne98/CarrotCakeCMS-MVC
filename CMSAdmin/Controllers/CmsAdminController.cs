@@ -2270,6 +2270,38 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
+		public ActionResult DuplicateWidgetFrom(Guid id, string zone, bool? saved) {
+			DuplicateWidgetFromModel model = new DuplicateWidgetFromModel(id, zone);
+
+			if (saved.HasValue && saved.Value) {
+				ShowSave();
+			}
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult DuplicateWidgetFrom(DuplicateWidgetFromModel model) {
+			if (ModelState.IsValid) {
+				if (model.StepNumber == 1) {
+					model.SearchOne();
+				}
+				if (model.StepNumber == 2) {
+					model.SearchTwo();
+				}
+				if (model.StepNumber == 3) {
+					model.Save();
+				}
+
+				ModelState.Clear();
+			}
+
+			Helper.HandleErrorDict(ModelState);
+			return View(model);
+		}
+
+		[HttpGet]
 		public ActionResult WidgetList(Guid id, string zone, bool? saved) {
 			WidgetListModel model = new WidgetListModel();
 			model.Root_ContentID = id;

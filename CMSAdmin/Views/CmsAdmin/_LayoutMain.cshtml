@@ -255,6 +255,11 @@
 		</script>
 
 		<div style="display: none;">
+
+			<form action="#" method="post">
+				<input type="submit" />
+			</form>
+
 			@if (Request.IsAuthenticated) {
 				using (Html.BeginForm("LogOff", RouteConfig.AdminCtrlr, FormMethod.Post, new { id = "logoutForm" })) {
 					@Html.AntiForgeryToken()

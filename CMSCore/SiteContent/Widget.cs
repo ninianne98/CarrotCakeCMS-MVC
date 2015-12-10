@@ -74,7 +74,7 @@ namespace Carrotware.CMS.Core {
 		public Guid WidgetDataID { get; set; }
 		public Guid Root_WidgetID { get; set; }
 
-		[Display(Name = "PlaceholderName")]
+		[Display(Name = "Placeholder Name")]
 		public string PlaceholderName { get; set; }
 
 		public Guid Root_ContentID { get; set; }

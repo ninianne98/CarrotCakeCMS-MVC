@@ -935,6 +935,7 @@
     <Content Include="Views\CmsAdmin\SiteSkinEdit.cshtml" />
     <Content Include="Views\CmsAdmin\_contentPageTextWidgets.cshtml" />
     <Content Include="Views\CmsAdmin\WidgetHistory.cshtml" />
+    <Content Include="Views\CmsAdmin\DuplicateWidgetFrom.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -958,6 +959,7 @@
     <Compile Include="Models\ContentSingleModel.cs" />
     <Compile Include="Models\DashboardInfo.cs" />
     <Compile Include="Models\DatabaseSetupModel.cs" />
+    <Compile Include="Models\DuplicateWidgetFromModel.cs" />
     <Compile Include="Models\FileBrowserModel.cs" />
     <Compile Include="Models\FileUpModel.cs" />
     <Compile Include="Models\PageChildSortModel.cs" />
