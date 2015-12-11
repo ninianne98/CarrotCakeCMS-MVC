@@ -2,12 +2,14 @@
 
 @{
 
-	ViewBag.Title = CmsPage.ThePage.TitleBar;
-	ViewBag.Heading = CmsPage.ThePage.PageHead;
+	ViewBag.Title = CmsPage.Titlebar;
+	ViewBag.SiteName = CmsPage.TheSite.SiteName;
 }
 
-<h2>@ViewBag.Heading</h2>
+<title>@CmsPage.Titlebar</title>
+
+<h2>@CmsPage.Heading</h2>
 
 <div>
-	@Html.Raw(CmsPage.ThePage.PageText)
+	@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
 </div>
