@@ -1,0 +1,60 @@
+﻿@inherits CmsWebViewPage
+
+<div class="row">
+
+	<div id="contactForm">
+		@{
+			var cap = new Captcha();
+			var cfg = new ContactInfoConfig("_contactform", cap);
+			cfg.NotifyEditors = true;
+			cfg.DirectEmailKeyName = "contact";
+			cap.Instructions = "Enter the code in the image in the CAPTCHA box.";
+
+			using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" })) {
+				var cmt = cmtFrm.GetModelHelper(cfg);
+				if (!cmt.ViewData.Model.IsSaved) {
+					@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
+
+					<div class="col-md-12">
+						<h2>Send Inquiry</h2>
+					</div>
+					<div class="col-md-6">
+						<p>Name @cmt.ValidationMessageFor(m => m.CommenterName, "", new { @class = "text-danger" })</p>
+						@cmt.TextBoxFor(m => m.CommenterName, new { @class = "contact_input", placeholder = "Your Name" })
+					</div>
+					<div class="col-md-6">
+						<p>Email @cmt.ValidationMessageFor(m => m.CommenterEmail, "", new { @class = "text-danger" })</p>
+						@cmt.TextBoxFor(m => m.CommenterEmail, new { @class = "contact_input", placeholder = "Your Email" })
+					</div>
+
+					<div class="col-md-6">
+						<p>@cap.Instructions</p>
+						@cap<br />
+					</div>
+					<div class="col-md-6">
+						<p>CAPTCHA @cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })</p>
+						@cmt.TextBoxFor(m => m.ValidationValue, new { @class = "contact_input", placeholder = "CAPTCHA Code" })
+					</div>
+
+					<div class="col-md-12">
+						<p>Message @cmt.ValidationMessageFor(m => m.PostCommentText, "", new { @class = "text-danger" })</p>
+						@cmt.TextAreaFor(m => m.PostCommentText, new { @class = "contact_textarea", placeholder = "Write your message here..." })
+					</div>
+
+					<div class="col-xs-6 col-sm-3 col-md-offset-6">
+						<input class="contact_button" type="submit" value="Send" />
+					</div>
+					<div class="col-xs-6 col-sm-3">
+						<input class="contact_button" type="reset" value="Reset" />
+					</div>
+
+				} else {
+					<div class="col-md-12">
+						<p>Thank you for your comment.</p>
+					</div>
+				}
+			}
+
+		}
+	</div>
+</div>

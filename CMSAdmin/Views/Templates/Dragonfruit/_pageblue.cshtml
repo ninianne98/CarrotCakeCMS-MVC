@@ -1,0 +1,22 @@
+﻿@inherits CmsWebViewPage
+
+<div class="block_blue">
+	<div class="container-fluid">
+		<h1>
+			@CmsPage.Heading
+		</h1>
+		<div class="col-sm-12">
+			@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+			<br />
+		</div>
+		<div class="clearfix">
+		</div>
+		<div>
+			@CarrotCakeHtml.RenderWidget("phCenterBottom")
+		</div>
+		<div class="clearfix">
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
+</div>

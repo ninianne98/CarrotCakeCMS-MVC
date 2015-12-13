@@ -1,0 +1,121 @@
+﻿@inherits CmsWebViewPage
+
+@{
+
+	string imgPath = String.Empty;
+
+	List<string> imgs = new List<string>();
+	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_member_01.jpg");
+	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_member_02.jpg");
+	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_member_03.jpg");
+	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_member_04.jpg");
+
+	List<string> css1 = new List<string>();
+	css1.Add(@"fa fa-rocket");
+	css1.Add(@"fa fa-cubes");
+	css1.Add(@"fa fa-bar-chart-o");
+	css1.Add(@"fa fa-comments");
+
+	List<string> css2 = new List<string>();
+	css2.Add(@"imgwap mission");
+	css2.Add(@"imgwap product");
+	css2.Add(@"imgwap testimonial");
+	css2.Add(@"imgwap statistic");
+
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 4;
+	pager.IgnoreSitePath = false;
+	pager.FetchData();
+
+	int iPageIdx = 0;
+}
+
+<div class="banner dragonfruit_banner_slide">
+	<ul>
+		<li class="dragonfruit_banner_slide_01">
+			<div class="slide_caption">
+				<h1>Responsive Design</h1>
+				<p>Aenean diam libero, venenatis eu risus eu, tincidunt porttitor orci. Praesent sit amet auctor erat, vitae auctor dolor. Sed viverra nunc magna, quis placerat augue pellentesque quis. Sed nec pellentesque dolor.</p>
+			</div>
+		</li>
+		<li class="dragonfruit_banner_slide_02">
+			<div class="slide_caption">
+				<h1>HTML5 CSS3 Template</h1>
+				<p>Dragonfruit is another responsive template from templatemo. Nulla consequat mi et lectus vehicula condimentum. Nulla ullamcorper dolor vehicula dolor interdum, eget fermentum ligula bibendum.</p>
+			</div>
+		</li>
+		<li class="dragonfruit_banner_slide_03">
+			<div class="slide_caption">
+				<h1>Mobile Ready</h1>
+				<p>Pellentesque luctus ac nunc et hendrerit. Aliquam eu scelerisque eros. Vestibulum scelerisque mi nec augue condimentum rhoncus. Cras fermentum convallis elementum. Vivamus ultrices ligula a dapibus lobortis.</p>
+			</div>
+		</li>
+	</ul>
+</div>
+
+<div class="block_home">
+	<div class="container-fluid">
+		<h1>
+			@CmsPage.Heading
+		</h1>
+		<div class="col-sm-12">
+			@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+			<br />
+		</div>
+		<div class="clearfix">
+		</div>
+		<div>
+			@CarrotCakeHtml.RenderWidget("phCenterBottom")
+		</div>
+		<div class="clearfix">
+		</div>
+
+		@if (pager.HasData) {
+			foreach (var p in pager.DataSource) {
+				<div class="col-sm-6 col-md-3 about_icon">
+					<div class="@css2[iPageIdx]"><i class="@css1[iPageIdx]"></i></div>
+					<h2> <a href="@p.FileName" target="_parent"> @p.NavigationText </a></h2>
+					<p>@p.PageTextPlainSummary </p>
+				</div>
+
+				iPageIdx++;
+			}
+		}
+
+		@if (CmsPage.TopNav.Any()) {
+			<div class="clearfix testimonial_top_bottom_spacer"></div>
+			<div class="col-xs-1 pre_next_wap" id="prev_testimonial">
+				<a href="#"><span class="glyphicon glyphicon-chevron-left pre_next"></span></a>
+			</div>
+
+			<div id="testimonial_text_wap" class="col-xs-9 col-sm-10">
+
+				@foreach (var p in CmsPage.TopNav) {
+					if (String.IsNullOrEmpty(p.Thumbnail)) {
+						imgPath = imgs.Where(x => x != imgPath).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+					} else {
+						imgPath = p.Thumbnail;
+					}
+
+					<div class="testimonial_text">
+						<div class="col-sm-3">
+							<img src="@imgPath" class="img-responsive" alt="@p.PageHead" />
+						</div>
+						<div class="col-sm-9">
+							<h2>@p.NavigationText</h2>
+							<p>
+								@p.PageTextPlainSummary <a rel="nofollow" href="@p.FileName" target="_parent">More</a>
+							</p>
+						</div>
+					</div><!--.testimonial_text-->
+				}
+			</div><!--#testimonial_text_wap-->
+
+			<div class="col-xs-1 pre_next_wap" id="next_testimonial">
+				<a href="#"><span class="glyphicon glyphicon-chevron-right pre_next"></span></a>
+			</div>
+			<div class="clearfix testimonial_top_bottom_spacer"></div>
+		}
+	</div>
+</div>

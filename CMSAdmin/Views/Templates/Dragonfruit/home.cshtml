@@ -1,0 +1,60 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = "_mainlayout.cshtml";
+
+	string currentTemplateFile = CmsPage.ThePage.TemplateFile;
+	string currentTemplateFilePath = currentTemplateFile.Substring(0, currentTemplateFile.LastIndexOf("/")).ToLower();
+
+	Dictionary<Guid, string> navPills = new Dictionary<Guid, string>();
+	if (this.ViewData["Dragonfruit_NavPills"] != null) {
+		navPills = (Dictionary<Guid, string>)this.ViewData["Dragonfruit_NavPills"];
+	} else {
+		navPills = (from p in CmsPage.TopNav
+					orderby p.NavOrder
+					select p).ToDictionary(kvp => kvp.Root_ContentID, kvp => String.Format("navigate{0}", kvp.FileName.Replace("/", "_").Replace("-", "_")).ToLower());
+	}
+	this.ViewData["Dragonfruit_NavPills"] = navPills;
+
+	SiteNav currentNav = CmsPage.ThePage.GetSiteNav();
+	currentNav.FileName = String.Format("navigate{0}", currentNav.FileName.Replace("/", "_").Replace("-", "_")).ToLower();
+}
+
+<div class="container_wrapper" @Html.Raw(String.Format(" id=\"{0}\" ", currentNav.FileName))>
+
+	@Html.Partial("_home")
+</div>
+
+<!-- current page: container_wrapper -->
+@if (!SecurityData.AdvancedEditMode) {
+	@* exclude the current page / homepage *@
+	foreach (var nd in navPills.Where(x => x.Key != currentNav.Root_ContentID).ToList()) {
+		var n = CmsPage.TopNav.Where(x => x.Root_ContentID == nd.Key).FirstOrDefault();
+		OverridePage(n);
+
+		<div class="container_wrapper" @Html.Raw(String.Format(" id=\"{0}\" ", nd.Value))>
+			@if (SecurityData.IsAuthEditor) {
+				<text>
+					<b style="float:right; clear:both;"> [ <a href="@CmsPage.ThePage.FileName">  View Page (to edit) </a> ] </b>
+				</text>
+			}
+
+			@if (n.TemplateFile.ToLower().StartsWith(currentTemplateFilePath.ToLower())) {
+				@*assume that the templates are from the same skin family and reroute to partial variant*@
+				@Html.Partial(n.TemplateFile.Insert(n.TemplateFile.LastIndexOf("/") + 1, "_"))
+			} else {
+				<h1>Not a valid template!</h1>
+				<h2>@CmsPage.ThePage.FileName</h2>
+				<h3>@n.TemplateFile</h3>
+			}
+		</div><!-- container_wrapper -->
+	}
+}
+
+@{
+	this.RefreshPayload();
+
+//this.OverridePage(currentNav);
+// restore the template selected
+//CmsPage.ThePage.TemplateFile = currentTemplateFile;
+}

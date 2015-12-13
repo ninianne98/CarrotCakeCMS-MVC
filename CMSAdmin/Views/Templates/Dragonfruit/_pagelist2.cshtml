@@ -1,0 +1,84 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 8;
+	pager.IgnoreSitePath = false;
+	pager.FetchData();
+
+	string imgPath = String.Empty;
+
+	List<string> imgs = new List<string>();
+	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_event_01.jpg");
+	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_event_02.jpg");
+	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_event_03.jpg");
+	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_event_04.jpg");
+
+}
+
+<div class="block_alternate">
+	<div class="container-fluid">
+		<h1>
+			@CmsPage.Heading
+		</h1>
+
+		<div class="clearfix"></div>
+		<div>
+			<div class="col-sm-12">
+				@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+				<br />
+			</div>
+			<div class="clearfix"></div>
+			<div>
+				@CarrotCakeHtml.RenderWidget("phCenterBottom")
+			</div>
+		</div>
+		<div class="clearfix"></div>
+
+		<div id="dragonfruit_events">
+			<div class="inner-container">
+
+				@if (pager != null) {
+					string cssSide = String.Empty;
+
+					foreach (var item in pager.DataSource) {
+						if (cssSide != "event_animate_left") {
+							cssSide = "event_animate_left";
+						} else {
+							cssSide = "event_animate_right";
+						}
+
+						if (String.IsNullOrEmpty(item.Thumbnail)) {
+							imgPath = imgs.Where(x => x != imgPath).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+						} else {
+							imgPath = item.Thumbnail;
+						}
+
+						<div class="col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-0">
+							<div class="@String.Format("event_box_wap  {0}", cssSide)">
+								<div class="event_box_img">
+									<img src="@imgPath" class="img-responsive" alt="@item.NavigationText" />
+								</div>
+								<div class="event_box_caption">
+									<h1>@item.NavigationText</h1>
+									<p>
+										<span class="glyphicon glyphicon glyphicon-user"></span> @item.CreateUser.FullName_FirstLast &nbsp;&nbsp;
+										<span class="glyphicon glyphicon-calendar"></span> @String.Format("  {0:d}  ", item.GoLiveDate) &nbsp;&nbsp;
+										<span class="fa fa-eye"></span> <a href="@item.FileName">Read</a>
+									</p>
+									<p>
+										@item.PageTextPlainSummary
+									</p>
+								</div>
+							</div>
+						</div>
+
+					}
+				}
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
+</div>

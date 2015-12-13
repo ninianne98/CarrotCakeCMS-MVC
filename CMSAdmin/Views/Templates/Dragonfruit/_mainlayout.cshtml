@@ -1,0 +1,160 @@
+﻿@inherits CmsWebViewPage
+
+@*
+	Dragonfruit Template
+	http://www.templatemo.com/free-website-templates/411-dragonfruit
+	http://www.templatemo.com/about
+	http://creativecommons.org/licenses/by/4.0/
+
+	templatemo.com was founded in July 2008. We offer free downloads for HTML5 CSS templates, responsive mobile web templates, which can be applied in your static HTML websites or dynamic CMS websites. You may download, modify or edit them to fit in your website needs.
+	Since all templates are absolutely free, there is no restriction about usage rights. However, we are not responsible for anything related to compatibility or accuracy or correctness of HTML CSS codes in any website template for any web browser. You may use them at your own risk. However, please let us know if you see any kind of error or issue and we will try to fix that.
+	All templates are licensed under Creative Commons 4.0 International. You can customize our freebies for your clients and charge them for your service. You can remove any credit link or anything when you do editing in any HTML editor.
+	Feel free to contact us if you have anything to say. Be happy!
+
+	Conversion to CarrotCake CMS MVC Template: Carrotware
+*@
+
+@{
+	Layout = null;
+
+	ViewBag.Title = CmsPage.Titlebar;
+	ViewBag.SiteName = CmsPage.TheSite.SiteName;
+
+	SiteNav navHome = CmsPage.HomeNav;
+	if (navHome == null) {
+		navHome = new SiteNav();
+	}
+
+	string homePageUri = navHome.FileName;
+
+	if (navHome.Root_ContentID == CmsPage.ThePage.Root_ContentID) {
+		homePageUri = String.Empty;
+	}
+
+	Dictionary<Guid, string> navPills = new Dictionary<Guid, string>();
+	if (this.ViewData["Dragonfruit_NavPills"] != null) {
+		navPills = (Dictionary<Guid, string>)this.ViewData["Dragonfruit_NavPills"];
+	} else {
+		navPills = (from p in CmsPage.TopNav
+					orderby p.NavOrder
+					select p).ToDictionary(kvp => kvp.Root_ContentID, kvp => String.Format("navigate{0}", kvp.FileName.Replace("/", "_").Replace("-", "_")).ToLower());
+	}
+	this.ViewData["Dragonfruit_NavPills"] = navPills;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	@CarrotCakeHtml.MetaTags()
+	@CarrotCakeHtml.Rss()
+
+	<title>@ViewBag.Title</title>
+
+	<link rel="shortcut icon" href="~/Assets/Dragonfruit/favicon.png" />
+
+	<link href="~/Assets/Dragonfruit/css/font-awesome.min.css" rel="stylesheet" />
+	<link href="~/Assets/Dragonfruit/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="~/Assets/Dragonfruit/css/style.css" rel="stylesheet" />
+
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.NotUsed })
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>-->
+	<!--<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>-->
+	<!--[if lt IE 9]>
+		<script src="js/html5shiv.min.js"></script>
+		<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	<script src="~/Assets/Dragonfruit/js/bootstrap.min.js"></script>
+	<script src="~/Assets/Dragonfruit/js/jquery.singlePageNav.min.js"></script>
+	<script src="~/Assets/Dragonfruit/js/unslider.min.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false"></script>
+
+	<script src="~/Assets/Dragonfruit/js/script.js"></script>
+
+	@CarrotCakeHtml.GetSiteCanonicalURL()
+
+	@CarrotCakeHtml.RenderOpenGraph()
+
+	@CarrotCakeHtml.IncludeHead()
+</head>
+<body>
+	<div id="dragonfruit_mobile_menu">
+		<ul class="nav nav-pills nav-stacked">
+			@foreach (var nd in navPills) {
+				var n = CmsPage.TopNav.Where(x => x.Root_ContentID == nd.Key).FirstOrDefault();
+
+				<li>
+					<a href="@String.Format("{0}#{1}", homePageUri, nd.Value)">
+						<i class="glyphicon glyphicon-link"></i>&nbsp; @n.NavigationText
+					</a>
+				</li>
+			}
+		</ul>
+	</div>
+	<div class="container_wrapper">
+		<div id="dragonfruit_banner_menu">
+			<div class="container-fluid">
+				<div class="col-xs-4 dragonfruit_logo">
+					<a href="~/">
+						<img src="~/Assets/Dragonfruit/images/dragonfruit_logo.jpg" id="logo_img" alt="dragonfruit website template" title="Dragonfruit Template" />
+						<h1 id="logo_text">
+							@ViewBag.SiteName
+						</h1>
+					</a>
+				</div>
+				<div class="col-sm-8 hidden-xs">
+					@if (CmsPage.ThePage.Root_ContentID == navHome.Root_ContentID) {
+						<ul id="navigate_links" class="nav nav-justified">
+							@foreach (var nd in navPills) {
+								var n = CmsPage.TopNav.Where(x => x.Root_ContentID == nd.Key).FirstOrDefault();
+
+								<li>
+									<a href="@String.Format("{0}#{1}", homePageUri, nd.Value)">
+										@n.NavigationText
+									</a>
+								</li>
+							}
+						</ul>
+					} else {
+						<ul class="nav nav-justified">
+							@foreach (var n in CmsPage.TopNav.OrderBy(x => x.NavOrder)) {
+								string cssClassState = (n.Root_ContentID == CmsPage.ThePage.Root_ContentID
+															|| (CmsPage.ThePage.Parent_ContentID.HasValue && n.Root_ContentID == CmsPage.ThePage.Parent_ContentID.Value)) ? "current" : "not-current";
+								<li>
+									<a class="@cssClassState" href="@String.Format("{0}", n.FileName)">
+										@n.NavigationText
+									</a>
+								</li>
+							}
+						</ul>
+					}
+				</div>
+				<div class="col-xs-8 visible-xs">
+					<a href="#" id="mobile_menu"><span class="glyphicon glyphicon-th-list"></span></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	@RenderBody()
+
+	<div class="footer">
+		<div>
+			<p id="footer">
+				@Html.Raw(String.Format("&copy;  {0}, <strong>{1}</strong>. ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
+				All rights reserved.
+				| Site built with <a target="_blank" href="http://www.carrotcakecms.com/">carrotcakecms</a>
+			</p>
+		</div>
+	</div>
+
+	@CarrotCakeHtml.IncludeFooter()
+</body>
+</html>

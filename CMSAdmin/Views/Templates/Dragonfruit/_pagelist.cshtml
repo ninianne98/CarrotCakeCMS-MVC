@@ -1,0 +1,124 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 8;
+	pager.IgnoreSitePath = false;
+	pager.FetchData();
+
+	DateTime now = SiteData.CurrentSite.Now;
+	TimeSpan dateDiffSpan = new TimeSpan();
+	double dateDiff = -1;
+	string diffCaption = String.Empty;
+
+}
+
+<div class="block_alternate">
+	<div class="container-fluid">
+		<h1>
+			@CmsPage.Heading
+		</h1>
+
+		<div class="clearfix"></div>
+		<div>
+			<div class="col-sm-12">
+				@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+				<br />
+			</div>
+			<div class="clearfix"></div>
+			<div>
+				@CarrotCakeHtml.RenderWidget("phCenterBottom")
+			</div>
+		</div>
+		<div class="clearfix"></div>
+
+		<div id="dragonfruit_timeline">
+			<div class="inner-container">
+
+				@if (pager != null) {
+
+					foreach (var item in pager.DataSource) {
+						DateTime itmDate = item.GoLiveDate.Date;
+						DateTime firstOfMonth = now.Date.AddDays(1 - now.Date.Day);
+						diffCaption = String.Empty;
+						dateDiffSpan = now.Date.Subtract(itmDate.Date);
+						dateDiff = dateDiffSpan.TotalDays;
+						int diff = (int)Math.Ceiling(dateDiff);
+
+						if (dateDiff < 0) {
+							diffCaption = String.Format("Future");
+						} else {
+							if (dateDiff <= 35 && (itmDate.Date >= firstOfMonth)) {
+								diff = (int)Math.Ceiling(dateDiff);
+
+								if (dateDiff <= 1 && itmDate.Date == now.Date) {
+									diffCaption = String.Format("Today", diff);
+								} else {
+									if (diff <= 2 && itmDate.Date == now.AddDays(-1).Date) {
+										diffCaption = String.Format("Yesterday", diff);
+									} else {
+										diffCaption = String.Format("{0} days ago", diff);
+									}
+								}
+							}
+
+							if ((itmDate.Date < firstOfMonth) && String.IsNullOrEmpty(diffCaption)) {
+								dateDiff = Math.Floor((float)dateDiffSpan.TotalDays / 30.5);
+								diff = (int)Math.Ceiling(dateDiff);
+
+								if (diff <= 12) {
+									if (diff <= 1 && (itmDate.Date < firstOfMonth)) {
+										diffCaption = String.Format("Last Month", diff);
+									} else {
+										diffCaption = String.Format("{0} months ago", diff);
+									}
+								}
+							}
+
+							if (itmDate.Date <= firstOfMonth.AddMonths(-12).Date && String.IsNullOrEmpty(diffCaption)) {
+								dateDiff = now.Date.Year - itmDate.Date.Year; //Math.Floor((float)dateDiffSpan.TotalDays / 365);
+								diff = (int)Math.Ceiling(dateDiff);
+
+								if (diff <= 1 && itmDate.Date.Year < now.Date.Year) {
+									diffCaption = String.Format("Last Year", diff);
+								} else {
+									diffCaption = String.Format("{0} years ago", diff);
+								}
+							}
+						}
+
+						<div class="time_line_wap">
+							<div class="time_line_caption"> @diffCaption </div>
+							<div class="time_line_paragraph">
+								<h1>@item.NavigationText</h1>
+								<p>
+									<span class="fa fa-user"></span> @item.CreateUser.FullName_FirstLast &nbsp;&nbsp;
+									<span class="fa fa-calendar"></span> @String.Format(" {0:d} ", item.GoLiveDate)  &nbsp;&nbsp;
+									<span class="fa fa-eye"></span> <a href="@item.FileName">Read</a>  &nbsp;&nbsp;
+									<span class="fa fa-edit"></span> <a href="@item.FileName">@String.Format(" Comments ({0}) ", item.CommentCount)</a>
+								</p>
+								<p>
+									@item.PageTextPlainSummary
+								</p>
+
+								@if (item.ContentCategories.Any()) {
+									<p>
+										<span class="fa fa-tags"></span>
+
+										@foreach (var cat in item.ContentCategories) {
+											<a href="@cat.Uri">@cat.Text</a> <text> &nbsp; </text>
+										}
+										<text> &nbsp;&nbsp; </text>
+									</p>
+								}
+							</div>
+						</div>
+					}
+				}
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
+</div>
