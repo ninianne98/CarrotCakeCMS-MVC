@@ -447,6 +447,7 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		[Display(Name = "Content Type")]
 		public ContentPageType.PageType ContentType { get; set; }
 
 		[Display(Name = "Slug")]

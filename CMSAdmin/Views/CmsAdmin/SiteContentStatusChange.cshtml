@@ -198,8 +198,13 @@
 				@grid.FormFieldFor(i => i.SiteID, GridFormFieldType.Hidden)
 			</text>
 		})
-		.AddColumn(x => x.NavMenuText, new CarrotGridColumn { Sortable = true })
-		.AddColumn(x => x.FileName, new CarrotGridColumn { Sortable = true })
+
+		.AddColumn(x => x.ContentType, new CarrotGridImageColumn {
+			ImagePairs = typeImgs
+		})
+
+		.AddColumn(x => x.NavMenuText, new CarrotGridColumn())
+		.AddColumn(x => x.FileName, new CarrotGridColumn())
 
 		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
 			HasHeadingText = false,
@@ -208,52 +213,44 @@
 			</a>
 		})
 
-		.AddColumn(x => x.ContentType, new CarrotGridImageColumn {
-			Sortable = true,
-			ImagePairs = typeImgs
-		})
-		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.RetireDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
 
 		.AddColumn(x => x.IsRetired, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Retired",
 			AlternateTextFalse = "Active",
 			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
-			ImagePathFalse = "~/Assets/Admin/Images/clock.png",
-			Sortable = true
+			ImagePathFalse = "~/Assets/Admin/Images/clock.png"
 		})
 		.AddColumn(x => x.IsUnReleased, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Unreleased",
 			AlternateTextFalse = "Active",
 			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
-			ImagePathFalse = "~/Assets/Admin/Images/clock.png",
-			Sortable = true
+			ImagePathFalse = "~/Assets/Admin/Images/clock.png"
 		})
 		.AddColumn(x => x.ShowInSiteNav, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Yes",
 			AlternateTextFalse = "No",
 			ImagePathTrue = "~/Assets/Admin/Images/lightbulb.png",
-			ImagePathFalse = "~/Assets/Admin/Images/lightbulb_off.png",
-			Sortable = true
+			ImagePathFalse = "~/Assets/Admin/Images/lightbulb_off.png"
 		})
 		.AddColumn(x => x.ShowInSiteMap, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Yes",
 			AlternateTextFalse = "No",
 			ImagePathTrue = "~/Assets/Admin/Images/lightbulb.png",
-			ImagePathFalse = "~/Assets/Admin/Images/lightbulb_off.png",
-			Sortable = true
+			ImagePathFalse = "~/Assets/Admin/Images/lightbulb_off.png"
 		})
 		.AddColumn(x => x.BlockIndex, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Yes",
 			AlternateTextFalse = "No",
 			ImagePathTrue = "~/Assets/Admin/Images/zoom_out.png",
-			ImagePathFalse = "~/Assets/Admin/Images/magnifier.png",
-			Sortable = true
+			ImagePathFalse = "~/Assets/Admin/Images/magnifier.png"
 		})
 		.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Active",
-			AlternateTextFalse = "Inactive",
-			Sortable = true
+			AlternateTextFalse = "Inactive"
 		});
 
 		<div class="tablezone">
