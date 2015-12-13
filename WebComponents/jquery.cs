@@ -34,6 +34,18 @@ namespace Carrotware.Web.UI.Components {
 			return BaseWebComponent.GetWebResourceUrl(typeof(jquery), resource);
 		}
 
+		private static string _generalUri = null;
+
+		public static string GeneralUri {
+			get {
+				if (String.IsNullOrEmpty(_generalUri)) {
+					_generalUri = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-8-3.js");
+				}
+
+				return _generalUri;
+			}
+		}
+
 		public override string GetHtml() {
 			StringBuilder sb = new StringBuilder();
 

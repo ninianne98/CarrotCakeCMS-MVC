@@ -67,16 +67,26 @@ namespace Carrotware.CMS.Core {
 			if (SecurityData.AdvancedEditMode) {
 				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 					cmsHelper.OverrideKey(uri);
+
 					if (cmsHelper.cmsAdminContent == null) {
 						page.ThePage = SiteData.GetPage(uri);
-						if (page.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
-							var c = page.ThePage.ContentCategories;
-							var t = page.ThePage.ContentTags;
-						}
 
-						cmsHelper.cmsAdminContent = page.ThePage;
+						if (!page.ThePage.IsPageLocked) {
+							if (page.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+								var c = page.ThePage.ContentCategories;
+								var t = page.ThePage.ContentTags;
+							}
+
+							cmsHelper.cmsAdminContent = page.ThePage;
+						} else {
+							cmsHelper.cmsAdminContent = null;
+						}
 					} else {
 						page.ThePage = cmsHelper.cmsAdminContent;
+						if (page.IsPageLocked) {
+							cmsHelper.cmsAdminContent = null;
+							page.ThePage = SiteData.GetPage(uri);
+						}
 					}
 				}
 			} else {
@@ -84,6 +94,7 @@ namespace Carrotware.CMS.Core {
 			}
 
 			page.Load();
+
 			return page;
 		}
 
@@ -108,6 +119,12 @@ namespace Carrotware.CMS.Core {
 
 		public void Load() {
 			this.TheSite = SiteData.CurrentSite;
+
+			if (SecurityData.AdvancedEditMode && !this.IsPageLocked) {
+				using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+					bool bRet = pageHelper.RecordPageLock(this.ThePage.Root_ContentID, this.TheSite.SiteID, SecurityData.CurrentUserGuid);
+				}
+			}
 
 			CMSConfigHelper.IdentifyLinkAsInactive(this.ThePage);
 			Guid guidContentID = Guid.Empty;
@@ -401,17 +418,23 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		private bool? _pageLocked = null;
+
 		public bool IsPageLocked {
 			get {
-				using (ContentPageHelper pageHelper = new ContentPageHelper()) {
-					return pageHelper.IsPageLocked(this.ThePage);
+				if (_pageLocked == null) {
+					using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+						_pageLocked = pageHelper.IsPageLocked(this.ThePage.Root_ContentID, this.TheSite.SiteID);
+					}
 				}
+
+				return _pageLocked.Value;
 			}
 		}
 
 		public UserProfile LockUser {
 			get {
-				if (IsPageLocked && this.ThePage.Heartbeat_UserId.HasValue) {
+				if (this.IsPageLocked && this.ThePage.Heartbeat_UserId.HasValue) {
 					return SecurityData.GetProfileByUserID(this.ThePage.Heartbeat_UserId.Value);
 				}
 				return null;
@@ -489,7 +512,7 @@ namespace Carrotware.CMS.Core {
 				takeTop = 100000;
 			}
 
-			if (SecurityData.AdvancedEditMode) {
+			if (SecurityData.AdvancedEditMode && !this.IsPageLocked) {
 				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 					cmsHelper.OverrideKey(this.ThePage.FileName);
 					if (cmsHelper.cmsAdminContent != null) {
@@ -556,7 +579,7 @@ namespace Carrotware.CMS.Core {
 				takeTop = 300000;
 			}
 
-			if (SecurityData.AdvancedEditMode) {
+			if (SecurityData.AdvancedEditMode && !this.IsPageLocked) {
 				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 					cmsHelper.OverrideKey(this.ThePage.FileName);
 					if (cmsHelper.cmsAdminContent != null) {

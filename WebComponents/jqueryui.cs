@@ -30,6 +30,18 @@ namespace Carrotware.Web.UI.Components {
 			return BaseWebComponent.GetWebResourceUrl(typeof(jqueryui), resource);
 		}
 
+		private static string _generalUri = null;
+
+		public static string GeneralUri {
+			get {
+				if (String.IsNullOrEmpty(_generalUri)) {
+					_generalUri = GetWebResourceUrl("Carrotware.Web.UI.Components.jqueryui-1-11-4.js");
+				}
+
+				return _generalUri;
+			}
+		}
+
 		public override string GetHtml() {
 			string sJQFile = String.Empty;
 			string jqVer = JQUIVersion;

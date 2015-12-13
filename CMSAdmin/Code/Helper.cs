@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -27,6 +28,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			AdminMainFooter,
 			PublicMainFooter,
 			PublicMainHeader,
+		}
+
+		public static string WebServiceAddress {
+			get {
+				return VirtualPathUtility.ToAbsolute("~/Assets/Admin/CMS.asmx");
+			}
 		}
 
 		public static string InsertSpecialView(ViewLocation CtrlKey) {

@@ -8,6 +8,8 @@
 	if (ViewBag.ContentEditMode == "raw") {
 		editCSS = "rawEditor";
 	}
+
+	bool bLocked = Model.ContentPage.IsPageLocked && Model.ContentPage.Heartbeat_UserId.HasValue;
 }
 
 @section scripts{
@@ -188,18 +190,15 @@
 			var webMthd = webSvc + "/RecordHeartbeat";
 			setTimeout("EditHB();", 25 * 1000);
 
-			if(!cmsGetOKToLeaveStatus()){
-
-				$.ajax({
-					type: "POST",
-					url: webMthd,
-					data: JSON.stringify({ PageID: thePageID }),
-					contentType: "application/json; charset=utf-8",
-					dataType: "json",
-					success: updateHeartbeat,
-					error: cmsAjaxFailedSwallow
-				});
-			}
+			$.ajax({
+				type: "POST",
+				url: webMthd,
+				data: JSON.stringify({ PageID: thePageID }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: updateHeartbeat,
+				error: cmsAjaxFailedSwallow
+			});
 		}
 
 		function updateHeartbeat(data, status) {
@@ -335,6 +334,19 @@
 
 	<link href="~/Assets/Admin/includes/tooltipster.css" rel="stylesheet" type="text/css" />
 	<script src="~/Assets/Admin/includes/jquery.tooltipster.min.js" type="text/javascript"></script>
+}
+
+@if (bLocked) {
+	UserProfile usr = SecurityData.GetProfileByUserID(Model.ContentPage.Heartbeat_UserId.Value);
+
+	<div class="ui-widget" id="divEditing">
+		<div class="ui-state-highlight ui-corner-all" style="padding: 5px; margin-top: 5px; margin-bottom: 5px; width: 500px;">
+			<p>
+				<span class="ui-icon ui-icon-info" style="float: left; margin: 3px;"></span>
+				@String.Format("Read only mode. User '{0}' is currently editing the page.", usr.UserName)
+			</p>
+		</div>
+	</div>
 }
 
 <div>
@@ -641,35 +653,37 @@
 			</tr>
 		</table>
 
-		<table style="width: 1100px;">
-			<tr>
-				<td>
-					<input type="button" name="btnSaveButton" value="Save" onclick="return SubmitPage();" id="btnSaveButton" />
-					&nbsp;&nbsp;
-					<input type="button" name="btnSaveButtonVisit" value="Save and Visit" onclick="return SubmitPageVisit();" id="btnSaveButtonVisit" />
-					&nbsp;&nbsp;
-					<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing();" />
-					&nbsp;&nbsp;
+		@if (!bLocked) {
+			<table style="width: 1100px;">
+				<tr>
+					<td>
+						<input type="button" name="btnSaveButton" value="Save" onclick="return SubmitPage();" id="btnSaveButton" />
+						&nbsp;&nbsp;
+						<input type="button" name="btnSaveButtonVisit" value="Save and Visit" onclick="return SubmitPageVisit();" id="btnSaveButtonVisit" />
+						&nbsp;&nbsp;
+						<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing();" />
+						&nbsp;&nbsp;
+						@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
+							<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
+						}
+					</td>
 					@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
-						<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
+						<td>
+							&nbsp;&nbsp;
+						</td>
+						<td align="right">
+							@Html.DropDownList("ddlVersions", new SelectList(Model.VersionHistory, "Key", "Value"), "[Select Version]")
+						</td>
+						<td>
+							&nbsp;&nbsp;
+						</td>
+						<td align="left">
+							<input type="button" onclick="javascript:cmsPageVersionNav();" name="btnReview" value="Review / Revert" />
+						</td>
 					}
-				</td>
-				@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
-					<td>
-						&nbsp;&nbsp;
-					</td>
-					<td align="right">
-						@Html.DropDownList("ddlVersions", new SelectList(Model.VersionHistory, "Key", "Value"), "[Select Version]")
-					</td>
-					<td>
-						&nbsp;&nbsp;
-					</td>
-					<td align="left">
-						<input type="button" onclick="javascript:cmsPageVersionNav();" name="btnReview" value="Review / Revert" />
-					</td>
-				}
-			</tr>
-		</table>
+				</tr>
+			</table>
+		}
 	</div>
 	<br />
 

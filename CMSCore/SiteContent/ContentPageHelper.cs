@@ -646,13 +646,21 @@ namespace Carrotware.CMS.Core {
 			return lstContent.ToList();
 		}
 
-		public void ResetHeartbeatLock(Guid rootContentID, Guid siteID) {
+		public void ResetHeartbeatLock(Guid rootContentID, Guid siteID, Guid currentUserID) {
 			carrot_RootContent rc = CompiledQueries.cqGetRootContentTbl(db, siteID, rootContentID);
 
 			if (rc != null) {
-				rc.EditHeartbeat = DateTime.UtcNow.AddHours(-2);
-				rc.Heartbeat_UserId = null;
-				db.SubmitChanges();
+				if (rc.Heartbeat_UserId.HasValue && rc.Heartbeat_UserId.Value == currentUserID) {
+					rc.EditHeartbeat = DateTime.UtcNow.AddHours(-2);
+					rc.Heartbeat_UserId = null;
+					db.SubmitChanges();
+				} else {
+					if (!rc.Heartbeat_UserId.HasValue) {
+						rc.EditHeartbeat = DateTime.UtcNow.AddHours(-4);
+						rc.Heartbeat_UserId = null;
+						db.SubmitChanges();
+					}
+				}
 			}
 		}
 
@@ -687,16 +695,16 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public bool IsPageLocked(Guid rootContentID, Guid siteID) {
-			carrot_RootContent rc = CompiledQueries.cqGetRootContentTbl(db, siteID, rootContentID);
+			carrot_RootContent cp = CompiledQueries.cqGetRootContentTbl(db, siteID, rootContentID);
 
 			bool bLock = false;
-			if (rc.Heartbeat_UserId != null) {
-				if (rc.Heartbeat_UserId != SecurityData.CurrentUserGuid
-						&& rc.EditHeartbeat.Value > DateTime.UtcNow.AddMinutes(-2)) {
+			if (cp.Heartbeat_UserId != null) {
+				if (cp.Heartbeat_UserId != SecurityData.CurrentUserGuid
+						&& cp.EditHeartbeat.Value > DateTime.UtcNow.AddMinutes(-2)) {
 					bLock = true;
 				}
-				if (rc.Heartbeat_UserId == SecurityData.CurrentUserGuid
-					|| rc.Heartbeat_UserId == null) {
+				if (cp.Heartbeat_UserId == SecurityData.CurrentUserGuid
+					|| cp.Heartbeat_UserId == null) {
 					bLock = false;
 				}
 			}
