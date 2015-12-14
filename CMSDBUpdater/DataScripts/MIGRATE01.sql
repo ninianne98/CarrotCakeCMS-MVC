@@ -254,46 +254,51 @@ END
 
 GO
 
-
 UPDATE dbo.[carrot_UserData]
 SET [UserKey] = LOWER(cast([UserId] as nvarchar(256)))
 WHERE [UserKey] is null
-
 
 GO
 
 -- optional drop
 update [dbo].[carrot_RootContent]
-set [FileName] = REPLACE([FileName], '.aspx',''),
-	[PageSlug] = REPLACE([PageSlug], '.aspx','')
-
+set [FileName] = REPLACE([FileName], '.aspx', ''),
+	[PageSlug] = REPLACE([PageSlug], '.aspx', '')
 
 update [dbo].[carrot_RootContent]
-set [FileName] = REPLACE([FileName], '.','-'),
-	[PageSlug] = REPLACE([PageSlug], '.','-')
+set [FileName] = REPLACE([FileName], '.', '-'),
+	[PageSlug] = REPLACE([PageSlug], '.', '-')
 
+update [dbo].[carrot_RootContent]
+set [FileName] = REPLACE([FileName], '--', '-'),
+	[PageSlug] = REPLACE([PageSlug], '--', '-')
 
 --=====================
 -- environment specific changes BEGIN
 update [dbo].[carrot_Content]
-set [PageText] = REPLACE([PageText], '/wp/','/')
+set [PageText] = REPLACE([PageText], '/wp/', '/')
 where [IsLatestVersion] = 1
 and [PageText] like '%/wp/%'
 
 update [dbo].[carrot_Content]
-set [PageText] = REPLACE([PageText], 'http://nccb.carrotware.net/','/')
+set [PageText] = REPLACE([PageText], 'http://nccb.carrotware.net/', '/')
 where [IsLatestVersion] = 1
 and [PageText] like '%nccb.carrotware.net%'
 
 update [dbo].[carrot_Content]
-set [PageText] = REPLACE([PageText], '.aspx','')
+set [PageText] = REPLACE([PageText], '.aspx', '')
 where [IsLatestVersion] = 1
 and [PageText] like '%.aspx%'
 
 update [dbo].[carrot_Content]
-set [PageText] = REPLACE([PageText], '/carrotwarethumb.axd','/carrotwarethumb.ashx')
+set [PageText] = REPLACE([PageText], '/carrotwarethumb.axd', '/carrotwarethumb.ashx')
 where [IsLatestVersion] = 1
 and [PageText] like '%/carrotwarethumb.axd%'
+
+update [dbo].[carrot_Content]
+set [PageText] = REPLACE([PageText], '/c3-admin/tiny_mce/', '/Assets/tiny_mce/')
+where [IsLatestVersion] = 1
+and [PageText] like '%/c3-admin/tiny_mce/%'
 
 --=====================
 -- environment specific changes END
@@ -328,7 +333,6 @@ and Root_ContentID in (
 --=====================================================================
 
 GO
-
 
 IF EXISTS( select * from information_schema.columns 
 		where table_name = 'aspnet_Users' and column_name = 'UserId') BEGIN
@@ -574,7 +578,6 @@ from (
 					and d.SiteID = cc3.SiteID
 
 
-
 GO
 ALTER VIEW [dbo].[vw_carrot_TagURL]
 AS 
@@ -621,8 +624,6 @@ from [dbo].carrot_Sites as s
 						and v_cc.PageActive = 1 and v_cc.RetireDate >= GETUTCDATE() and v_cc.GoLiveDate <= GETUTCDATE() 
 				 group by m.ContentCategoryID) as cc3 on cc.ContentCategoryID = cc3.ContentCategoryID
 
-
-
 GO
 ALTER VIEW [dbo].[vw_carrot_EditHistory]
 AS 
@@ -638,8 +639,6 @@ FROM [dbo].carrot_RootContent AS rc
 	INNER JOIN [dbo].membership_User AS m ON u.UserKey = m.Id
 	INNER JOIN [dbo].carrot_UserData AS u2 ON rc.CreateUserId = u2.UserId 
 	INNER JOIN [dbo].membership_User AS m2 ON u2.UserKey = m2.Id
-
-
 
 GO
 
