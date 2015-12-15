@@ -39,6 +39,10 @@ namespace Carrotware.Web.UI.Components {
 			this.CellColor = ColorTranslator.FromHtml("#ffffff");
 			this.JavascriptForDate = String.Empty;
 			this.OverrideCssFile = String.Empty;
+
+			this.HilightDateList = new List<DateTime>();
+			this.CalendarDate = DateTime.Now.Date;
+			this.ElementId = "cal";
 		}
 
 		public Color CellColor { get; set; }
@@ -120,6 +124,28 @@ namespace Carrotware.Web.UI.Components {
 				dates = (from dd in lstDates select Convert.ToDateTime(dd)).ToList();
 			}
 
+			sb.AppendLine("<table  id=\"" + CtrlID + "\" class=\"calendarGrid\" cellspacing=\"0\" cellpadding=\"3\" align=\"center\" border=\"1\">");
+			sb.AppendLine("	<tr class=\"calendarheadrow\">");
+			sb.AppendLine("		<td class=\"head\" colspan=\"7\">");
+			sb.AppendLine("			<table class=\"innerhead\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" border=\"0\">");
+			sb.AppendLine("				<tr> <td class=\"head normaltext\"> &nbsp; </td> </tr>");
+			sb.AppendLine("				<tr> <td class=\"head headtext\"> " + MonthName + " </td> </tr>");
+			sb.AppendLine("				<tr> <td class=\"head normaltext\"> &nbsp; </td> </tr>");
+			sb.AppendLine("			</table>");
+			sb.AppendLine("		</td>");
+			sb.AppendLine("	</tr>");
+			sb.AppendLine();
+			sb.AppendLine("	<tr class=\"weekday\">");
+			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> SU </td>");
+			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> M </td>");
+			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> TU </td>");
+			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> W </td>");
+			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> TR </td>");
+			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> F </td>");
+			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> SA </td>");
+			sb.AppendLine("	</tr>");
+			sb.AppendLine();
+
 			int WeekNumber = 1;
 
 			while ((dayOfMonth <= iDaysInMonth) && (dayOfMonth <= 31) && (dayOfMonth >= -7)) {
@@ -167,27 +193,7 @@ namespace Carrotware.Web.UI.Components {
 				}
 			}
 
-			sb.AppendLine("<table  id=\"" + CtrlID + "-CalTable\" class=\"calendarGrid\" cellspacing=\"0\" cellpadding=\"3\" align=\"center\" border=\"1\">");
-			sb.AppendLine("	<tr class=\"calendarheadrow\">");
-			sb.AppendLine("		<td class=\"head\" colspan=\"7\">");
-			sb.AppendLine("			<table class=\"innerhead\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" border=\"0\">");
-			sb.AppendLine("				<tr> <td class=\"head normaltext\"> &nbsp; </td> </tr>");
-			sb.AppendLine("				<tr> <td class=\"head headtext\"> " + MonthName + " </td> </tr>");
-			sb.AppendLine("				<tr> <td class=\"head normaltext\"> &nbsp; </td> </tr>");
-			sb.AppendLine("			</table>");
-			sb.AppendLine("		</td>");
-			sb.AppendLine("	</tr>");
-			sb.AppendLine();
-			sb.AppendLine("	<tr class=\"weekday\">");
-			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> SU </td>");
-			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> M </td>");
-			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> TU </td>");
-			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> W </td>");
-			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> TR </td>");
-			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> F </td>");
-			sb.AppendLine("		<td class=\"weekday\" width=\"38\"> SA </td>");
-			sb.AppendLine("	</tr>");
-			sb.AppendLine();
+
 
 			sb.AppendLine("</table>");
 
