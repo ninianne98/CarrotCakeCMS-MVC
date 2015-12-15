@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>@ViewBag.Title - My ASP.NET Application</title>
-	@CarrotWeb.RenderControlToHtml((new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Purple }))
+	@CarrotWeb.RenderControlToHtml((new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver }))
 
 	<script src="~/Scripts/bootstrap.min.js"></script>
 	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
@@ -13,7 +13,8 @@
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-			$("input:button, input:submit, input:reset").button();
+			$("input:button, input:submit, input:reset, button").button();
+			$("input:button, input:submit, input:reset, button").addClass('btn');
 		});
 	</script>
 </head>
