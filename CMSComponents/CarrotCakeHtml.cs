@@ -490,12 +490,16 @@ namespace Carrotware.CMS.UI.Components {
 			return new SearchForm(Html, CmsPage, formAttributes);
 		}
 
-		//public static ContactForm BeginContactForm2(object formAttributes = null) {
-		//	return new ContactForm(Html, CmsPage, formAttributes);
-		//}
-
 		public static AjaxContactForm BeginContactForm(AjaxOptions ajaxOptions, object formAttributes = null) {
 			return new AjaxContactForm(Ajax, CmsPage, ajaxOptions, formAttributes);
+		}
+
+		public static AjaxLoginForm BeginLoginForm(AjaxOptions ajaxOptions, object formAttributes = null) {
+			return new AjaxLoginForm(Ajax, CmsPage, ajaxOptions, formAttributes);
+		}
+
+		public static AjaxLogoutForm BeginLogoutForm(AjaxOptions ajaxOptions, object formAttributes = null) {
+			return new AjaxLogoutForm(Ajax, CmsPage, ajaxOptions, formAttributes);
 		}
 
 		public enum TextFieldZone {
@@ -574,9 +578,7 @@ namespace Carrotware.CMS.UI.Components {
 			}
 
 			int iWidgetCount = 0;
-			foreach (Widget widget in CmsPage.TheWidgets
-				.Where(x => x.PlaceholderName == placeHolderName)
-				.OrderBy(x => x.WidgetOrder)) {
+			foreach (Widget widget in CmsPage.TheWidgets.Where(x => x.PlaceholderName == placeHolderName).OrderBy(x => x.WidgetOrder)) {
 				bool IsWidgetClass = false;
 
 				string widgetKey = String.Format("WidgetId_{0}_{1}", placeHolderName, iWidgetCount);
@@ -622,7 +624,7 @@ namespace Carrotware.CMS.UI.Components {
 
 						if (settings != null) {
 							if (settings is IWidget) {
-								IWidget w = (IWidget)settings;
+								IWidget w = settings as IWidget;
 								w.SiteID = CmsPage.TheSite.SiteID;
 								w.RootContentID = widget.Root_ContentID;
 								w.PageWidgetID = widget.Root_WidgetID;
@@ -641,25 +643,22 @@ namespace Carrotware.CMS.UI.Components {
 							}
 
 							if (settings is IWidgetView) {
-								IWidgetView w = (IWidgetView)settings;
-
 								if (!String.IsNullOrEmpty(altView)) {
-									w.AlternateViewFile = altView;
+									(settings as IWidgetView).AlternateViewFile = altView;
 								}
 							}
 
 							if (settings is IWidgetRawData) {
-								IWidgetRawData w = settings as IWidgetRawData;
-								w.RawWidgetData = widget.ControlProperties;
+								(settings as IWidgetRawData).RawWidgetData = widget.ControlProperties;
 							}
 						}
 
 						if (obj != null && settings != null && obj is IWidgetDataObject) {
-							((IWidgetDataObject)obj).WidgetPayload = settings;
+							(obj as IWidgetDataObject).WidgetPayload = settings;
 						}
 
 						if (IsWidgetClass && obj is IHtmlString) {
-							widgetText = ((IHtmlString)obj).ToHtmlString();
+							widgetText = (obj as IHtmlString).ToHtmlString();
 						} else {
 							widgetText = GetResultViewStringFromController(objectPrefix, objType, obj);
 						}
@@ -689,12 +688,11 @@ namespace Carrotware.CMS.UI.Components {
 								Object model = Activator.CreateInstance(objType);
 
 								if (model is IWidgetRawData) {
-									IWidgetRawData w = model as IWidgetRawData;
-									w.RawWidgetData = widget.ControlProperties;
+									(model as IWidgetRawData).RawWidgetData = widget.ControlProperties;
 								}
 
 								if (model is IWidget) {
-									IWidget w = (IWidget)model;
+									IWidget w = model as IWidget;
 									w.SiteID = CmsPage.TheSite.SiteID;
 									w.RootContentID = widget.Root_ContentID;
 									w.PageWidgetID = widget.Root_WidgetID;
