@@ -282,7 +282,7 @@ namespace Carrotware.CMS.Core {
 						_parentnav = navHelper.GetParentPageNavigation(this.TheSite.SiteID, this.ThePage.Root_ContentID);
 					}
 					if (_parentnav != null) {
-						_parentnav = IdentifyLinkAsInactive(_parentnav);
+						_parentnav = CMSConfigHelper.IdentifyLinkAsInactive(_parentnav);
 					}
 				}
 
@@ -299,7 +299,7 @@ namespace Carrotware.CMS.Core {
 						_hometnav = navHelper.FindHome(this.TheSite.SiteID);
 					}
 					if (_hometnav != null) {
-						_hometnav = IdentifyLinkAsInactive(_hometnav);
+						_hometnav = CMSConfigHelper.IdentifyLinkAsInactive(_hometnav);
 					}
 				}
 
@@ -316,7 +316,7 @@ namespace Carrotware.CMS.Core {
 						using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 							_blogidxnav = navHelper.GetLatestVersion(this.TheSite.SiteID, this.TheSite.Blog_Root_ContentID.Value);
 						}
-						_blogidxnav = IdentifyLinkAsInactive(_blogidxnav);
+						_blogidxnav = CMSConfigHelper.IdentifyLinkAsInactive(_blogidxnav);
 					}
 				}
 
@@ -653,16 +653,13 @@ namespace Carrotware.CMS.Core {
 		}
 
 		// ======================================
-		private SiteNav IdentifyLinkAsInactive(SiteNav nav) {
-			return CMSConfigHelper.IdentifyLinkAsInactive(nav);
-		}
 
 		private List<SiteNav> TweakData(List<SiteNav> nav) {
 			if (nav != null) {
 				nav.RemoveAll(x => x.ShowInSiteNav == false && x.ContentType == ContentPageType.PageType.ContentEntry);
-				nav.RemoveAll(x => x.ShowInSiteMap == false && x.ContentType == ContentPageType.PageType.ContentEntry);
+				//nav.RemoveAll(x => x.ShowInSiteMap == false && x.ContentType == ContentPageType.PageType.ContentEntry);
 
-				nav.ToList().ForEach(q => IdentifyLinkAsInactive(q));
+				nav.ForEach(q => CMSConfigHelper.IdentifyLinkAsInactive(q));
 			}
 
 			return nav;

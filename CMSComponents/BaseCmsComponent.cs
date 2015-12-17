@@ -54,7 +54,7 @@ namespace Carrotware.CMS.UI.Components {
 		protected virtual void TweakData() {
 			if (this.NavigationData != null) {
 				this.NavigationData.RemoveAll(x => x.ShowInSiteNav == false && x.ContentType == ContentPageType.PageType.ContentEntry);
-				this.NavigationData.RemoveAll(x => x.ShowInSiteMap == false && x.ContentType == ContentPageType.PageType.ContentEntry);
+				//this.NavigationData.RemoveAll(x => x.ShowInSiteMap == false && x.ContentType == ContentPageType.PageType.ContentEntry);
 
 				this.NavigationData.ForEach(q => ControlUtilities.IdentifyLinkAsInactive(q));
 			}
