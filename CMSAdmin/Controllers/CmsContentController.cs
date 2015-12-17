@@ -104,7 +104,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					cmt.Root_ContentID = _page.ThePage.Root_ContentID;
 					cmt.CreateDate = SiteData.CurrentSite.Now;
 					cmt.CommenterIP = Request.ServerVariables["REMOTE_ADDR"];
-					this.ViewData["CMS_contactform"] = frm;
+					this.ViewData[ContactInfo.Key] = frm;
 					if (cmt != null) {
 						this.TryValidateModel(cmt);
 					}
@@ -221,7 +221,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public PartialViewResult Contact(ContactInfo model) {
 			model.ReconstructSettings();
-			this.ViewData["CMS_contactform"] = model;
+			this.ViewData[ContactInfo.Key] = model;
 			model.IsSaved = false;
 
 			LoadPage(model.Settings.Uri);
@@ -262,13 +262,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				model.CommenterURL = String.Empty;
 				model.ValidationValue = String.Empty;
 
-				this.ViewData["CMS_contactform"] = model;
+				this.ViewData[ContactInfo.Key] = model;
 				model.SendMail(pc, _page.ThePage);
 
 				ModelState.Clear();
 			}
 
-			return PartialView(model.Settings.PostPartialName);
+			return PartialView(settings.PostPartialName);
 		}
 
 		//====================================
@@ -287,67 +287,84 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		//====================================
 
 		[HttpPost]
+		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		public ActionResult LogOff() {
+		public ActionResult Logout(LogoutInfo model) {
+			model.ReconstructSettings();
+			this.ViewData[LogoutInfo.Key] = model;
+			LoadPage(model.Settings.Uri);
+
+			if (ModelState.IsValid) {
+				ModelState.Clear();
+			}
+
 			securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
-			return RedirectToAction("Default");
+			return PartialView(model.Settings.PostPartialName);
 		}
 
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Login(LoginViewModel model, string returnUrl) {
-			if (!ModelState.IsValid) {
-				return View(model);
+		public async Task<ActionResult> Login(LoginInfo model) {
+			bool rememberme = false;
+
+			model.ReconstructSettings();
+			this.ViewData[LoginInfo.Key] = model;
+
+			LoadPage(model.Settings.Uri);
+
+			var settings = model.Settings;
+
+			string partialName = settings.PostPartialName;
+
+			if (ModelState.IsValid) {
+				ModelState.Clear();
+
+				ApplicationUser user = await securityHelper.UserManager.FindByNameAsync(model.UserName);
+				SignInStatus result = await securityHelper.SignInManager.PasswordSignInAsync(model.UserName, model.Password, rememberme, shouldLockout: true);
+
+				model.LogInStatus = result;
+
+				switch (result) {
+					case SignInStatus.Success:
+						await securityHelper.UserManager.ResetAccessFailedCountAsync(user.Id);
+						break;
+
+					case SignInStatus.RequiresVerification:
+						if (!String.IsNullOrEmpty(settings.PostPartialNameVerification)) {
+							partialName = settings.PostPartialNameVerification;
+						}
+						break;
+
+					case SignInStatus.LockedOut:
+
+						ModelState.AddModelError(String.Empty, "User locked out.");
+
+						if (!String.IsNullOrEmpty(settings.PostPartialNameLockout)) {
+							partialName = settings.PostPartialNameLockout;
+						}
+						break;
+
+					case SignInStatus.Failure:
+					default:
+						ModelState.AddModelError(String.Empty, "Invalid login attempt.");
+
+						if (!String.IsNullOrEmpty(settings.PostPartialNameFailure)) {
+							partialName = settings.PostPartialNameFailure;
+						}
+
+						if (user.LockoutEndDateUtc.HasValue && user.LockoutEndDateUtc.Value < DateTime.UtcNow) {
+							user.LockoutEndDateUtc = null;
+							user.AccessFailedCount = 1;
+							securityHelper.UserManager.Update(user);
+						}
+
+						break;
+				}
 			}
 
-			//TODO: make configurable
-			//manage.UserManager.UserLockoutEnabledByDefault = true;
-			//manage.UserManager.MaxFailedAccessAttemptsBeforeLockout = 5;
-			//manage.UserManager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(15);
-
-			// This doesn't count login failures towards account lockout
-			// To enable password failures to trigger account lockout, change to shouldLockout: true
-			var user = await securityHelper.UserManager.FindByNameAsync(model.UserName);
-
-			var result = await securityHelper.SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
-
-			switch (result) {
-				case SignInStatus.Success:
-					await securityHelper.UserManager.ResetAccessFailedCountAsync(user.Id);
-					if (String.IsNullOrEmpty(returnUrl)) {
-						Response.Redirect(SiteData.RefererScriptName);
-					}
-
-					return RedirectToLocal(returnUrl);
-
-				case SignInStatus.LockedOut:
-					return View("Lockout");
-
-				case SignInStatus.RequiresVerification:
-					return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-
-				case SignInStatus.Failure:
-				default:
-					ModelState.AddModelError(String.Empty, "Invalid login attempt.");
-
-					if (user.LockoutEndDateUtc.HasValue && user.LockoutEndDateUtc.Value < DateTime.UtcNow) {
-						user.LockoutEndDateUtc = null;
-						user.AccessFailedCount = 1;
-						securityHelper.UserManager.Update(user);
-					}
-
-					return View(model);
-			}
-		}
-
-		private ActionResult RedirectToLocal(string returnUrl) {
-			if (Url.IsLocalUrl(returnUrl)) {
-				return Redirect(returnUrl);
-			}
-
-			return RedirectToAction("Default");
+			return PartialView(partialName, model);
 		}
 	}
 }

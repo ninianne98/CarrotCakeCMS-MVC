@@ -265,6 +265,24 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		public static bool IsAuthenticated {
+			get {
+				if (SiteData.IsWebView && HttpContext.Current.User.Identity.IsAuthenticated) {
+					return true;
+				}
+
+				return false;
+			}
+		}
+
+		public static string GetUserName() {
+			if (IsAuthenticated) {
+				return HttpContext.Current.User.Identity.GetUserName();
+			}
+
+			return String.Empty;
+		}
+
 		public static bool IsUserInRole(string groupName) {
 			return IsUserInRole(SecurityData.CurrentUserIdentityName, groupName);
 		}

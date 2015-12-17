@@ -1,5 +1,6 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -71,14 +72,14 @@ namespace Carrotware.CMS.UI.Components {
 		}
 	}
 
-	//=======
+	//==================================================
 	public class SiteSearch {
 
 		[StringLength(128)]
 		public string query { get; set; }
 	}
 
-	//======================
+	//==================================================
 
 	//public class ContactForm : IDisposable {
 	//	protected HtmlHelper _helper;
@@ -119,8 +120,8 @@ namespace Carrotware.CMS.UI.Components {
 	//		//	ModelBinders.Binders.Add(bind.BinderType, bind);
 	//		//}
 
-	//		if (_helper.ViewData["CMS_contactform"] != null) {
-	//			model = _helper.ViewData["CMS_contactform"] as ContactInfo;
+	//		if (_helper.ViewData[ContactInfo.Key] != null) {
+	//			model = _helper.ViewData[ContactInfo.Key] as ContactInfo;
 
 	//		} else {
 	//			model = new ContactInfo();
@@ -134,35 +135,7 @@ namespace Carrotware.CMS.UI.Components {
 	//	}
 	//}
 
-	//======================
-
-	internal class FormRouteValue {
-
-		internal FormRouteValue() {
-			this.controller = String.Empty;
-			this.action = String.Empty;
-			this.carrotedit = null;
-		}
-
-		internal FormRouteValue(string c, string a)
-			: this() {
-			this.controller = c;
-			this.action = a;
-		}
-
-		internal FormRouteValue(string c, string a, bool ce)
-			: this() {
-			this.controller = c;
-			this.action = a;
-			this.carrotedit = ce;
-		}
-
-		internal string controller { get; set; }
-		internal string action { get; set; }
-		internal bool? carrotedit { get; set; }
-	}
-
-	//======================
+	//==================================================
 
 	public class AjaxContactForm : IDisposable {
 		protected AjaxHelper _helper;
@@ -261,8 +234,8 @@ namespace Carrotware.CMS.UI.Components {
 			ContactInfo model = new ContactInfo();
 			_settings = new ContactInfoSettings();
 
-			if (_helper.ViewData["CMS_contactform"] != null) {
-				model = _helper.ViewData["CMS_contactform"] as ContactInfo;
+			if (_helper.ViewData[ContactInfo.Key] != null) {
+				model = _helper.ViewData[ContactInfo.Key] as ContactInfo;
 			} else {
 				model = new ContactInfo();
 			}
@@ -307,12 +280,18 @@ namespace Carrotware.CMS.UI.Components {
 		}
 	}
 
-	//=======
+	//==================================================
 
 	public class ContactInfo {
 
 		public ContactInfo() {
 			ReconstructSettings();
+		}
+
+		public static string Key {
+			get {
+				return "CMS_contactform";
+			}
 		}
 
 		public void ReconstructSettings() {
@@ -419,12 +398,13 @@ namespace Carrotware.CMS.UI.Components {
 		}
 	}
 
-	//========
+	//==================================================
 
 	public class ContactInfoSettings {
 
 		public ContactInfoSettings() {
 			this.ValidationFailText = "Failed to validate as a human.";
+			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
 		}
 
 		public string PostPartialName { get; set; }
@@ -436,7 +416,7 @@ namespace Carrotware.CMS.UI.Components {
 		public bool NotifyEditors { get; set; }
 	}
 
-	//========
+	//==================================================
 
 	public class ContactInfoConfig {
 
@@ -463,7 +443,435 @@ namespace Carrotware.CMS.UI.Components {
 		public bool NotifyEditors { get; set; }
 	}
 
-	//======================
+	//==================================================
+
+	public class AjaxLoginForm : IDisposable {
+		protected AjaxHelper _helper;
+		protected MvcForm frm = null;
+		protected LoginInfo _model = null;
+		protected LoginInfoSettings _settings = null;
+
+		public AjaxLoginForm(AjaxHelper ajaxHelper, PagePayload page, AjaxOptions ajaxOptions, object formAttributes = null) {
+			_helper = ajaxHelper;
+
+			if (page == null) {
+				page = PagePayload.GetCurrentContent();
+			}
+
+			if (ajaxOptions == null) {
+				ajaxOptions = new AjaxOptions();
+				ajaxOptions.InsertionMode = InsertionMode.Replace;
+			}
+			if (String.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
+				ajaxOptions.HttpMethod = "POST";
+			}
+			if (String.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
+				ajaxOptions.UpdateTargetId = "frmLogin";
+			}
+			if (String.IsNullOrEmpty(ajaxOptions.OnFailure)) {
+				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
+			}
+
+			string formAction = "Login.ashx";
+
+			if (SecurityData.AdvancedEditMode) {
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
+			} else {
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction }, ajaxOptions, formAttributes);
+			}
+		}
+
+		public HtmlHelper<LoginInfo> GetModelHelper(string partialName, IValidateHuman validateHuman = null) {
+			_model = InitLoginInfo(partialName);
+
+			if (validateHuman != null) {
+				_settings.UseValidateHuman = true;
+				_settings.ValidateHumanClass = validateHuman.GetType().AssemblyQualifiedName;
+				if (!String.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
+					_settings.ValidationFailText = validateHuman.AltValidationFailText;
+				}
+			}
+
+			return InitHelp();
+		}
+
+		public HtmlHelper<LoginInfo> GetModelHelper(LoginInfoConfig config) {
+			_model = InitLoginInfo(config.PostPartialName);
+
+			if (config.ValidateHuman != null) {
+				_settings.UseValidateHuman = true;
+				_settings.ValidateHumanClass = config.ValidateHuman.GetType().AssemblyQualifiedName;
+				if (!String.IsNullOrEmpty(config.ValidateHuman.AltValidationFailText)) {
+					_settings.ValidationFailText = config.ValidateHuman.AltValidationFailText;
+				}
+			}
+
+			_settings.RedirectUri = config.RedirectUri;
+			_settings.CodeRedirectUri = config.CodeRedirectUri;
+
+			_settings.PostPartialNameLockout = config.PostPartialNameLockout;
+			_settings.PostPartialNameVerification = config.PostPartialNameVerification;
+			_settings.PostPartialNameFailure = config.PostPartialNameFailure;
+
+			return InitHelp();
+		}
+
+		public HtmlHelper<LoginInfo> GetModelHelper(string partialName) {
+			_model = InitLoginInfo(partialName);
+
+			return InitHelp();
+		}
+
+		protected LoginInfo InitLoginInfo(string partialName) {
+			LoginInfo model = new LoginInfo();
+			_settings = new LoginInfoSettings();
+
+			if (_helper.ViewData[LoginInfo.Key] != null) {
+				model = _helper.ViewData[LoginInfo.Key] as LoginInfo;
+			} else {
+				model = new LoginInfo();
+			}
+
+			_settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
+			_settings.PostPartialName = partialName;
+			model.Settings = _settings;
+
+			return model;
+		}
+
+		protected HtmlHelper<LoginInfo> InitHelp() {
+			XmlSerializer xmlSerializer = new XmlSerializer(typeof(LoginInfoSettings));
+			string sXML = String.Empty;
+			using (StringWriter stringWriter = new StringWriter()) {
+				xmlSerializer.Serialize(stringWriter, _settings);
+				sXML = stringWriter.ToString();
+				sXML = CMSConfigHelper.EncodeBase64(sXML);
+			}
+
+			_model.Settings = _settings;
+			_model.EncodedSettings = sXML;
+
+			var hlp = new HtmlHelper<LoginInfo>(_helper.ViewContext, new WrapperForHtmlHelper<LoginInfo>(_model, _helper.ViewData));
+
+			string frmTag = Environment.NewLine
+						+ hlp.AntiForgeryToken().ToString()
+						+ Environment.NewLine
+						+ hlp.HiddenFor(x => x.EncodedSettings).ToString()
+						+ Environment.NewLine;
+
+			_helper.ViewContext.Writer.Write(frmTag);
+
+			return hlp;
+		}
+
+		public void Dispose() {
+			//_helper.ViewContext.Writer.Write("</form>");
+			if (frm != null) {
+				frm.Dispose();
+			}
+		}
+	}
+
+	//==================================================
+
+	public class LoginInfo {
+
+		public LoginInfo() {
+			ReconstructSettings();
+		}
+
+		public static string Key {
+			get {
+				return "CMS_loginform";
+			}
+		}
+
+		public void ReconstructSettings() {
+			this.Settings = null;
+
+			if (!String.IsNullOrEmpty(this.EncodedSettings)) {
+				string sXML = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
+				XmlSerializer xmlSerializer = new XmlSerializer(typeof(LoginInfoSettings));
+				using (StringReader stringReader = new StringReader(sXML)) {
+					this.Settings = (LoginInfoSettings)xmlSerializer.Deserialize(stringReader);
+				}
+
+				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
+					Type objType = Type.GetType(this.Settings.ValidateHumanClass);
+					Object obj = Activator.CreateInstance(objType);
+					this.ValidateHuman = (IValidateHuman)obj;
+					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
+				}
+			}
+
+			this.IsLoggedIn = SecurityData.IsAuthenticated;
+
+			this.LogInStatus = this.IsLoggedIn ? SignInStatus.Success : SignInStatus.Failure;
+		}
+
+		[Required]
+		[Display(Name = "Username")]
+		[StringLength(128)]
+		public string UserName { get; set; }
+
+		[Required]
+		[DataType(DataType.Password)]
+		[Display(Name = "Password")]
+		public string Password { get; set; }
+
+		public string EncodedSettings { get; set; }
+		public LoginInfoSettings Settings { get; set; }
+		public IValidateHuman ValidateHuman { get; set; }
+		public string ValidationValue { get; set; }
+		public SignInStatus LogInStatus { get; set; }
+		public bool IsLoggedIn { get; set; }
+	}
+
+	//==================================================
+
+	public class LoginInfoSettings {
+
+		public LoginInfoSettings() {
+			this.ValidationFailText = "Failed to validate as a human.";
+			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
+			//this.RedirectUri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
+		}
+
+		public string PostPartialName { get; set; }
+		public string Uri { get; set; }
+		public bool UseValidateHuman { get; set; }
+		public string ValidateHumanClass { get; set; }
+		public string ValidationFailText { get; set; }
+		public string PostPartialNameLockout { get; set; }
+		public string PostPartialNameVerification { get; set; }
+		public string PostPartialNameFailure { get; set; }
+		public string CodeRedirectUri { get; set; }
+		public string RedirectUri { get; set; }
+	}
+
+	//==================================================
+
+	public class LoginInfoConfig {
+
+		public LoginInfoConfig() {
+			this.ValidateHuman = null;
+			this.PostPartialName = String.Empty;
+		}
+
+		public LoginInfoConfig(string partialName)
+			: this() {
+			this.PostPartialName = partialName;
+		}
+
+		public LoginInfoConfig(string partialName, IValidateHuman validateHuman)
+			: this(partialName) {
+			this.ValidateHuman = validateHuman;
+		}
+
+		public IValidateHuman ValidateHuman { get; set; }
+		public string PostPartialName { get; set; }
+		public string PostPartialNameLockout { get; set; }
+		public string PostPartialNameVerification { get; set; }
+		public string PostPartialNameFailure { get; set; }
+
+		public string CodeRedirectUri { get; set; }
+		public string RedirectUri { get; set; }
+	}
+
+	//==================================================
+
+	public class AjaxLogoutForm : IDisposable {
+		protected AjaxHelper _helper;
+		protected MvcForm frm = null;
+		protected LogoutInfo _model = null;
+		protected LogoutInfoSettings _settings = null;
+
+		public AjaxLogoutForm(AjaxHelper ajaxHelper, PagePayload page, AjaxOptions ajaxOptions, object formAttributes = null) {
+			_helper = ajaxHelper;
+
+			if (page == null) {
+				page = PagePayload.GetCurrentContent();
+			}
+
+			if (ajaxOptions == null) {
+				ajaxOptions = new AjaxOptions();
+				ajaxOptions.InsertionMode = InsertionMode.Replace;
+			}
+			if (String.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
+				ajaxOptions.HttpMethod = "POST";
+			}
+			if (String.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
+				ajaxOptions.UpdateTargetId = "frmLogout";
+			}
+			if (String.IsNullOrEmpty(ajaxOptions.OnFailure)) {
+				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
+			}
+
+			string formAction = "Logout.ashx";
+
+			if (SecurityData.AdvancedEditMode) {
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
+			} else {
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction }, ajaxOptions, formAttributes);
+			}
+		}
+
+		public HtmlHelper<LogoutInfo> GetModelHelper(LogoutInfoConfig config) {
+			_model = InitLogoutInfo(config.PostPartialName);
+
+			_settings.RedirectUri = config.RedirectUri;
+
+			return InitHelp();
+		}
+
+		public HtmlHelper<LogoutInfo> GetModelHelper(string partialName) {
+			_model = InitLogoutInfo(partialName);
+
+			return InitHelp();
+		}
+
+		protected LogoutInfo InitLogoutInfo(string partialName) {
+			LogoutInfo model = new LogoutInfo();
+			_settings = new LogoutInfoSettings();
+
+			if (_helper.ViewData[LogoutInfo.Key] != null) {
+				model = _helper.ViewData[LogoutInfo.Key] as LogoutInfo;
+			} else {
+				model = new LogoutInfo();
+			}
+
+			_settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
+			_settings.PostPartialName = partialName;
+			model.Settings = _settings;
+
+			return model;
+		}
+
+		protected HtmlHelper<LogoutInfo> InitHelp() {
+			XmlSerializer xmlSerializer = new XmlSerializer(typeof(LogoutInfoSettings));
+			string sXML = String.Empty;
+			using (StringWriter stringWriter = new StringWriter()) {
+				xmlSerializer.Serialize(stringWriter, _settings);
+				sXML = stringWriter.ToString();
+				sXML = CMSConfigHelper.EncodeBase64(sXML);
+			}
+
+			_model.Settings = _settings;
+			_model.EncodedSettings = sXML;
+
+			var hlp = new HtmlHelper<LogoutInfo>(_helper.ViewContext, new WrapperForHtmlHelper<LogoutInfo>(_model, _helper.ViewData));
+
+			string frmTag = Environment.NewLine
+						+ hlp.AntiForgeryToken().ToString()
+						+ Environment.NewLine
+						+ hlp.HiddenFor(x => x.EncodedSettings).ToString()
+						+ Environment.NewLine;
+
+			_helper.ViewContext.Writer.Write(frmTag);
+
+			return hlp;
+		}
+
+		public void Dispose() {
+			//_helper.ViewContext.Writer.Write("</form>");
+			if (frm != null) {
+				frm.Dispose();
+			}
+		}
+	}
+
+	//==================================================
+
+	public class LogoutInfo {
+
+		public LogoutInfo() {
+			ReconstructSettings();
+		}
+
+		public static string Key {
+			get {
+				return "CMS_logoutform";
+			}
+		}
+
+		public void ReconstructSettings() {
+			this.Settings = null;
+
+			if (!String.IsNullOrEmpty(this.EncodedSettings)) {
+				string sXML = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
+				XmlSerializer xmlSerializer = new XmlSerializer(typeof(LogoutInfoSettings));
+				using (StringReader stringReader = new StringReader(sXML)) {
+					this.Settings = (LogoutInfoSettings)xmlSerializer.Deserialize(stringReader);
+				}
+			}
+
+			this.IsLoggedIn = SecurityData.IsAuthenticated;
+		}
+
+		public string EncodedSettings { get; set; }
+		public LogoutInfoSettings Settings { get; set; }
+		public bool IsLoggedIn { get; set; }
+	}
+
+	//==================================================
+
+	public class LogoutInfoSettings {
+
+		public LogoutInfoSettings() {
+			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
+		}
+
+		public string PostPartialName { get; set; }
+		public string Uri { get; set; }
+		public string RedirectUri { get; set; }
+	}
+
+	//==================================================
+
+	public class LogoutInfoConfig {
+
+		public LogoutInfoConfig() {
+			this.PostPartialName = String.Empty;
+		}
+
+		public LogoutInfoConfig(string partialName)
+			: this() {
+			this.PostPartialName = partialName;
+		}
+
+		public string PostPartialName { get; set; }
+		public string RedirectUri { get; set; }
+	}
+
+	//==================================================
+
+	internal class FormRouteValue {
+
+		internal FormRouteValue() {
+			this.controller = String.Empty;
+			this.action = String.Empty;
+			this.carrotedit = null;
+		}
+
+		internal FormRouteValue(string c, string a)
+			: this() {
+			this.controller = c;
+			this.action = a;
+		}
+
+		internal FormRouteValue(string c, string a, bool ce)
+			: this() {
+			this.controller = c;
+			this.action = a;
+			this.carrotedit = ce;
+		}
+
+		internal string controller { get; set; }
+		internal string action { get; set; }
+		internal bool? carrotedit { get; set; }
+	}
+
+	//==================================================
 
 	public class FormHelper {
 
