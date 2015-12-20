@@ -1,0 +1,145 @@
+﻿@model  CalendarViewModel
+
+<div id="divCalendarResults">
+
+	@if (!String.IsNullOrEmpty(Model.StyleSheetPath)) {
+		<link href="@Model.StyleSheetPath" rel="stylesheet" type="text/css" />
+	}
+
+	@*<h2>divCalendarResults</h2>*@
+
+	@{
+		Calendar cal = new Calendar();
+		cal.ElementId = "maincal";
+
+		cal.HilightDateList = Model.SelectedDates;
+		cal.CalendarDate = Model.MonthSelected;
+
+		var grid = CarrotWeb.CarrotWebGrid<tblCalendar>(Model.MonthDates);
+
+		grid.TableAttributes = new { @class = "calendarGrid" };
+		grid.THeadAttributes = new { @class = " " };
+		grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+		grid.ConfigName(Html.NameFor(x => x.MonthDates));
+
+		grid
+		.AddColumn(x => x.EventDate, new CarrotGridColumn { HasHeadingText = false, CellFormatString = "{0:d}" })
+		.AddColumn(new CarrotGridTemplateColumn<tblCalendar> {
+			HasHeadingText = false,
+			BodyAttributes = new { @class = "leftAlignCell" },
+			FormatTemplate = @<text>
+				<b> @item.EventTitle  </b> <br />
+				@Html.Raw(item.EventDetail) <br /><br />
+			</text>
+		});
+	}
+
+	<style type="text/css">
+		.calendarCenter1 {
+			width: 100%;
+			margin: 0px auto;
+			border: #ffffff 1px solid;
+			text-align: center;
+			padding-bottom: 10px;
+		}
+
+		.calendarCenter2 {
+			width: 75%;
+			margin: 0px auto;
+			border: #ffffff 1px solid;
+			text-align: center;
+			padding-bottom: 10px;
+		}
+
+		.calendarEventDetail {
+			width: 500px;
+			padding: 25px;
+		}
+
+		.leftAlignCell {
+			text-align: left;
+		}
+
+		table.calendarGrid {
+			margin: 0 auto !important;
+			vertical-align: top;
+		}
+
+		.calendarEventDetail td {
+			vertical-align: top;
+			margin-left: 4px;
+			margin-right: 4px;
+			padding-left: 4px;
+			padding-right: 4px;
+		}
+
+		.calendarEventDetail img {
+			margin-left: 4px;
+			margin-right: 4px;
+			padding-left: 2px;
+			padding-right: 2px;
+		}
+	</style>
+
+	@if (Model.GenerateCss) {
+		@cal.RenderHead()
+	}
+
+	<script type="text/javascript">
+		function PostSelected() {
+			$('#divCalendarResults #@Html.IdFor(m => m.MonthSelected)').val($('#divCalendarResults #CalendarInputDate').val());
+
+			$('#divCalendarResults #btnSubmitCal').click();
+		}
+
+		function PostNext() {
+			$('#divCalendarResults #@Html.IdFor(m => m.MonthSelected)').val($('#divCalendarResults #@Html.IdFor(m => m.MonthNext)').val());
+
+			$('#divCalendarResults #btnSubmitCal').click();
+		}
+
+		function PostPrior() {
+			$('#divCalendarResults #@Html.IdFor(m => m.MonthSelected)').val($('#divCalendarResults #@Html.IdFor(m => m.MonthPrior)').val());
+
+			$('#divCalendarResults #btnSubmitCal').click();
+		}
+	</script>
+
+	@using (Ajax.BeginForm("CalendarDisplay", "Home",
+	new { area = WebHelper.AssemblyName },
+	new AjaxOptions {
+		HttpMethod = "POST",
+		InsertionMode = InsertionMode.Replace,
+		UpdateTargetId = "divCalendarResults",
+		OnFailure = "__OnAjaxRequestFailure"
+	})) {
+
+		@Html.AntiForgeryToken()
+
+		<div class="calendarCenter2">
+			<div class="calendarCenter2">
+				@cal.RenderBody()
+			</div>
+
+			<input type="button" class="calendarbutton" id="btnLast " value="«««««" onclick="PostPrior();" />
+			&nbsp;&nbsp;&nbsp;
+			<input type="button" class="calendarbutton" id="btnNext " value="»»»»»" onclick="PostNext();" />
+		</div>
+
+		<div style="display:none;">
+			@Html.TextBoxFor(m => m.MonthSelected, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
+			@Html.TextBoxFor(m => m.MonthPrior, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
+			@Html.TextBoxFor(m => m.MonthNext, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
+
+			@Html.HiddenFor(m => m.SerialSettings)
+
+			<input type="submit" id="btnSubmitCal" />
+		</div>
+	}
+
+	<div class="calendarCenter2">
+		<div class="calendarEventDetail">
+			@grid.OutputHtmlBody()
+		</div>
+	</div>
+</div>

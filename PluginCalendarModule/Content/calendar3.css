@@ -1,0 +1,87 @@
+/* blues */
+
+td.headtext, td.head, td.headtext, td.weekday, td.today, td.normal, td.todaysel, td.normalsel {
+	font-size: 18pt;
+	font-weight: 700;
+	color: white;
+	text-align: center;
+	background-color: #00348F;
+}
+
+.innerhead, .innerhead tr, .innerhead tr td {
+	border-collapse: collapse;
+	border: 0px solid #00348F;
+}
+
+.calendarGrid, td.head, td.weekday, td.today, td.normal, td.todaysel, td.normalsel {
+	font-size: 10pt;
+	border: #000000 1px solid;
+}
+
+.calendarEventDetail {
+	border: #000000 2px solid;
+	font-size: 10pt;
+	background-color: #d6f1fe;
+}
+
+.calendarGrid {
+	border: #000000 2px solid;
+}
+
+td.head, td.headtext {
+	font-size: 16pt;
+}
+
+td.weekday {
+	font-size: 12pt;
+	color: #ffffff;
+	background-color: #4B5EA3;
+	text-align: center;
+}
+
+td.today, td.todaysel {
+	color: #F7E700;
+	background-color: #666666;
+	text-align: center;
+	padding: 5px;
+}
+
+td.normal, td.normalsel {
+	color: #004040;
+	background-color: #CCD9FF;
+	text-align: center;
+	padding: 5px;
+}
+
+td.todaysel {
+	color: #FFFF80;
+	background-color: #666666;
+	border: #F7E700 3px solid;
+}
+
+td.normalsel {
+	color: #000000;
+	background-color: #cccccc;
+	border: #0200FF 3px solid;
+}
+
+A:hover {
+	text-decoration: underline;
+}
+
+.normal a, .normalsel a {
+	color: #004040;
+	text-decoration: none;
+	padding: 5px;
+}
+.today a, .todaysel a {
+	color: #FFFF80;
+	text-decoration: none;
+	padding: 5px;
+}
+
+table.innerhead, table.innerhead tr, table.innerhead tr td, .head tr, .head tr td, .innerhead tr, .innerhead tr td {
+	border: 0px solid #00348F;
+}
+
+

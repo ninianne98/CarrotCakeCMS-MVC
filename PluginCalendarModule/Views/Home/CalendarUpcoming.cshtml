@@ -1,0 +1,41 @@
+﻿@model IEnumerable<CarrotCake.CMS.Plugins.CalendarModule.Code.tblCalendar>
+
+@{
+	DateTime lastDate = DateTime.MinValue;
+	string calendarUri = ViewBag.CalendarPageUri ?? String.Empty;
+}
+
+<div>
+
+	@foreach (var item in Model) {
+		if (item.EventDate.HasValue && lastDate != item.EventDate) {
+			lastDate = item.EventDate.Value;
+
+			<h3>
+				@String.Format("{0:MMMM d, yyyy}", lastDate)
+			</h3>
+		}
+
+		<div>
+			<p>
+				<b>
+					@item.EventTitle
+				</b>
+			</p>
+			@if (!String.IsNullOrEmpty(item.EventDetail)) {
+				@Html.Raw(item.EventDetail)
+			}
+		</div>
+	}
+
+	@if (!String.IsNullOrEmpty(calendarUri)) {
+		<div>
+			<br />
+			<a href="@calendarUri">
+				Calendar
+			</a>
+			<br />
+		</div>
+	}
+	<br />
+</div>

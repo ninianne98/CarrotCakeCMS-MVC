@@ -1,0 +1,148 @@
+﻿@model  CalendarViewModel
+
+@{
+	Layout = Carrotware.CMS.Interface.CarrotLayout.Main;
+
+	ViewBag.Title = "List Events";
+
+	Calendar cal = new Calendar();
+	cal.HilightDateList = Model.SelectedDates;
+	cal.CalendarDate = Model.MonthSelected;
+
+	var grid = CarrotWeb.CarrotWebGrid<tblCalendar>(Model.MonthDates);
+
+	grid.TableAttributes = new { @class = "calendarGrid" };
+	grid.THeadAttributes = new { @class = " " };
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.ConfigName(Html.NameFor(x => x.MonthDates));
+
+	grid
+	.AddColumn(new CarrotGridTemplateColumn<tblCalendar> {
+		HasHeadingText = false,
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("CalendarAdminAddEdit", "Admin", new { @id = @item.CalendarID }, "~/assets/admin/images/pencil.png", @String.Format("{0:yyyy-MM-dd}", item.EventDate), null, null) </text>
+	})
+	.AddColumn(x => x.EventDate, new CarrotGridColumn { HasHeadingText = false, CellFormatString = "{0:d}" })
+	.AddColumn(x => x.IsActive, new CarrotGridBooleanImageColumn { HasHeadingText = false })
+	.AddColumn(new CarrotGridTemplateColumn<tblCalendar> {
+		HasHeadingText = false,
+		BodyAttributes = new { @class = "leftAlignCell" },
+		FormatTemplate = @<text>
+			<b> @item.EventTitle  </b> <br />
+			@Html.Raw(item.EventDetail) <br /><br />
+		</text>
+	});
+}
+
+@section scripts {
+
+	<style type="text/css">
+		.calendarCenter1 {
+			width: 100%;
+			margin: 0px auto;
+			border: #ffffff 1px solid;
+			text-align: center;
+			padding-bottom: 10px;
+		}
+
+		.calendarCenter2 {
+			width: 75%;
+			margin: 0px auto;
+			border: #ffffff 1px solid;
+			text-align: center;
+			padding-bottom: 10px;
+		}
+
+		.calendarEventDetail {
+			width: 500px;
+			padding: 25px;
+		}
+
+		.leftAlignCell {
+			text-align: left;
+		}
+
+		table.calendarGrid {
+			margin: 0 auto !important;
+			vertical-align: top;
+		}
+
+		.calendarEventDetail td {
+			vertical-align: top;
+			margin-left: 4px;
+			margin-right: 4px;
+			padding-left: 4px;
+			padding-right: 4px;
+		}
+
+		.calendarEventDetail img {
+			margin-left: 4px;
+			margin-right: 4px;
+			padding-left: 2px;
+			padding-right: 2px;
+		}
+	</style>
+
+	@cal.RenderHead()
+
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			$('#CalendarInputDate').change(function () {
+				PostSelected();
+			});
+		});
+
+		function PostSelected() {
+			$('#@Html.IdFor(m => m.MonthSelected)').val($('#CalendarInputDate').val());
+
+			$('#btnSubmitCal').click();
+		}
+
+		function PostNext() {
+			$('#@Html.IdFor(m => m.MonthSelected)').val($('#@Html.IdFor(m => m.MonthNext)').val());
+
+			$('#btnSubmitCal').click();
+		}
+
+		function PostPrior() {
+			$('#@Html.IdFor(m => m.MonthSelected)').val($('#@Html.IdFor(m => m.MonthPrior)').val());
+
+			$('#btnSubmitCal').click();
+		}
+	</script>
+
+}
+
+<h3>@ViewBag.Title</h3>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div id="divDatePicker" class="calendarCenter1">
+		@Html.TextBox("CalendarInputDate", String.Format("{0:MM/dd/yyyy}", Model.MonthSelected), new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
+	</div>
+
+	<div class="calendarCenter2">
+		<div class="calendarCenter2">
+			@cal.RenderBody()
+		</div>
+
+		<input type="button" class="calendarbutton" id="btnLast " value="«««««" onclick="PostPrior();" />
+		&nbsp;&nbsp;&nbsp;
+		<input type="button" class="calendarbutton" id="btnNext " value="»»»»»" onclick="PostNext();" />
+	</div>
+
+	<div style="display:none;">
+		@Html.TextBoxFor(m => m.MonthSelected, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
+		@Html.TextBoxFor(m => m.MonthPrior, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
+		@Html.TextBoxFor(m => m.MonthNext, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
+
+		<input type="submit" id="btnSubmitCal" />
+	</div>
+}
+
+<div class="calendarCenter2">
+	<div class="calendarEventDetail">
+		@grid.OutputHtmlBody()
+	</div>
+</div>

@@ -1,0 +1,26 @@
+﻿@model DateModel
+
+<div>
+	<h3>
+		@String.Format("{0:MMMM d, yyyy}", Model.SelectedDate)
+	</h3>
+	@if (Model.Dates != null && Model.Dates.Any()) {
+		foreach (var item in Model.Dates) {
+			<div>
+				<p>
+					<b>
+						@item.EventTitle
+					</b>
+				</p>
+				@if (!String.IsNullOrEmpty(item.EventDetail)) {
+					@Html.Raw(item.EventDetail)
+				}
+			</div>
+		}
+
+	} else {
+		<p>
+			No events on the selected date.
+		</p>
+	}
+</div>

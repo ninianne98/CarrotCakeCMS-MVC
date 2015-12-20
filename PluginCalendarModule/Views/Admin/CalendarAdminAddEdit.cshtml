@@ -1,0 +1,117 @@
+﻿@model CarrotCake.CMS.Plugins.CalendarModule.Code.tblCalendar
+
+@{
+	ViewBag.Title = "Calendar Admin Add/Edit";
+
+	bool entryExists = true;
+	string buttonCaption = "Save";
+
+	if (Model.CalendarID == Guid.Empty) {
+		buttonCaption = "Add";
+		entryExists = false;
+	}
+
+}
+
+<h3>@ViewBag.Title</h3>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<table style="width: 600px;">
+		<tr>
+			<td class="tablecaption" style="width: 150px;">
+				date (m/d/y)
+			</td>
+			<td style="width: 450px;">
+				@Html.TextBoxFor(m => m.EventDate, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				event
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.EventTitle, new { @style = "width: 600px;" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				details
+			</td>
+			<td>
+				@Html.TextAreaFor(m => m.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 200px; width: 600px;" })
+			</td>
+		</tr>
+		<tr>
+			<td align="right">
+				&nbsp;
+			</td>
+			<td align="right">
+				<div style="text-align: left; float: left">
+					Active
+					@Html.CheckBox(Html.IdFor(m => m.IsActive).ToString(), Model.IsActive ?? false)
+				</div>
+				<br />
+
+				@if (entryExists) {
+					<input type="button" id="btnCalDelete" value="Delete" onclick="ClickDelete()" />
+					<text> &nbsp; &nbsp; &nbsp; </text>
+					<input type="button" id="btnCalCopy" value="Clone" onclick="SaveCopy()" />
+				}
+
+				&nbsp; &nbsp; &nbsp;
+				<input type="button" id="btnCalSave" value="@buttonCaption" onclick="SubmitPage()" />
+			</td>
+		</tr>
+	</table>
+
+	<div style="display:none">
+		<input type="submit" id="btnSubmitCal" />
+
+		@Html.HiddenFor(m => m.CalendarID)
+		@Html.HiddenFor(m => m.SiteID)
+	</div>
+
+}
+
+<script type="text/javascript">
+
+	$(document).ready(function () {
+		cmsInputEnterBlock();
+	});
+
+	function SubmitPage() {
+		var ret = cmsPreSaveTrigger();
+
+		setTimeout("ClickSub();", 500);
+	}
+
+	function SaveCopy() {
+		$('#@Html.IdFor(m => m.CalendarID)').val('@Guid.Empty');
+		var ret = cmsPreSaveTrigger();
+
+		setTimeout("ClickSub();", 500);
+	}
+
+	function ClickSub() {
+		$('#btnSubmitCal').click();
+	}
+
+	function ClickDelete() {
+		if (confirm("You sure you want to delete?")) {
+			$('#btnDelete').click();
+		}
+	}
+</script>
+
+<div style="display: none">
+	@using (Html.BeginForm("CalendarAdminDelete", null)) {
+		@Html.AntiForgeryToken()
+
+		@Html.HiddenFor(m => m.CalendarID)
+		@Html.HiddenFor(m => m.SiteID)
+
+		<input type="submit" name="btnDelete" value="Delete" id="btnDelete" />
+	}
+</div>

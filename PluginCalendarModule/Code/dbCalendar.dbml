@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CarrotCakeMVC" Class="dbCalendarDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\SQL2008EXPRESS;Initial Catalog=CarrotCakeMVC;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="CarrotwareCMSConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.tblCalendar" Member="tblCalendars">
+    <Type Name="tblCalendar">
+      <Column Name="CalendarID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EventDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="EventTitle" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="EventDetail" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="SiteID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
