@@ -5,7 +5,22 @@ where [TextWidgetAssembly] like '%Carrotware.CMS.UI.Controls.EmailEscapeInBody%'
 
 update [dbo].[carrot_Widget]
 set [ControlPath] = 'ShowPrettyPhotoGallery:CarrotCake.CMS.Plugins.PhotoGallery.Controllers.HomeController, CarrotCake.CMS.Plugins.PhotoGallery'
-where [ControlPath] like '%PhotoGallery%' AND [ControlPath] like '%ascx%'
+where [ControlPath] like '%PhotoGallery%' AND [ControlPath] like '%ascx'
+
+
+update [dbo].[carrot_Widget]
+set [ControlPath] = 'CalendarDisplay:CarrotCake.CMS.Plugins.CalendarModule.Controllers.HomeController, CarrotCake.CMS.Plugins.CalendarModule'
+where [ControlPath] like '%CalendarDisplay%' AND [ControlPath] like '%ascx'
+
+update [dbo].[carrot_Widget]
+set [ControlPath] = 'CalendarUpcoming:CarrotCake.CMS.Plugins.CalendarModule.Controllers.HomeController, CarrotCake.CMS.Plugins.CalendarModule'
+where [ControlPath] like '%CalendarUpcoming%' AND [ControlPath] like '%ascx'
+
+update [dbo].[carrot_Widget]
+set [ControlPath] = 'CalendarDateInfo:CarrotCake.CMS.Plugins.CalendarModule.Controllers.HomeController, CarrotCake.CMS.Plugins.CalendarModule'
+where [ControlPath] like '%CalendarDateInfo%' AND [ControlPath] like '%ascx'
+
+
 
 update [dbo].[carrot_Widget]
 set [ControlPath] = 'CLASS:Carrotware.CMS.UI.Components.ContentRichText, Carrotware.CMS.UI.Components'

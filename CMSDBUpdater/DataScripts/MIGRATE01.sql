@@ -308,25 +308,30 @@ and [PageText] like '%/c3-admin/tiny_mce/%'
 -- alter these statements if you have already written some new razor template views
 
 update [dbo].[carrot_Content]
-set [TemplateFile] = '~/Views/Templates/citrus-island/page.cshtml'
+set [TemplateFile] = '~/views/cmscontent/plainpageview.cshtml'
 where [IsLatestVersion] = 1
-and [TemplateFile] not like '%.cshtml'
+	and [TemplateFile] like '%plaintemplate%aspx'
 
 update [dbo].[carrot_Content]
-set [TemplateFile] = '~/Views/Templates/citrus-island/list.cshtml'
+set [TemplateFile] = '~/views/templates/citrus-island/page.cshtml'
 where [IsLatestVersion] = 1
-and [TemplateFile] like '%/citrus-island/page.cshtml'
-and Root_ContentID in (select Blog_Root_ContentID from dbo.carrot_Sites where Blog_Root_ContentID is not null)
+	and [TemplateFile] not like '%cshtml'
 
 update [dbo].[carrot_Content]
-set [TemplateFile] = '~/Views/Templates/citrus-island/post.cshtml'
+set [TemplateFile] = '~/views/templates/citrus-island/list.cshtml'
 where [IsLatestVersion] = 1
-and [TemplateFile] like '%/citrus-island/page.cshtml'
-and Root_ContentID in ( 
-			select rc.Root_ContentID
-			from carrot_ContentType AS ct 
-			inner join carrot_RootContent AS rc on ct.ContentTypeID = rc.ContentTypeID
-			where ct.ContentTypeValue like '%blog%' )
+	and [TemplateFile] like '%citrus-island%page.cshtml'
+	and Root_ContentID in (select Blog_Root_ContentID from dbo.carrot_Sites where Blog_Root_ContentID is not null)
+
+update [dbo].[carrot_Content]
+set [TemplateFile] = '~/views/templates/citrus-island/post.cshtml'
+where [IsLatestVersion] = 1
+	and [TemplateFile] like '%citrus-island%page.cshtml'
+	and Root_ContentID in ( 
+				select rc.Root_ContentID
+				from carrot_ContentType AS ct 
+				inner join carrot_RootContent AS rc on ct.ContentTypeID = rc.ContentTypeID
+				where ct.ContentTypeValue like '%blog%' )
 
 --=================== starter views END
 
