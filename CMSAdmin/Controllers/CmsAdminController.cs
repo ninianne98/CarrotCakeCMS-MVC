@@ -818,6 +818,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return View(model);
 		}
 
+		[AllowAnonymous]
 		public ActionResult About() {
 			return View();
 		}
