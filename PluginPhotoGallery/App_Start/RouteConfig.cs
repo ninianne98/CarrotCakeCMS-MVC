@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace CarrotCake.CMS.Plugins.PhotoGallery
-{
-    public class RouteConfig
-    {
-        public static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+namespace CarrotCake.CMS.Plugins.PhotoGallery {
+
+	public class RouteConfig {
+
+		public static void RegisterRoutes(RouteCollection routes) {
+			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 			Assembly _assembly = Assembly.GetExecutingAssembly();
 
@@ -20,12 +18,12 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery
 					.Where(x => !String.IsNullOrEmpty(x))
 					.Distinct().ToList();
 
-            routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-				defaults: new { controller = "Admin", action = "Index", id = UrlParameter.Optional },
+			routes.MapRoute(
+				name: "Default",
+				url: "{controller}/{action}/{id}",
+				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
 				namespaces: _namespaces.ToArray()
-            );
-        }
-    }
+			);
+		}
+	}
 }

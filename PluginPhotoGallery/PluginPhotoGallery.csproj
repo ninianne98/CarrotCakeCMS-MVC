@@ -223,6 +223,7 @@
     <Content Include="Views\Admin\EditGalleryPhotos.cshtml" />
     <Content Include="Views\Admin\EditImageMetaData.cshtml" />
     <Content Include="Views\Shared\_LayoutPop.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -286,6 +287,8 @@ xcopy "$(ProjectDir)\Assets\prettyPhoto\*" "$(SolutionDir)\CMSAdmin\Assets\prett
 xcopy "$(ProjectDir)\Views\Home\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\" /F /R /Y /I /S
 xcopy "$(ProjectDir)\Views\*.config" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\" /F /R /Y /I
 xcopy "$(ProjectDir)\Views\Admin\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\Admin\" /F /R /Y /I /S
+
+xcopy "$(SolutionDir)\CMSAdmin\Assets\Admin\*.png" "$(ProjectDir)\Assets\Admin\" /F /R /Y /I /S
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

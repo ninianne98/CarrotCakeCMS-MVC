@@ -10,6 +10,10 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 	public class HomeController : BaseDataWidgetController {
 
+		public ActionResult Index() {
+			return View();
+		}
+
 		[WidgetActionSettingModel("CarrotCake.CMS.Plugins.PhotoGallery.GallerySettings, CarrotCake.CMS.Plugins.PhotoGallery")]
 		public PartialViewResult ShowPrettyPhotoGallery() {
 			GallerySettings settings = new GallerySettings();
