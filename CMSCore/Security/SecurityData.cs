@@ -504,8 +504,26 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public bool ResetPassword(string Email) {
+			string adminFolder = SiteData.AdminFolderPath;
+			if (adminFolder.StartsWith("/")) {
+				adminFolder = adminFolder.Substring(1);
+			}
+			if (adminFolder.EndsWith("/")) {
+				adminFolder = adminFolder.Substring(0, adminFolder.Length - 1);
+			}
+
+			string adminEmailPath = String.Format("{0}/ResetPassword", adminFolder);
+
+			return ResetPassword(adminEmailPath, Email);
+		}
+
+		public bool ResetPassword(string ResetUri, string Email) {
 			ApplicationUser user = null;
 			string code = String.Empty;
+
+			if (ResetUri.StartsWith("/")) {
+				ResetUri = ResetUri.Substring(1);
+			}
 
 			if (!String.IsNullOrEmpty(Email)) {
 				using (var securityHelper = new SecurityHelper()) {
@@ -525,12 +543,12 @@ namespace Carrotware.CMS.Core {
 					sBody = oTextStream.ReadToEnd();
 				}
 
-				string strHTTPHost = "";
-				try { strHTTPHost = HttpContext.Current.Request.ServerVariables["HTTP_HOST"] + ""; } catch (Exception ex) { strHTTPHost = ""; }
+				string strHTTPHost = String.Empty;
+				try { strHTTPHost = HttpContext.Current.Request.ServerVariables["HTTP_HOST"] + String.Empty; } catch (Exception ex) { strHTTPHost = String.Empty; }
 
 				string strHTTPProto = "http://";
 				try {
-					strHTTPProto = HttpContext.Current.Request.ServerVariables["SERVER_PORT_SECURE"] + "";
+					strHTTPProto = HttpContext.Current.Request.ServerVariables["SERVER_PORT_SECURE"] + String.Empty;
 					if (strHTTPProto == "1") {
 						strHTTPProto = "https://";
 					} else {
@@ -540,15 +558,7 @@ namespace Carrotware.CMS.Core {
 
 				strHTTPHost = strHTTPProto + strHTTPHost.ToLower();
 
-				string adminFolder = SiteData.AdminFolderPath;
-				if (adminFolder.StartsWith("/")) {
-					adminFolder = adminFolder.Substring(1);
-				}
-				if (adminFolder.EndsWith("/")) {
-					adminFolder = adminFolder.Substring(0, adminFolder.Length - 1);
-				}
-
-				var callbackUrl = String.Format("{0}/{1}/ResetPassword?userId={2}&code={3}", strHTTPHost, adminFolder, user.Id, HttpUtility.UrlEncode(code));
+				var callbackUrl = String.Format("{0}/{1}?userId={2}&code={3}", strHTTPHost, ResetUri, user.Id, HttpUtility.UrlEncode(code));
 
 				sBody = sBody.Replace("{%%UserName%%}", user.UserName);
 				sBody = sBody.Replace("{%%SiteURL%%}", strHTTPHost);
@@ -643,6 +653,7 @@ namespace Carrotware.CMS.Core {
 
 		//create constant strings for each type of characters
 		private static string alphaCaps = "QWERTYUIOPASDFGHJKLZXCVBNM";
+
 		private static string alphaLow = "qwertyuiopasdfghjklzxcvbnm";
 		private static string numerics = "1234567890";
 		private static string special = "@#$";
@@ -650,6 +661,7 @@ namespace Carrotware.CMS.Core {
 
 		//create another string which is a concatenation of all above
 		private static string allChars = alphaCaps + alphaLow + numerics + special;
+
 		private static string specialChars = special + nonalphanum;
 
 		public static string GenerateSimplePassword() {

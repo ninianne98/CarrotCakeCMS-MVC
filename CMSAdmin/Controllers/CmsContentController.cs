@@ -284,7 +284,195 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 		}
 
+		private void AddErrors(IdentityResult result) {
+			foreach (var error in result.Errors) {
+				ModelState.AddModelError("", error);
+			}
+		}
+
 		//====================================
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> ForgotPassword(ForgotPasswordInfo model) {
+			model.ReconstructSettings();
+			this.ViewData[ForgotPasswordInfo.Key] = model;
+
+			LoadPage(model.Settings.Uri);
+
+			var settings = model.Settings;
+
+			if (settings.UseValidateHuman) {
+				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
+				if (!IsValidated) {
+					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
+					model.ValidationValue = String.Empty;
+				}
+			}
+
+			string confirmView = settings.PostPartialName;
+			if (!String.IsNullOrEmpty(settings.PostPartialName)) {
+				confirmView = settings.PostPartialConfirmation;
+			}
+
+			string confirmUri = settings.Uri;
+			if (!String.IsNullOrEmpty(settings.ConfirmUri)) {
+				confirmUri = settings.ConfirmUri;
+			}
+
+			if (ModelState.IsValid) {
+				var user = await securityHelper.UserManager.FindByEmailAsync(model.Email);
+				if (user != null) {
+					SecurityData sd = new SecurityData();
+					sd.ResetPassword(confirmUri, model.Email);
+				}
+
+				return PartialView(confirmView, model);
+			}
+
+			Helper.HandleErrorDict(ModelState);
+
+			return PartialView(settings.PostPartialName, model);
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> ResetPassword(ResetPasswordInfo model) {
+			model.ReconstructSettings();
+			this.ViewData[ResetPasswordInfo.Key] = model;
+
+			LoadPage(model.Settings.Uri);
+
+			var settings = model.Settings;
+
+			if (settings.UseValidateHuman) {
+				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
+				if (!IsValidated) {
+					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
+					model.ValidationValue = String.Empty;
+				}
+			}
+
+			if (ModelState.IsValid) {
+				string confirmView = settings.PostPartialName;
+				if (!String.IsNullOrEmpty(settings.PostPartialName)) {
+					confirmView = settings.PostPartialConfirmation;
+				}
+
+				var user = await securityHelper.UserManager.FindByEmailAsync(model.Email);
+				if (user == null) {
+					return PartialView(confirmView, model);
+				} else {
+					SecurityData sd = new SecurityData();
+					var result = sd.ResetPassword(user, settings.UserCode, model.Password);
+					model.CreationResult = result;
+
+					if (result.Succeeded) {
+						return PartialView(confirmView, model);
+					}
+
+					AddErrors(result);
+				}
+			}
+
+			Helper.HandleErrorDict(ModelState);
+
+			return PartialView(settings.PostPartialName, model);
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> ChangePassword(ChangePasswordInfo model) {
+			model.ReconstructSettings();
+			this.ViewData[ChangePasswordInfo.Key] = model;
+
+			LoadPage(model.Settings.Uri);
+
+			var settings = model.Settings;
+			if (!SecurityData.IsAuthenticated) {
+				ModelState.AddModelError("", "User is not authenticated");
+			}
+
+			if (settings.UseValidateHuman) {
+				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
+				if (!IsValidated) {
+					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
+					model.ValidationValue = String.Empty;
+				}
+			}
+
+			if (ModelState.IsValid && SecurityData.IsAuthenticated) {
+				string successView = settings.PostPartialName;
+				if (!String.IsNullOrEmpty(settings.PostPartialName)) {
+					successView = settings.PostPartialSuccess;
+				}
+
+				var result = await securityHelper.UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+
+				if (result.Succeeded) {
+					var user = await securityHelper.UserManager.FindByIdAsync(User.Identity.GetUserId());
+					if (user != null) {
+						await securityHelper.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+					}
+
+					return PartialView(successView, model);
+				}
+
+				AddErrors(result);
+			}
+
+			Helper.HandleErrorDict(ModelState);
+
+			return PartialView(settings.PostPartialName, model);
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public ActionResult ChangeProfile(ChangeProfileInfo model) {
+			model.ReconstructSettings();
+			this.ViewData[ChangeProfileInfo.Key] = model;
+
+			LoadPage(model.Settings.Uri);
+
+			var settings = model.Settings;
+
+			if (settings.UseValidateHuman) {
+				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
+				if (!IsValidated) {
+					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
+					model.ValidationValue = String.Empty;
+				}
+			}
+
+			if (ModelState.IsValid && SecurityData.IsAuthenticated) {
+				string successView = settings.PostPartialName;
+				if (!String.IsNullOrEmpty(settings.PostPartialName)) {
+					successView = settings.PostPartialSuccess;
+				}
+
+				ExtendedUserData exUsr = new ExtendedUserData(SecurityData.CurrentUserIdentityName);
+
+				IdentityResult result = securityHelper.UserManager.SetEmail(exUsr.UserKey, model.Email);
+
+				exUsr.UserNickName = model.UserNickName;
+				exUsr.FirstName = model.FirstName;
+				exUsr.LastName = model.LastName;
+
+				exUsr.Save();
+
+				if (result.Succeeded) {
+					return PartialView(successView, model);
+				}
+			}
+
+			Helper.HandleErrorDict(ModelState);
+
+			return PartialView(settings.PostPartialName, model);
+		}
 
 		[HttpPost]
 		[AllowAnonymous]
@@ -317,6 +505,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			var settings = model.Settings;
 
 			string partialName = settings.PostPartialName;
+
+			if (settings.UseValidateHuman) {
+				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
+				if (!IsValidated) {
+					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
+					model.ValidationValue = String.Empty;
+				}
+			}
 
 			if (ModelState.IsValid) {
 				ModelState.Clear();

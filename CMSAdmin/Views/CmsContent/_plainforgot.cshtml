@@ -1,0 +1,44 @@
+﻿@inherits CmsWebViewPage
+
+<div id="forgotForm">
+	<br />
+	<h3>
+		request password reset
+	</h3>
+	@{
+		var cap = new Captcha();
+		cap.SetBackColor("#ffffff");
+		cap.SetForeColor("#333333");
+		cap.SetNoiseColor("#999999");
+
+		ForgotPasswordInfoConfig config = new ForgotPasswordInfoConfig("_plainforgot"); // new ForgotPasswordInfoConfig("_plainforgot", cap);
+		config.ConfirmUri = String.Format("{0}", CmsPage.ThePage.FileName);
+		config.PostPartialConfirmation = "_plainforgotconf";
+
+		using (var cmtFrm = CarrotCakeHtml.BeginForgotPasswordForm(new AjaxOptions { UpdateTargetId = "forgotForm" })) {
+			var cmt = cmtFrm.GetModelHelper(config);
+
+			<div>
+				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
+			</div>
+
+			<div>
+				<label>Email</label><br />
+				@cmt.TextBoxFor(m => m.Email)
+				@cmt.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+			</div>
+
+			@*<div>
+					@cap<br />
+					@cap.Instructions <br />
+					@cmt.TextBoxFor(m => m.ValidationValue)
+					@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
+				</div>*@
+
+			<br />
+			<input class="button" type="submit" value="Requst" />
+			<input class="button" type="reset" value="Clear form" />
+		}
+	}
+	<br />
+</div>

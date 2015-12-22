@@ -995,6 +995,10 @@
     <Content Include="Views\CmsAdmin\WidgetHistory.cshtml" />
     <Content Include="Views\CmsAdmin\DuplicateWidgetFrom.cshtml" />
     <Content Include="Views\CmsContent\_plainloginout.cshtml" />
+    <Content Include="Views\CmsContent\_plainforgot.cshtml" />
+    <Content Include="Views\CmsContent\_plainforgotconf.cshtml" />
+    <Content Include="Views\CmsContent\_plainreset.cshtml" />
+    <Content Include="Views\CmsContent\_plainresetconf.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -502,6 +502,22 @@ namespace Carrotware.CMS.UI.Components {
 			return new AjaxLogoutForm(Ajax, CmsPage, ajaxOptions, formAttributes);
 		}
 
+		public static AjaxForgotPasswordForm BeginForgotPasswordForm(AjaxOptions ajaxOptions, object formAttributes = null) {
+			return new AjaxForgotPasswordForm(Ajax, CmsPage, ajaxOptions, formAttributes);
+		}
+
+		public static AjaxResetPasswordForm BeginResetPasswordForm(AjaxOptions ajaxOptions, object formAttributes = null) {
+			return new AjaxResetPasswordForm(Ajax, CmsPage, ajaxOptions, formAttributes);
+		}
+
+		public static AjaxChangePasswordForm BeginChangePasswordFormForm(AjaxOptions ajaxOptions, object formAttributes = null) {
+			return new AjaxChangePasswordForm(Ajax, CmsPage, ajaxOptions, formAttributes);
+		}
+
+		public static AjaxChangeProfileForm BeginChangeProfileFormForm(AjaxOptions ajaxOptions, object formAttributes = null) {
+			return new AjaxChangeProfileForm(Ajax, CmsPage, ajaxOptions, formAttributes);
+		}
+
 		public enum TextFieldZone {
 			TextLeft,
 			TextCenter,

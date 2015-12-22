@@ -112,6 +112,7 @@
     <Compile Include="PostCalendar.cs" />
     <Compile Include="SecondLevelNavigation.cs" />
     <Compile Include="SimpleList.cs" />
+    <Compile Include="SpecialFormModels.cs" />
     <Compile Include="SpecialForms.cs" />
     <Compile Include="ICmsComponent.cs" />
     <Compile Include="PagedDataSummary.cs" />
