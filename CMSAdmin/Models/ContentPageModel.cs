@@ -144,7 +144,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 						this.ContentPage.ContentID = Guid.NewGuid();
 
 						if (this.ContentPage.ContentType == ContentPageType.PageType.ContentEntry) {
-							this.ContentPage.NavOrder = pageHelper.GetSitePageCount(this.ContentPage.SiteID, this.ContentPage.ContentType) + 1;
+							this.ContentPage.NavOrder = pageHelper.GetSitePageCount(this.ContentPage.SiteID, this.ContentPage.ContentType) * 2;
 						} else {
 							this.ContentPage.Parent_ContentID = null;
 							this.ContentPage.NavOrder = SiteData.BlogSortOrderNumber;

@@ -50,8 +50,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				lstOKNoSiteActions.Add("login");
 				lstOKNoSiteActions.Add("logoff");
 
+				List<string> lstInitSiteActions = new List<string>();
+				lstInitSiteActions.Add("login");
+				lstInitSiteActions.Add("createfirstadmin");
+				lstInitSiteActions.Add("databasesetup");
+
 				try {
-					if (action != "databasesetup") {
+					if (!lstInitSiteActions.Contains(action)) {
 						if (!lstOKNoSiteActions.Contains(action) && !SiteData.CurretSiteExists) {
 							Response.Redirect(SiteFilename.SiteInfoURL);
 						}
@@ -136,7 +141,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				exUsr.Save();
 
 				if (result.Succeeded) {
-					return RedirectToAction("UserProfile", new { @saved = true }); ;
+					return RedirectToAction("UserProfile", new { @saved = true });
 				}
 			}
 
@@ -557,7 +562,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult DatabaseSetup(string signout) {
 			DatabaseSetupModel model = new DatabaseSetupModel();
 
-			DatabaseUpdate du = new DatabaseUpdate();
+			DatabaseUpdate du = new DatabaseUpdate(true);
 
 			if (!String.IsNullOrEmpty(signout)) {
 				securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
@@ -579,7 +584,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				bUpdate = du.DatabaseNeedsUpdate();
 
 				try {
-					model.CreateUser = !du.UsersExist;
+					model.CreateUser = !DatabaseUpdate.UsersExist;
 				} catch { }
 
 				if (bUpdate) {
@@ -593,7 +598,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				bUpdate = du.DatabaseNeedsUpdate();
 
 				if (!bUpdate && DatabaseUpdate.LastSQLError == null) {
-					model.CreateUser = !du.UsersExist;
+					model.CreateUser = !DatabaseUpdate.UsersExist;
 				}
 			}
 
@@ -612,11 +617,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[AllowAnonymous]
-		public ActionResult CreateFirstAdmin(string returnUrl) {
+		public ActionResult CreateFirstAdmin() {
 			securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
-			DatabaseUpdate du = new DatabaseUpdate();
-			if (du.UsersExist) {
+			if (DatabaseUpdate.UsersExist) {
 				return RedirectToLocal("Index");
 			}
 
@@ -629,12 +633,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
 		public ActionResult CreateFirstAdmin(RegisterViewModel model) {
-			DatabaseUpdate du = new DatabaseUpdate();
-			if (du.UsersExist) {
+			if (DatabaseUpdate.UsersExist) {
 				return RedirectToLocal("Index");
 			}
 
 			if (ModelState.IsValid) {
+				securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+
 				SecurityData sd = new SecurityData();
 				ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
 
@@ -669,10 +674,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			//	return RedirectToAction("DatabaseSetup");
 			//}
 
-			DatabaseUpdate du = new DatabaseUpdate();
-			if (DatabaseUpdate.AreCMSTablesIncomplete() || !du.UsersExist) {
+			if (DatabaseUpdate.AreCMSTablesIncomplete() || !DatabaseUpdate.UsersExist) {
+				DatabaseUpdate.ResetFailedSQL();
+				DatabaseUpdate.ResetSQLState();
+
 				Response.Redirect(SiteFilename.DatabaseSetupURL);
-				//return RedirectToAction("DatabaseSetup");
 			}
 		}
 
@@ -2026,7 +2032,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				dateEnd = Convert.ToDateTime(dateend).Date;
 			}
 			if (!String.IsNullOrEmpty(exportwhat)) {
-				ExportWhat = (SiteExport.ExportType)Enum.Parse(typeof(SiteExport.ExportType), exportwhat, true); ;
+				ExportWhat = (SiteExport.ExportType)Enum.Parse(typeof(SiteExport.ExportType), exportwhat, true);
 			}
 
 			string theXML = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n";

@@ -31,13 +31,17 @@ namespace Carrotware.CMS.DBUpdater {
 
 		public static string DbVersion01 { get { return "20151001"; } }
 
-		public DatabaseUpdate() {
-			LastSQLError = null;
-			TestDatabaseWithQuery();
+		public DatabaseUpdate() { }
+
+		public DatabaseUpdate(bool clearTest) {
+			if (clearTest) {
+				DatabaseUpdate.LastSQLError = null;
+				TestDatabaseWithQuery();
+			}
 		}
 
 		private void TestDatabaseWithQuery() {
-			LastSQLError = null;
+			DatabaseUpdate.LastSQLError = null;
 
 			string query = "select top 10 table_name, column_name, ordinal_position from [information_schema].[columns] as isc " +
 					" where isc.table_name like 'carrot%' " +
@@ -66,12 +70,13 @@ namespace Carrotware.CMS.DBUpdater {
 				return c;
 			}
 			set {
-				HttpContext.Current.Cache.Insert(ContentKey, value, null, DateTime.Now.AddMinutes(5), Cache.NoSlidingExpiration);
+				HttpContext.Current.Cache.Insert(ContentKey, value, null, DateTime.Now.AddMinutes(3), Cache.NoSlidingExpiration);
 			}
 		}
 
 		public static void ResetFailedSQL() {
-			HttpContext.Current.Cache.Insert(ContentKey, "False", null, DateTime.Now.AddMilliseconds(3), Cache.NoSlidingExpiration);
+			HttpContext.Current.Cache.Insert(ContentKey, "False", null, DateTime.Now.AddMilliseconds(10), Cache.NoSlidingExpiration);
+			HttpContext.Current.Cache.Remove(ContentKey);
 		}
 
 		public static bool SystemNeedsChecking(Exception ex) {
@@ -101,7 +106,7 @@ namespace Carrotware.CMS.DBUpdater {
 		public DatabaseUpdateResponse CreateCMSDatabase() {
 			DatabaseUpdateResponse res = new DatabaseUpdateResponse();
 
-			if (!FailedSQL) {
+			if (!DatabaseUpdate.FailedSQL) {
 				bool bTestResult = SQLUpdateNugget.EvalNuggetKey("DoCMSTablesExist");
 
 				if (!bTestResult) {
@@ -122,7 +127,7 @@ namespace Carrotware.CMS.DBUpdater {
 		}
 
 		public bool DoCMSTablesExist() {
-			if (!FailedSQL) {
+			if (!DatabaseUpdate.FailedSQL) {
 				bool bTestResult = SQLUpdateNugget.EvalNuggetKey("DoCMSTablesExist");
 
 				if (bTestResult) {
@@ -409,7 +414,7 @@ namespace Carrotware.CMS.DBUpdater {
 		}
 
 		public static bool AreCMSTablesIncomplete() {
-			if (!FailedSQL) {
+			if (!DatabaseUpdate.FailedSQL) {
 				bool bTestResult = false;
 
 				DataInfo ver = GetDbSchemaVersion();
@@ -433,7 +438,7 @@ namespace Carrotware.CMS.DBUpdater {
 		}
 
 		public bool DatabaseNeedsUpdate() {
-			if (!FailedSQL) {
+			if (!DatabaseUpdate.FailedSQL) {
 				bool bTestResult = false;
 
 				DataInfo ver = GetDbSchemaVersion();
@@ -456,9 +461,9 @@ namespace Carrotware.CMS.DBUpdater {
 			return false;
 		}
 
-		public bool UsersExist {
+		public static bool UsersExist {
 			get {
-				if (!FailedSQL) {
+				if (!DatabaseUpdate.FailedSQL) {
 					try {
 						bool bTestResult = SQLUpdateNugget.EvalNuggetKey("DoUsersExist");
 
@@ -766,7 +771,7 @@ namespace Carrotware.CMS.DBUpdater {
 				using (SqlConnection cn = new SqlConnection(sConnectionString)) {
 					cn.Open(); // throws if invalid
 
-					FailedSQL = false;
+					DatabaseUpdate.FailedSQL = false;
 
 					using (SqlCommand cmd = cn.CreateCommand()) {
 						cmd.CommandText = sSQLQuery;
@@ -784,10 +789,10 @@ namespace Carrotware.CMS.DBUpdater {
 
 					cn.Close();
 				}
-				LastSQLError = null;
+				DatabaseUpdate.LastSQLError = null;
 			} catch (SqlException sqlEx) {
-				LastSQLError = sqlEx;
-				FailedSQL = true;
+				DatabaseUpdate.LastSQLError = sqlEx;
+				DatabaseUpdate.FailedSQL = true;
 			}
 
 			return dt;
