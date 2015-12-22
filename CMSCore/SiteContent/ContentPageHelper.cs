@@ -811,7 +811,7 @@ namespace Carrotware.CMS.Core {
 			pageNew.IsLatestVersion = true;
 			pageNew.NavOrder = -1;
 			pageNew.TitleBar = "Template Preview - TITLE";
-			pageNew.NavMenuText = "Template PV - NAV"; ;
+			pageNew.NavMenuText = "Template PV - NAV" ;
 			pageNew.PageHead = "Template Preview - HEAD";
 			pageNew.PageActive = true;
 			pageNew.ShowInSiteNav = true;

@@ -148,7 +148,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		private bool ClearSerialized(string sKey) {
 			LoadGuids();
 
-			return CMSConfigHelper.ClearSerialized(CurrentPageGuid, sKey); ;
+			return CMSConfigHelper.ClearSerialized(CurrentPageGuid, sKey) ;
 		}
 
 		private void LoadGuids() {

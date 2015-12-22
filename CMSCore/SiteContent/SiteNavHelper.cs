@@ -200,7 +200,7 @@ namespace Carrotware.CMS.Core {
 
 			navNew.NavOrder = -1;
 			navNew.TitleBar = "Template Preview - TITLE";
-			navNew.NavMenuText = "Template PV - NAV"; ;
+			navNew.NavMenuText = "Template PV - NAV" ;
 			navNew.PageHead = "Template Preview - HEAD";
 			navNew.PageActive = true;
 			navNew.ShowInSiteNav = true;

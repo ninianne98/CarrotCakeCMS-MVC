@@ -157,7 +157,7 @@ namespace Carrotware.Web.UI.Components {
 			string sPath = MakeFileFolderPath(sQuery);
 
 			string myFileName = String.Empty;
-			DateTime myFileDate = Convert.ToDateTime("1899-01-01"); ;
+			DateTime myFileDate = Convert.ToDateTime("1899-01-01") ;
 			string myFileSizeF = String.Empty;
 			long myFileSize;
 
