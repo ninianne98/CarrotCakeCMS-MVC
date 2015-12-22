@@ -284,9 +284,14 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)\bin\$(TargetName).*" "$(SolutionDir)\CMSAdmin\bin\" /F /R /Y /I /S
 xcopy "$(ProjectDir)\Assets\prettyPhoto\*" "$(SolutionDir)\CMSAdmin\Assets\prettyPhoto\" /F /R /Y /I /S
-xcopy "$(ProjectDir)\Views\Home\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\" /F /R /Y /I /S
 xcopy "$(ProjectDir)\Views\*.config" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\" /F /R /Y /I
+
+del "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\*.cshtml"
+
 xcopy "$(ProjectDir)\Views\Admin\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\Admin\" /F /R /Y /I /S
+xcopy "$(ProjectDir)\Views\Home\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\Home\" /F /R /Y /I /S
+
+
 
 xcopy "$(SolutionDir)\CMSAdmin\Assets\Admin\*.png" "$(ProjectDir)\Assets\Admin\" /F /R /Y /I /S
 </PostBuildEvent>

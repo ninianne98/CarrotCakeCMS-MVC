@@ -12,14 +12,10 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 	public class AdminController : BaseAdminWidgetController {
 
 		public ActionResult Index() {
-			GalleryHelper gh = new GalleryHelper(this.SiteID);
-
 			PagedData<GalleryGroup> model = new PagedData<GalleryGroup>();
 			model.InitOrderBy(x => x.GalleryTitle, true);
 			model.PageSize = 25;
 			model.PageNumber = 1;
-
-			var srt = model.ParseSort();
 
 			return Index(model);
 		}
