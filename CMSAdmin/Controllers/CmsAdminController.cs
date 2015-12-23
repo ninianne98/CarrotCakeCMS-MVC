@@ -109,7 +109,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult LogOff() {
-			securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			SignOut();
 
 			return RedirectToAction("Index");
 		}
@@ -565,7 +565,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			DatabaseUpdate du = new DatabaseUpdate(true);
 
 			if (!String.IsNullOrEmpty(signout)) {
-				securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+				SignOut();
 			}
 
 			List<DatabaseUpdateMessage> lst = new List<DatabaseUpdateMessage>();
@@ -618,10 +618,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[AllowAnonymous]
 		public ActionResult CreateFirstAdmin() {
-			securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			RedirectIfUsersExist();
 
-			if (DatabaseUpdate.UsersExist) {
-				return RedirectToLocal("Index");
+			if (SecurityData.IsAuthenticated) {
+				SignOut();
+
+				return RedirectToAction("CreateFirstAdmin", new { @signout = true });
 			}
 
 			RegisterViewModel model = new RegisterViewModel();
@@ -633,12 +635,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
 		public ActionResult CreateFirstAdmin(RegisterViewModel model) {
-			if (DatabaseUpdate.UsersExist) {
-				return RedirectToLocal("Index");
-			}
+			RedirectIfUsersExist();
 
 			if (ModelState.IsValid) {
-				securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+				SignOut();
 
 				SecurityData sd = new SecurityData();
 				ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
@@ -2981,9 +2981,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return View(SiteData.PreviewTemplateFile);
 		}
 
-		private void AddErrors(IdentityResult result) {
-			foreach (var error in result.Errors) {
-				ModelState.AddModelError("", error);
+		protected void AddErrors(IdentityResult result) {
+			Helper.AddErrors(ModelState, result);
+		}
+
+		private void RedirectIfUsersExist() {
+			if (DatabaseUpdate.UsersExist) {
+				Response.Redirect(SiteFilename.DashboardURL);
 			}
 		}
 
@@ -3035,6 +3039,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		public ActionResult ModuleIndex() {
 			return View();
+		}
+
+		protected void SignOut() {
+			securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 		}
 
 		protected override void Dispose(bool disposing) {

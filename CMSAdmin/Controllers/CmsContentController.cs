@@ -284,10 +284,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 		}
 
-		private void AddErrors(IdentityResult result) {
-			foreach (var error in result.Errors) {
-				ModelState.AddModelError("", error);
-			}
+		protected void AddErrors(IdentityResult result) {
+			Helper.AddErrors(ModelState, result);
 		}
 
 		//====================================

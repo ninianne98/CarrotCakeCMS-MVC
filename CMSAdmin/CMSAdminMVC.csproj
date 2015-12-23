@@ -163,6 +163,7 @@
     <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen-scoped2.css" />
     <Content Include="Assets\Admin\glossyseagreen\jquery-ui-glossyseagreen.css" />
     <Content Include="Assets\Admin\Images\cloud-up.png" />
+    <Content Include="Assets\Admin\Images\database.png" />
     <Content Include="Assets\Admin\Images\information.png" />
     <Content Include="Assets\Admin\Includes\jquery.tooltipster.min.js" />
     <Content Include="Assets\Admin\Includes\tooltipster.css" />

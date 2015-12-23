@@ -1,5 +1,6 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -71,6 +72,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			option.Add(false, "No");
 
 			return option;
+		}
+
+		public static void AddErrors(ModelStateDictionary stateDictionary, IdentityResult result) {
+			foreach (var error in result.Errors) {
+				stateDictionary.AddModelError(String.Empty, error);
+			}
 		}
 
 		public static void HandleErrorDict(ModelStateDictionary stateDictionary, Dictionary<string, string> validationsDictionary) {
