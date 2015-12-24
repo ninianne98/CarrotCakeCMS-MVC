@@ -1,0 +1,68 @@
+﻿@inherits CmsWebViewPage
+
+<div id="changeProfileForm">
+	<br />
+	<h3>
+		change profile
+	</h3>
+	@{
+		if (SecurityData.IsAuthenticated) {
+
+			var cap = new Captcha();
+			cap.SetBackColor("#ffffff");
+			cap.SetForeColor("#333333");
+			cap.SetNoiseColor("#999999");
+
+			ChangeProfileInfoConfig config = new ChangeProfileInfoConfig("_changeprofile"); // new ChangeProfileInfoConfig("_forgot", cap);
+			config.PostPartialSuccess = "_changeprofileconf";
+
+			using (var cmtFrm = CarrotCakeHtml.BeginChangeProfileForm(new AjaxOptions { UpdateTargetId = "changeProfileForm" })) {
+				var cmt = cmtFrm.GetModelHelper(config);
+
+				<div>
+					@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
+				</div>
+
+				<div>
+					@cmt.LabelFor(m => m.UserNickName, new { @class = "caption" })
+					@cmt.ValidationMessageFor(m => m.UserNickName, "", new { @class = "text-danger" })<br />
+					@cmt.TextBoxFor(m => m.UserNickName)
+				</div>
+
+				<div>
+					@cmt.LabelFor(m => m.Email, new { @class = "caption" })
+					@cmt.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })<br />
+					@cmt.TextBoxFor(m => m.Email)
+				</div>
+
+				<div>
+					@cmt.LabelFor(m => m.FirstName, new { @class = "caption" })
+					@cmt.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })<br />
+					@cmt.TextBoxFor(m => m.FirstName)
+				</div>
+
+				<div>
+					@cmt.LabelFor(m => m.LastName, new { @class = "caption" })
+					@cmt.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })<br />
+					@cmt.TextBoxFor(m => m.LastName)
+				</div>
+
+				@*<div>
+						@cap<br />
+						@cap.Instructions <br />
+						@cmt.TextBoxFor(m => m.ValidationValue)
+						@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
+					</div>*@
+
+				<br />
+				<input class="button" type="submit" value="Change" />
+				<input class="button" type="reset" value="Clear form" />
+			}
+		} else {
+			<p>
+				You must be logged in to change your profile.
+			</p>
+		}
+	}
+	<br />
+</div>

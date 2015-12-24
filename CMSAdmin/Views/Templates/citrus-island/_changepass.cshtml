@@ -1,0 +1,62 @@
+﻿@inherits CmsWebViewPage
+
+<div id="changeForm">
+	<br />
+	<h3>
+		change password
+	</h3>
+	@{
+		if (SecurityData.IsAuthenticated) {
+
+			var cap = new Captcha();
+			cap.SetBackColor("#ffffff");
+			cap.SetForeColor("#333333");
+			cap.SetNoiseColor("#999999");
+
+			ChangePasswordInfoConfig config = new ChangePasswordInfoConfig("_changepass"); // new ChangePasswordInfoConfig("_forgot", cap);
+			config.PostPartialSuccess = "_changepassconf";
+
+			using (var cmtFrm = CarrotCakeHtml.BeginChangePasswordForm(new AjaxOptions { UpdateTargetId = "changeForm" })) {
+				var cmt = cmtFrm.GetModelHelper(config);
+
+				<div>
+					@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
+				</div>
+
+				<div>
+					@cmt.LabelFor(m => m.OldPassword, new { @class = "caption" })
+					@cmt.ValidationMessageFor(m => m.OldPassword, "", new { @class = "text-danger" })<br />
+					@cmt.PasswordFor(m => m.OldPassword)
+				</div>
+
+				<div>
+					@cmt.LabelFor(m => m.NewPassword, new { @class = "caption" })
+					@cmt.ValidationMessageFor(m => m.NewPassword, "", new { @class = "text-danger" }) <br />
+					@cmt.PasswordFor(m => m.NewPassword)
+				</div>
+
+				<div>
+					@cmt.LabelFor(m => m.ConfirmPassword, new { @class = "caption" })
+					@cmt.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" }) <br />
+					@cmt.PasswordFor(m => m.ConfirmPassword)
+				</div>
+
+				@*<div>
+						@cap<br />
+						@cap.Instructions <br />
+						@cmt.TextBoxFor(m => m.ValidationValue)
+						@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
+					</div>*@
+
+				<br />
+				<input class="button" type="submit" value="Change" />
+				<input class="button" type="reset" value="Clear form" />
+			}
+		} else {
+			<p>
+				You must be logged in to change your password.
+			</p>
+		}
+	}
+	<br />
+</div>

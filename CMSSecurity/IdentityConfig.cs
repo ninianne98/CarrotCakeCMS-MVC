@@ -34,7 +34,6 @@ namespace Carrotware.CMS.Security {
 
 		public ApplicationUserManager(IUserStore<ApplicationUser> store)
 			: base(store) {
-
 			Config();
 		}
 

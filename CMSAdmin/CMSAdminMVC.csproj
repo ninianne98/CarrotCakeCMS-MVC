@@ -1000,6 +1000,16 @@
     <Content Include="Views\CmsContent\_plainforgotconf.cshtml" />
     <Content Include="Views\CmsContent\_plainreset.cshtml" />
     <Content Include="Views\CmsContent\_plainresetconf.cshtml" />
+    <Content Include="Views\Templates\citrus-island\pageforms.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_forgot.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_forgotconf.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_loginout.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_reset.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_resetconf.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_changepass.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_changepassconf.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_changeprofile.cshtml" />
+    <Content Include="Views\Templates\citrus-island\_changeprofileconf.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

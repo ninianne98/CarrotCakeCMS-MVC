@@ -510,11 +510,11 @@ namespace Carrotware.CMS.UI.Components {
 			return new AjaxResetPasswordForm(Ajax, CmsPage, ajaxOptions, formAttributes);
 		}
 
-		public static AjaxChangePasswordForm BeginChangePasswordFormForm(AjaxOptions ajaxOptions, object formAttributes = null) {
+		public static AjaxChangePasswordForm BeginChangePasswordForm(AjaxOptions ajaxOptions, object formAttributes = null) {
 			return new AjaxChangePasswordForm(Ajax, CmsPage, ajaxOptions, formAttributes);
 		}
 
-		public static AjaxChangeProfileForm BeginChangeProfileFormForm(AjaxOptions ajaxOptions, object formAttributes = null) {
+		public static AjaxChangeProfileForm BeginChangeProfileForm(AjaxOptions ajaxOptions, object formAttributes = null) {
 			return new AjaxChangeProfileForm(Ajax, CmsPage, ajaxOptions, formAttributes);
 		}
 

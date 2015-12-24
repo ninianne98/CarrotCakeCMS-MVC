@@ -11,9 +11,9 @@
 		cap.SetForeColor("#333333");
 		cap.SetNoiseColor("#999999");
 
-		ForgotPasswordInfoConfig config = new ForgotPasswordInfoConfig("_plainforgot"); // new ForgotPasswordInfoConfig("_plainforgot", cap);
+		ForgotPasswordInfoConfig config = new ForgotPasswordInfoConfig("_forgot"); // new ForgotPasswordInfoConfig("_forgot", cap);
 		config.ConfirmUri = String.Format("{0}", CmsPage.ThePage.FileName);
-		config.PostPartialConfirmation = "_plainforgotconf";
+		config.PostPartialConfirmation = "_forgotconf";
 
 		using (var cmtFrm = CarrotCakeHtml.BeginForgotPasswordForm(new AjaxOptions { UpdateTargetId = "forgotForm" })) {
 			var cmt = cmtFrm.GetModelHelper(config);
@@ -23,9 +23,9 @@
 			</div>
 
 			<div>
-				<label>Email</label><br />
+				@cmt.LabelFor(m => m.Email, new { @class = "caption" })
+				@cmt.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })<br />
 				@cmt.TextBoxFor(m => m.Email)
-				@cmt.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
 			</div>
 
 			@*<div>

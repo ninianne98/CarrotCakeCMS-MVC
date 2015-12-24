@@ -353,6 +353,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 			}
 
+			if (String.IsNullOrEmpty(settings.UserCode)) {
+				ModelState.AddModelError(String.Empty, "Reset code not provided.");
+			}
+
 			if (ModelState.IsValid) {
 				string confirmView = settings.PostPartialName;
 				if (!String.IsNullOrEmpty(settings.PostPartialName)) {
@@ -452,7 +456,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					successView = settings.PostPartialSuccess;
 				}
 
-				ExtendedUserData exUsr = new ExtendedUserData(SecurityData.CurrentUserIdentityName);
+				var exUsr = new ExtendedUserData(SecurityData.CurrentUserIdentityName);
 
 				IdentityResult result = securityHelper.UserManager.SetEmail(exUsr.UserKey, model.Email);
 

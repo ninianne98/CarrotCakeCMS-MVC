@@ -1,0 +1,94 @@
+﻿@inherits CmsWebViewPage
+
+<div id="logonForm">
+	<br />
+	<h3>
+		log in/out
+	</h3>
+
+	<script type="text/javascript">
+		function logInOutComplete2() {
+			var d = new Date();
+			var timeTick = d.getTime();
+
+			//document.location = '@String.Format("{0}?auth={1}", CmsPage.ThePage.FileName, DateTime.Now.Ticks)';
+			document.location = $("#logonForm #RedirectUri").val() + '?auth=' + timeTick;
+		}
+
+		function logInOutComplete() {
+			if ($("#logonForm #LogInStatus").val() == 'Success' || $("#logonForm #LogInStatus").length < 1) {
+				setTimeout(function () { logInOutComplete2(); }, 250);
+				//logInOutComplete2();
+			}
+		}
+	</script>
+
+	@{
+		var cap = new Captcha();
+		cap.SetBackColor("#ffffff");
+		cap.SetForeColor("#333333");
+		cap.SetNoiseColor("#999999");
+
+		string partialName = "_loginout";
+		string formTargetId = "logonForm";
+
+		if (SecurityData.IsAuthenticated) {
+
+			LogoutInfoConfig config = new LogoutInfoConfig(partialName);
+			config.RedirectUri = String.Format("{0}", CmsPage.ThePage.FileName);
+
+			using (var logoutFrm = CarrotCakeHtml.BeginLogoutForm(new AjaxOptions { UpdateTargetId = formTargetId, OnSuccess = "logInOutComplete" })) {
+				var frmhelp = logoutFrm.GetModelHelper(config);
+
+				@frmhelp.Hidden("RedirectUri", config.RedirectUri)
+
+				<input class="button" type="submit" value="@String.Format("Logout '{0}'", SecurityData.GetUserName()) " />
+			}
+
+		} else {
+
+			LoginInfoConfig config = new LoginInfoConfig(partialName);
+			//LoginInfoConfig config = new LoginInfoConfig(partialName, cap);
+
+			config.RedirectUri = String.Format("{0}", CmsPage.ThePage.FileName);
+
+			using (var loginFrm = CarrotCakeHtml.BeginLoginForm(new AjaxOptions { UpdateTargetId = formTargetId, OnSuccess = "logInOutComplete" })) {
+				var frmhelp = loginFrm.GetModelHelper(config);
+
+				<div>
+					@*@frmhelp.DisplayFor(m => m.LogInStatus)*@
+					@frmhelp.HiddenFor(m => m.LogInStatus)
+					@frmhelp.Hidden("RedirectUri", config.RedirectUri)
+					@frmhelp.ValidationSummary(true, "", new { @class = "text-danger" })
+				</div>
+
+				<div>
+					@frmhelp.LabelFor(m => m.UserName)
+					@frmhelp.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })<br />
+					@frmhelp.TextBoxFor(m => m.UserName)
+				</div>
+
+				<div>
+					@frmhelp.LabelFor(m => m.Password)
+					@frmhelp.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })<br />
+					@frmhelp.PasswordFor(m => m.Password)
+				</div>
+
+				@*<div>
+						@cap<br />
+						@cap.Instructions <br />
+						@frmhelp.TextBoxFor(m => m.ValidationValue)
+						@frmhelp.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
+					</div>*@
+
+				<br />
+				<div>
+					<input class="button" type="submit" value="Login" />
+					<input class="button" type="reset" value="Clear form" />
+				</div>
+			}
+
+		}
+	}
+	<br />
+</div>
