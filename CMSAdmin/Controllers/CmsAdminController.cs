@@ -662,24 +662,25 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[AllowAnonymous]
 		public ActionResult Login(string returnUrl) {
-			CheckDatabase();
+			var res = CheckDatabase();
+			if (res != null) {
+				return res;
+			}
 
 			ViewBag.ReturnUrl = returnUrl;
 			return View();
 		}
 
-		public void CheckDatabase() {
-			//DatabaseUpdate du = new DatabaseUpdate();
-			//if (DatabaseUpdate.AreCMSTablesIncomplete() || !du.UsersExist) {
-			//	return RedirectToAction("DatabaseSetup");
-			//}
-
+		public ActionResult CheckDatabase() {
 			if (DatabaseUpdate.AreCMSTablesIncomplete() || !DatabaseUpdate.UsersExist) {
 				DatabaseUpdate.ResetFailedSQL();
 				DatabaseUpdate.ResetSQLState();
 
-				Response.Redirect(SiteFilename.DatabaseSetupURL);
+				// Response.Redirect(SiteFilename.DatabaseSetupURL);
+				return RedirectToAction("DatabaseSetup");
 			}
+
+			return null;
 		}
 
 		[HttpPost]
@@ -807,7 +808,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		public ActionResult Index() {
-			CheckDatabase();
+			var res = CheckDatabase();
+			if (res != null) {
+				return res;
+			}
 
 			DashboardInfo model = new DashboardInfo();
 
@@ -1016,7 +1020,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpGet]
 		public ActionResult SiteInfo() {
-			CheckDatabase();
+			var res = CheckDatabase();
+			if (res != null) {
+				return res;
+			}
 
 			LoadTimeZoneInfo();
 			LoadDatePattern();

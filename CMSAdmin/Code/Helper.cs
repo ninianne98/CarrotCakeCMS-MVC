@@ -128,6 +128,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 		}
 
 		public static void RegisterCmsComponents() {
+			//AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+
 			AreaRegistration.RegisterAllAreas();
 			RouteConfig.RegisterRoutes(RouteTable.Routes);
 

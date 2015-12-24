@@ -889,6 +889,7 @@
     <Content Include="Assets\tiny_mce\tiny_mce.zip" />
     <Content Include="GPL-LICENSE.txt" />
     <Content Include="MIT-LICENSE.txt" />
+    <Content Include="SiteMapping.config" />
     <Content Include="Views\Templates\oilpainting\page.cshtml" />
     <Content Include="Views\Templates\oilpainting\list.cshtml" />
     <Content Include="Views\Templates\oilpainting\_contactform.cshtml" />
