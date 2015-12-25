@@ -100,7 +100,6 @@ namespace Carrotware.CMS.UI.Components {
 		public void SendMail(PostComment pc, ContentPage page) {
 			HttpRequest request = HttpContext.Current.Request;
 
-			//TODO: NotifyEditors wire up
 			if (this.Settings.NotifyEditors || !String.IsNullOrEmpty(this.Settings.DirectEmailKeyName)) {
 				List<string> emails = new List<string>();
 
@@ -120,10 +119,10 @@ namespace Carrotware.CMS.UI.Components {
 					emails.Add(ConfigurationManager.AppSettings[this.Settings.DirectEmailKeyName].ToString());
 				}
 
-				string mailSubject = "Comment Form " + request.ServerVariables["HTTP_HOST"];
-
 				string strHTTPHost = String.Empty;
-				try { strHTTPHost = request.ServerVariables["HTTP_HOST"] + String.Empty; } catch { strHTTPHost = String.Empty; }
+				try { strHTTPHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { strHTTPHost = String.Empty; }
+
+				string hostName = strHTTPHost.ToLower();
 
 				string strHTTPPrefix = "http://";
 				try {
@@ -132,12 +131,16 @@ namespace Carrotware.CMS.UI.Components {
 
 				strHTTPHost = String.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLower();
 
+				string mailSubject = String.Format("Comment Form From {0}", hostName);
+
 				string sBody = "Name:   " + pc.CommenterName
 					+ "\r\nEmail:   " + pc.CommenterEmail
 					+ "\r\nURL:   " + pc.CommenterURL
-					+ "\r\n-----------------\r\nComment:\r\n" + HttpUtility.HtmlEncode(pc.PostCommentText)
-					+ "\r\n=================\r\n\r\nIP:   " + pc.CommenterIP
-					+ "\r\nSite URL:   " + String.Format("{0}{1}", strHTTPHost, request.ServerVariables["script_name"])
+					+ "\r\n-----------------"
+					+ "\r\nComment:\r\n" + HttpUtility.HtmlEncode(pc.PostCommentText)
+					+ "\r\n=================\r\n"
+					+ "\r\nIP:   " + pc.CommenterIP
+					+ "\r\nSite URL:   " + String.Format("{0}{1}", strHTTPHost, page.FileName)
 					+ "\r\nSite Time:   " + SiteData.CurrentSite.Now.ToString()
 					+ "\r\nUTC Time:   " + DateTime.UtcNow.ToString();
 

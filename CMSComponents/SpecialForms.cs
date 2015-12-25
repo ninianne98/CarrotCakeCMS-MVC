@@ -452,7 +452,6 @@ namespace Carrotware.CMS.UI.Components {
 		public LoginInfoSettings() {
 			this.ValidationFailText = "Failed to validate as a human.";
 			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
-			//this.RedirectUri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
 		}
 
 		public string PostPartialName { get; set; }
@@ -760,7 +759,6 @@ namespace Carrotware.CMS.UI.Components {
 		public ForgotPasswordInfoSettings() {
 			this.ValidationFailText = "Failed to validate as a human.";
 			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
-			//this.RedirectUri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
 		}
 
 		public string PostPartialName { get; set; }

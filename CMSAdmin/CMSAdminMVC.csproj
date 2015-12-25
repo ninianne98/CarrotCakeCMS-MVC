@@ -889,7 +889,6 @@
     <Content Include="Assets\tiny_mce\tiny_mce.zip" />
     <Content Include="GPL-LICENSE.txt" />
     <Content Include="MIT-LICENSE.txt" />
-    <Content Include="SiteMapping.config" />
     <Content Include="Views\Templates\oilpainting\page.cshtml" />
     <Content Include="Views\Templates\oilpainting\list.cshtml" />
     <Content Include="Views\Templates\oilpainting\_contactform.cshtml" />
@@ -1011,6 +1010,7 @@
     <Content Include="Views\Templates\citrus-island\_changepassconf.cshtml" />
     <Content Include="Views\Templates\citrus-island\_changeprofile.cshtml" />
     <Content Include="Views\Templates\citrus-island\_changeprofileconf.cshtml" />
+    <Content Include="SiteMapping.config" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
