@@ -21,7 +21,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public PagedDataSummary() {
 			this.SelectedCategorySlugs = new List<string>();
-			this.InitOrderBy(x => x.GoLiveDate, false);
+			this.InitOrderByDescending(x => x.GoLiveDate);
 		}
 
 		public enum SummaryContentType {
@@ -64,7 +64,7 @@ namespace Carrotware.CMS.UI.Components {
 			string sPagePath = SiteData.CurrentScriptName;
 
 			if (String.IsNullOrEmpty(this.OrderBy)) {
-				this.InitOrderBy(x => x.GoLiveDate, false);
+				this.InitOrderByDescending(x => x.GoLiveDate);
 			}
 
 			List<SiteNav> lstContents = new List<SiteNav>();
@@ -88,7 +88,7 @@ namespace Carrotware.CMS.UI.Components {
 				case SummaryContentType.Blog:
 				case SummaryContentType.ContentPage:
 				case SummaryContentType.SiteSearch:
-					this.InitOrderBy(x => x.GoLiveDate, false);
+					this.InitOrderByDescending(x => x.GoLiveDate);
 					break;
 			}
 

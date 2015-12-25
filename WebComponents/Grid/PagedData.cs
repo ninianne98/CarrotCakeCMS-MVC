@@ -21,6 +21,10 @@ namespace Carrotware.Web.UI.Components {
 			: base() {
 		}
 
+		public void InitOrderByDescending(Expression<Func<T, object>> field) {
+			InitOrderBy(field, false);
+		}
+
 		public void InitOrderBy(Expression<Func<T, object>> field) {
 			InitOrderBy(field, true);
 		}
