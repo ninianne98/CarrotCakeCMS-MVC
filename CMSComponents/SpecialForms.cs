@@ -1225,20 +1225,20 @@ namespace Carrotware.CMS.UI.Components {
 		protected ChangeProfileInfo InitChangeProfileInfo(string partialName) {
 			ChangeProfileInfo model = new ChangeProfileInfo();
 
-			if (SecurityData.IsAuthenticated) {
-				var usr = SecurityData.CurrentExUser;
-				if (usr != null) {
-					model.Email = usr.Email;
-					model.UserNickName = usr.UserNickName;
-					model.FirstName = usr.FirstName;
-					model.LastName = usr.LastName;
-				}
-			}
-
 			_settings = new ChangeProfileInfoSettings();
 
 			if (_helper.ViewData[ChangeProfileInfo.Key] != null) {
 				model = _helper.ViewData[ChangeProfileInfo.Key] as ChangeProfileInfo;
+			} else {
+				if (SecurityData.IsAuthenticated) {
+					var usr = SecurityData.CurrentExUser;
+					if (usr != null) {
+						model.Email = usr.Email;
+						model.UserNickName = usr.UserNickName;
+						model.FirstName = usr.FirstName;
+						model.LastName = usr.LastName;
+					}
+				}
 			}
 
 			_settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;

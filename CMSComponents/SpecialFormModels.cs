@@ -55,7 +55,7 @@ namespace Carrotware.CMS.UI.Components {
 				}
 
 				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = Type.GetType(this.Settings.ValidateHumanClass);
+					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
 					Object obj = Activator.CreateInstance(objType);
 					this.ValidateHuman = (IValidateHuman)obj;
 					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
@@ -209,7 +209,7 @@ namespace Carrotware.CMS.UI.Components {
 				}
 
 				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = Type.GetType(this.Settings.ValidateHumanClass);
+					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
 					Object obj = Activator.CreateInstance(objType);
 					this.ValidateHuman = (IValidateHuman)obj;
 					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
@@ -264,7 +264,7 @@ namespace Carrotware.CMS.UI.Components {
 				}
 
 				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = Type.GetType(this.Settings.ValidateHumanClass);
+					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
 					Object obj = Activator.CreateInstance(objType);
 					this.ValidateHuman = (IValidateHuman)obj;
 					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
@@ -311,7 +311,7 @@ namespace Carrotware.CMS.UI.Components {
 				}
 
 				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = Type.GetType(this.Settings.ValidateHumanClass);
+					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
 					Object obj = Activator.CreateInstance(objType);
 					this.ValidateHuman = (IValidateHuman)obj;
 					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
@@ -369,7 +369,7 @@ namespace Carrotware.CMS.UI.Components {
 				}
 
 				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = Type.GetType(this.Settings.ValidateHumanClass);
+					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
 					Object obj = Activator.CreateInstance(objType);
 					this.ValidateHuman = (IValidateHuman)obj;
 					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
@@ -424,7 +424,7 @@ namespace Carrotware.CMS.UI.Components {
 				}
 
 				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = Type.GetType(this.Settings.ValidateHumanClass);
+					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
 					Object obj = Activator.CreateInstance(objType);
 					this.ValidateHuman = (IValidateHuman)obj;
 					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;

@@ -456,7 +456,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					successView = settings.PostPartialSuccess;
 				}
 
-				var exUsr = new ExtendedUserData(SecurityData.CurrentUserIdentityName);
+				ExtendedUserData exUsr = SecurityData.CurrentExUser;
 
 				IdentityResult result = securityHelper.UserManager.SetEmail(exUsr.UserKey, model.Email);
 
