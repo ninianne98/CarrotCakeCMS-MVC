@@ -38,7 +38,6 @@
 		#galleryTarget, #gallerySource {
 			list-style-type: none;
 			margin: 0;
-			padding: 0;
 			float: left;
 			margin-right: 10px;
 			padding: 5px;
@@ -51,7 +50,7 @@
 				padding: 5px;
 				font-size: 11px;
 				width: 350px;
-				height: 60px;
+				height: 75px;
 			}
 
 				#galleryTarget li img, #gallerySource li img {
@@ -59,7 +58,16 @@
 				}
 
 		.fileInfo {
-			margin: 8px;
+			min-height: 60px;
+			margin: 6px;
+			overflow: hidden;
+			max-width: 220px;
+			display: block;
+		}
+
+		#imgName {
+			overflow: hidden;
+			max-width: 200px;
 		}
 
 		div.galleryScroll {
@@ -333,7 +341,8 @@
 					<li class="ui-widget ui-widget-content" id="ID_0000000000">
 						<img id="imgThumb" height="50" width="50" onmouseout="hideImg(this)" onmouseover="showImg(this)" style="float: left"
 							 src="~/Assets/prettyPhoto/PhotoIcon.png" title="@srcImage.FileName" alt="@HttpUtility.UrlEncode(srcImage.FileName)" />
-						<div style="float: left; max-width: 240px" class="fileInfo">
+
+						<div style="float: left; max-width: 225px" class="fileInfo">
 							<span id="imgName">@srcImage.FullFileName</span>
 							<br />
 							@String.Format("{0:d}  ", srcImage.FileDate)
@@ -350,6 +359,7 @@
 								<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
 							</a>
 						</div>
+						<br />
 					</li>
 				}
 			</ul>
@@ -361,7 +371,7 @@
 					<li class="ui-widget ui-widget-content" id="ID_0000000000">
 						@CarrotWeb.ImageSizer(galImage.FullFileName, galImage.FileName, 50, true, new { @style = "float: left", @id = "imgThumb", @onmouseout = "hideImg(this)", @onmouseover = "showImg(this)" })
 
-						<div style="float: left; max-width: 240px" class="fileInfo">
+						<div style="float: left; max-width: 225px" class="fileInfo">
 							<span id="imgName">@galImage.FullFileName</span>
 							<br />
 							@String.Format("{0:d}  ", galImage.FileDate)
@@ -378,6 +388,7 @@
 								<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
 							</a>
 						</div>
+						<br />
 					</li>
 				}
 			</ul>

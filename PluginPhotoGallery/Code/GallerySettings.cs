@@ -8,6 +8,13 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 
 	public class GallerySettings : WidgetActionSettingModel {
 
+		public GallerySettings() {
+			this.ScaleImage = true;
+			this.ShowHeading = false;
+			this.ThumbSize = 100;
+			this.PrettyPhotoSkin = "light_rounded";
+		}
+
 		public override bool EnableEdit {
 			get {
 				return true;
