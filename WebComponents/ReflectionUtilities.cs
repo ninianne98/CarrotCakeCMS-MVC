@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Web.Compilation;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -23,6 +24,19 @@ namespace Carrotware.Web.UI.Components {
 			get {
 				return BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
 			}
+		}
+
+		public static Type GetTypeFromString(string classString) {
+			Type typ = null;
+			if (!String.IsNullOrEmpty(classString)) {
+				typ = Type.GetType(classString);
+
+				if (typ == null && classString.IndexOf(",") < 1) {
+					typ = BuildManager.GetType(classString, true);
+				}
+			}
+
+			return typ;
 		}
 
 		public static Object GetPropertyValue(Object obj, string property) {
@@ -303,7 +317,5 @@ namespace Carrotware.Web.UI.Components {
 
 			return source.Provider.CreateQuery<T>(resultExp);
 		}
-
-
 	}
 }

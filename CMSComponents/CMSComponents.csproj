@@ -111,6 +111,7 @@
     <Compile Include="IFrameWidgetWrapper.cs" />
     <Compile Include="IPagedContent.cs" />
     <Compile Include="LiteralMessage.cs" />
+    <Compile Include="MostRecentUpdated.cs" />
     <Compile Include="OpenGraph.cs" />
     <Compile Include="PagedComments.cs" />
     <Compile Include="PostCalendar.cs" />
@@ -146,7 +147,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <EmbeddedResource Include="_TextZone.cshtml" />
     <EmbeddedResource Include="_WidgetZone.cshtml" />
   </ItemGroup>

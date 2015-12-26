@@ -1,5 +1,6 @@
 ﻿using Carrotware.CMS.Data;
 using Carrotware.CMS.Interface;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace Carrotware.CMS.Core {
 		public ITextBodyUpdate TextProcessor {
 			get {
 				if (_txt == null && !String.IsNullOrEmpty(this.TextWidgetAssembly)) {
-					Type t = Type.GetType(this.TextWidgetAssembly);
+					Type t = ReflectionUtilities.GetTypeFromString(this.TextWidgetAssembly);
 					Object o = null;
 
 					try {

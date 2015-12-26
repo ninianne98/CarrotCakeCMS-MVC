@@ -67,7 +67,7 @@ namespace Carrotware.CMS.Core {
 				if (w.ControlPath.ToUpper().StartsWith("CLASS:")) {
 					try {
 						string className = w.ControlPath.Replace("CLASS:", "");
-						Type t = Type.GetType(className);
+						Type t = ReflectionUtilities.GetTypeFromString(className);
 						widget = Activator.CreateInstance(t);
 					} catch (Exception ex) { }
 				} else {
@@ -76,13 +76,15 @@ namespace Carrotware.CMS.Core {
 						string objectPrefix = path[0];
 						string objectClass = path[1];
 
-						Type t = Type.GetType(objectClass);
-						Object obj = Activator.CreateInstance(t);
+						Type t = ReflectionUtilities.GetTypeFromString(objectClass);
 
+						Object obj = Activator.CreateInstance(t);
 						Object attrib = ReflectionUtilities.GetAttribute<WidgetActionSettingModelAttribute>(t, objectPrefix);
 
-						if (attrib != null) {
-							Type s = Type.GetType(((WidgetActionSettingModelAttribute)attrib).ClassName);
+						if (attrib != null && attrib is WidgetActionSettingModelAttribute) {
+							string attrClass = (attrib as WidgetActionSettingModelAttribute).ClassName;
+							Type s = ReflectionUtilities.GetTypeFromString(attrClass);
+
 							widget = Activator.CreateInstance(s);
 						}
 					} catch (Exception ex) { }
@@ -95,7 +97,8 @@ namespace Carrotware.CMS.Core {
 						string modelClass = String.Empty;
 						if (path.Length > 1) {
 							modelClass = path[1];
-							Type objType = Type.GetType(modelClass);
+							Type objType = ReflectionUtilities.GetTypeFromString(modelClass);
+
 							widget = Activator.CreateInstance(objType);
 						}
 					} catch (Exception ex) { }
@@ -154,9 +157,29 @@ namespace Carrotware.CMS.Core {
 									 && p.Name.ToLower() == sListSourcePropertyName.ToLower()
 								  select p).FirstOrDefault();
 
-				if (lstItmVals != null && lstItmVals.Any() && dp.FieldMode != WidgetAttribute.FieldMode.CheckBoxList) {
-					dp.TextValue = lstItmVals != null ? lstItmVals.FirstOrDefault().KeyValue : String.Empty;
-					dp.DefValue = dp.TextValue;
+				if (dp.FieldMode != WidgetAttribute.FieldMode.CheckBoxList) {
+					string sDefTxt = String.Empty;
+
+					if (lstItmVals != null && lstItmVals.Any()) {
+						dp.TextValue = lstItmVals != null ? lstItmVals.FirstOrDefault().KeyValue : String.Empty;
+					} else {
+						if (dp.DefValue != null) {
+							sDefTxt = dp.DefValue.ToString();
+
+							if (dp.PropertyType == typeof(bool)) {
+								bool vB = Convert.ToBoolean(dp.DefValue.ToString());
+								sDefTxt = vB.ToString();
+							}
+							if (dp.PropertyType == typeof(System.Drawing.Color)) {
+								System.Drawing.Color vC = (System.Drawing.Color)dp.DefValue;
+								sDefTxt = System.Drawing.ColorTranslator.ToHtml(vC);
+							}
+						}
+
+						dp.TextValue = sDefTxt;
+					}
+
+					dp.DefValue = dp.DefValue;
 				}
 
 				Type pt = dp.PropertyType;

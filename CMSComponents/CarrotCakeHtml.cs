@@ -73,7 +73,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static HtmlString RenderPartialFromController(string partialViewName, string controllerClass, Object model) {
-			Type type = Type.GetType(controllerClass);
+			Type type = ReflectionUtilities.GetTypeFromString(controllerClass);
 			Object obj = Activator.CreateInstance(type);
 
 			if (obj is Controller) {
@@ -89,7 +89,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static HtmlString RenderResultViewFromController(string actionName, string controllerClass) {
-			Type type = Type.GetType(controllerClass);
+			Type type = ReflectionUtilities.GetTypeFromString(controllerClass);
 			Object obj = Activator.CreateInstance(type);
 
 			return new HtmlString(GetResultViewStringFromController(actionName, type, obj));
@@ -620,7 +620,8 @@ namespace Carrotware.CMS.UI.Components {
 					Object settings = null;
 
 					try {
-						Type objType = Type.GetType(objectClass);
+						Type objType = ReflectionUtilities.GetTypeFromString(objectClass);
+
 						obj = Activator.CreateInstance(objType);
 
 						if (objectPrefix.ToUpper() != "CLASS") {
@@ -628,8 +629,9 @@ namespace Carrotware.CMS.UI.Components {
 							// assumed to be a controller action/method
 							Object attrib = ReflectionUtilities.GetAttribute<WidgetActionSettingModelAttribute>(objType, objectPrefix);
 
-							if (attrib != null) {
-								Type s = Type.GetType(((WidgetActionSettingModelAttribute)attrib).ClassName);
+							if (attrib != null && attrib is WidgetActionSettingModelAttribute) {
+								string attrClass = (attrib as WidgetActionSettingModelAttribute).ClassName;
+								Type s = ReflectionUtilities.GetTypeFromString(attrClass);
 								settings = Activator.CreateInstance(s);
 							}
 						} else {
@@ -700,7 +702,8 @@ namespace Carrotware.CMS.UI.Components {
 							if (String.IsNullOrEmpty(modelClass)) {
 								widgetText = RenderPartialToString(viewPath);
 							} else {
-								Type objType = Type.GetType(modelClass);
+								Type objType = ReflectionUtilities.GetTypeFromString(modelClass);
+
 								Object model = Activator.CreateInstance(objType);
 
 								if (model is IWidgetRawData) {

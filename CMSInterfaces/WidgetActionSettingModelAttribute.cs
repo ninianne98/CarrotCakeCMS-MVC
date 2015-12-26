@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.Compilation;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -28,8 +29,16 @@ namespace Carrotware.CMS.Interface {
 
 		public Object SettingsModel {
 			get {
-				Type type = Type.GetType(this.ClassName);
-				return Activator.CreateInstance(type);
+				Type typ = null;
+				if (!String.IsNullOrEmpty(this.ClassName)) {
+					typ = Type.GetType(this.ClassName);
+
+					if (typ == null && this.ClassName.IndexOf(",") < 1) {
+						typ = BuildManager.GetType(this.ClassName, true);
+					}
+				}
+
+				return Activator.CreateInstance(typ);
 			}
 		}
 	}
