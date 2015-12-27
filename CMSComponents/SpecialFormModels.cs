@@ -32,9 +32,10 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class ContactInfo {
+	public class ContactInfo : FormModelBase {
 
-		public ContactInfo() {
+		public ContactInfo()
+			: base() {
 			ReconstructSettings();
 		}
 
@@ -45,21 +46,11 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void ReconstructSettings() {
+			base.GetSettings(typeof(ContactInfoSettings));
 			this.Settings = null;
 
-			if (!String.IsNullOrEmpty(this.EncodedSettings)) {
-				string sXML = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(ContactInfoSettings));
-				using (StringReader stringReader = new StringReader(sXML)) {
-					this.Settings = (ContactInfoSettings)xmlSerializer.Deserialize(stringReader);
-				}
-
-				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
-					Object obj = Activator.CreateInstance(objType);
-					this.ValidateHuman = (IValidateHuman)obj;
-					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
-				}
+			if (this.ValidateSettings != null && this.ValidateSettings is ContactInfoSettings) {
+				this.Settings = this.ValidateSettings as ContactInfoSettings;
 			}
 		}
 
@@ -91,10 +82,7 @@ namespace Carrotware.CMS.UI.Components {
 		[Display(Name = "Comment")]
 		public string PostCommentText { get; set; }
 
-		public string EncodedSettings { get; set; }
 		public ContactInfoSettings Settings { get; set; }
-		public IValidateHuman ValidateHuman { get; set; }
-		public string ValidationValue { get; set; }
 		public bool IsSaved { get; set; }
 
 		public void SendMail(PostComment pc, ContentPage page) {
@@ -186,9 +174,10 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class LoginInfo {
+	public class LoginInfo : FormModelBase {
 
-		public LoginInfo() {
+		public LoginInfo()
+			: base() {
 			ReconstructSettings();
 		}
 
@@ -199,21 +188,11 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void ReconstructSettings() {
+			base.GetSettings(typeof(LoginInfoSettings));
 			this.Settings = null;
 
-			if (!String.IsNullOrEmpty(this.EncodedSettings)) {
-				string sXML = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(LoginInfoSettings));
-				using (StringReader stringReader = new StringReader(sXML)) {
-					this.Settings = (LoginInfoSettings)xmlSerializer.Deserialize(stringReader);
-				}
-
-				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
-					Object obj = Activator.CreateInstance(objType);
-					this.ValidateHuman = (IValidateHuman)obj;
-					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
-				}
+			if (this.ValidateSettings != null && this.ValidateSettings is LoginInfoSettings) {
+				this.Settings = this.ValidateSettings as LoginInfoSettings;
 			}
 
 			this.IsLoggedIn = SecurityData.IsAuthenticated;
@@ -231,19 +210,17 @@ namespace Carrotware.CMS.UI.Components {
 		[Display(Name = "Password")]
 		public string Password { get; set; }
 
-		public string EncodedSettings { get; set; }
 		public LoginInfoSettings Settings { get; set; }
-		public IValidateHuman ValidateHuman { get; set; }
-		public string ValidationValue { get; set; }
 		public SignInStatus LogInStatus { get; set; }
 		public bool IsLoggedIn { get; set; }
 	}
 
 	//==================================================
 
-	public class ForgotPasswordInfo {
+	public class ForgotPasswordInfo : FormModelBase {
 
-		public ForgotPasswordInfo() {
+		public ForgotPasswordInfo()
+			: base() {
 			ReconstructSettings();
 		}
 
@@ -254,21 +231,11 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void ReconstructSettings() {
+			base.GetSettings(typeof(ForgotPasswordInfoSettings));
 			this.Settings = null;
 
-			if (!String.IsNullOrEmpty(this.EncodedSettings)) {
-				string sXML = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(ForgotPasswordInfoSettings));
-				using (StringReader stringReader = new StringReader(sXML)) {
-					this.Settings = (ForgotPasswordInfoSettings)xmlSerializer.Deserialize(stringReader);
-				}
-
-				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
-					Object obj = Activator.CreateInstance(objType);
-					this.ValidateHuman = (IValidateHuman)obj;
-					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
-				}
+			if (this.ValidateSettings != null && this.ValidateSettings is ForgotPasswordInfoSettings) {
+				this.Settings = this.ValidateSettings as ForgotPasswordInfoSettings;
 			}
 		}
 
@@ -278,17 +245,15 @@ namespace Carrotware.CMS.UI.Components {
 		[StringLength(128)]
 		public string Email { get; set; }
 
-		public string EncodedSettings { get; set; }
 		public ForgotPasswordInfoSettings Settings { get; set; }
-		public IValidateHuman ValidateHuman { get; set; }
-		public string ValidationValue { get; set; }
 	}
 
 	//==================================================
 
-	public class ResetPasswordInfo {
+	public class ResetPasswordInfo : FormModelBase {
 
-		public ResetPasswordInfo() {
+		public ResetPasswordInfo()
+			: base() {
 			this.CreationResult = null;
 
 			ReconstructSettings();
@@ -301,21 +266,11 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void ReconstructSettings() {
+			base.GetSettings(typeof(ResetPasswordInfoSettings));
 			this.Settings = null;
 
-			if (!String.IsNullOrEmpty(this.EncodedSettings)) {
-				string sXML = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(ResetPasswordInfoSettings));
-				using (StringReader stringReader = new StringReader(sXML)) {
-					this.Settings = (ResetPasswordInfoSettings)xmlSerializer.Deserialize(stringReader);
-				}
-
-				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
-					Object obj = Activator.CreateInstance(objType);
-					this.ValidateHuman = (IValidateHuman)obj;
-					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
-				}
+			if (this.ValidateSettings != null && this.ValidateSettings is ResetPasswordInfoSettings) {
+				this.Settings = this.ValidateSettings as ResetPasswordInfoSettings;
 			}
 		}
 
@@ -336,19 +291,17 @@ namespace Carrotware.CMS.UI.Components {
 		[Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
 		public string ConfirmPassword { get; set; }
 
-		public string EncodedSettings { get; set; }
 		public ResetPasswordInfoSettings Settings { get; set; }
-		public IValidateHuman ValidateHuman { get; set; }
-		public string ValidationValue { get; set; }
 
 		public IdentityResult CreationResult { get; set; }
 	}
 
 	//==================================================
 
-	public class ChangePasswordInfo {
+	public class ChangePasswordInfo : FormModelBase {
 
-		public ChangePasswordInfo() {
+		public ChangePasswordInfo()
+			: base() {
 			ReconstructSettings();
 		}
 
@@ -359,21 +312,11 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void ReconstructSettings() {
+			base.GetSettings(typeof(ChangePasswordInfoSettings));
 			this.Settings = null;
 
-			if (!String.IsNullOrEmpty(this.EncodedSettings)) {
-				string sXML = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(ChangePasswordInfoSettings));
-				using (StringReader stringReader = new StringReader(sXML)) {
-					this.Settings = (ChangePasswordInfoSettings)xmlSerializer.Deserialize(stringReader);
-				}
-
-				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
-					Object obj = Activator.CreateInstance(objType);
-					this.ValidateHuman = (IValidateHuman)obj;
-					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
-				}
+			if (this.ValidateSettings != null && this.ValidateSettings is ChangePasswordInfoSettings) {
+				this.Settings = this.ValidateSettings as ChangePasswordInfoSettings;
 			}
 		}
 
@@ -393,17 +336,15 @@ namespace Carrotware.CMS.UI.Components {
 		[Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
 		public string ConfirmPassword { get; set; }
 
-		public string EncodedSettings { get; set; }
 		public ChangePasswordInfoSettings Settings { get; set; }
-		public IValidateHuman ValidateHuman { get; set; }
-		public string ValidationValue { get; set; }
 	}
 
 	//==================================================
 
-	public class ChangeProfileInfo {
+	public class ChangeProfileInfo : FormModelBase {
 
-		public ChangeProfileInfo() {
+		public ChangeProfileInfo()
+			: base() {
 			ReconstructSettings();
 		}
 
@@ -414,21 +355,11 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void ReconstructSettings() {
+			base.GetSettings(typeof(ChangeProfileInfoSettings));
 			this.Settings = null;
 
-			if (!String.IsNullOrEmpty(this.EncodedSettings)) {
-				string sXML = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(ChangeProfileInfoSettings));
-				using (StringReader stringReader = new StringReader(sXML)) {
-					this.Settings = (ChangeProfileInfoSettings)xmlSerializer.Deserialize(stringReader);
-				}
-
-				if (this.Settings != null && !String.IsNullOrEmpty(this.Settings.ValidateHumanClass)) {
-					Type objType = ReflectionUtilities.GetTypeFromString(this.Settings.ValidateHumanClass);
-					Object obj = Activator.CreateInstance(objType);
-					this.ValidateHuman = (IValidateHuman)obj;
-					this.ValidateHuman.AltValidationFailText = this.Settings.ValidationFailText;
-				}
+			if (this.ValidateSettings != null && this.ValidateSettings is ChangeProfileInfoSettings) {
+				this.Settings = this.ValidateSettings as ChangeProfileInfoSettings;
 			}
 		}
 
@@ -450,9 +381,6 @@ namespace Carrotware.CMS.UI.Components {
 		[StringLength(64)]
 		public string LastName { get; set; }
 
-		public string EncodedSettings { get; set; }
 		public ChangeProfileInfoSettings Settings { get; set; }
-		public IValidateHuman ValidateHuman { get; set; }
-		public string ValidationValue { get; set; }
 	}
 }

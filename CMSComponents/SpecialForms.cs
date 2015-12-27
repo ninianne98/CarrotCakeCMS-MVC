@@ -201,13 +201,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<ContactInfo> GetModelHelper(ContactInfoConfig config) {
 			_model = InitContactInfo(config.PostPartialName);
 
-			if (config.ValidateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = config.ValidateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(config.ValidateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = config.ValidateHuman.AltValidationFailText;
-				}
-			}
+			_settings.GetSettingFromConfig(config);
 
 			_settings.DirectEmailKeyName = config.DirectEmailKeyName;
 			_settings.NotifyEditors = config.NotifyEditors;
@@ -273,45 +267,38 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class ContactInfoSettings {
+	public class ContactInfoSettings : FormSettingBase {
 
-		public ContactInfoSettings() {
-			this.ValidationFailText = "Failed to validate as a human.";
-			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
-		}
+		public ContactInfoSettings() : base() { }
 
-		public string PostPartialName { get; set; }
-		public string Uri { get; set; }
-		public bool UseValidateHuman { get; set; }
-		public string ValidateHumanClass { get; set; }
-		public string ValidationFailText { get; set; }
 		public string DirectEmailKeyName { get; set; }
 		public bool NotifyEditors { get; set; }
 	}
 
 	//==================================================
 
-	public class ContactInfoConfig {
+	public class ContactInfoConfig : FormConfigBase {
 
-		public ContactInfoConfig() {
-			this.ValidateHuman = null;
-			this.NotifyEditors = false;
-			this.PostPartialName = String.Empty;
-			this.DirectEmailKeyName = String.Empty;
+		public ContactInfoConfig()
+			: base() {
+			InitStuff();
 		}
 
 		public ContactInfoConfig(string partialName)
-			: this() {
-			this.PostPartialName = partialName;
+			: base(partialName) {
+			InitStuff();
 		}
 
 		public ContactInfoConfig(string partialName, IValidateHuman validateHuman)
-			: this(partialName) {
-			this.ValidateHuman = validateHuman;
+			: base(partialName, validateHuman) {
+			InitStuff();
 		}
 
-		public IValidateHuman ValidateHuman { get; set; }
-		public string PostPartialName { get; set; }
+		protected void InitStuff() {
+			this.NotifyEditors = false;
+			this.DirectEmailKeyName = String.Empty;
+		}
+
 		public string DirectEmailKeyName { get; set; }
 		public bool NotifyEditors { get; set; }
 	}
@@ -357,13 +344,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<LoginInfo> GetModelHelper(string partialName, IValidateHuman validateHuman = null) {
 			_model = InitLoginInfo(partialName);
 
-			if (validateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = validateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = validateHuman.AltValidationFailText;
-				}
-			}
+			_settings.SetHuman(validateHuman);
 
 			return InitHelp();
 		}
@@ -371,13 +352,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<LoginInfo> GetModelHelper(LoginInfoConfig config) {
 			_model = InitLoginInfo(config.PostPartialName);
 
-			if (config.ValidateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = config.ValidateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(config.ValidateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = config.ValidateHuman.AltValidationFailText;
-				}
-			}
+			_settings.GetSettingFromConfig(config);
 
 			_settings.RedirectUri = config.RedirectUri;
 			_settings.CodeRedirectUri = config.CodeRedirectUri;
@@ -447,18 +422,10 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class LoginInfoSettings {
+	public class LoginInfoSettings : FormSettingBase {
 
-		public LoginInfoSettings() {
-			this.ValidationFailText = "Failed to validate as a human.";
-			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
-		}
+		public LoginInfoSettings() : base() { }
 
-		public string PostPartialName { get; set; }
-		public string Uri { get; set; }
-		public bool UseValidateHuman { get; set; }
-		public string ValidateHumanClass { get; set; }
-		public string ValidationFailText { get; set; }
 		public string PostPartialNameLockout { get; set; }
 		public string PostPartialNameVerification { get; set; }
 		public string PostPartialNameFailure { get; set; }
@@ -468,25 +435,18 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class LoginInfoConfig {
+	public class LoginInfoConfig : FormConfigBase {
 
-		public LoginInfoConfig() {
-			this.ValidateHuman = null;
-			this.PostPartialName = String.Empty;
-		}
+		public LoginInfoConfig() : base() { }
 
 		public LoginInfoConfig(string partialName)
-			: this() {
-			this.PostPartialName = partialName;
+			: base(partialName) {
 		}
 
 		public LoginInfoConfig(string partialName, IValidateHuman validateHuman)
-			: this(partialName) {
-			this.ValidateHuman = validateHuman;
+			: base(partialName, validateHuman) {
 		}
 
-		public IValidateHuman ValidateHuman { get; set; }
-		public string PostPartialName { get; set; }
 		public string PostPartialNameLockout { get; set; }
 		public string PostPartialNameVerification { get; set; }
 		public string PostPartialNameFailure { get; set; }
@@ -599,31 +559,23 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class LogoutInfoSettings {
+	public class LogoutInfoSettings : FormSettingRootBase {
 
-		public LogoutInfoSettings() {
-			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
-		}
+		public LogoutInfoSettings() : base() { }
 
-		public string PostPartialName { get; set; }
-		public string Uri { get; set; }
 		public string RedirectUri { get; set; }
 	}
 
 	//==================================================
 
-	public class LogoutInfoConfig {
+	public class LogoutInfoConfig : FormConfigRootBase {
 
-		public LogoutInfoConfig() {
-			this.PostPartialName = String.Empty;
-		}
+		public LogoutInfoConfig() : base() { }
 
 		public LogoutInfoConfig(string partialName)
-			: this() {
-			this.PostPartialName = partialName;
+			: base(partialName) {
 		}
 
-		public string PostPartialName { get; set; }
 		public string RedirectUri { get; set; }
 	}
 
@@ -668,13 +620,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<ForgotPasswordInfo> GetModelHelper(string partialName, IValidateHuman validateHuman = null) {
 			_model = InitForgotPasswordInfo(partialName);
 
-			if (validateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = validateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = validateHuman.AltValidationFailText;
-				}
-			}
+			_settings.SetHuman(validateHuman);
 
 			return InitHelp();
 		}
@@ -682,13 +628,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<ForgotPasswordInfo> GetModelHelper(ForgotPasswordInfoConfig config) {
 			_model = InitForgotPasswordInfo(config.PostPartialName);
 
-			if (config.ValidateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = config.ValidateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(config.ValidateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = config.ValidateHuman.AltValidationFailText;
-				}
-			}
+			_settings.GetSettingFromConfig(config);
 
 			_settings.PostPartialConfirmation = config.PostPartialConfirmation;
 			_settings.ConfirmUri = config.ConfirmUri;
@@ -754,18 +694,9 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class ForgotPasswordInfoSettings {
+	public class ForgotPasswordInfoSettings : FormSettingBase {
 
-		public ForgotPasswordInfoSettings() {
-			this.ValidationFailText = "Failed to validate as a human.";
-			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
-		}
-
-		public string PostPartialName { get; set; }
-		public string Uri { get; set; }
-		public bool UseValidateHuman { get; set; }
-		public string ValidateHumanClass { get; set; }
-		public string ValidationFailText { get; set; }
+		public ForgotPasswordInfoSettings() : base() { }
 
 		public string PostPartialConfirmation { get; set; }
 		public string ConfirmUri { get; set; }
@@ -773,25 +704,18 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class ForgotPasswordInfoConfig {
+	public class ForgotPasswordInfoConfig : FormConfigBase {
 
-		public ForgotPasswordInfoConfig() {
-			this.ValidateHuman = null;
-			this.PostPartialName = String.Empty;
-		}
+		public ForgotPasswordInfoConfig() : base() { }
 
 		public ForgotPasswordInfoConfig(string partialName)
-			: this() {
-			this.PostPartialName = partialName;
+			: base(partialName) {
 		}
 
 		public ForgotPasswordInfoConfig(string partialName, IValidateHuman validateHuman)
-			: this(partialName) {
-			this.ValidateHuman = validateHuman;
+			: base(partialName, validateHuman) {
 		}
 
-		public IValidateHuman ValidateHuman { get; set; }
-		public string PostPartialName { get; set; }
 		public string PostPartialConfirmation { get; set; }
 		public string ConfirmUri { get; set; }
 	}
@@ -839,13 +763,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<ResetPasswordInfo> GetModelHelper(string partialName, IValidateHuman validateHuman = null) {
 			_model = InitResetPasswordInfo(partialName);
 
-			if (validateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = validateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = validateHuman.AltValidationFailText;
-				}
-			}
+			_settings.SetHuman(validateHuman);
 
 			return InitHelp();
 		}
@@ -853,13 +771,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<ResetPasswordInfo> GetModelHelper(ResetPasswordInfoConfig config) {
 			_model = InitResetPasswordInfo(config.PostPartialName);
 
-			if (config.ValidateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = config.ValidateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(config.ValidateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = config.ValidateHuman.AltValidationFailText;
-				}
-			}
+			_settings.GetSettingFromConfig(config);
 
 			_settings.PostPartialConfirmation = config.PostPartialConfirmation;
 
@@ -926,19 +838,12 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class ResetPasswordInfoSettings {
+	public class ResetPasswordInfoSettings : FormSettingBase {
 
-		public ResetPasswordInfoSettings() {
-			this.ValidationFailText = "Failed to validate as a human.";
-			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
+		public ResetPasswordInfoSettings()
+			: base() {
 			this.UserCode = ResetPasswordInfoSettings.CodeUrl;
 		}
-
-		public string PostPartialName { get; set; }
-		public string Uri { get; set; }
-		public bool UseValidateHuman { get; set; }
-		public string ValidateHumanClass { get; set; }
-		public string ValidationFailText { get; set; }
 
 		public string PostPartialConfirmation { get; set; }
 		public string UserCode { get; set; }
@@ -953,25 +858,18 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class ResetPasswordInfoConfig {
+	public class ResetPasswordInfoConfig : FormConfigBase {
 
-		public ResetPasswordInfoConfig() {
-			this.ValidateHuman = null;
-			this.PostPartialName = String.Empty;
-		}
+		public ResetPasswordInfoConfig() : base() { }
 
 		public ResetPasswordInfoConfig(string partialName)
-			: this() {
-			this.PostPartialName = partialName;
+			: base(partialName) {
 		}
 
 		public ResetPasswordInfoConfig(string partialName, IValidateHuman validateHuman)
-			: this(partialName) {
-			this.ValidateHuman = validateHuman;
+			: base(partialName, validateHuman) {
 		}
 
-		public IValidateHuman ValidateHuman { get; set; }
-		public string PostPartialName { get; set; }
 		public string PostPartialConfirmation { get; set; }
 	}
 
@@ -1016,13 +914,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<ChangePasswordInfo> GetModelHelper(string partialName, IValidateHuman validateHuman = null) {
 			_model = InitChangePasswordInfo(partialName);
 
-			if (validateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = validateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = validateHuman.AltValidationFailText;
-				}
-			}
+			_settings.SetHuman(validateHuman);
 
 			return InitHelp();
 		}
@@ -1030,13 +922,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<ChangePasswordInfo> GetModelHelper(ChangePasswordInfoConfig config) {
 			_model = InitChangePasswordInfo(config.PostPartialName);
 
-			if (config.ValidateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = config.ValidateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(config.ValidateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = config.ValidateHuman.AltValidationFailText;
-				}
-			}
+			_settings.GetSettingFromConfig(config);
 
 			_settings.PostPartialSuccess = config.PostPartialSuccess;
 
@@ -1102,18 +988,10 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class ChangePasswordInfoSettings {
+	public class ChangePasswordInfoSettings : FormSettingBase {
 
-		public ChangePasswordInfoSettings() {
-			this.ValidationFailText = "Failed to validate as a human.";
-			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
-		}
+		public ChangePasswordInfoSettings() : base() { }
 
-		public string PostPartialName { get; set; }
-		public string Uri { get; set; }
-		public bool UseValidateHuman { get; set; }
-		public string ValidateHumanClass { get; set; }
-		public string ValidationFailText { get; set; }
 		public string PostPartialSuccess { get; set; }
 
 		public static string CodeUrl {
@@ -1126,25 +1004,18 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class ChangePasswordInfoConfig {
+	public class ChangePasswordInfoConfig : FormConfigBase {
 
-		public ChangePasswordInfoConfig() {
-			this.ValidateHuman = null;
-			this.PostPartialName = String.Empty;
-		}
+		public ChangePasswordInfoConfig() : base() { }
 
 		public ChangePasswordInfoConfig(string partialName)
-			: this() {
-			this.PostPartialName = partialName;
+			: base(partialName) {
 		}
 
 		public ChangePasswordInfoConfig(string partialName, IValidateHuman validateHuman)
-			: this(partialName) {
-			this.ValidateHuman = validateHuman;
+			: base(partialName, validateHuman) {
 		}
 
-		public IValidateHuman ValidateHuman { get; set; }
-		public string PostPartialName { get; set; }
 		public string PostPartialSuccess { get; set; }
 	}
 
@@ -1189,13 +1060,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<ChangeProfileInfo> GetModelHelper(string partialName, IValidateHuman validateHuman = null) {
 			_model = InitChangeProfileInfo(partialName);
 
-			if (validateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = validateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = validateHuman.AltValidationFailText;
-				}
-			}
+			_settings.SetHuman(validateHuman);
 
 			return InitHelp();
 		}
@@ -1203,13 +1068,7 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<ChangeProfileInfo> GetModelHelper(ChangeProfileInfoConfig config) {
 			_model = InitChangeProfileInfo(config.PostPartialName);
 
-			if (config.ValidateHuman != null) {
-				_settings.UseValidateHuman = true;
-				_settings.ValidateHumanClass = config.ValidateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(config.ValidateHuman.AltValidationFailText)) {
-					_settings.ValidationFailText = config.ValidateHuman.AltValidationFailText;
-				}
-			}
+			_settings.GetSettingFromConfig(config);
 
 			_settings.PostPartialSuccess = config.PostPartialSuccess;
 
@@ -1284,43 +1143,27 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 
-	public class ChangeProfileInfoSettings {
+	public class ChangeProfileInfoSettings : FormSettingBase {
 
-		public ChangeProfileInfoSettings() {
-			this.ValidationFailText = "Failed to validate as a human.";
-			this.Uri = HttpContext.Current.Request.ServerVariables["SCRIPT_NAME"].ToString();
-		}
+		public ChangeProfileInfoSettings() : base() { }
 
-		public string PostPartialName { get; set; }
-		public string Uri { get; set; }
-
-		public bool UseValidateHuman { get; set; }
-		public string ValidateHumanClass { get; set; }
-		public string ValidationFailText { get; set; }
 		public string PostPartialSuccess { get; set; }
 	}
 
 	//==================================================
 
-	public class ChangeProfileInfoConfig {
+	public class ChangeProfileInfoConfig : FormConfigBase {
 
-		public ChangeProfileInfoConfig() {
-			this.ValidateHuman = null;
-			this.PostPartialName = String.Empty;
-		}
+		public ChangeProfileInfoConfig() : base() { }
 
 		public ChangeProfileInfoConfig(string partialName)
-			: this() {
-			this.PostPartialName = partialName;
+			: base(partialName) {
 		}
 
 		public ChangeProfileInfoConfig(string partialName, IValidateHuman validateHuman)
-			: this(partialName) {
-			this.ValidateHuman = validateHuman;
+			: base(partialName, validateHuman) {
 		}
 
-		public IValidateHuman ValidateHuman { get; set; }
-		public string PostPartialName { get; set; }
 		public string PostPartialSuccess { get; set; }
 	}
 
