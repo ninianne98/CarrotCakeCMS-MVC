@@ -43,5 +43,9 @@ set [ControlPath] = 'CLASS:Carrotware.CMS.UI.Components.SecondLevelNavigation, C
 where [ControlPath] like '%Carrotware.CMS.UI.Controls.SecondLevelNavigation%'
 
 update [dbo].[carrot_Widget]
+set [ControlPath] = 'CLASS:Carrotware.CMS.UI.Components.MostRecentUpdated, Carrotware.CMS.UI.Components'
+where [ControlPath] like '%Carrotware.CMS.UI.Controls.MostRecentUpdated%'
+
+update [dbo].[carrot_Widget]
 set [ControlPath] = 'CLASS:Carrotware.CMS.UI.Components.IFrameWidgetWrapper, Carrotware.CMS.UI.Components'
 where [ControlPath] like '%Carrotware.CMS.UI.Controls.IFrameWidgetWrapper%'
