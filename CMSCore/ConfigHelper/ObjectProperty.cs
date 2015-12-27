@@ -162,6 +162,7 @@ namespace Carrotware.CMS.Core {
 
 					if (lstItmVals != null && lstItmVals.Any()) {
 						dp.TextValue = lstItmVals != null ? lstItmVals.FirstOrDefault().KeyValue : String.Empty;
+						dp.DefValue = dp.TextValue;
 					} else {
 						if (dp.DefValue != null) {
 							sDefTxt = dp.DefValue.ToString();
@@ -177,9 +178,8 @@ namespace Carrotware.CMS.Core {
 						}
 
 						dp.TextValue = sDefTxt;
+						dp.DefValue = dp.DefValue;
 					}
-
-					dp.DefValue = dp.DefValue;
 				}
 
 				Type pt = dp.PropertyType;
@@ -206,7 +206,7 @@ namespace Carrotware.CMS.Core {
 
 				if ((pt == typeof(bool)) || dp.FieldMode == WidgetAttribute.FieldMode.CheckBox) {
 					dp.FieldMode = WidgetAttribute.FieldMode.CheckBox;
-					dp.CheckBoxState = Convert.ToBoolean(dp.DefValue);
+					dp.CheckBoxState = Convert.ToBoolean(dp.TextValue);
 				}
 			}
 
