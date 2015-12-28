@@ -594,7 +594,13 @@ namespace Carrotware.CMS.UI.Components {
 			}
 
 			int iWidgetCount = 0;
-			foreach (Widget widget in CmsPage.TheWidgets.Where(x => x.PlaceholderName == placeHolderName).OrderBy(x => x.WidgetOrder)) {
+
+			var widgetList = (from w in CmsPage.TheWidgets
+							  where w.PlaceholderName.ToLower() == placeHolderName.ToLower()
+							  orderby w.WidgetOrder, w.EditDate
+							  select w).ToList();
+
+			foreach (Widget widget in widgetList) {
 				bool IsWidgetClass = false;
 
 				string widgetKey = String.Format("WidgetId_{0}_{1}", placeHolderName, iWidgetCount);
