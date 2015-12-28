@@ -3,14 +3,14 @@
 td.headtext, td.head, td.headtext, td.weekday, td.today, td.normal, td.todaysel, td.normalsel {
 	font-size: 18pt;
 	font-weight: 700;
-	color: white;
+	color: #ffffff;
 	text-align: center;
 	background-color: #00348F;
 }
 
 .innerhead, .innerhead tr, .innerhead tr td {
 	border-collapse: collapse;
-	border: 0px solid #00348F;
+	border: 0 solid #00348F;
 }
 
 .calendarGrid, td.head, td.weekday, td.today, td.normal, td.todaysel, td.normalsel {
@@ -74,6 +74,7 @@ A:hover {
 	text-decoration: none;
 	padding: 5px;
 }
+
 .today a, .todaysel a {
 	color: #FFFF80;
 	text-decoration: none;
@@ -81,7 +82,5 @@ A:hover {
 }
 
 table.innerhead, table.innerhead tr, table.innerhead tr td, .head tr, .head tr td, .innerhead tr, .innerhead tr td {
-	border: 0px solid #00348F;
+	border: 0 solid #00348F;
 }
-
-

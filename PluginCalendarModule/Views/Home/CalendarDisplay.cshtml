@@ -37,22 +37,22 @@
 	<style type="text/css">
 		.calendarCenter1 {
 			width: 100%;
-			margin: 0px auto;
-			border: #ffffff 1px solid;
+			margin: 0 auto;
+			border: 1px solid transparent;
 			text-align: center;
 			padding-bottom: 10px;
 		}
 
 		.calendarCenter2 {
 			width: 75%;
-			margin: 0px auto;
-			border: #ffffff 1px solid;
+			margin: 0 auto;
+			border: 1px solid transparent;
 			text-align: center;
 			padding-bottom: 10px;
 		}
 
-		.calendarEventDetail {
-			width: 500px;
+		.calendarEventDetailList {
+			width: 600px;
 			padding: 25px;
 		}
 
@@ -65,7 +65,7 @@
 			vertical-align: top;
 		}
 
-		.calendarEventDetail td {
+		.calendarEventDetailList td {
 			vertical-align: top;
 			margin-left: 4px;
 			margin-right: 4px;
@@ -73,11 +73,15 @@
 			padding-right: 4px;
 		}
 
-		.calendarEventDetail img {
+		.calendarEventDetailList img {
 			margin-left: 4px;
 			margin-right: 4px;
 			padding-left: 2px;
 			padding-right: 2px;
+		}
+
+		.calendarEventDetailList table {
+			border: 0;
 		}
 	</style>
 
@@ -138,7 +142,7 @@
 	}
 
 	<div class="calendarCenter2">
-		<div class="calendarEventDetail">
+		<div class="calendarEventDetailList">
 			@grid.OutputHtmlBody()
 		</div>
 	</div>
