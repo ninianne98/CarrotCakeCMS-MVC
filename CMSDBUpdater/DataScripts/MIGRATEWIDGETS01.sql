@@ -27,8 +27,8 @@ set [ControlPath] = 'CLASS:Carrotware.CMS.UI.Components.ContentRichText, Carrotw
 where [ControlPath] like '%Carrotware.CMS.UI.Controls.ContentRichText%'
 
 update [dbo].[carrot_Widget]
-set [ControlPath] = 'CLASS:Carrotware.CMS.UI.Components.ContentRichText, Carrotware.CMS.UI.Components'
-where [ControlPath] like '%Carrotware.CMS.UI.Controls.ContentRichText%'
+set [ControlPath] = 'CLASS:Carrotware.CMS.UI.Components.ContentPlainText, Carrotware.CMS.UI.Components'
+where [ControlPath] like '%Carrotware.CMS.UI.Controls.ContentPlainText%'
 
 update [dbo].[carrot_Widget]
 set [ControlPath] = 'CLASS:Carrotware.CMS.UI.Components.ContentSnippetText, Carrotware.CMS.UI.Components'

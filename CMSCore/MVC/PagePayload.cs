@@ -358,6 +358,13 @@ namespace Carrotware.CMS.Core {
 			return this.ThePage.Root_ContentID == nav.Root_ContentID;
 		}
 
+		public bool NavIsInCurrentTree(SiteNav nav) {
+			return (nav.Root_ContentID == this.ThePage.Root_ContentID
+							|| (this.ThePage.Parent_ContentID.HasValue && nav.Root_ContentID == this.ThePage.Parent_ContentID.Value)
+							|| (this.ThePage.ContentType == ContentPageType.PageType.BlogEntry && this.TheSite.Blog_Root_ContentID.HasValue
+										&& nav.Root_ContentID == this.TheSite.Blog_Root_ContentID.Value));
+		}
+
 		public List<SiteNav> GetTopNav(List<SiteNav> nav) {
 			return nav.Where(ct => ct.Parent_ContentID == null).OrderBy(ct => ct.NavMenuText).OrderBy(ct => ct.NavOrder).ToList();
 		}

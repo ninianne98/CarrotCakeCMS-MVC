@@ -53,8 +53,10 @@ namespace Carrotware.CMS.UI.Components {
 
 			this.NavigationData = new List<SiteNav>();
 
+			this.ElementId = this.WidgetClientID;
+
 			try {
-				string sFoundVal = this.GetParmValue("ElementId", "list");
+				string sFoundVal = this.GetParmValue("ElementId", this.WidgetClientID);
 
 				if (!String.IsNullOrEmpty(sFoundVal)) {
 					this.ElementId = sFoundVal;

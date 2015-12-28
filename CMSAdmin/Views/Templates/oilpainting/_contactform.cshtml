@@ -9,20 +9,23 @@
 			var cmt = cmtFrm.GetModelHelper("_contactform", cap);
 			if (!cmt.ViewData.Model.IsSaved) {
 				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
-				<div>
-					<label>Name</label><br />
-					@cmt.TextBoxFor(m => m.CommenterName)
-					@cmt.ValidationMessageFor(m => m.CommenterName, "", new { @class = "text-danger" })
-				</div>
 
 				<div>
-					<label>Email</label><br />
-					@cmt.TextBoxFor(m => m.CommenterEmail)
+					@cmt.LabelFor(m => m.CommenterEmail)
 					@cmt.ValidationMessageFor(m => m.CommenterEmail, "", new { @class = "text-danger" })
+					<br />
+					@cmt.TextBoxFor(m => m.CommenterEmail)
 				</div>
 
 				<div>
-					<label>Your Comments</label>
+					@cmt.LabelFor(m => m.CommenterEmail)
+					@cmt.ValidationMessageFor(m => m.CommenterEmail, "", new { @class = "text-danger" })
+					<br />
+					@cmt.TextBoxFor(m => m.CommenterEmail)
+				</div>
+
+				<div>
+					@cmt.LabelFor(m => m.PostCommentText, "Your Comments")
 					@cmt.ValidationMessageFor(m => m.PostCommentText, "", new { @class = "text-danger" })
 					<br />
 					@cmt.TextAreaFor(m => m.PostCommentText, new { rows = "5", cols = "50" })
@@ -36,7 +39,7 @@
 				</div>
 
 				<br />
-				<input class="button" type="submit" />
+				<input class="button" type="submit" value="Submit" />
 				<input class="button" type="reset" value="Clear form" />
 			} else {
 				<p>Thank you for your comment.</p>
