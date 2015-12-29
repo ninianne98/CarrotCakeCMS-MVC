@@ -106,8 +106,10 @@ namespace Carrotware.CMS.UI.Components {
 			}
 		}
 
+		[Widget]
 		public bool ShowUpdateDate { get; set; }
 
+		[Widget(WidgetAttribute.FieldMode.TextBox)]
 		public string DateFormat { get; set; }
 
 		protected List<SiteNav> GetUpdates() {
@@ -132,6 +134,10 @@ namespace Carrotware.CMS.UI.Components {
 						break;
 				}
 
+				if (this.ShowUpdateDate && String.IsNullOrEmpty(this.DateFormat)) {
+					this.DateFormat = "({0:d})";
+				}
+
 				if (this.ShowUpdateDate && !String.IsNullOrEmpty(this.DateFormat)) {
 					lst.ForEach(x => x.NavMenuText = String.Format("{0}  {1}", x.NavMenuText, String.Format(this.DateFormat, x.GoLiveDate)));
 				}
@@ -148,6 +154,10 @@ namespace Carrotware.CMS.UI.Components {
 					this.TakeTop = int.Parse(base.GetParmValue("TakeTop", "5"));
 
 					this.ContentType = (ListContentType)Enum.Parse(typeof(ListContentType), base.GetParmValue("ContentType", "Blog"), true);
+
+					this.DateFormat = base.GetParmValue("DateFormat", String.Empty);
+
+					this.ShowUpdateDate = Convert.ToBoolean(base.GetParmValue("ShowUpdateDate", "false"));
 
 					this.SelectedCategories = new List<Guid>();
 

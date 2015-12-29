@@ -63,8 +63,9 @@ namespace Carrotware.CMS.Core {
 			while (iDepth > 1) {
 				lstSub = (from ct in CannedQueries.GetLatestContentList(db, siteID, bActiveOnly)
 						  where ct.SiteID == siteID
-								&& ct.IsLatestVersion == true
+								&& ct.ShowInSiteNav == true
 								&& (ct.PageActive == true || bActiveOnly == false)
+								&& ct.IsLatestVersion == true
 								&& (ct.GoLiveDate < DateTime.UtcNow || bActiveOnly == false)
 								&& (ct.RetireDate > DateTime.UtcNow || bActiveOnly == false)
 								&& (!lstTop.Contains(ct.Root_ContentID) && lstTop.Contains(ct.Parent_ContentID.Value))
@@ -78,10 +79,11 @@ namespace Carrotware.CMS.Core {
 			lstContent = (from ct in CannedQueries.GetLatestContentList(db, siteID, bActiveOnly)
 						  orderby ct.NavOrder, ct.NavMenuText
 						  where ct.SiteID == siteID
+								&& ct.ShowInSiteNav == true
 								&& (ct.PageActive == true || bActiveOnly == false)
+								&& ct.IsLatestVersion == true
 								&& (ct.GoLiveDate < DateTime.UtcNow || bActiveOnly == false)
 								&& (ct.RetireDate > DateTime.UtcNow || bActiveOnly == false)
-								&& ct.IsLatestVersion == true
 								&& lstTop.Contains(ct.Root_ContentID)
 						  select new SiteNav(ct)).ToList();
 

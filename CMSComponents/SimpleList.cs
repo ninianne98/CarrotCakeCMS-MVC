@@ -2,6 +2,7 @@
 using Carrotware.CMS.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 /*
@@ -24,6 +25,7 @@ namespace Carrotware.CMS.UI.Components {
 			this.ElementId = "list";
 
 			this.CmsPage = PagePayload.GetContentFromViewData();
+			this.NavigationData = new List<SiteNav>();
 		}
 
 		public override bool EnableEdit {
@@ -94,11 +96,7 @@ namespace Carrotware.CMS.UI.Components {
 			LoadData();
 			TweakData();
 
-			string sItemCSS = String.Empty;
-			if (!String.IsNullOrEmpty(this.CssItem)) {
-				sItemCSS = String.Format(" {0} ", this.CssItem).Trim();
-			}
-			string sThis1CSS = sItemCSS;
+			string sItemCss = String.Empty;
 
 			StringBuilder output = new StringBuilder();
 
@@ -108,18 +106,18 @@ namespace Carrotware.CMS.UI.Components {
 				output.AppendLine("<ul id=\"" + this.ElementId + "\" >");
 			}
 
-			if (this.NavigationData != null) {
+			if (this.NavigationData != null && this.NavigationData.Any()) {
 				foreach (var n in this.NavigationData) {
 					if (SiteData.IsFilenameCurrentPage(n.FileName)
 								|| (n.NavOrder == 0 && SiteData.IsCurrentLikelyHomePage)
 								|| ControlUtilities.AreFilenamesSame(n.FileName, this.CmsPage.ThePage.FileName)) {
-						sThis1CSS = String.Format(" {0} {1} ", this.CssItem, this.CssSelected).Trim();
+						sItemCss = String.Format(" {0} {1} ", this.CssItem, this.CssSelected).Trim();
 					} else {
-						sThis1CSS = String.Format(" {0} ", this.CssItem).Trim();
+						sItemCss = String.Format(" {0} ", this.CssItem).Trim();
 					}
 
-					if (!String.IsNullOrEmpty(sThis1CSS)) {
-						output.Append("<li class=\"" + sThis1CSS + "\">");
+					if (!String.IsNullOrEmpty(sItemCss)) {
+						output.Append("<li class=\"" + sItemCss + "\">");
 					} else {
 						output.Append("<li>");
 					}
