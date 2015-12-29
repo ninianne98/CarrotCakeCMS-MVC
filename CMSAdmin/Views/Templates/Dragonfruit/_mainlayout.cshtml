@@ -125,8 +125,7 @@
 					} else {
 						<ul class="nav nav-justified">
 							@foreach (var n in CmsPage.TopNav.OrderBy(x => x.NavOrder)) {
-								string cssClassState = (n.Root_ContentID == CmsPage.ThePage.Root_ContentID
-															|| (CmsPage.ThePage.Parent_ContentID.HasValue && n.Root_ContentID == CmsPage.ThePage.Parent_ContentID.Value)) ? "current" : "not-current";
+								string cssClassState = CmsPage.NavIsInCurrentTree(n) ? "current" : "not-current";
 								<li>
 									<a class="@cssClassState" href="@String.Format("{0}", n.FileName)">
 										@n.NavigationText
