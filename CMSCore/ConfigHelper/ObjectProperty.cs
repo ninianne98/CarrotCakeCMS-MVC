@@ -167,7 +167,7 @@ namespace Carrotware.CMS.Core {
 						if (dp.DefValue != null) {
 							sDefTxt = dp.DefValue.ToString();
 
-							if (dp.PropertyType == typeof(bool)) {
+							if (dp.PropertyType == typeof(Boolean)) {
 								bool vB = Convert.ToBoolean(dp.DefValue.ToString());
 								sDefTxt = vB.ToString();
 							}
@@ -178,7 +178,6 @@ namespace Carrotware.CMS.Core {
 						}
 
 						dp.TextValue = sDefTxt;
-						dp.DefValue = dp.DefValue;
 					}
 				}
 
@@ -204,7 +203,16 @@ namespace Carrotware.CMS.Core {
 					}
 				}
 
-				if ((pt == typeof(bool)) || dp.FieldMode == WidgetAttribute.FieldMode.CheckBox) {
+				if (dp.FieldMode == WidgetAttribute.FieldMode.Unknown) {
+					if (pt == typeof(String) || pt == typeof(DateTime)
+						|| pt == typeof(Int16) || pt == typeof(Int32) || pt == typeof(Int64)
+						|| pt == typeof(float) || pt == typeof(Decimal)
+						|| pt == typeof(Guid) || pt == typeof(System.Drawing.Color)) {
+						dp.FieldMode = WidgetAttribute.FieldMode.TextBox;
+					}
+				}
+
+				if ((pt == typeof(Boolean)) || dp.FieldMode == WidgetAttribute.FieldMode.CheckBox) {
 					dp.FieldMode = WidgetAttribute.FieldMode.CheckBox;
 					dp.CheckBoxState = Convert.ToBoolean(dp.TextValue);
 				}
@@ -239,7 +247,7 @@ namespace Carrotware.CMS.Core {
 				CanWrite = prop.CanWrite,
 				Props = prop,
 				CompanionSourceFieldName = String.Empty,
-				FieldMode = prop.PropertyType == typeof(bool) ?
+				FieldMode = prop.PropertyType == typeof(Boolean) ?
 						WidgetAttribute.FieldMode.CheckBox : WidgetAttribute.FieldMode.TextBox
 			};
 
