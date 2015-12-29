@@ -306,12 +306,58 @@ and [PageText] like '%/c3-admin/tiny_mce/%'
 
 --=================== starter views BEGIN
 -- alter these statements if you have already written some new razor template views
-
+-- plain
 update [dbo].[carrot_Content]
 set [TemplateFile] = '~/views/cmscontent/plainpageview.cshtml'
 where [IsLatestVersion] = 1
 	and [TemplateFile] like '%plaintemplate%aspx'
 
+
+-- imagination
+update [dbo].[carrot_Content]
+set [TemplateFile] = '~/views/templates/imagination/index.cshtml'
+where [IsLatestVersion] = 1
+	and [TemplateFile] like '%cmsTemplates%Imagination%'
+	and [TemplateFile] like '%home.aspx'
+	and [TemplateFile] not like '%cshtml'
+
+update [dbo].[carrot_Content]
+set [TemplateFile] = '~/views/templates/imagination/no-sidebar.cshtml'
+where [IsLatestVersion] = 1
+	and [TemplateFile] like '%cmsTemplates%Imagination%'
+	and [TemplateFile] like '%no-sidebar.aspx'
+	and [TemplateFile] not like '%cshtml'
+
+update [dbo].[carrot_Content]
+set [TemplateFile] = '~/views/templates/imagination/right-sidebar.cshtml'
+where [IsLatestVersion] = 1
+	and [TemplateFile] like '%cmsTemplates%Imagination%'
+	and [TemplateFile] like '%right-sidebar.aspx'
+	and [TemplateFile] not like '%cshtml'
+
+update [dbo].[carrot_Content]
+set [TemplateFile] = '~/views/templates/imagination/left-sidebar.cshtml'
+where [IsLatestVersion] = 1
+	and [TemplateFile] like '%cmsTemplates%Imagination%'
+	and [TemplateFile] like '%left-sidebar.aspx'
+	and [TemplateFile] not like '%cshtml'
+
+update [dbo].[carrot_Content]
+set [TemplateFile] = '~/views/templates/imagination/blog-index.cshtml'
+where [IsLatestVersion] = 1
+	and [TemplateFile] like '%cmsTemplates%Imagination%'
+	and [TemplateFile] like '%listing.aspx'
+	and [TemplateFile] not like '%cshtml'
+
+update [dbo].[carrot_Content]
+set [TemplateFile] = '~/views/templates/imagination/blog.cshtml'
+where [IsLatestVersion] = 1
+	and [TemplateFile] like '%cmsTemplates%Imagination%'
+	and [TemplateFile] like '%post.aspx'
+	and [TemplateFile] not like '%cshtml'
+
+
+-- catch all / citrus island
 update [dbo].[carrot_Content]
 set [TemplateFile] = '~/views/templates/citrus-island/page.cshtml'
 where [IsLatestVersion] = 1
