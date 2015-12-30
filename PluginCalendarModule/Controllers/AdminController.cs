@@ -58,6 +58,17 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 			return View(lst);
 		}
 
+		public ActionResult CalendarAdminAdd(Guid? id) {
+			return CalendarAdminAddEdit(Guid.Empty);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[ValidateInput(false)]
+		public ActionResult CalendarAdminAdd(tblCalendar model) {
+			return CalendarAdminAddEdit(model);
+		}
+
 		public ActionResult CalendarAdminAddEdit(Guid? id) {
 			Guid ItemGuid = id ?? Guid.Empty;
 
@@ -75,7 +86,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 				};
 			}
 
-			return View(model);
+			return View("CalendarAdminAddEdit", model);
 		}
 
 		[HttpPost]
@@ -110,7 +121,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 				return RedirectToAction("CalendarAdminAddEdit", new { @id = itm.CalendarID });
 			}
 
-			return View(model);
+			return View("CalendarAdminAddEdit", model);
 		}
 
 		[HttpPost]

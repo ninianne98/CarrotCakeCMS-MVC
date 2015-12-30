@@ -1,12 +1,13 @@
 ﻿@model CarrotCake.CMS.Plugins.CalendarModule.Code.tblCalendar
 
 @{
-	ViewBag.Title = "Calendar Admin Add/Edit";
+	ViewBag.Title = "Calendar Admin Edit";
 
 	bool entryExists = true;
 	string buttonCaption = "Save";
 
 	if (Model.CalendarID == Guid.Empty) {
+		ViewBag.Title = "Calendar Admin Add";
 		buttonCaption = "Add";
 		entryExists = false;
 	}
@@ -18,26 +19,30 @@
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
 	<table style="width: 600px;">
 		<tr>
 			<td class="tablecaption" style="width: 150px;">
-				date (m/d/y)
+				@Html.LabelFor(model => model.EventDate)
 			</td>
 			<td style="width: 450px;">
 				@Html.TextBoxFor(m => m.EventDate, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
+				@Html.ValidationMessageFor(model => model.EventDate, "", new { @class = "text-danger" })
 			</td>
 		</tr>
 		<tr>
 			<td class="tablecaption">
-				event
+				@Html.LabelFor(model => model.EventTitle)
 			</td>
 			<td>
 				@Html.TextBoxFor(m => m.EventTitle, new { @style = "width: 600px;" })
+				@Html.ValidationMessageFor(model => model.EventTitle, "", new { @class = "text-danger" })
 			</td>
 		</tr>
 		<tr>
 			<td class="tablecaption">
-				details
+				@Html.LabelFor(model => model.EventDetail)
 			</td>
 			<td>
 				@Html.TextAreaFor(m => m.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 200px; width: 600px;" })
@@ -49,7 +54,7 @@
 			</td>
 			<td align="right">
 				<div style="text-align: left; float: left">
-					Active
+					@Html.LabelFor(model => model.IsActive)
 					@Html.CheckBox(Html.IdFor(m => m.IsActive).ToString(), Model.IsActive ?? false)
 				</div>
 				<br />
@@ -68,11 +73,9 @@
 
 	<div style="display:none">
 		<input type="submit" id="btnSubmitCal" />
-
 		@Html.HiddenFor(m => m.CalendarID)
 		@Html.HiddenFor(m => m.SiteID)
 	</div>
-
 }
 
 <script type="text/javascript">
@@ -109,6 +112,10 @@
 	@using (Html.BeginForm("CalendarAdminDelete", null)) {
 		@Html.AntiForgeryToken()
 
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+		@Html.HiddenFor(m => m.EventDate)
+		@Html.HiddenFor(m => m.EventTitle)
 		@Html.HiddenFor(m => m.CalendarID)
 		@Html.HiddenFor(m => m.SiteID)
 

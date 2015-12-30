@@ -131,6 +131,7 @@
       <DependentUpon>dbCalendar.dbml</DependentUpon>
     </Compile>
     <Compile Include="Code\CalendarModuleRegistration.cs" />
+    <Compile Include="Code\ICalendar.cs" />
     <Compile Include="Code\WebHelper.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

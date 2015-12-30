@@ -91,16 +91,17 @@ namespace Carrotware.Web.UI.Components {
 		public static string DisplayNameFor<T>(Expression<Func<T, object>> expression) {
 			string propertyName = String.Empty;
 			PropertyInfo propInfo = null;
+			Type type = null;
 
 			MemberExpression memberExpression = expression.Body as MemberExpression ??
 												((UnaryExpression)expression.Body).Operand as MemberExpression;
 			if (memberExpression != null) {
 				propertyName = memberExpression.Member.Name;
-				Type t = memberExpression.Member.DeclaringType;
-				propInfo = t.GetProperty(propertyName);
+				type = memberExpression.Member.DeclaringType;
+				propInfo = type.GetProperty(propertyName);
 			}
 
-			if (!String.IsNullOrEmpty(propertyName)) {
+			if (!String.IsNullOrEmpty(propertyName) && type != null) {
 				DisplayAttribute attribute1 = propInfo.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
 				if (attribute1 != null) {
 					return attribute1.Name;
@@ -109,6 +110,22 @@ namespace Carrotware.Web.UI.Components {
 				DisplayNameAttribute attribute2 = propInfo.GetCustomAttributes(typeof(DisplayNameAttribute), true).FirstOrDefault() as DisplayNameAttribute;
 				if (attribute2 != null) {
 					return attribute2.DisplayName;
+				}
+
+				MetadataTypeAttribute metadataType = (MetadataTypeAttribute)type.GetCustomAttributes(typeof(MetadataTypeAttribute), true).FirstOrDefault();
+				if (metadataType != null) {
+					PropertyInfo metaProp = metadataType.MetadataClassType.GetProperty(propInfo.Name);
+					if (metaProp != null) {
+						DisplayAttribute attribute3 = (DisplayAttribute)metaProp.GetCustomAttributes(typeof(DisplayAttribute), true).SingleOrDefault();
+						if (attribute3 != null) {
+							return attribute3.Name;
+						}
+
+						DisplayNameAttribute attribute4 = (DisplayNameAttribute)metaProp.GetCustomAttributes(typeof(DisplayNameAttribute), true).SingleOrDefault();
+						if (attribute4 != null) {
+							return attribute4.DisplayName;
+						}
+					}
 				}
 			}
 
