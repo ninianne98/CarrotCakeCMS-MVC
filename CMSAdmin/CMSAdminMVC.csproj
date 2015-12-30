@@ -1043,6 +1043,7 @@
     <Compile Include="Models\DuplicateWidgetFromModel.cs" />
     <Compile Include="Models\FileBrowserModel.cs" />
     <Compile Include="Models\FileUpModel.cs" />
+    <Compile Include="Models\ModuleInfo.cs" />
     <Compile Include="Models\PageChildSortModel.cs" />
     <Compile Include="Models\PageHistoryModel.cs" />
     <Compile Include="Models\PageTemplateUpdateModel.cs" />

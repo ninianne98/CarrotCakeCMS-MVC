@@ -55,18 +55,23 @@ namespace Carrotware.CMS.Core {
 
 	[Serializable()]
 	public class CMSTemplate {
+
 		[Display(Name = "Template Path")]
 		public string TemplatePath { get; set; }
+
 		[Display(Name = "Caption")]
 		public string Caption { get; set; }
+
 		[Display(Name = "Encoded Path")]
 		public string EncodedPath { get; set; }
 	}
 
 	[Serializable()]
 	public class CMSTextWidget {
+
 		[Display(Name = "Assembly String")]
 		public string AssemblyString { get; set; }
+
 		[Display(Name = "Display Name")]
 		public string DisplayName { get; set; }
 	}
