@@ -88,6 +88,9 @@
 				@RenderSection("SideBar", required: false)
 			</div>
 			<div>
+				@CarrotCakeHtml.RenderWidget("phLeftTop")
+			</div>
+			<div>
 				@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextLeft)
 			</div>
 			<div>
@@ -96,8 +99,11 @@
 			<p>&nbsp;</p>
 		</div>
 		<div id="main">
-			<a name="TemplateInfo"></a>
 			<h1>@CmsPage.Heading</h1>
+			<div>
+				@CarrotCakeHtml.RenderWidget("phCenterTop")
+			</div>
+
 			<div>
 				@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
 				@RenderBody()
@@ -139,6 +145,9 @@
 				@RenderSection("RightSideBar", required: false)
 			</div>
 			<div>
+				@CarrotCakeHtml.RenderWidget("phRightTop")
+			</div>
+			<div>
 				@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextRight)
 			</div>
 			<div>
@@ -157,7 +166,8 @@
 			<div id="footer-left">
 				@Html.Raw(String.Format("&copy;  {0}, <strong>{1}</strong>. ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
 				All rights reserved.
-				| Site built with <a target="_blank" href="http://www.carrotcakecms.com/">carrotcake cms</a>
+				<br />
+				Site built with <a target="_blank" href="http://www.carrotcakecms.com/">carrotcake cms</a>
 				<br />
 				Design by: <a target="_blank" href="http://www.styleshout.com/">styleshout</a>
 				| Valid <a target="_blank" href="http://validator.w3.org/check/referer">XHTML</a>

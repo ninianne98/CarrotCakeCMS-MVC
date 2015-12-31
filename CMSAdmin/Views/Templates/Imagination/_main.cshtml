@@ -99,22 +99,20 @@
 <body class="@bodyCssClass">
 
 	<div id="header-wrapper">
+
 		<!-- Header -->
 		<div id="header">
 			<div class="container">
 
-				<!-- Logo -->
 				<div id="logo">
 					<h1><a href="~/">@ViewBag.SiteName</a></h1>
-				</div>
+				</div> <!-- /Logo -->
 
-				<!-- Nav -->
 				<nav id="nav">
 					@nav
-				</nav>
+				</nav> <!-- /Nav -->
 			</div>
-		</div>
-		<!-- Header -->
+		</div> <!-- /Header -->
 		@RenderSection("Banner", required: false)
 	</div>
 
@@ -125,12 +123,12 @@
 	<!-- Featured -->
 	<div id="featured">
 		<div class="container">
-			<section>
-				<header>
-					<h2>Fusce ultrices fringilla metus</h2>
-					<span class="byline">Posuere eleifend odio quisque semper mattis</span>
-				</header>
-			</section>
+			@*<section>
+					<header>
+						<h2>Fusce ultrices fringilla metus</h2>
+						<span class="byline">Posuere eleifend odio quisque semper mattis</span>
+					</header>
+				</section>*@
 
 			<div class="row">
 				@foreach (var p in pager.DataSource) {
@@ -200,7 +198,9 @@
 			@Html.Raw(String.Format("&copy;  {0}, {1}. All rights reserved.", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
 			<br />
 			Design: <a target="_blank" href="http://templated.co">TEMPLATED</a>
-			Images: <a target="_blank" href="http://unsplash.com">Unsplash</a> (<a target="_blank" href="http://unsplash.com/cc0">CC0</a>)
+			Images: <a target="_blank" href="http://unsplash.com">Unsplash</a>
+			(<a target="_blank" href="http://unsplash.com/cc0">CC0</a>)
+			<br />
 			Site built with <a target="_blank" href="http://www.carrotcakecms.com/">carrotcakecms</a>
 		</div>
 	</div>

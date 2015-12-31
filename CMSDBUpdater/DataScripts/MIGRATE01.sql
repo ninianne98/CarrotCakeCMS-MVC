@@ -276,16 +276,6 @@ set [FileName] = REPLACE([FileName], '--', '-'),
 --=====================
 -- environment specific changes BEGIN
 update [dbo].[carrot_Content]
-set [PageText] = REPLACE([PageText], '/wp/', '/')
-where [IsLatestVersion] = 1
-and [PageText] like '%/wp/%'
-
-update [dbo].[carrot_Content]
-set [PageText] = REPLACE([PageText], 'http://nccb.carrotware.net/', '/')
-where [IsLatestVersion] = 1
-and [PageText] like '%nccb.carrotware.net%'
-
-update [dbo].[carrot_Content]
 set [PageText] = REPLACE([PageText], '.aspx', '')
 where [IsLatestVersion] = 1
 and [PageText] like '%.aspx%'
