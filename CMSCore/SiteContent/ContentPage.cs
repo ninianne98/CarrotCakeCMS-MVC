@@ -523,7 +523,7 @@ namespace Carrotware.CMS.Core {
 		[Display(Name = "Block")]
 		public bool BlockIndex { get; set; }
 
-		[Display(Name = "Active")]
+		[Display(Name = "Public")]
 		public bool PageActive { get; set; }
 
 		[Display(Name = "In Site Nav")]

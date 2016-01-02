@@ -29,6 +29,14 @@
 			<img src="~/Assets/Admin/Images/html.png" alt="Visit Page" title="Visit Page" />
 		</a>
 	})
+	.AddColumn(new CarrotGridTemplateColumn<EditHistory> {
+		HasHeadingText = false,
+		FormatTemplate = @<text>
+			<a href="javascript:void(0)" onclick="@String.Format("ShowWindowNoRefresh('{0}/{1}')", SiteFilename.PageHistoryURL, item.Root_ContentID)">
+				<img src="~/Assets/Admin/Images/hourglass.png" alt="View Page History" title="View Page History" />
+			</a>
+		</text>
+	})
 	.AddColumn(x => x.NavMenuText, new CarrotGridColumn { Sortable = true })
 
 	.AddColumn(x => x.ContentTypeValue, new CarrotGridImageColumn {
@@ -36,10 +44,15 @@
 		ImagePairs = typeImgs
 	})
 
-	.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true })
 	.AddColumn(x => x.EditUserName, new CarrotGridColumn { Sortable = true })
-	.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true })
+	.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy} {0:h:mm tt}" })
+
 	.AddColumn(x => x.CreateUserName, new CarrotGridColumn { Sortable = true })
+	.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy} {0:h:mm tt}" })
+
+	.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+	.AddColumn(x => x.RetireDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+
 	.AddColumn(x => x.IsLatestVersion, new CarrotGridBooleanImageColumn {
 		AlternateTextTrue = "Latest",
 		AlternateTextFalse = "Not Latest",

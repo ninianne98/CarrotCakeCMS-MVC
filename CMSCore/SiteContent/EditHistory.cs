@@ -77,7 +77,7 @@ namespace Carrotware.CMS.Core {
 		[Display(Name = "Content Type")]
 		public string ContentTypeValue { get; set; }
 
-		[Display(Name = "Active")]
+		[Display(Name = "Public")]
 		public bool PageActive { get; set; }
 
 		[Display(Name = "Go Live Date")]
