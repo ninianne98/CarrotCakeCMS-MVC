@@ -5,16 +5,42 @@
 }
 
 <p>
-	@using (Html.BeginForm("FixOrphan", RouteConfig.AdminCtrlr, FormMethod.Post)) {
-		@Html.AntiForgeryToken()
-		<input type="submit" name="btnFixOrphan" value="Fix Orphaned Pages" id="btnFixOrphan" />
-	}
+	<input type="button" name="btnSaveButton2" value="Save Sitemap" id="btnSaveButton2" onclick="ClickSaveBtn()" />
+	&nbsp;&nbsp;&nbsp;
+	<input type="button" name="btnFixOrphan2" value="Fix Orphaned Pages" id="btnFixOrphan2" onclick="ClickFixOrphanBtn()" />
+	&nbsp;&nbsp;&nbsp;
+	<input type="button" name="btnFixBlog2" value="Fix Blog Navs" id="btnFixBlog2" onclick="ClickFixBlogBtn()" />
 </p>
-<p>
-	@using (Html.BeginForm("FixBlog", RouteConfig.AdminCtrlr, FormMethod.Post)) {
-		@Html.AntiForgeryToken()
-		<input type="submit" name="btnFixBlog" value="Fix Blog Navs" id="btnFixBlog" />
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#btnSaveButtonDiv').css('display', 'none');
+	});
+
+	function ClickSaveBtn() {
+		$('#btnSaveButton').click();
 	}
-</p>
+	function ClickFixOrphanBtn() {
+		$('#btnFixOrphan').click();
+	}
+	function ClickFixBlogBtn() {
+		$('#btnFixBlog').click();
+	}
+</script>
+
+<div style="display: none;">
+	<p>
+		@using (Html.BeginForm("FixOrphan", RouteConfig.AdminCtrlr, FormMethod.Post)) {
+			@Html.AntiForgeryToken()
+			<input type="submit" name="btnFixOrphan" value="Fix Orphaned Pages" id="btnFixOrphan" />
+		}
+	</p>
+	<p>
+		@using (Html.BeginForm("FixBlog", RouteConfig.AdminCtrlr, FormMethod.Post)) {
+			@Html.AntiForgeryToken()
+			<input type="submit" name="btnFixBlog" value="Fix Blog Navs" id="btnFixBlog" />
+		}
+	</p>
+</div>
 
 @Html.Partial("_SiteMap", Model)

@@ -221,8 +221,7 @@
 				<img src="~/Assets/Admin/Images/webpage.png" class="imgNoBorder image-handle" title="webpage" alt="webpage" id="@String.Format("img-{0}", mo.Root_ContentID)" />
 				<span class="page-status">
 					<a href="@mo.FileName" target="_blank">
-						@mo.FileName &nbsp;&nbsp;&nbsp;&nbsp;
-						[<b>@mo.NavMenuText</b>]
+						@mo.FileName &nbsp;&nbsp;&nbsp;&nbsp; [<b>@mo.NavMenuText</b>]
 					</a> &nbsp;&nbsp;&nbsp;&nbsp;
 
 					@if (!mo.PageActive) {
@@ -252,7 +251,8 @@
 
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
-	<p>
+
+	<p id="btnSaveButtonDiv">
 		<input type="submit" name="btnSaveButton" value="Save Sitemap" id="btnSaveButton" />
 	</p>
 
