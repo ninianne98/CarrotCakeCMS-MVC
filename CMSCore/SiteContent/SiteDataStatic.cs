@@ -530,6 +530,10 @@ namespace Carrotware.CMS.Core {
 			DatabaseUpdate.WriteDebugException(bWriteError, sSrc, objErr);
 		}
 
+		public static void Perform404Redirect(string sReqURL) {
+			PerformRedirectToErrorPage(404, sReqURL);
+		}
+
 		public static void PerformRedirectToErrorPage(int ErrorKey, string sReqURL) {
 			PerformRedirectToErrorPage(ErrorKey.ToString(), sReqURL);
 		}
@@ -544,7 +548,7 @@ namespace Carrotware.CMS.Core {
 			XmlElement xmlCustomErrors = xDoc.SelectSingleNode("//system.web/customErrors") as XmlElement;
 
 			if (xmlCustomErrors != null) {
-				string redirectPage = "";
+				string redirectPage = String.Empty;
 
 				if (xmlCustomErrors.Attributes["mode"] != null && xmlCustomErrors.Attributes["mode"].Value.ToLower() != "off") {
 					if (xmlCustomErrors.Attributes["defaultRedirect"] != null) {
@@ -557,15 +561,15 @@ namespace Carrotware.CMS.Core {
 							redirectPage = xmlErrNode.Attributes["redirect"].Value;
 						}
 					}
-					string sQS = "";
+					string sQS = String.Empty;
 					if (context.Request.QueryString != null) {
 						if (!String.IsNullOrEmpty(context.Request.QueryString.ToString())) {
-							sQS = HttpUtility.UrlEncode("?" + context.Request.QueryString.ToString());
+							sQS = HttpUtility.UrlEncode(String.Format("?{0}", context.Request.QueryString));
 						}
 					}
 
 					if (!String.IsNullOrEmpty(redirectPage) && !sQS.ToLower().Contains("aspxerrorpath")) {
-						context.Response.Redirect(redirectPage + "?aspxerrorpath=" + sReqURL + sQS);
+						context.Response.Redirect(String.Format("{0}?aspxerrorpath={1}{2}", redirectPage, sReqURL, sQS));
 					}
 				}
 			}

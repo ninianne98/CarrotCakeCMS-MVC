@@ -166,6 +166,18 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 		}
 
+		public ActionResult PageNotFound() {
+			//SiteData.Perform404Redirect(Request.Path);
+
+			Response.StatusCode = 404;
+			Response.AppendHeader("Status", "HTTP/1.1 404 Object Not Found");
+			SiteData.WriteDebugException("cmscontentcontroller_pagenotfound", new Exception("HttpNotFound"));
+
+			throw new HttpException(404, "HTTP/1.1 404 Object Not Found");
+
+			return HttpNotFound();
+		}
+
 		protected void LoadPage() {
 			if (_page == null) {
 				if (this.ViewData[PagePayload.ViewDataKey] == null) {

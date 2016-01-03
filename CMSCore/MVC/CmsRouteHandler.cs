@@ -91,7 +91,7 @@ namespace Carrotware.CMS.Core {
 							requestCtx.RouteData.Values["action"] = "Default";
 						} else {
 							SiteData.WriteDebugException("cmsroutehandler == null", new Exception(String.Format("_PageNotFound: {0}", sCurrentPage)));
-							requestCtx.RouteData.Values["action"] = "_PageNotFound";
+							requestCtx.RouteData.Values["action"] = "PageNotFound";
 						}
 						requestCtx.RouteData.Values["id"] = null;
 					}
