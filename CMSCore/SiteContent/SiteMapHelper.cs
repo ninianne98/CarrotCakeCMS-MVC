@@ -41,9 +41,15 @@ namespace Carrotware.CMS.Core {
 			response.Clear();
 			response.ContentType = "application/xml";
 
-			XmlWriter writer = XmlWriter.Create(response.Output);
+			XmlWriterSettings settings = new XmlWriterSettings();
+			settings.Indent = true;
+			settings.Encoding = Encoding.UTF8;
+			settings.CheckCharacters = true;
 
-			writer.WriteStartDocument();
+			XmlWriter writer = XmlWriter.Create(response.Output, settings);
+
+			//writer.WriteStartDocument();
+			writer.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\"");
 			writer.WriteRaw("\n");
 			writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
 			writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
@@ -90,9 +96,15 @@ namespace Carrotware.CMS.Core {
 			DateTime dtMax = lstNav.Min(x => x.EditDate);
 			string DateFormat = "yyyy-MM-dd";
 
-			XmlWriter writer = XmlWriter.Create(sb);
+			XmlWriterSettings settings = new XmlWriterSettings();
+			settings.Indent = true;
+			settings.Encoding = Encoding.UTF8;
+			settings.CheckCharacters = true;
 
-			writer.WriteStartDocument();
+			XmlWriter writer = XmlWriter.Create(sb, settings);
+
+			//writer.WriteStartDocument();
+			writer.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\"");
 			writer.WriteRaw("\n");
 			writer.WriteStartElement("urlset", "http://www.sitemaps.org/schemas/sitemap/0.9");
 			writer.WriteAttributeString("xmlns", "xsi", null, "http://www.w3.org/2001/XMLSchema-instance");
