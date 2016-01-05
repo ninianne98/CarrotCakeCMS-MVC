@@ -53,6 +53,11 @@ namespace Carrotware.CMS.Core {
 				SiteData.WriteDebugException("cmsroutehandler ashx not matched", new Exception(String.Format("RequestedUri: {0}", requestedUri)));
 
 				return base.GetHttpHandler(requestCtx);
+			} else if (requestedUri.EndsWith(".aspx")) {
+				//since .aspx is not supported
+				requestCtx.RouteData.Values["controller"] = ContentCtrlr;
+				requestCtx.RouteData.Values["action"] = "PageNotFound";
+				requestCtx.RouteData.Values["id"] = null;
 			} else {
 				string sCurrentPage = SiteData.CurrentScriptName;
 
