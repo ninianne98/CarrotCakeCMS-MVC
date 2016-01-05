@@ -47,8 +47,9 @@ namespace Carrotware.CMS.Core {
 				//	return base.GetHttpHandler(requestCtx);
 				//}
 
-				requestCtx.RouteData.Values["controller"] = "Carrotware.CMS.Core.CmsHome";
-				requestCtx.RouteData.Values["action"] = "Default_ashx";
+				requestCtx.RouteData.Values["controller"] = ContentCtrlr;
+				requestCtx.RouteData.Values["action"] = "PageNotFound";
+				requestCtx.RouteData.Values["id"] = null;
 
 				SiteData.WriteDebugException("cmsroutehandler ashx not matched", new Exception(String.Format("RequestedUri: {0}", requestedUri)));
 
