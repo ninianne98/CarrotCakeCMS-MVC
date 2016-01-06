@@ -19,42 +19,39 @@ using System.Web.Routing;
 namespace Carrotware.CMS.Mvc.UI.Admin {
 
 	public class CmsControllerFactory : DefaultControllerFactory {
-		private Dictionary<string, Func<RequestContext, IController>> controllers;
 
-		public CmsControllerFactory() {
-			controllers = new Dictionary<string, Func<RequestContext, IController>>();
+		public CmsControllerFactory()
+			: base() {
 		}
 
-		public CmsControllerFactory(IAdminModule moduleData)
-			: base() { }
-
 		public override IController CreateController(RequestContext requestContext, string controllerName) {
-			if (controllers != null && controllers.ContainsKey(controllerName)) {
-				return controllers[controllerName](requestContext);
-			} else {
-				IController ctrl = base.CreateController(requestContext, controllerName);
+			IController ctrl = base.CreateController(requestContext, controllerName);
 
-				if (ctrl is IAdminModule) {
-					var principal = requestContext.HttpContext.User;
+			if (ctrl is IAdminModule) {
+				var principal = requestContext.HttpContext.User;
 
-					if (principal.Identity.IsAuthenticated) {
-						if (ctrl is IAdminModule) {
-							IAdminModule m = ((IAdminModule)ctrl);
-							m.SiteID = SiteData.CurrentSiteID;
-							m.ModuleID = Guid.Empty;
-						}
-					} else {
-						ctrl = new CmsAdminController();
+				if (principal.Identity.IsAuthenticated) {
+					if (ctrl is IAdminModule) {
+						IAdminModule m = (ctrl as IAdminModule);
+						m.SiteID = SiteData.CurrentSiteID;
+						m.ModuleID = Guid.Empty;
 					}
-				}
+				} else {
+					SiteData.WriteDebugException("cmscontrollerfactory_createcontroller", new Exception(String.Format("Anonymous: {0} - {1}", ctrl.GetType(), controllerName)));
 
-				if (ctrl is IWidget) {
-					IWidget w = (IWidget)ctrl;
-					w.SiteID = SiteData.CurrentSiteID;
-				}
+					requestContext.RouteData.Values["action"] = "Index";
+					requestContext.RouteData.Values["id"] = null;
 
-				return ctrl;
+					ctrl = new CmsAdminController();
+				}
 			}
+
+			if (ctrl is IWidget) {
+				IWidget w = ctrl as IWidget;
+				w.SiteID = SiteData.CurrentSiteID;
+			}
+
+			return ctrl;
 		}
 
 		public static IControllerFactory GetFactory() {
