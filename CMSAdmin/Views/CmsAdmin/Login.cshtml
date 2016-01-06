@@ -6,7 +6,7 @@
 	ViewBag.Title = "Login";
 }
 
-@using (Html.BeginForm("Login", RouteConfig.AdminCtrlr, new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" })) {
+@using (Html.BeginForm("Login", RouteConfig.AdminCtrlr, FormMethod.Post, new { role = "form" })) {
 	@Html.AntiForgeryToken()
 
 	<table style="width: 300px;">
@@ -58,6 +58,7 @@
 			<td>
 				<div style="float: right; clear: both; margin-right: 10px;">
 					<input type="submit" name="cmdLogon" value="Logon" id="cmdLogon" tabindex="3" />
+					@Html.HiddenFor(m => m.ReturnUrl)
 				</div>
 			</td>
 			<td>
@@ -69,7 +70,7 @@
 		@Html.Partial("_PublicValidError")
 		<div>
 			<p>
-				<a href="./ForgotPassword" id="lnkForgot">Forgot Password?</a>
+				<a href="@SiteFilename.ForgotPasswordURL" id="lnkForgot">Forgot Password?</a>
 			</p>
 		</div>
 	</div>

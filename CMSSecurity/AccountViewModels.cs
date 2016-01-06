@@ -51,6 +51,8 @@ namespace Carrotware.CMS.Security.Models {
 
 	public class LoginViewModel {
 
+		public LoginViewModel() { }
+
 		[Required]
 		[Display(Name = "Username")]
 		[StringLength(128)]
@@ -63,6 +65,8 @@ namespace Carrotware.CMS.Security.Models {
 
 		[Display(Name = "Remember me?")]
 		public bool RememberMe { get; set; }
+
+		public string ReturnUrl { get; set; }
 	}
 
 	public class RegisterViewModel {

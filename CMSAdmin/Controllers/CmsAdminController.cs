@@ -660,17 +660,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return View(model);
 		}
 
-		[AllowAnonymous]
-		public ActionResult Login(string returnUrl) {
-			var res = CheckDatabase();
-			if (res != null) {
-				return res;
-			}
-
-			ViewBag.ReturnUrl = returnUrl;
-			return View();
-		}
-
 		public ActionResult CheckDatabase() {
 			if (DatabaseUpdate.AreCMSTablesIncomplete() || !DatabaseUpdate.UsersExist) {
 				DatabaseUpdate.ResetFailedSQL();
@@ -683,10 +672,23 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return null;
 		}
 
+		[AllowAnonymous]
+		public ActionResult Login(string returnUrl) {
+			var res = CheckDatabase();
+			if (res != null) {
+				return res;
+			}
+
+			LoginViewModel model = new LoginViewModel();
+			model.ReturnUrl = HttpUtility.UrlEncode(returnUrl);
+
+			return View(model);
+		}
+
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Login(LoginViewModel model, string returnUrl) {
+		public async Task<ActionResult> Login(LoginViewModel model) {
 			Helper.ForceValidation(ModelState, model);
 
 			if (!ModelState.IsValid) {
@@ -694,6 +696,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				return View(model);
 			}
+
+			string returnUrl = HttpUtility.UrlDecode(model.ReturnUrl);
 
 			//TODO: make configurable
 			//manage.UserManager.UserLockoutEnabledByDefault = true;
