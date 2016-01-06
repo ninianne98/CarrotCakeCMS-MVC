@@ -261,7 +261,7 @@
 			</form>
 
 			@if (Request.IsAuthenticated) {
-				using (Html.BeginForm("LogOff", RouteConfig.AdminCtrlr, FormMethod.Post, new { id = "logoutForm" })) {
+				using (Html.BeginForm("LogOff", RouteConfig.AdminCtrlr, new { area = "" }, FormMethod.Post, new { id = "logoutForm" })) {
 					@Html.AntiForgeryToken()
 
 					<input type="submit" name="btnLogout" value="Logout" id="btnLogout" />
