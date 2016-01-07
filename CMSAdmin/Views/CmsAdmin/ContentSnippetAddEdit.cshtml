@@ -8,6 +8,8 @@
 	if (ViewBag.ContentEditMode == "raw") {
 		editCSS = "rawEditor";
 	}
+
+	bool bLocked = Model.IsLocked && Model.Heartbeat_UserId.HasValue;
 }
 
 @section scripts{
@@ -128,7 +130,7 @@
 			});
 		}
 
-		@if (Model.IsLocked) {
+		@if (bLocked) {
 		<text>
 
 		function EditHB() { }
@@ -142,18 +144,15 @@
 			var webMthd = webSvc + "/RecordSnippetHeartbeat";
 			setTimeout("EditHB();", 25 * 1000);
 
-			if(!cmsGetOKToLeaveStatus()){
-
-				$.ajax({
-					type: "POST",
-					url: webMthd,
-					data: JSON.stringify({ ItemID: thePageID }),
-					contentType: "application/json; charset=utf-8",
-					dataType: "json",
-					success: updateHeartbeat,
-					error: cmsAjaxFailedSwallow
-				});
-			}
+			$.ajax({
+				type: "POST",
+				url: webMthd,
+				data: JSON.stringify({ ItemID: thePageID }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: updateHeartbeat,
+				error: cmsAjaxFailedSwallow
+			});
 		}
 
 		function updateHeartbeat(data, status) {
@@ -186,7 +185,7 @@
 		</text>
 		}
 
-		var cmsIsPageLocked = @Model.IsLocked.ToString().ToLower();
+		var cmsIsPageLocked = @bLocked.ToString().ToLower();
 
 		$(window).bind('beforeunload', function () {
 			//cmsConfirmLeavingPage = false;
@@ -210,6 +209,19 @@
 		});
 	</script>
 
+}
+
+@if (bLocked) {
+	UserProfile usr = SecurityData.GetProfileByUserID(Model.Heartbeat_UserId.Value);
+
+	<div class="ui-widget" id="divEditing">
+		<div class="ui-state-highlight ui-corner-all" style="padding: 5px; margin-top: 5px; margin-bottom: 5px; width: 500px;">
+			<p>
+				<span class="ui-icon ui-icon-info" style="float: left; margin: 3px;"></span>
+				@String.Format("Read only mode. User '{0}' is currently editing the snippet.", usr.UserName)
+			</p>
+		</div>
+	</div>
 }
 
 <div>
@@ -296,31 +308,34 @@
 		</tr>
 	</table>
 	<div id="pnlButtons">
-
-		<table style="width: 900px;">
-			<tr>
-				<td>
-					<input type="button" name="btnSaveButton" value="Save" onclick="return SubmitPage();" id="btnSaveButton" />
-					&nbsp;&nbsp;
-					<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing()" />
-					&nbsp;&nbsp;
-					@if (Model.Root_ContentSnippetID != Guid.Empty) {
-						<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
-					}
-				</td>
-				<td>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				</td>
-			</tr>
-		</table>
+		@if (!bLocked) {
+			<table style="width: 900px;">
+				<tr>
+					<td>
+						<input type="button" name="btnSaveButton" value="Save" onclick="return SubmitPage();" id="btnSaveButton" />
+						&nbsp;&nbsp;
+						<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing()" />
+						&nbsp;&nbsp;
+						@if (Model.Root_ContentSnippetID != Guid.Empty) {
+							<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
+						}
+					</td>
+					<td>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					</td>
+				</tr>
+			</table>
+		}
 	</div>
 
 	<div style="display: none;">
-		<input type="submit" name="btnSave" value="Save" id="btnSave" />
+		@if (!bLocked) {
+			<input type="submit" name="btnSave" value="Save" id="btnSave" />
 
-		@Html.HiddenFor(m => m.Root_ContentSnippetID)
-		@Html.HiddenFor(m => m.ContentSnippetID)
-		@Html.HiddenFor(m => m.SiteID)
+			@Html.HiddenFor(m => m.Root_ContentSnippetID)
+			@Html.HiddenFor(m => m.ContentSnippetID)
+			@Html.HiddenFor(m => m.SiteID)
+		}
 
 		<div id="formPrettyValidationSummary">
 			@Html.ValidationSummary(true, "")
@@ -329,15 +344,17 @@
 
 }
 
-<div style="display: none">
-	@using (Html.BeginForm("DeleteSnippet", RouteConfig.AdminCtrlr)) {
-		@Html.AntiForgeryToken()
+@if (!bLocked) {
+	<div style="display: none">
+		@using (Html.BeginForm("DeleteSnippet", RouteConfig.AdminCtrlr)) {
+			@Html.AntiForgeryToken()
 
-		@Html.HiddenFor(m => m.Root_ContentSnippetID)
+			@Html.HiddenFor(m => m.Root_ContentSnippetID)
 
-		<input type="submit" name="btnDelete" value="Delete" id="btnDelete" />
-	}
-</div>
+			<input type="submit" name="btnDelete" value="Delete" id="btnDelete" />
+		}
+	</div>
+}
 
 <script type="text/javascript">
 
@@ -363,12 +380,6 @@
 	function SubmitPage() {
 		var sc = SaveCommon();
 		setTimeout("ClickSaveBtn();", 500);
-		return true;
-	}
-
-	function SubmitPageVisit() {
-		var sc = SaveCommon();
-		setTimeout("ClickSaveVisitBtn();", 500);
 		return true;
 	}
 

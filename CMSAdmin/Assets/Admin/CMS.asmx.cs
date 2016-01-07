@@ -148,7 +148,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		private bool ClearSerialized(string sKey) {
 			LoadGuids();
 
-			return CMSConfigHelper.ClearSerialized(CurrentPageGuid, sKey) ;
+			return CMSConfigHelper.ClearSerialized(CurrentPageGuid, sKey);
 		}
 
 		private void LoadGuids() {
@@ -514,7 +514,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				ContentSnippet item = GetSnippet(CurrentItemGuid);
 				bool bRet = false;
 
-				if (item != null) {
+				if (item != null && !item.IsLocked) {
 					bRet = item.RecordSnippetLock(SecurityData.CurrentUserGuid);
 				}
 
@@ -537,7 +537,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				Guid CurrentItemGuid = new Guid(ItemID);
 				ContentSnippet item = GetSnippet(CurrentItemGuid);
 
-				if (item != null) {
+				if (item != null && !item.IsLocked) {
 					item.ResetHeartbeatLock();
 				}
 
