@@ -5,8 +5,8 @@ Source code for CarrotCakeCMS (MVC)
 [REPO_GH]: https://github.com/ninianne98/CarrotCakeCMS-MVC/
 [REPO_CX]: http://carrotcakecmsmvc.codeplex.com/
 
-[DOC]: http://www.carrotware.com/carrotcake-cms.aspx?from=github-mvc "CarrotCakeCMS User Documentation"
-[TMPLT]: http://www.carrotware.com/carrotcake-templates.aspx?from=github-mvc
+[DOC]: http://www.carrotware.com/carrotcake-cms?from=github-mvc "CarrotCakeCMS User Documentation"
+[TMPLT]: http://www.carrotware.com/carrotcake-templates?from=github-mvc
 [IDE2013]: https://www.visualstudio.com/en-us/news/vs2013-community-vs.aspx
 [VWDISO2013]: https://go.microsoft.com/fwlink/?LinkId=532501&type=ISO&clcid=0x409
 [CEISO2013]: https://go.microsoft.com/fwlink/?LinkId=532496&type=ISO&clcid=0x409
