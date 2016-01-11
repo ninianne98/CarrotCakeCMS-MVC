@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <tbl>
-
 	<querynugget>
 		<priority>5</priority>
 		<mode>LT</mode>
@@ -9,7 +8,7 @@
 		<testcontext>|AreCMSTablesIncomplete|AlterStep01|</testcontext>
 		<sql>
 			select distinct table_name, column_name
-			from [information_schema].[columns]
+			from [INFORMATION_SCHEMA].[COLUMNS]
 			where table_name like 'vw_carrot_Comment'
 		</sql>
 	</querynugget>
@@ -22,7 +21,7 @@
 		<testcontext>|AreCMSTablesIncomplete|AlterStep00|</testcontext>
 		<sql>
 			select distinct table_name
-			from [information_schema].[columns]
+			from [INFORMATION_SCHEMA].[COLUMNS]
 			where table_name like 'carrot%'
 		</sql>
 	</querynugget>
@@ -35,7 +34,7 @@
 		<testcontext>|DoCMSTablesExist|AlterStep00|</testcontext>
 		<sql>
 			select distinct table_name
-			from [information_schema].[columns]
+			from [INFORMATION_SCHEMA].[COLUMNS]
 			where table_name in ('carrot_Sites', 'carrot_RootContent', 'carrot_Content', 'carrot_Widget')
 		</sql>
 	</querynugget>
@@ -48,7 +47,7 @@
 		<testcontext>|DoCMSTablesExist|</testcontext>
 		<sql>
 			select distinct table_name
-			from [information_schema].[columns]
+			from [INFORMATION_SCHEMA].[COLUMNS]
 			where table_name in ('membership_Role', 'membership_User', 'carrot_Sites', 'carrot_Content', 'carrot_Widget')
 		</sql>
 	</querynugget>
@@ -60,7 +59,7 @@
 		<alwayscheck>False</alwayscheck>
 		<testcontext>|DoUsersExist|</testcontext>
 		<sql>
-			if exists( select * from information_schema.columns  where table_name = 'membership_User' ) begin
+			if exists( select * from [INFORMATION_SCHEMA].[COLUMNS] where table_name = 'membership_User' ) begin
 			select top 3 * from [dbo].[membership_User]
 			end else begin
 			select top 0 GetDate() as FauxColumn
@@ -75,7 +74,7 @@
 		<alwayscheck>False</alwayscheck>
 		<testcontext>|SchemaVersionCheck|</testcontext>
 		<sql>
-			if not exists(select [table_name]  from [information_schema].[columns] where [table_name] in ('carrot_DataInfo') ) begin
+			if not exists(select [table_name] from [INFORMATION_SCHEMA].[COLUMNS] where [table_name] in ('carrot_DataInfo') ) begin
 			select @DataKey as [DataKey], '' [DataValue]
 			end else begin
 			select [DataKey], [DataValue] from dbo.[carrot_DataInfo] where [DataKey] = @DataKey
@@ -90,7 +89,7 @@
 		<alwayscheck>False</alwayscheck>
 		<testcontext>|SchemaVersionUpdate|</testcontext>
 		<sql>
-			if exists(select [table_name]  from [information_schema].[columns] where [table_name] in ('carrot_DataInfo') ) begin
+			if exists(select [table_name] from [INFORMATION_SCHEMA].[COLUMNS] where [table_name] in ('carrot_DataInfo') ) begin
 
 			if not exists(select * from dbo.[carrot_DataInfo] where [DataKey] = @DataKey) begin
 
@@ -109,38 +108,6 @@
 		</sql>
 	</querynugget>
 
-	<querynugget>
-		<priority>100</priority>
-		<mode>LT</mode>
-		<rowcount>2</rowcount>
-		<alwayscheck>False</alwayscheck>
-		<testcontext>|StepXX|</testcontext>
-		<sql>XXXXXXXXXXXXXXXX</sql>
-	</querynugget>
-	<querynugget>
-		<priority>100</priority>
-		<mode>LT</mode>
-		<rowcount>2</rowcount>
-		<alwayscheck>False</alwayscheck>
-		<testcontext>|StepXX|</testcontext>
-		<sql>XXXXXXXXXXXXXXXX</sql>
-	</querynugget>
-	<querynugget>
-		<priority>100</priority>
-		<mode>LT</mode>
-		<rowcount>2</rowcount>
-		<alwayscheck>False</alwayscheck>
-		<testcontext>|StepXX|</testcontext>
-		<sql>XXXXXXXXXXXXXXXX</sql>
-	</querynugget>
-	<querynugget>
-		<priority>100</priority>
-		<mode>LT</mode>
-		<rowcount>2</rowcount>
-		<alwayscheck>False</alwayscheck>
-		<testcontext>|StepXX|</testcontext>
-		<sql>XXXXXXXXXXXXXXXX</sql>
-	</querynugget>
 	<querynugget>
 		<priority>100</priority>
 		<mode>LT</mode>

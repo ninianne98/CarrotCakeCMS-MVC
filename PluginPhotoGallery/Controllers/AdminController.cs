@@ -108,7 +108,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			try {
 				sqlUpdate = GalleryHelper.ReadEmbededScript("CarrotCake.CMS.Plugins.PhotoGallery.tblGallery.sql");
 
-				sqlTest = "select * from [information_schema].[columns] where table_name in('tblGalleryImageMeta')";
+				sqlTest = "select * from [INFORMATION_SCHEMA].[COLUMNS] where table_name in('tblGalleryImageMeta')";
 				dbRes = du.ApplyUpdateIfNotFound(sqlTest, sqlUpdate, false);
 
 				if (dbRes.LastException != null && !string.IsNullOrEmpty(dbRes.LastException.Message)) {

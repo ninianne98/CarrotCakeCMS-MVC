@@ -7,7 +7,7 @@ GO
 SET ANSI_PADDING ON
 GO
 
-IF NOT EXISTS( select * from information_schema.columns 
+IF NOT EXISTS( select * from [INFORMATION_SCHEMA].[COLUMNS] 
 		where table_name = 'membership_Role' and column_name = 'Name') BEGIN
 
 CREATE TABLE [dbo].[membership_Role](
@@ -209,7 +209,7 @@ GO
 
 GO
 
-IF EXISTS( select * from information_schema.columns 
+IF EXISTS( select * from [INFORMATION_SCHEMA].[COLUMNS] 
 		where table_name = 'aspnet_Membership' and column_name = 'UserId') BEGIN
 
 INSERT INTO [dbo].[membership_User](
@@ -247,7 +247,7 @@ END
 
 GO
 
-IF NOT EXISTS( select * from information_schema.columns 
+IF NOT EXISTS( select * from [INFORMATION_SCHEMA].[COLUMNS] 
 		where table_name = 'carrot_UserData' and column_name = 'UserKey') BEGIN
 	ALTER TABLE [dbo].[carrot_UserData] ADD [UserKey] [nvarchar](128)
 END
@@ -375,7 +375,7 @@ where [IsLatestVersion] = 1
 
 GO
 
-IF EXISTS( select * from information_schema.columns 
+IF EXISTS( select * from [INFORMATION_SCHEMA].[COLUMNS] 
 		where table_name = 'aspnet_Users' and column_name = 'UserId') BEGIN
 
 INSERT INTO dbo.[carrot_UserData](UserId,UserKey)
@@ -491,7 +491,7 @@ END
 GO
 
 
-IF EXISTS( select * from information_schema.columns 
+IF EXISTS( select * from [INFORMATION_SCHEMA].[COLUMNS] 
 		where table_name = 'aspnet_Users' ) BEGIN
 
 ALTER TABLE [dbo].[aspnet_UsersInRoles] DROP CONSTRAINT [FK_aspnet_UsersInRoles_UserId]

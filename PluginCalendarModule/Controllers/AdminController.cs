@@ -43,7 +43,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 			try {
 				sqlUpdate = WebHelper.ReadEmbededScript("CarrotCake.CMS.Plugins.CalendarModule.tblCalendar.sql");
 
-				sqlTest = "select * from [information_schema].[columns] where table_name in('tblCalendar')";
+				sqlTest = "select * from [INFORMATION_SCHEMA].[COLUMNS] where table_name in('tblCalendar')";
 				dbRes = du.ApplyUpdateIfNotFound(sqlTest, sqlUpdate, false);
 
 				if (dbRes.LastException != null && !string.IsNullOrEmpty(dbRes.LastException.Message)) {

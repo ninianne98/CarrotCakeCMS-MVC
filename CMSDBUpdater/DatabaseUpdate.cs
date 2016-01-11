@@ -43,7 +43,7 @@ namespace Carrotware.CMS.DBUpdater {
 		private void TestDatabaseWithQuery() {
 			DatabaseUpdate.LastSQLError = null;
 
-			string query = "select top 10 table_name, column_name, ordinal_position from [information_schema].[columns] as isc " +
+			string query = "select top 10 table_name, column_name, ordinal_position from [INFORMATION_SCHEMA].[COLUMNS] as isc " +
 					" where isc.table_name like 'carrot%' " +
 					" order by isc.table_name, isc.ordinal_position, isc.column_name";
 
@@ -265,7 +265,7 @@ namespace Carrotware.CMS.DBUpdater {
 		}
 
 		public bool TableExists(string testTableName) {
-			string testQuery = "select * from [information_schema].[columns] where table_name = @TableName ";
+			string testQuery = "select * from [INFORMATION_SCHEMA].[COLUMNS] where table_name = @TableName ";
 			List<SqlParameter> parms = new List<SqlParameter>();
 
 			SqlParameter parmKey = new SqlParameter();
@@ -289,7 +289,7 @@ namespace Carrotware.CMS.DBUpdater {
 		public List<string> GetTableColumns(string testTableName) {
 			List<string> lst = new List<string>();
 
-			string testQuery = "select * from [information_schema].[columns] where table_name = @TableName ";
+			string testQuery = "select * from [INFORMATION_SCHEMA].[COLUMNS] where table_name = @TableName ";
 
 			List<SqlParameter> parms = new List<SqlParameter>();
 
