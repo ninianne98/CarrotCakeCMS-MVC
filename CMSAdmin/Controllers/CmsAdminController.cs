@@ -58,28 +58,28 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				try {
 					if (!lstInitSiteActions.Contains(action)) {
 						if (!lstOKNoSiteActions.Contains(action) && !SiteData.CurretSiteExists) {
-							Response.Redirect(SiteFilename.SiteInfoURL);
+							filterContext.Result = new RedirectResult(SiteFilename.SiteInfoURL);
 						}
 
 						if (DatabaseUpdate.TablesIncomplete) {
-							Response.Redirect(SiteFilename.DatabaseSetupURL);
+							filterContext.Result = new RedirectResult(SiteFilename.DatabaseSetupURL);
 						}
 
 						if (!SecurityData.IsAuthEditor &&
 							!(action == "notauthorized" || action == "login" || action == "logoff")) {
-							Response.Redirect(SiteFilename.NotAuthorizedURL);
+							filterContext.Result = new RedirectResult(SiteFilename.NotAuthorizedURL);
 						}
 
 						if (!SecurityData.IsAdmin && (action.StartsWith("useradd")
 									|| action.StartsWith("useredit")
 									|| action.StartsWith("roleadd"))) {
-							Response.Redirect(SiteFilename.SiteInfoURL);
+							filterContext.Result = new RedirectResult(SiteFilename.SiteInfoURL);
 						}
 					}
 				} catch (Exception ex) {
 					//assumption is database is probably empty / needs updating, so trigger the under construction view
 					if (DatabaseUpdate.SystemNeedsChecking(ex) || DatabaseUpdate.AreCMSTablesIncomplete()) {
-						Response.Redirect(SiteFilename.DatabaseSetupURL);
+						filterContext.Result = new RedirectResult(SiteFilename.DatabaseSetupURL);
 					} else {
 						//something bad has gone down, toss back the error
 						throw;
