@@ -19,6 +19,10 @@ namespace Carrotware.CMS.Interface {
 			this._field = className;
 		}
 
+		public WidgetActionSettingModelAttribute(Type dataType) {
+			this._field = dataType.AssemblyQualifiedName;
+		}
+
 		private string _field;
 
 		public string ClassName {

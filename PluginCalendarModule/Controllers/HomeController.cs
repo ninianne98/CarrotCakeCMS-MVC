@@ -33,7 +33,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		[WidgetActionSettingModel("CarrotCake.CMS.Plugins.CalendarModule.CalendarDisplaySettings, CarrotCake.CMS.Plugins.CalendarModule")]
+		[WidgetActionSettingModel(typeof(CalendarDisplaySettings))]
 		public ActionResult CalendarDisplay(CalendarViewModel model) {
 			CalendarViewSettings settings = new CalendarViewSettings();
 
@@ -75,7 +75,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		[WidgetActionSettingModel("CarrotCake.CMS.Plugins.CalendarModule.CalendarSimpleSettings, CarrotCake.CMS.Plugins.CalendarModule")]
+		[WidgetActionSettingModel(typeof(CalendarSimpleSettings))]
 		public ActionResult CalendarDisplaySimple(CalendarViewModel model) {
 			CalendarSimpleSettings settings = new CalendarSimpleSettings();
 
@@ -98,7 +98,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 			}
 		}
 
-		[WidgetActionSettingModel("CarrotCake.CMS.Plugins.CalendarModule.CalendarUpcomingSettings, CarrotCake.CMS.Plugins.CalendarModule")]
+		[WidgetActionSettingModel(typeof(CalendarUpcomingSettings))]
 		public ActionResult CalendarUpcoming() {
 			CalendarUpcomingSettings payload = new CalendarUpcomingSettings();
 
@@ -127,7 +127,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 			}
 		}
 
-		[WidgetActionSettingModel("CarrotCake.CMS.Plugins.CalendarModule.CalendarSimpleSettings, CarrotCake.CMS.Plugins.CalendarModule")]
+		[WidgetActionSettingModel(typeof(CalendarSimpleSettings))]
 		public ActionResult CalendarDateInfo(DateTime? calendardate) {
 			DateTime theEventDate = calendardate ?? DateTime.Now.Date;
 
