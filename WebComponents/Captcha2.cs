@@ -90,7 +90,7 @@ namespace Carrotware.Web.UI.Components {
 				return false;
 			}
 
-			bool valid = this.SessionKeyValue.Value.ToLower().Trim() == testValue.ToLower().Trim();
+			bool valid = this.SessionKeyValue.Value.ToLowerInvariant().Trim() == testValue.ToLowerInvariant().Trim();
 
 			if (valid) {
 				HttpContext.Current.Session[SessionKey] = null;

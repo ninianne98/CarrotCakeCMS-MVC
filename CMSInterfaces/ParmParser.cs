@@ -22,7 +22,7 @@ namespace Carrotware.CMS.Interface {
 
 			if (parmDictionary.Any()) {
 				ret = (from c in parmDictionary
-					   where c.Key.ToLower() == sKey.ToLower()
+					   where c.Key.ToLowerInvariant() == sKey.ToLowerInvariant()
 					   select c.Value).FirstOrDefault();
 			}
 
@@ -34,7 +34,7 @@ namespace Carrotware.CMS.Interface {
 
 			if (parmDictionary.Any()) {
 				ret = (from c in parmDictionary
-					   where c.Key.ToLower() == sKey.ToLower()
+					   where c.Key.ToLowerInvariant() == sKey.ToLowerInvariant()
 					   select c.Value).FirstOrDefault();
 			}
 
@@ -53,13 +53,13 @@ namespace Carrotware.CMS.Interface {
 
 		public static List<string> GetParmValueList(Dictionary<string, string> parmDictionary, string sKey) {
 			sKey = sKey.EndsWith("|") ? sKey : sKey + "|";
-			sKey = sKey.ToLower();
+			sKey = sKey.ToLowerInvariant();
 
 			List<string> ret = new List<string>();
 
 			if (parmDictionary.Any()) {
 				ret = (from c in parmDictionary
-					   where c.Key.ToLower().StartsWith(sKey)
+					   where c.Key.ToLowerInvariant().StartsWith(sKey)
 					   select c.Value).ToList();
 			}
 

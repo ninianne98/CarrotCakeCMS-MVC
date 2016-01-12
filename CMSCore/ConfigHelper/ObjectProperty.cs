@@ -64,7 +64,7 @@ namespace Carrotware.CMS.Core {
 			List<WidgetProps> lstProps = w.ParseDefaultControlProperties();
 
 			if (w.ControlPath.Contains(":")) {
-				if (w.ControlPath.ToUpper().StartsWith("CLASS:")) {
+				if (w.ControlPath.ToUpperInvariant().StartsWith("CLASS:")) {
 					try {
 						string className = w.ControlPath.Replace("CLASS:", "");
 						Type t = ReflectionUtilities.GetTypeFromString(className);
@@ -128,22 +128,22 @@ namespace Carrotware.CMS.Core {
 			//require that widget be attributed to be on the list
 			List<string> limitedPropertyList = (from ww in widget.GetType().GetProperties()
 												where Attribute.IsDefined(ww, typeof(WidgetAttribute))
-												select ww.Name.ToLower()).ToList();
+												select ww.Name.ToLowerInvariant()).ToList();
 
 			List<ObjectProperty> lstPropsToEdit = (from p in lstDefProps
-												   join l in limitedPropertyList on p.Name.ToLower() equals l.ToLower()
+												   join l in limitedPropertyList on p.Name.ToLowerInvariant() equals l.ToLowerInvariant()
 												   where p.CanRead == true
 													   && p.CanWrite == true
 												   select p).ToList();
 
 			foreach (var dp in lstPropsToEdit) {
-				string sName = dp.Name.ToLower();
-				List<WidgetProps> lstItmVals = lstProps.Where(x => x.KeyName.ToLower().StartsWith(sName + "|") || x.KeyName.ToLower() == sName).ToList();
+				string sName = dp.Name.ToLowerInvariant();
+				List<WidgetProps> lstItmVals = lstProps.Where(x => x.KeyName.ToLowerInvariant().StartsWith(sName + "|") || x.KeyName.ToLowerInvariant() == sName).ToList();
 
 				ObjectProperty sourceProperty = new ObjectProperty();
 
 				string sListSourcePropertyName = (from p in lstDefProps
-												  where p.Name.ToLower() == sName.ToLower()
+												  where p.Name.ToLowerInvariant() == sName.ToLowerInvariant()
 														&& !String.IsNullOrEmpty(p.CompanionSourceFieldName)
 												  select p.CompanionSourceFieldName).FirstOrDefault();
 
@@ -154,7 +154,7 @@ namespace Carrotware.CMS.Core {
 				sourceProperty = (from p in lstDefProps
 								  where p.CanRead == true
 									 && p.CanWrite == false
-									 && p.Name.ToLower() == sListSourcePropertyName.ToLower()
+									 && p.Name.ToLowerInvariant() == sListSourcePropertyName.ToLowerInvariant()
 								  select p).FirstOrDefault();
 
 				if (dp.FieldMode != WidgetAttribute.FieldMode.CheckBoxList) {

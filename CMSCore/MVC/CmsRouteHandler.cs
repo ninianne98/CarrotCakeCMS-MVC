@@ -21,7 +21,7 @@ namespace Carrotware.CMS.Core {
 		protected override IHttpHandler GetHttpHandler(System.Web.Routing.RequestContext requestCtx) {
 			string requestedUri = (string)requestCtx.RouteData.Values["RequestedUri"];
 
-			requestedUri = String.IsNullOrEmpty(requestedUri) ? String.Empty : requestedUri.ToLower();
+			requestedUri = String.IsNullOrEmpty(requestedUri) ? String.Empty : requestedUri.ToLowerInvariant();
 			if (!requestedUri.StartsWith("/")) {
 				requestedUri = String.Format("/{0}", requestedUri);
 			}
@@ -65,7 +65,7 @@ namespace Carrotware.CMS.Core {
 				try {
 					string sScrubbedURL = SiteData.AlternateCurrentScriptName;
 
-					if (sScrubbedURL.ToLower() != sCurrentPage.ToLower()) {
+					if (sScrubbedURL.ToLowerInvariant() != sCurrentPage.ToLowerInvariant()) {
 						requestedUri = sScrubbedURL;
 					}
 

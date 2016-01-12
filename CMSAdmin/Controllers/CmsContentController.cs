@@ -86,7 +86,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			Object frm = null;
 
 			if (Request.Form["form_type"] != null) {
-				string formMode = Request.Form["form_type"].ToString().ToLower();
+				string formMode = Request.Form["form_type"].ToString().ToLowerInvariant();
 
 				if (formMode == "searchform") {
 					frm = new SiteSearch();

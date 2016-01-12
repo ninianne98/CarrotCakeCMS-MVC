@@ -329,7 +329,7 @@ namespace Carrotware.CMS.Core {
 			bool keyVal = false;
 
 			if (SiteData.IsWebView && HttpContext.Current.User.Identity.IsAuthenticated) {
-				string key = String.Format("{0}_{1}_{2}", keyIsUserInRole, userName.ToLower(), groupName.ToLower());
+				string key = String.Format("{0}_{1}_{2}", keyIsUserInRole, userName.ToLowerInvariant(), groupName.ToLowerInvariant());
 
 				if (HttpContext.Current.Cache[key] != null) {
 					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
@@ -493,7 +493,7 @@ namespace Carrotware.CMS.Core {
 			get {
 				if (SiteData.IsWebView && HttpContext.Current.User.Identity.IsAuthenticated) {
 					if (!String.IsNullOrEmpty(HttpContext.Current.User.Identity.Name)) {
-						return HttpContext.Current.User.Identity.Name.ToLower();
+						return HttpContext.Current.User.Identity.Name.ToLowerInvariant();
 					}
 				}
 				return String.Empty;
@@ -594,14 +594,14 @@ namespace Carrotware.CMS.Core {
 				string strHTTPHost = String.Empty;
 				try { strHTTPHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { strHTTPHost = String.Empty; }
 
-				string hostName = strHTTPHost.ToLower();
+				string hostName = strHTTPHost.ToLowerInvariant();
 
 				string strHTTPPrefix = "http://";
 				try {
 					strHTTPPrefix = request.ServerVariables["SERVER_PORT_SECURE"] == "1" ? "https://" : "http://";
 				} catch { strHTTPPrefix = "http://"; }
 
-				strHTTPHost = String.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLower();
+				strHTTPHost = String.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLowerInvariant();
 
 				var resetTokenUrl = String.Format("{0}/{1}?userId={2}&code={3}", strHTTPHost, resetUri, user.Id, HttpUtility.UrlEncode(code));
 

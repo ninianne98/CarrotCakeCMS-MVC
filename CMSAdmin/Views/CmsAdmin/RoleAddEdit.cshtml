@@ -41,7 +41,7 @@
 	</fieldset>
 }
 
-@if (Model.Role.RoleId != Guid.Empty.ToString().ToLower()) {
+@if (Model.Role.RoleId != Guid.Empty.ToString().ToLowerInvariant()) {
 	<div id="pnlUsers">
 		<table>
 			<tr>

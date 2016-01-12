@@ -105,7 +105,7 @@ namespace Carrotware.CMS.UI.Components {
 		public static string GetParentPageName() {
 			SiteNav nav = ControlUtilities.GetParentPage();
 
-			return nav.FileName.ToLower();
+			return nav.FileName.ToLowerInvariant();
 		}
 
 		public static bool AreFilenamesSame(string sParm1, string sParm2) {
@@ -113,7 +113,7 @@ namespace Carrotware.CMS.UI.Components {
 				return false;
 			}
 
-			return (sParm1.ToLower() == sParm2.ToLower()) ? true : false;
+			return (sParm1.ToLowerInvariant() == sParm2.ToLowerInvariant()) ? true : false;
 		}
 	}
 

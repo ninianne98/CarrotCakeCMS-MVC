@@ -295,7 +295,7 @@ namespace Carrotware.CMS.Core {
 				string sCurrentPage = SiteData.CurrentScriptName;
 				string sScrubbedURL = SiteData.AlternateCurrentScriptName;
 
-				if (sScrubbedURL.ToLower() != sCurrentPage.ToLower()) {
+				if (sScrubbedURL.ToLowerInvariant() != sCurrentPage.ToLowerInvariant()) {
 					sCurrentPage = sScrubbedURL;
 				}
 
@@ -550,7 +550,7 @@ namespace Carrotware.CMS.Core {
 			if (xmlCustomErrors != null) {
 				string redirectPage = String.Empty;
 
-				if (xmlCustomErrors.Attributes["mode"] != null && xmlCustomErrors.Attributes["mode"].Value.ToLower() != "off") {
+				if (xmlCustomErrors.Attributes["mode"] != null && xmlCustomErrors.Attributes["mode"].Value.ToLowerInvariant() != "off") {
 					if (xmlCustomErrors.Attributes["defaultRedirect"] != null) {
 						redirectPage = xmlCustomErrors.Attributes["defaultRedirect"].Value;
 					}
@@ -568,7 +568,7 @@ namespace Carrotware.CMS.Core {
 						}
 					}
 
-					if (!String.IsNullOrEmpty(redirectPage) && !sQS.ToLower().Contains("aspxerrorpath")) {
+					if (!String.IsNullOrEmpty(redirectPage) && !sQS.ToLowerInvariant().Contains("aspxerrorpath")) {
 						context.Response.Redirect(String.Format("{0}?aspxerrorpath={1}{2}", redirectPage, sReqURL, sQS));
 					}
 				}
@@ -604,8 +604,8 @@ namespace Carrotware.CMS.Core {
 				sCurrentFile = sCurrentFile.Substring(0, sCurrentFile.IndexOf("?"));
 			}
 
-			if (sCurrentFile.ToLower() == SiteData.CurrentScriptName.ToLower()
-				|| sCurrentFile.ToLower() == SiteData.AlternateCurrentScriptName.ToLower()) {
+			if (sCurrentFile.ToLowerInvariant() == SiteData.CurrentScriptName.ToLowerInvariant()
+				|| sCurrentFile.ToLowerInvariant() == SiteData.AlternateCurrentScriptName.ToLowerInvariant()) {
 				return true;
 			}
 			return false;
@@ -636,15 +636,15 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string SearchQueryParameter {
-			get { return "query".ToLower(); }
+			get { return "query".ToLowerInvariant(); }
 		}
 
 		public static string AdvancedEditParameter {
-			get { return "carrotedit".ToLower(); }
+			get { return "carrotedit".ToLowerInvariant(); }
 		}
 
 		public static string TemplatePreviewParameter {
-			get { return "carrot_templatepreview".ToLower(); }
+			get { return "carrot_templatepreview".ToLowerInvariant(); }
 		}
 
 		public static string DefaultDirectoryFilename {
@@ -652,7 +652,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string DefaultTemplateFilename {
-			get { return "~/Views/CmsContent/PlainPageView.cshtml".ToLower(); }
+			get { return "~/Views/CmsContent/PlainPageView.cshtml".ToLowerInvariant(); }
 		}
 
 		public static string PreviewTemplateFilePage {
@@ -661,7 +661,7 @@ namespace Carrotware.CMS.Core {
 
 		public static bool IsPageSampler {
 			get {
-				return CurrentScriptName.ToLower().StartsWith(PreviewTemplateFilePage.ToLower())
+				return CurrentScriptName.ToLowerInvariant().StartsWith(PreviewTemplateFilePage.ToLowerInvariant())
 						&& HttpContext.Current.Request.QueryString[TemplatePreviewParameter] != null;
 			}
 		}
@@ -669,7 +669,7 @@ namespace Carrotware.CMS.Core {
 		public static bool IsPageReal {
 			get {
 				if (IsWebView
-					&& CurrentScriptName.ToLower() != DefaultDirectoryFilename.ToLower()
+					&& CurrentScriptName.ToLowerInvariant() != DefaultDirectoryFilename.ToLowerInvariant()
 					&& File.Exists(HttpContext.Current.Server.MapPath(CurrentScriptName))) {
 					return true;
 				} else {
@@ -697,12 +697,12 @@ namespace Carrotware.CMS.Core {
 
 		public static bool IsCurrentPageSpecial {
 			get {
-				return SiteData.SpecialFiles.Contains(CurrentScriptName.ToLower());
+				return SiteData.SpecialFiles.Contains(CurrentScriptName.ToLowerInvariant());
 			}
 		}
 
 		public static bool IsPageSpecial(string sPageName) {
-			return SiteData.SpecialFiles.Contains(sPageName.ToLower()) || sPageName.ToLower().StartsWith(AdminFolderPath);
+			return SiteData.SpecialFiles.Contains(sPageName.ToLowerInvariant()) || sPageName.ToLowerInvariant().StartsWith(AdminFolderPath);
 		}
 
 		public static string PreviewTemplateFile {
@@ -800,10 +800,10 @@ namespace Carrotware.CMS.Core {
 				string sCurrentPage = CurrentScriptName;
 
 				if (IsWebView) {
-					if (!CurrentScriptName.ToLower().StartsWith(AdminFolderPath)) {
+					if (!CurrentScriptName.ToLowerInvariant().StartsWith(AdminFolderPath)) {
 						string sScrubbedURL = CheckForSpecialURL(CurrentSite);
 
-						//if (sScrubbedURL.ToLower() == sCurrentPage.ToLower()) {
+						//if (sScrubbedURL.ToLowerInvariant() == sCurrentPage.ToLowerInvariant()) {
 						//	sCurrentPage = AppendDefaultPath(sCurrentPage);
 						//}
 
@@ -811,9 +811,9 @@ namespace Carrotware.CMS.Core {
 							sCurrentPage = sCurrentPage.Substring(0, sCurrentPage.Length - 1);
 						}
 
-						if (!sScrubbedURL.ToLower().StartsWith(sCurrentPage.ToLower())
-							&& !sCurrentPage.ToLower().EndsWith(DefaultDirectoryFilename)) {
-							if (sScrubbedURL.ToLower() != sCurrentPage.ToLower()) {
+						if (!sScrubbedURL.ToLowerInvariant().StartsWith(sCurrentPage.ToLowerInvariant())
+							&& !sCurrentPage.ToLowerInvariant().EndsWith(DefaultDirectoryFilename)) {
+							if (sScrubbedURL.ToLowerInvariant() != sCurrentPage.ToLowerInvariant()) {
 								sCurrentPage = sScrubbedURL;
 							}
 						}
@@ -831,9 +831,9 @@ namespace Carrotware.CMS.Core {
 				sRequestedURL = CurrentScriptName;
 				string sFileRequested = sRequestedURL;
 
-				if (!sRequestedURL.ToLower().StartsWith(AdminFolderPath) && site != null) {
-					if (sFileRequested.ToLower().StartsWith(site.BlogFolderPath.ToLower())) {
-						if (site.GetSpecialFilePathPrefixes().Where(x => sFileRequested.ToLower().StartsWith(x)).Count() > 0) {
+				if (!sRequestedURL.ToLowerInvariant().StartsWith(AdminFolderPath) && site != null) {
+					if (sFileRequested.ToLowerInvariant().StartsWith(site.BlogFolderPath.ToLowerInvariant())) {
+						if (site.GetSpecialFilePathPrefixes().Where(x => sFileRequested.ToLowerInvariant().StartsWith(x)).Count() > 0) {
 							if (site.Blog_Root_ContentID.HasValue) {
 								using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 									SiteNav blogNavPage = navHelper.GetLatestVersion(site.SiteID, site.Blog_Root_ContentID.Value);

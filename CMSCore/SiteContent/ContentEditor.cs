@@ -34,7 +34,7 @@ namespace Carrotware.CMS.Core {
 			if (obj is ContentEditor) {
 				ContentEditor p = (ContentEditor)obj;
 				return (this.SiteID == p.SiteID
-						&& this.UserName.ToLower() == p.UserName.ToLower());
+						&& this.UserName.ToLowerInvariant() == p.UserName.ToLowerInvariant());
 			} else {
 				return false;
 			}

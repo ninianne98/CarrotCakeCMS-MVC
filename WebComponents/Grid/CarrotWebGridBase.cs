@@ -163,8 +163,8 @@ namespace Carrotware.Web.UI.Components {
 									using (new WrappedItem(sb, "a", tagAttrib)) {
 										sb.Append(col.HeaderText);
 
-										if (_sortDir.SortField.ToUpper() == colExt.ColumnName.ToUpper()) {
-											if (_sortDir.SortDirection.ToUpper() == "ASC") {
+										if (_sortDir.SortField.ToUpperInvariant() == colExt.ColumnName.ToUpperInvariant()) {
+											if (_sortDir.SortDirection.ToUpperInvariant() == "ASC") {
 												sb.Append(this.SortAscIndicator);
 											} else {
 												sb.Append(this.SortDescIndicator);

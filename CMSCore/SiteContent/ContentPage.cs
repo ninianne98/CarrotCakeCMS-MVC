@@ -38,8 +38,8 @@ namespace Carrotware.CMS.Core {
 			this.GoLiveDate = siteTime.AddMinutes(-5);
 			this.RetireDate = siteTime.AddYears(200);
 
-			//this.NavMenuText = "PAGE " + this.Root_ContentID.ToString().ToLower();
-			//this.FileName = "/" + this.Root_ContentID.ToString().ToLower();
+			//this.NavMenuText = "PAGE " + this.Root_ContentID.ToString().ToLowerInvariant();
+			//this.FileName = "/" + this.Root_ContentID.ToString().ToLowerInvariant();
 			this.NavMenuText = String.Empty;
 			this.FileName = String.Empty;
 			this.TemplateFile = SiteData.DefaultTemplateFilename;
@@ -772,7 +772,7 @@ namespace Carrotware.CMS.Core {
 			DateTime dateGoLive = Convert.ToDateTime(this.GoLiveDate);
 			DateTime dateOrigGoLive = DateTime.MinValue;
 
-			string thePageSlug = ContentPageHelper.ScrubFilename(this.Root_ContentID, this.PageSlug).ToLower();
+			string thePageSlug = ContentPageHelper.ScrubFilename(this.Root_ContentID, this.PageSlug).ToLowerInvariant();
 
 			string theFileName = thePageSlug;
 
@@ -814,14 +814,14 @@ namespace Carrotware.CMS.Core {
 
 			theFileName = ContentPageHelper.ScrubFilename(this.Root_ContentID, theFileName);
 
-			theFileName = theFileName.ToLower();
+			theFileName = theFileName.ToLowerInvariant();
 
 			if (SiteData.IsPageSpecial(theFileName) || SiteData.IsLikelyHomePage(theFileName)) {
 				return false;
 			}
 
-			if (SiteData.CurrentSite.GetSpecialFilePathPrefixes().Where(x => theFileName.StartsWith(x.ToLower())).Count() > 0
-				|| theFileName.StartsWith(SiteData.CurrentSite.BlogFolderPath.ToLower())) {
+			if (SiteData.CurrentSite.GetSpecialFilePathPrefixes().Where(x => theFileName.StartsWith(x.ToLowerInvariant())).Count() > 0
+				|| theFileName.StartsWith(SiteData.CurrentSite.BlogFolderPath.ToLowerInvariant())) {
 				return false;
 			}
 

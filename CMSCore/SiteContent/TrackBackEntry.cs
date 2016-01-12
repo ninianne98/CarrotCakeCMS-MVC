@@ -137,7 +137,7 @@ namespace Carrotware.CMS.Core {
 				TrackBackEntry p = (TrackBackEntry)obj;
 				return (this.TrackbackQueueID == p.TrackbackQueueID
 						&& this.Root_ContentID == p.Root_ContentID
-						&& this.TrackBackURL.ToLower() == p.TrackBackURL.ToLower());
+						&& this.TrackBackURL.ToLowerInvariant() == p.TrackBackURL.ToLowerInvariant());
 			} else {
 				return false;
 			}

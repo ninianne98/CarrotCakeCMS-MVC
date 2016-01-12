@@ -58,7 +58,7 @@ namespace Carrotware.Web.UI.Components {
 				message.Headers.Add("X-Originating-IP", context.Request.ServerVariables["REMOTE_ADDR"].ToString());
 				message.Headers.Add("X-Application", "Carrotware Web " + CurrentDLLVersion);
 				message.Headers.Add("User-Agent", "Carrotware Web " + CurrentDLLVersion);
-				message.Headers.Add("Message-ID", "<" + Guid.NewGuid().ToString().ToLower() + "@" + mailSettings.MailDomainName + ">");
+				message.Headers.Add("Message-ID", "<" + Guid.NewGuid().ToString().ToLowerInvariant() + "@" + mailSettings.MailDomainName + ">");
 
 				foreach (var t in emailTo) {
 					message.To.Add(new MailAddress(t));

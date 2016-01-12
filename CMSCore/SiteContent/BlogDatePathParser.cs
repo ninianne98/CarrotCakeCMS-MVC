@@ -76,11 +76,11 @@ namespace Carrotware.CMS.Core {
 
 		private void ParseString() {
 			_filename = _filename.Replace(@"\", "/").Replace("//", "/").Replace("//", "/");
-			string sFile = _filename.ToLower().Replace(_site.BlogDateFolderPath, String.Empty);
+			string sFile = _filename.ToLowerInvariant().Replace(_site.BlogDateFolderPath, String.Empty);
 
 			if (sFile.EndsWith(SiteData.SiteSearchPageName) ||
 					sFile.EndsWith(String.Format("{0}.aspx", SiteData.SiteSearchPageName))) {
-				sFile = sFile.Substring(0, sFile.ToLower().LastIndexOf("/"));
+				sFile = sFile.Substring(0, sFile.ToLowerInvariant().LastIndexOf("/"));
 			}
 
 			string[] parms = sFile.Split('/');

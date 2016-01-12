@@ -230,7 +230,7 @@ namespace Carrotware.CMS.UI.Components {
 			if (this.Enable301Redirect) {
 				HttpContext ctx = HttpContext.Current;
 
-				if (!SiteData.CurrentSite.MainCanonicalURL.ToLower().Contains(@"://" + CMSConfigHelper.DomainName.ToLower())) {
+				if (!SiteData.CurrentSite.MainCanonicalURL.ToLowerInvariant().Contains(@"://" + CMSConfigHelper.DomainName.ToLowerInvariant())) {
 					ctx.Response.Status = "301 Moved Permanently";
 					ctx.Response.AddHeader("Location", pageUri);
 				}

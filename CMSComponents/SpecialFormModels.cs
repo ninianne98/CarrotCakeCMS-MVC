@@ -110,14 +110,14 @@ namespace Carrotware.CMS.UI.Components {
 				string strHTTPHost = String.Empty;
 				try { strHTTPHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { strHTTPHost = String.Empty; }
 
-				string hostName = strHTTPHost.ToLower();
+				string hostName = strHTTPHost.ToLowerInvariant();
 
 				string strHTTPPrefix = "http://";
 				try {
 					strHTTPPrefix = request.ServerVariables["SERVER_PORT_SECURE"] == "1" ? "https://" : "http://";
 				} catch { strHTTPPrefix = "http://"; }
 
-				strHTTPHost = String.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLower();
+				strHTTPHost = String.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLowerInvariant();
 
 				string mailSubject = String.Format("Comment Form From {0}", hostName);
 

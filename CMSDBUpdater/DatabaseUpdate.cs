@@ -356,7 +356,7 @@ namespace Carrotware.CMS.DBUpdater {
 			if (bWriteError && objErr != null) {
 				StringBuilder sb = new StringBuilder();
 
-				sb.AppendLine("----------------  " + sSrc.ToUpper() + " - " + DateTime.Now.ToString() + "  ----------------");
+				sb.AppendLine("----------------  " + sSrc.ToUpperInvariant() + " - " + DateTime.Now.ToString() + "  ----------------");
 
 				sb.AppendLine("[" + objErr.GetType().ToString() + "] " + objErr.Message);
 

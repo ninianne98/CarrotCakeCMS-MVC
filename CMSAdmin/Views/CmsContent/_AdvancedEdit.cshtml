@@ -3,7 +3,7 @@
 <!-- CarrotCake CMS Editor Control BEGIN -->
 @{
 	bool pageLocked = CmsPage.IsPageLocked;
-	string lockStatus = pageLocked.ToString().ToLower();
+	string lockStatus = pageLocked.ToString().ToLowerInvariant();
 	var lockUser = CmsPage.LockUser;
 	string lockUsername = lockUser != null ? lockUser.UserName : String.Empty;
 
@@ -62,7 +62,7 @@
 		var cmsTabIdx = parseInt('@EditorPrefs.EditorSelectedTabIdx');
 		var cmsScrollPos = parseInt('@EditorPrefs.EditorScrollPosition');
 		var cmsScrollWPos = parseInt('@EditorPrefs.EditorWidgetScrollPosition');
-		var cmsOpenStat = @String.Format("{0};", EditorPrefs.EditorOpen.ToString().ToLower())
+		var cmsOpenStat = @String.Format("{0};", EditorPrefs.EditorOpen.ToString().ToLowerInvariant())
 
 		cmsSetPageStatus(cmsPageLocked);
 
@@ -194,7 +194,7 @@
 											<div class="cmsLeft5px">
 												<p>
 													Templates / Skins<br />
-													@Html.DropDownList("ddlCmsTemplateList", new SelectList(CmsPage.Templates, "TemplatePath", "Caption", CmsPage.ThePage.TemplateFile.ToLower()), new { @class = "cmsAdvEditTemplatePicker" })
+													@Html.DropDownList("ddlCmsTemplateList", new SelectList(CmsPage.Templates, "TemplatePath", "Caption", CmsPage.ThePage.TemplateFile.ToLowerInvariant()), new { @class = "cmsAdvEditTemplatePicker" })
 												</p>
 												<p class="cmsCenter5px">
 													<input name="btnTemplate" type="button" id="btnTemplate" value="Apply" onclick="cmsUpdateTemplate();" />

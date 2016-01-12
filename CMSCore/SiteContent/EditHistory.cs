@@ -164,7 +164,7 @@ namespace Carrotware.CMS.Core {
 			bool IsContentProp = false;
 
 			srt.SortField = (from p in ReflectionUtilities.GetPropertyStrings(typeof(vw_carrot_EditHistory))
-							 where p.ToLower().Trim() == srt.SortField.ToLower().Trim()
+							 where p.ToLowerInvariant().Trim() == srt.SortField.ToLowerInvariant().Trim()
 							 select p).FirstOrDefault();
 
 			if (!String.IsNullOrEmpty(srt.SortField)) {

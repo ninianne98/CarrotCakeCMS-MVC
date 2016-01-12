@@ -26,7 +26,7 @@ namespace Carrotware.Web.UI.Components {
 		public bool IsPostBack {
 			get {
 				string requestMethod = "POST";
-				try { requestMethod = HttpContext.Current.Request.ServerVariables["request_method"].ToString().ToUpper(); } catch { }
+				try { requestMethod = HttpContext.Current.Request.ServerVariables["request_method"].ToString().ToUpperInvariant(); } catch { }
 				return requestMethod == "POST" ? true : false;
 			}
 		}

@@ -37,7 +37,7 @@
 	} else {
 		navPills = (from p in CmsPage.TopNav
 					orderby p.NavOrder
-					select p).ToDictionary(kvp => kvp.Root_ContentID, kvp => String.Format("navigate{0}", kvp.FileName.Replace("/", "_").Replace("-", "_")).ToLower());
+					select p).ToDictionary(kvp => kvp.Root_ContentID, kvp => String.Format("navigate{0}", kvp.FileName.Replace("/", "_").Replace("-", "_")).ToLowerInvariant());
 	}
 	this.ViewData["Dragonfruit_NavPills"] = navPills;
 }

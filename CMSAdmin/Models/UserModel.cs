@@ -41,7 +41,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 							  select new SelectListItem {
 								  Text = l.SiteName,
 								  Selected = this.User.GetSiteList().Where(x => x.SiteID == l.SiteID).Any(),
-								  Value = l.SiteID.ToString().ToLower()
+								  Value = l.SiteID.ToString().ToLowerInvariant()
 							  }).ToList();
 				}
 
@@ -58,7 +58,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 							  select new SelectListItem {
 								  Text = l.RoleName,
 								  Selected = this.User.GetRoles().Where(x => x.RoleId == l.RoleId).Any(),
-								  Value = l.RoleId.ToLower()
+								  Value = l.RoleId.ToLowerInvariant()
 							  }).ToList();
 				}
 

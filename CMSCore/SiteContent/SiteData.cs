@@ -466,53 +466,53 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public bool IsBlogCategoryPath {
-			get { return SiteData.CurrentScriptName.ToLower().StartsWith(this.BlogCategoryPath); }
+			get { return SiteData.CurrentScriptName.ToLowerInvariant().StartsWith(this.BlogCategoryPath); }
 		}
 
 		public bool IsBlogTagPath {
-			get { return SiteData.CurrentScriptName.ToLower().StartsWith(this.BlogTagPath); }
+			get { return SiteData.CurrentScriptName.ToLowerInvariant().StartsWith(this.BlogTagPath); }
 		}
 
 		public bool IsBlogDateFolderPath {
-			get { return SiteData.CurrentScriptName.ToLower().StartsWith(this.BlogDateFolderPath); }
+			get { return SiteData.CurrentScriptName.ToLowerInvariant().StartsWith(this.BlogDateFolderPath); }
 		}
 
 		public bool IsBlogEditorFolderPath {
-			get { return SiteData.CurrentScriptName.ToLower().StartsWith(this.BlogEditorFolderPath); }
+			get { return SiteData.CurrentScriptName.ToLowerInvariant().StartsWith(this.BlogEditorFolderPath); }
 		}
 
 		public bool IsSiteSearchPath {
-			get { return SiteData.CurrentScriptName.ToLower().StartsWith(this.SiteSearchPath); }
+			get { return SiteData.CurrentScriptName.ToLowerInvariant().StartsWith(this.SiteSearchPath); }
 		}
 
 		public bool CheckIsBlogCategoryPath(string sFilterPath) {
-			return sFilterPath.ToLower().StartsWith(this.BlogCategoryPath);
+			return sFilterPath.ToLowerInvariant().StartsWith(this.BlogCategoryPath);
 		}
 
 		public bool CheckIsBlogTagPath(string sFilterPath) {
-			return sFilterPath.ToLower().StartsWith(this.BlogTagPath);
+			return sFilterPath.ToLowerInvariant().StartsWith(this.BlogTagPath);
 		}
 
 		public bool CheckIsBlogDateFolderPath(string sFilterPath) {
-			return sFilterPath.ToLower().StartsWith(this.BlogDateFolderPath);
+			return sFilterPath.ToLowerInvariant().StartsWith(this.BlogDateFolderPath);
 		}
 
 		public bool CheckIsBlogEditorFolderPath(string sFilterPath) {
-			return sFilterPath.ToLower().StartsWith(this.BlogEditorFolderPath);
+			return sFilterPath.ToLowerInvariant().StartsWith(this.BlogEditorFolderPath);
 		}
 
 		public bool CheckIsSiteSearchPath(string sFilterPath) {
-			return sFilterPath.ToLower().StartsWith(this.SiteSearchPath);
+			return sFilterPath.ToLowerInvariant().StartsWith(this.SiteSearchPath);
 		}
 
 		public List<string> GetSpecialFilePathPrefixes() {
 			List<string> lst = new List<string>();
 
-			lst.Add(this.BlogCategoryPath.ToLower());
-			lst.Add(this.BlogTagPath.ToLower());
-			lst.Add(this.BlogDateFolderPath.ToLower());
-			lst.Add(this.BlogEditorFolderPath.ToLower());
-			lst.Add(this.SiteSearchPath.ToLower());
+			lst.Add(this.BlogCategoryPath.ToLowerInvariant());
+			lst.Add(this.BlogTagPath.ToLowerInvariant());
+			lst.Add(this.BlogDateFolderPath.ToLowerInvariant());
+			lst.Add(this.BlogEditorFolderPath.ToLowerInvariant());
+			lst.Add(this.SiteSearchPath.ToLowerInvariant());
 
 			return lst;
 		}
@@ -555,7 +555,7 @@ namespace Carrotware.CMS.Core {
 
 		private string RemoveDupeSlashesURL(string sInput) {
 			if (!String.IsNullOrEmpty(sInput)) {
-				if (!sInput.ToLower().StartsWith("http")) {
+				if (!sInput.ToLowerInvariant().StartsWith("http")) {
 					sInput = "http://" + sInput;
 				}
 				return RemoveDupeSlashes(sInput.Replace("://", "¤¤¤")).Replace("¤¤¤", "://");
@@ -688,16 +688,16 @@ namespace Carrotware.CMS.Core {
 				List<string> lst = new List<string>();
 
 				if (!String.IsNullOrEmpty(this.Blog_CategoryPath)) {
-					lst.Add(this.Blog_CategoryPath.ToLower().Trim());
+					lst.Add(this.Blog_CategoryPath.ToLowerInvariant().Trim());
 				}
 				if (!String.IsNullOrEmpty(this.Blog_TagPath)) {
-					lst.Add(this.Blog_TagPath.ToLower().Trim());
+					lst.Add(this.Blog_TagPath.ToLowerInvariant().Trim());
 				}
 				if (!String.IsNullOrEmpty(this.Blog_DatePath)) {
-					lst.Add(this.Blog_DatePath.ToLower().Trim());
+					lst.Add(this.Blog_DatePath.ToLowerInvariant().Trim());
 				}
 				if (!String.IsNullOrEmpty(this.Blog_EditorPath)) {
-					lst.Add(this.Blog_EditorPath.ToLower().Trim());
+					lst.Add(this.Blog_EditorPath.ToLowerInvariant().Trim());
 				}
 
 				List<string> duplicates = lst.GroupBy(s => s).SelectMany(grp => grp.Skip(1)).ToList();

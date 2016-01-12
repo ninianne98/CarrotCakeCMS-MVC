@@ -25,7 +25,7 @@ namespace Carrotware.CMS.Core {
 			if (obj == null || GetType() != obj.GetType()) return false;
 			if (obj is LabeledControl) {
 				LabeledControl p = (LabeledControl)obj;
-				return (ControlLabel.ToLower() == p.ControlLabel.ToLower());
+				return (ControlLabel.ToLowerInvariant() == p.ControlLabel.ToLowerInvariant());
 			} else {
 				return false;
 			}

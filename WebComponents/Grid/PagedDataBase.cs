@@ -106,7 +106,7 @@ namespace Carrotware.Web.UI.Components {
 			SortParm srt = this.ParseSort();
 
 			if (!String.IsNullOrEmpty(this.SortByNew)) {
-				if (srt.SortField.ToLower() == this.SortByNew.ToLower()) {
+				if (srt.SortField.ToLowerInvariant() == this.SortByNew.ToLowerInvariant()) {
 					if (srt.SortDirection.EndsWith("ASC")) {
 						this.OrderBy = String.Format("{0}  DESC", this.SortByNew);
 					} else {
@@ -149,7 +149,7 @@ namespace Carrotware.Web.UI.Components {
 			}
 
 			this.SortField = sortFld;
-			this.SortDirection = sortDir.ToUpper();
+			this.SortDirection = sortDir.ToUpperInvariant();
 		}
 
 		public string OrderBy { get; set; }

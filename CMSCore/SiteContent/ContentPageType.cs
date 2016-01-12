@@ -88,7 +88,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static Guid GetIDByType(PageType contentType) {
-			ContentPageType _type = ContentPageTypeList.Where(t => t.ContentTypeValue.ToLower() == contentType.ToString().ToLower()).FirstOrDefault();
+			ContentPageType _type = ContentPageTypeList.Where(t => t.ContentTypeValue.ToLowerInvariant() == contentType.ToString().ToLowerInvariant()).FirstOrDefault();
 
 			return _type.ContentTypeID;
 		}

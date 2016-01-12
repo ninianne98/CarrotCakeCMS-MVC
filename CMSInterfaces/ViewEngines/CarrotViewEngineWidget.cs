@@ -65,7 +65,7 @@ namespace Carrotware.CMS.Interface {
 #endif
 
 			if (!String.IsNullOrEmpty(viewPath) && !String.IsNullOrEmpty(assemblyName)) {
-				newViewPath = viewPath.ToLower().Replace("::key::", assemblyName);
+				newViewPath = viewPath.ToLowerInvariant().Replace("::key::", assemblyName);
 			}
 
 			return newViewPath;

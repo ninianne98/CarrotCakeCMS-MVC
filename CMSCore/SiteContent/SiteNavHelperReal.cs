@@ -683,10 +683,10 @@ namespace Carrotware.CMS.Core {
 
 			bool IsContentProp = false;
 
-			sortDir = sortDir.ToUpper();
+			sortDir = sortDir.ToUpperInvariant();
 
 			sortField = (from p in ReflectionUtilities.GetPropertyStrings(typeof(vw_carrot_Content))
-						 where p.ToLower().Trim() == sortField.ToLower().Trim()
+						 where p.ToLowerInvariant().Trim() == sortField.ToLowerInvariant().Trim()
 						 select p).FirstOrDefault();
 
 			if (!String.IsNullOrEmpty(sortField)) {

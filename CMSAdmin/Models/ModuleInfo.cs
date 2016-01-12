@@ -71,7 +71,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		}
 
 		public bool EvalModule(CMSAdminModule mod) {
-			if (mod.AreaKey.ToLower() == this.SelectedArea.ToLower()) {
+			if (mod.AreaKey.ToLowerInvariant() == this.SelectedArea.ToLowerInvariant()) {
 				this.SelectedTab = this.OpenTab;
 				this.SelectedAreaName = mod.AreaKey;
 				this.SelectedPluginAreaName = mod.PluginName;
@@ -112,15 +112,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public CMSAdminModuleMenu GetCurrentPlug() {
 			CMSAdminModuleMenu plug = null;
 
-			CMSAdminModule mod = this.Modules.Where(x => x.AreaKey.ToLower() == this.SelectedArea.ToLower()).FirstOrDefault();
+			CMSAdminModule mod = this.Modules.Where(x => x.AreaKey.ToLowerInvariant() == this.SelectedArea.ToLowerInvariant()).FirstOrDefault();
 
 			if (mod != null) {
-				plug = mod.PluginMenus.Where(x => x.Action.ToLower() == this.CurrentActionFull.ToLower()
-								&& x.Controller.ToLower() == this.CurrentController.ToLower()).FirstOrDefault();
+				plug = mod.PluginMenus.Where(x => x.Action.ToLowerInvariant() == this.CurrentActionFull.ToLowerInvariant()
+								&& x.Controller.ToLowerInvariant() == this.CurrentController.ToLowerInvariant()).FirstOrDefault();
 
 				if (plug == null) {
-					plug = mod.PluginMenus.Where(x => x.Action.ToLower() == this.CurrentAction.ToLower()
-								&& x.Controller.ToLower() == this.CurrentController.ToLower()).FirstOrDefault();
+					plug = mod.PluginMenus.Where(x => x.Action.ToLowerInvariant() == this.CurrentAction.ToLowerInvariant()
+								&& x.Controller.ToLowerInvariant() == this.CurrentController.ToLowerInvariant()).FirstOrDefault();
 				}
 			}
 

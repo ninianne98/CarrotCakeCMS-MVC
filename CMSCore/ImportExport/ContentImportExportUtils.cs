@@ -78,7 +78,7 @@ namespace Carrotware.CMS.Core {
 				cont.EditUserId = SecurityData.CurrentUserGuid;
 
 				if (!String.IsNullOrEmpty(c.PostAuthor)) {
-					WordPressUser wpu = wps.Authors.Where(x => x.Login.ToLower() == c.PostAuthor.ToLower()).FirstOrDefault();
+					WordPressUser wpu = wps.Authors.Where(x => x.Login.ToLowerInvariant() == c.PostAuthor.ToLowerInvariant()).FirstOrDefault();
 
 					if (wpu != null && wpu.ImportUserID != Guid.Empty) {
 						ApplicationUser usr = SecurityData.GetUserByID(wpu.ImportUserID.ToString());
@@ -137,11 +137,11 @@ namespace Carrotware.CMS.Core {
 				List<ContentCategory> lstCategories = site.GetCategoryList();
 
 				cont.ContentCategories = (from l in lstCategories
-										  join o in c.Categories on l.CategorySlug.ToLower() equals o.ToLower()
+										  join o in c.Categories on l.CategorySlug.ToLowerInvariant() equals o.ToLowerInvariant()
 										  select l).Distinct().ToList();
 
 				cont.ContentTags = (from l in lstTags
-									join o in c.Tags on l.TagSlug.ToLower() equals o.ToLower()
+									join o in c.Tags on l.TagSlug.ToLowerInvariant() equals o.ToLowerInvariant()
 									select l).Distinct().ToList();
 			}
 

@@ -153,7 +153,7 @@
 						</thead>
 						<tbody>
 							@for (int j = 0; j < Model.SiteOptions.Count; j++) {
-								var site = Model.AllSites.Where(m => m.SiteID.ToString().ToLower() == Model.SiteOptions[j].Value).FirstOrDefault();
+								var site = Model.AllSites.Where(m => m.SiteID.ToString().ToLowerInvariant() == Model.SiteOptions[j].Value).FirstOrDefault();
 
 								<tr>
 									<td>

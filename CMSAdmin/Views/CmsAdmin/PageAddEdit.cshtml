@@ -228,7 +228,7 @@
 		</text>
 		}
 
-		var cmsIsPageLocked = @Model.ContentPage.IsPageLocked.ToString().ToLower();
+		var cmsIsPageLocked = @Model.ContentPage.IsPageLocked.ToString().ToLowerInvariant();
 
 		$(window).bind('beforeunload', function () {
 			//cmsConfirmLeavingPage = false;

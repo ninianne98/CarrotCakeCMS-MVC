@@ -55,7 +55,7 @@ namespace Carrotware.CMS.Core {
 			string fileName = GetTemplateFile(ctrlCtx);
 
 			if (!String.IsNullOrEmpty(fileName) && !String.IsNullOrEmpty(viewPath)) {
-				string folderPath = fileName.Substring(0, fileName.LastIndexOf("/")).ToLower();
+				string folderPath = fileName.Substring(0, fileName.LastIndexOf("/")).ToLowerInvariant();
 				string folderName = folderPath.Substring(folderPath.LastIndexOf("/") + 1);
 
 				CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
@@ -67,13 +67,13 @@ namespace Carrotware.CMS.Core {
 					templatePath = templatePath + "/";
 				}
 
-				string themePath = String.Format("{0}{1}", templatePath, folderName).ToLower();
+				string themePath = String.Format("{0}{1}", templatePath, folderName).ToLowerInvariant();
 
 #if DEBUG
 				Debug.WriteLine(String.Format("CarrotViewEngineTemplate: n:{0}   c:{1}   v:{2}   f:{3}   t:{4}", ctrlCtx.Controller.GetType().Namespace, ctrlCtx.Controller.GetType().Name, viewPath, folderPath, themePath));
 #endif
 
-				newViewPath = viewPath.ToLower().Replace("::filepath::", folderPath).Replace("::themepath::", themePath);
+				newViewPath = viewPath.ToLowerInvariant().Replace("::filepath::", folderPath).Replace("::themepath::", themePath);
 			}
 
 			return newViewPath;

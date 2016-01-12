@@ -268,10 +268,10 @@ namespace Carrotware.CMS.Core {
 				newFileName = newFileName.Replace("//", "/");
 			}
 
-			if (newFileName.ToLower().EndsWith(".htm")) {
+			if (newFileName.ToLowerInvariant().EndsWith(".htm")) {
 				newFileName = newFileName.Substring(0, newFileName.Length - 4);
 			}
-			if (newFileName.ToLower().EndsWith(".html")) {
+			if (newFileName.ToLowerInvariant().EndsWith(".html")) {
 				newFileName = newFileName.Substring(0, newFileName.Length - 5);
 			}
 
@@ -619,10 +619,10 @@ namespace Carrotware.CMS.Core {
 
 			bool IsContentProp = false;
 
-			sortDir = sortDir.ToUpper();
+			sortDir = sortDir.ToUpperInvariant();
 
 			sortField = (from p in ReflectionUtilities.GetPropertyStrings(typeof(vw_carrot_Content))
-						 where p.ToLower().Trim() == sortField.ToLower().Trim()
+						 where p.ToLowerInvariant().Trim() == sortField.ToLowerInvariant().Trim()
 						 select p).FirstOrDefault();
 
 			if (!String.IsNullOrEmpty(sortField)) {
@@ -1052,10 +1052,10 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public bool ExistingPagesBeginWith(Guid siteID, string sFolderPath) {
-			string p1 = ("/" + sFolderPath.ToLower() + "/").Replace("//", "/");
+			string p1 = ("/" + sFolderPath.ToLowerInvariant() + "/").Replace("//", "/");
 			int i1 = GetPagesBeginingWith(siteID, p1).Count();
 
-			string p2 = ("/" + sFolderPath.ToLower()).Replace("//", "/");
+			string p2 = ("/" + sFolderPath.ToLowerInvariant()).Replace("//", "/");
 			int i2 = GetPagesEquals(siteID, p2).Count();
 
 			return (i1 + i2) > 0;
@@ -1088,18 +1088,18 @@ namespace Carrotware.CMS.Core {
 				return true;
 			}
 
-			string p2 = String.Format("/{0}", site.Blog_FolderPath).ToLower().Replace("//", "/");
+			string p2 = String.Format("/{0}", site.Blog_FolderPath).ToLowerInvariant().Replace("//", "/");
 			iTot += GetPagesEquals(site.SiteID, p2).Count();
 
 			return (iTot) > 0;
 		}
 
 		private IQueryable<vw_carrot_Content> GetPagesBeginingWith(Guid siteID, string sFolderPath) {
-			sFolderPath = sFolderPath.ToLower().Trim().Replace("//", "/");
+			sFolderPath = sFolderPath.ToLowerInvariant().Trim().Replace("//", "/");
 
 			IQueryable<vw_carrot_Content> query = (from ct in db.vw_carrot_Contents
 												   where ct.SiteID == siteID
-														&& ct.FileName.ToLower().StartsWith(sFolderPath)
+														&& ct.FileName.ToLowerInvariant().StartsWith(sFolderPath)
 														&& ct.IsLatestVersion == true
 												   select ct);
 
@@ -1107,11 +1107,11 @@ namespace Carrotware.CMS.Core {
 		}
 
 		private IQueryable<vw_carrot_Content> GetPagesEquals(Guid siteID, string sFolderPath) {
-			sFolderPath = sFolderPath.ToLower().Trim().Replace("//", "/");
+			sFolderPath = sFolderPath.ToLowerInvariant().Trim().Replace("//", "/");
 
 			IQueryable<vw_carrot_Content> query = (from ct in db.vw_carrot_Contents
 												   where ct.SiteID == siteID
-														&& ct.FileName.ToLower() == sFolderPath
+														&& ct.FileName.ToLowerInvariant() == sFolderPath
 														&& ct.IsLatestVersion == true
 												   select ct);
 

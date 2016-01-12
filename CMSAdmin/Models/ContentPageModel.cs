@@ -90,7 +90,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 							 select new SelectListItem {
 								 Text = l.CategoryText,
 								 Selected = this.ContentPage.ContentCategories.Where(x => x.ContentCategoryID == l.ContentCategoryID).Any(),
-								 Value = l.ContentCategoryID.ToString().ToLower()
+								 Value = l.ContentCategoryID.ToString().ToLowerInvariant()
 							 }).ToList();
 				}
 
@@ -107,7 +107,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 							 select new SelectListItem {
 								 Text = l.TagText,
 								 Selected = this.ContentPage.ContentTags.Where(x => x.ContentTagID == l.ContentTagID).Any(),
-								 Value = l.ContentTagID.ToString().ToLower()
+								 Value = l.ContentTagID.ToString().ToLowerInvariant()
 							 }).ToList();
 				}
 
@@ -125,8 +125,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.ContentPage = page;
 
 			this.OriginalFileName = page.FileName;
-			this.SelectedCategories = this.ContentPage.ContentCategories.Select(x => x.ContentCategoryID.ToString().ToLower()).ToList();
-			this.SelectedTags = this.ContentPage.ContentTags.Select(x => x.ContentTagID.ToString().ToLower()).ToList();
+			this.SelectedCategories = this.ContentPage.ContentCategories.Select(x => x.ContentCategoryID.ToString().ToLowerInvariant()).ToList();
+			this.SelectedTags = this.ContentPage.ContentTags.Select(x => x.ContentTagID.ToString().ToLowerInvariant()).ToList();
 			this.InitSelections();
 
 			if (this.ContentPage != null) {

@@ -106,14 +106,14 @@ namespace Carrotware.CMS.Core {
 
 		public CMSFilePath(string fileName) {
 			this.DateChecked = DateTime.UtcNow;
-			this.TemplateFile = fileName.ToLower();
+			this.TemplateFile = fileName.ToLowerInvariant();
 			this.SiteID = Guid.Empty;
 			this.FileExists = File.Exists(HttpContext.Current.Server.MapPath(this.TemplateFile));
 		}
 
 		public CMSFilePath(string fileName, Guid siteID) {
 			this.DateChecked = DateTime.UtcNow;
-			this.TemplateFile = fileName.ToLower();
+			this.TemplateFile = fileName.ToLowerInvariant();
 			this.SiteID = siteID;
 			this.FileExists = File.Exists(HttpContext.Current.Server.MapPath(this.TemplateFile));
 		}
@@ -128,7 +128,7 @@ namespace Carrotware.CMS.Core {
 			if (obj == null || GetType() != obj.GetType()) return false;
 			if (obj is CMSFilePath) {
 				CMSFilePath p = (CMSFilePath)obj;
-				return (this.TemplateFile.ToLower() == p.TemplateFile.ToLower())
+				return (this.TemplateFile.ToLowerInvariant() == p.TemplateFile.ToLowerInvariant())
 					&& (this.SiteID == p.SiteID);
 			} else {
 				return false;
@@ -136,7 +136,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public override int GetHashCode() {
-			return TemplateFile.ToLower().GetHashCode() ^ SiteID.GetHashCode();
+			return TemplateFile.ToLowerInvariant().GetHashCode() ^ SiteID.GetHashCode();
 		}
 	}
 }

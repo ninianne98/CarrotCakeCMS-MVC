@@ -43,7 +43,7 @@ namespace Carrotware.Web.UI.Components {
 				if (xmlMailSettings.Attributes["from"] != null) {
 					mailSettings.ReturnAddress = xmlMailSettings.Attributes["from"].Value;
 				}
-				if (xmlMailSettings.Attributes["deliveryMethod"] != null && xmlMailSettings.Attributes["deliveryMethod"].Value.ToLower() == "network") {
+				if (xmlMailSettings.Attributes["deliveryMethod"] != null && xmlMailSettings.Attributes["deliveryMethod"].Value.ToLowerInvariant() == "network") {
 					mailSettings.DeliveryMethod = SmtpDeliveryMethod.Network;
 					if (xmlMailSettings.HasChildNodes) {
 						XmlNode xmlNetSettings = xmlMailSettings.SelectSingleNode("//system.net/mailSettings/smtp/network");

@@ -30,7 +30,7 @@ namespace Carrotware.Web.UI.Components {
 			this.Type = SizeType.Pixel;
 
 			if (!String.IsNullOrEmpty(value)) {
-				value = value.ToLower();
+				value = value.ToLowerInvariant();
 
 				if (value.EndsWith("px")) {
 					this.Type = SizeType.Pixel;

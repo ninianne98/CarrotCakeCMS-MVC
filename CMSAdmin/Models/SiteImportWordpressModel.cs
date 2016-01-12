@@ -70,13 +70,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 				}
 			}
 
-			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith(SiteData.AdminFolderPath));
-			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/app_code/"));
-			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/app_data/"));
-			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/app_start/"));
-			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/bin/"));
-			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/obj/"));
-			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/views/"));
+			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith(SiteData.AdminFolderPath));
+			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/app_code/"));
+			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/app_data/"));
+			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/app_start/"));
+			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/bin/"));
+			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/obj/"));
+			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/views/"));
 
 			this.DownloadFolders = lstFolders.OrderBy(f => f.FileName).ToList();
 		}
@@ -131,11 +131,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			string sMsg = String.Empty;
 
 			if (this.ImportSite || this.ImportPages || this.ImportPosts) {
-				List<string> tags = site.GetTagList().Select(x => x.TagSlug.ToLower()).ToList();
-				List<string> cats = site.GetCategoryList().Select(x => x.CategorySlug.ToLower()).ToList();
+				List<string> tags = site.GetTagList().Select(x => x.TagSlug.ToLowerInvariant()).ToList();
+				List<string> cats = site.GetCategoryList().Select(x => x.CategorySlug.ToLowerInvariant()).ToList();
 
-				this.Site.Tags.RemoveAll(x => tags.Contains(x.InfoKey.ToLower()));
-				this.Site.Categories.RemoveAll(x => cats.Contains(x.InfoKey.ToLower()));
+				this.Site.Tags.RemoveAll(x => tags.Contains(x.InfoKey.ToLowerInvariant()));
+				this.Site.Categories.RemoveAll(x => cats.Contains(x.InfoKey.ToLowerInvariant()));
 
 				sMsg += "<li>Imported Tags and Categories</li>";
 
@@ -252,9 +252,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 						SiteNav navParent = null;
 
-						SiteNav navData = navHelper.GetLatestVersion(site.SiteID, false, cp.FileName.ToLower());
+						SiteNav navData = navHelper.GetLatestVersion(site.SiteID, false, cp.FileName.ToLowerInvariant());
 						if (parent != null) {
-							navParent = navHelper.GetLatestVersion(site.SiteID, false, parent.ImportFileName.ToLower());
+							navParent = navHelper.GetLatestVersion(site.SiteID, false, parent.ImportFileName.ToLowerInvariant());
 						}
 
 						//if URL exists already, make this become a new version in the current series
@@ -273,7 +273,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 							}
 						}
 						//preserve homepage
-						if (navHome != null && navHome.FileName.ToLower() == cp.FileName.ToLower()) {
+						if (navHome != null && navHome.FileName.ToLowerInvariant() == cp.FileName.ToLowerInvariant()) {
 							cp.NavOrder = 0;
 						}
 
@@ -313,7 +313,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 						cp.NavOrder = SiteData.BlogSortOrderNumber;
 						cp.TemplateFile = this.PostTemplate;
 
-						SiteNav navData = navHelper.GetLatestVersion(site.SiteID, false, cp.FileName.ToLower());
+						SiteNav navData = navHelper.GetLatestVersion(site.SiteID, false, cp.FileName.ToLowerInvariant());
 
 						cp.RetireDate = CMSConfigHelper.CalcNearestFiveMinTime(cp.CreateDate).AddYears(200);
 						cp.GoLiveDate = CMSConfigHelper.CalcNearestFiveMinTime(cp.CreateDate).AddMinutes(-5);
@@ -370,10 +370,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					if (wpc.Approved == "1") {
 						pc.IsApproved = true;
 					}
-					if (wpc.Approved.ToLower() == "trash") {
+					if (wpc.Approved.ToLowerInvariant() == "trash") {
 						pc.IsSpam = true;
 					}
-					if (wpc.Type.ToLower() == "trackback" || wpc.Type.ToLower() == "pingback") {
+					if (wpc.Type.ToLowerInvariant() == "trackback" || wpc.Type.ToLowerInvariant() == "pingback") {
 						pc.CommenterEmail = wpc.Type;
 					}
 

@@ -101,7 +101,7 @@ namespace Carrotware.CMS.UI.Components {
 			SiteNav parentPageNav = ControlUtilities.GetParentPage();
 			List<SiteNav> lstNavTree = ControlUtilities.GetPageNavTree().OrderByDescending(x => x.NavOrder).ToList();
 
-			this.ParentFileName = parentPageNav.FileName.ToLower();
+			this.ParentFileName = parentPageNav.FileName.ToLowerInvariant();
 
 			if (lstNav != null && lstNav.Any()) {
 				output.AppendLine();

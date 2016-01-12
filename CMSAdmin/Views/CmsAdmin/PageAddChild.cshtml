@@ -130,7 +130,7 @@
 
 		function openPage() { }
 
-		var cmsIsPageLocked = @Model.ContentPage.IsPageLocked.ToString().ToLower();
+		var cmsIsPageLocked = @Model.ContentPage.IsPageLocked.ToString().ToLowerInvariant();
 
 		$(document).ready(function () {
 			if (!cmsIsPageLocked) {

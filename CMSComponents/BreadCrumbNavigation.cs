@@ -41,7 +41,7 @@ namespace Carrotware.CMS.UI.Components {
 			List<SiteNav> lstNav = new List<SiteNav>();
 			StringBuilder sb = new StringBuilder();
 			SiteNav pageNav = this.ContentPage.GetSiteNav();
-			string sParent = pageNav.FileName.ToLower();
+			string sParent = pageNav.FileName.ToLowerInvariant();
 
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				if (SiteData.CurretSiteExists && SiteData.CurrentSite.Blog_Root_ContentID.HasValue &&

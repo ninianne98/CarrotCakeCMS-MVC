@@ -96,7 +96,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		private static void AddUpdateRouting(RouteData routeData, string key, string value) {
-			string keyLower = key.ToLower();
+			string keyLower = key.ToLowerInvariant();
 			if (routeData.Values.ContainsKey(keyLower)) {
 				routeData.Values[keyLower] = value;
 			} else {
@@ -105,7 +105,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		private static string GetResultViewStringFromController(string actionName, Type type, Object obj) {
-			bool IsPost = Html.ViewContext.HttpContext.Request.HttpMethod.ToUpper() == "POST";
+			bool IsPost = Html.ViewContext.HttpContext.Request.HttpMethod.ToUpperInvariant() == "POST";
 
 			if (obj is Controller) {
 				MethodInfo methodInfo = null;
@@ -118,7 +118,7 @@ namespace Carrotware.CMS.UI.Components {
 				string areaName = type.Assembly.ManifestModule.Name;
 				areaName = areaName.Substring(0, areaName.Length - 4);
 
-				AddUpdateRouting(routeData, "Controller", type.Name.ToLower().Replace("controller", String.Empty));
+				AddUpdateRouting(routeData, "Controller", type.Name.ToLowerInvariant().Replace("controller", String.Empty));
 				AddUpdateRouting(routeData, "Action", actionName);
 				AddUpdateRouting(routeData, "Area", areaName);
 
@@ -596,7 +596,7 @@ namespace Carrotware.CMS.UI.Components {
 			int iWidgetCount = 0;
 
 			var widgetList = (from w in CmsPage.TheWidgets
-							  where w.PlaceholderName.ToLower() == placeHolderName.ToLower()
+							  where w.PlaceholderName.ToLowerInvariant() == placeHolderName.ToLowerInvariant()
 							  orderby w.WidgetOrder, w.EditDate
 							  select w).ToList();
 
@@ -630,7 +630,7 @@ namespace Carrotware.CMS.UI.Components {
 
 						obj = Activator.CreateInstance(objType);
 
-						if (objectPrefix.ToUpper() != "CLASS") {
+						if (objectPrefix.ToUpperInvariant() != "CLASS") {
 							IsWidgetClass = false;
 							// assumed to be a controller action/method
 							Object attrib = ReflectionUtilities.GetAttribute<WidgetActionSettingModelAttribute>(objType, objectPrefix);
@@ -744,7 +744,7 @@ namespace Carrotware.CMS.UI.Components {
 					}
 				}
 
-				if (widgetText == null || widget.ControlPath.ToLower().EndsWith(".ascx")) {
+				if (widgetText == null || widget.ControlPath.ToLowerInvariant().EndsWith(".ascx")) {
 					LiteralMessage msg = new LiteralMessage("The widget is not supported.", widgetKey, widget.ControlPath);
 					widgetText = msg.ToHtmlString();
 				}
@@ -765,7 +765,7 @@ namespace Carrotware.CMS.UI.Components {
 					widgetWrapper = widgetWrapper.Replace("[[ITEM_ID]]", widget.Root_WidgetID.ToString());
 
 					CMSPlugin plug = (from p in CmsPage.Plugins
-									  where p.FilePath.ToLower() == widget.ControlPath.ToLower()
+									  where p.FilePath.ToLowerInvariant() == widget.ControlPath.ToLowerInvariant()
 									  select p).FirstOrDefault();
 
 					string captionPrefix = String.Empty;

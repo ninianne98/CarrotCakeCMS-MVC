@@ -79,7 +79,7 @@ namespace Carrotware.Web.UI.Components {
 			bool bValid = false;
 			string guid = SessionKeyValue;
 
-			if (testValue.ToLower() == guid.ToLower()) {
+			if (testValue.ToLowerInvariant() == guid.ToLowerInvariant()) {
 				bValid = true;
 			}
 
@@ -112,7 +112,7 @@ namespace Carrotware.Web.UI.Components {
 						HttpContext.Current.Session[SessionKey] = guid;
 					}
 				}
-				return guid.ToUpper();
+				return guid.ToUpperInvariant();
 			}
 		}
 

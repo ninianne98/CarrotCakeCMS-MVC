@@ -43,7 +43,7 @@ namespace Carrotware.CMS.Core {
 			XmlNamespaceManager rssNamespace = new XmlNamespaceManager(doc.NameTable);
 
 			foreach (XmlAttribute attrib in rssNode.Attributes) {
-				if (attrib != null && attrib.Value.ToLower().StartsWith("http")) {
+				if (attrib != null && attrib.Value.ToLowerInvariant().StartsWith("http")) {
 					rssNamespace.AddNamespace(attrib.LocalName, attrib.Value);
 				}
 			}
@@ -115,10 +115,10 @@ namespace Carrotware.CMS.Core {
 				wpp.PostName = node.SelectSingleNode("wp:post_name", rssNamespace).InnerText.Trim();
 
 				if (String.IsNullOrEmpty(wpp.PostName)) {
-					wpp.PostName = wpp.PostTitle.ToLower();
+					wpp.PostName = wpp.PostTitle.ToLowerInvariant();
 				}
 				if (String.IsNullOrEmpty(wpp.PostName)) {
-					wpp.PostName = wpp.ImportRootID.ToString().ToLower();
+					wpp.PostName = wpp.ImportRootID.ToString().ToLowerInvariant();
 				}
 				if (String.IsNullOrEmpty(wpp.PostTitle)) {
 					wpp.PostTitle = "(No Title)";

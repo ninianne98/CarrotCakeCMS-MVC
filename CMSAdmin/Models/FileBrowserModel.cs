@@ -49,9 +49,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 			useTiny = useTiny ?? "0";
 			returnVal = returnVal ?? "0";
-			this.UseTinyMCE = useTiny == "1" || useTiny.ToLower() == "true";
-			this.ReturnMode = returnVal == "1" || returnVal.ToLower() == "true";
-			this.Thumbnails = this.ViewMode.ToLower() != defaultBrowseMode;
+			this.UseTinyMCE = useTiny == "1" || useTiny.ToLowerInvariant() == "true";
+			this.ReturnMode = returnVal == "1" || returnVal.ToLowerInvariant() == "true";
+			this.Thumbnails = this.ViewMode.ToLowerInvariant() != defaultBrowseMode;
 
 			string linkPatt = "{0}?fldrpath={1}&useTiny={2}&returnvalue={3}&viewmode={4}";
 
@@ -101,7 +101,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public string FileViewLink { get; set; }
 
 		public string FileImageLink(string sMime) {
-			sMime = sMime.ToLower();
+			sMime = sMime.ToLowerInvariant();
 			var mime = sMime.Substring(0, sMime.IndexOf("/"));
 
 			string sImage = "plain";
@@ -162,8 +162,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		}
 
 		public string CreateFileSrc(string sPath, string sFile, string sMime) {
-			if (this.FileImageLink(sMime).ToLower() == "image") {
-				return String.Format("{0}{1}", sPath, sFile).ToLower();
+			if (this.FileImageLink(sMime).ToLowerInvariant() == "image") {
+				return String.Format("{0}{1}", sPath, sFile).ToLowerInvariant();
 			} else {
 				return "/Assets/Admin/images/document.png";
 			}
@@ -190,7 +190,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					string uploadedFileName = this.PostedFile.FileName;
 
 					if (!(from b in helpFile.BlockedTypes
-						  where uploadedFileName.ToLower().Contains("." + b.ToLower())
+						  where uploadedFileName.ToLowerInvariant().Contains("." + b.ToLowerInvariant())
 						  select b).Any()) {
 						if (this.EscapeSpaces) {
 							uploadedFileName = uploadedFileName.Replace(" ", "-");
@@ -242,7 +242,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					string uploadedFileName = postedFile.FileName;
 
 					if (!(from b in helpFile.BlockedTypes
-						  where uploadedFileName.ToLower().EndsWith(String.Format(".{0}", b).ToLower())
+						  where uploadedFileName.ToLowerInvariant().EndsWith(String.Format(".{0}", b).ToLowerInvariant())
 						  select b).Any()) {
 						if (this.EscapeSpaces) {
 							uploadedFileName = uploadedFileName.Replace(" ", "-");

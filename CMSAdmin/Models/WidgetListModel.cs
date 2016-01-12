@@ -52,7 +52,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public string GetCaption(string controlPath) {
 			CMSPlugin plug = (from p in this.Plugins
-							  where p.FilePath.ToLower() == controlPath.ToLower()
+							  where p.FilePath.ToLowerInvariant() == controlPath.ToLowerInvariant()
 							  select p).FirstOrDefault();
 
 			if (plug != null) {

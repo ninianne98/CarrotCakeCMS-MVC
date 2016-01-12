@@ -62,7 +62,7 @@ namespace Carrotware.CMS.Core {
 			if (obj is TextWidget) {
 				TextWidget p = (TextWidget)obj;
 				return (this.SiteID == p.SiteID
-						&& this.TextWidgetAssembly.ToLower() == p.TextWidgetAssembly.ToLower());
+						&& this.TextWidgetAssembly.ToLowerInvariant() == p.TextWidgetAssembly.ToLowerInvariant());
 			} else {
 				return false;
 			}

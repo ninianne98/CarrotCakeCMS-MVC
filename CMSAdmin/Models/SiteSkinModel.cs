@@ -45,7 +45,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.FullFilePath = HttpContext.Current.Server.MapPath(this.TemplateFile);
 
 			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
-				this.Template = cmsHelper.Templates.Where(x => x.TemplatePath.ToLower() == this.TemplateFile.ToLower()).FirstOrDefault();
+				this.Template = cmsHelper.Templates.Where(x => x.TemplatePath.ToLowerInvariant() == this.TemplateFile.ToLowerInvariant()).FirstOrDefault();
 			}
 
 			var ifo = new FileInfo(this.TemplateFile);
@@ -70,7 +70,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			if (File.Exists(templateFile)) {
 				templateFile = templateFile.Replace(@"/", @"\");
 
-				string skinPath = templateFile.Substring(0, templateFile.LastIndexOf(@"\")).ToLower();
+				string skinPath = templateFile.Substring(0, templateFile.LastIndexOf(@"\")).ToLowerInvariant();
 				string skinName = skinPath.Substring(skinPath.LastIndexOf(@"\") + 1);
 
 				FileData skinFolder = helpFile.GetFolderInfo("/", templateFile);
@@ -121,7 +121,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					List<FileData> fls = helpFile.GetFiles(f.FolderPath);
 
 					flsWorking = (from m in flsWorking.Union(fls).ToList()
-								  join e in lstFileExtensions on m.FileExtension.ToLower() equals e
+								  join e in lstFileExtensions on m.FileExtension.ToLowerInvariant() equals e
 								  select m).ToList();
 				}
 
@@ -180,7 +180,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			if (!(sIn.StartsWith(@"\") || sIn.StartsWith(@"/"))) {
 				sIn = @"/" + sIn;
 			}
-			return CMSConfigHelper.EncodeBase64(sIn.ToLower());
+			return CMSConfigHelper.EncodeBase64(sIn.ToLowerInvariant());
 		}
 
 		public CMSTemplate Template { get; set; }

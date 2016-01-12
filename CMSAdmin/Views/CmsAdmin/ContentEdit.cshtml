@@ -6,7 +6,7 @@
 
 	string editCSS = "mceEditor";
 
-	if (Model.Mode.ToLower() == "plain") {
+	if (Model.Mode.ToLowerInvariant() == "plain") {
 		editCSS = "rawEditor";
 	}
 

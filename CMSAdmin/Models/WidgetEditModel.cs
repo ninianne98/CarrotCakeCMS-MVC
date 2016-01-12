@@ -119,7 +119,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			if (this.Widget != null) {
 				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 					CMSPlugin plug = (from p in cmsHelper.ToolboxPlugins
-									  where p.FilePath.ToLower() == this.Widget.ControlPath.ToLower()
+									  where p.FilePath.ToLowerInvariant() == this.Widget.ControlPath.ToLowerInvariant()
 									  select p).FirstOrDefault();
 
 					if (plug != null) {

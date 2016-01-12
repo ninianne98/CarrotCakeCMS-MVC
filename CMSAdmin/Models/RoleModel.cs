@@ -20,7 +20,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public RoleModel() {
 			this.Role = new UserRole();
-			this.Role.RoleId = Guid.Empty.ToString().ToLower();
+			this.Role.RoleId = Guid.Empty.ToString().ToLowerInvariant();
 			this.Users = new List<UserModel>();
 		}
 
@@ -41,9 +41,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public bool CanEditRoleName {
 			get {
-				return !(SecurityData.CMSGroup_Admins.ToLower() == this.Role.LoweredRoleName
-							|| SecurityData.CMSGroup_Editors.ToLower() == this.Role.LoweredRoleName
-							|| SecurityData.CMSGroup_Users.ToLower() == this.Role.LoweredRoleName);
+				return !(SecurityData.CMSGroup_Admins.ToLowerInvariant() == this.Role.LoweredRoleName
+							|| SecurityData.CMSGroup_Editors.ToLowerInvariant() == this.Role.LoweredRoleName
+							|| SecurityData.CMSGroup_Users.ToLowerInvariant() == this.Role.LoweredRoleName);
 			}
 		}
 	}

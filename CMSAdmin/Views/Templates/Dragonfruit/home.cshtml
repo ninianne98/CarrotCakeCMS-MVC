@@ -4,7 +4,7 @@
 	Layout = "_mainlayout.cshtml";
 
 	string currentTemplateFile = CmsPage.ThePage.TemplateFile;
-	string currentTemplateFilePath = currentTemplateFile.Substring(0, currentTemplateFile.LastIndexOf("/")).ToLower();
+	string currentTemplateFilePath = currentTemplateFile.Substring(0, currentTemplateFile.LastIndexOf("/")).ToLowerInvariant();
 
 	Dictionary<Guid, string> navPills = new Dictionary<Guid, string>();
 	if (this.ViewData["Dragonfruit_NavPills"] != null) {
@@ -12,12 +12,12 @@
 	} else {
 		navPills = (from p in CmsPage.TopNav
 					orderby p.NavOrder
-					select p).ToDictionary(kvp => kvp.Root_ContentID, kvp => String.Format("navigate{0}", kvp.FileName.Replace("/", "_").Replace("-", "_")).ToLower());
+					select p).ToDictionary(kvp => kvp.Root_ContentID, kvp => String.Format("navigate{0}", kvp.FileName.Replace("/", "_").Replace("-", "_")).ToLowerInvariant());
 	}
 	this.ViewData["Dragonfruit_NavPills"] = navPills;
 
 	SiteNav currentNav = CmsPage.ThePage.GetSiteNav();
-	currentNav.FileName = String.Format("navigate{0}", currentNav.FileName.Replace("/", "_").Replace("-", "_")).ToLower();
+	currentNav.FileName = String.Format("navigate{0}", currentNav.FileName.Replace("/", "_").Replace("-", "_")).ToLowerInvariant();
 }
 
 <div class="container_wrapper" @Html.Raw(String.Format(" id=\"{0}\" ", currentNav.FileName))>
@@ -39,7 +39,7 @@
 				</text>
 			}
 
-			@if (n.TemplateFile.ToLower().StartsWith(currentTemplateFilePath.ToLower())) {
+			@if (n.TemplateFile.ToLowerInvariant().StartsWith(currentTemplateFilePath.ToLowerInvariant())) {
 				@*assume that the templates are from the same skin family and reroute to partial variant*@
 				@Html.Partial(n.TemplateFile.Insert(n.TemplateFile.LastIndexOf("/") + 1, "_"))
 			} else {

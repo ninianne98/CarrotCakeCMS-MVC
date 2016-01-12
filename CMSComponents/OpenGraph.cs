@@ -66,15 +66,15 @@ namespace Carrotware.CMS.UI.Components {
 
 					if (this.OpenGraphType == OpenGraphTypeDef.Default) {
 						if (this.CmsPage.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
-							contType = OpenGraphTypeDef.Blog.ToString().ToLower();
+							contType = OpenGraphTypeDef.Blog.ToString().ToLowerInvariant();
 						} else {
-							contType = OpenGraphTypeDef.Article.ToString().ToLower();
+							contType = OpenGraphTypeDef.Article.ToString().ToLowerInvariant();
 						}
 						if (this.CmsPage.TheSite.Blog_Root_ContentID.HasValue && this.CmsPage.ThePage.Root_ContentID == this.CmsPage.TheSite.Blog_Root_ContentID) {
-							contType = OpenGraphTypeDef.Website.ToString().ToLower();
+							contType = OpenGraphTypeDef.Website.ToString().ToLowerInvariant();
 						}
 					} else {
-						contType = this.OpenGraphType.ToString().ToLower();
+						contType = this.OpenGraphType.ToString().ToLowerInvariant();
 					}
 
 					sb.AppendLine(CarrotWeb.MetaTag("og:type", contType).ToString());

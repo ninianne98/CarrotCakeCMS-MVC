@@ -48,18 +48,18 @@ namespace Carrotware.CMS.Core {
 		public string RoleName { get; set; }
 
 		[Display(Name = "Lowercase Name")]
-		public string LoweredRoleName { get { return (this.RoleName ?? String.Empty).ToLower(); } }
+		public string LoweredRoleName { get { return (this.RoleName ?? String.Empty).ToLowerInvariant(); } }
 
 		public void Save() {
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
 				membership_Role role = (from r in _db.membership_Roles
-										where r.Name.ToLower() == this.RoleName.ToLower()
+										where r.Name.ToLowerInvariant() == this.RoleName.ToLowerInvariant()
 											|| r.Id == this.RoleId
 										select r).FirstOrDefault();
 
 				if (role == null) {
 					role = new membership_Role();
-					role.Id = Guid.NewGuid().ToString().ToLower();
+					role.Id = Guid.NewGuid().ToString().ToLowerInvariant();
 					_db.membership_Roles.InsertOnSubmit(role);
 				}
 

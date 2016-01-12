@@ -57,7 +57,7 @@ namespace Carrotware.CMS.Interface {
 #endif
 
 			if (!String.IsNullOrEmpty(viewPath)) {
-				newViewPath = viewPath.ToLower().Replace("::key::", this.AssemblyKey);
+				newViewPath = viewPath.ToLowerInvariant().Replace("::key::", this.AssemblyKey);
 			}
 
 			return newViewPath;

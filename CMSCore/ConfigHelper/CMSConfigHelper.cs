@@ -140,7 +140,7 @@ namespace Carrotware.CMS.Core {
 					domName = domName.Substring(0, domName.IndexOf(":"));
 				}
 
-				return domName.ToLower();
+				return domName.ToLowerInvariant();
 			}
 		}
 
@@ -385,10 +385,10 @@ namespace Carrotware.CMS.Core {
 										   Caption = d.Field<string>("crtldesc")
 									   }).Where(x => x.FilePath.Contains(":")).ToList();
 
-							foreach (var p in _p2.Where(x => x.FilePath.ToLower().EndsWith("html")).Select(x => x)) {
+							foreach (var p in _p2.Where(x => x.FilePath.ToLowerInvariant().EndsWith("html")).Select(x => x)) {
 								string[] path = p.FilePath.Split(':');
 								if (path.Length > 2 && !String.IsNullOrEmpty(path[2])
-											&& (path[2].ToLower().EndsWith(".cshtml") || path[2].ToLower().EndsWith(".vbhtml"))) {
+											&& (path[2].ToLowerInvariant().EndsWith(".cshtml") || path[2].ToLowerInvariant().EndsWith(".vbhtml"))) {
 									path[2] = "~" + sPathPrefix + path[2];
 									p.FilePath = String.Join(":", path);
 								}
@@ -683,7 +683,7 @@ namespace Carrotware.CMS.Core {
 
 							var _p2 = (from d in ds.Tables[0].AsEnumerable()
 									   select new CMSTemplate {
-										   TemplatePath = "~/" + (sPathPrefix + d.Field<string>("templatefile").ToLower()).ToLower(),
+										   TemplatePath = "~/" + (sPathPrefix + d.Field<string>("templatefile").ToLowerInvariant()).ToLowerInvariant(),
 										   EncodedPath = String.Empty,
 										   Caption = d.Field<string>("filedesc")
 									   }).ToList();
@@ -707,7 +707,7 @@ namespace Carrotware.CMS.Core {
 		public List<CMSTemplate> Templates {
 			get {
 				List<CMSTemplate> _plugins = null;
-				string sDefTemplate = SiteData.DefaultTemplateFilename.ToLower();
+				string sDefTemplate = SiteData.DefaultTemplateFilename.ToLowerInvariant();
 
 				bool bCached = false;
 
@@ -732,7 +732,7 @@ namespace Carrotware.CMS.Core {
 				if (!bCached) {
 					var _p2 = GetTemplatesByDirectory();
 
-					_plugins = _plugins.Union(_p2.Where(t => t.TemplatePath.ToLower() != sDefTemplate)).ToList();
+					_plugins = _plugins.Union(_p2.Where(t => t.TemplatePath.ToLowerInvariant() != sDefTemplate)).ToList();
 
 					HttpContext.Current.Cache.Insert(keyTemplates, _plugins, null, DateTime.Now.AddMinutes(5), Cache.NoSlidingExpiration);
 				}
@@ -795,7 +795,7 @@ namespace Carrotware.CMS.Core {
 
 					_sites = (from d in ds.Tables[0].AsEnumerable()
 							  select new DynamicSite {
-								  DomainName = String.IsNullOrEmpty(d.Field<string>("domname")) ? String.Empty : d.Field<string>("domname").ToLower(),
+								  DomainName = String.IsNullOrEmpty(d.Field<string>("domname")) ? String.Empty : d.Field<string>("domname").ToLowerInvariant(),
 								  SiteID = new Guid(d.Field<string>("siteid"))
 							  }).ToList();
 
@@ -835,7 +835,7 @@ namespace Carrotware.CMS.Core {
 		public static bool CheckRequestedFileExistence(string templateFileName, Guid siteID) {
 			var _tmplts = GetTmplateStatus();
 
-			CMSFilePath tmp = _tmplts.Where(x => x.TemplateFile.ToLower() == templateFileName.ToLower() && x.SiteID == siteID).FirstOrDefault();
+			CMSFilePath tmp = _tmplts.Where(x => x.TemplateFile.ToLowerInvariant() == templateFileName.ToLowerInvariant() && x.SiteID == siteID).FirstOrDefault();
 
 			if (tmp == null) {
 				tmp = new CMSFilePath(templateFileName, siteID);
@@ -854,7 +854,7 @@ namespace Carrotware.CMS.Core {
 		public static bool CheckFileExistence(string templateFileName) {
 			var _tmplts = GetTmplateStatus();
 
-			CMSFilePath tmp = _tmplts.Where(x => x.TemplateFile.ToLower() == templateFileName.ToLower() && x.SiteID == Guid.Empty).FirstOrDefault();
+			CMSFilePath tmp = _tmplts.Where(x => x.TemplateFile.ToLowerInvariant() == templateFileName.ToLowerInvariant() && x.SiteID == Guid.Empty).FirstOrDefault();
 
 			if (tmp == null) {
 				tmp = new CMSFilePath(templateFileName);
@@ -1034,7 +1034,7 @@ namespace Carrotware.CMS.Core {
 					if (SiteData.IsPageSampler && filePage == null) {
 						filePage = ContentPageHelper.GetSamplerView();
 					} else {
-						if (SiteData.CurrentScriptName.ToLower().StartsWith(SiteData.AdminFolderPath)) {
+						if (SiteData.CurrentScriptName.ToLowerInvariant().StartsWith(SiteData.AdminFolderPath)) {
 							Guid guidPage = Guid.Empty;
 							if (!String.IsNullOrEmpty(HttpContext.Current.Request.QueryString["pageid"])) {
 								guidPage = new Guid(HttpContext.Current.Request.QueryString["pageid"].ToString());
