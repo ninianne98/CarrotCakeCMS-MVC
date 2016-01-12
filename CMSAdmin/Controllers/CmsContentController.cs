@@ -173,7 +173,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			Response.AppendHeader("Status", "HTTP/1.1 404 Object Not Found");
 			SiteData.WriteDebugException("cmscontentcontroller_pagenotfound", new Exception(String.Format("HttpNotFound: {0}", Request.Path)));
 
-			throw new HttpException(404, "HTTP/1.1 404 Object Not Found");
+			throw new HttpException(404, String.Format("HTTP/1.1 404 Object Not Found: {0}", Request.Path));
 
 			return HttpNotFound();
 		}

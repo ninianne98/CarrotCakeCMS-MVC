@@ -24,7 +24,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 	// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line.
 	[System.Web.Script.Services.ScriptService]
-	[Authorize]
+	[CmsAuthorize]
 	public class CMS : System.Web.Services.WebService {
 
 		public CMS() {
@@ -269,11 +269,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				editor.Init();
 			}
 
-			editor.EditorMargin = String.IsNullOrEmpty(ToolbarMargin) ? "L" : ToolbarMargin.ToUpper();
-			editor.EditorOpen = String.IsNullOrEmpty(ToolbarState) ? "true" : ToolbarState.ToLower();
-			editor.EditorWidgetScrollPosition = String.IsNullOrEmpty(WidgetScroll) ? "0" : WidgetScroll.ToLower();
-			editor.EditorScrollPosition = String.IsNullOrEmpty(ToolbarScroll) ? "0" : ToolbarScroll.ToLower();
-			editor.EditorSelectedTabIdx = String.IsNullOrEmpty(SelTabID) ? "0" : SelTabID.ToLower();
+			editor.EditorMargin = String.IsNullOrEmpty(ToolbarMargin) ? "L" : ToolbarMargin.ToUpperInvariant();
+			editor.EditorOpen = String.IsNullOrEmpty(ToolbarState) ? "true" : ToolbarState.ToLowerInvariant();
+			editor.EditorWidgetScrollPosition = String.IsNullOrEmpty(WidgetScroll) ? "0" : WidgetScroll.ToLowerInvariant();
+			editor.EditorScrollPosition = String.IsNullOrEmpty(ToolbarScroll) ? "0" : ToolbarScroll.ToLowerInvariant();
+			editor.EditorSelectedTabIdx = String.IsNullOrEmpty(SelTabID) ? "0" : SelTabID.ToLowerInvariant();
 
 			if (String.IsNullOrEmpty(ToolbarMargin) && String.IsNullOrEmpty(ToolbarState)) {
 				UserEditState.cmsUserEditState = null;
@@ -629,7 +629,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				sThePageTitle = sThePageTitle.Replace("/", "-");
 				string sTheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, sThePageTitle);
 
-				if (Mode.ToLower() == "page") {
+				if (Mode.ToLowerInvariant() == "page") {
 					string sTestRes = ValidateUniqueFilename(CMSConfigHelper.EncodeBase64(sTheFileName), PageID);
 					if (sTestRes != "OK") {
 						for (int i = 1; i < 1000; i++) {
@@ -659,7 +659,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 					}
 				}
 
-				return ContentPageHelper.ScrubFilename(CurrentPageGuid, sTheFileName).ToLower();
+				return ContentPageHelper.ScrubFilename(CurrentPageGuid, sTheFileName).ToLowerInvariant();
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 				return "FAIL";
@@ -675,14 +675,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				TheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, TheFileName);
 
-				TheFileName = TheFileName.ToLower();
+				TheFileName = TheFileName.ToLowerInvariant();
 
 				if (SiteData.IsPageSpecial(TheFileName) || SiteData.IsLikelyHomePage(TheFileName)) {
 					return "FAIL";
 				}
 
-				if (SiteData.CurrentSite.GetSpecialFilePathPrefixes().Where(x => TheFileName.StartsWith(x.ToLower())).Any()
-							|| TheFileName.StartsWith(SiteData.CurrentSite.BlogFolderPath.ToLower())) {
+				if (SiteData.CurrentSite.GetSpecialFilePathPrefixes().Where(x => TheFileName.StartsWith(x.ToLowerInvariant())).Any()
+							|| TheFileName.StartsWith(SiteData.CurrentSite.BlogFolderPath.ToLowerInvariant())) {
 					return "FAIL";
 				}
 
@@ -732,7 +732,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				ThePageSlug = CMSConfigHelper.DecodeBase64(ThePageSlug);
 
 				ThePageSlug = ContentPageHelper.ScrubFilename(CurrentPageGuid, ThePageSlug);
-				ThePageSlug = ThePageSlug.ToLower();
+				ThePageSlug = ThePageSlug.ToLowerInvariant();
 
 				string TheFileName = ThePageSlug;
 
@@ -776,7 +776,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
 		public string GenerateCategoryTagSlug(string TheSlug, string Mode) {
 			try {
-				TheSlug = CMSConfigHelper.DecodeBase64(TheSlug).ToLower().Trim();
+				TheSlug = CMSConfigHelper.DecodeBase64(TheSlug).ToLowerInvariant().Trim();
 
 				return ContentPageHelper.ScrubSlug(TheSlug);
 			} catch (Exception ex) {
@@ -790,7 +790,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
 		public string GenerateSnippetSlug(string TheSlug) {
 			try {
-				TheSlug = CMSConfigHelper.DecodeBase64(TheSlug).ToLower().Trim();
+				TheSlug = CMSConfigHelper.DecodeBase64(TheSlug).ToLowerInvariant().Trim();
 
 				return ContentPageHelper.ScrubSlug(TheSlug);
 			} catch (Exception ex) {
@@ -832,7 +832,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				}
 
 				List<Widget> ww2 = (from w1 in cacheWidget
-									where w1.PlaceholderName.ToLower() == WidgetTarget.ToLower()
+									where w1.PlaceholderName.ToLowerInvariant() == WidgetTarget.ToLowerInvariant()
 									&& w1.WidgetOrder >= 0
 									orderby w1.WidgetOrder, w1.EditDate
 									select w1).ToList();
@@ -875,8 +875,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 						string[] w = arrWidgCell.Split('\t');
 
 						Widget rWidg = new Widget();
-						if (w[2].ToLower().EndsWith(".cshtml") || w[2].ToLower().EndsWith(".vbhtml")
-								|| w[2].ToLower().Contains(":") || w[2].ToLower().Contains("|")) {
+						if (w[2].ToLowerInvariant().EndsWith(".cshtml") || w[2].ToLowerInvariant().EndsWith(".vbhtml")
+								|| w[2].ToLowerInvariant().Contains(":") || w[2].ToLowerInvariant().Contains("|")) {
 							rWidg.ControlPath = w[2];
 							rWidg.Root_WidgetID = Guid.NewGuid();
 
@@ -1239,20 +1239,20 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				Zone = CMSConfigHelper.DecodeBase64(Zone);
 				CurrentPageGuid = new Guid(ThisPage);
 				LoadGuids();
-				CurrentEditPage = filePage.FileName.ToLower();
+				CurrentEditPage = filePage.FileName.ToLowerInvariant();
 
 				var c = cmsAdminContent;
 				c.EditDate = SiteData.CurrentSite.Now;
 				c.EditUserId = SecurityData.CurrentUserGuid;
 				c.ContentID = Guid.NewGuid();
 
-				if (Zone.ToLower() == "c")
+				if (Zone.ToLowerInvariant() == "c")
 					c.PageText = ZoneText;
 
-				if (Zone.ToLower() == "l")
+				if (Zone.ToLowerInvariant() == "l")
 					c.LeftPageText = ZoneText;
 
-				if (Zone.ToLower() == "r")
+				if (Zone.ToLowerInvariant() == "r")
 					c.RightPageText = ZoneText;
 
 				cmsAdminContent = c;
@@ -1271,7 +1271,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			try {
 				CurrentPageGuid = new Guid(ThisPage);
 				LoadGuids();
-				CurrentEditPage = filePage.FileName.ToLower();
+				CurrentEditPage = filePage.FileName.ToLowerInvariant();
 
 				bool bLock = pageHelper.IsPageLocked(CurrentPageGuid, SiteData.CurrentSite.SiteID, SecurityData.CurrentUserGuid);
 				Guid guidUser = pageHelper.GetCurrentEditUser(CurrentPageGuid, SiteData.CurrentSite.SiteID);

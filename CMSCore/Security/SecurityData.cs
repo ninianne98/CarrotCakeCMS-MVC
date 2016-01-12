@@ -226,6 +226,42 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		private static string keyIsAdmin = "cms_IsAdmin";
+
+		private static string keyIsSiteEditor = "cms_IsSiteEditor";
+
+		public static bool GetIsAdminFromCache() {
+			bool keyVal = false;
+
+			if (SiteData.IsWebView && HttpContext.Current.User.Identity.IsAuthenticated) {
+				string key = String.Format("{0}_{1}", keyIsAdmin, SecurityData.CurrentUserIdentityName);
+				if (HttpContext.Current.Cache[key] != null) {
+					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
+				} else {
+					keyVal = SecurityData.IsAdmin;
+					HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(30), Cache.NoSlidingExpiration);
+				}
+			}
+
+			return keyVal;
+		}
+
+		public static bool GetIsSiteEditorFromCache() {
+			bool keyVal = false;
+
+			if (SiteData.IsWebView && HttpContext.Current.User.Identity.IsAuthenticated) {
+				string key = String.Format("{0}_{1}", keyIsSiteEditor, SecurityData.CurrentUserIdentityName);
+				if (HttpContext.Current.Cache[key] != null) {
+					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
+				} else {
+					keyVal = SecurityData.IsSiteEditor;
+					HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(30), Cache.NoSlidingExpiration);
+				}
+			}
+
+			return keyVal;
+		}
+
 		public static bool IsAdmin {
 			get {
 				try {
@@ -287,16 +323,27 @@ namespace Carrotware.CMS.Core {
 			return IsUserInRole(SecurityData.CurrentUserIdentityName, groupName);
 		}
 
-		public static bool IsUserInRole(string userName, string groupName) {
-			if (SiteData.IsWebView && HttpContext.Current.User.Identity.IsAuthenticated) {
-				using (var securityHelper = new SecurityHelper()) {
-					var _user = securityHelper.UserManager.FindByName(userName);
+		private static string keyIsUserInRole = "cms_IsUserInRole";
 
-					return securityHelper.UserManager.IsInRole(_user.Id, groupName);
+		public static bool IsUserInRole(string userName, string groupName) {
+			bool keyVal = false;
+
+			if (SiteData.IsWebView && HttpContext.Current.User.Identity.IsAuthenticated) {
+				string key = String.Format("{0}_{1}_{2}", keyIsUserInRole, userName.ToLower(), groupName.ToLower());
+
+				if (HttpContext.Current.Cache[key] != null) {
+					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
+				} else {
+					using (var securityHelper = new SecurityHelper()) {
+						var _user = securityHelper.UserManager.FindByName(userName);
+
+						keyVal = securityHelper.UserManager.IsInRole(_user.Id, groupName);
+					}
+					HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(15), Cache.NoSlidingExpiration);
 				}
 			}
 
-			return false;
+			return keyVal;
 		}
 
 		public static bool IsSiteEditor {

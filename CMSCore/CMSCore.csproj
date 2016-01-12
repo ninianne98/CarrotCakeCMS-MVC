@@ -149,6 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CannedQueries.cs" />
+    <Compile Include="MVC\CmsAdminAuthorizeAttribute.cs" />
+    <Compile Include="MVC\CmsAuthorizeAttribute.cs" />
     <Compile Include="MVC\CmsWebViewPage.cs" />
     <Compile Include="MVC\CarrotViewEngineTemplate.cs" />
     <Compile Include="ConfigHelper\CarrotCakeConfig.cs" />

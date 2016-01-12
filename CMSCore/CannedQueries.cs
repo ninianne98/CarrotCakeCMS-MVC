@@ -65,8 +65,8 @@ namespace Carrotware.CMS.Core {
 					orderby ct.NavOrder, ct.NavMenuText
 					where ct.SiteID == siteID
 					 && ct.IsLatestVersion == true
-					 && (ct.PageHead.ToLower() == sTitle.ToLower() || ct.TitleBar.ToLower() == sTitle.ToLower())
-					 && ct.FileName.ToLower().Contains(sFileNameFrag.ToLower())
+					 && (ct.PageHead == sTitle || ct.TitleBar == sTitle)
+					 && ct.FileName.Contains(sFileNameFrag)
 					 && ct.CreateDate.Date == dateCreate.Date
 					select ct);
 		}
@@ -144,9 +144,9 @@ namespace Carrotware.CMS.Core {
 			Guid contentTypeID = ContentPageType.GetIDByType(pageType);
 
 			return (from ct in ctx.vw_carrot_Contents.Where(c => c.SiteID == siteID && c.ContentTypeID == contentTypeID && c.IsLatestVersion == true)
-					group ct by ct.TemplateFile.ToLower() into grp
+					group ct by ct.TemplateFile into grp
 					orderby grp.Count() descending
-					select new KeyValuePair<string, float>(grp.Key.ToLower(), (float)grp.Count()))
+					select new KeyValuePair<string, float>(grp.Key, (float)grp.Count()))
 					.ToDictionary(t => t.Key, t => t.Value);
 		}
 
@@ -156,7 +156,7 @@ namespace Carrotware.CMS.Core {
 					join ct in ctx.vw_carrot_Contents on m.Root_ContentID equals ct.Root_ContentID
 					where t.SiteID == siteID
 						&& ct.SiteID == siteID
-						&& t.TagUrl.ToLower() == sTagURL.ToLower()
+						&& t.TagUrl == sTagURL
 						&& ct.ContentTypeID == ContentPageType.GetIDByType(ContentPageType.PageType.BlogEntry)
 						&& (ct.PageActive == true || bActiveOnly == false)
 						&& (ct.GoLiveDate < DateTime.UtcNow || bActiveOnly == false)
@@ -171,7 +171,7 @@ namespace Carrotware.CMS.Core {
 					join ct in ctx.vw_carrot_Contents on m.Root_ContentID equals ct.Root_ContentID
 					where c.SiteID == siteID
 						&& ct.SiteID == siteID
-						&& c.CategoryUrl.ToLower() == sCatURL.ToLower()
+						&& c.CategoryUrl == sCatURL
 						&& ct.ContentTypeID == ContentPageType.GetIDByType(ContentPageType.PageType.BlogEntry)
 						&& (ct.PageActive == true || bActiveOnly == false)
 						&& (ct.GoLiveDate < DateTime.UtcNow || bActiveOnly == false)
@@ -185,7 +185,7 @@ namespace Carrotware.CMS.Core {
 					join ct in ctx.vw_carrot_Contents on ed.SiteID equals ct.SiteID
 					where ed.SiteID == siteID
 						&& ct.SiteID == siteID
-						&& ed.UserUrl.ToLower() == sUserURL.ToLower()
+						&& ed.UserUrl == sUserURL
 						&& ct.ContentTypeID == ContentPageType.GetIDByType(ContentPageType.PageType.BlogEntry)
 						&& (ct.PageActive == true || bActiveOnly == false)
 						&& (ct.GoLiveDate < DateTime.UtcNow || bActiveOnly == false)
@@ -261,7 +261,7 @@ namespace Carrotware.CMS.Core {
 					join cp in ctx.vw_carrot_ContentChilds on ct.Root_ContentID equals cp.Root_ContentID
 					orderby ct.NavOrder, ct.NavMenuText
 					where ct.SiteID == siteID
-						   && cp.ParentFileName.ToLower() == parentPage.ToLower()
+						   && cp.ParentFileName == parentPage
 						   && ct.IsLatestVersion == true
 						   && (ct.PageActive == true || bActiveOnly == false)
 						   && (ct.GoLiveDate < DateTime.UtcNow || bActiveOnly == false)
@@ -357,7 +357,7 @@ namespace Carrotware.CMS.Core {
 			return (from ct in ctx.vw_carrot_CategoryURLs
 					join m in ctx.carrot_CategoryContentMappings on ct.ContentCategoryID equals m.ContentCategoryID
 					join c in ctx.carrot_RootContents on m.Root_ContentID equals c.Root_ContentID
-					where c.FileName.ToLower() == urlFileName.ToLower()
+					where c.FileName == urlFileName
 						&& ct.SiteID == siteID
 					select ct);
 		}
@@ -366,7 +366,7 @@ namespace Carrotware.CMS.Core {
 			return (from ct in ctx.vw_carrot_TagURLs
 					join m in ctx.carrot_TagContentMappings on ct.ContentTagID equals m.ContentTagID
 					join c in ctx.carrot_RootContents on m.Root_ContentID equals c.Root_ContentID
-					where c.FileName.ToLower() == urlFileName.ToLower()
+					where c.FileName == urlFileName
 						&& ct.SiteID == siteID
 					select ct);
 		}

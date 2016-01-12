@@ -137,7 +137,7 @@ namespace Carrotware.CMS.Core {
 					(CarrotCMSDataContext ctx, SearchParameterObject sp) =>
 					  (from ct in ctx.vw_carrot_Contents
 					   where ct.SiteID == sp.SiteID
-							&& ct.FileName.ToLower() == sp.FileName.ToLower()
+							&& ct.FileName == sp.FileName
 							&& ct.IsLatestVersion == true
 							&& (ct.PageActive == true || sp.ActiveOnly == false)
 							&& (ct.GoLiveDate < sp.DateCompare || sp.ActiveOnly == false)
@@ -149,7 +149,7 @@ namespace Carrotware.CMS.Core {
 					(CarrotCMSDataContext ctx, Guid siteID, DateTime datePublished, string sPageSlug) =>
 					  (from ct in ctx.vw_carrot_Contents
 					   where ct.SiteID == siteID
-							&& ct.PageSlug.ToLower() == sPageSlug.ToLower()
+							&& ct.PageSlug == sPageSlug
 							&& (ct.GoLiveDate.Date == datePublished.Date)
 							&& ct.IsLatestVersion == true
 					   select ct).FirstOrDefault());
@@ -159,7 +159,7 @@ namespace Carrotware.CMS.Core {
 					(CarrotCMSDataContext ctx, Guid siteID, string sPage) =>
 					  (from ct in ctx.vw_carrot_CategoryURLs
 					   where ct.SiteID == siteID
-							&& ct.CategoryUrl.ToLower() == sPage.ToLower()
+							&& ct.CategoryUrl == sPage
 					   select ct).FirstOrDefault());
 
 		internal static readonly Func<CarrotCMSDataContext, Guid, string, vw_carrot_TagURL> cqGetTagByURL =
@@ -167,7 +167,7 @@ namespace Carrotware.CMS.Core {
 					(CarrotCMSDataContext ctx, Guid siteID, string sPage) =>
 					  (from ct in ctx.vw_carrot_TagURLs
 					   where ct.SiteID == siteID
-							&& ct.TagUrl.ToLower() == sPage.ToLower()
+							&& ct.TagUrl == sPage
 					   select ct).FirstOrDefault());
 
 		internal static readonly Func<CarrotCMSDataContext, Guid, string, vw_carrot_EditorURL> cqGetEditorByURL =
@@ -175,7 +175,7 @@ namespace Carrotware.CMS.Core {
 					(CarrotCMSDataContext ctx, Guid siteID, string sPage) =>
 					  (from ct in ctx.vw_carrot_EditorURLs
 					   where ct.SiteID == siteID
-							&& ct.UserUrl.ToLower() == sPage.ToLower()
+							&& ct.UserUrl == sPage
 					   select ct).FirstOrDefault());
 
 		internal static vw_carrot_Content GetLatestContentByID(CarrotCMSDataContext ctx, Guid siteID, bool bActiveOnly, Guid rootContentID) {
@@ -243,7 +243,7 @@ namespace Carrotware.CMS.Core {
 					 join cp in ctx.vw_carrot_ContentChilds on ct.Root_ContentID equals cp.Root_ContentID
 					 orderby ct.NavOrder, ct.NavMenuText
 					 where ct.SiteID == sp.SiteID
-							&& cp.ParentFileName.ToLower() == sp.ParentFileName.ToLower()
+							&& cp.ParentFileName == sp.ParentFileName
 							&& ct.IsLatestVersion == true
 							&& (ct.PageActive == true || sp.ActiveOnly == false)
 							&& (ct.GoLiveDate < sp.DateCompare || sp.ActiveOnly == false)
@@ -297,7 +297,7 @@ namespace Carrotware.CMS.Core {
 					 join ct in ctx.vw_carrot_Contents on cc2.Root_ContentID equals ct.Root_ContentID
 					 orderby ct.NavOrder, ct.NavMenuText
 					 where ct.SiteID == sp.SiteID
-							&& cc1.FileName.ToLower() == sp.FileName.ToLower()
+							&& cc1.FileName == sp.FileName
 							&& cc1.SiteID == sp.SiteID
 							&& cc2.SiteID == sp.SiteID
 							&& ct.IsLatestVersion == true
@@ -348,7 +348,7 @@ namespace Carrotware.CMS.Core {
 					 join cp in ctx.vw_carrot_ContentChilds on ct.Root_ContentID equals cp.Root_ContentID
 					 orderby ct.NavOrder, ct.NavMenuText
 					 where ct.SiteID == sp.SiteID
-							&& cp.ParentFileName.ToLower() == sp.ParentFileName.ToLower()
+							&& cp.ParentFileName == sp.ParentFileName
 							&& ct.IsLatestVersion == true
 							&& (ct.PageActive == true || sp.ActiveOnly == false)
 							&& (ct.GoLiveDate < sp.DateCompare || sp.ActiveOnly == false)
@@ -475,7 +475,7 @@ namespace Carrotware.CMS.Core {
 					   orderby r.GoLiveDate descending
 					   where r.SiteID == siteID
 							&& r.ContentTypeID == entryType
-							&& r.FileName.ToLower() == sPage.ToLower()
+							&& r.FileName == sPage
 					   select r));
 
 		internal static readonly Func<CarrotCMSDataContext, Guid, IQueryable<vw_carrot_Content>> cqGetAllContent =
@@ -491,7 +491,7 @@ namespace Carrotware.CMS.Core {
 					(CarrotCMSDataContext ctx, Guid siteID, Guid rootContentID, string sPage) =>
 					  (from ct in ctx.vw_carrot_Contents
 					   where ct.SiteID == siteID
-						   && ct.FileName.ToLower() == sPage.ToLower()
+						   && ct.FileName == sPage
 						   && ct.Root_ContentID != rootContentID
 					   select ct));
 
@@ -708,7 +708,7 @@ namespace Carrotware.CMS.Core {
 		CompiledQuery.Compile(
 			(CarrotCMSDataContext ctx, string contentTypeValue) =>
 				(from r in ctx.carrot_ContentTypes
-				 where r.ContentTypeValue.ToLower() == contentTypeValue.ToLower()
+				 where r.ContentTypeValue == contentTypeValue
 				 select r).FirstOrDefault());
 
 		internal static readonly Func<CarrotCMSDataContext, Guid, carrot_ContentType> cqGetContentTypeByID =
@@ -731,7 +731,7 @@ namespace Carrotware.CMS.Core {
 			(CarrotCMSDataContext ctx, Guid siteID, string slugURL) =>
 				(from c in ctx.vw_carrot_TagURLs
 				 where c.SiteID == siteID
-					 && c.TagUrl.ToLower() == slugURL.ToLower()
+					 && c.TagUrl == slugURL
 				 select c).FirstOrDefault());
 
 		internal static readonly Func<CarrotCMSDataContext, Guid, string, vw_carrot_CategoryURL> cqGetContentCategoryByURL =
@@ -739,7 +739,7 @@ namespace Carrotware.CMS.Core {
 			(CarrotCMSDataContext ctx, Guid siteID, string slugURL) =>
 				(from c in ctx.vw_carrot_CategoryURLs
 				 where c.SiteID == siteID
-					 && c.CategoryUrl.ToLower() == slugURL.ToLower()
+					 && c.CategoryUrl == slugURL
 				 select c).FirstOrDefault());
 
 		internal static readonly Func<CarrotCMSDataContext, Guid, string, vw_carrot_EditorURL> cqGetContentEditorURL =
@@ -747,7 +747,7 @@ namespace Carrotware.CMS.Core {
 			(CarrotCMSDataContext ctx, Guid siteID, string slugURL) =>
 				(from c in ctx.vw_carrot_EditorURLs
 				 where c.SiteID == siteID
-					 && c.UserUrl.ToLower() == slugURL.ToLower()
+					 && c.UserUrl == slugURL
 				 select c).FirstOrDefault());
 
 		internal static readonly Func<CarrotCMSDataContext, Guid, carrot_ContentTag> cqGetContentTagByID =
@@ -806,7 +806,7 @@ namespace Carrotware.CMS.Core {
 				(from r in ctx.carrot_ContentTags
 				 where r.SiteID == siteID
 					&& r.ContentTagID != contentTagID
-					&& r.TagSlug.ToLower() == slug.ToLower()
+					&& r.TagSlug == slug
 				 select r));
 
 		internal static readonly Func<CarrotCMSDataContext, Guid, Guid, string, IQueryable<carrot_ContentCategory>> cqGetContentCategoryNoMatch =
@@ -815,7 +815,7 @@ namespace Carrotware.CMS.Core {
 				(from r in ctx.carrot_ContentCategories
 				 where r.SiteID == siteID
 					&& r.ContentCategoryID != contentCategoryID
-					&& r.CategorySlug.ToLower() == slug.ToLower()
+					&& r.CategorySlug == slug
 				 select r));
 
 		internal static readonly Func<CarrotCMSDataContext, Guid, IQueryable<carrot_ContentTag>> cqGetContentTagByContentID =
@@ -869,7 +869,7 @@ namespace Carrotware.CMS.Core {
 				 join ct in ctx.vw_carrot_Contents on m.Root_ContentID equals ct.Root_ContentID
 				 where r.SiteID == sp.SiteID
 						&& ct.SiteID == sp.SiteID
-						&& r.TagUrl.ToLower() == sp.FileName.ToLower()
+						&& r.TagUrl == sp.FileName
 						&& (ct.PageActive == true || sp.ActiveOnly == false)
 						&& (ct.GoLiveDate < sp.DateCompare || sp.ActiveOnly == false)
 						&& (ct.RetireDate > sp.DateCompare || sp.ActiveOnly == false)
@@ -895,7 +895,7 @@ namespace Carrotware.CMS.Core {
 				 join ct in ctx.vw_carrot_Contents on m.Root_ContentID equals ct.Root_ContentID
 				 where r.SiteID == sp.SiteID
 						&& ct.SiteID == sp.SiteID
-						&& r.CategoryUrl.ToLower() == sp.FileName.ToLower()
+						&& r.CategoryUrl == sp.FileName
 						&& (ct.PageActive == true || sp.ActiveOnly == false)
 						&& (ct.GoLiveDate < sp.DateCompare || sp.ActiveOnly == false)
 						&& (ct.RetireDate > sp.DateCompare || sp.ActiveOnly == false)
@@ -1029,14 +1029,14 @@ namespace Carrotware.CMS.Core {
 		CompiledQuery.Compile(
 				(CarrotCMSDataContext ctx, string userName) =>
 					(from ct in ctx.vw_carrot_UserDatas
-					 where ct.UserName.ToLower() == userName.ToLower()
+					 where ct.UserName == userName
 					 select ct).FirstOrDefault());
 
 		internal static readonly Func<CarrotCMSDataContext, string, vw_carrot_UserData> cqFindUserByEmail =
 		CompiledQuery.Compile(
 				(CarrotCMSDataContext ctx, string emailAddy) =>
 					(from ct in ctx.vw_carrot_UserDatas
-					 where ct.Email.ToLower() == emailAddy.ToLower()
+					 where ct.Email == emailAddy
 					 select ct).FirstOrDefault());
 
 		internal static readonly Func<CarrotCMSDataContext, IQueryable<vw_carrot_UserData>> cqGetUserList =
@@ -1096,7 +1096,7 @@ namespace Carrotware.CMS.Core {
 					(from ct in ctx.vw_carrot_TrackbackQueues
 					 orderby ct.CreateDate descending
 					 where ct.Root_ContentID == rootContentID
-						&& ct.TrackBackURL.ToLower() == sURL.ToLower()
+						&& ct.TrackBackURL == sURL
 					 select ct));
 
 		//===============
@@ -1174,7 +1174,7 @@ namespace Carrotware.CMS.Core {
 				(from r in ctx.vw_carrot_ContentSnippets
 				 where r.SiteID == siteID
 					&& r.Root_ContentSnippetID != rootSnippetID
-					&& r.ContentSnippetSlug.ToLower() == slug.ToLower()
+					&& r.ContentSnippetSlug == slug
 				 select r));
 
 		internal static vw_carrot_ContentSnippet GetLatestContentSnippetBySlug(CarrotCMSDataContext ctx, Guid siteID, bool bActiveOnly, string sItemSlug) {
@@ -1192,7 +1192,7 @@ namespace Carrotware.CMS.Core {
 					(CarrotCMSDataContext ctx, SearchParameterObject sp) =>
 					  (from ct in ctx.vw_carrot_ContentSnippets
 					   where ct.SiteID == sp.SiteID
-							&& ct.ContentSnippetSlug.ToLower() == sp.ItemSlug.ToLower()
+							&& ct.ContentSnippetSlug == sp.ItemSlug
 							&& ct.IsLatestVersion == true
 							&& (ct.ContentSnippetActive == true || sp.ActiveOnly == false)
 							&& (ct.GoLiveDate < sp.DateCompare || sp.ActiveOnly == false)

@@ -346,10 +346,12 @@
 
 @if (!bLocked) {
 	<div style="display: none">
-		@using (Html.BeginForm("DeleteSnippet", RouteConfig.AdminCtrlr)) {
+		@using (Html.BeginForm("DeleteContentSnippet", RouteConfig.AdminCtrlr)) {
 			@Html.AntiForgeryToken()
 
 			@Html.HiddenFor(m => m.Root_ContentSnippetID)
+			@Html.HiddenFor(m => m.ContentSnippetSlug)
+			@Html.HiddenFor(m => m.ContentSnippetName)
 
 			<input type="submit" name="btnDelete" value="Delete" id="btnDelete" />
 		}
