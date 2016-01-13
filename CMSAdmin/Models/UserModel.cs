@@ -76,5 +76,27 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 				return _allSites;
 			}
 		}
+
+		public void SaveOptions() {
+			if (this.SiteOptions.Any()) {
+				foreach (var s in this.SiteOptions) {
+					if (s.Selected) {
+						this.User.AddToSite(new Guid(s.Value));
+					} else {
+						this.User.RemoveFromSite(new Guid(s.Value));
+					}
+				}
+			}
+
+			if (this.RoleOptions.Any()) {
+				foreach (var r in this.RoleOptions) {
+					if (r.Selected) {
+						this.User.AddToRole(r.Text);
+					} else {
+						this.User.RemoveFromRole(r.Text);
+					}
+				}
+			}
+		}
 	}
 }

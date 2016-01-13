@@ -12,6 +12,11 @@
 <p>
 	You do not have access to the admin tools for this website.
 </p>
+@if (SecurityData.IsSiteEditor) {
+	<p>
+		<a href="@SiteFilename.SiteInfoURL">Site Info</a>
+	</p>
+}
 <div>
 	@if (Request.IsAuthenticated) {
 		using (Html.BeginForm("LogOff", RouteConfig.AdminCtrlr, FormMethod.Post, new { id = "logoutForm" })) {
@@ -19,6 +24,7 @@
 
 			<input type="submit" name="btnLogout" value="Logout" id="btnLogout" />
 		}
+
 	} else {
 		<p>
 			<a href="@SiteFilename.LoginURL">Login</a>

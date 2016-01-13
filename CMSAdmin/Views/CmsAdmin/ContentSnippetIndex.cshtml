@@ -22,18 +22,42 @@
 	grid.ConfigName(Html.NameFor(x => x));
 
 	grid
+
 		.AddColumn(new CarrotGridTemplateColumn<ContentSnippet> {
 			HasHeadingText = false,
-			FormatTemplate = @<text> @CarrotWeb.ActionImage("ContentSnippetAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentSnippetID }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
+			FormatTemplate = @<text> @CarrotWeb.ActionImage("ContentSnippetAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentSnippetID }, "~/Assets/Admin/Images/pencil.png", "Edit with WYSIWYG", null, null) </text>
 		})
+		.AddColumn(new CarrotGridTemplateColumn<ContentSnippet> {
+			HasHeadingText = false,
+			FormatTemplate = @<text> @CarrotWeb.ActionImage("ContentSnippetAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentSnippetID, @mode = "raw" }, "~/Assets/Admin/Images/script.png", "Edit with Plain Text", null, null) </text>
+		})
+
 		.AddColumn(x => x.ContentSnippetName, new CarrotGridColumn { Sortable = true })
-		.AddColumn(x => x.ContentSnippetActive, new CarrotGridBooleanImageColumn {
-			Sortable = true
-		})
-		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.ContentSnippetSlug, new CarrotGridColumn { Sortable = true })
+
 		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
 		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.RetireDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" });
+		.AddColumn(x => x.RetireDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+
+		.AddColumn(x => x.IsRetired, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Retired",
+			AlternateTextFalse = "Active",
+			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
+			ImagePathFalse = "~/Assets/Admin/Images/clock.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.IsUnReleased, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Unreleased",
+			AlternateTextFalse = "Active",
+			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
+			ImagePathFalse = "~/Assets/Admin/Images/clock.png",
+			Sortable = true
+		})
+		.AddColumn(x => x.ContentSnippetActive, new CarrotGridBooleanImageColumn {
+			AlternateTextTrue = "Active",
+			AlternateTextFalse = "Inactive",
+			Sortable = true
+		});
 
 		@grid.Write()
 }

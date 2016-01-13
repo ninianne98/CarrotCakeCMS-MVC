@@ -39,7 +39,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			string action = vals["action"].ToString().ToLowerInvariant();
 			string controller = vals["controller"].ToString().ToLowerInvariant();
 
-			//TODO: non admin or site editor redirect to go here
 			if (this.User.Identity.IsAuthenticated) {
 				List<string> lstOKNoSiteActions = new List<string>();
 				lstOKNoSiteActions.Add("siteinfo");
@@ -54,6 +53,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				List<string> lstInitSiteActions = new List<string>();
 				lstInitSiteActions.Add("login");
+				lstInitSiteActions.Add("forgotpassword");
 				lstInitSiteActions.Add("createfirstadmin");
 				lstInitSiteActions.Add("databasesetup");
 
@@ -66,19 +66,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 						if (DatabaseUpdate.TablesIncomplete) {
 							filterContext.Result = new RedirectResult(SiteFilename.DatabaseSetupURL);
-							return;
-						}
-
-						if (!SecurityData.IsAuthEditor &&
-							!(action == "notauthorized" || action == "login" || action == "logoff")) {
-							filterContext.Result = new RedirectResult(SiteFilename.NotAuthorizedURL);
-							return;
-						}
-
-						if (!SecurityData.IsAdmin && (action.StartsWith("useradd")
-									|| action.StartsWith("useredit")
-									|| action.StartsWith("roleadd"))) {
-							filterContext.Result = new RedirectResult(SiteFilename.SiteInfoURL);
 							return;
 						}
 					}
@@ -207,21 +194,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				exUsr.Save();
 
-				foreach (var s in model.SiteOptions) {
-					if (s.Selected) {
-						userExt.AddToSite(new Guid(s.Value));
-					} else {
-						userExt.RemoveFromSite(new Guid(s.Value));
-					}
-				}
-
-				foreach (var r in model.RoleOptions) {
-					if (r.Selected) {
-						userExt.AddToRole(r.Text);
-					} else {
-						userExt.RemoveFromRole(r.Text);
-					}
-				}
+				model.SaveOptions();
 
 				return RedirectToAction("UserEdit", new { @id = userExt.UserId });
 			}
@@ -968,6 +941,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
+		[CmsAdminAuthorize]
 		public ActionResult SiteDetail(Guid id) {
 			SiteModel model = new SiteModel(id);
 
@@ -976,12 +950,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[CmsAdminAuthorize]
 		public ActionResult SiteDetail(SiteModel model) {
 			return View(model);
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[CmsAdminAuthorize]
 		public ActionResult SiteAddUser(SiteModel model) {
 			ModelState.Clear();
 
@@ -1014,6 +990,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[CmsAdminAuthorize]
 		public ActionResult SiteRemoveUsers(SiteModel model) {
 			ModelState.Clear();
 
@@ -1432,6 +1409,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return View(model);
 		}
 
+		[HttpGet]
 		public ActionResult ContentSnippetAddEdit(Guid? id, Guid? versionid, string mode) {
 			ViewBag.ContentEditMode = (String.IsNullOrEmpty(mode) || mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
 
@@ -2522,15 +2500,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return View(model);
 		}
 
-		//[HttpGet]
-		//public ActionResult SinglePageCommentIndex(Guid? id) {
-		//	CommentIndexModel model = new CommentIndexModel();
-		//	model.PageType = ContentPageType.PageType.Unknown;
-		//	model.Root_ContentID = id;
-
-		//	return CommentIndex(model);
-		//}
-
 		[HttpGet]
 		public ActionResult PageCommentIndex(Guid? id) {
 			CommentIndexModel model = new CommentIndexModel();
@@ -2864,6 +2833,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[CmsAdminAuthorize]
 		public ActionResult RoleRemoveUsers(RoleModel model) {
 			UserRole role = model.Role;
 
@@ -2884,6 +2854,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[CmsAdminAuthorize]
 		public ActionResult RoleAddUser(RoleModel model) {
 			if (String.IsNullOrEmpty(model.NewUserId)) {
 				ModelState.AddModelError("NewUserId", "The New User field is required.");
