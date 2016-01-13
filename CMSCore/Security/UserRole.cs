@@ -53,8 +53,7 @@ namespace Carrotware.CMS.Core {
 		public void Save() {
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
 				membership_Role role = (from r in _db.membership_Roles
-										where r.Name.ToLowerInvariant() == this.RoleName.ToLowerInvariant()
-											|| r.Id == this.RoleId
+										where r.Name == this.RoleName || r.Id == this.RoleId
 										select r).FirstOrDefault();
 
 				if (role == null) {

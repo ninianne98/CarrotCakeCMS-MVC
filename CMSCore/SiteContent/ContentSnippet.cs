@@ -75,6 +75,7 @@ namespace Carrotware.CMS.Core {
 		public Guid? Heartbeat_UserId { get; set; }
 		public DateTime? EditHeartbeat { get; set; }
 
+		[Display(Name = "Retired")]
 		public bool IsRetired {
 			get {
 				if (this.RetireDate < SiteData.CurrentSite.Now) {
@@ -85,6 +86,7 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		[Display(Name = "Unreleased")]
 		public bool IsUnReleased {
 			get {
 				if (this.GoLiveDate > SiteData.CurrentSite.Now) {

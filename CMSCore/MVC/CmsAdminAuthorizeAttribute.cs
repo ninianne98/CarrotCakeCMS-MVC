@@ -19,7 +19,7 @@ namespace Carrotware.CMS.Core {
 	public class CmsAdminAuthorizeAttribute : AuthorizeAttribute {
 
 		protected override bool AuthorizeCore(HttpContextBase httpContext) {
-			if (!httpContext.User.Identity.IsAuthenticated) {
+			if (!SecurityData.IsAuthenticated) {
 				return false;
 			}
 
@@ -27,7 +27,27 @@ namespace Carrotware.CMS.Core {
 				return true;
 			}
 
-			return base.AuthorizeCore(httpContext);
+			return false;
+		}
+
+		public override void OnAuthorization(AuthorizationContext filterContext) {
+			base.OnAuthorization(filterContext);
+
+			bool skipAuth = filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true)
+								|| filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true);
+
+			if (skipAuth) {
+				return;
+			} else {
+				if (!filterContext.HttpContext.User.Identity.IsAuthenticated) {
+					filterContext.Result = new RedirectResult(SiteFilename.LoginURL);
+					return;
+				}
+			}
+
+			if (filterContext.Result is HttpUnauthorizedResult) {
+				filterContext.Result = new RedirectResult(SiteFilename.NotAuthorizedURL);
+			}
 		}
 	}
 }

@@ -811,7 +811,7 @@ namespace Carrotware.CMS.Core {
 			pageNew.IsLatestVersion = true;
 			pageNew.NavOrder = -1;
 			pageNew.TitleBar = "Template Preview - TITLE";
-			pageNew.NavMenuText = "Template PV - NAV" ;
+			pageNew.NavMenuText = "Template PV - NAV";
 			pageNew.PageHead = "Template Preview - HEAD";
 			pageNew.PageActive = true;
 			pageNew.ShowInSiteNav = true;
@@ -1099,7 +1099,7 @@ namespace Carrotware.CMS.Core {
 
 			IQueryable<vw_carrot_Content> query = (from ct in db.vw_carrot_Contents
 												   where ct.SiteID == siteID
-														&& ct.FileName.ToLowerInvariant().StartsWith(sFolderPath)
+														&& ct.FileName.StartsWith(sFolderPath)
 														&& ct.IsLatestVersion == true
 												   select ct);
 
@@ -1111,7 +1111,7 @@ namespace Carrotware.CMS.Core {
 
 			IQueryable<vw_carrot_Content> query = (from ct in db.vw_carrot_Contents
 												   where ct.SiteID == siteID
-														&& ct.FileName.ToLowerInvariant() == sFolderPath
+														&& ct.FileName == sFolderPath
 														&& ct.IsLatestVersion == true
 												   select ct);
 

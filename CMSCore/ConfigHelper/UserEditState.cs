@@ -38,7 +38,7 @@ namespace Carrotware.CMS.Core {
 
 		public static string ContentKey {
 			get {
-				if (SecurityData.CurrentUser != null) {
+				if (SecurityData.IsAuthenticated) {
 					return "cms_UserEditState_" + SecurityData.CurrentUser.UserName.ToLowerInvariant();
 				} else {
 					return "cms_UserEditState_anonymous";

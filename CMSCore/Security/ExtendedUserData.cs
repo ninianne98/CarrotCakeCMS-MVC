@@ -223,21 +223,11 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public bool AddToRole(string roleName) {
-			if (!SecurityData.IsUserInRole(this.UserName, roleName)) {
-				SecurityData.AddUserToRole(this.UserName, roleName);
-				return true;
-			} else {
-				return false;
-			}
+			return SecurityData.AddUserToRole(this.UserName, roleName);
 		}
 
 		public bool RemoveFromRole(string roleName) {
-			if (SecurityData.IsUserInRole(this.UserName, roleName)) {
-				SecurityData.RemoveUserFromRole(this.UserName, roleName);
-				return true;
-			} else {
-				return false;
-			}
+			return SecurityData.RemoveUserFromRole(this.UserName, roleName);
 		}
 
 		public bool AddToSite(Guid siteID) {
