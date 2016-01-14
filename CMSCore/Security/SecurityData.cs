@@ -332,7 +332,7 @@ namespace Carrotware.CMS.Core {
 			bool keyVal = false;
 
 			if (SiteData.IsWebView && IsAuthenticated) {
-				string key = String.Format("{0}_{1}_{2}", keyIsUserInRole, userName.ToLowerInvariant(), groupName.ToLowerInvariant());
+				string key = String.Format("{0}_{1}_{2}", keyIsUserInRole, userName, groupName);
 
 				if (HttpContext.Current.Cache[key] != null) {
 					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
@@ -492,9 +492,7 @@ namespace Carrotware.CMS.Core {
 		public static string CurrentUserIdentityName {
 			get {
 				if (SiteData.IsWebView && IsAuthenticated) {
-					if (!String.IsNullOrEmpty(UserPrincipal.Identity.Name)) {
-						return UserPrincipal.Identity.Name.ToLowerInvariant();
-					}
+					return UserPrincipal.Identity.Name.ToLowerInvariant();
 				}
 				return String.Empty;
 			}
