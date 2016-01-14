@@ -2,17 +2,17 @@
 <h2>This is the homepage</h2>
 
 <p>This website is being built with CarrotCake CMS, an open source c# project. CarrotCake is a 
-	<a href="http://www.carrotware.com/carrotcake-templates.aspx">template-based</a> ASP.Net CMS 
+	<a href="http://www.carrotware.com/carrotcake-templates" target="_blank">template-based</a> ASP.Net CMS 
 	(<a href="http://en.wikipedia.org/wiki/Content_management_system" target="_blank">content management system</a>) 
 	built with C#, SQL server, <a href="http://jqueryui.com/" target="_blank">jQueryUI</a>, and 
 	<a href="http://www.tinymce.com/" target="_blank">TinyMCE</a>. If you have found this software useful or have
-	published a site with CarrotCake, we'd love to <a href="http://www.carrotware.com/contact.aspx" target="_blank">hear</a> from you.</p>
+	published a site with CarrotCake, we'd love to <a href="http://www.carrotware.com/contact" target="_blank">hear</a> from you.</p>
 
 <p>Source code and documentation is available on 
 		<a href="https://github.com/ninianne98/CarrotCakeCMS-MVC" target="_blank">GitHub</a>,   
 		<a href="http://sourceforge.net/projects/carrotcakecmsmvc/" target="_blank">SourceForge</a>, and 
 		<a href="http://carrotcakecmsmvc.codeplex.com/" target="_blank">Microsoft CodePlex</a>.
-		Documentation and assemblies can be found <a href="http://www.carrotware.com/carrotcake-download.aspx">here</a>. </p>
+		Documentation and assemblies can be found <a href="http://www.carrotware.com/carrotcake-download" target="_blank">here</a>. </p>
 
 <p>Some features include: blogging engine, configurable date based blog post URLs, blog post content association with categories and tags, 
 		assignment/customization of category and tag URL patterns, simple content feedback collection and review, blog post pagination/indexes 
