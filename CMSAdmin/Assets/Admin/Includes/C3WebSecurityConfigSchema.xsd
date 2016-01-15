@@ -1,17 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema id="CarrotSecuritySchema"
+<xs:schema id="CarrotCakeMVCSecuritySchema"
 					elementFormDefault="qualified"
-					targetNamespace="http://schema.carrotcakecms.com/mvc/securityconfig"
-					xmlns="http://schema.carrotcakecms.com/mvc/securityconfig"
-					xmlns:mstns="http://schema.carrotcakecms.com/mvc/securityconfig"
-					xmlns:xs="http://www.w3.org/2001/XMLSchema">
+					targetNamespace="urn:schema-carrotcakecms-com:mvc-securityconfig"
+					xmlns="urn:schema-carrotcakecms-com:mvc-securityconfig"
+					xmlns:mstns="urn:schema-carrotcakecms-com:mvc-securityconfig"
+					xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense">
 
 	<xs:element name="CarrotSecurity">
 		<xs:complexType>
-			<xs:sequence>
+			<xs:sequence minOccurs="1" maxOccurs="1">
 				<xs:element name="Settings">
 					<xs:complexType>
-						<xs:sequence>
+						<xs:sequence minOccurs="0" maxOccurs="1">
 							<xs:element name="UserValidator">
 								<xs:complexType>
 									<xs:attribute name="AllowOnlyAlphanumericUserNames" type="xs:boolean" use="optional" />

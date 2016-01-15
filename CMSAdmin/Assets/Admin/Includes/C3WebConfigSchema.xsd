@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<xs:schema id="CarrotCakeCMSWebSchema"
+<xs:schema id="CarrotCakeMVCWebSchema"
 					elementFormDefault="qualified"
-					targetNamespace="http://schema.carrotcakecms.com/mvc/config"
-					xmlns="http://schema.carrotcakecms.com/mvc/config"
-					xmlns:mstns="http://schema.carrotcakecms.com/mvc/config"
-					xmlns:xs="http://www.w3.org/2001/XMLSchema">
+					targetNamespace="urn:schema-carrotcakecms-com:mvc-config"
+					xmlns="urn:schema-carrotcakecms-com:mvc-config"
+					xmlns:mstns="urn:schema-carrotcakecms-com:mvc-config"
+					xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense">
 
 	<xs:simpleType name="guid">
 		<xs:restriction base="xs:string">
@@ -14,10 +15,10 @@
 
 	<xs:element name="CarrotCakeCMS.Web">
 		<xs:complexType>
-			<xs:sequence>
+			<xs:sequence minOccurs="1" maxOccurs="1">
 				<xs:element name="Settings">
 					<xs:complexType>
-						<xs:sequence>
+						<xs:sequence minOccurs="0" maxOccurs="1">
 							<xs:element name="Config">
 								<xs:complexType>
 									<xs:attribute name="SiteID" type="guid" use="optional" />
