@@ -124,7 +124,7 @@ function mouseNode() {
 		if (bMoused != true) {
 			hideMnu();
 
-			$('#' + menuInner).html("<div style='width: 32px; height: 32px; margin: 0 auto;'><img src='/c3-admin/images/mini-spinner3-6F997D.gif' alt='spinner' /></div>");
+			$('#' + menuInner).html("<div style='width: 32px; height: 32px; margin: 0 auto;'><img src='/Assets/Admin/images/mini-spinner3-6F997D.gif' alt='spinner' /></div>");
 
 			$.ajax({
 				type: "POST",

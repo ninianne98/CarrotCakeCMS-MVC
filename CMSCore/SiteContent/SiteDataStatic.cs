@@ -780,15 +780,16 @@ namespace Carrotware.CMS.Core {
 		public static string AdminFolderPath {
 			get {
 				if (_adminFolderPath == null) {
+					string _defPath = "/c3-admin/";
 					CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
 					if (config.MainConfig != null && !String.IsNullOrEmpty(config.MainConfig.AdminFolderPath)) {
 						_adminFolderPath = config.MainConfig.AdminFolderPath;
-						_adminFolderPath = ("/" + _adminFolderPath + "/").Replace(@"\", "/").Replace("//", "/").Replace("//", "/");
+						_adminFolderPath = String.Format("/{0}/", _adminFolderPath).Replace(@"\", "/").Replace("///", "/").Replace("//", "/").Replace("//", "/").Trim();
 					} else {
-						_adminFolderPath = "/c3-admin/";
+						_adminFolderPath = _defPath;
 					}
 					if (String.IsNullOrEmpty(_adminFolderPath) || _adminFolderPath.Length < 2) {
-						_adminFolderPath = "/c3-admin/";
+						_adminFolderPath = _defPath;
 					}
 				}
 				return _adminFolderPath;
