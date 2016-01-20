@@ -28,7 +28,7 @@ namespace Northwind.Controllers {
 
 		[HttpGet]
 		[WidgetActionSettingModel("Carrotware.CMS.Interface.WidgetActionSettingModel, Carrotware.CMS.Interface")]
-		public PartialViewResult ProductSearch() {
+		public ActionResult ProductSearch() {
 			WidgetActionSettingModel settings = new WidgetActionSettingModel();
 
 			if (this.WidgetPayload is WidgetActionSettingModel) {
@@ -48,8 +48,8 @@ namespace Northwind.Controllers {
 		}
 
 		[HttpPost]
-		[WidgetActionSettingModel("Carrotware.CMS.Interface.WidgetActionSettingModel, Carrotware.CMS.Interface")]
-		public PartialViewResult ProductSearch(ProductSearch model) {
+		[WidgetActionSettingModel(typeof(WidgetActionSettingModel))]
+		public ActionResult ProductSearch(ProductSearch model) {
 			WidgetActionSettingModel settings = new WidgetActionSettingModel();
 
 			if (this.WidgetPayload is WidgetActionSettingModel) {
@@ -67,8 +67,8 @@ namespace Northwind.Controllers {
 		}
 
 		[HttpGet]
-		[WidgetActionSettingModel("Northwind.MultiOptions, Northwind")]
-		public PartialViewResult ProductSearchMulti() {
+		[WidgetActionSettingModel(typeof(MultiOptions))]
+		public ActionResult ProductSearchMulti() {
 			MultiOptions settings = new MultiOptions();
 
 			if (this.WidgetPayload is MultiOptions) {
