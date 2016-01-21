@@ -108,12 +108,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return RedirectToAction("Index");
 		}
 
-		public ActionResult UserProfile(bool? saved) {
+		[HttpGet]
+		public ActionResult UserProfile() {
 			ExtendedUserData model = new ExtendedUserData(SecurityData.CurrentUserIdentityName);
 
-			if (saved.HasValue && saved.Value) {
-				ShowSave("Profile Updated");
-			}
+			ShowSaved("Profile Updated");
 
 			return View(model);
 		}
@@ -135,7 +134,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				exUsr.Save();
 
 				if (result.Succeeded) {
-					return RedirectToAction("UserProfile", new { @saved = true });
+					SetSaved();
+					return RedirectToAction("UserProfile");
 				}
 			}
 
@@ -1090,7 +1090,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
-		public ActionResult PageEdit(Guid id, bool? saved) {
+		public ActionResult PageEdit(Guid id) {
 			ContentPageModel model = new ContentPageModel();
 
 			cmsHelper.OverrideKey(id);
@@ -1098,9 +1098,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			model.SetPage(pageContents);
 
-			if (saved.HasValue && saved.Value) {
-				ShowSave();
-			}
+			ShowSaved();
 
 			return View(model);
 		}
@@ -1146,8 +1144,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			if (ModelState.IsValid) {
 				cmsHelper.cmsAdminContent = pageContents;
-
-				return RedirectToAction("PageEdit", new { @id = model.ContentPage.Root_ContentID, @saved = true });
+				SetSaved();
+				return RedirectToAction("PageEdit", new { @id = model.ContentPage.Root_ContentID });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -1213,7 +1211,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
-		public ActionResult BlogPostEdit(Guid id, bool? saved) {
+		public ActionResult BlogPostEdit(Guid id) {
 			ContentPageModel model = new ContentPageModel();
 
 			cmsHelper.OverrideKey(id);
@@ -1221,9 +1219,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			model.SetPage(pageContents);
 
-			if (saved.HasValue && saved.Value) {
-				ShowSave();
-			}
+			ShowSaved();
 
 			return View(model);
 		}
@@ -1276,8 +1272,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			if (ModelState.IsValid) {
 				cmsHelper.cmsAdminContent = pageContents;
-
-				return RedirectToAction("BlogPostEdit", new { @id = model.ContentPage.Root_ContentID, @saved = true });
+				SetSaved();
+				return RedirectToAction("BlogPostEdit", new { @id = model.ContentPage.Root_ContentID });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -1584,7 +1580,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
-		public ActionResult ControlPropertiesEdit(Guid id, Guid pageid, bool? saved) {
+		public ActionResult ControlPropertiesEdit(Guid id, Guid pageid) {
 			cmsHelper.OverrideKey(pageid);
 
 			Widget w = (from aw in cmsHelper.cmsAdminWidget
@@ -1596,9 +1592,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			WidgetProperties model = new WidgetProperties(w, lstProps);
 
-			if (saved.HasValue && saved.Value) {
-				ShowSave();
-			}
+			ShowSaved();
 
 			return View(model);
 		}
@@ -1664,27 +1658,59 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			lstPageWidgets.Add(w);
 			cmsHelper.cmsAdminWidget = lstPageWidgets;
 
-			ShowSave();
+			SetSaved();
 
-			//return View(model);
-			return RedirectToAction("ControlPropertiesEdit", new { @id = w.Root_WidgetID, @pageid = w.Root_ContentID, @saved = true });
+			return RedirectToAction("ControlPropertiesEdit", new { @id = w.Root_WidgetID, @pageid = w.Root_ContentID });
 		}
 
-		protected void ShowSave() {
-			ViewBag.SavedPageAlert = true;
-			ViewBag.SavedPageAlertText = "Changes Applied";
+		protected bool? GetSaved() {
+			bool? saved = TempData["cmsShowSaved"] != null ? (bool?)TempData["cmsShowSaved"] : null;
+
+			return saved;
 		}
 
-		protected void ShowSave(string msg) {
-			ViewBag.SavedPageAlert = true;
-			ViewBag.SavedPageAlertText = msg;
+		protected void SetSaved() {
+			SetSaved(true);
+		}
+
+		protected void SetSaved(bool? v) {
+			TempData["cmsShowSaved"] = v;
+		}
+
+		protected void ShowSaved() {
+			bool? saved = GetSaved();
+
+			if (saved.HasValue && saved.Value) {
+				ViewBag.SavedPageAlert = true;
+				ViewBag.SavedPageAlertText = "Changes Applied";
+			}
+		}
+
+		protected void ShowSaved(string msg) {
+			bool? saved = GetSaved();
+
+			if (saved.HasValue && saved.Value) {
+				ViewBag.SavedPageAlert = true;
+				ViewBag.SavedPageAlertText = msg;
+			}
+		}
+
+		protected void ShowSaved(string msgTrue, string msgFalse) {
+			bool? saved = GetSaved();
+
+			if (saved.HasValue) {
+				ViewBag.SavedPageAlert = true;
+				if (saved.Value) {
+					ViewBag.SavedPageAlertText = msgTrue;
+				} else {
+					ViewBag.SavedPageAlertText = msgFalse;
+				}
+			}
 		}
 
 		[HttpGet]
-		public ActionResult SiteMapPop(bool? saved) {
-			if (saved.HasValue && saved.Value) {
-				ShowSave();
-			}
+		public ActionResult SiteMapPop() {
+			ShowSaved();
 
 			return SiteMapResult("SiteMapPop");
 		}
@@ -1723,7 +1749,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				orderHelper.UpdateSiteMap(this.SiteID, model);
 			}
 
-			return RedirectToAction(viewName, new { @saved = saved });
+			SetSaved(saved);
+
+			return RedirectToAction(viewName);
 		}
 
 		[HttpPost]
@@ -1782,8 +1810,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				pageContents.SavePageEdit();
 
-				//return RedirectToAction("PageAddChild", new { @id = model.ParentID.Value, @saved = true });
-				ShowSave("Page Created");
+				ShowSaved("Page Created");
 				model.VisitPage = true;
 			}
 
@@ -1792,10 +1819,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
-		public ActionResult PageChildSort(Guid id, bool? saved) {
-			if (saved.HasValue && saved.Value) {
-				ShowSave();
-			}
+		public ActionResult PageChildSort(Guid id) {
+			ShowSaved();
 
 			PageChildSortModel model = new PageChildSortModel(id);
 
@@ -1815,15 +1840,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					orderHelper.UpdateSiteMap(SiteData.CurrentSiteID, lst);
 				}
 
-				return RedirectToAction("PageChildSort", new { @id = model.Root_ContentID, @saved = true });
+				SetSaved();
+				return RedirectToAction("PageChildSort", new { @id = model.Root_ContentID });
 			}
 		}
 
 		[HttpGet]
 		public ActionResult ContentEdit(Guid id, Guid? widgetid, string field, string mode) {
 			ContentSingleModel model = new ContentSingleModel();
-			ViewBag.SavedPage = null;
-
 			model.Mode = mode;
 			model.Field = field;
 			model.PageId = id;
@@ -1855,6 +1879,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					}
 				}
 			}
+
+			ShowSaved();
 
 			return View(model);
 		}
@@ -1902,21 +1928,17 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					cmsHelper.cmsAdminContent = pageContents;
 				}
 
-				ShowSave();
+				SetSaved();
+
+				return RedirectToAction("ContentEdit", new { @id = model.PageId, @widgetid = model.WidgetId, @field = model.Field, @mode = model.Mode });
 			}
 
 			return View(model);
 		}
 
 		[HttpGet]
-		public ActionResult PageHistory(Guid? id, Guid? versionid, bool? saved) {
-			if (saved.HasValue) {
-				if (saved.Value) {
-					ShowSave("Selected items removed");
-				} else {
-					ShowSave("No items selected to remove");
-				}
-			}
+		public ActionResult PageHistory(Guid? id, Guid? versionid) {
+			ShowSaved("Selected items removed", "No items selected to remove");
 
 			PageHistoryModel model = new PageHistoryModel(this.SiteID);
 
@@ -1938,11 +1960,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			if (lstDel.Any()) {
 				pageHelper.RemoveVersions(this.SiteID, lstDel);
-
-				return RedirectToAction("PageHistory", new { @id = model.Root_ContentID, @saved = true });
+				SetSaved(true);
 			} else {
-				return RedirectToAction("PageHistory", new { @id = model.Root_ContentID, @saved = false });
+				SetSaved(false);
 			}
+
+			return RedirectToAction("PageHistory", new { @id = model.Root_ContentID });
 		}
 
 		[HttpGet]
@@ -2239,12 +2262,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
-		public ActionResult WidgetTime(Guid? id, Guid widgetid, bool? saved) {
+		public ActionResult WidgetTime(Guid? id, Guid widgetid) {
 			WidgetEditModel model = new WidgetEditModel(id, widgetid);
 
-			if (saved.HasValue && saved.Value) {
-				ShowSave();
-			}
+			ShowSaved();
 
 			return View(model);
 		}
@@ -2255,11 +2276,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (ModelState.IsValid) {
 				model.Save();
 
+				SetSaved();
+
 				if (model.CachedWidget) {
-					return RedirectToAction("WidgetTime", new { @id = model.Root_ContentID, @widgetid = model.Root_WidgetID, @saved = true });
+					return RedirectToAction("WidgetTime", new { @id = model.Root_ContentID, @widgetid = model.Root_WidgetID });
 				}
 
-				return RedirectToAction("WidgetTime", new { @widgetid = model.Root_WidgetID, @saved = true });
+				return RedirectToAction("WidgetTime", new { @widgetid = model.Root_WidgetID });
 			}
 
 			return View(model);
@@ -2267,13 +2290,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpGet]
 		public ActionResult WidgetHistory(Guid id, bool? saved) {
-			if (saved.HasValue) {
-				if (saved.Value) {
-					ShowSave("Selected items removed");
-				} else {
-					ShowSave("No items selected to remove");
-				}
-			}
+			ShowSaved("Selected items removed", "No items selected to remove");
 
 			WidgetHistoryModel model = new WidgetHistoryModel(id);
 
@@ -2285,16 +2302,16 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult WidgetHistory(WidgetHistoryModel model) {
 			ModelState.Clear();
 
-			return RedirectToAction("WidgetHistory", new { @id = model.Root_WidgetID, @saved = model.Remove() });
+			SetSaved(model.Remove());
+
+			return RedirectToAction("WidgetHistory", new { @id = model.Root_WidgetID });
 		}
 
 		[HttpGet]
-		public ActionResult DuplicateWidgetFrom(Guid id, string zone, bool? saved) {
+		public ActionResult DuplicateWidgetFrom(Guid id, string zone) {
 			DuplicateWidgetFromModel model = new DuplicateWidgetFromModel(id, zone);
 
-			if (saved.HasValue && saved.Value) {
-				ShowSave();
-			}
+			ShowSaved();
 
 			return View(model);
 		}
@@ -2321,16 +2338,23 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
-		public ActionResult WidgetList(Guid id, string zone, bool? saved) {
+		public ActionResult WidgetList(Guid id, string zone) {
 			WidgetListModel model = new WidgetListModel();
 			model.Root_ContentID = id;
 			model.PlaceholderName = zone;
+			cmsHelper.OverrideKey(model.Root_ContentID);
 
-			if (saved.HasValue && saved.Value) {
-				ShowSave();
-			}
+			ShowSaved();
 
-			return WidgetList(model);
+			model.Controls = (from aw in cmsHelper.cmsAdminWidget
+							  where aw.PlaceholderName.ToLowerInvariant() == model.PlaceholderName.ToLowerInvariant()
+									|| model.PlaceholderName.ToLowerInvariant() == "cms-all-placeholder-zones"
+							  orderby aw.PlaceholderName ascending, aw.IsWidgetPendingDelete ascending, aw.IsWidgetActive descending, aw.WidgetOrder
+							  select aw).ToList();
+
+			ModelState.Clear();
+
+			return View(model);
 		}
 
 		[HttpPost]
@@ -2365,28 +2389,19 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 
 				cmsHelper.cmsAdminWidget = cacheWidget;
-
-				ShowSave();
 			}
 
-			model.Controls = (from aw in cmsHelper.cmsAdminWidget
-							  where aw.PlaceholderName.ToLowerInvariant() == model.PlaceholderName.ToLowerInvariant() || model.PlaceholderName.ToLowerInvariant() == "cms-all-placeholder-zones"
-							  orderby aw.PlaceholderName ascending, aw.IsWidgetPendingDelete ascending, aw.IsWidgetActive descending, aw.WidgetOrder
-							  select aw).ToList();
+			SetSaved();
 
-			ModelState.Clear();
-
-			return View(model);
+			return RedirectToAction("WidgetList", new { @id = model.Root_ContentID, @zone = model.PlaceholderName });
 		}
 
 		[HttpGet]
-		public ActionResult PageWidgets(Guid id, bool? saved) {
+		public ActionResult PageWidgets(Guid id) {
 			WidgetListModel model = new WidgetListModel(id);
 			model.PlaceholderName = String.Empty;
 
-			if (saved.HasValue && saved.Value) {
-				ShowSave();
-			}
+			ShowSaved();
 
 			return PageWidgets(model);
 		}
