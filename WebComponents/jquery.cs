@@ -66,6 +66,11 @@ namespace Carrotware.Web.UI.Components {
 					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-11-3.js");
 					break;
 
+				case "1.12":
+					jqVer = "1.12.0";
+					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-12-0.js");
+					break;
+
 				case "1.10":
 					jqVer = "1.10.2";
 					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-10-2.js");
@@ -104,10 +109,18 @@ namespace Carrotware.Web.UI.Components {
 			sb.AppendLine("<!-- JQuery v. " + jqVer + " --> <script src=\"" + sJQFile + "\" type=\"text/javascript\"></script> ");
 
 			if (this.UseJqueryMigrate) {
-				if (jqVer.StartsWith("1.9") || jqVer.StartsWith("1.10") || jqVer.StartsWith("1.11")) {
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-2-1-mig.js");
+				string sJQFileMig = String.Empty;
 
-					sb.AppendLine("<!-- jQuery Migrate Plugin --> <script src=\"" + sJQFile + "\" type=\"text/javascript\"></script> ");
+				if (jqVer.StartsWith("1.9") || jqVer.StartsWith("1.10") || jqVer.StartsWith("1.11")) {
+					sJQFileMig = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-2-1-mig.js");
+				}
+
+				if (jqVer.StartsWith("1.12") || jqVer.StartsWith("1.13")) {
+					sJQFileMig = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-3-0-mig.js");
+				}
+
+				if (!String.IsNullOrEmpty(sJQFileMig)) {
+					sb.AppendLine("<!-- jQuery Migrate Plugin --> <script src=\"" + sJQFileMig + "\" type=\"text/javascript\"></script> ");
 				}
 			}
 
