@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web.Mvc;
 using System.Web.Script.Services;
 using System.Web.Services;
 using System.Xml.Serialization;
@@ -169,6 +168,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 					}
 				}
 			}
+		}
+
+		[WebMethod]
+		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+		public string GetSiteAdminFolder() {
+			return SiteData.AdminFolderPath;
 		}
 
 		private string CurrentEditPage = String.Empty;

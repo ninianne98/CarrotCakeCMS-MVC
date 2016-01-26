@@ -1,4 +1,5 @@
 ﻿using Carrotware.CMS.Core;
+using Carrotware.CMS.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,10 +53,25 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 				namespaces: _namespaces.ToArray()
 			);
 
+			CarrotSecurityConfig config = CarrotSecurityConfig.GetConfig();
+			string loginPath = config.AdditionalSettings.LoginPath;
+			if (loginPath.ToLowerInvariant() != SiteFilename.LoginURL.ToLowerInvariant()) {
+				if (loginPath.StartsWith("/")) {
+					loginPath = loginPath.Substring(1);
+				}
+
+				routes.MapRoute(
+					name: "C3_Admin_Login",
+					url: loginPath + "/{id}",
+					defaults: new { controller = AdminCtrlr, action = "Login", id = UrlParameter.Optional },
+					namespaces: _namespaces.ToArray()
+				);
+			}
+
 			routes.MapRoute(
 				name: "CmsContent_AjaxForms",
 				url: "CmsAjaxForms/{action}.ashx",
-				defaults: new { controller = "CmsContent", action = "Index", id = UrlParameter.Optional },
+				defaults: new { controller = CmsRouteHandler.ContentCtrlr, action = "Index", id = UrlParameter.Optional },
 				namespaces: _namespaces.ToArray()
 			);
 

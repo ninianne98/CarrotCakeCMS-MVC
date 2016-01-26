@@ -9,13 +9,37 @@ function cmsSetPageStatus(stat) {
 }
 
 var webSvc = "/Assets/Admin/CMS.asmx";
+var adminUri = "/c3-admin/";
 var thisPage = ""; // used in escaped fashion
 var thisPageNav = "";  // used non-escaped (redirects)
 var thisPageNavSaved = "";  // used non-escaped (redirects)
 var thisPageID = "";
 var timeTick = 9999;
 
+function cmsGetAdminPath() {
+	var webMthd = webSvc + "/GetSiteAdminFolder";
+
+	$.ajax({
+		type: "POST",
+		url: webMthd,
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+		success: cmsSetAdminPath,
+		error: cmsAjaxFailed
+	});
+}
+
+function cmsSetAdminPath(data, status) {
+	adminUri = data.d;
+}
+
+$(document).ready(function () {
+	cmsGetAdminPath();
+});
+
 function cmsSetServiceParms(serviceURL, pagePath, pageID) {
+	cmsGetAdminPath();
+
 	webSvc = serviceURL;
 	thisPageNav = pagePath;
 	thisPage = cmsMakeStringSafe(pagePath);
@@ -771,54 +795,54 @@ function cmsAlertModalXLarge(request) {
 // do a lot of iFrame magic
 
 function cmsShowWidgetList() {
-	cmsLaunchWindow('/c3-admin/WidgetList/' + thisPageID + "?zone=cms-all-placeholder-zones");
+	cmsLaunchWindow(adminUri + 'WidgetList/' + thisPageID + "?zone=cms-all-placeholder-zones");
 }
 function cmsManageWidgetList(zoneName) {
 	//alert(zoneName);
-	cmsLaunchWindow('/c3-admin/WidgetList/' + thisPageID + "?zone=" + zoneName);
+	cmsLaunchWindow(adminUri + 'WidgetList/' + thisPageID + "?zone=" + zoneName);
 }
 function cmsManageWidgetHistory(widgetID) {
 	//alert(widgetID);
-	cmsLaunchWindow('/c3-admin/WidgetHistory/' + thisPageID + "?widgetid=" + widgetID);
+	cmsLaunchWindow(adminUri + 'WidgetHistory/' + thisPageID + "?widgetid=" + widgetID);
 }
 function cmsManageWidgetTime(widgetID) {
 	//alert(widgetID);
-	cmsLaunchWindow('/c3-admin/WidgetTime/' + thisPageID + "?widgetid=" + widgetID);
+	cmsLaunchWindow(adminUri + 'WidgetTime/' + thisPageID + "?widgetid=" + widgetID);
 }
 
 function cmsShowEditPageInfo() {
-	cmsLaunchWindow('/c3-admin/PageEdit/' + thisPageID);
+	cmsLaunchWindow(adminUri + 'PageEdit/' + thisPageID);
 }
 
 function cmsShowEditPostInfo() {
-	cmsLaunchWindow('/c3-admin/BlogPostEdit/' + thisPageID);
+	cmsLaunchWindow(adminUri + 'BlogPostEdit/' + thisPageID);
 }
 function cmsShowAddPage() {
-	cmsLaunchWindow('/c3-admin/PageAddChild/' + thisPageID);
+	cmsLaunchWindow(adminUri + 'PageAddChild/' + thisPageID);
 }
 function cmsShowAddChildPage() {
-	cmsLaunchWindow('/c3-admin/PageAddChild/' + thisPageID);
+	cmsLaunchWindow(adminUri + 'PageAddChild/' + thisPageID);
 }
 function cmsShowAddTopPage() {
-	cmsLaunchWindow('/c3-admin/PageAddChild/' + thisPageID + '?addtoplevel=true');
+	cmsLaunchWindow(adminUri + 'PageAddChild/' + thisPageID + '?addtoplevel=true');
 }
 function cmsEditSiteMap() {
-	cmsLaunchWindow('/c3-admin/SiteMapPop');
+	cmsLaunchWindow(adminUri + 'SiteMapPop');
 }
 
 function cmsSortChildren() {
 	//cmsAlertModal("cmsSortChildren");
-	cmsLaunchWindowOnly('/c3-admin/PageChildSort/' + thisPageID);
+	cmsLaunchWindowOnly(adminUri + 'PageChildSort/' + thisPageID);
 }
 
 function cmsShowEditWidgetForm(w, m) {
 	//cmsAlertModal("cmsShowEditWidgetForm");
-	cmsLaunchWindow('/c3-admin/ContentEdit/' + thisPageID + '?widgetid=' + w + '&mode=' + m);
+	cmsLaunchWindow(adminUri + 'ContentEdit/' + thisPageID + '?widgetid=' + w + '&mode=' + m);
 }
 
 function cmsShowEditContentForm(f, m) {
 	//cmsAlertModal("cmsShowEditContentForm");
-	cmsLaunchWindow('/c3-admin/ContentEdit/' + thisPageID + '?field=' + f + '&mode=' + m);
+	cmsLaunchWindow(adminUri + 'ContentEdit/' + thisPageID + '?field=' + f + '&mode=' + m);
 }
 
 function cmsFixSpinner() {
@@ -881,7 +905,7 @@ function cmsBuildOrder() {
 }
 
 function cmsCopyWidgetFrom(zoneName) {
-	cmsLaunchWindow('/c3-admin/DuplicateWidgetFrom/' + thisPageID + "?zone=" + zoneName);
+	cmsLaunchWindow(adminUri + 'DuplicateWidgetFrom/' + thisPageID + "?zone=" + zoneName);
 }
 
 function cmsCopyWidget(key) {
@@ -1105,7 +1129,7 @@ function cmsOverrideCSSScope(elm, xtra) {
 }
 
 function cmsGenericEdit(PageId, WidgetId) {
-	cmsLaunchWindow('/c3-admin/ControlPropertiesEdit?pageid=' + PageId + '&id=' + WidgetId);
+	cmsLaunchWindow(adminUri + 'ControlPropertiesEdit?pageid=' + PageId + '&id=' + WidgetId);
 }
 
 function cmsLaunchWindow(theURL) {

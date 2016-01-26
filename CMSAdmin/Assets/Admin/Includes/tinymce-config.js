@@ -51,7 +51,7 @@ function TinyMCEParamInit(winWidth, winHeight, allowResize) {
 
 // http://wiki.moxiecode.com/index.php/TinyMCE:Custom_filebrowser
 function cmsFileBrowserCallback(field_name, url, type, win) {
-	var sURL = "/c3-admin/FileBrowser?useTiny=1&viewmode=file&fldrpath=/";
+	var sURL = adminUri + "FileBrowser?useTiny=1&viewmode=file&fldrpath=/";
 	setTimeout("tinyResetFileBrowserOpenStatus();", 500);
 
 	// block multiple file browser windows
@@ -111,9 +111,9 @@ function cmsFileBrowserOpen(fldN) {
 	if (winBrowse != null) {
 		winBrowse.close();
 	}
-	//winBrowse = window.open('/c3-admin/FileBrowser?useTiny=0&viewmode=file&fldrpath=/', '_winBrowse', 'resizable=yes,location=no,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=yes,width=650,height=500,left=50,top=50');
+	//winBrowse = window.open(adminUri + 'FileBrowser?useTiny=0&viewmode=file&fldrpath=/', '_winBrowse', 'resizable=yes,location=no,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=yes,width=650,height=500,left=50,top=50');
 
-	ShowWindowNoRefresh('/c3-admin/FileBrowser?useTiny=0&viewmode=file&fldrpath=/');
+	ShowWindowNoRefresh(adminUri + 'FileBrowser?useTiny=0&viewmode=file&fldrpath=/');
 
 	return false;
 }
@@ -126,3 +126,26 @@ function cmsSetFileName(v) {
 	winBrowse.close();
 	winBrowse = null;
 }
+
+var adminUri = "/c3-admin/";
+
+function cmsGetAdminPath() {
+	var webMthd = webSvc + "/GetSiteAdminFolder";
+
+	$.ajax({
+		type: "POST",
+		url: webMthd,
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+		success: cmsSetAdminPath,
+		error: cmsAjaxFailed
+	});
+}
+
+function cmsSetAdminPath(data, status) {
+	adminUri = data.d;
+}
+
+$(document).ready(function () {
+	cmsGetAdminPath();
+});

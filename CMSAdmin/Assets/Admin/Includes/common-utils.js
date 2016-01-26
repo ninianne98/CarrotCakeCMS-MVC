@@ -696,6 +696,29 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 
 //=======================
 
+var adminUri = "/c3-admin/";
+
+function cmsGetAdminPath() {
+	var webMthd = webSvc + "/GetSiteAdminFolder";
+
+	$.ajax({
+		type: "POST",
+		url: webMthd,
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+		success: cmsSetAdminPath,
+		error: cmsAjaxFailed
+	});
+}
+
+function cmsSetAdminPath(data, status) {
+	adminUri = data.d;
+}
+
+$(document).ready(function () {
+	cmsGetAdminPath();
+});
+
 var fldNameRet = '';
 
 function cmsFileBrowserOpenReturn(fldN) {
@@ -703,7 +726,7 @@ function cmsFileBrowserOpenReturn(fldN) {
 	var fld = $(fldN);
 	fldNameRet = fld.attr('id');
 
-	ShowWindowNoRefresh('/c3-admin/FileBrowser?returnvalue=1&viewmode=file&fldrpath=/');
+	ShowWindowNoRefresh(adminUri + 'FileBrowser?returnvalue=1&viewmode=file&fldrpath=/');
 
 	return false;
 }
@@ -713,7 +736,7 @@ function cmsFileBrowserOpenReturnPop(fldN) {
 	var fld = $(fldN);
 	fldNameRet = fld.attr('id');
 
-	ShowWindowNoRefreshPop('/c3-admin/FileBrowser?returnvalue=1&viewmode=file&fldrpath=/');
+	ShowWindowNoRefreshPop(adminUri + 'FileBrowser?returnvalue=1&viewmode=file&fldrpath=/');
 
 	return false;
 }
