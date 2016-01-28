@@ -1,0 +1,108 @@
+﻿@model ContentSnippetHistoryModel
+
+@{
+	ViewBag.Title = "Content Snippet History";
+
+	Layout = "~/Views/CmsAdmin/_LayoutPopup.cshtml";
+}
+
+<script type="text/javascript">
+	var webSvc = cmsGetServiceAddress();
+
+	function cmsGetWidgetText(val) {
+
+		var webMthd = webSvc + "/GetSnippetVersionText";
+
+		$.ajax({
+			type: "POST",
+			url: webMthd,
+			data: JSON.stringify({ DBKey: val }),
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: cmsReqContentCallback,
+			error: cmsAjaxFailed
+		});
+	}
+
+	function cmsDoToolTipDataRequest(val) {
+		cmsGetWidgetText(val);
+	}
+
+	function cmsReqContentCallback(data, status) {
+		if (data.d == "FAIL") {
+			cmsSetHTMLMessage('<i>An error occurred. Please try again.</i>');
+		} else {
+			cmsSetTextMessage(data.d);
+		}
+	}
+</script>
+<link href="~/Assets/Admin/Includes/tooltipster.css" rel="stylesheet" type="text/css" />
+<script src="~/Assets/Admin/Includes/jquery.tooltipster.min.js" type="text/javascript"></script>
+
+<p>
+	<b>slug:</b> @Model.Item.ContentSnippetSlug
+	@if (Model.Item.ContentSnippetActive) {
+		<img src="~/Assets/Admin/Images/accept.png" alt="Active" title="Active" />
+	} else {
+		<img src="~/Assets/Admin/Images/cancel.png" alt="Inactive" title="Inactive" />
+	}
+	<br />
+	<b>name:</b> @Model.Item.ContentSnippetName<br />
+</p>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	@Html.HiddenFor(m => m.Item.ContentSnippetSlug)
+	@Html.HiddenFor(m => m.Item.ContentSnippetName)
+	@Html.HiddenFor(m => m.Item.ContentSnippetActive)
+	@Html.HiddenFor(m => m.Item.Root_ContentSnippetID)
+
+	<p>
+		<input type="submit" name="btnRemove" value="Remove Selected" id="btnRemove" /><br />
+	</p>
+
+	<div id="divHistory">
+
+		@{
+	var grid = CarrotWeb.CarrotWebGrid<ContentSnippet>(Model.History);
+
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.UseDataPage = false;
+	grid.ConfigName(Html.NameFor(x => x.History.DataSource));
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<ContentSnippet> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+				@if (!item.IsLatestVersion) {
+					@grid.FormFieldFor(m => m.Selected, GridFormFieldType.Checkbox)
+				} else {
+					@grid.FormFieldFor(m => m.Selected, GridFormFieldType.Hidden)
+					<text> &nbsp;&nbsp;&nbsp; </text>
+				}
+
+				@grid.FormFieldFor(m => m.IsLatestVersion, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(m => m.Root_ContentSnippetID, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(m => m.ContentSnippetID, GridFormFieldType.Hidden)
+				@grid.FormFieldFor(m => m.EditDate, GridFormFieldType.Hidden)
+			</text>
+		})
+		.AddColumn(new CarrotGridTemplateColumn<ContentSnippet> {
+			HasHeadingText = false,
+			BodyAttributes = new { @class = "centerItem" },
+			FormatTemplate = @<text>
+				<a class="dataPopupTrigger" rel="@item.ContentSnippetID" href="javascript:void(0)">
+					<img src="~/Assets/Admin/images/doc.png" alt="text" style="margin:0;" />
+				</a>
+			</text>
+		})
+		.AddColumn(x => x.EditDate, new CarrotGridColumn());
+
+		@grid.OutputHtmlBody()
+		}
+	</div>
+
+}

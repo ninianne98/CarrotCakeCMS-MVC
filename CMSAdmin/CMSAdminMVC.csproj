@@ -1017,6 +1017,7 @@
     <Content Include="Views\Templates\citrus-island\_changeprofile.cshtml" />
     <Content Include="Views\Templates\citrus-island\_changeprofileconf.cshtml" />
     <Content Include="SiteMapping.config" />
+    <Content Include="Views\CmsAdmin\ContentSnippetHistory.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1038,6 +1039,7 @@
     <Compile Include="Models\ContentHistoryModel.cs" />
     <Compile Include="Models\ContentPageModel.cs" />
     <Compile Include="Models\ContentSingleModel.cs" />
+    <Compile Include="Models\ContentSnippetHistoryModel.cs" />
     <Compile Include="Models\DashboardInfo.cs" />
     <Compile Include="Models\DatabaseSetupModel.cs" />
     <Compile Include="Models\DuplicateWidgetFromModel.cs" />

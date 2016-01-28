@@ -519,6 +519,33 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return View(model);
 		}
 
+		[HttpGet]
+		public ActionResult ContentSnippetHistory(Guid id) {
+			ContentSnippetHistoryModel model = new ContentSnippetHistoryModel(id);
+
+			ShowSaved();
+
+			return View(model);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult ContentSnippetHistory(ContentSnippetHistoryModel model) {
+			ModelState.Clear();
+
+			List<Guid> lstDel = model.History.DataSource.Where(x => x.Selected).Select(x => x.ContentSnippetID).ToList();
+
+			foreach (Guid delID in lstDel) {
+				ContentSnippet.GetVersion(delID).DeleteThisVersion();
+			}
+
+			if (lstDel.Any()) {
+				SetSaved();
+			}
+
+			return RedirectToAction("ContentSnippetHistory", new { @id = model.Item.Root_ContentSnippetID });
+		}
+
 		public ActionResult ChangePassword() {
 			return View();
 		}

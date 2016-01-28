@@ -75,6 +75,9 @@ namespace Carrotware.CMS.Core {
 		public Guid? Heartbeat_UserId { get; set; }
 		public DateTime? EditHeartbeat { get; set; }
 
+		[Display(Name = "Selected Item")]
+		public bool Selected { get; set; }
+
 		[Display(Name = "Retired")]
 		public bool IsRetired {
 			get {

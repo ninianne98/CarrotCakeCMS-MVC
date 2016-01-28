@@ -4,11 +4,29 @@
 	ViewBag.Title = "Content Snippet Index";
 }
 
+<div>
+	<table style="width: 625px;">
+		<tr>
+			<td style="width: 48%;">
+				<a href="@SiteFilename.ContentSnippetAddEditURL">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add as WYSIWYG" />
+					Add Content Snippet (with HTML editor)
+				</a>
+			</td>
+			<td>
+				&nbsp;
+			</td>
+			<td style="width: 48%;">
+				<a href="@String.Format("{0}?mode=raw", SiteFilename.ContentSnippetAddEditURL)">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/script_add.png" alt="Add" title="Add as Plain Text" />
+					Add Content Snippet (as plain text)
+				</a>
+			</td>
+		</tr>
+	</table>
+</div>
 <p>
-	<a href="@SiteFilename.ContentSnippetAddEditURL">
-		<img class="imgNoBorder" src="~/Assets/Admin/Images/add.png" alt="Add" title="Add" />
-		Add Snippet
-	</a>
+	<br />
 </p>
 
 @using (Html.BeginForm()) {
@@ -22,7 +40,6 @@
 	grid.ConfigName(Html.NameFor(x => x));
 
 	grid
-
 		.AddColumn(new CarrotGridTemplateColumn<ContentSnippet> {
 			HasHeadingText = false,
 			FormatTemplate = @<text> @CarrotWeb.ActionImage("ContentSnippetAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentSnippetID }, "~/Assets/Admin/Images/pencil.png", "Edit with WYSIWYG", null, null) </text>
@@ -31,7 +48,14 @@
 			HasHeadingText = false,
 			FormatTemplate = @<text> @CarrotWeb.ActionImage("ContentSnippetAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentSnippetID, @mode = "raw" }, "~/Assets/Admin/Images/script.png", "Edit with Plain Text", null, null) </text>
 		})
-
+		.AddColumn(new CarrotGridTemplateColumn<ContentSnippet> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+				<a href="javascript:void(0)" onclick="@String.Format("ShowWindowNoRefresh('{0}/{1}')", SiteFilename.ContentSnippetHistoryURL, item.Root_ContentSnippetID)">
+					<img src="~/Assets/Admin/Images/hourglass.png" alt="View Page History" title="View Page History" />
+				</a>
+			</text>
+		})
 		.AddColumn(x => x.ContentSnippetName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.ContentSnippetSlug, new CarrotGridColumn { Sortable = true })
 

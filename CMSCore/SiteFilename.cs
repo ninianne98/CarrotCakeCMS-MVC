@@ -136,6 +136,10 @@ namespace Carrotware.CMS.Core {
 			get { return SiteData.AdminFolderPath + "ContentSnippetIndex"; }
 		}
 
+		public static string ContentSnippetHistoryURL {
+			get { return SiteData.AdminFolderPath + "ContentSnippetHistory"; }
+		}
+
 		public static string TagIndexURL {
 			get { return SiteData.AdminFolderPath + "TagIndex"; }
 		}
