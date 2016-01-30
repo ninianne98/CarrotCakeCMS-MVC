@@ -1,7 +1,9 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -19,14 +21,51 @@ namespace Carrotware.CMS.UI.Components {
 
 	public abstract class SimpleList : BaseToolboxComponent {
 
-		public SimpleList() {
+		public SimpleList()
+			: base() {
 			this.CssClass = String.Empty;
 			this.CssSelected = "selected";
 			this.ElementId = "list";
+			this.SortNavBy = SortOrder.SortAsc;
 
 			this.CmsPage = PagePayload.GetContentFromViewData();
 			this.NavigationData = new List<SiteNav>();
 		}
+
+		public enum SortOrder {
+
+			[Description("Link Order Ascending")]
+			SortAsc,
+
+			[Description("Link Order Descending")]
+			SortDesc,
+
+			[Description("Go Live Date Ascending")]
+			DateAsc,
+
+			[Description("Go Live Date Descending")]
+			DateDesc,
+
+			[Description("Link Text Ascending")]
+			TitleAsc,
+
+			[Description("Link Text Descending")]
+			TitleDesc,
+		}
+
+		[Widget(WidgetAttribute.FieldMode.DictionaryList)]
+		public Dictionary<string, string> lstSortOrder {
+			get {
+				Dictionary<string, string> _dict = new Dictionary<string, string>();
+
+				_dict = EnumHelper.ToList<SortOrder>().ToDictionary(k => k.Text, v => v.Description);
+
+				return _dict;
+			}
+		}
+
+		[Widget(WidgetAttribute.FieldMode.DropDownList, "lstSortOrder")]
+		public SortOrder SortNavBy { get; set; }
 
 		public override bool EnableEdit {
 			get {
@@ -88,13 +127,55 @@ namespace Carrotware.CMS.UI.Components {
 					this.CssSelected = sFoundVal;
 				}
 			} catch (Exception ex) { }
+
+			try {
+				string sFoundVal = this.GetParmValue("SortNavBy", SortOrder.SortAsc.ToString());
+
+				if (!String.IsNullOrEmpty(sFoundVal)) {
+					this.SortNavBy = (SortOrder)Enum.Parse(typeof(SortOrder), sFoundVal, true);
+				}
+			} catch (Exception ex) { }
 		}
 
 		protected virtual void TweakData() { }
 
+		protected void ToggleSort() {
+			if (this.NavigationData != null && this.NavigationData.Any()) {
+				switch (this.SortNavBy) {
+					case SortOrder.TitleAsc:
+						this.NavigationData = this.NavigationData.OrderBy(ct => ct.NavMenuText).ToList();
+						break;
+
+					case SortOrder.TitleDesc:
+						this.NavigationData = this.NavigationData.OrderByDescending(ct => ct.NavMenuText).ToList();
+						break;
+
+					case SortOrder.DateAsc:
+						this.NavigationData = this.NavigationData.OrderBy(ct => ct.NavMenuText).OrderBy(ct => ct.GoLiveDate).ToList();
+						break;
+
+					case SortOrder.DateDesc:
+						this.NavigationData = this.NavigationData.OrderBy(ct => ct.NavMenuText).OrderByDescending(ct => ct.GoLiveDate).ToList();
+						break;
+
+					case SortOrder.SortDesc:
+						this.NavigationData = this.NavigationData.OrderBy(ct => ct.NavMenuText).OrderByDescending(ct => ct.NavOrder).ToList();
+						break;
+
+					case SortOrder.SortAsc:
+					default:
+						this.NavigationData = this.NavigationData.OrderBy(ct => ct.NavMenuText).OrderBy(ct => ct.NavOrder).ToList();
+						break;
+				}
+			} else {
+				this.NavigationData = new List<SiteNav>();
+			}
+		}
+
 		public override string ToHtmlString() {
 			LoadData();
 			TweakData();
+			ToggleSort();
 
 			string sItemCss = String.Empty;
 

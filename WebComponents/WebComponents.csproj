@@ -135,6 +135,7 @@
     <Compile Include="CarrotHttpHandler.cs" />
     <Compile Include="CarrotWeb.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="EnumHelper.cs" />
     <Compile Include="FileData.cs" />
     <Compile Include="Grid\CarrotWebDataTable.cs" />
     <Compile Include="Grid\CarrotWebGridBase.cs" />
