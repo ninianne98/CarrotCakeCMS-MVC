@@ -1,7 +1,9 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 /*
@@ -31,8 +33,14 @@ namespace Carrotware.CMS.UI.Components {
 
 		public enum ListContentType {
 			Unknown,
+
+			[Description("Blog")]
 			Blog,
+
+			[Description("Content Page")]
 			ContentPage,
+
+			[Description("Specified Categories")]
 			SpecifiedCategories
 		}
 
@@ -40,9 +48,9 @@ namespace Carrotware.CMS.UI.Components {
 		public Dictionary<string, string> lstContentType {
 			get {
 				Dictionary<string, string> _dict = new Dictionary<string, string>();
-				_dict.Add("Blog", "Blog");
-				_dict.Add("ContentPage", "Content Page");
-				_dict.Add("SpecifiedCategories", "Specified Categories");
+
+				_dict = EnumHelper.ToList<ListContentType>().Where(x => x.Value != (int)ListContentType.Unknown).ToDictionary(k => k.Text, v => v.Description);
+
 				return _dict;
 			}
 		}
@@ -153,7 +161,7 @@ namespace Carrotware.CMS.UI.Components {
 				if (this.PublicParmValues.Any()) {
 					this.TakeTop = int.Parse(base.GetParmValue("TakeTop", "5"));
 
-					this.ContentType = (ListContentType)Enum.Parse(typeof(ListContentType), base.GetParmValue("ContentType", "Blog"), true);
+					this.ContentType = (ListContentType)Enum.Parse(typeof(ListContentType), base.GetParmValue("ContentType", ListContentType.Blog.ToString()), true);
 
 					this.DateFormat = base.GetParmValue("DateFormat", String.Empty);
 

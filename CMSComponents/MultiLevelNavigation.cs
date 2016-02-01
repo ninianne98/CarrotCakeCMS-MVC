@@ -17,7 +17,7 @@ using System.Text;
 
 namespace Carrotware.CMS.UI.Components {
 
-	public class MultiLevelNavigation : SimpleList {
+	public class MultiLevelNavigation : SimpleListSortable {
 		protected StringBuilder output = new StringBuilder();
 		protected string sItemCss = String.Empty;
 		protected string sItemCSS = String.Empty;

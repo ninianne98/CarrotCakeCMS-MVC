@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Carrotware.CMS.UI.Components {
 
-	public class ChildNavigation : SimpleList {
+	public class ChildNavigation : SimpleListSortable {
 
 		public override void LoadData() {
 			base.LoadData();

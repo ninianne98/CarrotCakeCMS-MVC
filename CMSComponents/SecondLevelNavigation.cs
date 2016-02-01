@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace Carrotware.CMS.UI.Components {
 
-	public class SecondLevelNavigation : SimpleList {
+	public class SecondLevelNavigation : SimpleListSortable {
 
 		[Widget(WidgetAttribute.FieldMode.CheckBox)]
 		public bool IncludeParent { get; set; }
