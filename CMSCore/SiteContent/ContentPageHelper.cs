@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Transactions;
 using System.Web;
@@ -249,24 +250,19 @@ namespace Carrotware.CMS.Core {
 			db.SubmitChanges();
 		}
 
-		public static string ScrubFilename(Guid rootContentID, string FileName) {
-			string newFileName = FileName;
+		public static string ScrubFilename(Guid rootContentID, string fileName) {
+			string newFileName = String.Format("{0}", fileName).Trim();
 
 			if (String.IsNullOrEmpty(newFileName)) {
 				newFileName = rootContentID.ToString();
 			}
-			newFileName = newFileName.Replace(@"\", @"/");
-
-			if (!newFileName.StartsWith(@"/")) {
-				newFileName = @"/" + newFileName;
-			}
-
-			newFileName = ScrubSpecial(newFileName);
 
 			if (newFileName.EndsWith(@"/")) {
 				newFileName = newFileName.Substring(0, newFileName.Length - 1);
 				newFileName = newFileName.Replace("//", "/");
 			}
+
+			newFileName = ScrubFilePath(newFileName).Trim();
 
 			if (newFileName.ToLowerInvariant().EndsWith(".htm")) {
 				newFileName = newFileName.Substring(0, newFileName.Length - 4);
@@ -275,7 +271,7 @@ namespace Carrotware.CMS.Core {
 				newFileName = newFileName.Substring(0, newFileName.Length - 5);
 			}
 
-			if (newFileName.Trim().EndsWith("/")) {
+			if (newFileName.EndsWith(@"/")) {
 				newFileName = newFileName.Trim().Substring(0, newFileName.Length - 1);
 			}
 
@@ -283,7 +279,25 @@ namespace Carrotware.CMS.Core {
 		}
 
 		private static string ScrubSpecial(string sInput) {
-			string sOutput = sInput;
+			sInput = String.Format("{0}", sInput).Trim();
+
+			Encoding iso = Encoding.GetEncoding("ISO-8859-8");  //use ISO-8859-8 to auto drop accent chars
+			Encoding utf8 = Encoding.UTF8;
+			byte[] utfBytes = utf8.GetBytes(sInput);
+			byte[] isoBytes = Encoding.Convert(utf8, iso, utfBytes);
+			string sOutput = iso.GetString(isoBytes);
+
+			iso = Encoding.ASCII;  //once accents are dropped, turn ASCII
+			utfBytes = utf8.GetBytes(sOutput);
+			isoBytes = Encoding.Convert(utf8, iso, utfBytes);
+			sOutput = iso.GetString(isoBytes);
+
+			sOutput = sOutput.Replace("*", "-star-");
+			sOutput = sOutput.Replace("%", "-percent-");
+			sOutput = sOutput.Replace("&", "-n-");
+
+			char[] badPathChars = Path.GetInvalidPathChars();  // if chars not valid for a path make into a dash
+			sOutput = new String(sOutput.Select(x => badPathChars.Contains(x) ? '-' : x).ToArray());
 
 			sOutput = sOutput.Replace("....", "-").Replace("...", "-").Replace("..", "-");
 			sOutput = sOutput.Replace(" ", "-");
@@ -292,16 +306,12 @@ namespace Carrotware.CMS.Core {
 			sOutput = sOutput.Replace(",", "-");
 			sOutput = sOutput.Replace("+", "-");
 
-			sOutput = sOutput.Replace("*", "-star-");
-			sOutput = sOutput.Replace("%", "-percent-");
-			sOutput = sOutput.Replace("&", "-n-");
-
 			sOutput = sOutput.Replace("---", "-").Replace("--", "-");
 			sOutput = sOutput.Replace(@"///", "/").Replace(@"//", "/");
 			sOutput = sOutput.Trim();
 
 			sOutput = Regex.Replace(sOutput, "[:\"*?<>|]+", "-");
-			sOutput = Regex.Replace(sOutput, @"[^0-9a-zA-Z-/_]+", "-");
+			sOutput = Regex.Replace(sOutput, @"[^0-9a-zA-Z.-/_]+", "-");
 
 			sOutput = sOutput.Replace("----", "-").Replace("---", "-").Replace("--", "-").Replace("--", "-");
 			sOutput = sOutput.Replace(@"////", "/").Replace(@"///", "/").Replace(@"//", "/").Replace(@"//", "/");
@@ -311,46 +321,40 @@ namespace Carrotware.CMS.Core {
 				sOutput = sOutput.Substring(0, sOutput.Length - 1);
 			}
 
-			//if (sOutput.EndsWith(@"/")) {
-			//	sOutput = sOutput.Substring(0, sOutput.Length - 1);
-			//	sOutput = sOutput.Replace("//", "/");
-			//}
-
-			return sOutput;
+			return sOutput.Trim();
 		}
 
-		public static string ScrubSlug(string SlugValue) {
-			string newSlug = SlugValue;
+		public static string ScrubSlug(string slugValue) {
+			string newSlug = String.Format("{0}", slugValue).Trim();
 
-			if (!String.IsNullOrEmpty(newSlug)) {
-				newSlug = newSlug.Replace(@"\", "");
-				newSlug = newSlug.Replace(@"/", "");
+			newSlug = newSlug.Replace(@"\", String.Empty);
+			newSlug = newSlug.Replace(@"/", String.Empty);
 
-				newSlug = ScrubSpecial(newSlug);
-			} else {
-				newSlug = String.Empty;
-			}
+			newSlug = ScrubSpecial(newSlug);
 
 			return newSlug;
 		}
 
 		public static string ScrubPath(string filePath) {
-			string newFilePath = filePath;
+			string newFilePath = ScrubFilePath(filePath);
 
-			newFilePath = newFilePath.Replace(@"\", @"/");
+			if (!newFilePath.EndsWith(@"/")) {
+				newFilePath = String.Format("{0}/", newFilePath).Trim();
+			}
+
+			return newFilePath;
+		}
+
+		private static string ScrubFilePath(string filePath) {
+			string newFilePath = String.Format("{0}", filePath).Trim().Replace(@"//", @"/").Replace(@"\", @"/");
+
+			string[] newPaths = newFilePath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+			newPaths = newPaths.ToList().Select(x => ScrubSpecial(x)).ToArray();
+			newFilePath = String.Join("/", newPaths.ToArray());
 
 			if (!newFilePath.StartsWith(@"/")) {
-				newFilePath = @"/" + newFilePath;
+				newFilePath = String.Format("/{0}", newFilePath).Trim();
 			}
-
-			if (newFilePath.EndsWith(@"/")) {
-				newFilePath = newFilePath.Substring(0, newFilePath.Length - 1);
-				newFilePath = newFilePath.Replace("//", "/");
-			}
-
-			newFilePath = ScrubSpecial(newFilePath);
-
-			newFilePath = newFilePath.Replace("//", "/");
 
 			return newFilePath;
 		}

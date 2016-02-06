@@ -19,19 +19,19 @@ namespace Carrotware.Web.UI.Components {
 
 		public static string DecodeBase64(string ValIn) {
 			string val = String.Empty;
-			if (!String.IsNullOrEmpty(ValIn)) {
-				ASCIIEncoding encoding = new ASCIIEncoding();
-				val = encoding.GetString(Convert.FromBase64String(ValIn));
+			if (!string.IsNullOrEmpty(ValIn)) {
+				Encoding enc = Encoding.GetEncoding("ISO-8859-1"); //Western European (ISO)
+				val = enc.GetString(Convert.FromBase64String(ValIn));
 			}
 			return val;
 		}
 
 		public static string EncodeBase64(string ValIn) {
 			string val = String.Empty;
-			if (!String.IsNullOrEmpty(ValIn)) {
-				ASCIIEncoding encoding = new ASCIIEncoding();
-				byte[] toEncodeAsBytes = ASCIIEncoding.ASCII.GetBytes(ValIn);
-				val = System.Convert.ToBase64String(toEncodeAsBytes);
+			if (!string.IsNullOrEmpty(ValIn)) {
+				Encoding enc = Encoding.GetEncoding("ISO-8859-1"); //Western European (ISO)
+				byte[] toEncodeAsBytes = enc.GetBytes(ValIn);
+				val = Convert.ToBase64String(toEncodeAsBytes);
 			}
 			return val;
 		}
