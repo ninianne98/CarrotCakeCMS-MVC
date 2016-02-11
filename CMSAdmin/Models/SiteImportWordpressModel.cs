@@ -74,6 +74,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/app_code/"));
 			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/app_data/"));
 			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/app_start/"));
+			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/aspnet_client/"));
 			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/bin/"));
 			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/obj/"));
 			lstFolders.RemoveAll(f => f.FileName.ToLowerInvariant().StartsWith("/views/"));

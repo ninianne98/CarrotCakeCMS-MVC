@@ -31,7 +31,7 @@ namespace Carrotware.Web.UI.Components {
 		public string FileName { get; set; }
 		public string FileExtension { get; set; }
 		public DateTime FileDate { get; set; }
-		public int FileSize { get; set; }
+		public long FileSize { get; set; }
 		public string FileSizeFriendly { get; set; }
 		public string FolderPath { get; set; }
 		public string MimeType { get; set; }
@@ -66,7 +66,7 @@ namespace Carrotware.Web.UI.Components {
 		public FileDataHelper() { }
 
 		public FileDataHelper(string blockedExts) {
-			_FileTypes = blockedExts;
+			_blockedTypes = blockedExts;
 		}
 
 		private static string _wwwpath = null;
@@ -83,19 +83,19 @@ namespace Carrotware.Web.UI.Components {
 			}
 		}
 
-		private string _FileTypes = null;
+		private string _blockedTypes = null;
 
 		public List<string> BlockedTypes {
 			get {
-				if (_FileTypes == null) {
-					_FileTypes = "asp;aspx;ascx;asmx;svc;asax;axd;ashx;dll;pdb;exe;cs;vb;cshtml;vbhtml;master;config;xml;user;csproj;vbproj;sln";
+				if (_blockedTypes == null) {
+					_blockedTypes = "asp;aspx;ascx;asmx;svc;asax;axd;ashx;dll;pdb;exe;cs;vb;cshtml;vbhtml;master;config;xml;user;csproj;vbproj;sln";
 				}
-				return _FileTypes.Split(';').ToList();
+				return _blockedTypes.Split(';').ToList();
 			}
 		}
 
 		public void IncludeAllFiletypes() {
-			_FileTypes = String.Empty;
+			_blockedTypes = String.Empty;
 		}
 
 		public FileData GetFolderInfo(string sQuery, string myFile) {
@@ -157,7 +157,7 @@ namespace Carrotware.Web.UI.Components {
 			string sPath = MakeFileFolderPath(sQuery);
 
 			string myFileName = String.Empty;
-			DateTime myFileDate = Convert.ToDateTime("1899-01-01") ;
+			DateTime myFileDate = Convert.ToDateTime("1899-01-01");
 			string myFileSizeF = String.Empty;
 			long myFileSize;
 
@@ -184,7 +184,7 @@ namespace Carrotware.Web.UI.Components {
 				f.FileName = myFileName;
 				f.FolderPath = MakeFilePathUniform(sP);
 				f.FileDate = myFileDate;
-				f.FileSize = Convert.ToInt32(myFileSize);
+				f.FileSize = myFileSize;
 				f.FileSizeFriendly = myFileSizeF;
 				if (!String.IsNullOrEmpty(MyFile.Extension)) {
 					f.FileExtension = MyFile.Extension.ToLowerInvariant();
