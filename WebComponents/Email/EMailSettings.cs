@@ -16,6 +16,15 @@ using System.Xml;
 namespace Carrotware.Web.UI.Components {
 
 	public class EMailSettings {
+
+		public EMailSettings() {
+			this.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
+			this.MailDomainName = String.Empty;
+			this.MailUserName = String.Empty;
+			this.MailPassword = String.Empty;
+			this.ReturnAddress = String.Empty;
+		}
+
 		public SmtpDeliveryMethod DeliveryMethod { get; set; }
 		public string MailDomainName { get; set; }
 		public string MailUserName { get; set; }
@@ -26,14 +35,8 @@ namespace Carrotware.Web.UI.Components {
 			HttpContext context = HttpContext.Current;
 
 			EMailSettings mailSettings = new EMailSettings();
-			mailSettings.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-			mailSettings.MailDomainName = String.Empty;
-			mailSettings.MailUserName = String.Empty;
-			mailSettings.MailPassword = String.Empty;
-			mailSettings.ReturnAddress = String.Empty;
 
 			//parse web.config as XML because of medium trust issues
-
 			XmlDocument xDoc = new XmlDocument();
 			xDoc.Load(context.Server.MapPath("~/Web.config"));
 

@@ -4,7 +4,7 @@ An request to reset your password has been submitted.  Please click the link bel
 
 		{%%ResetURL%%}
 
--- CMS Site
+-- CMS Site {%%SiteURL%%}
 
 
 Powered by CarrotCake CMS {%%Version%%}
