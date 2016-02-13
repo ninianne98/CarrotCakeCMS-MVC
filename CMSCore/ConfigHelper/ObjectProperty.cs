@@ -21,6 +21,23 @@ namespace Carrotware.CMS.Core {
 
 		public ObjectProperty() { }
 
+		public ObjectProperty(PropertyInfo prop) {
+			this.DefValue = null;
+			this.Name = prop.Name;
+			this.PropertyType = prop.PropertyType;
+			this.CanRead = prop.CanRead;
+			this.CanWrite = prop.CanWrite;
+			this.Props = prop;
+			this.CompanionSourceFieldName = String.Empty;
+			this.FieldMode = (prop.PropertyType == typeof(bool)) ?
+					WidgetAttribute.FieldMode.CheckBox : WidgetAttribute.FieldMode.TextBox;
+		}
+
+		public ObjectProperty(Object obj, PropertyInfo prop)
+			: this(prop) {
+			this.DefValue = obj.GetType().GetProperty(prop.Name).GetValue(obj, null);
+		}
+
 		public string Name { get; set; }
 		public bool CanWrite { get; set; }
 		public bool CanRead { get; set; }
@@ -239,17 +256,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static ObjectProperty GetCustProps(Object obj, PropertyInfo prop) {
-			ObjectProperty objprop = new ObjectProperty {
-				Name = prop.Name,
-				DefValue = obj.GetType().GetProperty(prop.Name).GetValue(obj, null),
-				PropertyType = prop.PropertyType,
-				CanRead = prop.CanRead,
-				CanWrite = prop.CanWrite,
-				Props = prop,
-				CompanionSourceFieldName = String.Empty,
-				FieldMode = prop.PropertyType == typeof(Boolean) ?
-						WidgetAttribute.FieldMode.CheckBox : WidgetAttribute.FieldMode.TextBox
-			};
+			ObjectProperty objprop = new ObjectProperty(obj, prop);
 
 			try {
 				foreach (Attribute attr in objprop.Props.GetCustomAttributes(true)) {

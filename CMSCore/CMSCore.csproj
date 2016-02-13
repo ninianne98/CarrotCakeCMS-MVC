@@ -206,7 +206,6 @@
     <Compile Include="SiteContent\WidgetHelper.cs" />
     <Compile Include="Security\SecurityData.cs" />
     <Compile Include="ConfigHelper\UserEditState.cs" />
-    <Compile Include="ConfigHelper\LabeledControl.cs" />
     <Compile Include="SiteContent\Widget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteContent\SiteData.cs" />
