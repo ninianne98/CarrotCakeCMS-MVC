@@ -1183,56 +1183,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public ActionResult PageAddEdit(Guid? id, Guid? versionid, Guid? importid, string mode) {
 			ContentPageModel model = new ContentPageModel();
-			model.ImportID = importid;
-			model.VersionID = versionid;
-			model.Mode = (String.IsNullOrEmpty(mode) || mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
-
-			ContentPage pageContents = null;
+			ContentPage pageContents = model.GetPage(id, versionid, importid, mode);
 			ViewBag.ContentEditMode = model.Mode;
-
-			if (!id.HasValue && !versionid.HasValue && !importid.HasValue) {
-				if (pageContents == null) {
-					pageContents = new ContentPage(this.SiteID, ContentPageType.PageType.ContentEntry);
-				}
-
-				pageContents.Root_ContentID = Guid.Empty;
-			} else {
-				if (importid.HasValue) {
-					ContentPageExport cpe = ContentImportExportUtils.GetSerializedContentPageExport(importid.Value);
-					if (cpe != null) {
-						pageContents = cpe.ThePage;
-						pageContents.EditDate = SiteData.CurrentSite.Now;
-						pageContents.Parent_ContentID = null;
-						var rp = pageHelper.GetLatestContentByURL(this.SiteID, false, pageContents.FileName);
-						if (rp != null) {
-							pageContents.Root_ContentID = rp.Root_ContentID;
-							pageContents.ContentID = rp.ContentID;
-							pageContents.Parent_ContentID = rp.Parent_ContentID;
-							pageContents.NavOrder = rp.NavOrder;
-						} else {
-							pageContents.Root_ContentID = Guid.Empty;
-							pageContents.ContentID = Guid.Empty;
-							pageContents.NavOrder = pageHelper.GetSitePageCount(this.SiteID, ContentPageType.PageType.ContentEntry);
-						}
-					}
-				}
-				if (versionid.HasValue) {
-					pageContents = pageHelper.GetVersion(this.SiteID, versionid.Value);
-				}
-				if (id.HasValue && pageContents == null) {
-					pageContents = pageHelper.FindContentByID(this.SiteID, id.Value);
-				}
-			}
 
 			if (pageContents.ContentType != ContentPageType.PageType.ContentEntry) {
 				return RedirectToAction("BlogPostAddEdit", new { @id = pageContents.Root_ContentID, @mode = model.Mode });
 			}
-
-			cmsHelper.OverrideKey(pageContents.Root_ContentID);
-			cmsHelper.cmsAdminContent = pageContents;
-			cmsHelper.cmsAdminWidget = pageContents.GetWidgetList();
-
-			model.SetPage(pageContents);
 
 			return View(model);
 		}
@@ -1313,55 +1269,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult PageAddEdit(ContentPageModel model) {
 			Helper.ForceValidation(ModelState, model);
-
 			model.Mode = (String.IsNullOrEmpty(model.Mode) || model.Mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
 			ViewBag.ContentEditMode = model.Mode;
 
 			if (ModelState.IsValid) {
-				ContentPage page = model.ContentPage;
-
-				var pageContents = pageHelper.FindContentByID(this.SiteID, page.Root_ContentID);
-				if (pageContents == null) {
-					pageContents = new ContentPage(this.SiteID, ContentPageType.PageType.ContentEntry);
-				}
-
-				pageContents.GoLiveDate = page.GoLiveDate;
-				pageContents.RetireDate = page.RetireDate;
-
-				pageContents.IsLatestVersion = true;
-				pageContents.Thumbnail = page.Thumbnail;
-
-				pageContents.TemplateFile = page.TemplateFile;
-
-				pageContents.TitleBar = page.TitleBar;
-				pageContents.NavMenuText = page.NavMenuText;
-				pageContents.PageHead = page.PageHead;
-				pageContents.FileName = page.FileName;
-				pageContents.PageSlug = null;
-
-				pageContents.MetaDescription = page.MetaDescription;
-				pageContents.MetaKeyword = page.MetaKeyword;
-
-				pageContents.EditDate = SiteData.CurrentSite.Now;
-				pageContents.NavOrder = page.NavOrder;
-
-				pageContents.PageText = page.PageText;
-				pageContents.LeftPageText = page.LeftPageText;
-				pageContents.RightPageText = page.RightPageText;
-
-				pageContents.PageActive = page.PageActive;
-				pageContents.ShowInSiteNav = page.ShowInSiteNav;
-				pageContents.ShowInSiteMap = page.ShowInSiteMap;
-				pageContents.BlockIndex = page.BlockIndex;
-
-				pageContents.Parent_ContentID = page.Parent_ContentID;
-
-				pageContents.CreditUserId = page.CreditUserId;
-
-				pageContents.EditUserId = SecurityData.CurrentUserGuid;
-
-				pageContents.SavePageEdit();
-				model.SaveTextWidgets();
+				var pageContents = model.SavePage();
 
 				if (model.VisitPage) {
 					Response.Redirect(pageContents.FileName);
@@ -1379,55 +1291,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public ActionResult BlogPostAddEdit(Guid? id, Guid? versionid, Guid? importid, string mode) {
 			ContentPageModel model = new ContentPageModel();
-			model.ImportID = importid;
-			model.VersionID = versionid;
-			model.Mode = (String.IsNullOrEmpty(mode) || mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
-
-			ContentPage pageContents = null;
+			ContentPage pageContents = model.GetPost(id, versionid, importid, mode);
 			ViewBag.ContentEditMode = model.Mode;
-
-			if (!id.HasValue && !versionid.HasValue && !importid.HasValue) {
-				if (pageContents == null) {
-					pageContents = new ContentPage(this.SiteID, ContentPageType.PageType.BlogEntry);
-				}
-
-				pageContents.Root_ContentID = Guid.Empty;
-			} else {
-				if (importid.HasValue) {
-					ContentPageExport cpe = ContentImportExportUtils.GetSerializedContentPageExport(importid.Value);
-					if (cpe != null) {
-						pageContents = cpe.ThePage;
-						pageContents.EditDate = SiteData.CurrentSite.Now;
-
-						var rp = pageHelper.GetLatestContentByURL(this.SiteID, false, pageContents.FileName);
-						if (rp != null) {
-							pageContents.Root_ContentID = rp.Root_ContentID;
-							pageContents.ContentID = rp.ContentID;
-						} else {
-							pageContents.Root_ContentID = Guid.Empty;
-							pageContents.ContentID = Guid.Empty;
-						}
-						pageContents.Parent_ContentID = null;
-						pageContents.NavOrder = SiteData.BlogSortOrderNumber;
-					}
-				}
-				if (versionid.HasValue) {
-					pageContents = pageHelper.GetVersion(this.SiteID, versionid.Value);
-				}
-				if (id.HasValue && pageContents == null) {
-					pageContents = pageHelper.FindContentByID(this.SiteID, id.Value);
-				}
-			}
 
 			if (pageContents.ContentType != ContentPageType.PageType.BlogEntry) {
 				return RedirectToAction("PageAddEdit", new { @id = pageContents.Root_ContentID, @mode = model.Mode });
 			}
-
-			cmsHelper.OverrideKey(pageContents.Root_ContentID);
-			cmsHelper.cmsAdminContent = pageContents;
-			cmsHelper.cmsAdminWidget = pageContents.GetWidgetList();
-
-			model.SetPage(pageContents);
 
 			return View(model);
 		}
@@ -1506,77 +1375,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult BlogPostAddEdit(ContentPageModel model) {
 			Helper.ForceValidation(ModelState, model);
-
 			model.Mode = (String.IsNullOrEmpty(model.Mode) || model.Mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
 			ViewBag.ContentEditMode = model.Mode;
 
 			if (ModelState.IsValid) {
-				ContentPage page = model.ContentPage;
-
-				var pageContents = pageHelper.FindContentByID(this.SiteID, page.Root_ContentID);
-				if (pageContents == null) {
-					pageContents = new ContentPage(this.SiteID, ContentPageType.PageType.BlogEntry);
-				}
-
-				pageContents.GoLiveDate = page.GoLiveDate;
-				pageContents.RetireDate = page.RetireDate;
-
-				pageContents.IsLatestVersion = true;
-				pageContents.Thumbnail = page.Thumbnail;
-
-				pageContents.TemplateFile = page.TemplateFile;
-
-				pageContents.TitleBar = page.TitleBar;
-				pageContents.NavMenuText = page.NavMenuText;
-				pageContents.PageHead = page.PageHead;
-				pageContents.FileName = page.FileName;
-				pageContents.PageSlug = page.PageSlug;
-
-				pageContents.MetaDescription = page.MetaDescription;
-				pageContents.MetaKeyword = page.MetaKeyword;
-
-				pageContents.EditDate = SiteData.CurrentSite.Now;
-				pageContents.NavOrder = SiteData.BlogSortOrderNumber;
-
-				pageContents.PageText = page.PageText;
-				pageContents.LeftPageText = page.LeftPageText;
-				pageContents.RightPageText = page.RightPageText;
-
-				pageContents.PageActive = page.PageActive;
-				pageContents.ShowInSiteNav = false;
-				pageContents.ShowInSiteMap = false;
-				pageContents.BlockIndex = page.BlockIndex;
-
-				pageContents.Parent_ContentID = page.Parent_ContentID;
-
-				pageContents.CreditUserId = page.CreditUserId;
-
-				pageContents.EditUserId = SecurityData.CurrentUserGuid;
-
-				List<ContentCategory> lstCat = new List<ContentCategory>();
-				List<ContentTag> lstTag = new List<ContentTag>();
-
-				//lstCat = (from cr in model.CategoryOptions
-				//		  join l in SiteData.CurrentSite.GetCategoryList() on cr.Value equals l.ContentCategoryID.ToString()
-				//		  where cr.Selected
-				//		  select l).ToList();
-				//lstTag = (from cr in model.TagOptions
-				//		  join l in SiteData.CurrentSite.GetTagList() on cr.Value equals l.ContentTagID.ToString()
-				//		  where cr.Selected
-				//		  select l).ToList();
-
-				lstCat = (from l in SiteData.CurrentSite.GetCategoryList()
-						  join cr in model.SelectedCategories on l.ContentCategoryID.ToString().ToLowerInvariant() equals cr.ToLowerInvariant()
-						  select l).ToList();
-				lstTag = (from l in SiteData.CurrentSite.GetTagList()
-						  join cr in model.SelectedTags on l.ContentTagID.ToString().ToLowerInvariant() equals cr.ToLowerInvariant()
-						  select l).ToList();
-
-				pageContents.ContentCategories = lstCat;
-				pageContents.ContentTags = lstTag;
-
-				pageContents.SavePageEdit();
-				model.SaveTextWidgets();
+				var pageContents = model.SavePost();
 
 				if (model.VisitPage) {
 					Response.Redirect(pageContents.FileName);

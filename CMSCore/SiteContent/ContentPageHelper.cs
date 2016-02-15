@@ -317,6 +317,7 @@ namespace Carrotware.CMS.Core {
 			sOutput = sOutput.Replace(@"////", "/").Replace(@"///", "/").Replace(@"//", "/").Replace(@"//", "/");
 			sOutput = sOutput.Trim();
 
+			sOutput = sOutput.Replace(".", "-").Replace("--", "-");
 			if (sOutput.EndsWith("-")) {
 				sOutput = sOutput.Substring(0, sOutput.Length - 1);
 			}

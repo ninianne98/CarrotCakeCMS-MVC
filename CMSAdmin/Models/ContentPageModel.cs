@@ -157,15 +157,28 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 						float iThird = (float)(this.ContentPage.NavOrder - 1) / (float)3;
 
 						Dictionary<string, float> dictTemplates = pageHelper.GetPopularTemplateList(this.ContentPage.SiteID, this.ContentPage.ContentType);
-						if (dictTemplates.Any() && dictTemplates.First().Value >= iThird) {
+
+						if (dictTemplates.Any()) {
 							try {
 								this.ContentPage.TemplateFile = dictTemplates.First().Key;
+
+								if (dictTemplates.First().Value >= iThird) {
+									this.ContentPage.TemplateFile = dictTemplates.First().Key;
+								}
 							} catch { }
 						}
 					}
 				}
 
 				RefreshWidgetList();
+			}
+		}
+
+		protected void OverrideCache(ContentPage pageContents) {
+			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+				cmsHelper.OverrideKey(pageContents.Root_ContentID);
+				cmsHelper.cmsAdminContent = pageContents;
+				cmsHelper.cmsAdminWidget = pageContents.GetWidgetList();
 			}
 		}
 
@@ -188,6 +201,219 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 										   select w).ToList();
 				}
 			}
+		}
+
+		public ContentPage GetPost(Guid? id, Guid? versionid, Guid? importid, string mode) {
+			ContentPage pageContents = null;
+			this.ImportID = importid;
+			this.VersionID = versionid;
+			this.Mode = (String.IsNullOrEmpty(mode) || mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
+
+			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+				if (!id.HasValue && !versionid.HasValue && !importid.HasValue) {
+					if (pageContents == null) {
+						pageContents = new ContentPage(SiteData.CurrentSiteID, ContentPageType.PageType.BlogEntry);
+					}
+
+					pageContents.Root_ContentID = Guid.Empty;
+				} else {
+					if (importid.HasValue) {
+						ContentPageExport cpe = ContentImportExportUtils.GetSerializedContentPageExport(importid.Value);
+						if (cpe != null) {
+							pageContents = cpe.ThePage;
+							pageContents.EditDate = SiteData.CurrentSite.Now;
+
+							var rp = pageHelper.GetLatestContentByURL(SiteData.CurrentSiteID, false, pageContents.FileName);
+							if (rp != null) {
+								pageContents.Root_ContentID = rp.Root_ContentID;
+								pageContents.ContentID = rp.ContentID;
+							} else {
+								pageContents.Root_ContentID = Guid.Empty;
+								pageContents.ContentID = Guid.Empty;
+							}
+							pageContents.Parent_ContentID = null;
+							pageContents.NavOrder = SiteData.BlogSortOrderNumber;
+						}
+					}
+					if (versionid.HasValue) {
+						pageContents = pageHelper.GetVersion(SiteData.CurrentSiteID, versionid.Value);
+					}
+					if (id.HasValue && pageContents == null) {
+						pageContents = pageHelper.FindContentByID(SiteData.CurrentSiteID, id.Value);
+					}
+				}
+			}
+
+			OverrideCache(pageContents);
+
+			SetPage(pageContents);
+
+			return pageContents;
+		}
+
+		public ContentPage SavePost() {
+			ContentPage page = this.ContentPage;
+			ContentPage pageContents = null;
+
+			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+				pageContents = pageHelper.FindContentByID(SiteData.CurrentSiteID, page.Root_ContentID);
+			}
+			if (pageContents == null) {
+				pageContents = new ContentPage(SiteData.CurrentSiteID, ContentPageType.PageType.BlogEntry);
+			}
+
+			pageContents.GoLiveDate = page.GoLiveDate;
+			pageContents.RetireDate = page.RetireDate;
+
+			pageContents.IsLatestVersion = true;
+			pageContents.Thumbnail = page.Thumbnail;
+
+			pageContents.TemplateFile = page.TemplateFile;
+
+			pageContents.TitleBar = page.TitleBar;
+			pageContents.NavMenuText = page.NavMenuText;
+			pageContents.PageHead = page.PageHead;
+			pageContents.FileName = page.FileName;
+			pageContents.PageSlug = page.PageSlug;
+
+			pageContents.MetaDescription = page.MetaDescription;
+			pageContents.MetaKeyword = page.MetaKeyword;
+
+			pageContents.EditDate = SiteData.CurrentSite.Now;
+			pageContents.NavOrder = SiteData.BlogSortOrderNumber;
+
+			pageContents.PageText = page.PageText;
+			pageContents.LeftPageText = page.LeftPageText;
+			pageContents.RightPageText = page.RightPageText;
+
+			pageContents.PageActive = page.PageActive;
+			pageContents.ShowInSiteNav = false;
+			pageContents.ShowInSiteMap = false;
+			pageContents.BlockIndex = page.BlockIndex;
+
+			pageContents.Parent_ContentID = page.Parent_ContentID;
+
+			pageContents.CreditUserId = page.CreditUserId;
+
+			pageContents.EditUserId = SecurityData.CurrentUserGuid;
+
+			List<ContentCategory> lstCat = (from l in SiteData.CurrentSite.GetCategoryList()
+											join cr in this.SelectedCategories on l.ContentCategoryID.ToString().ToLowerInvariant() equals cr.ToLowerInvariant()
+											select l).ToList();
+			List<ContentTag> lstTag = (from l in SiteData.CurrentSite.GetTagList()
+									   join cr in this.SelectedTags on l.ContentTagID.ToString().ToLowerInvariant() equals cr.ToLowerInvariant()
+									   select l).ToList();
+
+			pageContents.ContentCategories = lstCat;
+			pageContents.ContentTags = lstTag;
+
+			pageContents.SavePageEdit();
+			SaveTextWidgets();
+
+			return pageContents;
+		}
+
+		public ContentPage GetPage(Guid? id, Guid? versionid, Guid? importid, string mode) {
+			ContentPage pageContents = null;
+			this.ImportID = importid;
+			this.VersionID = versionid;
+			this.Mode = (String.IsNullOrEmpty(mode) || mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
+
+			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+				if (!id.HasValue && !versionid.HasValue && !importid.HasValue) {
+					if (pageContents == null) {
+						pageContents = new ContentPage(SiteData.CurrentSiteID, ContentPageType.PageType.ContentEntry);
+					}
+
+					pageContents.Root_ContentID = Guid.Empty;
+				} else {
+					if (importid.HasValue) {
+						ContentPageExport cpe = ContentImportExportUtils.GetSerializedContentPageExport(importid.Value);
+						if (cpe != null) {
+							pageContents = cpe.ThePage;
+							pageContents.EditDate = SiteData.CurrentSite.Now;
+							pageContents.Parent_ContentID = null;
+							var rp = pageHelper.GetLatestContentByURL(SiteData.CurrentSiteID, false, pageContents.FileName);
+							if (rp != null) {
+								pageContents.Root_ContentID = rp.Root_ContentID;
+								pageContents.ContentID = rp.ContentID;
+								pageContents.Parent_ContentID = rp.Parent_ContentID;
+								pageContents.NavOrder = rp.NavOrder;
+							} else {
+								pageContents.Root_ContentID = Guid.Empty;
+								pageContents.ContentID = Guid.Empty;
+								pageContents.NavOrder = pageHelper.GetSitePageCount(SiteData.CurrentSiteID, ContentPageType.PageType.ContentEntry);
+							}
+						}
+					}
+					if (versionid.HasValue) {
+						pageContents = pageHelper.GetVersion(SiteData.CurrentSiteID, versionid.Value);
+					}
+					if (id.HasValue && pageContents == null) {
+						pageContents = pageHelper.FindContentByID(SiteData.CurrentSiteID, id.Value);
+					}
+				}
+			}
+
+			OverrideCache(pageContents);
+
+			SetPage(pageContents);
+
+			return pageContents;
+		}
+
+		public ContentPage SavePage() {
+			ContentPage page = this.ContentPage;
+			ContentPage pageContents = null;
+
+			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+				pageContents = pageHelper.FindContentByID(SiteData.CurrentSiteID, page.Root_ContentID);
+			}
+
+			if (pageContents == null) {
+				pageContents = new ContentPage(SiteData.CurrentSiteID, ContentPageType.PageType.ContentEntry);
+			}
+
+			pageContents.GoLiveDate = page.GoLiveDate;
+			pageContents.RetireDate = page.RetireDate;
+
+			pageContents.IsLatestVersion = true;
+			pageContents.Thumbnail = page.Thumbnail;
+
+			pageContents.TemplateFile = page.TemplateFile;
+
+			pageContents.TitleBar = page.TitleBar;
+			pageContents.NavMenuText = page.NavMenuText;
+			pageContents.PageHead = page.PageHead;
+			pageContents.FileName = page.FileName;
+			pageContents.PageSlug = null;
+
+			pageContents.MetaDescription = page.MetaDescription;
+			pageContents.MetaKeyword = page.MetaKeyword;
+
+			pageContents.EditDate = SiteData.CurrentSite.Now;
+			pageContents.NavOrder = page.NavOrder;
+
+			pageContents.PageText = page.PageText;
+			pageContents.LeftPageText = page.LeftPageText;
+			pageContents.RightPageText = page.RightPageText;
+
+			pageContents.PageActive = page.PageActive;
+			pageContents.ShowInSiteNav = page.ShowInSiteNav;
+			pageContents.ShowInSiteMap = page.ShowInSiteMap;
+			pageContents.BlockIndex = page.BlockIndex;
+
+			pageContents.Parent_ContentID = page.Parent_ContentID;
+
+			pageContents.CreditUserId = page.CreditUserId;
+
+			pageContents.EditUserId = SecurityData.CurrentUserGuid;
+
+			pageContents.SavePageEdit();
+
+			SaveTextWidgets();
+
+			return pageContents;
 		}
 
 		public void SaveTextWidgets() {
