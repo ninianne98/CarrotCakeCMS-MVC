@@ -51,9 +51,9 @@ namespace Carrotware.CMS.Core {
 			wps.NewSiteID = Guid.NewGuid();
 
 			wps.Content.Where(p => p.PostType == WordPressPost.WPPostType.BlogPost).ToList()
-				.ForEach(q => q.ImportFileName = ContentPageHelper.ScrubPath("/" + sd.ConvertUTCToSiteTime(q.PostDateUTC).ToString(sd.Blog_DatePattern) + "/" + q.ImportFileSlug));
+				.ForEach(q => q.ImportFileName = ContentPageHelper.ScrubFilename(q.ImportRootID, String.Format("/{0}/{1}", sd.ConvertUTCToSiteTime(q.PostDateUTC).ToString(sd.Blog_DatePattern), q.ImportFileSlug)));
 
-			wps.Content.ToList().ForEach(r => r.ImportFileName = ContentPageHelper.ScrubPath(r.ImportFileName.Replace("//", "/")));
+			wps.Content.ToList().ForEach(r => r.ImportFileName = ContentPageHelper.ScrubFilename(r.ImportRootID, r.ImportFileName));
 		}
 
 		public static ContentPage CreateWPContentPage(WordPressSite wps, WordPressPost c, SiteData site) {
@@ -90,7 +90,7 @@ namespace Carrotware.CMS.Core {
 				}
 
 				cont.Root_ContentID = c.ImportRootID;
-				cont.FileName = c.ImportFileName.Replace("//", "/");
+				cont.FileName = ContentPageHelper.ScrubFilename(c.ImportRootID, c.ImportFileName);
 				cont.PageSlug = null;
 				cont.NavOrder = c.PostOrder;
 				cont.Parent_ContentID = null;
@@ -101,7 +101,7 @@ namespace Carrotware.CMS.Core {
 
 				if (c.PostType == WordPressPost.WPPostType.BlogPost) {
 					cont.ContentType = ContentPageType.PageType.BlogEntry;
-					cont.PageSlug = c.ImportFileSlug.Replace("//", "/");
+					cont.PageSlug = ContentPageHelper.ScrubFilename(c.ImportRootID, c.ImportFileSlug);
 					cont.NavOrder = SiteData.BlogSortOrderNumber;
 					cont.Parent_ContentID = null;
 				}
