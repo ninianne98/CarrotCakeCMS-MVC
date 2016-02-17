@@ -266,6 +266,10 @@ namespace Carrotware.CMS.Core {
 				newFileName = newFileName.Replace("//", "/");
 			}
 
+			if (newFileName.ToLowerInvariant().EndsWith(".aspx")) {
+				newFileName = newFileName.Substring(0, newFileName.Length - 5);
+			}
+
 			newFileName = ScrubFilePath(newFileName).Trim();
 
 			if (newFileName.ToLowerInvariant().EndsWith(".htm")) {

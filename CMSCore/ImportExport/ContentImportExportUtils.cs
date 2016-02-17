@@ -25,7 +25,7 @@ namespace Carrotware.CMS.Core {
 			cpe.NewRootContentID = Guid.NewGuid();
 
 			cpe.ThePage.Root_ContentID = cpe.NewRootContentID;
-			cpe.ThePage.ContentID = cpe.NewRootContentID;
+			cpe.ThePage.ContentID = Guid.NewGuid();
 			cpe.ThePage.SiteID = SiteData.CurrentSiteID;
 			cpe.ThePage.EditUserId = SecurityData.CurrentUserGuid;
 			cpe.ThePage.EditDate = DateTime.UtcNow;
@@ -45,6 +45,14 @@ namespace Carrotware.CMS.Core {
 			foreach (var p in se.ThePages) {
 				AssignContentPageExportNewIDs(p);
 			}
+
+			se.ThePages.Where(p => p.ThePage.ContentType == ContentPageType.PageType.BlogEntry).ToList()
+				.ForEach(r => r.ThePage.PageSlug = ContentPageHelper.ScrubFilename(r.ThePage.Root_ContentID, r.ThePage.PageSlug));
+
+			se.ThePages.Where(p => p.ThePage.ContentType == ContentPageType.PageType.BlogEntry).ToList()
+				.ForEach(q => q.ThePage.FileName = ContentPageHelper.ScrubFilename(q.ThePage.Root_ContentID, String.Format("/{0}/{1}", q.ThePage.GoLiveDate.ToString(se.TheSite.Blog_DatePattern), q.ThePage.PageSlug)));
+
+			se.ThePages.ToList().ForEach(r => r.ThePage.FileName = ContentPageHelper.ScrubFilename(r.ThePage.Root_ContentID, r.ThePage.FileName));
 		}
 
 		public static void AssignWPExportNewIDs(SiteData sd, WordPressSite wps) {
