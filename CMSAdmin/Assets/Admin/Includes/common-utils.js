@@ -57,12 +57,6 @@ function AjaxBtnLoad() {
 		};
 	});
 
-	//$('.timeRegion').timepicker({
-	//	showOn: "both",
-	//	button: '.ui-timepicker-trigger',
-	//	showPeriod: true,
-	//	showLeadingZero: true
-	//});
 }
 
 $(document).ready(function () {

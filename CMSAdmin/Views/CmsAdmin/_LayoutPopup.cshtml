@@ -35,73 +35,78 @@
 	<script src="~/Assets/Admin/includes/jquery.simplemodal.js" type="text/javascript"></script>
 	<script src="~/Assets/Admin/includes/jquery.blockUI.js" type="text/javascript"></script>
 	<script src="~/Assets/Admin/Includes/chosen.jquery.min.js"></script>
-	<script src="~/Assets/Admin/includes/common-utils.js" type="text/javascript"></script>
+	@if (SecurityData.IsAuthenticated) {
+		<script src="~/Assets/Admin/includes/common-utils.js" type="text/javascript"></script>
+	}
+	@if (SecurityData.IsAuthenticated) {
+		<script type="text/javascript">
 
-	<script type="text/javascript">
+			$(document).ready(function () {
+				AjaxBtnLoad();
+			});
 
-		$(document).ready(function () {
-			AjaxBtnLoad();
-		});
-
-		$(document).ajaxComplete(function (event, xhr, settings) {
-			AjaxBtnLoad();
-		});
-	</script>
+			$(document).ajaxComplete(function (event, xhr, settings) {
+				AjaxBtnLoad();
+			});
+		</script>
+	}
+	@if (SecurityData.IsAuthenticated) {
 	<!-- TinyMCE -->
-	<script type="text/javascript" src="~/Assets/tiny_mce/tiny_mce.js"></script>
-	<script type="text/javascript" src="~/Assets/Admin/includes/tinymce-config.js"></script>
-	<script type="text/javascript">
+		<script type="text/javascript" src="~/Assets/tiny_mce/tiny_mce.js"></script>
+		<script type="text/javascript" src="~/Assets/Admin/includes/tinymce-config.js"></script>
+		<script type="text/javascript">
 
-		var pnl = '#divSavedAlert';
-		var fld = '#hdnShowSaveLayer';
-		var timer1 = '';
+			var pnl = '#divSavedAlert';
+			var fld = '#hdnShowSaveLayer';
+			var timer1 = '';
 
-		function DisplaySaveBox() {
+			function DisplaySaveBox() {
 
-			if ($(fld).length < 1) {
-				hideAlert();
-			}
-
-			if (timer1 != '') {
-				clearTimeout(timer1);
-			}
-
-			if ($(fld).length > 0 && $(pnl).length > 0) {
-				if ($(fld).val().length > 0) {
-					$(pnl).css('display', '');
-					timer1 = setTimeout(function () { hideAlert(); }, 3000);
+				if ($(fld).length < 1) {
+					hideAlert();
 				}
 
-				$(fld).val('');
+				if (timer1 != '') {
+					clearTimeout(timer1);
+				}
+
+				if ($(fld).length > 0 && $(pnl).length > 0) {
+					if ($(fld).val().length > 0) {
+						$(pnl).css('display', '');
+						timer1 = setTimeout(function () { hideAlert(); }, 3000);
+					}
+
+					$(fld).val('');
+				}
 			}
-		}
 
-		function hideAlert() {
-			if ($(pnl).length > 0) {
-				$(pnl).css('display', 'none');
+			function hideAlert() {
+				if ($(pnl).length > 0) {
+					$(pnl).css('display', 'none');
+				}
 			}
-		}
 
-		var bTinyLoaded = false;
-		function AjaxTinyLoad() {
-			if (!bTinyLoaded) {
-				TinyMCEParamInit("650", "400", true);
+			var bTinyLoaded = false;
+			function AjaxTinyLoad() {
+				if (!bTinyLoaded) {
+					TinyMCEParamInit("650", "400", true);
+				}
+				bTinyLoaded = true;
 			}
-			bTinyLoaded = true;
-		}
 
-		function AjaxScriptLoad() {
+			function AjaxScriptLoad() {
 
-			AjaxTinyLoad();
+				AjaxTinyLoad();
 
-			DisplaySaveBox();
-		}
+				DisplaySaveBox();
+			}
 
-		$(document).ready(function () {
-			AjaxScriptLoad();
-		});
-	</script>
+			$(document).ready(function () {
+				AjaxScriptLoad();
+			});
+		</script>
 	<!-- /TinyMCE -->
+	}
 	@RenderSection("scripts", required: false)
 </head>
 <body>
