@@ -409,7 +409,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				sTest = sXML.Substring(0, 250).ToLowerInvariant();
 
 				try {
-					if (sTest.Contains("<contentpageexport xmlns:xsi=\"http://www.w3.org/2001/xmlschema-instance\" xmlns:xsd=\"http://www.w3.org/2001/xmlschema\">")) {
+					if (sTest.Contains("<contentpageexport xmlns:xsi=\"http://www.w3.org/2001/xmlschema-instance\" xmlns:xsd=\"http://www.w3.org/2001/xmlschema\">")
+						|| sTest.Contains("<contentpageexport xmlns:xsd=\"http://www.w3.org/2001/xmlschema\" xmlns:xsi=\"http://www.w3.org/2001/xmlschema-instance\">")) {
 						ContentPageExport cph = ContentImportExportUtils.DeserializeContentPageExport(sXML);
 						ContentImportExportUtils.AssignContentPageExportNewIDs(cph);
 						ContentImportExportUtils.SaveSerializedDataExport<ContentPageExport>(cph.NewRootContentID, cph);
@@ -421,7 +422,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						}
 					}
 
-					if (sTest.Contains("<siteexport xmlns:xsi=\"http://www.w3.org/2001/xmlschema-instance\" xmlns:xsd=\"http://www.w3.org/2001/xmlschema\">")) {
+					if (sTest.Contains("<siteexport xmlns:xsi=\"http://www.w3.org/2001/xmlschema-instance\" xmlns:xsd=\"http://www.w3.org/2001/xmlschema\">")
+						|| sTest.Contains("<siteexport xmlns:xsd=\"http://www.w3.org/2001/xmlschema\" xmlns:xsi=\"http://www.w3.org/2001/xmlschema-instance\">")) {
 						SiteExport site = ContentImportExportUtils.DeserializeSiteExport(sXML);
 						ContentImportExportUtils.AssignSiteExportNewIDs(site);
 						ContentImportExportUtils.SaveSerializedDataExport<SiteExport>(site.NewSiteID, site);
