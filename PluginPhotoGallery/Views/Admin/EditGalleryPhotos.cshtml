@@ -321,7 +321,7 @@
 				Restrict images to +/- 14 days
 			</td>
 			<td style="width: 225px">
-				@Html.TextBoxFor(m => m.Date, "{0:MM/dd/yyyy}", new { @class = "dateRegion" })
+				@Html.TextBoxFor(m => m.Date, "{0:MM/dd/yyyy}", new { @class = "dateRegion", maxlength = "12", size = "16" })
 			</td>
 			<td style="width: 100px">
 				<input type="submit" name="btnApply" value="Apply" id="btnApply" class="btn btn-primary" />
