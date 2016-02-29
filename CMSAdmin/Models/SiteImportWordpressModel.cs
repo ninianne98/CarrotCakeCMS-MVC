@@ -188,11 +188,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 				//attempt to find the user in the userbase
 				usr = ExtendedUserData.FindByEmail(wpu.Email);
-				if (usr != null) {
+				if (usr != null && usr.UserId != Guid.Empty) {
 					wpu.ImportUserID = usr.UserId;
 				} else {
 					usr = ExtendedUserData.FindByUsername(wpu.Login);
-					if (usr != null) {
+					if (usr != null && usr.UserId != Guid.Empty) {
 						wpu.ImportUserID = usr.UserId;
 					}
 				}
@@ -204,7 +204,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 						if (result.Succeeded) {
 							usr = ExtendedUserData.FindByUsername(wpu.Login);
 						} else {
-							throw new Exception(String.Format("Could not create user: {0} ({1}) \r\n{3}", wpu.Login, wpu.Email, String.Join("\r\n", result.Errors)));
+							throw new Exception(String.Format("Could not create user: {0} ({1}) \r\n{2}", wpu.Login, wpu.Email, String.Join("\r\n", result.Errors)));
 						}
 						wpu.ImportUserID = usr.UserId;
 					}
