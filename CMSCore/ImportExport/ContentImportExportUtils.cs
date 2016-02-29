@@ -37,6 +37,26 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		public static void MapSiteCategoryTags(ContentPageExport cpe) {
+			if (cpe.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+				var lstCategories = SiteData.CurrentSite.GetCategoryList();
+				var lstTags = SiteData.CurrentSite.GetTagList();
+
+				cpe.ThePage.ContentCategories = (from l in lstCategories
+												 join o in cpe.ThePage.ContentCategories on l.CategorySlug.ToLowerInvariant() equals o.CategorySlug.ToLowerInvariant()
+												 where !String.IsNullOrEmpty(o.CategorySlug)
+												 select l).Distinct().ToList();
+
+				cpe.ThePage.ContentTags = (from l in lstTags
+										   join o in cpe.ThePage.ContentTags on l.TagSlug.ToLowerInvariant() equals o.TagSlug.ToLowerInvariant()
+										   where !String.IsNullOrEmpty(o.TagSlug)
+										   select l).Distinct().ToList();
+			} else {
+				cpe.ThePage.ContentCategories = new List<ContentCategory>();
+				cpe.ThePage.ContentTags = new List<ContentTag>();
+			}
+		}
+
 		public static void AssignSiteExportNewIDs(SiteExport se) {
 			se.NewSiteID = Guid.NewGuid();
 
@@ -44,6 +64,11 @@ namespace Carrotware.CMS.Core {
 
 			foreach (var p in se.ThePages) {
 				AssignContentPageExportNewIDs(p);
+
+				if (p.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+					p.ThePage.ContentCategories.ToList().ForEach(r => r.CategorySlug = se.TheCategories.Where(x => x.ContentCategoryID == r.ContentCategoryID).FirstOrDefault().CategorySlug);
+					p.ThePage.ContentTags.ToList().ForEach(r => r.TagSlug = se.TheTags.Where(x => x.ContentTagID == r.ContentTagID).FirstOrDefault().TagSlug);
+				}
 			}
 
 			se.ThePages.Where(p => p.ThePage.ContentType == ContentPageType.PageType.BlogEntry).ToList()

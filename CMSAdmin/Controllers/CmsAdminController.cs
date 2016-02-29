@@ -405,7 +405,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 
 			string sTest = String.Empty;
-			if (!string.IsNullOrEmpty(sXML) && sXML.Length > 500) {
+			if (!String.IsNullOrEmpty(sXML) && sXML.Length > 500) {
 				sTest = sXML.Substring(0, 250).ToLowerInvariant();
 
 				try {
@@ -413,6 +413,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						|| sTest.Contains("<contentpageexport xmlns:xsd=\"http://www.w3.org/2001/xmlschema\" xmlns:xsi=\"http://www.w3.org/2001/xmlschema-instance\">")) {
 						ContentPageExport cph = ContentImportExportUtils.DeserializeContentPageExport(sXML);
 						ContentImportExportUtils.AssignContentPageExportNewIDs(cph);
+						ContentImportExportUtils.MapSiteCategoryTags(cph);
 						ContentImportExportUtils.SaveSerializedDataExport<ContentPageExport>(cph.NewRootContentID, cph);
 
 						if (cph.ThePage.ContentType == ContentPageType.PageType.ContentEntry) {

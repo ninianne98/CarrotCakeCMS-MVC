@@ -178,7 +178,7 @@ namespace Carrotware.CMS.Core {
 			List<ContentCategory> _types = null;
 
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<vw_carrot_CategoryURL> query = CompiledQueries.cqGetContentCategoryByContentID(_db, rootContentID);
+				IQueryable<carrot_ContentCategory> query = CompiledQueries.cqGetContentCategoryByContentID(_db, rootContentID);
 
 				_types = (from d in query.ToList()
 						  select new ContentCategory(d)).ToList();
