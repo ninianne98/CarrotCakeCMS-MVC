@@ -16,11 +16,11 @@ namespace Carrotware.CMS.Core {
 	public class ContentPageExport {
 
 		public ContentPageExport() {
-			CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
-			ExportDate = DateTime.UtcNow;
+			this.CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
+			this.ExportDate = DateTime.UtcNow;
 
-			ThePage = new ContentPage();
-			ThePageWidgets = new List<Widget>();
+			this.ThePage = new ContentPage();
+			this.ThePageWidgets = new List<Widget>();
 		}
 
 		public ContentPageExport(Guid siteID, Guid rootContentID) {
@@ -40,45 +40,45 @@ namespace Carrotware.CMS.Core {
 		}
 
 		private void SetVals(ContentPage cp, List<Widget> widgets) {
-			CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
-			ExportDate = DateTime.UtcNow;
+			this.CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
+			this.ExportDate = DateTime.UtcNow;
 			Guid siteID = cp.SiteID;
 
-			NewRootContentID = Guid.NewGuid();
+			this.NewRootContentID = Guid.NewGuid();
 
 			cp.LoadAttributes();
 
-			ThePage = cp;
-			ThePageWidgets = widgets;
+			this.ThePage = cp;
+			this.ThePageWidgets = widgets;
 
-			if (ThePage == null) {
-				ThePage = new ContentPage();
-				ThePage.Root_ContentID = Guid.NewGuid();
-				ThePage.ContentID = ThePage.Root_ContentID;
+			if (this.ThePage == null) {
+				this.ThePage = new ContentPage();
+				this.ThePage.Root_ContentID = Guid.NewGuid();
+				this.ThePage.ContentID = ThePage.Root_ContentID;
 			}
-			if (ThePageWidgets == null) {
-				ThePageWidgets = new List<Widget>();
+			if (this.ThePageWidgets == null) {
+				this.ThePageWidgets = new List<Widget>();
 			}
 
-			OriginalRootContentID = ThePage.Root_ContentID;
-			OriginalSiteID = ThePage.SiteID;
-			OriginalParentContentID = Guid.Empty;
-			ParentFileName = "";
+			this.OriginalRootContentID = ThePage.Root_ContentID;
+			this.OriginalSiteID = ThePage.SiteID;
+			this.OriginalParentContentID = Guid.Empty;
+			this.ParentFileName = String.Empty;
 
-			if (ThePage.Parent_ContentID != null) {
+			if (this.ThePage.Parent_ContentID != null) {
 				ContentPage parent = new ContentPage();
 				using (ContentPageHelper cph = new ContentPageHelper()) {
 					parent = cph.FindContentByID(siteID, ThePage.Parent_ContentID.Value);
 				}
-				ParentFileName = parent.FileName;
-				OriginalParentContentID = parent.Root_ContentID;
+				this.ParentFileName = parent.FileName;
+				this.OriginalParentContentID = parent.Root_ContentID;
 			}
 
-			ThePage.Root_ContentID = NewRootContentID;
-			ThePage.ContentID = NewRootContentID;
+			this.ThePage.Root_ContentID = this.NewRootContentID;
+			this.ThePage.ContentID = this.NewRootContentID;
 
-			foreach (var w in ThePageWidgets) {
-				w.Root_ContentID = NewRootContentID;
+			foreach (var w in this.ThePageWidgets) {
+				w.Root_ContentID = this.NewRootContentID;
 				w.Root_WidgetID = Guid.NewGuid();
 				w.WidgetDataID = Guid.NewGuid();
 			}

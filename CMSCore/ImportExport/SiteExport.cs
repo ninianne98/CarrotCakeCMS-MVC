@@ -23,15 +23,15 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public SiteExport() {
-			CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
-			ExportDate = DateTime.UtcNow;
+			this.CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
+			this.ExportDate = DateTime.UtcNow;
 
-			TheSite = new SiteData();
-			ThePages = new List<ContentPageExport>();
+			this.TheSite = new SiteData();
+			this.ThePages = new List<ContentPageExport>();
 
-			TheCategories = new List<ContentCategory>();
-			TheTags = new List<ContentTag>();
-			TheSnippets = new List<ContentSnippet>();
+			this.TheCategories = new List<ContentCategory>();
+			this.TheTags = new List<ContentTag>();
+			this.TheSnippets = new List<ContentSnippet>();
 		}
 
 		public SiteExport(Guid siteID) {
@@ -81,38 +81,38 @@ namespace Carrotware.CMS.Core {
 		}
 
 		private void SetVals(SiteData s, List<ContentPageExport> pages) {
-			CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
-			ExportDate = DateTime.UtcNow;
+			this.CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
+			this.ExportDate = DateTime.UtcNow;
 
-			NewSiteID = Guid.NewGuid();
+			this.NewSiteID = Guid.NewGuid();
 
-			TheSite = s;
-			ThePages = pages;
+			this.TheSite = s;
+			this.ThePages = pages;
 
-			if (TheSite == null) {
-				TheSite = new SiteData();
-				TheSite.SiteID = Guid.NewGuid();
+			if (this.TheSite == null) {
+				this.TheSite = new SiteData();
+				this.TheSite.SiteID = Guid.NewGuid();
 			}
-			if (ThePages == null) {
-				ThePages = new List<ContentPageExport>();
+			if (this.ThePages == null) {
+				this.ThePages = new List<ContentPageExport>();
 			}
 
-			OriginalSiteID = TheSite.SiteID;
+			this.OriginalSiteID = TheSite.SiteID;
 
 			foreach (var w in ThePages) {
 				w.OriginalSiteID = NewSiteID;
 			}
 
-			TheCategories = s.GetCategoryList();
-			TheTags = s.GetTagList();
-			TheSnippets = s.GetContentSnippetList();
+			this.TheCategories = s.GetCategoryList();
+			this.TheTags = s.GetTagList();
+			this.TheSnippets = s.GetContentSnippetList();
 		}
 
 		public void LoadComments() {
-			if (ThePages != null) {
-				TheComments = new List<CommentExport>();
-				foreach (ContentPageExport cpe in ThePages) {
-					TheComments = TheComments.Union(CommentExport.GetPageCommentExport(cpe.OriginalRootContentID)).ToList();
+			if (this.ThePages != null) {
+				this.TheComments = new List<CommentExport>();
+				foreach (ContentPageExport cpe in this.ThePages) {
+					this.TheComments = this.TheComments.Union(CommentExport.GetPageCommentExport(cpe.OriginalRootContentID)).ToList();
 				}
 			}
 		}
