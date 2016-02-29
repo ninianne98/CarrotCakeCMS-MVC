@@ -97,10 +97,16 @@ namespace Carrotware.CMS.Core {
 			if (c != null) {
 				this.ContentTagID = c.ContentTagID;
 				this.SiteID = c.SiteID;
-				this.TagSlug = c.TagSlug;
+				this.TagSlug = ContentPageHelper.ScrubSlug(c.TagSlug);
 				this.TagText = c.TagText;
 				this.UseCount = c.UseCount;
+				this.PublicUseCount = 1;
 				this.IsPublic = c.IsPublic;
+
+				SiteData site = SiteData.GetSiteFromCache(c.SiteID);
+				if (site != null) {
+					this.TagURL = ContentPageHelper.ScrubFilename(c.ContentTagID, String.Format("/{0}/{1}", site.BlogTagPath, c.TagSlug));
+				}
 			}
 		}
 
@@ -110,7 +116,7 @@ namespace Carrotware.CMS.Core {
 
 				this.ContentTagID = c.ContentTagID;
 				this.SiteID = c.SiteID;
-				this.TagURL = c.TagUrl;
+				this.TagURL = ContentPageHelper.ScrubFilename(c.ContentTagID, c.TagUrl);
 				this.TagText = c.TagText;
 				this.UseCount = c.UseCount;
 				this.PublicUseCount = c.PublicUseCount;
@@ -126,9 +132,16 @@ namespace Carrotware.CMS.Core {
 			if (c != null) {
 				this.ContentTagID = c.ContentTagID;
 				this.SiteID = c.SiteID;
-				this.TagSlug = c.TagSlug;
+				this.TagSlug = ContentPageHelper.ScrubSlug(c.TagSlug);
 				this.TagText = c.TagText;
 				this.IsPublic = c.IsPublic;
+				this.UseCount = 1;
+				this.PublicUseCount = 1;
+
+				SiteData site = SiteData.GetSiteFromCache(c.SiteID);
+				if (site != null) {
+					this.TagURL = ContentPageHelper.ScrubFilename(c.ContentTagID, String.Format("/{0}/{1}", site.BlogTagPath, c.TagSlug));
+				}
 			}
 		}
 

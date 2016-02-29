@@ -482,9 +482,7 @@
 								<div>
 									<p>
 										<b class="green" style="font-size: 110%;">
-											<a class="green" href="@item.FileName">@item.NavMenuText</a>
-											&nbsp;|&nbsp;
-											@String.Format("{0:d}", item.GoLiveDate)
+											<a href="@item.FileName">@item.NavigationText</a> &nbsp;|&nbsp; @String.Format("{0:d}", item.GoLiveDate)
 										</b>
 										<br />
 										by @{
