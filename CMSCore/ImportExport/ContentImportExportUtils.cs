@@ -30,6 +30,11 @@ namespace Carrotware.CMS.Core {
 			cpe.ThePage.EditUserId = SecurityData.CurrentUserGuid;
 			cpe.ThePage.EditDate = DateTime.UtcNow;
 
+			cpe.ThePage.FileName = ContentPageHelper.ScrubFilename(cpe.NewRootContentID, cpe.ThePage.FileName);
+			if (!String.IsNullOrEmpty(cpe.ParentFileName)) {
+				cpe.ParentFileName = ContentPageHelper.ScrubFilename(cpe.OriginalParentContentID, cpe.ParentFileName);
+			}
+
 			foreach (var w in cpe.ThePageWidgets) {
 				w.Root_ContentID = cpe.NewRootContentID;
 				w.Root_WidgetID = Guid.NewGuid();
