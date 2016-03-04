@@ -1,5 +1,5 @@
 body {
-	font-size: 14px;
+	font-size: 12pt;
 	font-family: Arial, Helvetica, sans-serif;
 	color: #000000;
 	background-color: #ffffff;
@@ -14,12 +14,12 @@ pre {
 }
 
 .mceItemMedia, .mceItemIframe, .mceItemVideo, .mceItemRealMedia, .mceItemWindowsMedia, .mceItemQuickTime, .mceItemFlash, .mceItemShockWave {
-	background-color: #FFFFCC;
+	background-color: #ffffcc;
 	border: thin dashed #cc0000;
 }
 
 td, tr, th, p, div {
-	font-size: 14px;
+	font-size: 12pt;
 	font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -27,31 +27,31 @@ th {
 	font-weight: bold;
 }
 
-A {
+a {
 	color: #000099;
 }
 
-	A:active {
+	a:active {
 		color: #009900;
 	}
 
-	A:visited {
+	a:visited {
 		color: #660066;
 	}
 
 blockquote {
-	background-color: #EEEEEE;
+	background-color: #eeeeee;
 	border-left: 5px solid #999999;
 	color: #000000;
-	margin: 10px 20px;
+	margin: 0.75em 1.5em;
 	overflow: auto;
-	padding: 5px 20px 5px 20px;
+	padding: 0.5em 1em;
 	border-left-color: #666666;
 }
 
 tt, pre, code, kbd, samp {
-	font-size: 11px;
-	font-family: 'Lucida Console', 'Courier New', Courier, Monaco, monospace, sans-serif;
+	font-size: 11pt;
+	font-family: "Lucida Console", "Courier New", Courier, Monaco, monospace;
 }
 
 /* other */
