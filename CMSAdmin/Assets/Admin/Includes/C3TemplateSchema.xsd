@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CarrotCakeMVCTemplateSchema"
+					elementFormDefault="qualified"
+					 attributeFormDefault="unqualified"
+					targetNamespace="urn:schema-carrotcakecms-com:mvc-template"
+					xmlns="urn:schema-carrotcakecms-com:mvc-template"
+					xmlns:mstns="urn:schema-carrotcakecms-com:mvc-template"
+					xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense">
+
+	<xs:element name="tbl">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="pagenames" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="templatefile" type="xs:string"></xs:element>
+							<xs:element name="filedesc" type="xs:string"></xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

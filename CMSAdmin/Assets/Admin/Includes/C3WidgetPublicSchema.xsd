@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CarrotCakeMVCPublicWidgetSchema"
+					elementFormDefault="qualified"
+					 attributeFormDefault="unqualified"
+					targetNamespace="urn:schema-carrotcakecms-com:mvc-widget-public"
+					xmlns="urn:schema-carrotcakecms-com:mvc-widget-public"
+					xmlns:mstns="urn:schema-carrotcakecms-com:mvc-widget-public"
+					xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense">
+
+	<xs:element name="tbl">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ctrlfile" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="filepath" type="xs:string"></xs:element>
+							<xs:element name="crtldesc" type="xs:string"></xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

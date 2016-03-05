@@ -885,6 +885,9 @@
     <Content Include="Assets\telephasic\fonts\fontawesome-webfont.woff" />
     <Content Include="Assets\telephasic\fonts\fontawesome-webfont.woff2" />
     <Content Include="Assets\telephasic\fonts\FontAwesome.otf" />
+    <None Include="Assets\Admin\Includes\C3SiteConfigSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Assets\Admin\Includes\C3WebSecurityConfigSchema.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1018,6 +1021,18 @@
     <Content Include="Views\Templates\citrus-island\_changeprofileconf.cshtml" />
     <Content Include="SiteMapping.config" />
     <Content Include="Views\CmsAdmin\ContentSnippetHistory.cshtml" />
+    <None Include="Assets\Admin\Includes\C3TemplateSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Assets\Admin\Includes\C3WidgetAdminSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Assets\Admin\Includes\C3WidgetPublicSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Assets\Admin\Includes\C3WidgetTextSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

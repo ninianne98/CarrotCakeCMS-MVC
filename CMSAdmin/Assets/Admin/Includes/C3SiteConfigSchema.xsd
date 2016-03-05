@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CarrotCakeMVCSiteSchema"
+					elementFormDefault="qualified"
+					targetNamespace="urn:schema-carrotcakecms-com:mvc-site"
+					xmlns="urn:schema-carrotcakecms-com:mvc-site"
+					xmlns:mstns="urn:schema-carrotcakecms-com:mvc-site"
+					xmlns:xs="http://www.w3.org/2001/XMLSchema"
+					xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense">
+
+	<xs:simpleType name="guid">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="tbl">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="sitedetail" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="siteid" type="guid"></xs:element>
+							<xs:element name="domname" type="xs:string"></xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
