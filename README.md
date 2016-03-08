@@ -4,6 +4,7 @@ Source code for CarrotCakeCMS (MVC)
 [REPO_SF]: http://sourceforge.net/projects/carrotcakecmsmvc/
 [REPO_GH]: https://github.com/ninianne98/CarrotCakeCMS-MVC/
 [REPO_CX]: http://carrotcakecmsmvc.codeplex.com/
+[GP_COMM]: https://plus.google.com/communities/104535122315939396738
 
 [DOC_PDF]: http://www.carrotware.com/fileassets/CarrotCakeMVCDevNotes.pdf?from=github-mvc
 [DOC]: http://www.carrotware.com/carrotcake-cms?from=github-mvc "CarrotCakeCMS User Documentation"
@@ -16,7 +17,7 @@ Source code for CarrotCakeCMS (MVC)
 
 Welcome to the GitHub project for CarrotCake CMS MVC, an open source c# project. CarrotCake is a [template-based][TMPLT] MVC5 ASP.Net CMS (content management system) built with C#, SQL server, jQueryUI, and TinyMCE. This content management system supports multi-tenant webroots with shared databases. 
 
-Source code and [documentation][DOC_PDF] is available on [GitHub][REPO_GH], [SourceForge][REPO_SF], and [Microsoft CodePlex][REPO_CX]. Documentation and assemblies can be found [here][DOC].
+Source code and [documentation][DOC_PDF] is available on [GitHub][REPO_GH], [SourceForge][REPO_SF], and [Microsoft CodePlex][REPO_CX]. Documentation and assemblies can be found [here][DOC]. Interactive help can be found through the [Google Community][GP_COMM].
 
 Some features include: blogging engine, configurable date based blog post URLs, blog post content association with categories and tags, assignment/customization of category and tag URL patterns, simple content feedback collection and review, blog post pagination/indexes (with templating support), designation of default blog page (required to make search, category links, or tag links function), URL date formatting patterns, RSS feed support for posts and pages, import and export of site content, and import of content from WordPress XML export files (tested against versions 2.9, 3.0, 3.4, and 3.5).
 
