@@ -19,9 +19,9 @@ Welcome to the GitHub project for CarrotCake CMS MVC, an open source c# project.
 
 Source code and [documentation][DOC_PDF] is available on [GitHub][REPO_GH], [SourceForge][REPO_SF], and [Microsoft CodePlex][REPO_CX]. Documentation and assemblies can be found [here][DOC]. Interactive help can be found through the [Google Community][GP_COMM].
 
-Some features include: blogging engine, configurable date based blog post URLs, blog post content association with categories and tags, assignment/customization of category and tag URL patterns, simple content feedback collection and review, blog post pagination/indexes (with templating support), designation of default blog page (required to make search, category links, or tag links function), URL date formatting patterns, RSS feed support for posts and pages, import and export of site content, and import of content from WordPress XML export files (tested against versions 2.9, 3.0, 3.4, and 3.5).
+Some features include: blogging engine, configurable date based blog post URLs, blog post content association with categories and tags, assignment/customization of category and tag URL patterns, simple content feedback collection and review, blog post pagination/indexes (with templating support), designation of default listing blog page (required to make search, category links, or tag links function), URL date formatting patterns, RSS feed support for posts and pages, import and export of site content, and import of content from WordPress XML export files (tested against versions 2.9, 3.0, 3.4, and 3.5).
 
-Other features also include date based release and retirement of content - allowing you to queue up content to appear or disappear from your site on a pre-arranged schedule, site timezone designation, ability to rename the administration folder, and site search. Supports the use of master pages to provide re-use when designing site templates.
+Other features also include date based release and retirement of content - allowing you to queue up content to appear or disappear from your site on a pre-arranged schedule, site timezone designation, site search, and ability to rename the administration folder. Supports the use of layout views to provide re-use when designing content view templates.
 
 ---
 
