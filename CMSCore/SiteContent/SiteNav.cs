@@ -257,6 +257,24 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		private ExtendedUserData _bylineUser = null;
+
+		public ExtendedUserData BylineUser {
+			get {
+				if (_bylineUser == null) {
+					_bylineUser = this.CreditUser;
+				}
+				if (_bylineUser == null) {
+					_bylineUser = this.EditUser;
+				}
+				if (_bylineUser == null) {
+					_bylineUser = this.CreateUser;
+				}
+
+				return _bylineUser;
+			}
+		}
+
 		public override bool Equals(Object obj) {
 			//Check for null and compare run-time types.
 			if (obj == null || GetType() != obj.GetType()) return false;

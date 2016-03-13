@@ -675,6 +675,24 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		private ExtendedUserData _bylineUser = null;
+
+		public ExtendedUserData BylineUser {
+			get {
+				if (_bylineUser == null) {
+					_bylineUser = this.CreditUser;
+				}
+				if (_bylineUser == null) {
+					_bylineUser = this.EditUser;
+				}
+				if (_bylineUser == null) {
+					_bylineUser = this.CreateUser;
+				}
+
+				return _bylineUser;
+			}
+		}
+
 		public List<TrackBackEntry> GetTrackbacks() {
 			return TrackBackEntry.GetPageTrackBackList(this.Root_ContentID);
 		}

@@ -72,7 +72,7 @@ namespace Carrotware.CMS.Core {
 		public string UserBio { get; set; }
 
 		[Display(Name = "URL")]
-		public string EditorURL { get { return SiteData.CurrentSite.BlogEditorFolderPath + this.UserName; } }
+		public string EditorURL { get { return ContentPageHelper.ScrubFilename(this.UserId, String.Format("/{0}/{1}", SiteData.CurrentSite.BlogEditorFolderPath, this.UserName)); } }
 
 		public override string ToString() {
 			return this.FullName_FirstLast;

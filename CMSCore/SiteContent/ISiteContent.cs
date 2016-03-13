@@ -50,5 +50,7 @@ namespace Carrotware.CMS.Core {
 		List<ContentCategory> ContentCategories { get; set; }
 
 		ExtendedUserData GetUserInfo();
+		ExtendedUserData GetCreditUserInfo();
+		ExtendedUserData BylineUser { get; }
 	}
 }
