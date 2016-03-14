@@ -1,0 +1,190 @@
+﻿@inherits CmsWebViewPage
+
+@*
+	Aqueous by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+	http://templated.co/aqueous
+
+	Conversion to CarrotCake CMS MVC Template: Carrotware
+*@
+
+@{
+	Layout = null;
+
+	string bodyCssClass = ViewBag.BodyCssClass ?? "not-homepage";
+
+	ViewBag.SiteName = CmsPage.TheSite.SiteName;
+
+	TwoLevelNavigation nav = new TwoLevelNavigation() {
+		CssSelected = "current active",
+		AutoStylingDisabled = true,
+		ElementId = "navmenu"
+	};
+
+	var pager1 = new PagedDataSummary();
+	pager1.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager1.PageSize = 3;
+	pager1.PageNumber = 1;
+	pager1.IgnoreSitePath = true;
+	pager1.FetchData();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	@CarrotCakeHtml.MetaTags()
+	@CarrotCakeHtml.Rss()
+
+	<title>@CmsPage.Titlebar</title>
+
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Blue })
+
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:700italic,400,300,700' rel='stylesheet' type='text/css'>
+	<!--[if lte IE 8]><script src="~/Assets/Aqueous/js/html5shiv.js" type="text/javascript"></script><![endif]-->
+
+	<script src="~/Assets/Aqueous/js/jquery.dropotron.min.js"></script>
+	<script src="~/Assets/Aqueous/js/skel.min.js"></script>
+	<script src="~/Assets/Aqueous/js/skel-panels.min.js"></script>
+	<script src="~/Assets/Aqueous/js/init.js"></script>
+	<noscript>
+		<link rel="stylesheet" href="~/Assets/Aqueous/skel-noscript.css" />
+		<link rel="stylesheet" href="~/Assets/Aqueous/style.css" />
+		<link rel="stylesheet" href="~/Assets/Aqueous/style-desktop.css" />
+	</noscript>
+
+	<script type="text/javascript">
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			$("input:button, input:submit, input:reset, button").button();
+		});
+
+		$(document).ready(function () {
+
+			$("input:button, input:submit, input:reset, button").button();
+
+			setTimeout("moveCMSZone();", 1250);
+
+			// Dropdowns.
+			$('#nav > ul').dropotron({
+				mode: 'fade',
+				speed: 300,
+				alignment: 'center',
+				noOpenerFade: true
+			});
+		});
+
+		var cmsHasMoved = false;
+
+		function moveCMSZone() {
+			if (!cmsHasMoved) {
+				$(document.body).append($('.cmsNavigationBlock').detach());
+				$(document.body).append($('.cmsMainAdvControls').detach());
+				cmsHasMoved = true;
+			}
+		}
+	</script>
+
+	@CarrotCakeHtml.GetSiteCanonicalURL()
+
+	@CarrotCakeHtml.RenderOpenGraph()
+
+	@CarrotCakeHtml.IncludeHead()
+</head>
+<body class="@bodyCssClass">
+
+	<!-- Header -->
+	<div id="header-wrapper">
+		<div id="header">
+			<div class="container">
+				<div id="logo">
+					<!-- Logo -->
+					<h1><a href="~/">@ViewBag.SiteName</a></h1>
+					<span>@CmsPage.TheSite.SiteTagline</span>
+				</div>
+			</div>
+			<div id="menu-wrapper">
+				<div class="container">
+					@*<nav id="nav">
+							@if (CmsPage.TopNav.Any()) {
+								string tabSelCSS = String.Empty;
+
+								<ul>
+									@foreach (var n in CmsPage.TopNav) {
+										tabSelCSS = CmsPage.NavIsInCurrentTree(n) ? "active" : "not-active";
+										<li class="@tabSelCSS">
+											<a href="@n.FileName">@n.NavigationText</a>
+										</li>
+									}
+								</ul>
+							}
+						</nav>*@
+					<nav id="nav">
+						@nav
+					</nav> <!-- /Nav -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Header -->
+	<!-- Main -->
+	<div id="main-wrapper">
+		@RenderSection("BannerSection", required: false)
+
+		<div class="container">
+			<div id="main">
+				<div class="row">
+					@RenderBody()
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /Main -->
+	<!-- Footer -->
+	<div class="container">
+		<div id="footer">
+			<div class="row">
+				@if (pager1.HasData) {
+					foreach (var itm in pager1.DataSource) {
+						<section class="4u">
+							<header>
+								<h2>
+									@String.Format("{0} | {1:d}", itm.NavigationText, itm.GoLiveDate)
+								</h2>
+							</header>
+							<p>
+								@itm.PageTextPlainSummary
+								<br style="clear: both" />
+								<a class="button small" href="@itm.FileName">
+									Read more
+								</a>
+								<br style="clear: both" />
+							</p>
+						</section>
+					}
+				} else {
+					<section class="12u">
+						&nbsp;
+					</section>
+				}
+			</div>
+		</div>
+	</div>
+	<!-- /Footer -->
+	<!-- Copyright -->
+	<div id="copyright">
+		<div class="container">
+			@Html.Raw(String.Format("&copy;  {0}, {1}. ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
+			All rights reserved.
+			<br />
+			Site built with <a target="_blank" href="http://www.carrotcakecms.com/">carrotcake cms</a> <br />
+
+			Design: <a target="_blank" href="http://templated.co">TEMPLATED</a>
+			Images: <a target="_blank" href="http://unsplash.com">Unsplash</a>
+			(<a target="_blank" href="http://unsplash.com/cc0">CC0</a>)
+		</div>
+	</div>
+
+	@CarrotCakeHtml.IncludeFooter()
+</body>
+</html>

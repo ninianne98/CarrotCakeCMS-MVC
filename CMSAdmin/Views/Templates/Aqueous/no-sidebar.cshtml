@@ -1,0 +1,24 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+}
+
+<!-- Content -->
+<div id="content" class="12u skel-cell-important">
+	<section>
+		<header>
+			<h2>@CmsPage.Heading</h2>
+		</header>
+		<div>
+			@CarrotCakeHtml.RenderWidget("phCenterTop")
+		</div>
+		<div>
+			@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+		</div>
+		<div>
+			@CarrotCakeHtml.RenderWidget("phCenterBottom")
+		</div>
+	</section>
+</div>
+<!-- Content -->

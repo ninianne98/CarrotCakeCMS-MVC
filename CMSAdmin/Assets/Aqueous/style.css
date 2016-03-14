@@ -1,0 +1,557 @@
+﻿/*
+	Aqueous by TEMPLATED
+    templated.co @templatedco
+    Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+*/
+
+@charset 'UTF-8';
+
+/*********************************************************************************/
+/* Basic                                                                         */
+/*********************************************************************************/
+
+body {
+	background: #4AA0E4 url(images/img01.jpg) repeat;
+}
+
+body, input, textarea, select {
+	font-family: 'Roboto Condensed', sans-serif;
+	font-size: 13pt;
+	font-weight: 300;
+	line-height: 1.75em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: bold;
+}
+
+	h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+/* Change this to whatever font weight/color pairing is most suitable */
+strong, b {
+	font-weight: bold;
+	color: #000000;
+}
+
+em, i {
+	font-style: italic;
+}
+
+/* Don't forget to set this to something that matches the design */
+a {
+	text-decoration: none;
+	color: #333;
+}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
+sub {
+	position: relative;
+	top: 0.5em;
+	font-size: 0.8em;
+}
+
+sup {
+	position: relative;
+	top: -0.5em;
+	font-size: 0.8em;
+}
+
+hr {
+	border: 0;
+	border-top: solid 1px #ddd;
+}
+
+blockquote {
+	border-left: solid 0.5em #ddd;
+	padding: 1em 0 1em 2em;
+	font-style: italic;
+}
+
+p, ul, ol, dl, table {
+	margin-bottom: 1em;
+}
+
+header {
+	margin-bottom: 2em;
+}
+
+	header h2 {
+		line-height: 1em;
+		text-transform: uppercase;
+		font-weight: 300;
+		font-size: 3em;
+	}
+
+	header .byline {
+		display: block;
+		margin: 0.5em 0 0 0;
+		padding: 0 0 0.5em 0;
+		font-size: 1.6em;
+		color: #00A6FA;
+	}
+
+footer {
+	margin-top: 1em;
+}
+
+br.clear {
+	clear: both;
+}
+
+/* Sections/Articles */
+
+section,
+article {
+	margin-bottom: 3em;
+}
+
+	section > :last-child,
+	article > :last-child {
+		margin-bottom: 0;
+	}
+
+	section:last-child,
+	article:last-child {
+		margin-bottom: 0;
+	}
+
+.row > section,
+.row > article {
+	margin-bottom: 0;
+}
+
+/* Images */
+
+.image {
+	display: inline-block;
+}
+
+	.image img {
+		display: block;
+		width: 100%;
+	}
+
+	.image.featured {
+		display: block;
+		width: 100%;
+		margin: 0 0 2em 0;
+	}
+
+	.image.full {
+		display: block;
+		width: 100%;
+		margin-bottom: 2em;
+	}
+
+	.image.left {
+		float: left;
+		margin: 0 2em 2em 0;
+	}
+
+	.image.centered {
+		display: block;
+		margin: 0 0 2em 0;
+	}
+
+		.image.centered img {
+			margin: 0 auto;
+			width: auto;
+		}
+
+/* Lists */
+
+ul.default {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+	ul.default li {
+		padding: 0.80em 0;
+		border-top: 1px solid;
+		border-color: rgba(0,0,0,.1);
+	}
+
+		ul.default li:first-child {
+			padding-top: 0;
+			border-top: none;
+		}
+
+	ul.default a {
+		color: #333;
+	}
+
+ul.style1 {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+	ul.style1 li {
+		margin: 0;
+		padding: 30px 0 20px 0;
+		background: url(images/img08.png) repeat-x left top;
+	}
+
+	ul.style1 a {
+		display: block;
+		text-decoration: none;
+	}
+
+	ul.style1 p {
+	}
+
+	ul.style1 a:hover {
+		text-decoration: underline;
+	}
+
+	ul.style1 .date {
+		float: left;
+		width: 78px;
+		height: 78px;
+		margin: 0 25px 0 0;
+		padding: 6px 0 0 0;
+		background: url(images/img07.jpg) no-repeat left top;
+		line-height: normal;
+		letter-spacing: 1px;
+		text-align: center;
+		text-transform: uppercase;
+		font-size: 0.8em;
+		font-weight: 300;
+		color: #fff;
+	}
+
+		ul.style1 .date b {
+			display: block;
+			margin: 5px 0 0 0;
+			padding: 0;
+			letter-spacing: -1px;
+			font-size: 3em;
+			font-weight: 300;
+			color: #fff;
+		}
+
+		ul.style1 .date a {
+			color: #fff;
+		}
+
+			ul.style1 .date a:hover {
+				text-decoration: none;
+			}
+
+	ul.style1 .first {
+		padding-top: 0;
+		background: none;
+	}
+
+/* Buttons */
+
+.button {
+	position: relative;
+	display: inline-block;
+	margin-top: 0.5em;
+	padding: 0.80em 1.5em;
+	background: #4196d9;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-size: 1.2em;
+	color: #FFF;
+	-moz-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
+	-webkit-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
+	-o-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
+	-ms-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
+	transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
+	cursor: pointer;
+}
+
+	.button:hover {
+		background: #2b7ec0;
+		color: #FFF !important;
+	}
+
+	.button.small {
+		font-size: 1em;
+		margin-top: 0.25em;
+		margin-bottom: 0.75em;
+		padding: 0.3em 1em;
+	}
+
+/*********************************************************************************/
+/* Header                                                                        */
+/*********************************************************************************/
+
+#header {
+	position: relative;
+}
+
+#logo {
+	overflow: hidden;
+	text-align: center;
+	height: 160px;
+}
+
+	#logo h1 a {
+		display: block;
+		padding: 30px 0 0 0;
+		letter-spacing: -1px;
+		text-align: center;
+		text-decoration: none;
+		text-shadow: -1px -1px 0 #2C7485;
+		text-transform: uppercase;
+		font-size: 44pt;
+		font-weight: 200;
+		color: #fff;
+	}
+
+	#logo span {
+		display: inline-block;
+		padding: 10px 0 0 0;
+		letter-spacing: -1px;
+		text-align: center;
+		text-shadow: -1px -1px 0 #388ACA;
+		font-size: 18pt;
+		color: #A5D0F2;
+	}
+
+#menu-wrapper {
+	height: 90px;
+	background: url(images/img05.jpg) no-repeat center top;
+}
+
+#nav {
+	height: 90px;
+}
+
+	#nav ul {
+		text-align: center;
+	}
+
+	#nav li {
+		display: inline-block;
+		padding: 0 20px;
+	}
+
+	#nav a {
+		display: block;
+		float: left;
+		margin-right: 2px;
+		text-decoration: none;
+		text-transform: uppercase;
+		line-height: 45px;
+		font-size: 13pt;
+		color: #16576B;
+	}
+
+	#nav .active, #nav .current {
+		background: url(images/img01.jpg) repeat;
+		border-bottom: 5px solid #437BA7;
+		text-shadow: -1px -1px 0 #2C7485;
+		color: #fff;
+	}
+
+		#nav .active a, #nav .current a {
+			color: #fff;
+		}
+
+	#nav > ul > li > ul {
+		display: none;
+	}
+
+.dropotron {
+	text-align: left;
+	line-height: 2em;
+	border-radius: 0.35em;
+	min-width: 12em;
+	background: #fff;
+	line-height: 1em;
+	padding: 0.85em 0 0.85em 0;
+	box-shadow: 0 1px 3px 0 rgba(0,0,0,0.25);
+	margin-top: -0.8em;
+}
+
+	.dropotron a,
+	.dropotron span {
+		display: block;
+		padding: 0.65em 1em 0.65em 1em;
+		border-top: solid 1px #e8e8e8;
+		border-bottom: 0;
+	}
+
+	.dropotron li:first-child > a,
+	.dropotron li:first-child > span {
+		border-top: 0;
+	}
+
+	.dropotron li.active > a,
+	.dropotron li.active > span {
+		color: #2C7485;
+	}
+
+	.dropotron.level-0 {
+		font-size: 0.9em;
+		margin-top: 0;
+	}
+
+		.dropotron.level-0:before {
+			content: '';
+			position: absolute;
+			top: -1em;
+			width: 1em;
+			height: 1em;
+			border-bottom: solid 0.5em #fff;
+			border-left: solid 0.5em rgba(255,255,255,0);
+			border-right: solid 0.5em rgba(255,255,255,0);
+		}
+
+		.dropotron.level-0.center:before {
+			left: 50%;
+			margin-left: -0.5em;
+		}
+
+		.dropotron.level-0.left:before {
+			left: 1em;
+		}
+
+		.dropotron.level-0.right:before {
+			right: 1em;
+		}
+
+/*********************************************************************************/
+/* Banner                                                                        */
+/*********************************************************************************/
+
+#banner {
+	position: relative;
+	padding: 0 3em;
+	color: #fff;
+}
+
+/*********************************************************************************/
+/* Main                                                                          */
+/*********************************************************************************/
+
+#main-wrapper {
+	background: url(images/img03.jpg) repeat;
+}
+
+#main {
+	position: relative;
+	background: #FFF;
+}
+
+#sidebar header h2 {
+	font-size: 1.8em;
+}
+
+#sidebar header .byline {
+	font-size: 1.2em;
+}
+
+/*********************************************************************************/
+/* Footer                                                                        */
+/*********************************************************************************/
+
+#footer {
+	position: relative;
+	background: #FFF url(images/img09.jpg) repeat;
+}
+
+	#footer header h2 {
+		font-size: 1.6em;
+	}
+
+/*********************************************************************************/
+/* Copyright                                                                     */
+/*********************************************************************************/
+
+#copyright {
+	position: relative;
+	padding: 3em 0;
+	background: url(images/img10.png) no-repeat center top;
+	text-align: center;
+	text-transform: uppercase;
+	color: rgba(255,255,255,.4);
+}
+
+	#copyright .container {
+	}
+
+	#copyright a {
+		text-decoration: none;
+		color: rgba(255,255,255,.6);
+	}
+
+/* pager stylings */
+
+.calendar {
+	width: 100%;
+	margin: 0 auto;
+}
+
+	.calendar table {
+		width: 250px;
+		margin: 0 auto;
+	}
+
+		.calendar table a {
+			font-weight: bold;
+			text-decoration: underline;
+		}
+
+		.calendar table #prev {
+			text-align: left;
+			padding-left: 20px;
+		}
+
+		.calendar table #next {
+			text-align: right;
+			padding-right: 20px;
+		}
+
+		.calendar table caption, .calendar .calendar-caption {
+			font-size: 1.2em;
+			font-weight: bold;
+			margin: 0 auto;
+		}
+
+.pagerfooterlinks {
+	line-height: normal;
+	margin-top: 1em;
+	margin-bottom: 2em;
+}
+
+	.pagerfooterlinks .pagerlink {
+		margin: 0.25em 0.25em 0.25em 0.25em;
+		padding: 0.4em 0.4em 0.4em 0.4em;
+		background-color: #fff;
+		color: #388ACA;
+		border: 2px solid #388ACA;
+		float: left;
+	}
+
+		.pagerfooterlinks .pagerlink a {
+			margin: 0.25em 0.25em 0.25em 0.25em;
+			padding: 0.4em 0.4em 0.4em 0.4em;
+			font-weight: bold;
+			text-decoration: none;
+			background-color: #fff;
+			color: #388ACA;
+		}
+
+			.pagerfooterlinks .pagerlink a.selected {
+				background-color: #388ACA;
+				color: #fff;
+				font-weight: bolder;
+			}
+
+	.pagerfooterlinks .selectedwrap {
+		background-color: #388ACA;
+		color: #fff;
+		font-weight: bolder;
+	}

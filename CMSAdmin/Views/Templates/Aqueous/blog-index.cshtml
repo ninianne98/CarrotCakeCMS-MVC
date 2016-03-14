@@ -1,0 +1,87 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	List<TypeHeadingOption> heads = new List<TypeHeadingOption>();
+	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateIndex, LabelText = "Date:" });
+	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateDayIndex, LabelText = "Day:", FormatText = "{0:dddd, d MMMM yyyy}" });
+	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateMonthIndex, LabelText = "Month:", FormatText = "{0:MMM yyyy}" });
+	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateYearIndex, LabelText = "Year:", FormatText = "{0:yyyy}" });
+	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.CategoryIndex, LabelText = "Category:" });
+	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.TagIndex, LabelText = "Tag:" });
+	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.AuthorIndex, LabelText = "Content by " });
+	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.SearchResults, LabelText = "Search results for:", FormatText = " [ {0} ] " });
+
+	CmsPage.TypeLabelPrefixes = heads;
+
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 10;
+	pager.IgnoreSitePath = false;
+	pager.FetchData();
+}
+
+<!-- Sidebar -->
+<div id="sidebar" class="4u">
+	@Html.Partial("_navBlog")
+</div>
+<!-- Sidebar -->
+<!-- Content -->
+<div id="content" class="8u skel-cell-important">
+	<section>
+		<header>
+			<h2>@CmsPage.Heading</h2>
+		</header>
+		<div>
+			@CarrotCakeHtml.RenderWidget("phCenterTop")
+		</div>
+		<div>
+			@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+		</div>
+		<div>
+			@CarrotCakeHtml.RenderWidget("phCenterBottom")
+		</div>
+	</section>
+
+	<section>
+		@if (pager != null) {
+
+			foreach (var item in pager.DataSource) {
+				<div>
+					<p>
+						<b>
+							<a href="@item.FileName">@item.NavigationText</a>
+							&nbsp;|&nbsp;
+							@String.Format("{0:d}", item.GoLiveDate)
+						</b>
+						<br />
+						by
+						@item.BylineUser.FullName_FirstLast
+						<br />
+						@item.PageTextPlainSummary
+					</p>
+
+					<p class="post-footer align-right">
+						<a class="button small" href="@item.FileName">
+							Read more
+						</a>
+					</p>
+				</div>
+
+			}
+
+			<div class="pagerfooterlinks">
+				@foreach (var i in pager.PageNumbers) {
+					using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+						using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+							@String.Format(" {0} ", i)
+						}
+					}
+				}
+			</div>
+
+		}
+	</section>
+</div>
+<!-- Content -->

@@ -1,0 +1,35 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	string lstCss = "first";
+}
+
+@if (CmsPage.ChildNav.Any()) {
+	lstCss = "first";
+	<section>
+		<header>
+			<h2>Child Pages</h2>
+		</header>
+		<ul class="style1">
+			@foreach (var itm in CmsPage.ChildNav) {
+				<li class="@lstCss"><a href="@itm.FileName">@itm.NavigationText</a></li>
+				lstCss = "not-first";
+			}
+		</ul>
+	</section>
+}
+
+@if (CmsPage.SiblingNav.Any()) {
+	lstCss = "first";
+	<section>
+		<header>
+			<h2>Sibling Pages</h2>
+		</header>
+		<ul class="style1">
+			@foreach (var itm in CmsPage.SiblingNav) {
+				<li class="@lstCss"><a href="@itm.FileName">@itm.NavigationText</a></li>
+				lstCss = "not-first";
+			}
+		</ul>
+	</section>
+}

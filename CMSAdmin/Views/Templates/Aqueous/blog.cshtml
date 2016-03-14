@@ -1,0 +1,48 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+}
+
+<!-- Sidebar -->
+<div id="sidebar" class="4u">
+	@Html.Partial("_navBlog")
+</div>
+<!-- Sidebar -->
+<!-- Content -->
+<div id="content" class="8u skel-cell-important">
+	<section>
+		<header>
+			<h2>@CmsPage.Heading</h2>
+			<span class="byline">
+				@String.Format(" By {0} on {1:d} ", CmsPage.ThePage.BylineUser.FullName_FirstLast, CmsPage.ThePage.GoLiveDate)
+			</span>
+		</header>
+		<div>
+			@CarrotCakeHtml.RenderWidget("phCenterTop")
+		</div>
+		<div>
+			@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+		</div>
+		@if (CmsPage.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+			var pagecat = CmsPage.GetPageCategories(25);
+			var pagetag = CmsPage.GetPageTags(25);
+
+			<div class="meta">
+				@foreach (var itm in pagecat) {
+					<span class="button small meta-item @String.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
+				}
+			</div>
+
+			<div class="meta">
+				@foreach (var itm in pagetag) {
+					<span class="button small meta-item @String.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
+				}
+			</div>
+		}
+		<div>
+			@CarrotCakeHtml.RenderWidget("phCenterBottom")
+		</div>
+	</section>
+</div>
+<!-- Content -->

@@ -173,6 +173,30 @@
     <Content Include="Assets\Admin\Images\information.png" />
     <Content Include="Assets\Admin\Includes\jquery.tooltipster.min.js" />
     <Content Include="Assets\Admin\Includes\tooltipster.css" />
+    <Content Include="Assets\Aqueous\images\img01.jpg" />
+    <Content Include="Assets\Aqueous\images\img02.jpg" />
+    <Content Include="Assets\Aqueous\images\img03.jpg" />
+    <Content Include="Assets\Aqueous\images\img04.jpg" />
+    <Content Include="Assets\Aqueous\images\img05.jpg" />
+    <Content Include="Assets\Aqueous\images\img06.jpg" />
+    <Content Include="Assets\Aqueous\images\img07.jpg" />
+    <Content Include="Assets\Aqueous\images\img08.png" />
+    <Content Include="Assets\Aqueous\images\img09.jpg" />
+    <Content Include="Assets\Aqueous\images\img10.png" />
+    <Content Include="Assets\Aqueous\images\img11.png" />
+    <Content Include="Assets\Aqueous\images\mobileUI-site-nav-opener-bg.svg" />
+    <Content Include="Assets\Aqueous\images\pics01.jpg" />
+    <Content Include="Assets\Aqueous\images\toggle.svg" />
+    <Content Include="Assets\Aqueous\js\html5shiv.js" />
+    <Content Include="Assets\Aqueous\js\init.js" />
+    <Content Include="Assets\Aqueous\js\jquery.dropotron.min.js" />
+    <Content Include="Assets\Aqueous\js\skel-panels.min.js" />
+    <Content Include="Assets\Aqueous\js\skel.min.js" />
+    <Content Include="Assets\Aqueous\skel-noscript.css" />
+    <Content Include="Assets\Aqueous\style-1000px.css" />
+    <Content Include="Assets\Aqueous\style-desktop.css" />
+    <Content Include="Assets\Aqueous\style-mobile.css" />
+    <Content Include="Assets\Aqueous\style.css" />
     <Content Include="Assets\Dragonfruit\css\bootstrap.min.css" />
     <Content Include="Assets\Dragonfruit\css\font-awesome.min.css" />
     <Content Include="Assets\Dragonfruit\css\style.css" />
@@ -898,6 +922,34 @@
     <Content Include="Assets\tiny_mce\tiny_mce.zip" />
     <Content Include="GPL-LICENSE.txt" />
     <Content Include="MIT-LICENSE.txt" />
+    <Content Include="Views\Templates\Aqueous\blog-index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Templates\Aqueous\blog.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Templates\Aqueous\index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Templates\Aqueous\left-sidebar.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Templates\Aqueous\no-sidebar.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Templates\Aqueous\right-sidebar.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Templates\Aqueous\Skin.config" />
+    <Content Include="Views\Templates\Aqueous\_main.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Templates\Aqueous\_navBlog.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Templates\Aqueous\_navPage.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Views\Templates\oilpainting\page.cshtml" />
     <Content Include="Views\Templates\oilpainting\list.cshtml" />
     <Content Include="Views\Templates\oilpainting\_contactform.cshtml" />

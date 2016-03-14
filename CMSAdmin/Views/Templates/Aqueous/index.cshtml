@@ -1,0 +1,71 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	ViewBag.BodyCssClass = "homepage";
+}
+
+@section BannerSection {
+	<div id="banner">
+		<div class="container">
+			<div class="row">
+				<section>
+					<a href="~/" class="image full"><img src="~/Assets/Aqueous/images/pics01.jpg" alt=""></a>
+				</section>
+			</div>
+		</div>
+	</div>
+}
+
+<!-- Content -->
+<div id="content" class="8u skel-cell-important">
+	<section>
+		<header>
+			<h2>@CmsPage.Heading</h2>
+		</header>
+		<div>
+			@CarrotCakeHtml.RenderWidget("phCenterTop")
+		</div>
+		<div>
+			@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+		</div>
+		<div>
+			@CarrotCakeHtml.RenderWidget("phCenterBottom")
+		</div>
+	</section>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar" class="4u">
+
+	<section>
+		@{
+			var updates = CmsPage.GetSiteUpdates(5);
+			string lstCss = "first";
+
+			if (updates.Any()) {
+				<header>
+					<h2>Recent Updates</h2>
+				</header>
+				<ul class="style1">
+					@foreach (var itm in updates) {
+						<li class="@lstCss">
+							<p class="date">
+								<a href="@itm.FileName">
+									@itm.GoLiveDate.ToString("MMMM")
+									<b>@itm.GoLiveDate.Day.ToString()</b>
+								</a>
+							</p>
+							<p>@itm.NavigationText</p>
+							<p style="font-size:6pt;">&nbsp;</p>
+						</li>
+						lstCss = "not-first";
+					}
+				</ul>
+			}
+		}
+
+		@Html.Partial("_navBlog")
+	</section>
+</div>
