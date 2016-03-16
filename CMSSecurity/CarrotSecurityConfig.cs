@@ -89,7 +89,7 @@ namespace Carrotware.CMS.Security {
 	//==============================
 	public class PasswordValidatorElement : ConfigurationElement {
 
-		[ConfigurationProperty("RequiredLength", DefaultValue = 6, IsRequired = false)]
+		[ConfigurationProperty("RequiredLength", DefaultValue = 8, IsRequired = false)]
 		public int RequiredLength {
 			get { return (int)this["RequiredLength"]; }
 			set { this["RequiredLength"] = value; }
