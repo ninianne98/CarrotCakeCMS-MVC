@@ -652,7 +652,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string DefaultTemplateFilename {
-			get { return "~/Views/CmsContent/PlainPageView.cshtml".ToLowerInvariant(); }
+			get { return "~/Views/CmsContent/PlainPage/PlainPageView.cshtml".ToLowerInvariant(); }
 		}
 
 		public static string PreviewTemplateFilePage {

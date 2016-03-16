@@ -989,7 +989,7 @@
     <Content Include="Views\CmsAdmin\PageChildSort.cshtml" />
     <Content Include="Views\CmsAdmin\PageAddChild.cshtml" />
     <Content Include="Views\CmsAdmin\SiteDetail.cshtml" />
-    <Content Include="Views\CmsContent\_plaincontact.cshtml" />
+    <Content Include="Views\CmsContent\PlainPage\_plaincontact.cshtml" />
     <Content Include="Views\CmsAdmin\CommentAddEdit.cshtml" />
     <Content Include="Views\CmsAdmin\PageHistory.cshtml" />
     <Content Include="Views\Templates\citrus-island\post.cshtml" />
@@ -1056,11 +1056,11 @@
     <Content Include="Views\CmsAdmin\_contentPageTextWidgets.cshtml" />
     <Content Include="Views\CmsAdmin\WidgetHistory.cshtml" />
     <Content Include="Views\CmsAdmin\DuplicateWidgetFrom.cshtml" />
-    <Content Include="Views\CmsContent\_plainloginout.cshtml" />
-    <Content Include="Views\CmsContent\_plainforgot.cshtml" />
-    <Content Include="Views\CmsContent\_plainforgotconf.cshtml" />
-    <Content Include="Views\CmsContent\_plainreset.cshtml" />
-    <Content Include="Views\CmsContent\_plainresetconf.cshtml" />
+    <Content Include="Views\CmsContent\PlainPage\_plainloginout.cshtml" />
+    <Content Include="Views\CmsContent\PlainPage\_plainforgot.cshtml" />
+    <Content Include="Views\CmsContent\PlainPage\_plainforgotconf.cshtml" />
+    <Content Include="Views\CmsContent\PlainPage\_plainreset.cshtml" />
+    <Content Include="Views\CmsContent\PlainPage\_plainresetconf.cshtml" />
     <Content Include="Views\Templates\citrus-island\pageforms.cshtml" />
     <Content Include="Views\Templates\citrus-island\_forgot.cshtml" />
     <Content Include="Views\Templates\citrus-island\_forgotconf.cshtml" />
@@ -1184,7 +1184,7 @@
     <Content Include="Views\CmsAdmin\_SitePageDrillDown.cshtml" />
     <Content Include="Views\CmsContent\_AdvancedEdit.cshtml" />
     <Content Include="Views\CmsContent\_AdvancedEditHead.cshtml" />
-    <Content Include="Views\CmsContent\PlainPageView.cshtml" />
+    <Content Include="Views\CmsContent\PlainPage\PlainPageView.cshtml" />
     <Content Include="Views\CmsAdmin\SiteTemplateUpdate.cshtml" />
     <Content Include="Views\Templates\citrus-island\Skin.config" />
     <Content Include="Views\Templates\Telephasic\Skin.config" />

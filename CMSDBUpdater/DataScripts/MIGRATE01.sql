@@ -298,7 +298,7 @@ and [PageText] like '%/c3-admin/tiny_mce/%'
 -- alter these statements if you have already written some new razor template views
 -- plain
 update [dbo].[carrot_Content]
-set [TemplateFile] = '~/views/cmscontent/plainpageview.cshtml'
+set [TemplateFile] = '~/views/cmscontent/plainpage/plainpageview.cshtml'
 where [IsLatestVersion] = 1
 	and [TemplateFile] like '%plaintemplate%aspx'
 
