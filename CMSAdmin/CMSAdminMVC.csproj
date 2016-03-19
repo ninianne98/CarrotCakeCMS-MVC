@@ -1085,6 +1085,7 @@
     <None Include="Assets\Admin\Includes\C3WidgetTextSchema.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\Templates\Aqueous\_contact.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

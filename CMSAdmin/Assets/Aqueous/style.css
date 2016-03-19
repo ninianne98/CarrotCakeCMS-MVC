@@ -489,6 +489,11 @@ ul.style1 {
 
 /* pager stylings */
 
+.text-danger {
+	color: #ad142c;
+	font-weight: bold;
+}
+
 .calendar {
 	width: 100%;
 	margin: 0 auto;
