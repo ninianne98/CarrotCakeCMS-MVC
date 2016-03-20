@@ -417,9 +417,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						ContentImportExportUtils.SaveSerializedDataExport<ContentPageExport>(cph.NewRootContentID, cph);
 
 						if (cph.ThePage.ContentType == ContentPageType.PageType.ContentEntry) {
-							Response.Redirect(SiteFilename.PageAddEditURL + "?importid=" + cph.NewRootContentID.ToString());
+							//Response.Redirect(SiteFilename.PageAddEditURL + "?importid=" + cph.NewRootContentID.ToString());
+							return RedirectToAction("PageAddEdit", new { importid = cph.NewRootContentID });
 						} else {
-							Response.Redirect(SiteFilename.BlogPostAddEditURL + "?importid=" + cph.NewRootContentID.ToString());
+							//Response.Redirect(SiteFilename.BlogPostAddEditURL + "?importid=" + cph.NewRootContentID.ToString());
+							return RedirectToAction("BlogPostAddEdit", new { importid = cph.NewRootContentID });
 						}
 					}
 
@@ -429,7 +431,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						ContentImportExportUtils.AssignSiteExportNewIDs(site);
 						ContentImportExportUtils.SaveSerializedDataExport<SiteExport>(site.NewSiteID, site);
 
-						Response.Redirect(SiteFilename.SiteImportURL + "?importid=" + site.NewSiteID.ToString());
+						//Response.Redirect(SiteFilename.SiteImportURL + "?importid=" + site.NewSiteID.ToString());
+						return RedirectToAction("SiteImport", new { importid = site.NewSiteID });
 					}
 
 					if (sXML.Contains("<channel>") && sXML.Contains("<rss")) {
@@ -444,7 +447,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						ContentImportExportUtils.AssignWPExportNewIDs(SiteData.CurrentSite, wps);
 						ContentImportExportUtils.SaveSerializedDataExport<WordPressSite>(wps.NewSiteID, wps);
 
-						Response.Redirect(SiteFilename.SiteImportWP_URL + "?importid=" + wps.NewSiteID.ToString());
+						//Response.Redirect(SiteFilename.SiteImportWP_URL + "?importid=" + wps.NewSiteID.ToString());
+						return RedirectToAction("SiteImportWP", new { importid = wps.NewSiteID });
 					}
 
 					ModelState.AddModelError("PostedFile", "File did not appear to match an expected format.");
@@ -2843,6 +2847,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		private void RedirectIfUsersExist() {
 			if (DatabaseUpdate.UsersExist) {
 				Response.Redirect(SiteFilename.DashboardURL);
+				//return RedirectToAction("Dashboard");
 			}
 		}
 
