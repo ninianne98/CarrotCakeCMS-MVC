@@ -1,0 +1,42 @@
+﻿@model FaqItems
+
+@if (Model.Faq.FaqCategoryID != Guid.Empty) {
+	<h2>
+		@Model.Faq.FAQTitle
+	</h2>
+	<br />
+
+	<table class="table">
+		<tr>
+			<th>
+				@Html.DisplayNameFor(m => Model.FaqCount)
+			</th>
+			<th>
+				@Html.DisplayNameFor(m => Model.Items[0].Caption)
+			</th>
+			<th>
+				@Html.DisplayNameFor(m => Model.Items[0].Question)
+			</th>
+			<th>
+				@Html.DisplayNameFor(m => Model.Items[0].Answer)
+			</th>
+		</tr>
+
+		@foreach (var item in Model.Items) {
+			<tr>
+				<td>
+					@Html.DisplayFor(m => Model.FaqCount)
+				</td>
+				<td>
+					@Html.DisplayFor(m => item.Caption)
+				</td>
+				<td>
+					@Html.Raw(item.Question)
+				</td>
+				<td>
+					@Html.Raw(item.Answer)
+				</td>
+			</tr>
+		}
+	</table>
+}

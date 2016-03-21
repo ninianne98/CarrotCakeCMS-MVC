@@ -1,0 +1,73 @@
+﻿@model CarrotCake.CMS.Plugins.FAQ2.carrot_FaqItem
+
+@{
+	ViewBag.Title = "Edit FAQ Item";
+
+	if (Model.FaqItemID == Guid.Empty) {
+		ViewBag.Title = "Add FAQ Item";
+	}
+}
+
+<h3>@ViewBag.Title</h3>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div class="form-horizontal">
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		@Html.HiddenFor(model => model.FaqItemID)
+		@Html.HiddenFor(model => model.FaqCategoryID)
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Caption, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.TextBoxFor(model => model.Caption, new { @class = "form-control form-control-lg" })
+				@Html.ValidationMessageFor(model => model.Caption, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Question, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.ValidationMessageFor(model => model.Question, "", new { @class = "text-danger" })
+				@Html.TextAreaFor(m => m.Question, new { @class = "mceEditor", rows = "12", cols = "80", @style = "height: 200px; width: 680px;" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.Answer, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.ValidationMessageFor(model => model.Answer, "", new { @class = "text-danger" })
+				@Html.TextAreaFor(m => m.Answer, new { @class = "mceEditor", rows = "12", cols = "80", @style = "height: 200px; width: 680px;" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.ItemOrder, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-5">
+				@Html.TextBoxFor(model => model.ItemOrder, new { @class = "form-control form-control-sm" })
+				@Html.ValidationMessageFor(model => model.ItemOrder, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				<div class="checkbox">
+					@Html.EditorFor(model => model.IsActive)
+					@Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Save" class="btn btn-default" />
+			</div>
+		</div>
+	</div>
+}
+
+<div>
+	@Html.ActionLink("Back to List", "ListFAQItems", new { @id = Model.FaqCategoryID })
+</div>

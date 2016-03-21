@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="FAQ">
+  <DataContextMoniker Name="/FAQDataContext" />
+  <nestedChildShapes>
+    <classShape Id="a01bb29f-70ae-41a1-b0b1-d83f628d4477" absoluteBounds="3.625, 0.5, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/FAQDataContext/carrot_FaqItem" />
+      <nestedChildShapes>
+        <elementListCompartment Id="4d6288d5-e097-420b-bba5-799e383e54e9" absoluteBounds="3.64, 0.96, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="30b9a1af-2116-4259-ae54-2d6c367dd38d" absoluteBounds="0.5, 0.5, 2, 1.3862939453125003">
+      <DataClassMoniker Name="/FAQDataContext/carrot_FaqCategory" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fb158e22-8606-4156-a165-ec1c77971517" absoluteBounds="0.515, 0.96, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.5 : 1.19314697265625); (3.625 : 1.19314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/FAQDataContext/carrot_FaqCategory/carrot_FaqCategory_carrot_FaqItem" />
+      <nodes>
+        <classShapeMoniker Id="30b9a1af-2116-4259-ae54-2d6c367dd38d" />
+        <classShapeMoniker Id="a01bb29f-70ae-41a1-b0b1-d83f628d4477" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

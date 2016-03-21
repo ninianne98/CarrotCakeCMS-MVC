@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CarrotCakeMVC" Class="FAQDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\SQL2008EXPRESS;Initial Catalog=CarrotCakeMVC;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="CarrotwareCMSConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.carrot_FaqItem" Member="carrot_FaqItems">
+    <Type Name="carrot_FaqItem">
+      <Column Name="FaqItemID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FaqCategoryID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ItemOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="Caption" Type="System.String" DbType="VarChar(128)" CanBeNull="true" />
+      <Column Name="Question" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Answer" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Association Name="carrot_FaqCategory_carrot_FaqItem" Member="carrot_FaqCategory" ThisKey="FaqCategoryID" OtherKey="FaqCategoryID" Type="carrot_FaqCategory" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.carrot_FaqCategory" Member="carrot_FaqCategories">
+    <Type Name="carrot_FaqCategory">
+      <Column Name="FaqCategoryID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FAQTitle" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="SiteID" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
+      <Association Name="carrot_FaqCategory_carrot_FaqItem" Member="carrot_FaqItems" ThisKey="FaqCategoryID" OtherKey="FaqCategoryID" Type="carrot_FaqItem" />
+    </Type>
+  </Table>
+</Database>

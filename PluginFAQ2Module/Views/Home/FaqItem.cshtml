@@ -1,0 +1,39 @@
+﻿@model CarrotCake.CMS.Plugins.FAQ2.carrot_FaqItem
+
+@if (Model.FaqItemID != Guid.Empty) {
+	<div>
+		<ul class="dl-horizontal">
+
+			<li>
+				@Html.DisplayNameFor(model => model.Caption)
+				&mdash;
+				@Html.DisplayFor(model => model.Caption)
+			</li>
+
+			<li>
+				@Html.DisplayNameFor(model => model.Question)
+				&mdash;
+				@Html.Raw(Model.Question)
+			</li>
+
+			<li>
+				@Html.DisplayNameFor(model => model.Answer)
+				&mdash;
+				@Html.Raw(Model.Answer)
+			</li>
+
+			<li>
+				@Html.DisplayNameFor(model => model.ItemOrder)
+				&mdash;
+				@Html.DisplayFor(model => model.ItemOrder)
+			</li>
+
+			<li>
+				@Html.DisplayNameFor(model => model.IsActive)
+				&mdash;
+				@Html.DisplayFor(model => model.IsActive)
+			</li>
+		</ul>
+	</div>
+
+}
