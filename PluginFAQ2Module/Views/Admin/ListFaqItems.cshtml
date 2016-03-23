@@ -32,8 +32,8 @@
 		FormatTemplate = @<text> @CarrotWeb.ActionImage("EditFaqItem", "Admin", new { @id = @item.FaqItemID }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
 	})
 
-	.AddColumn(x => x.Caption, new CarrotGridColumn { Sortable = true })
 	.AddColumn(x => x.ItemOrder, new CarrotGridColumn { Sortable = true })
+	.AddColumn(x => x.Caption, new CarrotGridColumn { Sortable = true })
 	.AddColumn(x => x.IsActive, new CarrotGridBooleanImageColumn {
 		AlternateTextTrue = "Active",
 		AlternateTextFalse = "Inactive",

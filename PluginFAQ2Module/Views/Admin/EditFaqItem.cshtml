@@ -10,64 +10,125 @@
 
 <h3>@ViewBag.Title</h3>
 
+<p>
+	@CarrotWeb.ActionImage("ListFaqItems", "Admin", new { @id = Model.FaqCategoryID }, "~/assets/admin/images/back.png", "Return to List", null, null)
+	@Html.ActionLink("Return to List", "ListFaqItems", new { @id = Model.FaqCategoryID })
+</p>
+
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 
 	<div class="form-horizontal">
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-		@Html.HiddenFor(model => model.FaqItemID)
-		@Html.HiddenFor(model => model.FaqCategoryID)
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Caption, htmlAttributes: new { @class = "control-label col-md-2" })
+			@Html.LabelFor(m => m.Caption, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.TextBoxFor(model => model.Caption, new { @class = "form-control form-control-lg" })
-				@Html.ValidationMessageFor(model => model.Caption, "", new { @class = "text-danger" })
+				@Html.TextBoxFor(m => m.Caption, new { @class = "form-control form-control-lg" })
+				@Html.ValidationMessageFor(m => m.Caption, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Question, htmlAttributes: new { @class = "control-label col-md-2" })
+			@Html.LabelFor(m => m.Question, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.ValidationMessageFor(model => model.Question, "", new { @class = "text-danger" })
+				@Html.ValidationMessageFor(m => m.Question, "", new { @class = "text-danger" })
 				@Html.TextAreaFor(m => m.Question, new { @class = "mceEditor", rows = "12", cols = "80", @style = "height: 200px; width: 680px;" })
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Answer, htmlAttributes: new { @class = "control-label col-md-2" })
+			@Html.LabelFor(m => m.Answer, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.ValidationMessageFor(model => model.Answer, "", new { @class = "text-danger" })
+				@Html.ValidationMessageFor(m => m.Answer, "", new { @class = "text-danger" })
 				@Html.TextAreaFor(m => m.Answer, new { @class = "mceEditor", rows = "12", cols = "80", @style = "height: 200px; width: 680px;" })
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.ItemOrder, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-5">
-				@Html.TextBoxFor(model => model.ItemOrder, new { @class = "form-control form-control-sm" })
-				@Html.ValidationMessageFor(model => model.ItemOrder, "", new { @class = "text-danger" })
+			@Html.LabelFor(m => m.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-2">
+				@Html.EditorFor(m => m.IsActive)
+				@Html.ValidationMessageFor(m => m.IsActive, "", new { @class = "text-danger" })
+			</div>
+
+			@Html.LabelFor(m => m.ItemOrder, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-2">
+				@Html.TextBoxFor(m => m.ItemOrder, new { @class = "form-control form-control-sm" })
+				@Html.ValidationMessageFor(m => m.ItemOrder, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				<div class="checkbox">
-					@Html.EditorFor(model => model.IsActive)
-					@Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+			<div class="col-md-offset-2 col-md-8">
+				<input type="button" value="Save" class="btn btn-default" onclick="SaveItem()" />
+				<text>
+					&nbsp; &nbsp; &nbsp;
+				</text>
+
+				<input type="button" value="Cancel" class="btn btn-default" onclick="CancelItem()" />
+				<text>
+					&nbsp; &nbsp; &nbsp;
+				</text>
+
+				@if (Model.FaqItemID != Guid.Empty) {
+					<input type="button" value="Delete" class="btn btn-default" onclick="DeleteItem()" />
+				}
+
+				<div style="display:none">
+					<input type="submit" value="Save" id="btnSaveFaq" class="btn btn-default" />
+
+					@Html.HiddenFor(m => m.FaqItemID)
+					@Html.HiddenFor(m => m.FaqCategoryID)
 				</div>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<div class="col-md-offset-2 col-md-10">
-				<input type="submit" value="Save" class="btn btn-default" />
 			</div>
 		</div>
 	</div>
 }
 
-<div>
-	@Html.ActionLink("Back to List", "ListFAQItems", new { @id = Model.FaqCategoryID })
-</div>
+@using (Html.BeginForm("DeleteFaqItem", "Admin")) {
+	@Html.AntiForgeryToken()
+
+	<div style="display:none">
+		<input type="submit" value="Save" id="btnDeleteFaq" class="btn btn-default" />
+		@Html.TextBoxFor(m => m.Caption)
+		@Html.HiddenFor(m => m.FaqItemID)
+		@Html.HiddenFor(m => m.FaqCategoryID)
+	</div>
+
+}
+
+<script type="text/javascript">
+
+	function DeleteItem() {
+		if (confirm("You sure you want to delete?")) {
+			$('#btnDeleteFaq').click();
+		}
+
+		return false;
+	}
+
+	function faqAutoSynchMCE() {
+		if (saving != 1) {
+			var ret = cmsPreSaveTrigger();
+			setTimeout("faqAutoSynchMCE();", 1250);
+		}
+	}
+
+	faqAutoSynchMCE();
+
+	var saving = 0;
+
+	function SaveItem() {
+		faqAutoSynchMCE();
+		saving = 1;
+		setTimeout("ClickSub();", 500);
+	}
+	function ClickSub() {
+		$('#btnSaveFaq').click();
+	}
+
+	function CancelItem() {
+		window.setTimeout("location.href = '@Url.Action("ListFaqItems", "Admin", new { @id = Model.FaqCategoryID })'", 500);
+	}
+</script>

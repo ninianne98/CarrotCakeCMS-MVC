@@ -58,8 +58,8 @@ namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 		}
 
 		public ActionResult EditFaq(Guid id) {
-			using (FaqHelper gh = new FaqHelper(this.SiteID)) {
-				return View("EditFaq", gh.CategoryGetByID(id));
+			using (FaqHelper fh = new FaqHelper(this.SiteID)) {
+				return View("EditFaq", fh.CategoryGetByID(id));
 			}
 		}
 
@@ -135,9 +135,20 @@ namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 			return EditFaqItem(model);
 		}
 
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[ValidateInput(false)]
+		public ActionResult DeleteFaqItem(carrot_FaqItem model) {
+			using (FaqHelper fh = new FaqHelper(this.SiteID)) {
+				fh.DeleteItem(model.FaqItemID);
+			}
+
+			return RedirectToAction("ListFaqItems", new { @id = model.FaqCategoryID });
+		}
+
 		public ActionResult EditFaqItem(Guid id) {
-			using (FaqHelper gh = new FaqHelper(this.SiteID)) {
-				return View("EditFaqItem", gh.FaqItemGetByID(id));
+			using (FaqHelper fh = new FaqHelper(this.SiteID)) {
+				return View("EditFaqItem", fh.FaqItemGetByID(id));
 			}
 		}
 

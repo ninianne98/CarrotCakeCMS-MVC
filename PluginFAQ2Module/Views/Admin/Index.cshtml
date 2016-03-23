@@ -29,7 +29,7 @@
 	})
 	.AddColumn(new CarrotGridTemplateColumn<carrot_FaqCategory> {
 		HasHeadingText = false,
-		FormatTemplate = @<text> @CarrotWeb.ActionImage("ListFAQItems", "Admin", new { @id = @item.FaqCategoryID }, "~/assets/admin/images/table.png", @item.FAQTitle, null, null) </text>
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("ListFaqItems", "Admin", new { @id = @item.FaqCategoryID }, "~/assets/admin/images/table.png", @item.FAQTitle, null, null) </text>
 	})
 	.AddColumn(new CarrotGridTemplateColumn<carrot_FaqCategory> {
 		HasHeadingText = false,
