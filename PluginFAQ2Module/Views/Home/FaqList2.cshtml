@@ -1,0 +1,39 @@
+﻿@model FaqItems
+
+@if (Model.Faq.FaqCategoryID != Guid.Empty) {
+	<h2 style="clear:both">
+		@Model.Faq.FAQTitle
+	</h2>
+	<br />
+
+	foreach (var item in Model.Items) {
+		<div style="clear:both">
+			<div style="clear:both">
+				<div style="float:left;margin-right:10px;">
+					@String.Format("({0}) ", Model.FaqCount)
+				</div>
+				<div style="float:left">
+					@Html.DisplayFor(m => item.Caption)
+				</div>
+			</div>
+
+			<div style="clear:both">
+				<div style="float:left;margin-right:10px;">
+					Q:
+				</div>
+				<div style="float:left">
+					@Html.Raw(item.Question)
+				</div>
+			</div>
+			<div style="clear:both">
+				<div style="float:left;margin-right:10px;">
+					A:
+				</div>
+				<div style="float:left">
+					@Html.Raw(item.Answer)
+				</div>
+			</div>
+		</div>
+	}
+
+}

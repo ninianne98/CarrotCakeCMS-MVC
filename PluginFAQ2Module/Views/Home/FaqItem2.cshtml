@@ -1,0 +1,27 @@
+﻿@model CarrotCake.CMS.Plugins.FAQ2.carrot_FaqItem
+
+@if (Model.FaqItemID != Guid.Empty) {
+	<div style="clear:both">
+		<div>
+			@Html.DisplayFor(m => m.Caption)
+		</div>
+
+		<div style="clear:both">
+			<div style="float:left;margin-right:10px;">
+				Q:
+			</div>
+			<div style="float:left">
+				@Html.Raw(Model.Question)
+			</div>
+		</div>
+		<div style="clear:both">
+			<div style="float:left;margin-right:10px;">
+				A:
+			</div>
+			<div style="float:left">
+				@Html.Raw(Model.Answer)
+			</div>
+		</div>
+	</div>
+
+}
