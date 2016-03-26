@@ -1,4 +1,5 @@
 ﻿@inherits CmsWebViewPage
+
 @*
 	Imagination by TEMPLATED
 	templated.co @templatedco
@@ -24,6 +25,7 @@
 	var pager = new PagedDataSummary();
 	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
 	pager.PageSize = 3;
+	pager.PageNumbParm = "nopage#";
 	pager.IgnoreSitePath = true;
 	pager.FetchData();
 

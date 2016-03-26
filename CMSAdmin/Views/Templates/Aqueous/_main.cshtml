@@ -26,6 +26,7 @@
 	pager1.ContentType = PagedDataSummary.SummaryContentType.Blog;
 	pager1.PageSize = 3;
 	pager1.PageNumber = 1;
+	pager1.PageNumbParm = "nopage#";
 	pager1.IgnoreSitePath = true;
 	pager1.FetchData();
 }
@@ -149,7 +150,8 @@
 						<section class="4u">
 							<header>
 								<h2>
-									@String.Format("{0} | {1:d}", itm.NavigationText, itm.GoLiveDate)
+									@itm.NavigationText
+									@String.Format(" | {0:d}", itm.GoLiveDate)
 								</h2>
 							</header>
 							<p>
