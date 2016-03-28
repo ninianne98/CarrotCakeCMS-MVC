@@ -4,6 +4,28 @@
 	Layout = "_main.cshtml";
 
 	ViewBag.BodyCssClass = "homepage";
+
+	var pager1 = new PagedDataSummary();
+	pager1.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager1.PageSize = 4;
+	pager1.PageNumber = 1;
+	pager1.PageNumbParm = "nopage#";
+	pager1.IgnoreSitePath = true;
+	pager1.FetchData();
+
+	string cssPagerSel = String.Empty;
+	List<string> pagerStyles = new List<string>();
+	pagerStyles.Add("fa fa-magic");
+	pagerStyles.Add("fa fa-wrench");
+	pagerStyles.Add("fa fa-chain");
+	pagerStyles.Add("fa fa-briefcase");
+	pagerStyles.Add("fa fa-expeditedssl");
+	pagerStyles.Add("fa fa-coffee");
+	pagerStyles.Add("fa fa-rocket");
+	pagerStyles.Add("fa fa-shield");
+	pagerStyles.Add("fa fa-bell-o");
+
+	List<string> pagerStylesOld = new List<string>();
 }
 
 @section Banner {
@@ -28,36 +50,39 @@
 	<div id="extra">
 		<div class="container">
 			<div class="row">
-				<section class="3u">
-					<header>
-						<h2>Mauris vulputate</h2>
-					</header>
-					<span class="fa fa-magic"></span>
-					<p>Integer nisl risus, sagittis convallis, rutrum id, elementum congue, nibh. Suspendisse dictum porta lectus.</p>
-				</section>
-				<section class="3u">
-					<header>
-						<h2>Fusce ultrices</h2>
-					</header>
-					<span class="fa fa-wrench"></span>
-					<p>Pellentesque tristique ante ut risus. Integer risus congue. Suspendisse dictum porta lectus.</p>
-				</section>
-				<section class="3u">
-					<header>
-						<h2>Maecenas luctus</h2>
-					</header>
-					<span class="fa fa-chain"></span>
-					<p>Suspendisse dictum porta lectus. Integer nisl risus, sagittis convallis, rutrum congue nibh. </p>
-				</section>
-				<section class="3u">
-					<header>
-						<h2>Donec dictum</h2>
-					</header>
-					<span class="fa fa-briefcase"></span>
-					<p>In posuere eleifend odio quisque semper augue mattis wisi maecenas ligula augue praesent.</p>
-				</section>
+				@if (pager1.HasData) {
+					foreach (var itm in pager1.DataSource) {
+						cssPagerSel = pagerStyles.Where(x => !pagerStylesOld.Contains(x)).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+						pagerStylesOld.Add(cssPagerSel) ;
+
+					<section class="3u">
+						<header>
+							<h2>
+								<a href="@itm.FileName">
+									@itm.NavigationText
+								</a>
+							</h2>
+						</header>
+						<span class="@cssPagerSel"></span>
+						<p>
+							@String.Format(" [{0:d}] ", itm.GoLiveDate)
+							@itm.PageTextPlainSummary
+						</p>
+					</section>
+					}
+				} else {
+					<section class="12u">
+						&nbsp;
+					</section>
+				}
 			</div>
-			<a href="#" class="button medium">Etiam posuere augue</a>
+
+			@if (SiteData.CurretSiteExists && SiteData.CurrentSite.Blog_Root_ContentID.HasValue) {
+				var blgIdx = SiteData.GetPage(SiteData.CurrentSite.Blog_Root_ContentID.Value);
+				if (blgIdx != null) {
+				<a href="@blgIdx.FileName" class="button medium">More</a>
+				}
+			}
 		</div>
 	</div>
 	<!-- /Extra -->
