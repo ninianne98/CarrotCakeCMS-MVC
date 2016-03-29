@@ -12,7 +12,7 @@ form input[type="password"],
 form select,
 form textarea {
 	position: relative;
-	-ms-behavior: url("../js/ie/PIE.htc");
+	-ms-behavior: url('/Assets/telephasic/js/ie/PIE.htc');
 }
 
 input[type="button"],
@@ -21,14 +21,14 @@ input[type="reset"],
 button,
 .button {
 	position: relative;
-	-ms-behavior: url("../js/ie/PIE.htc");
+	-ms-behavior: url('/Assets/telephasic/js/ie/PIE.htc');
 }
 
 /* Promo */
 
 #promo {
 	position: relative;
-	-ms-behavior: url("../js/ie/PIE.htc");
+	-ms-behavior: url('/Assets/telephasic/js/ie/PIE.htc');
 }
 
 /* Section/Article */
@@ -45,27 +45,27 @@ article.last-child {
 #promo-wrapper {
 	background: url("../images/promo.jpg");
 	background-size: cover;
-	-ms-behavior: url("../js/ie/backgroundsize.min.htc");
+	-ms-behavior: url('/Assets/telephasic/js/ie/backgroundsize.min.htc');
 }
 
 /* Header */
 
 #logo a {
 	position: relative;
-	-ms-behavior: url("../js/ie/PIE.htc");
+	-ms-behavior: url('/Assets/telephasic/js/ie/PIE.htc');
 }
 
 /* Nav */
 
 #nav > ul > li > span, #nav > ul > li > a {
 	position: relative;
-	-ms-behavior: url("../js/ie/PIE.htc");
+	-ms-behavior: url('/Assets/telephasic/js/ie/PIE.htc');
 }
 
 .dropotron {
 	position: relative;
 	box-shadow: none !important;
-	-ms-behavior: url("../js/ie/PIE.htc");
+	-ms-behavior: url('/Assets/telephasic/js/ie/PIE.htc');
 }
 
 	.dropotron.level-0 {

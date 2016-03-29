@@ -35,17 +35,17 @@
 	<title>@CmsPage.Titlebar</title>
 
 	<!-- Styles -->
-	<!--[if lte IE 8]><script src="~/Assets/telephasic/js/ie/html5shiv.js"></script><![endif]-->
+	<!--[if lte IE 8]><script src="/Assets/telephasic/js/ie/html5shiv.js"></script><![endif]-->
 	<link rel="stylesheet" href="~/Assets/telephasic/css/main.css" />
-	<!--[if lte IE 8]><link rel="stylesheet" href="~/Assets/telephasic/css/ie8.css" /><![endif]-->
-	<!--[if lte IE 9]><link rel="stylesheet" href="~/Assets/telephasic/css/ie9.css" /><![endif]-->
+	<!--[if lte IE 8]><link rel="stylesheet" href="/Assets/telephasic/css/ie8.css" /><![endif]-->
+	<!--[if lte IE 9]><link rel="stylesheet" href="/Assets/telephasic/css/ie9.css" /><![endif]-->
 	@CarrotWeb.RenderControlToHtml((new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver }))
 
 	<!-- Scripts -->
 	<script src="~/Assets/telephasic/js/jquery.dropotron.min.js"></script>
 	<script src="~/Assets/telephasic/js/skel.min.js"></script>
 	<script src="~/Assets/telephasic/js/util.js"></script>
-	<!--[if lte IE 8]><script src="~/Assets/telephasic/js/ie/respond.min.js"></script><![endif]-->
+	<!--[if lte IE 8]><script src="/Assets/telephasic/js/ie/respond.min.js"></script><![endif]-->
 	<script src="~/Assets/telephasic/js/main.js"></script>
 
 	<script type="text/javascript">
@@ -63,12 +63,6 @@
 					$("#@nav.ElementId .level1").addClass('break');
 				}
 			}
-
-			//var imgSize = $('#feature-row .image-wrapper').length;
-			//if (imgSize > 0) {
-			//	$("#feature-row .image-wrapper:nth-child(1)").addClass('first');
-			//}
-
 		});
 
 		var cmsHasMoved = false;

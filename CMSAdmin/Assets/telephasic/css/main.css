@@ -86,7 +86,6 @@ body {
 }
 
 @media screen and (max-width: 1280px) {
-
 	.container.\31 25\25 {
 		width: 100%;
 		max-width: 1200px;
@@ -111,7 +110,6 @@ body {
 }
 
 @media screen and (max-width: 1080px) {
-
 	.container.\31 25\25 {
 		width: 100%;
 		max-width: 125%;
@@ -136,7 +134,6 @@ body {
 }
 
 @media screen and (max-width: 820px) {
-
 	.container.\31 25\25 {
 		width: 100%;
 		max-width: 125%;
@@ -161,7 +158,6 @@ body {
 }
 
 @media screen and (max-width: 736px) {
-
 	.container.\31 25\25 {
 		width: 100%;
 		max-width: 125%;
@@ -186,7 +182,6 @@ body {
 }
 
 @media screen and (max-width: 480px) {
-
 	.container.\31 25\25 {
 		width: 100%;
 		max-width: 125%;
@@ -469,7 +464,6 @@ body {
 }
 
 @media screen and (max-width: 1280px) {
-
 	.row > * {
 		padding: 40px 0 0 40px;
 	}
@@ -683,7 +677,6 @@ body {
 }
 
 @media screen and (max-width: 1080px) {
-
 	.row > * {
 		padding: 40px 0 0 40px;
 	}
@@ -897,7 +890,6 @@ body {
 }
 
 @media screen and (max-width: 820px) {
-
 	.row > * {
 		padding: 30px 0 0 30px;
 	}
@@ -1111,7 +1103,6 @@ body {
 }
 
 @media screen and (max-width: 736px) {
-
 	.row > * {
 		padding: 30px 0 0 30px;
 	}
@@ -1325,7 +1316,6 @@ body {
 }
 
 @media screen and (max-width: 480px) {
-
 	.row > * {
 		padding: 20px 0 0 20px;
 	}
@@ -1993,10 +1983,6 @@ button,
 		background: #f6f8fb url("images/image-wrapper.svg");
 	}
 
-
-
-
-
 #header-wrapper {
 	position: relative;
 	padding: 4em 0 2em 0;
@@ -2034,7 +2020,7 @@ button,
 
 #promo-wrapper {
 	position: relative;
-	background-image: url("images/overlay.png"), url("../images/promo.jpg");
+	background-image: url('images/overlay.png'), url('../images/promo.jpg');
 	background-size: 192px 192px, cover;
 	background-position: top left, center center;
 	color: #fff;
@@ -2047,7 +2033,7 @@ button,
 	position: relative;
 	border-top: solid 1px #c2c7cc;
 	padding: 6em 0 6em 0;
-	background-image: url("images/overlay.png"), url("images/footer.svg");
+	background-image: url('images/overlay.png'), url('images/footer.svg');
 	background-size: 128px 128px, 100% 100%;
 }
 
@@ -2317,7 +2303,6 @@ button,
 /* Normal */
 
 @media screen and (max-width: 1280px) {
-
 	/* Basic */
 
 	body, input, textarea, select {
@@ -2355,7 +2340,6 @@ button,
 /* Narrow */
 
 @media screen and (max-width: 1080px) {
-
 	/* Sections/Article */
 
 	header br {
@@ -2458,7 +2442,6 @@ button,
 /* Narrower */
 
 @media screen and (max-width: 820px) {
-
 	/* Basic */
 
 	body, input, textarea, select {
@@ -2570,7 +2553,6 @@ button,
 }
 
 @media screen and (max-width: 736px) {
-
 	/* Basic */
 
 	html, body {
@@ -2848,7 +2830,6 @@ button,
 /* Mobile (Portrait) */
 
 @media screen and (max-width: 480px) {
-
 	/* Basic */
 
 	body, input, textarea, select {
