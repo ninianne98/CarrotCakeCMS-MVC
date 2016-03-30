@@ -9,31 +9,22 @@
 
 	string imgPath = String.Empty;
 
+	List<string> imgsOld = new List<string>();
+
 	List<string> imgs = new List<string>();
 	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_event_01.jpg");
 	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_event_02.jpg");
 	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_event_03.jpg");
 	imgs.Add(@"/Assets/Dragonfruit/images/dragonfruit_event_04.jpg");
 
+	imgs = imgs.OrderBy(x => Guid.NewGuid()).ToList();
+
 }
 
 <div class="block_alternate">
 	<div class="container-fluid">
-		<h1>
-			@CmsPage.Heading
-		</h1>
+		@Html.Partial("_core_content")
 
-		<div class="clearfix"></div>
-		<div>
-			<div class="col-sm-12">
-				@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
-				<br />
-			</div>
-			<div class="clearfix"></div>
-			<div>
-				@CarrotCakeHtml.RenderWidget("phCenterBottom")
-			</div>
-		</div>
 		<div class="clearfix"></div>
 
 		<div id="dragonfruit_events">
@@ -50,7 +41,12 @@
 						}
 
 						if (String.IsNullOrEmpty(item.Thumbnail)) {
-							imgPath = imgs.Where(x => x != imgPath).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
+							if (imgsOld.Count == imgs.Count) {
+								imgsOld = new List<string>();
+							}
+
+							imgPath = imgs.Where(x => !imgsOld.Contains(x)).FirstOrDefault();
+							imgsOld.Add(imgPath);
 						} else {
 							imgPath = item.Thumbnail;
 						}

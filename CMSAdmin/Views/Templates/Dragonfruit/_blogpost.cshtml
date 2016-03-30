@@ -1,0 +1,18 @@
+﻿@inherits CmsWebViewPage
+@{
+	ViewBag.FormHeadDragon = "Contact Us";
+}
+
+<div class="block_alternate">
+	<div class="container-fluid">
+		@Html.Partial("_core_content")
+
+		<div class="clearfix"></div>
+
+		<div class="col-sm-12">
+			@Html.Partial("_contactform")
+		</div>
+
+		<div class="clearfix"></div>
+	</div>
+</div>

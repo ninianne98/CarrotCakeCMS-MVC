@@ -656,6 +656,22 @@ h1 {
 	border: 1px solid #6698b5;
 }
 
+#dragonfruit_body .button {
+	min-width: 5em;
+	width: auto;
+	padding: 1em;
+	height: 50px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: none;
+	background: #eaeaea;
+	color: #000;
+}
+
+	#dragonfruit_body .button:hover {
+		background: #f4f4f4;
+	}
+
 #dragonfruit_contact button, .contact_button {
 	width: 100%;
 	height: 50px;
@@ -670,6 +686,7 @@ h1 {
 	#dragonfruit_contact button:hover, .contact_button:hover {
 		background: #f4f4f4;
 	}
+
 /*dragonfruit_footer*/
 .footer {
 	width: 100%;

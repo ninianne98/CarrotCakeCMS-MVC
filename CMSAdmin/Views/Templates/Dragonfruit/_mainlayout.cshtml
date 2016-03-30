@@ -78,6 +78,20 @@
 
 	<script src="~/Assets/Dragonfruit/js/script.js"></script>
 
+	<script type="text/javascript">
+		function decorateDragonButtons() {
+			$("#dragonfruit_body input:button:not(.contact_button), #dragonfruit_body input:submit:not(.contact_button), #dragonfruit_body input:reset:not(.contact_button), #dragonfruit_body button:not(.contact_button)").addClass('button');
+		}
+
+		$(document).ready(function () {
+			decorateDragonButtons();
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			decorateDragonButtons();
+		});
+	</script>
+
 	@CarrotCakeHtml.GetSiteCanonicalURL()
 
 	@CarrotCakeHtml.RenderOpenGraph()
@@ -142,7 +156,9 @@
 		</div>
 	</div>
 
-	@RenderBody()
+	<div id="dragonfruit_body">
+		@RenderBody()
+	</div>
 
 	<div class="footer">
 		<div>

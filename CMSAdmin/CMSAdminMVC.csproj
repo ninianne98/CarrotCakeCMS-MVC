@@ -1086,6 +1086,9 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\Templates\Aqueous\_contact.cshtml" />
+    <Content Include="Views\Templates\Dragonfruit\blogpost.cshtml" />
+    <Content Include="Views\Templates\Dragonfruit\_blogpost.cshtml" />
+    <Content Include="Views\Templates\Dragonfruit\_core_content.cshtml" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

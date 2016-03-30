@@ -1,5 +1,9 @@
 ﻿@inherits CmsWebViewPage
 
+@{
+	string headingText = ViewBag.FormHeadDragon == null ? "Send Inquiry" : ViewBag.FormHeadDragon;
+}
+
 <div class="row">
 
 	<div id="contactForm">
@@ -16,7 +20,7 @@
 					@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
 
 					<div class="col-md-12">
-						<h2>Send Inquiry</h2>
+						<h2>@headingText</h2>
 					</div>
 					<div class="col-md-6">
 						<p>Name @cmt.ValidationMessageFor(m => m.CommenterName, "", new { @class = "text-danger" })</p>
