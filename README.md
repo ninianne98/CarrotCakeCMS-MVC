@@ -1,7 +1,7 @@
 # CarrotCakeCMS-MVC
 Source code for CarrotCakeCMS (MVC)
 
-[SITE_CT]: http://www.carrotware.com/contact
+[SITE_CT]: http://www.carrotware.com/contact?from=github-mvc
 [REPO_SF]: http://sourceforge.net/projects/carrotcakecmsmvc/
 [REPO_GH]: https://github.com/ninianne98/CarrotCakeCMS-MVC/
 [REPO_CX]: http://carrotcakecmsmvc.codeplex.com/
