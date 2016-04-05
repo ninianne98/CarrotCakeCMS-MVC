@@ -23,14 +23,6 @@ function AjaxBtnLoad() {
 
 	initCheckboxStyle();
 
-	//$(".timeRegion").each(function () {
-	//	if (!$(this).hasClass("hasTimePicker")) {
-	//		var id = $(this).attr('id');
-	//		$('<img class="ui-timepicker-trigger" src="/Assets/Admin/images/clock.png" for="' + id + '" id="' + id + '_triggerbtn" alt="..." title="...">').insertAfter(this);
-	//		$(this).addClass("hasTimePicker");
-	//	};
-	//});
-
 	$(".dateRegion").each(function () {
 		$(this).datepicker({
 			changeMonth: true,
@@ -56,7 +48,6 @@ function AjaxBtnLoad() {
 			});
 		};
 	});
-
 }
 
 $(document).ready(function () {
@@ -66,46 +57,12 @@ $(document).ready(function () {
 var htmlAjaxSpinnerTable = '<table class="cmsTableSpinner"><tr><td><img class="cmsRingSpinner" src="/Assets/Admin/images/Ring-64px-A7B2A0.gif"/></td></tr></table>';
 
 function BlockUI(elementID) {
-	/*
-	if (typeof (Sys) != 'undefined') {
-		var prm = Sys.WebForms.PageRequestManager.getInstance();
-		prm.add_beginRequest(function () {
-			$("#" + elementID).block({
-				message: htmlAjaxSpinnerTable,
-				css: {
-					padding: 0,
-					margin: 0,
-					width: '30%',
-					top: '40%',
-					left: '45%',
-					textAlign: 'center'
-				},
-				fadeOut: 80000,
-				timeout: 90000,
-				overlayCSS: {
-					backgroundColor: '#FFFFFF',
-					opacity: 0.6,
-					border: '0px solid #000000'
-				}
-			});
-			var spinner = ".blockMsg"; // fix for spinner location
-			$(spinner).css('top', '33%');
-			$(spinner).css('left', '45%');
-			$(spinner).css('margin-left', 'auto');
-			$(spinner).css('margin-right', 'auto');
-			$(spinner).css('position', 'fixed');
-		});
-		prm.add_endRequest(function () {
-			$("#" + elementID).unblock();
-		});
-	}
-	*/
 }
 
-$(document).ready(function () {
-	BlockUI("cmsAjaxMainDiv");
-	$.blockUI.defaults.css = {};
-});
+//$(document).ready(function () {
+//	BlockUI("cmsAjaxMainDiv");
+//	$.blockUI.defaults.css = {};
+//});
 
 function checkGridBoxes(gridID) {
 	$('#' + gridID + ' input[type=checkbox]').each(function () {
@@ -259,27 +216,8 @@ function cmsOpenPage(theURL) {
 	}
 }
 
+//=======================
 // begin fancy validator stylings
-
-//$(document).ready(function () {
-//	loadValidationStyles();
-//	ajaxLoadValidationStyles();
-//});
-
-//function ajaxLoadValidationStyles() {
-//	if (typeof (Sys) != 'undefined') {
-//		var prm = Sys.WebForms.PageRequestManager.getInstance();
-//		prm.add_endRequest(function () {
-//			loadValidationStyles();
-//		});
-//	}
-//}
-
-//function loadValidationStyles() {
-//	if (typeof (Page_ClientValidate) == 'function') {
-//		cmsLoadOverrideValidation();
-//	}
-//}
 
 var invalidCSSClass = "validationErrorBox";
 
