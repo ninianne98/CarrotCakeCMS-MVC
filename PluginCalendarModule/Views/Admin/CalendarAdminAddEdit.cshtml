@@ -1,4 +1,4 @@
-﻿@model CarrotCake.CMS.Plugins.CalendarModule.Code.tblCalendar
+﻿@model CalendarDetail
 
 @{
 	ViewBag.Title = "Calendar Admin Edit";
@@ -24,25 +24,25 @@
 	<table style="width: 600px;">
 		<tr>
 			<td class="tablecaption" style="width: 150px;">
-				@Html.LabelFor(model => model.EventDate)
+				@Html.LabelFor(m => m.EventDate)
 			</td>
 			<td style="width: 450px;">
-				@Html.TextBoxFor(m => m.EventDate, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
-				@Html.ValidationMessageFor(model => model.EventDate, "", new { @class = "text-danger" })
+				@Html.TextBoxFor(m => m.EventDate, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
+				@Html.ValidationMessageFor(m => m.EventDate, "", new { @class = "text-danger" })
 			</td>
 		</tr>
 		<tr>
 			<td class="tablecaption">
-				@Html.LabelFor(model => model.EventTitle)
+				@Html.LabelFor(m => m.EventTitle)
 			</td>
 			<td>
 				@Html.TextBoxFor(m => m.EventTitle, new { @style = "width: 600px;" })
-				@Html.ValidationMessageFor(model => model.EventTitle, "", new { @class = "text-danger" })
+				@Html.ValidationMessageFor(m => m.EventTitle, "", new { @class = "text-danger" })
 			</td>
 		</tr>
 		<tr>
 			<td class="tablecaption">
-				@Html.LabelFor(model => model.EventDetail)
+				@Html.LabelFor(m => m.EventDetail)
 			</td>
 			<td>
 				@Html.TextAreaFor(m => m.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 200px; width: 600px;" })
@@ -54,7 +54,7 @@
 			</td>
 			<td align="right">
 				<div style="text-align: left; float: left">
-					@Html.LabelFor(model => model.IsActive)
+					@Html.LabelFor(m => m.IsActive)
 					@Html.CheckBox(Html.IdFor(m => m.IsActive).ToString(), Model.IsActive ?? false)
 				</div>
 				<br />

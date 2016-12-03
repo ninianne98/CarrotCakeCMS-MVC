@@ -139,6 +139,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CalendarViewModel.cs" />
+    <Compile Include="Models\CalendarDetail.cs" />
     <Compile Include="Models\DateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

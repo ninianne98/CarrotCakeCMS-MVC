@@ -124,9 +124,9 @@
 		</div>
 
 		<div style="display:none;">
-			@Html.TextBoxFor(m => m.MonthSelected, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
-			@Html.TextBoxFor(m => m.MonthPrior, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
-			@Html.TextBoxFor(m => m.MonthNext, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
+			@Html.TextBoxFor(m => m.MonthSelected, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
+			@Html.TextBoxFor(m => m.MonthPrior, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
+			@Html.TextBoxFor(m => m.MonthNext, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
 
 			@Html.HiddenFor(m => m.SiteID)
 			@Html.HiddenFor(m => m.AlternateViewFile)

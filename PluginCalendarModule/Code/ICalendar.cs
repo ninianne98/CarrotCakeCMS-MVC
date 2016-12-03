@@ -12,7 +12,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Code {
 		Guid CalendarID { get; set; }
 
 		[Required]
-		[Display(Name = "date (m/d/y)")]
+		[Display(Name = "date")]
 		DateTime? EventDate { get; set; }
 
 		[Required]

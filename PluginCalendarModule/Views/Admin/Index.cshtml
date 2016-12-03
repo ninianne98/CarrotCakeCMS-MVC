@@ -19,7 +19,7 @@
 	grid
 	.AddColumn(new CarrotGridTemplateColumn<tblCalendar> {
 		HasHeadingText = false,
-		FormatTemplate = @<text> @CarrotWeb.ActionImage("CalendarAdminAddEdit", "Admin", new { @id = @item.CalendarID }, "~/assets/admin/images/pencil.png", @String.Format("{0:yyyy-MM-dd}", item.EventDate), null, null) </text>
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("CalendarAdminAddEdit", "Admin", new { @id = @item.CalendarID }, "~/assets/admin/images/pencil.png", String.Format("{0:yyyy-MM-dd}", item.EventDate), null, null) </text>
 	})
 	.AddColumn(x => x.EventDate, new CarrotGridColumn { HasHeadingText = false, CellFormatString = "{0:d}" })
 	.AddColumn(x => x.IsActive, new CarrotGridBooleanImageColumn { HasHeadingText = false })
@@ -123,7 +123,7 @@
 	@Html.AntiForgeryToken()
 
 	<div id="divDatePicker" class="calendarCenter1">
-		@Html.TextBox("CalendarInputDate", String.Format("{0:MM/dd/yyyy}", Model.MonthSelected), new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
+		@Html.TextBox("CalendarInputDate", String.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
 	</div>
 
 	<div class="calendarCenter2">
@@ -137,9 +137,9 @@
 	</div>
 
 	<div style="display:none;">
-		@Html.TextBoxFor(m => m.MonthSelected, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
-		@Html.TextBoxFor(m => m.MonthPrior, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
-		@Html.TextBoxFor(m => m.MonthNext, "{0:MM/dd/yyyy}", new { maxlength = "12", size = "16" })
+		@Html.TextBoxFor(m => m.MonthSelected, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
+		@Html.TextBoxFor(m => m.MonthPrior, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
+		@Html.TextBoxFor(m => m.MonthNext, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
 
 		<input type="submit" id="btnSubmitCal" />
 	</div>

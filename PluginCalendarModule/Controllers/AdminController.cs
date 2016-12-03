@@ -65,20 +65,20 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[ValidateInput(false)]
-		public ActionResult CalendarAdminAdd(tblCalendar model) {
+		public ActionResult CalendarAdminAdd(CalendarDetail model) {
 			return CalendarAdminAddEdit(model);
 		}
 
 		public ActionResult CalendarAdminAddEdit(Guid? id) {
 			Guid ItemGuid = id ?? Guid.Empty;
 
-			tblCalendar model = (from c in db.tblCalendars
-								 where c.CalendarID == ItemGuid
-									  && SiteID == this.SiteID
-								 select c).FirstOrDefault();
+			CalendarDetail model = (from c in db.tblCalendars
+									where c.CalendarID == ItemGuid
+										 && SiteID == this.SiteID
+									select new CalendarDetail(c)).FirstOrDefault();
 
 			if (model == null) {
-				model = new tblCalendar {
+				model = new CalendarDetail {
 					SiteID = this.SiteID,
 					CalendarID = Guid.Empty,
 					IsActive = true,
@@ -92,7 +92,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[ValidateInput(false)]
-		public ActionResult CalendarAdminAddEdit(tblCalendar model) {
+		public ActionResult CalendarAdminAddEdit(CalendarDetail model) {
 			if (ModelState.IsValid) {
 				ModelState.Clear();
 
@@ -127,7 +127,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[ValidateInput(false)]
-		public ActionResult CalendarAdminDelete(tblCalendar model) {
+		public ActionResult CalendarAdminDelete(CalendarDetail model) {
 			var itm = (from c in db.tblCalendars
 					   where c.CalendarID == model.CalendarID
 							&& SiteID == this.SiteID
