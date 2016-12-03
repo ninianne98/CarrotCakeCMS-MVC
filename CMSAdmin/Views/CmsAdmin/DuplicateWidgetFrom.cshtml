@@ -136,9 +136,9 @@
 					.AddColumn(x => x.NavMenuText, new CarrotGridColumn())
 					.AddColumn(x => x.FileName, new CarrotGridColumn())
 
-					.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
-					.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
-					.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+					.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+					.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+					.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
 
 					.AddColumn(x => x.ContentType, new CarrotGridImageColumn {
 						ImagePairs = typeImgs
@@ -207,7 +207,7 @@
 								</text>
 							})
 
-								.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+								.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
 								.AddColumn(x => x.PlaceholderName, new CarrotGridColumn())
 								.AddColumn(x => x.ControlPath, new CarrotGridColumn())
 								.AddColumn(x => x.IsWidgetActive, new CarrotGridBooleanImageColumn {

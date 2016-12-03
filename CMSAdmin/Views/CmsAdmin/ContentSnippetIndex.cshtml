@@ -59,9 +59,9 @@
 		.AddColumn(x => x.ContentSnippetName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.ContentSnippetSlug, new CarrotGridColumn { Sortable = true })
 
-		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.RetireDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateFormatPattern })
+		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateFormatPattern })
+		.AddColumn(x => x.RetireDate, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateFormatPattern })
 
 		.AddColumn(x => x.IsRetired, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Retired",

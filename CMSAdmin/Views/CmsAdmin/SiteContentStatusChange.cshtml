@@ -126,7 +126,7 @@
 						&nbsp;&nbsp;
 					</td>
 					<td>
-						@Html.TextBoxFor(m => m.SearchDate, "{0:MM/dd/yyyy}", new { @class = "dateRegion form-control-sm", maxlength = "12", size = "16" })
+						@Html.TextBoxFor(m => m.SearchDate, Helper.ShortDateFormatPattern, new { @class = "dateRegion form-control-sm", maxlength = "12", size = "16" })
 
 						@Html.DropDownListFor(m => m.SelectedRange, new SelectList(Model.DateRanges, "Key", "Value"))
 
@@ -213,10 +213,10 @@
 			</a>
 		})
 
-		.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.RetireDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+		.AddColumn(x => x.RetireDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
 
 		.AddColumn(x => x.IsRetired, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Retired",

@@ -98,14 +98,14 @@
 			</text>
 		})
 
-		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
 		.AddColumn(x => x.IsUnReleased, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Unreleased",
 			AlternateTextFalse = "Active",
 			ImagePathTrue = "~/Assets/Admin/Images/clock_red.png",
 			ImagePathFalse = "~/Assets/Admin/Images/clock.png"
 		})
-		.AddColumn(x => x.RetireDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.RetireDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
 		.AddColumn(x => x.IsRetired, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Retired",
 			AlternateTextFalse = "Active",

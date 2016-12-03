@@ -37,7 +37,7 @@
 			ImagePathTrue = "~/assets/admin/images/user.png",
 			Sortable = true
 		})
-		.AddColumn(x => x.LockoutEndDateUtc, new CarrotGridColumn { Sortable = true });
+		.AddColumn(x => x.LockoutEndDateUtc, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateTimeFormatPattern });
 
 		@grid.Write()
 }

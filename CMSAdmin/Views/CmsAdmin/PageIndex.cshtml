@@ -141,10 +141,10 @@
 
 		.AddColumn(x => x.NavMenuText, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.FileName, new CarrotGridColumn { Sortable = true })
-		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.RetireDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateFormatPattern })
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateFormatPattern })
+		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateFormatPattern })
+		.AddColumn(x => x.RetireDate, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateFormatPattern })
 		.AddColumn(x => x.VersionCount, new CarrotGridColumn { Sortable = true })
 
 		.AddColumn(x => x.IsRetired, new CarrotGridBooleanImageColumn {

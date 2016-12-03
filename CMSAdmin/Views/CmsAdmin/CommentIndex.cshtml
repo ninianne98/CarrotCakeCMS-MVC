@@ -70,7 +70,7 @@
 		})
 		.AddColumn(x => x.CommenterName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.CommenterIP, new CarrotGridColumn { Sortable = true })
-		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateTimeFormatPattern })
 		.AddColumn(x => x.NavMenuText, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.FileName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(new CarrotGridTemplateColumn<PostComment> {

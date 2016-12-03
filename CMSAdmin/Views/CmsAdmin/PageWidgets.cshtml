@@ -100,7 +100,7 @@
 			</text>
 		})
 		.AddColumn(x => x.PlaceholderName, new CarrotGridColumn())
-		.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
 
 		.AddColumn(new CarrotGridTemplateColumn<Widget> {
 			HasHeadingText = false,
@@ -111,8 +111,8 @@
 			</text>
 		})
 
-		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.RetireDate, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+		.AddColumn(x => x.RetireDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
 
 		.AddColumn(new CarrotGridTemplateColumn<Widget> {
 			HasHeadingText = false,

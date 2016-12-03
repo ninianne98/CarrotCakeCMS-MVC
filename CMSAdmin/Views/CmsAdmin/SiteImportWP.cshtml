@@ -223,7 +223,7 @@
 		.AddColumn(x => x.PostOrder, new CarrotGridColumn())
 		.AddColumn(x => x.ImportFileName, new CarrotGridColumn())
 		.AddColumn(x => x.PostTitle, new CarrotGridColumn())
-		.AddColumn(x => x.PostDateUTC, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.PostDateUTC, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
 		.AddColumn(x => x.IsPublished, new CarrotGridBooleanImageColumn());
 
 		@pageGrid.OutputHtmlBody()
@@ -263,7 +263,7 @@
 	postGrid
 		.AddColumn(x => x.ImportFileName, new CarrotGridColumn())
 		.AddColumn(x => x.PostTitle, new CarrotGridColumn())
-		.AddColumn(x => x.PostDateUTC, new CarrotGridColumn { CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.PostDateUTC, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
 		.AddColumn(x => x.IsPublished, new CarrotGridBooleanImageColumn());
 
 		@postGrid.OutputHtmlBody()

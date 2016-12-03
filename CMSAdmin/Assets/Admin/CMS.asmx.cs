@@ -1,6 +1,7 @@
 ﻿using Carrotware.CMS.Core;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Script.Services;
@@ -25,6 +26,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 	[System.Web.Script.Services.ScriptService]
 	[CmsAuthorize]
 	public class CMS : System.Web.Services.WebService {
+		private DateTimeFormatInfo _dtf = CultureInfo.CurrentCulture.DateTimeFormat;
 
 		public CMS() {
 			if (!this.User.Identity.IsAuthenticated) {
@@ -33,6 +35,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 			if (!(SecurityData.IsAdmin || SecurityData.IsSiteEditor)) {
 				throw new Exception("Not Authorizeed!");
+			}
+
+			if (_dtf == null) {
+				_dtf = CultureInfo.CreateSpecificCulture("en-US").DateTimeFormat;
 			}
 		}
 
@@ -174,6 +180,18 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
 		public string GetSiteAdminFolder() {
 			return SiteData.AdminFolderPath;
+		}
+
+		[WebMethod]
+		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+		public string GetShortDatePattern() {
+			return Helper.ShortDatePattern;
+		}
+
+		[WebMethod]
+		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+		public string GetShortTimePattern() {
+			return Helper.ShortTimePattern;
 		}
 
 		private string CurrentEditPage = String.Empty;

@@ -122,8 +122,8 @@
 		.AddColumn(x => x.TemplateFile, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.NavMenuText, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.FileName, new CarrotGridColumn { Sortable = true })
-		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
-		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = "{0:M/d/yyyy}" })
+		.AddColumn(x => x.CreateDate, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateFormatPattern })
+		.AddColumn(x => x.EditDate, new CarrotGridColumn { Sortable = true, CellFormatString = Helper.ShortDateFormatPattern })
 
 		.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn {
 			AlternateTextTrue = "Active",

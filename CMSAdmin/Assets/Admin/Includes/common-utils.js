@@ -23,8 +23,49 @@ function AjaxBtnLoad() {
 
 	initCheckboxStyle();
 
+	if (!cmsDatePattern || cmsDatePattern.length < 1) {
+		cmsGetShortDatePattern();
+	} else {
+		cmsSetDateRegion();
+	}
+
+	cmsSetTimeRegion();
+
+	//if (!cmsTimePattern || cmsTimePattern.length < 1) {
+	//	cmsGetShortTimePattern();
+	//} else {
+	//	cmsSetTimeRegion();
+	//}
+}
+
+var webSvc = "/Assets/Admin/CMS.asmx";
+
+function cmsGetShortDatePattern() {
+	var webMthd = webSvc + "/GetShortDatePattern";
+
+	$.ajax({
+		type: "POST",
+		url: webMthd,
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+		success: cmsSetShortDatePattern,
+		error: cmsAjaxFailed
+	});
+}
+
+var cmsDatePattern = '';
+
+function cmsSetShortDatePattern(data, status) {
+	var datePatrn = data.d.toLowerCase();
+	cmsDatePattern = datePatrn.replace(/yyyy/gi, 'yy');
+
+	cmsSetDateRegion();
+}
+
+function cmsSetDateRegion() {
 	$(".dateRegion").each(function () {
 		$(this).datepicker({
+			dateFormat: cmsDatePattern,
 			changeMonth: true,
 			changeYear: true,
 			showOn: "both",
@@ -33,7 +74,31 @@ function AjaxBtnLoad() {
 			constrainInput: true
 		});
 	});
+}
 
+function cmsGetShortTimePattern() {
+	var webMthd = webSvc + "/GetShortTimePattern";
+
+	$.ajax({
+		type: "POST",
+		url: webMthd,
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+		success: cmsSetShortTimePattern,
+		error: cmsAjaxFailed
+	});
+}
+
+var cmsTimePattern = '';
+
+function cmsSetShortTimePattern(data, status) {
+	var datePatrn = data.d.toLowerCase();
+	cmsTimePattern = datePatrn.replace(/yyyy/gi, 'yy');
+
+	cmsSetTimeRegion();
+}
+
+function cmsSetTimeRegion() {
 	$(".timeRegion").each(function () {
 		if (!$(this).hasClass("hasTimePicker")) {
 			$(this).addClass("hasTimePicker");
