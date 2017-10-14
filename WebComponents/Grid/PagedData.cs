@@ -21,15 +21,15 @@ namespace Carrotware.Web.UI.Components {
 			: base() {
 		}
 
-		public void InitOrderByDescending(Expression<Func<T, object>> field) {
+		public void InitOrderByDescending(Expression<Func<T, Object>> field) {
 			InitOrderBy(field, false);
 		}
 
-		public void InitOrderBy(Expression<Func<T, object>> field) {
+		public void InitOrderBy(Expression<Func<T, Object>> field) {
 			InitOrderBy(field, true);
 		}
 
-		public void InitOrderBy(Expression<Func<T, object>> field, bool ascending) {
+		public void InitOrderBy(Expression<Func<T, Object>> field, bool ascending) {
 			MemberExpression memberExpression = field.Body as MemberExpression ??
 												((UnaryExpression)field.Body).Operand as MemberExpression;
 

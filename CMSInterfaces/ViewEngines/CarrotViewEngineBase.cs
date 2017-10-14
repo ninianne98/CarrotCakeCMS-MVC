@@ -26,6 +26,36 @@ namespace Carrotware.CMS.Interface {
 			this.AreaPartialViewLocationFormats = areas;
 		}
 
+		protected enum ViewPathType {
+			Area,
+			View,
+		}
+
+		protected string[] GetPaths(ViewPathType vpt) {
+			string[] viewPaths = null;
+			string prefix = String.Empty;
+
+			switch (vpt) {
+				case ViewPathType.Area:
+					prefix = "~/Areas/::KEY::/Views/";
+					break;
+
+				case ViewPathType.View:
+					prefix = "~/Views/::KEY::/";
+					break;
+			}
+
+			viewPaths = new[] {
+					prefix + "{0}.cshtml",
+                    prefix + "{0}.vbhtml",
+                    prefix + "{1}/{0}.cshtml",
+                    prefix + "{1}/{0}.vbhtml",
+                    prefix + "Shared/{0}.cshtml",
+                    prefix + "Shared/{0}.vbhtml"};
+
+			return viewPaths;
+		}
+
 		protected virtual string ReplacePath(ControllerContext controllerContext, string viewPath) {
 			return "~/Views/Shared/__";
 		}

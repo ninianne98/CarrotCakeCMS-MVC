@@ -1,12 +1,7 @@
 ﻿using Carrotware.CMS.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Northwind {
-	public class NorthRegistration : BaseWidgetAreaReg {
 
-
+	public class NorthRegistration : BaseWidgetAreaAttrRouteReg {
 	}
 }

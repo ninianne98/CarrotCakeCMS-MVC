@@ -44,12 +44,16 @@ namespace Carrotware.CMS.Interface {
 		}
 
 		public override void RegisterArea(AreaRegistrationContext context) {
-			context.MapRoute(
+			string nsp = typeof(BaseWidgetAreaReg).Namespace;
+
+			if (this.AreaName.ToLowerInvariant() != nsp.ToLowerInvariant()) {
+				context.MapRoute(
 						name: this.AreaName + "_Default",
 						url: this.AreaName + "/{controller}/{action}/{id}",
 						defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
 						namespaces: _namespaces.ToArray()
 					);
+			}
 		}
 	}
 }

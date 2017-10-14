@@ -18,21 +18,9 @@ namespace Carrotware.CMS.Interface {
 
 		public CarrotViewEngineWidget()
 			: base() {
-			string[] views = new[] {
-					"~/Views/::KEY::/{0}.cshtml",
-                    "~/Views/::KEY::/{0}.vbhtml",
-                    "~/Views/::KEY::/{1}/{0}.cshtml",
-                    "~/Views/::KEY::/{1}/{0}.vbhtml",
-                    "~/Views/::KEY::/Shared/{0}.cshtml",
-                    "~/Views/::KEY::/Shared/{0}.vbhtml"};
+			string[] views = GetPaths(ViewPathType.View);
 
-			string[] areas = new[] {
-					"~/Areas/::KEY::/Views/{0}.cshtml",
-                    "~/Areas/::KEY::/Views/{0}.vbhtml",
-                    "~/Areas/::KEY::/Views/{1}/{0}.cshtml",
-                    "~/Areas/::KEY::/Views/{1}/{0}.vbhtml",
-                    "~/Areas/::KEY::/Views/Shared/{0}.cshtml",
-                    "~/Areas/::KEY::/Views/Shared/{0}.vbhtml"};
+			string[] areas = GetPaths(ViewPathType.Area);
 
 			this.LoadPaths(views, areas);
 		}

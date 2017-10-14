@@ -97,6 +97,18 @@
 	@CarrotCakeHtml.RenderOpenGraph()
 
 	@CarrotCakeHtml.IncludeHead()
+
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$("input:button, input:submit, input:reset, button").removeClass('button').addClass('button');
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			$("input:button, input:submit, input:reset, button").removeClass('button').addClass('button');
+		});
+	</script>
+
 </head>
 <body class="@bodyCssClass">
 

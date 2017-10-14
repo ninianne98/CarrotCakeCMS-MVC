@@ -132,7 +132,7 @@ namespace Carrotware.Web.UI.Components {
 			return String.Empty;
 		}
 
-		public static PropertyInfo PropInfoFromExpression<T>(this T source, Expression<Func<T, object>> expression) {
+		public static PropertyInfo PropInfoFromExpression<T>(this T source, Expression<Func<T, Object>> expression) {
 			string propertyName = String.Empty;
 			PropertyInfo propInfo = null;
 

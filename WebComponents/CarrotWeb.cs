@@ -88,7 +88,7 @@ namespace Carrotware.Web.UI.Components {
 			return grid;
 		}
 
-		public static string DisplayNameFor<T>(Expression<Func<T, object>> expression) {
+		public static string DisplayNameFor<T>(Expression<Func<T, Object>> expression) {
 			string propertyName = String.Empty;
 			PropertyInfo propInfo = null;
 			Type type = null;

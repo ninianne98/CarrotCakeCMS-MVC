@@ -23,6 +23,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 		public const string AdminCtrlr = "CmsAdmin";
 
 		public static void RegisterRoutes(RouteCollection routes) {
+			routes.MapMvcAttributeRoutes();
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 			Assembly _assembly = Assembly.GetExecutingAssembly();

@@ -113,6 +113,7 @@
   <ItemGroup>
     <Compile Include="AdminModuleData.cs" />
     <Compile Include="BaseWidgetAreaReg.cs" />
+    <Compile Include="BaseWidgetAreaAttrRouteReg.cs" />
     <Compile Include="ViewEngines\CarrotViewEngineWidgetAdmin.cs" />
     <Compile Include="ViewEngines\CarrotViewEngineWidget.cs" />
     <Compile Include="ViewEngines\CarrotViewEngineBase.cs" />

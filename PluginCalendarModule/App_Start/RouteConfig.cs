@@ -10,6 +10,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule {
 	public class RouteConfig {
 
 		public static void RegisterRoutes(RouteCollection routes) {
+			routes.MapMvcAttributeRoutes();
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 			Assembly _assembly = Assembly.GetExecutingAssembly();
