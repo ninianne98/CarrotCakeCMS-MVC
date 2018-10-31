@@ -27,7 +27,7 @@ namespace Carrotware.Web.UI.Components {
 		public string JQUIVersion { get; set; }
 
 		public static string GetWebResourceUrl(string resource) {
-			return BaseWebComponent.GetWebResourceUrl(typeof(jqueryui), resource);
+			return CarrotWeb.GetWebResourceUrl(typeof(jqueryui), resource);
 		}
 
 		private static string _generalUri = null;

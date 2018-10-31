@@ -31,7 +31,7 @@ namespace Carrotware.Web.UI.Components {
 		public bool UseJqueryMigrate { get; set; }
 
 		public static string GetWebResourceUrl(string resource) {
-			return BaseWebComponent.GetWebResourceUrl(typeof(jquery), resource);
+			return CarrotWeb.GetWebResourceUrl(typeof(jquery), resource);
 		}
 
 		private static string _generalUri = null;
@@ -127,6 +127,10 @@ namespace Carrotware.Web.UI.Components {
 			string sAjax = GetWebResourceUrl("Carrotware.Web.UI.Components.unobtrusive-ajax.js");
 
 			sb.AppendLine("<!-- Unobtrusive Ajax --> <script src=\"" + sAjax + "\" type=\"text/javascript\"></script> ");
+
+			string key = CarrotWeb.DateKey();
+
+			sb.AppendLine("<!-- Carrot Helpers --> <script src=\"/carrotwarehelper.ashx?ts=" + key + "\" type=\"text/javascript\"></script> ");
 
 			return sb.ToString().Trim();
 		}

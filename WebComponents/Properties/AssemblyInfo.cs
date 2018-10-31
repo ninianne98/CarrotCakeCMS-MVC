@@ -49,6 +49,8 @@ using System.Web.UI;
 [assembly: WebResource("Carrotware.Web.UI.Components.Grid.attach.png", "image/png")]
 [assembly: WebResource("Carrotware.Web.UI.Components.jsHelperLibrary.js", "text/javascript", PerformSubstitution = true)]
 
+[assembly: WebResource("Carrotware.Web.UI.Components.carrotHelp.js", "text/javascript")]
+
 [assembly: WebResource("Carrotware.Web.UI.Components.jquery-1-6-4.js", "text/javascript")]
 [assembly: WebResource("Carrotware.Web.UI.Components.jquery-1-7-2.js", "text/javascript")]
 [assembly: WebResource("Carrotware.Web.UI.Components.jquery-1-8-3.js", "text/javascript")]

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Text;
 using System.Web.Mvc;
 
 /*
@@ -18,8 +19,15 @@ using System.Web.Mvc;
 namespace Carrotware.Web.UI.Components.Controllers {
 
 	public class HomeController : Controller {
+		protected MemoryStream stream = new MemoryStream();
 
-		[OutputCache(Duration = 360)]
+		protected override void Dispose(bool disposing) {
+			base.Dispose(disposing);
+
+			stream.Dispose();
+		}
+
+		[OutputCache(Duration = 120)]
 		public ActionResult GetImageThumb(string thumb, bool? scale, int? square) {
 			string sImageUri = thumb;
 			string sImgPath = thumb;
@@ -82,9 +90,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 
 							graphics.DrawString(sImageUri, font, textBrush, sidePadding, topPadding);
 
-							using (MemoryStream memStream = new MemoryStream()) {
-								bmpThumb.Save(memStream, ImageFormat.Png);
-							}
+							bmpThumb.Save(stream, ImageFormat.Png);
 
 							textBrush.Dispose();
 							font.Dispose();
@@ -97,12 +103,10 @@ namespace Carrotware.Web.UI.Components.Controllers {
 				return null;
 			}
 
-			using (MemoryStream imgStream = new MemoryStream()) {
-				bmpThumb.Save(imgStream, ImageFormat.Png);
-				bmpThumb.Dispose();
+			bmpThumb.Save(stream, ImageFormat.Png);
+			bmpThumb.Dispose();
 
-				return File(imgStream.ToArray(), "image/png");
-			}
+			return File(stream.ToArray(), "image/png");
 		}
 
 		private Bitmap ResizeBitmap(Bitmap bmpIn, int w, int h) {
@@ -136,15 +140,33 @@ namespace Carrotware.Web.UI.Components.Controllers {
 				return File(bb, "image/png");
 			}
 
-			using (MemoryStream imgStream = new MemoryStream()) {
-				bmpCaptcha.Save(imgStream, ImageFormat.Png);
-				bmpCaptcha.Dispose();
+			bmpCaptcha.Save(stream, ImageFormat.Png);
+			bmpCaptcha.Dispose();
 
-				Response.StatusCode = 200;
-				Response.StatusDescription = "OK";
+			Response.StatusCode = 200;
+			Response.StatusDescription = "OK";
 
-				return File(imgStream.ToArray(), "image/png");
-			}
+			return File(stream.ToArray(), "image/png");
+		}
+
+		[OutputCache(Duration = 600)]
+		public ActionResult GetCarrotHelp(string id) {
+			string sBody = CarrotWeb.GetManifestResourceStream("Carrotware.Web.UI.Components.carrotHelp.js");
+			DateTime timeAM = DateTime.Now.Date.AddHours(6);  // 6AM
+			DateTime timePM = DateTime.Now.Date.AddHours(12);  // 6PM
+
+			sBody = sBody.Replace("[[TIMESTAMP]]", DateTime.UtcNow.ToString("u"));
+
+			sBody = sBody.Replace("[[SHORTDATEPATTERN]]", CarrotWeb.ShortDatePattern);
+			sBody = sBody.Replace("[[SHORTTIMEPATTERN]]", CarrotWeb.ShortTimePattern);
+
+			sBody = sBody.Replace("[[AM_TIMEPATTERN]]", timeAM.ToString("tt"));
+			sBody = sBody.Replace("[[PM_TIMEPATTERN]]", timePM.ToString("tt"));
+
+			var byteArray = Encoding.UTF8.GetBytes(sBody);
+			stream = new MemoryStream(byteArray);
+
+			return File(stream, "text/javascript");
 		}
 	}
 }

@@ -319,6 +319,7 @@
     <EmbeddedResource Include="jquery-1-11-3.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="carrotHelp.js" />
     <EmbeddedResource Include="Grid\accept.png" />
     <EmbeddedResource Include="Grid\attach.png" />
     <EmbeddedResource Include="Grid\cancel.png" />

@@ -2,6 +2,9 @@
 	throw new Error('Common Utils JavaScript requires jQuery')
 }
 
+var cmsDatePattern = '';
+var cmsTimePattern = '';
+
 function AjaxBtnLoad() {
 	$(function () {
 		$('#jqtabs, .jqtabs').tabs();
@@ -29,35 +32,38 @@ function AjaxBtnLoad() {
 		cmsSetDateRegion();
 	}
 
-	cmsSetTimeRegion();
-
-	//if (!cmsTimePattern || cmsTimePattern.length < 1) {
-	//	cmsGetShortTimePattern();
-	//} else {
-	//	cmsSetTimeRegion();
-	//}
+	if (!cmsTimePattern || cmsTimePattern.length < 1) {
+		cmsGetShortTimePattern();
+	} else {
+		cmsSetTimeRegion();
+	}
 }
 
 var webSvc = "/Assets/Admin/CMS.asmx";
 
-function cmsGetShortDatePattern() {
-	var webMthd = webSvc + "/GetShortDatePattern";
+function cmsScrubDate(val) {
+	val = val.replace(/m/gi, 'mm');
+	val = val.replace(/mmm/gi, 'mm');
+	val = val.replace(/d/gi, 'dd');
+	val = val.replace(/ddd/gi, 'dd');
 
-	$.ajax({
-		type: "POST",
-		url: webMthd,
-		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: cmsSetShortDatePattern,
-		error: cmsAjaxFailed
-	});
+	return val.replace(/yyyy/gi, 'yy');
 }
 
-var cmsDatePattern = '';
+function cmsScrubTime(val) {
+	val = val.replace(/h/gi, 'hh');
+	val = val.replace(/hhh/gi, 'hh');
+	val = val.replace(/HH/gi, 'HH');
+	val = val.replace(/HHH/gi, 'HH');
+	val = val.replace(/t/gi, 'tt');
+	val = val.replace(/ttt/gi, 'tt');
 
-function cmsSetShortDatePattern(data, status) {
-	var datePatrn = data.d.toLowerCase();
-	cmsDatePattern = datePatrn.replace(/yyyy/gi, 'yy');
+	return val.replace(/yyyy/gi, 'yy');
+}
+
+function cmsGetShortDatePattern() {
+	var datePatrn = __carrotGetDateFormat();
+	cmsDatePattern = cmsScrubDate(datePatrn);
 
 	cmsSetDateRegion();
 }
@@ -66,6 +72,7 @@ function cmsSetDateRegion() {
 	$(".dateRegion").each(function () {
 		$(this).datepicker({
 			dateFormat: cmsDatePattern,
+			buttonText: cmsDatePattern,
 			changeMonth: true,
 			changeYear: true,
 			showOn: "both",
@@ -77,38 +84,29 @@ function cmsSetDateRegion() {
 }
 
 function cmsGetShortTimePattern() {
-	var webMthd = webSvc + "/GetShortTimePattern";
-
-	$.ajax({
-		type: "POST",
-		url: webMthd,
-		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: cmsSetShortTimePattern,
-		error: cmsAjaxFailed
-	});
-}
-
-var cmsTimePattern = '';
-
-function cmsSetShortTimePattern(data, status) {
-	var datePatrn = data.d.toLowerCase();
-	cmsTimePattern = datePatrn.replace(/yyyy/gi, 'yy');
+	var datePatrn = __carrotGetTimeFormat();
+	cmsTimePattern = cmsScrubTime(datePatrn);
 
 	cmsSetTimeRegion();
 }
 
 function cmsSetTimeRegion() {
+	var showAmPm = (cmsTimePattern.indexOf('tt') != -1) || !(cmsTimePattern.indexOf('HH') != -1);
+	var stringAM = __carrotGetAMDateFormat();
+	var stringPM = __carrotGetPMDateFormat();
+
 	$(".timeRegion").each(function () {
 		if (!$(this).hasClass("hasTimePicker")) {
 			$(this).addClass("hasTimePicker");
 			var id = $(this).attr('id');
-			$('<img class="ui-timepicker-trigger" src="/Assets/Admin/images/clock.png" for="' + id + '" id="' + id + '_triggerbtn" alt="..." title="...">').insertAfter(this);
+			$('<img class="ui-timepicker-trigger" src="/Assets/Admin/images/clock.png" for="' + id + '" id="' + id + '_triggerbtn" alt="' + cmsTimePattern + '" title="' + cmsTimePattern + '">').insertAfter(this);
 
 			$(this).timepicker({
 				showOn: "both",
 				button: '#' + id + '_triggerbtn',
-				showPeriod: true,
+				showPeriodLabels: showAmPm,
+				showPeriod: showAmPm,
+				amPmText: [stringAM, stringPM],
 				showLeadingZero: true
 			});
 		};

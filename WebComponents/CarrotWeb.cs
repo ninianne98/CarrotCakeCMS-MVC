@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -37,6 +39,65 @@ namespace Carrotware.Web.UI.Components {
 			get { return ((WebViewPage)WebPageContext.Current.Page).Url; }
 		}
 
+		public static string ShortDateFormatPattern {
+			get {
+				return "{0:" + ShortDatePattern + "}";
+			}
+		}
+
+		public static string ShortDateTimeFormatPattern {
+			get {
+				return "{0:" + ShortDatePattern + "} {0:" + ShortTimePattern + "} ";
+			}
+		}
+
+		private static string _shortDatePattern = null;
+
+		public static string ShortDatePattern {
+			get {
+				if (_shortDatePattern == null) {
+					DateTimeFormatInfo _dtf = CultureInfo.CurrentCulture.DateTimeFormat;
+					if (_dtf == null) {
+						_dtf = CultureInfo.CreateSpecificCulture("en-US").DateTimeFormat;
+					}
+
+					_shortDatePattern = _dtf.ShortDatePattern ?? "M/d/yyyy";
+					_shortDatePattern = _shortDatePattern.Replace("MM", "M").Replace("dd", "d");
+				}
+
+				return _shortDatePattern;
+			}
+		}
+
+		private static string _shortTimePattern = null;
+
+		public static string ShortTimePattern {
+			get {
+				if (_shortTimePattern == null) {
+					DateTimeFormatInfo _dtf = CultureInfo.CurrentCulture.DateTimeFormat;
+					if (_dtf == null) {
+						_dtf = CultureInfo.CreateSpecificCulture("en-US").DateTimeFormat;
+					}
+					_shortTimePattern = _dtf.ShortTimePattern ?? "hh:mm tt";
+				}
+
+				return _shortTimePattern;
+			}
+		}
+
+		public static string DateKey() {
+			return DateKey(15);
+		}
+
+		public static string DateKey(int interval) {
+			DateTime now = DateTime.UtcNow;
+			TimeSpan d = TimeSpan.FromMinutes(interval);
+			DateTime dt = new DateTime(((now.Ticks + d.Ticks - 1) / d.Ticks) * d.Ticks);
+			byte[] dateStringBytes = ASCIIEncoding.ASCII.GetBytes(dt.ToString("U"));
+
+			return Convert.ToBase64String(dateStringBytes);
+		}
+
 		private static Page _Page;
 
 		private static Page WebPage {
@@ -52,12 +113,31 @@ namespace Carrotware.Web.UI.Components {
 		public static string GetWebResourceUrl(Type type, string resource) {
 			string sPath = String.Empty;
 
+			if (!resource.StartsWith("Carrotware.Web.UI")) {
+				resource = String.Format("Carrotware.Web.UI.Components.(0}", resource);
+			}
+
 			try {
 				sPath = WebPage.ClientScript.GetWebResourceUrl(type, resource);
 				sPath = HttpUtility.HtmlEncode(sPath);
 			} catch { }
 
 			return sPath;
+		}
+
+		public static string GetManifestResourceStream(string resource) {
+			string returnText = null;
+
+			if (!resource.StartsWith("Carrotware.Web.UI")) {
+				resource = String.Format("Carrotware.Web.UI.Components.(0}", resource);
+			}
+
+			Assembly _assembly = Assembly.GetExecutingAssembly();
+			using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream(resource))) {
+				returnText = oTextStream.ReadToEnd();
+			}
+
+			return returnText;
 		}
 
 		public static CarrotWebGrid<T> CarrotWebGrid<T>() where T : class {

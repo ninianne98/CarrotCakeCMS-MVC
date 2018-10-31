@@ -15,10 +15,6 @@ namespace Carrotware.Web.UI.Components {
 
 	public abstract class BaseWebComponent : IWebComponent, IHtmlString {
 
-		public static string GetWebResourceUrl(Type type, string resource) {
-			return CarrotWeb.GetWebResourceUrl(type, resource);
-		}
-
 		protected string CurrentScriptName {
 			get { return HttpContext.Current.Request.ServerVariables["script_name"].ToString(); }
 		}

@@ -57,6 +57,13 @@ namespace Carrotware.Web.UI.Components {
 					defaults: new { controller = "Home", action = "GetCaptchaImage", id = UrlParameter.Optional },
 					namespaces: _namespaces.ToArray()
 				);
+
+			context.MapRoute(
+					name: this.AreaName + "_GetCarrotHelp",
+					url: "carrotwarehelper.ashx/{id}",
+					defaults: new { controller = "Home", action = "GetCarrotHelp", id = UrlParameter.Optional },
+					namespaces: _namespaces.ToArray()
+			);
 		}
 	}
 }

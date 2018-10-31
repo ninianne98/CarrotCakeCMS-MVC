@@ -41,7 +41,7 @@ namespace Carrotware.Web.UI.Components {
 		public bool UseJqueryMigrate { get; set; }
 
 		public static string GetWebResourceUrl(string resource) {
-			return BaseWebComponent.GetWebResourceUrl(typeof(jquerybasic), resource);
+			return CarrotWeb.GetWebResourceUrl(typeof(jquerybasic), resource);
 		}
 
 		private jquery _jq = new jquery();
