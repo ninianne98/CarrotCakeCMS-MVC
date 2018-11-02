@@ -47,7 +47,7 @@ namespace Carrotware.Web.UI.Components {
 
 		public static string ShortDateTimeFormatPattern {
 			get {
-				return "{0:" + ShortDatePattern + "} {0:" + ShortTimePattern + "} ";
+				return "{0:" + ShortDatePattern + "} {0:" + ShortTimePattern + "}";
 			}
 		}
 
