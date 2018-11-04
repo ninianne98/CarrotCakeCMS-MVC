@@ -335,13 +335,11 @@
     <EmbeddedResource Include="captcha2\web.png" />
     <EmbeddedResource Include="jquery-1-3-0-mig.js" />
     <EmbeddedResource Include="jquery-1-12-0.js" />
-    <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
     <EmbeddedResource Include="unobtrusive-ajax.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
