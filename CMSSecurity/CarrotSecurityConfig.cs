@@ -159,7 +159,13 @@ namespace Carrotware.CMS.Security {
 			set { this["ExpireTimeSpan"] = value; }
 		}
 
-		[ConfigurationProperty("ValidateInterval", DefaultValue = 15, IsRequired = false)]
+		[ConfigurationProperty("SetCookieExpireTimeSpan", DefaultValue = true, IsRequired = false)]
+		public Boolean SetCookieExpireTimeSpan {
+			get { return (Boolean)this["SetCookieExpireTimeSpan"]; }
+			set { this["SetCookieExpireTimeSpan"] = value; }
+		}
+
+		[ConfigurationProperty("ValidateInterval", DefaultValue = 30, IsRequired = false)]
 		public int ValidateInterval {
 			get { return (int)this["ValidateInterval"]; }
 			set { this["ValidateInterval"] = value; }

@@ -36,6 +36,7 @@
 									<xs:attribute name="DataProtectionProviderAppName" type="xs:string" use="optional" />
 									<xs:attribute name="LoginPath" type="xs:string" use="optional" />
 									<xs:attribute name="ExpireTimeSpan" type="xs:int" use="optional" />
+									<xs:attribute name="SetCookieExpireTimeSpan" type="xs:boolean" use="optional" />
 									<xs:attribute name="ValidateInterval" type="xs:int" use="optional" />
 								</xs:complexType>
 							</xs:element>

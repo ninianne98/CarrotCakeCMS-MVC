@@ -30,8 +30,25 @@ namespace Carrotware.CMS.Security {
 
 			CarrotSecurityConfig config = CarrotSecurityConfig.GetConfig();
 
+			bool setCookieExpireTimeSpan = config.AdditionalSettings.SetCookieExpireTimeSpan;
 			string loginPath = config.AdditionalSettings.LoginPath;
-			int expireTimeSpan = config.AdditionalSettings.ExpireTimeSpan;
+
+			double expireTimeSpan = config.AdditionalSettings.ExpireTimeSpan;
+			double validateInterval = config.AdditionalSettings.ValidateInterval;
+
+			if (expireTimeSpan < 5) {
+				expireTimeSpan = 5;
+			}
+			if (validateInterval < 5) {
+				validateInterval = 5;
+			}
+
+			//because otherwise you'll get constantly logged out
+			if (expireTimeSpan < validateInterval) {
+				expireTimeSpan = validateInterval + 1;
+			}
+
+			double cookieLife = (setCookieExpireTimeSpan ? expireTimeSpan : validateInterval) + 2;
 
 			app.UseCookieAuthentication(new CookieAuthenticationOptions {
 				AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
@@ -40,11 +57,17 @@ namespace Carrotware.CMS.Security {
 					// Enables the application to validate the security stamp when the user logs in.
 					// This is a security feature which is used when you change a password or add an external login to your account.
 					OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
-						validateInterval: TimeSpan.FromMinutes(30),
-						regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
+						validateInterval: TimeSpan.FromMinutes(validateInterval),
+						regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager)),
+					OnResponseSignIn = (context) => {
+						context.Properties.IsPersistent = true;
+						context.Properties.AllowRefresh = true;
+						context.Properties.ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(cookieLife);
+					}
 				},
-				SlidingExpiration = true,
-				ExpireTimeSpan = TimeSpan.FromMinutes(expireTimeSpan)
+				CookieHttpOnly = true,
+				ExpireTimeSpan = TimeSpan.FromMinutes(expireTimeSpan),
+				SlidingExpiration = true
 			});
 			app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
