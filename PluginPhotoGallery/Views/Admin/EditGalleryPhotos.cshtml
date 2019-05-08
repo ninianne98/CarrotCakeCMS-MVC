@@ -150,7 +150,7 @@
 			min-width: 2px;
 			width: 850px;
 			padding: 8px;
-			margin: 0px;
+			margin: 0;
 			position: absolute;
 			z-index: 2000;
 			text-align: center;
@@ -370,7 +370,7 @@
 									</span>
 								</a>
 							</span>
-							<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink( Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(srcImage.FullFileName) }))">
+							<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink(Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(srcImage.FullFileName) }))">>
 								<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
 							</a>
 						</div>

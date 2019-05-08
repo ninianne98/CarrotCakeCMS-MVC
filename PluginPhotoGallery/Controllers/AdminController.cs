@@ -123,12 +123,23 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			return View(lst);
 		}
 
+		[HttpGet]
 		public ActionResult EditImageMetaData(string path) {
 			GalleryHelper gh = new GalleryHelper(this.SiteID);
 			string imageFile = String.Empty;
 
 			if (!String.IsNullOrEmpty(path)) {
 				imageFile = Utils.DecodeBase64(path);
+			}
+
+			if (imageFile.Contains("../") || imageFile.Contains(@"..\")) {
+				throw new Exception("Cannot use relative paths.");
+			}
+			if (imageFile.Contains(":")) {
+				throw new Exception("Cannot specify drive letters.");
+			}
+			if (imageFile.Contains("//") || imageFile.Contains(@"\\")) {
+				throw new Exception("Cannot use UNC paths.");
 			}
 
 			GalleryMetaData model = gh.GalleryMetaDataGetByFilename(imageFile);
