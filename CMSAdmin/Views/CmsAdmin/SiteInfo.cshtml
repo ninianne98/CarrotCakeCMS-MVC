@@ -75,7 +75,7 @@
 					Site Time Zone
 				</td>
 				<td>
-					@Html.DropDownListFor(m => m.Site.TimeZoneIdentifier, new SelectList(ViewBag.TimeZoneInfoList, "Id", "DisplayName"), new { @class = "form-control-xlg" })
+					@Html.DropDownListFor(m => m.Site.TimeZoneIdentifier, new SelectList(ViewBag.TimeZoneInfoList, "Id", "DisplayNameCurrent"), new { @class = "form-control-xlg" })
 					@Html.ValidationMessageFor(m => m.Site.TimeZoneIdentifier, "", new { @class = "validationError" })
 				</td>
 			</tr>

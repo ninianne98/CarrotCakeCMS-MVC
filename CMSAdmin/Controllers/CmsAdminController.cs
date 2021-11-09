@@ -554,12 +554,20 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		public ActionResult ChangePassword() {
+			ViewBag.ChangePasswordSuccess = "";
+
+			if (this.TempData["cmsChangePasswordSuccess"] != null) {
+				ViewBag.ChangePasswordSuccess = this.TempData["cmsChangePasswordSuccess"].ToString();
+			}
+
 			return View();
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model) {
+			ViewBag.ChangePasswordSuccess = "";
+
 			if (!ModelState.IsValid) {
 				return View(model);
 			}
@@ -571,7 +579,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				if (user != null) {
 					await securityHelper.SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 				}
-				return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+
+				this.TempData["cmsChangePasswordSuccess"] = "Password change success!";
+
+				return RedirectToAction("ChangePassword", new { Message = ManageMessageId.ChangePasswordSuccess });
 			}
 
 			AddErrors(result);
@@ -858,7 +869,23 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		protected void LoadTimeZoneInfo() {
-			ViewBag.TimeZoneInfoList = TimeZoneInfo.GetSystemTimeZones();
+			var now = SiteData.CurrentSite.Now;
+			var lstTZ = TimeZoneInfo.GetSystemTimeZones();
+
+			ViewBag.TimeZoneInfoList = (from z in lstTZ
+										select new {
+											Id = z.Id,
+											DisplayNameCurrent2 = "(UTC" +
+																	(z.GetUtcOffset(now).Hours != 0 ?
+																			(z.GetUtcOffset(now).Hours >= 0 ? "+" : "-") + z.GetUtcOffset(now).ToString("hh\\:mm")
+																			: String.Empty) + ") "
+																	+ (z.IsDaylightSavingTime(now) ? z.DaylightName : z.StandardName),
+											DisplayNameCurrent = z.DisplayName,
+											DisplayName = z.DisplayName,
+											UtcOffset = z.GetUtcOffset(now),
+											StandardName = z.StandardName,
+											DaylightName = z.DaylightName
+										}).OrderBy(x => x.DisplayNameCurrent).OrderBy(x => x.UtcOffset).ToList();
 		}
 
 		protected void LoadDatePattern() {
@@ -1084,15 +1111,18 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					site.SiteID = SiteID;
 				}
 
+				var timezoneOld = site.TimeZoneIdentifier;
+				var datePatternOld = site.Blog_DatePattern;
+
 				site = model.Site;
 
 				site.Save();
 
-				//if (sDatePatternOld != ddlDatePattern.SelectedValue || sTimezoneOld != ddlTimeZone.SelectedValue) {
-				//	using (ContentPageHelper cph = new ContentPageHelper()) {
-				//		cph.BulkBlogFileNameUpdateFromDate(this.SiteID);
-				//	}
-				//}
+				if (datePatternOld != model.Site.Blog_DatePattern || timezoneOld != model.Site.TimeZoneIdentifier) {
+					using (ContentPageHelper cph = new ContentPageHelper()) {
+						cph.BulkBlogFileNameUpdateFromDate(this.SiteID);
+					}
+				}
 
 				if (model.CreateHomePage) {
 					CreateEmptyHome();

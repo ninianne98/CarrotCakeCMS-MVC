@@ -109,6 +109,29 @@
 	</querynugget>
 
 	<querynugget>
+		<priority>12</priority>
+		<mode>LT</mode>
+		<rowcount>1</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|AlterStep02|</testcontext>
+		<sql>
+			select o.name, o.type_desc
+			from sys.objects o
+			where o.name = 'carrot_UpdateGoLiveLocal'
+			AND o.object_id in (select m.object_id
+			from sys.sql_modules as m
+			where m.definition like '%replace(b.PostPrefix + ''/'' + rc.PageSlug, ''//'',  ''/'')%' )
+		</sql>
+	</querynugget>
+	<querynugget>
+		<priority>100</priority>
+		<mode>LT</mode>
+		<rowcount>2</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|StepXX|</testcontext>
+		<sql>XXXXXXXXXXXXXXXX</sql>
+	</querynugget>
+	<querynugget>
 		<priority>100</priority>
 		<mode>LT</mode>
 		<rowcount>2</rowcount>

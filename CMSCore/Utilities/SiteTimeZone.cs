@@ -19,14 +19,6 @@ using System.Xml.Serialization;
 namespace Carrotware.CMS.Core {
 
 	public class ContentLocalTime {
-		public Guid Root_ContentID { get; set; }
-
-		public Guid ContentTypeID { get; set; }
-
-		public string FileName { get; set; }
-
-		public string PageSlug { get; set; }
-
 		public DateTime GoLiveDate { get; set; }
 
 		public DateTime GoLiveDateLocal { get; set; }
@@ -34,11 +26,11 @@ namespace Carrotware.CMS.Core {
 
 	//===============================
 	public class BlogPostPageUrl {
-		public Guid Root_ContentID { get; set; }
+		public string PostPrefix { get; set; }
+
+		public DateTime GoLiveDate { get; set; }
 
 		public DateTime GoLiveDateLocal { get; set; }
-
-		public string FileName { get; set; }
 	}
 
 	//===============================
@@ -58,38 +50,31 @@ namespace Carrotware.CMS.Core {
 			// use C# libraries for timezones rather than pass in offset as some dates are +/- an hour off because of DST
 
 			this.SiteID = siteID;
-
-			this.ContentLocalDates = new List<ContentLocalTime>();
-
-			this.BlogPostUrls = new List<BlogPostPageUrl>();
-
 			SiteData site = SiteData.GetSiteFromCache(siteID);
 
-			List<carrot_RootContent> queryAllContent = null;
+			this.ContentLocalDates = new List<ContentLocalTime>();
+			this.BlogPostUrls = new List<BlogPostPageUrl>();
+
+			var allContentDates = new List<DateTime>();
+			var blogDateList = new List<DateTime>();
 
 			using (CarrotCMSDataContext db = CarrotCMSDataContext.Create()) {
-				queryAllContent = CannedQueries.GetAllRootTbl(db, siteID).ToList();
+				allContentDates = CannedQueries.GetAllDates(db, siteID).Distinct().ToList();
+				blogDateList = CannedQueries.GetAllDatesByType(db, siteID, ContentPageType.PageType.BlogEntry).Distinct().ToList();
 			}
 
-			this.ContentLocalDates = (from p in queryAllContent
-									  select new ContentLocalTime {
-										  Root_ContentID = p.Root_ContentID,
-										  ContentTypeID = p.ContentTypeID,
-										  GoLiveDate = p.GoLiveDate,
-										  PageSlug = p.PageSlug,
-										  FileName = p.FileName,
-										  GoLiveDateLocal = site.ConvertUTCToSiteTime(p.GoLiveDate)
+			this.ContentLocalDates = (from d in allContentDates
+									  select new ContentLocalTime() {
+										  GoLiveDate = d,
+										  GoLiveDateLocal = site.ConvertUTCToSiteTime(d)
 									  }).ToList();
 
-			IEnumerable<ContentLocalTime> queryBlog = (from c in this.ContentLocalDates
-													   where c.ContentTypeID == ContentPageType.GetIDByType(ContentPageType.PageType.BlogEntry)
-													   select c);
-
-			this.BlogPostUrls = (from p in queryBlog
-								 select new BlogPostPageUrl {
-									 Root_ContentID = p.Root_ContentID,
-									 GoLiveDateLocal = p.GoLiveDateLocal,
-									 FileName = ContentPageHelper.CreateFileNameFromSlug(siteID, p.GoLiveDateLocal, p.PageSlug)
+			this.BlogPostUrls = (from bd in blogDateList
+								 join ld in this.ContentLocalDates on bd equals ld.GoLiveDate
+								 select new BlogPostPageUrl() {
+									 GoLiveDate = ld.GoLiveDate,
+									 PostPrefix = ContentPageHelper.CreateFileNameFromSlug(siteID, ld.GoLiveDateLocal, string.Empty),
+									 GoLiveDateLocal = ld.GoLiveDateLocal
 								 }).ToList();
 		}
 

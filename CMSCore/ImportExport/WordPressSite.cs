@@ -16,7 +16,13 @@ namespace Carrotware.CMS.Core {
 
 	public class WordPressSite {
 
-		public WordPressSite() { }
+		public WordPressSite() {
+			this.Content = new List<WordPressPost>();
+			this.Comments = new List<WordPressComment>();
+			this.Authors = new List<WordPressUser>();
+			this.Categories = new List<InfoKVP>();
+			this.Tags = new List<InfoKVP>();
+		}
 
 		public Guid NewSiteID { get; set; }
 

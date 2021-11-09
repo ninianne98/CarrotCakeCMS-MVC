@@ -312,6 +312,20 @@ namespace Carrotware.CMS.Core {
 					select ct);
 		}
 
+		internal static IQueryable<DateTime> GetAllDates(CarrotCMSDataContext ctx, Guid siteID) {
+			return (from ct in ctx.carrot_RootContents
+					where ct.SiteID == siteID
+					select ct.GoLiveDate).Distinct();
+		}
+
+		internal static IQueryable<DateTime> GetAllDatesByType(CarrotCMSDataContext ctx, Guid siteID, ContentPageType.PageType pageType) {
+			var pageTypeId = ContentPageType.GetIDByType(pageType);
+
+			return (from ct in ctx.carrot_RootContents
+					where ct.SiteID == siteID && ct.ContentTypeID == pageTypeId
+					select ct.GoLiveDate).Distinct();
+		}
+
 		internal static IQueryable<carrot_Content> GetContentAllContentTbl(CarrotCMSDataContext ctx, Guid siteID) {
 			return (from ct in ctx.carrot_RootContents
 					join c in ctx.carrot_Contents on ct.Root_ContentID equals c.Root_ContentID

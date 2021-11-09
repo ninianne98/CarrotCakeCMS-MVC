@@ -87,11 +87,11 @@ ALTER PROCEDURE [dbo].[carrot_BlogMonthlyTallies]
 
 /*
 
-exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4eb6-A4E7-BB097C2255A0', 0, 10
+exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4EB6-A4E7-BB097C2255A0', 0, 10
 
-exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4eb6-A4E7-BB097C2255A0', 0, 16
+exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4EB6-A4E7-BB097C2255A0', 0, 16
 
-exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4eb6-A4E7-BB097C2255A0', 0, 5
+exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4EB6-A4E7-BB097C2255A0', 0, 5
 
 */
 
@@ -426,7 +426,7 @@ ALTER TABLE [dbo].[carrot_RootContent]  WITH CHECK ADD  CONSTRAINT [carrot_RootC
 REFERENCES [dbo].[carrot_UserData] ([UserId])
 ALTER TABLE [dbo].[carrot_RootContent] CHECK CONSTRAINT [carrot_RootContent_CreateUserId_FK]
 
-ALTER TABLE [dbo].[carrot_Content]  WITH CHECK ADD  CONSTRAINT [carrot_Content_EditUserId_FK] FOREIGN KEY([CreditUserId])
+ALTER TABLE [dbo].[carrot_Content]  WITH CHECK ADD  CONSTRAINT [carrot_Content_EditUserId_FK] FOREIGN KEY([EditUserId])
 REFERENCES [dbo].[carrot_UserData] ([UserId])
 ALTER TABLE [dbo].[carrot_Content] CHECK CONSTRAINT [carrot_Content_EditUserId_FK]
 

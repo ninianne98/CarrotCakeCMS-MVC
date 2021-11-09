@@ -1,9 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[carrot_BlogDateFilenameUpdate]
+﻿
+CREATE PROCEDURE [dbo].[carrot_BlogDateFilenameUpdate]
     @SiteID uniqueidentifier
     
 /*
 
-exec [carrot_BlogDateFilenameUpdate] '3BD253EA-AC65-4eb6-A4E7-BB097C2255A0' 
+exec [carrot_BlogDateFilenameUpdate] '3BD253EA-AC65-4EB6-A4E7-BB097C2255A0'
 
 */    
     
@@ -18,29 +19,21 @@ SET NOCOUNT ON
     SET @TranStarted = 0
     
     DECLARE @DatePattern nvarchar(50)
-    SELECT  @DatePattern = (select top 1 ct.Blog_DatePattern from dbo.carrot_Sites ct where ct.SiteID = @SiteID)
+    SELECT  @DatePattern = (select top 1 ct.Blog_DatePattern from dbo.carrot_Sites (nolock) ct where ct.SiteID = @SiteID)
 
-    DECLARE @ContentTypeID uniqueidentifier
-    SELECT  @ContentTypeID = (select top 1 ct.ContentTypeID from dbo.carrot_ContentType ct where ct.ContentTypeValue = 'BlogEntry')
+	DECLARE @blogType uniqueidentifier
+	SELECT  @blogType = (select top 1 ct.ContentTypeID from dbo.carrot_ContentType (nolock) ct where ct.ContentTypeValue = 'BlogEntry')
 
 	DECLARE @tblTimeSlugs TABLE(
-		Root_ContentID uniqueidentifier,
-		GoLiveDateLocal datetime not null,
-		TempSlug nvarchar(128) not null,
-		URLBase nvarchar(50) null
+		GoLiveDateLocal datetime,
+		URLBase nvarchar(256)
 	)
 
-	insert into @tblTimeSlugs(Root_ContentID, GoLiveDateLocal, TempSlug)
-		select rc.Root_ContentID, rc.GoLiveDateLocal,  '/' + LOWER(CAST(rc.Root_ContentID as nvarchar(60)) + '.aspx') as tmpSlug 
-		from dbo.[carrot_RootContent] as rc
+	insert into @tblTimeSlugs(GoLiveDateLocal)
+		select distinct rc.GoLiveDateLocal
+		from dbo.[carrot_RootContent] as rc (nolock)
 		where rc.SiteID = @SiteID
-			AND rc.ContentTypeID = @ContentTypeID
-
-
-	IF (ISNULL(@DatePattern, 'yyyy/MM/dd') = 'yyyy/MM/dd' ) BEGIN
-		update @tblTimeSlugs
-		set URLBase = CONVERT(NVARCHAR(20), GoLiveDateLocal, 111)
-	END
+			and rc.ContentTypeID = @blogType
 
 	IF (@DatePattern = 'yyyy/M/d' ) BEGIN
 		update @tblTimeSlugs
@@ -62,6 +55,11 @@ SET NOCOUNT ON
 		set URLBase = CAST(YEAR(GoLiveDateLocal) as nvarchar(20))
 	END
 
+	IF (ISNULL(@DatePattern, 'yyyy/MM/dd') = 'yyyy/MM/dd' ) 
+			OR EXISTS(select * from @tblTimeSlugs where URLBase is null or len(URLBase) < 1) BEGIN
+		update @tblTimeSlugs
+		set URLBase = CONVERT(NVARCHAR(20), GoLiveDateLocal, 111)
+	END
 
     IF ( @@TRANCOUNT = 0 ) BEGIN
         BEGIN TRANSACTION
@@ -69,13 +67,12 @@ SET NOCOUNT ON
     END ELSE
         SET @TranStarted = 0
 
-		--select replace('/'+ s.URLBase +'/' + ISNULL(PageSlug, s.TempSlug), '//','/') as FN
 		update rc
-		set [FileName] = replace('/'+ s.URLBase +'/' + ISNULL(rc.PageSlug, s.TempSlug) , '//','/')
+		set [FileName] = replace('/'+ s.URLBase +'/' + ISNULL(rc.PageSlug, cast(Root_ContentID as nvarchar(64))) , '//','/')
 		from dbo.[carrot_RootContent] rc
-			join @tblTimeSlugs s on rc.Root_ContentID = s.Root_ContentID
+			join @tblTimeSlugs s on rc.GoLiveDateLocal = s.GoLiveDateLocal
 		where rc.SiteID = @SiteID
-			AND rc.ContentTypeID = @ContentTypeID
+			AND rc.ContentTypeID = @blogType
 
 
     IF ( @@ERROR <> 0 ) BEGIN

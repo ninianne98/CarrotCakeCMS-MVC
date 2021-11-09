@@ -334,7 +334,7 @@ namespace Carrotware.CMS.Core {
 			List<ContentDateTally> lstContent = (from ct in lstContentTally
 												 orderby ct.DateMonth descending
 												 select (new ContentDateTally {
-													 DateCaption = ct.DateSlug,
+													 DateCaption = ct.DateMonth.HasValue ? string.Format("{0:MMMM} {0:yyyy}", ct.DateMonth.Value) : ct.DateSlug,
 													 TallyDate = ct.DateMonth ?? DateTime.Now,
 													 UseCount = ct.ContentCount ?? 0,
 													 TheSite = site

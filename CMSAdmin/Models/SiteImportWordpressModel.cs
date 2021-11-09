@@ -332,8 +332,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					}
 
 					using (ContentPageHelper cph = new ContentPageHelper()) {
-						//cph.BulkBlogFileNameUpdateFromDate(site.SiteID);
-						cph.ResolveDuplicateBlogURLs(site.SiteID);
+						cph.BulkBlogFileNameUpdateFromDate(site.SiteID);
 						cph.FixBlogNavOrder(site.SiteID);
 					}
 				}

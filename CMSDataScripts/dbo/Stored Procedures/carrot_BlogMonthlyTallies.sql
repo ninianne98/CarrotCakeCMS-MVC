@@ -1,15 +1,14 @@
-﻿CREATE PROCEDURE [dbo].[carrot_BlogMonthlyTallies]
+﻿
+CREATE PROCEDURE [dbo].[carrot_BlogMonthlyTallies]
     @SiteID uniqueidentifier,
     @ActiveOnly bit,    
     @TakeTop int = 10
 
 /*
 
-exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4eb6-A4E7-BB097C2255A0', 0, 10
+exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4EB6-A4E7-BB097C2255A0', 1, 16
 
-exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4eb6-A4E7-BB097C2255A0', 0, 16
-
-exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4eb6-A4E7-BB097C2255A0', 0, 5
+exec [carrot_BlogMonthlyTallies] '3BD253EA-AC65-4EB6-A4E7-BB097C2255A0', 0, 16
 
 */
 
@@ -20,8 +19,8 @@ SET NOCOUNT ON
 	DECLARE @UTCDateTime Datetime
 	SET @UTCDateTime = GetUTCDate()
 	
-    DECLARE @ContentTypeID uniqueidentifier
-    SELECT  @ContentTypeID = (select top 1 ct.ContentTypeID from dbo.carrot_ContentType ct where ct.ContentTypeValue = 'BlogEntry')
+	DECLARE @blogType uniqueidentifier
+	SELECT  @blogType = (select top 1 ct.ContentTypeID from dbo.carrot_ContentType (nolock) ct where ct.ContentTypeValue = 'BlogEntry')
 
 	DECLARE @tblTallies TABLE(
 		RowID int identity(1,1),
@@ -37,12 +36,12 @@ SET NOCOUNT ON
 					CONVERT(datetime, CONVERT(nvarchar(100), GoLiveDateLocal, 112)) AS DateMonth, 
 					DATENAME(MONTH, GoLiveDateLocal) + ' ' + CAST(YEAR(GoLiveDateLocal) as nvarchar(100)) AS DateSlug
 			FROM (SELECT Root_ContentID, SiteID, ContentTypeID, (GoLiveDateLocal - DAY(GoLiveDateLocal) + 1) as GoLiveDateLocal
-				FROM [dbo].[carrot_RootContent]
+				FROM [dbo].[carrot_RootContent] (nolock)
 				WHERE SiteID = @SiteID
 					AND (PageActive = 1 OR @ActiveOnly = 0)
 					AND (GoLiveDate < @UTCDateTime OR @ActiveOnly = 0)
 					AND (RetireDate > @UTCDateTime OR @ActiveOnly = 0)
-					AND ContentTypeID = @ContentTypeID ) AS Y) AS Z
+					AND ContentTypeID = @blogType ) AS Y) AS Z
 
 		GROUP BY SiteID, DateMonth, DateSlug
 		ORDER BY DateMonth DESC
