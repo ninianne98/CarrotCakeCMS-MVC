@@ -2,7 +2,6 @@
 using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Reflection;
 using System.Web;
@@ -234,7 +233,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		protected HtmlHelper<ContactInfo> InitHelp() {
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(ContactInfoSettings));
-			string sXML = String.Empty;
+			string sXML = string.Empty;
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
@@ -296,7 +295,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		protected void InitStuff() {
 			this.NotifyEditors = false;
-			this.DirectEmailKeyName = String.Empty;
+			this.DirectEmailKeyName = string.Empty;
 		}
 
 		public string DirectEmailKeyName { get; set; }
@@ -389,7 +388,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		protected HtmlHelper<LoginInfo> InitHelp() {
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(LoginInfoSettings));
-			string sXML = String.Empty;
+			string sXML = string.Empty;
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
@@ -526,7 +525,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		protected HtmlHelper<LogoutInfo> InitHelp() {
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(LogoutInfoSettings));
-			string sXML = String.Empty;
+			string sXML = string.Empty;
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
@@ -661,7 +660,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		protected HtmlHelper<ForgotPasswordInfo> InitHelp() {
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(ForgotPasswordInfoSettings));
-			string sXML = String.Empty;
+			string sXML = string.Empty;
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
@@ -805,7 +804,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		protected HtmlHelper<ResetPasswordInfo> InitHelp() {
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(ResetPasswordInfoSettings));
-			string sXML = String.Empty;
+			string sXML = string.Empty;
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
@@ -851,7 +850,7 @@ namespace Carrotware.CMS.UI.Components {
 		public static string CodeUrl {
 			get {
 				return HttpContext.Current.Request.QueryString["code"] != null
-					? HttpContext.Current.Request.QueryString["code"].ToString() : String.Empty;
+					? HttpContext.Current.Request.QueryString["code"].ToString() : string.Empty;
 			}
 		}
 	}
@@ -955,7 +954,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		protected HtmlHelper<ChangePasswordInfo> InitHelp() {
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(ChangePasswordInfoSettings));
-			string sXML = String.Empty;
+			string sXML = string.Empty;
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
@@ -997,7 +996,7 @@ namespace Carrotware.CMS.UI.Components {
 		public static string CodeUrl {
 			get {
 				return HttpContext.Current.Request.QueryString["code"] != null
-					? HttpContext.Current.Request.QueryString["code"].ToString() : String.Empty;
+					? HttpContext.Current.Request.QueryString["code"].ToString() : string.Empty;
 			}
 		}
 	}
@@ -1110,7 +1109,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		protected HtmlHelper<ChangeProfileInfo> InitHelp() {
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(ChangeProfileInfoSettings));
-			string sXML = String.Empty;
+			string sXML = string.Empty;
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
@@ -1172,8 +1171,8 @@ namespace Carrotware.CMS.UI.Components {
 	internal class FormRouteValue {
 
 		internal FormRouteValue() {
-			this.controller = String.Empty;
-			this.action = String.Empty;
+			this.controller = string.Empty;
+			this.action = string.Empty;
 			this.carrotedit = null;
 		}
 

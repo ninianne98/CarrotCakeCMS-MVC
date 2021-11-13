@@ -162,11 +162,11 @@ namespace Carrotware.CMS.Core {
 				cont.NavMenuText = c.PostTitle;
 				cont.PageHead = c.PostTitle;
 				cont.PageText = c.PostContent;
-				cont.LeftPageText = String.Empty;
-				cont.RightPageText = String.Empty;
+				cont.LeftPageText = string.Empty;
+				cont.RightPageText = string.Empty;
 
-				cont.MetaDescription = String.Empty;
-				cont.MetaKeyword = String.Empty;
+				cont.MetaDescription = string.Empty;
+				cont.MetaKeyword = string.Empty;
 
 				cont.ContentCategories = new List<ContentCategory>();
 				cont.ContentTags = new List<ContentTag>();
@@ -236,7 +236,7 @@ namespace Carrotware.CMS.Core {
 
 		public static string GetExportXML<T>(T cpe) {
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-			string sXML = String.Empty;
+			string sXML = string.Empty;
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, cpe);
 				sXML = stringWriter.ToString();
@@ -322,7 +322,7 @@ namespace Carrotware.CMS.Core {
 				CMSConfigHelper.ClearSerialized(guidKey, keyPageImport);
 			} else {
 				XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-				string sXML = String.Empty;
+				string sXML = string.Empty;
 				using (StringWriter stringWriter = new StringWriter()) {
 					xmlSerializer.Serialize(stringWriter, theData);
 					sXML = stringWriter.ToString();

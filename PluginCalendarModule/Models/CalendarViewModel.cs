@@ -11,9 +11,9 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Models {
 	public class CalendarViewModel {
 
 		public CalendarViewModel() {
-			this.SerialSettings = String.Empty;
+			this.SerialSettings = string.Empty;
 			this.GenerateCss = true;
-			this.AlternateViewFile = String.Empty;
+			this.AlternateViewFile = string.Empty;
 			this.MonthSelected = DateTime.Now.Date;
 			this.MonthNext = this.MonthSelected.AddMonths(1);
 			this.MonthPrior = this.MonthSelected.AddMonths(-1);
@@ -62,7 +62,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Models {
 		public string SerialSettings { get; set; }
 
 		public void SetSettings(CalendarDisplaySettings obj) {
-			string sXML = String.Empty;
+			string sXML = string.Empty;
 
 			if (obj != null) {
 				CalendarViewSettings settings = ConvertSettings(obj);

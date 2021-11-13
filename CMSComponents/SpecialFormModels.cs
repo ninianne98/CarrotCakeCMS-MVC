@@ -107,8 +107,8 @@ namespace Carrotware.CMS.UI.Components {
 					emails.Add(ConfigurationManager.AppSettings[this.Settings.DirectEmailKeyName].ToString());
 				}
 
-				string strHTTPHost = String.Empty;
-				try { strHTTPHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { strHTTPHost = String.Empty; }
+				string strHTTPHost = string.Empty;
+				try { strHTTPHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { strHTTPHost = string.Empty; }
 
 				string hostName = strHTTPHost.ToLowerInvariant();
 

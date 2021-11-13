@@ -16,6 +16,14 @@
 
 	protected void Application_Start() {
 		Helper.RegisterCmsComponents();
+
+		MvcHandler.DisableMvcResponseHeader = true; //this line is to hide mvc header
+	}
+
+	protected void Application_PreSendRequestHeaders() {
+		if (HttpContext.Current != null) {
+			HttpContext.Current.Response.Headers.Remove("Server");
+		}
 	}
 
 	/*

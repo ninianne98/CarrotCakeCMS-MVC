@@ -107,7 +107,7 @@ namespace Carrotware.CMS.Core {
 		private static Page _CachedPage;
 
 		public static string GetWebResourceUrl(Type type, string resource) {
-			string sPath = String.Empty;
+			string sPath = string.Empty;
 
 			try {
 				sPath = CachedPage.ClientScript.GetWebResourceUrl(type, resource);
@@ -118,7 +118,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string GetWebResourceUrl(Control X, Type type, string resource) {
-			string sPath = String.Empty;
+			string sPath = string.Empty;
 
 			if (X != null && X.Page != null) {
 				sPath = X.Page.ClientScript.GetWebResourceUrl(type, resource);
@@ -218,7 +218,7 @@ namespace Carrotware.CMS.Core {
 			if (iExpectedTblCount > 0) {
 				iTblCount = ds.Tables.Count;
 
-				string table1Name = String.Empty;
+				string table1Name = string.Empty;
 
 				List<string> reqCols0 = new List<string>();
 				List<string> reqCols1 = new List<string>();
@@ -438,7 +438,7 @@ namespace Carrotware.CMS.Core {
 
 		public CMSAdminModuleMenu GetCurrentAdminModuleControl() {
 			HttpRequest request = HttpContext.Current.Request;
-			string pf = String.Empty;
+			string pf = string.Empty;
 			CMSAdminModuleMenu cc = null;
 
 			if (request.QueryString["pf"] != null) {
@@ -470,7 +470,7 @@ namespace Carrotware.CMS.Core {
 
 		public List<CMSAdminModuleMenu> GetCurrentAdminModuleControlList() {
 			HttpRequest request = HttpContext.Current.Request;
-			string pf = String.Empty;
+			string pf = string.Empty;
 
 			CMSAdminModule mod = (from m in AdminModules
 								  where m.AreaKey == PluginAreaPath
@@ -602,7 +602,7 @@ namespace Carrotware.CMS.Core {
 														select new CMSTextWidgetPicker {
 															TextWidgetPickerID = p.TextWidgetID,
 															AssemblyString = p.TextWidgetAssembly,
-															DisplayName = String.Empty,
+															DisplayName = string.Empty,
 															ProcessBody = p.ProcessBody,
 															ProcessPlainText = p.ProcessPlainText,
 															ProcessHTMLText = p.ProcessHTMLText,
@@ -684,7 +684,7 @@ namespace Carrotware.CMS.Core {
 							var _p2 = (from d in ds.Tables[0].AsEnumerable()
 									   select new CMSTemplate {
 										   TemplatePath = "~/" + (sPathPrefix + d.Field<string>("templatefile").ToLowerInvariant()).ToLowerInvariant(),
-										   EncodedPath = String.Empty,
+										   EncodedPath = string.Empty,
 										   Caption = d.Field<string>("filedesc")
 									   }).ToList();
 
@@ -795,7 +795,7 @@ namespace Carrotware.CMS.Core {
 
 					_sites = (from d in ds.Tables[0].AsEnumerable()
 							  select new DynamicSite {
-								  DomainName = String.IsNullOrEmpty(d.Field<string>("domname")) ? String.Empty : d.Field<string>("domname").ToLowerInvariant(),
+								  DomainName = String.IsNullOrEmpty(d.Field<string>("domname")) ? string.Empty : d.Field<string>("domname").ToLowerInvariant(),
 								  SiteID = new Guid(d.Field<string>("siteid"))
 							  }).ToList();
 
@@ -1069,7 +1069,7 @@ namespace Carrotware.CMS.Core {
 					ClearSerialized(keyAdminContent);
 				} else {
 					XmlSerializer xmlSerializer = new XmlSerializer(typeof(ContentPage));
-					string sXML = String.Empty;
+					string sXML = string.Empty;
 					using (StringWriter stringWriter = new StringWriter()) {
 						xmlSerializer.Serialize(stringWriter, value);
 						sXML = stringWriter.ToString();
@@ -1098,7 +1098,7 @@ namespace Carrotware.CMS.Core {
 					ClearSerialized(keyAdminWidget);
 				} else {
 					XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Widget>));
-					string sXML = String.Empty;
+					string sXML = string.Empty;
 					using (StringWriter stringWriter = new StringWriter()) {
 						xmlSerializer.Serialize(stringWriter, value);
 						sXML = stringWriter.ToString();
@@ -1135,7 +1135,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string GetSerialized(Guid itemID, string sKey) {
-			string sData = String.Empty;
+			string sData = string.Empty;
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
 				carrot_SerialCache itm = CompiledQueries.SearchSeriaCache(_db, itemID, sKey);
 
@@ -1169,7 +1169,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		private string GetSerialized(string sKey) {
-			string sData = String.Empty;
+			string sData = string.Empty;
 			LoadGuids();
 
 			if (filePage != null) {

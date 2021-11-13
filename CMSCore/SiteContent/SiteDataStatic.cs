@@ -54,6 +54,7 @@ namespace Carrotware.CMS.Core {
 						sb.Replace(p5.Key, p5.Value);
 					}
 
+					// [[CARROT_SITE_NAME]]: [[CARROT_PAGE_TITLEBAR]] ([[CARROT_PAGE_DATE_EDIT:MMMM d, yyyy]])
 					var p6 = ParsePlaceholder(s.SiteTitlebarPattern, "[[CARROT_PAGE_DATE_EDIT:*]]", 6);
 					if (!String.IsNullOrEmpty(p6.Key)) {
 						sb.Replace(p6.Key, p6.Value);
@@ -67,28 +68,29 @@ namespace Carrotware.CMS.Core {
 		}
 
 		private static KeyValuePair<string, string> ParsePlaceholder(string titleString, string placeHolder, int posNum) {
-			KeyValuePair<string, string> pair = new KeyValuePair<string, string>(String.Empty, String.Empty);
+			var pair = new KeyValuePair<string, string>(string.Empty, string.Empty);
 
-			string[] frags = placeHolder.Split(':');
-			string frag0 = frags[0];
-			string frag1 = frags[1];
+			if (placeHolder.Contains(":")) {
+				string fragTest = placeHolder.Substring(0, placeHolder.IndexOf(":") + 1);
 
-			string formatPattern = String.Format("{{{0}}}", posNum);
+				string formatPattern = String.Format("{{{0}}}", posNum);
 
-			if (titleString.Contains(frag0)) {
-				int idx1 = titleString.IndexOf(frag0);
-				int idx2 = titleString.IndexOf("]]", idx1 + 4);
-				int len = idx2 - idx1 - frag0.Length - 1;
+				if (titleString.Contains(fragTest)) {
+					int idx1 = titleString.IndexOf(fragTest);
+					int idx2 = titleString.IndexOf("]]", idx1 + 4);
+					int len = idx2 - idx1 - fragTest.Length;
 
-				if (idx1 > 0 && idx2 > 0) {
-					string format = "d";
-					if (len > 0) {
-						format = titleString.Substring(idx1 + frag0.Length + 1, len);
+					if (idx1 >= 0 && idx2 > 0 && titleString.Contains(fragTest)) {
+						string format = "M/d/yyyy"; // default date format
+
+						if (len > 0) {
+							format = titleString.Substring(idx1 + fragTest.Length, len);
+						}
+						placeHolder = placeHolder.Replace("*", format);
+
+						formatPattern = String.Format("{{{0}:{1}}}", posNum, format);
+						pair = new KeyValuePair<string, string>(placeHolder, formatPattern);
 					}
-					placeHolder = placeHolder.Replace("*", format);
-
-					formatPattern = String.Format("{{{0}:{1}}}", posNum, format);
-					pair = new KeyValuePair<string, string>(placeHolder, formatPattern);
 				}
 			}
 
@@ -362,6 +364,28 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		public static SiteData InitNewSite(Guid siteID) {
+			SiteData site = new SiteData();
+			site.SiteID = siteID;
+			site.BlockIndex = true;
+
+			site.MainURL = "http://" + CMSConfigHelper.DomainName;
+			site.SiteName = CMSConfigHelper.DomainName;
+
+			site.SiteTitlebarPattern = SiteData.DefaultPageTitlePattern;
+
+			site.Blog_FolderPath = "archive";
+			site.Blog_CategoryPath = "category";
+			site.Blog_TagPath = "tag";
+			site.Blog_DatePath = "date";
+			site.Blog_EditorPath = "author";
+			site.Blog_DatePattern = "yyyy/MM/dd";
+
+			site.TimeZoneIdentifier = TimeZoneInfo.Local.Id;
+
+			return site;
+		}
+
 		public static AspNetHostingPermissionLevel CurrentTrustLevel {
 			get {
 				foreach (AspNetHostingPermissionLevel trustLevel in
@@ -392,7 +416,7 @@ namespace Carrotware.CMS.Core {
 		public static void ManuallyWriteDefaultFile(HttpContext context, Exception objErr) {
 			Assembly _assembly = Assembly.GetExecutingAssembly();
 
-			string sBody = String.Empty;
+			string sBody = string.Empty;
 
 			using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream("Carrotware.CMS.Core.SiteContent.Default.htm"))) {
 				sBody = oTextStream.ReadToEnd();
@@ -430,7 +454,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		private static string FormatToHTML(string inputString) {
-			string outputString = String.Empty;
+			string outputString = string.Empty;
 			if (!String.IsNullOrEmpty(inputString)) {
 				StringBuilder sb = new StringBuilder(inputString);
 				sb.Replace("\r\n", " <br \\> \r\n");
@@ -445,7 +469,7 @@ namespace Carrotware.CMS.Core {
 		public static string FormatErrorOutput(Exception objErr) {
 			Assembly _assembly = Assembly.GetExecutingAssembly();
 
-			string sBody = String.Empty;
+			string sBody = string.Empty;
 			using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream("Carrotware.CMS.Core.SiteContent.ErrorFormat.htm"))) {
 				sBody = oTextStream.ReadToEnd();
 			}
@@ -548,7 +572,7 @@ namespace Carrotware.CMS.Core {
 			XmlElement xmlCustomErrors = xDoc.SelectSingleNode("//system.web/customErrors") as XmlElement;
 
 			if (xmlCustomErrors != null) {
-				string redirectPage = String.Empty;
+				string redirectPage = string.Empty;
 
 				if (xmlCustomErrors.Attributes["mode"] != null && xmlCustomErrors.Attributes["mode"].Value.ToLowerInvariant() != "off") {
 					if (xmlCustomErrors.Attributes["defaultRedirect"] != null) {
@@ -561,7 +585,7 @@ namespace Carrotware.CMS.Core {
 							redirectPage = xmlErrNode.Attributes["redirect"].Value;
 						}
 					}
-					string sQS = String.Empty;
+					string sQS = string.Empty;
 					if (context.Request.QueryString != null) {
 						if (!String.IsNullOrEmpty(context.Request.QueryString.ToString())) {
 							sQS = HttpUtility.UrlEncode(String.Format("?{0}", context.Request.QueryString));
@@ -615,7 +639,7 @@ namespace Carrotware.CMS.Core {
 			get {
 				Assembly _assembly = Assembly.GetExecutingAssembly();
 
-				string sBody = String.Empty;
+				string sBody = string.Empty;
 				using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream("Carrotware.CMS.Core.SiteContent.FirstPage.txt"))) {
 					sBody = oTextStream.ReadToEnd();
 				}
@@ -763,7 +787,7 @@ namespace Carrotware.CMS.Core {
 
 		public static string RefererScriptName {
 			get {
-				string sPath = String.Empty;
+				string sPath = string.Empty;
 				try { sPath = HttpContext.Current.Request.ServerVariables["http_referer"].ToString(); } catch { }
 				return sPath;
 			}

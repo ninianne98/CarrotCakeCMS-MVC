@@ -159,28 +159,6 @@ namespace Carrotware.CMS.Core {
 			return CurrentSite;
 		}
 
-		public static SiteData InitNewSite(Guid siteID) {
-			SiteData site = new SiteData();
-			site.SiteID = siteID;
-			site.BlockIndex = true;
-
-			site.MainURL = "http://" + CMSConfigHelper.DomainName;
-			site.SiteName = CMSConfigHelper.DomainName;
-
-			site.SiteTitlebarPattern = SiteData.DefaultPageTitlePattern;
-
-			site.Blog_FolderPath = "archive";
-			site.Blog_CategoryPath = "category";
-			site.Blog_TagPath = "tag";
-			site.Blog_DatePath = "date";
-			site.Blog_EditorPath = "author";
-			site.Blog_DatePattern = "yyyy/MM/dd";
-
-			site.TimeZoneIdentifier = TimeZoneInfo.Local.Id;
-
-			return site;
-		}
-
 		public void Save() {
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
 				carrot_Site s = CompiledQueries.cqGetSiteByID(_db, this.SiteID);

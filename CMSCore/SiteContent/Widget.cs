@@ -243,7 +243,7 @@ namespace Carrotware.CMS.Core {
 
 		public void SaveDefaultControlProperties(List<WidgetProps> props) {
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<WidgetProps>));
-			string sXML = "";
+			string sXML = string.Empty;
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, props);
 				sXML = stringWriter.ToString();

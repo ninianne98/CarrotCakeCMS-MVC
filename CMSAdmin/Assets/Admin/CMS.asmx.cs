@@ -86,7 +86,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				if (value == null) {
 					ClearSerialized(CMSConfigHelper.keyAdminContent);
 				} else {
-					string sXML = String.Empty;
+					string sXML = string.Empty;
 					XmlSerializer xmlSerializer = new XmlSerializer(typeof(ContentPage));
 					using (StringWriter stringWriter = new StringWriter()) {
 						xmlSerializer.Serialize(stringWriter, value);
@@ -101,7 +101,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			get {
 				List<Widget> c = null;
 				string sXML = GetSerialized(CMSConfigHelper.keyAdminWidget);
-				//since a page may not have any widgets, initalize it and skip deserializing
+				//since a page may not have any widgets, initialize it and skip deserializing
 				if (!String.IsNullOrEmpty(sXML)) {
 					XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Widget>));
 					Object genpref = null;
@@ -118,7 +118,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				if (value == null) {
 					ClearSerialized(CMSConfigHelper.keyAdminWidget);
 				} else {
-					string sXML = String.Empty;
+					string sXML = string.Empty;
 					XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Widget>));
 					using (StringWriter stringWriter = new StringWriter()) {
 						xmlSerializer.Serialize(stringWriter, value);
@@ -136,7 +136,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		}
 
 		private string GetSerialized(string sKey) {
-			string sData = String.Empty;
+			string sData = string.Empty;
 			LoadGuids();
 
 			sData = CMSConfigHelper.GetSerialized(CurrentPageGuid, sKey);
@@ -176,7 +176,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			return SiteData.AdminFolderPath;
 		}
 
-		private string CurrentEditPage = String.Empty;
+		private string CurrentEditPage = string.Empty;
 
 		[WebMethod]
 		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
@@ -263,7 +263,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		}
 
 		private void GetSetUserEditStateAsEmpty() {
-			GetSetUserEditState(String.Empty, String.Empty, String.Empty, String.Empty, String.Empty);
+			GetSetUserEditState(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 		}
 
 		private void GetSetUserEditState(string ToolbarState, string ToolbarMargin, string ToolbarScroll, string WidgetScroll, string SelTabID) {
@@ -644,7 +644,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 								sTheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, sTestFile);
 								break;
 							} else {
-								sTheFileName = String.Empty;
+								sTheFileName = string.Empty;
 							}
 						}
 					}
@@ -658,7 +658,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 								sTheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, sTestFile);
 								break;
 							} else {
-								sTheFileName = String.Empty;
+								sTheFileName = string.Empty;
 							}
 						}
 					}

@@ -82,7 +82,7 @@ namespace Carrotware.CMS.Core {
 			using (CarrotCMSDataContext db = CarrotCMSDataContext.Create()) {
 				string xml = this.GetXml();
 
-				xml = xml.Replace("<?xml version=\"1.0\" encoding=\"utf-16\"?>", "");
+				xml = xml.Replace("<?xml version=\"1.0\" encoding=\"utf-16\"?>", string.Empty);
 
 				db.carrot_UpdateGoLiveLocal(this.SiteID, XElement.Parse(xml));
 			}
@@ -90,7 +90,7 @@ namespace Carrotware.CMS.Core {
 
 		public string GetXml() {
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(TimeZoneContent));
-			string sXML = "";
+			string sXML = string.Empty;
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, this);
 				sXML = stringWriter.ToString();
