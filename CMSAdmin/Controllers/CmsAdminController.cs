@@ -869,7 +869,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		protected void LoadTimeZoneInfo() {
-			var now = SiteData.CurrentSite.Now;
+			var now = DateTime.Now;
+
+			if (SiteData.CurrentSite != null) {
+				// site is pre-existing
+				now = SiteData.CurrentSite.Now;
+			}
+
 			var lstTZ = TimeZoneInfo.GetSystemTimeZones();
 
 			ViewBag.TimeZoneInfoList = (from z in lstTZ
