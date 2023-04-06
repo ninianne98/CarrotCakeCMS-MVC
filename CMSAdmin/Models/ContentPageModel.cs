@@ -21,7 +21,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public ContentPageModel() {
 			this.InitSelections();
-			this.Mode = "html";
+			this.Mode = SiteData.HtmlMode;
 			this.VisitPage = false;
 
 			this.VersionHistory = new Dictionary<string, string>();
@@ -136,7 +136,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 											   join u in ExtendedUserData.GetUserList() on v.EditUserId equals u.UserId
 											   orderby v.EditDate descending
 											   select new KeyValuePair<string, string>(v.ContentID.ToString(),
-																		String.Format("{0} ({1}) {2}", v.EditDate, u.UserName, (v.IsLatestVersion ? " [**] " : " ")))
+																		string.Format("{0} ({1}) {2}", v.EditDate, u.UserName, (v.IsLatestVersion ? " [**] " : " ")))
 																		).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
 					} else {
 						this.ContentPage.CreateDate = DateTime.UtcNow.Date;
@@ -207,7 +207,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			ContentPage pageContents = null;
 			this.ImportID = importid;
 			this.VersionID = versionid;
-			this.Mode = (String.IsNullOrEmpty(mode) || mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
+			this.Mode = SiteData.EditMode(mode);
 
 			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
 				if (!id.HasValue && !versionid.HasValue && !importid.HasValue) {
@@ -317,7 +317,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			ContentPage pageContents = null;
 			this.ImportID = importid;
 			this.VersionID = versionid;
-			this.Mode = (String.IsNullOrEmpty(mode) || mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
+			this.Mode = SiteData.EditMode(mode);
 
 			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
 				if (!id.HasValue && !versionid.HasValue && !importid.HasValue) {
@@ -445,7 +445,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			IEnumerable<ValidationResult> oldErrors = this.ContentPage.Validate(validationContext);
 
 			foreach (ValidationResult s in oldErrors) {
-				List<string> mbrs = s.MemberNames.ToList().Select(m => String.Format("ContentPage.{0}", m)).ToList();
+				List<string> mbrs = s.MemberNames.ToList().Select(m => string.Format("ContentPage.{0}", m)).ToList();
 
 				errors.Add(new ValidationResult(s.ErrorMessage, mbrs));
 			}

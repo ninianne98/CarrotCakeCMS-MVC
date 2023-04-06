@@ -786,22 +786,18 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static ContentPage GetSamplerView() {
-			string sFile1 = String.Empty;
-			string sFile2 = String.Empty;
+			string sFile1 = string.Empty;
+			string sFile2 = string.Empty;
 
 			try {
 				Assembly _assembly = Assembly.GetExecutingAssembly();
 
-				using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream("Carrotware.CMS.Core.SiteContent.Mock.SampleContent1.txt"))) {
-					sFile1 = oTextStream.ReadToEnd();
-				}
-				using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream("Carrotware.CMS.Core.SiteContent.Mock.SampleContent2.txt"))) {
-					sFile2 = oTextStream.ReadToEnd();
-				}
+				sFile1 = SiteData.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Mock.SampleContent1.txt");
+				sFile2 = SiteData.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Mock.SampleContent2.txt");
 
 				List<string> imageNames = (from i in _assembly.GetManifestResourceNames()
-										   where i.Contains("SiteContent.Mock.sample")
-										   && i.EndsWith(".png")
+										   where i.ToLowerInvariant().Contains("sitecontent.mock.sample")
+													 && i.EndsWith(".png")
 										   select i).ToList();
 
 				foreach (string img in imageNames) {

@@ -1,0 +1,48 @@
+﻿@model Northwind.Models.TestModel
+
+@using Northwind.Models
+
+@{
+	ViewBag.Title = "Test Product Search Multi";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	<div>
+		<div class="form-horizontal">
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.SelectedCategories, htmlAttributes: new { @class = "control-label col-md-2" })
+				<div class="col-md-8">
+					@Html.ListBoxFor(m => m.SelectedCategories,
+					  new MultiSelectList(Model.Categories, "CategoryID", "CategoryName", Model.SelectedCategories),
+					 new { @class = "form-control chosen-select", @data_placeholder = "Select Categories" })
+				</div>
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(model => model.SelectedView, htmlAttributes: new { @class = "control-label col-md-2" })
+				<div class="col-md-8">
+					@Html.DropDownListFor(m => m.SelectedView, new SelectList(Model.Views, Model.SelectedView), "[select]")
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-offset-2 col-md-8">
+					<input type="submit" value="Save" class="btn btn-primary" />
+				</div>
+			</div>
+
+
+			<script type="text/javascript">
+				$(document).ready(function () {
+					$(".chosen-select").chosen({ width: "98%" });
+				});
+			</script>
+		</div>
+	</div>
+
+}
+
+@Html.Partial(Model.SelectedView, Model.ProductSearch)

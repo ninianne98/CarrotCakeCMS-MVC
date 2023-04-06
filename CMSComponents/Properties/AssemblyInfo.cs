@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Web.UI;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -34,10 +33,3 @@ using System.Web.UI;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("5.5.*")]
 //  [assembly: AssemblyFileVersion("5.4.0.0")]
-
-[assembly: WebResource("TopMenu.txt", "text/css")]
-[assembly: WebResource("_TextZone.cshtml", "text/html")]
-[assembly: WebResource("_WidgetZone.cshtml", "text/html")]
-[assembly: WebResource("_WidgetWrapper.cshtml", "text/html")]
-
-[assembly: WebResource("Carrotware.CMS.UI.Components.feed.png", "image/png")]

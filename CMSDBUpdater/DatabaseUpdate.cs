@@ -42,6 +42,17 @@ namespace Carrotware.CMS.DBUpdater {
 			}
 		}
 
+		public static string ReadEmbededScript(string sResouceName) {
+			string sReturn = null;
+
+			Assembly _assembly = Assembly.GetExecutingAssembly();
+			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(sResouceName))) {
+				sReturn = stream.ReadToEnd();
+			}
+
+			return sReturn;
+		}
+
 		private void TestDatabaseWithQuery() {
 			DatabaseUpdate.LastSQLError = null;
 
@@ -507,7 +518,6 @@ namespace Carrotware.CMS.DBUpdater {
 			return res;
 		}
 
-
 		public DatabaseUpdateResponse AlterStep02() {
 			DatabaseUpdateResponse res = new DatabaseUpdateResponse();
 
@@ -531,19 +541,6 @@ namespace Carrotware.CMS.DBUpdater {
 
 			res.Response = "Timezone sproc update already applied";
 			return res;
-		}
-
-
-		private string ReadEmbededScript(string filePath) {
-			string sFile = "";
-
-			Assembly _assembly = Assembly.GetExecutingAssembly();
-
-			using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream(filePath))) {
-				sFile = oTextStream.ReadToEnd();
-			}
-
-			return sFile;
 		}
 
 		private List<string> SplitScriptAtGo(string sSQLQuery) {

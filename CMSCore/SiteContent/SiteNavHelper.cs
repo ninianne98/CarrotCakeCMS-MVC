@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Web;
-using System.Web.UI;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -142,15 +141,11 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string GetSampleBody() {
-			return GetSampleBody(null, String.Empty);
+			return GetSampleBody(string.Empty);
 		}
 
-		public static string GetSampleBody(string sContentSampleNumber) {
-			return GetSampleBody(null, sContentSampleNumber);
-		}
-
-		public static string GetSampleBody(Control X, string sContentSampleNumber) { // SampleContent2
-			if (String.IsNullOrEmpty(sContentSampleNumber)) {
+		public static string GetSampleBody(string sContentSampleNumber) { // SampleContent2
+			if (string.IsNullOrEmpty(sContentSampleNumber)) {
 				sContentSampleNumber = "SampleContent2";
 			}
 
@@ -158,17 +153,16 @@ namespace Carrotware.CMS.Core {
 
 			try {
 				Assembly _assembly = Assembly.GetExecutingAssembly();
-				using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream("Carrotware.CMS.Core.SiteContent.Mock." + sContentSampleNumber + ".txt"))) {
-					sFile2 = oTextStream.ReadToEnd();
-				}
+
+				sFile2 = SiteData.ReadEmbededScript(string.Format("Carrotware.CMS.Core.SiteContent.Mock.{0}.txt", sContentSampleNumber));
 
 				List<string> imageNames = (from i in _assembly.GetManifestResourceNames()
 										   where i.Contains("SiteContent.Mock.sample")
-										   && i.EndsWith(".png")
+												&& i.EndsWith(".png")
 										   select i).ToList();
 
 				foreach (string img in imageNames) {
-					var imgURL = CMSConfigHelper.GetWebResourceUrl(X, typeof(SiteNav), img);
+					var imgURL = CMSConfigHelper.GetWebResourceUrl(typeof(SiteNav), img);
 					sFile2 = sFile2.Replace(img, imgURL);
 				}
 			} catch { }

@@ -1,16 +1,15 @@
 ﻿using Carrotware.CMS.Data;
 using Carrotware.Web.UI.Components;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Caching;
-using System.Web.UI;
+using System.Web;
 using System.Xml.Serialization;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -90,44 +89,15 @@ namespace Carrotware.CMS.Core {
 			} catch (Exception ex) { }
 
 			if (SiteData.CurrentTrustLevel == AspNetHostingPermissionLevel.Unrestricted) {
-				System.Web.HttpRuntime.UnloadAppDomain();
+				HttpRuntime.UnloadAppDomain();
 			}
 		}
-
-		private static Page CachedPage {
-			get {
-				if (_CachedPage == null) {
-					_CachedPage = new Page();
-					_CachedPage.AppRelativeVirtualPath = "~/";
-				}
-				return _CachedPage;
-			}
-		}
-
-		private static Page _CachedPage;
 
 		public static string GetWebResourceUrl(Type type, string resource) {
 			string sPath = string.Empty;
 
 			try {
-				sPath = CachedPage.ClientScript.GetWebResourceUrl(type, resource);
-				sPath = HttpUtility.HtmlEncode(sPath);
-			} catch { }
-
-			return sPath;
-		}
-
-		public static string GetWebResourceUrl(Control X, Type type, string resource) {
-			string sPath = string.Empty;
-
-			if (X != null && X.Page != null) {
-				sPath = X.Page.ClientScript.GetWebResourceUrl(type, resource);
-			} else {
-				sPath = GetWebResourceUrl(type, resource);
-			}
-
-			try {
-				sPath = HttpUtility.HtmlEncode(sPath);
+				sPath = CarrotWeb.GetWebResourceUrl(type, resource);
 			} catch { }
 
 			return sPath;

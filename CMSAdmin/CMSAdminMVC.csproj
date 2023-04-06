@@ -906,6 +906,7 @@
     <Content Include="Assets\telephasic\js\skel.min.js" />
     <Content Include="Assets\telephasic\js\util.js" />
     <Content Include="env.aspx" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Assets\telephasic\fonts\fontawesome-webfont.eot" />
     <Content Include="Assets\telephasic\fonts\fontawesome-webfont.ttf" />

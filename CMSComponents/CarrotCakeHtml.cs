@@ -1,17 +1,17 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface;
 using Carrotware.Web.UI.Components;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Web;
-using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
+using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.WebPages;
+using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -61,7 +61,7 @@ namespace Carrotware.CMS.UI.Components {
 			}
 		}
 
-		private static Controller HydrateController(Object obj) {
+		private static Controller HydrateController(object obj) {
 			Controller controller = null;
 			if (obj is Controller) {
 				controller = (Controller)obj;
@@ -72,9 +72,9 @@ namespace Carrotware.CMS.UI.Components {
 			return controller;
 		}
 
-		public static HtmlString RenderPartialFromController(string partialViewName, string controllerClass, Object model) {
+		public static HtmlString RenderPartialFromController(string partialViewName, string controllerClass, object model) {
 			Type type = ReflectionUtilities.GetTypeFromString(controllerClass);
-			Object obj = Activator.CreateInstance(type);
+			object obj = Activator.CreateInstance(type);
 
 			if (obj is Controller) {
 				Controller controller = HydrateController(obj);
@@ -85,12 +85,12 @@ namespace Carrotware.CMS.UI.Components {
 				return new HtmlString(RenderPartialToString((ControllerBase)controller, controller.TempData, partialViewName, model));
 			}
 
-			return new HtmlString(String.Empty);
+			return new HtmlString(string.Empty);
 		}
 
 		public static HtmlString RenderResultViewFromController(string actionName, string controllerClass) {
 			Type type = ReflectionUtilities.GetTypeFromString(controllerClass);
-			Object obj = Activator.CreateInstance(type);
+			object obj = Activator.CreateInstance(type);
 
 			return new HtmlString(GetResultViewStringFromController(actionName, type, obj));
 		}
@@ -104,7 +104,7 @@ namespace Carrotware.CMS.UI.Components {
 			}
 		}
 
-		private static string GetResultViewStringFromController(string actionName, Type type, Object obj) {
+		private static string GetResultViewStringFromController(string actionName, Type type, object obj) {
 			bool IsPost = Html.ViewContext.HttpContext.Request.HttpMethod.ToUpperInvariant() == "POST";
 
 			if (obj is Controller) {
@@ -118,7 +118,7 @@ namespace Carrotware.CMS.UI.Components {
 				string areaName = type.Assembly.ManifestModule.Name;
 				areaName = areaName.Substring(0, areaName.Length - 4);
 
-				AddUpdateRouting(routeData, "Controller", type.Name.ToLowerInvariant().Replace("controller", String.Empty));
+				AddUpdateRouting(routeData, "Controller", type.Name.ToLowerInvariant().Replace("controller", string.Empty));
 				AddUpdateRouting(routeData, "Action", actionName);
 				AddUpdateRouting(routeData, "Area", areaName);
 
@@ -144,7 +144,7 @@ namespace Carrotware.CMS.UI.Components {
 				var collect = controller.ViewEngineCollection;
 
 				if (methodInfo != null) {
-					Object result = null;
+					object result = null;
 					ParameterInfo[] parameters = methodInfo.GetParameters();
 
 					if (parameters.Length == 0) {
@@ -195,7 +195,7 @@ namespace Carrotware.CMS.UI.Components {
 						Html.ViewContext.Controller.ViewData[actionName] = res.ViewData;
 						Html.ViewContext.Controller.TempData[actionName] = res.TempData;
 
-						if (String.IsNullOrEmpty(res.ViewName)) {
+						if (string.IsNullOrEmpty(res.ViewName)) {
 							res.ViewName = actionName;
 						}
 
@@ -207,7 +207,7 @@ namespace Carrotware.CMS.UI.Components {
 				}
 			}
 
-			return String.Empty;
+			return string.Empty;
 		}
 
 		private static string RenderView(ControllerContext ctrlCtx, PartialViewResult result) {
@@ -219,8 +219,8 @@ namespace Carrotware.CMS.UI.Components {
 				ViewContext vc = new ViewContext(ctrlCtx, result.View, result.ViewData, result.TempData, sw);
 				result.View.Render(vc, sw);
 
-				//return String.Format("{0}{1}", sw.GetStringBuilder(), Environment.NewLine);
-				return String.Format("{0} ", sw.GetStringBuilder());
+				//return string.Format("{0}{1}", sw.GetStringBuilder(), Environment.NewLine);
+				return string.Format("{0} ", sw.GetStringBuilder());
 			}
 		}
 
@@ -228,14 +228,14 @@ namespace Carrotware.CMS.UI.Components {
 			return RenderPartialToString(partialViewName, null);
 		}
 
-		private static string RenderPartialToString(string partialViewName, Object model) {
+		private static string RenderPartialToString(string partialViewName, object model) {
 			ControllerBase controller = Html.ViewContext.Controller;
 			TempDataDictionary tempData = Html.ViewContext.TempData;
 
 			return RenderPartialToString(controller, tempData, partialViewName, model);
 		}
 
-		private static string RenderPartialToString(ControllerBase controller, TempDataDictionary tempData, string partialViewName, Object model) {
+		private static string RenderPartialToString(ControllerBase controller, TempDataDictionary tempData, string partialViewName, object model) {
 			bool bNullModel = controller.ViewData.Model == null;
 
 			if (model != null) {
@@ -259,30 +259,30 @@ namespace Carrotware.CMS.UI.Components {
 					controller.ViewData.Model = null;
 				}
 
-				//return String.Format("{0}{1}", sw.GetStringBuilder(), Environment.NewLine);
-				return String.Format("{0} ", sw.GetStringBuilder());
+				//return string.Format("{0}{1}", sw.GetStringBuilder(), Environment.NewLine);
+				return string.Format("{0} ", sw.GetStringBuilder());
 			}
 		}
 
 		public static HtmlString MetaTags() {
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (CmsPage.TheSite.BlockIndex || CmsPage.ThePage.BlockIndex) {
 				sb.AppendLine(CarrotWeb.MetaTag("robots", "noindex,nofollow,noarchive").ToString());
-				sb.AppendLine(String.Empty);
+				sb.AppendLine(string.Empty);
 			}
 
-			if (!String.IsNullOrEmpty(CmsPage.ThePage.MetaKeyword)) {
+			if (!string.IsNullOrEmpty(CmsPage.ThePage.MetaKeyword)) {
 				sb.AppendLine(CarrotWeb.MetaTag("keywords", CmsPage.ThePage.MetaKeyword).ToString());
-				sb.AppendLine(String.Empty);
+				sb.AppendLine(string.Empty);
 			}
-			if (!String.IsNullOrEmpty(CmsPage.ThePage.MetaDescription)) {
+			if (!string.IsNullOrEmpty(CmsPage.ThePage.MetaDescription)) {
 				sb.AppendLine(CarrotWeb.MetaTag("description", CmsPage.ThePage.MetaDescription).ToString());
-				sb.AppendLine(String.Empty);
+				sb.AppendLine(string.Empty);
 			}
 
 			sb.AppendLine(CarrotWeb.MetaTag("generator", SiteData.CarrotCakeCMSVersion).ToString());
-			sb.AppendLine(String.Empty);
+			sb.AppendLine(string.Empty);
 
 			return new HtmlString(sb.ToString());
 		}
@@ -315,7 +315,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static HtmlString Rss(SiteData.RSSFeedInclude mode) {
-			return new HtmlString(String.Format("<!-- RSS Header Feed --> <link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS Feed\" href=\"{0}?type={1}\" /> ", CarrotCakeHtml.RssUri, mode));
+			return new HtmlString(string.Format("<!-- RSS Header Feed --> <link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS Feed\" href=\"{0}?type={1}\" /> ", CarrotCakeHtml.RssUri, mode));
 		}
 
 		public static HtmlString Rss() {
@@ -337,12 +337,12 @@ namespace Carrotware.CMS.UI.Components {
 			var url = new UrlHelper(Html.ViewContext.RequestContext);
 
 			var anchorBuilder = new TagBuilder("a");
-			anchorBuilder.MergeAttribute("href", String.Format("{0}?type={1}", CarrotCakeHtml.RssUri, mode));
+			anchorBuilder.MergeAttribute("href", string.Format("{0}?type={1}", CarrotCakeHtml.RssUri, mode));
 
 			var lnkAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(linkAttributes);
 			anchorBuilder.MergeAttributes(lnkAttribs);
 
-			if (String.IsNullOrEmpty(imagePath)) {
+			if (string.IsNullOrEmpty(imagePath)) {
 				imagePath = ControlUtilities.GetWebResourceUrl("Carrotware.CMS.UI.Components.feed.png");
 			}
 
@@ -367,7 +367,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public static MvcHtmlString RssTextLink(SiteData.RSSFeedInclude mode, string linkText = "RSS", object linkAttributes = null) {
 			var anchorBuilder = new TagBuilder("a");
-			anchorBuilder.MergeAttribute("href", String.Format("{0}?type={1}", CarrotCakeHtml.RssUri, mode));
+			anchorBuilder.MergeAttribute("href", string.Format("{0}?type={1}", CarrotCakeHtml.RssUri, mode));
 
 			var lnkAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(linkAttributes);
 			anchorBuilder.MergeAttributes(lnkAttribs);
@@ -378,8 +378,8 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static HtmlString IncludeHead() {
-			StringBuilder sb = new StringBuilder();
-			sb.AppendLine(String.Empty);
+			var sb = new StringBuilder();
+			sb.AppendLine(string.Empty);
 
 			if (SecurityData.IsAdmin || SecurityData.IsSiteEditor) {
 				if (SecurityData.AdvancedEditMode) {
@@ -393,8 +393,8 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static HtmlString IncludeFooter() {
-			StringBuilder sb = new StringBuilder();
-			sb.AppendLine(String.Empty);
+			var sb = new StringBuilder();
+			sb.AppendLine(string.Empty);
 			bool IsPageTemplate = false;
 
 			if (SecurityData.IsAdmin || SecurityData.IsSiteEditor) {
@@ -421,9 +421,9 @@ namespace Carrotware.CMS.UI.Components {
 			Uri url = Html.ViewContext.HttpContext.Request.Url;
 
 			if (viewContext.RouteData.Values["id"] != null) {
-				return String.Join("", url.Segments.Take(url.Segments.Length - 1));
+				return string.Join("", url.Segments.Take(url.Segments.Length - 1));
 			} else {
-				return String.Join("", url.Segments) + @"/";
+				return string.Join("", url.Segments) + @"/";
 			}
 		}
 
@@ -525,7 +525,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static HtmlString RenderBody(TextFieldZone zone) {
-			string bodyText = String.Empty;
+			string bodyText = string.Empty;
 
 			switch (zone) {
 				case TextFieldZone.TextLeft:
@@ -544,7 +544,7 @@ namespace Carrotware.CMS.UI.Components {
 					break;
 			}
 
-			bodyText = bodyText ?? String.Empty;
+			bodyText = bodyText ?? string.Empty;
 
 			bodyText = SiteData.CurrentSite.UpdateContent(bodyText);
 
@@ -566,28 +566,28 @@ namespace Carrotware.CMS.UI.Components {
 						break;
 				}
 
-				string sTextZone = ControlUtilities.GetManifestResourceStream("Carrotware.CMS.UI.Components._TextZone.cshtml");
+				string sTextZone = ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._TextZone.cshtml");
 				sTextZone = sTextZone.Replace("[[CONTENT]]", m.Content);
 				sTextZone = sTextZone.Replace("[[AREA_NAME]]", m.AreaName.ToString());
 				sTextZone = sTextZone.Replace("[[zone]]", m.Zone);
 
-				bodyText = sTextZone ?? String.Empty;
+				bodyText = sTextZone ?? string.Empty;
 			}
 
 			return new HtmlString(bodyText);
 		}
 
 		public static HtmlString RenderWidget(string placeHolderName) {
-			StringBuilder sb = new StringBuilder();
-			string sWidgetZone = String.Empty;
-			string masterWidgetWrapper = String.Empty;
-			string widgetMenuTemplate = String.Empty;
-			string sStatusTemplate = String.Empty;
+			var sb = new StringBuilder();
+			string sWidgetZone = string.Empty;
+			string masterWidgetWrapper = string.Empty;
+			string widgetMenuTemplate = string.Empty;
+			string sStatusTemplate = string.Empty;
 
 			if (SecurityData.AdvancedEditMode) {
 				widgetMenuTemplate = "<li id=\"liMenu\"><a href=\"javascript:[[JS_CALL]]\" id=\"cmsMenuEditLink\" class=\"cmsWidgetBarLink cmsWidgetBarIconPencil\" alt=\"[[CAP]]\" title=\"[[CAP]]\"> [[CAP]]</a></li>";
-				sWidgetZone = ControlUtilities.GetManifestResourceStream("Carrotware.CMS.UI.Components._WidgetZone.cshtml");
-				masterWidgetWrapper = ControlUtilities.GetManifestResourceStream("Carrotware.CMS.UI.Components._WidgetWrapper.cshtml");
+				sWidgetZone = ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._WidgetZone.cshtml");
+				masterWidgetWrapper = ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._WidgetWrapper.cshtml");
 
 				sWidgetZone = sWidgetZone.Replace("[[PLACEHOLDER]]", placeHolderName);
 				masterWidgetWrapper = masterWidgetWrapper.Replace("[[PLACEHOLDER]]", placeHolderName);
@@ -603,27 +603,27 @@ namespace Carrotware.CMS.UI.Components {
 			foreach (Widget widget in widgetList) {
 				bool IsWidgetClass = false;
 
-				string widgetKey = String.Format("WidgetId_{0}_{1}", placeHolderName, iWidgetCount);
+				string widgetKey = string.Format("WidgetId_{0}_{1}", placeHolderName, iWidgetCount);
 				if (Html.ViewContext.Controller is IContentController) {
 					IContentController cc = (Html.ViewContext.Controller as IContentController);
 
-					widgetKey = String.Format("WidgetId_{0}", cc.WidgetCount);
+					widgetKey = string.Format("WidgetId_{0}", cc.WidgetCount);
 				}
 
 				iWidgetCount++;
 
-				string widgetText = String.Empty;
-				string widgetWrapper = String.Empty;
+				string widgetText = string.Empty;
+				string widgetWrapper = string.Empty;
 				Dictionary<string, string> lstMenus = new Dictionary<string, string>();
 
 				if (widget.ControlPath.Contains(":")) {
 					string[] path = widget.ControlPath.Split(':');
 					string objectPrefix = path[0];
 					string objectClass = path[1];
-					string altView = path.Length >= 3 ? path[2] : String.Empty;
+					string altView = path.Length >= 3 ? path[2] : string.Empty;
 
-					Object obj = null;
-					Object settings = null;
+					object obj = null;
+					object settings = null;
 
 					try {
 						Type objType = ReflectionUtilities.GetTypeFromString(objectClass);
@@ -633,7 +633,7 @@ namespace Carrotware.CMS.UI.Components {
 						if (objectPrefix.ToUpperInvariant() != "CLASS") {
 							IsWidgetClass = false;
 							// assumed to be a controller action/method
-							Object attrib = ReflectionUtilities.GetAttribute<WidgetActionSettingModelAttribute>(objType, objectPrefix);
+							object attrib = ReflectionUtilities.GetAttribute<WidgetActionSettingModelAttribute>(objType, objectPrefix);
 
 							if (attrib != null && attrib is WidgetActionSettingModelAttribute) {
 								string attrClass = (attrib as WidgetActionSettingModelAttribute).ClassName;
@@ -667,7 +667,7 @@ namespace Carrotware.CMS.UI.Components {
 							}
 
 							if (settings is IWidgetView) {
-								if (!String.IsNullOrEmpty(altView)) {
+								if (!string.IsNullOrEmpty(altView)) {
 									(settings as IWidgetView).AlternateViewFile = altView;
 								}
 							}
@@ -693,24 +693,24 @@ namespace Carrotware.CMS.UI.Components {
 					}
 				}
 
-				widgetText = widgetText ?? String.Empty;
+				widgetText = widgetText ?? string.Empty;
 
-				if (!widget.ControlPath.Contains(":") && String.IsNullOrEmpty(widgetText)) {
+				if (!widget.ControlPath.Contains(":") && string.IsNullOrEmpty(widgetText)) {
 					string[] path = widget.ControlPath.Split('|');
 					string viewPath = path[0];
-					string modelClass = String.Empty;
+					string modelClass = string.Empty;
 					if (path.Length > 1) {
 						modelClass = path[1];
 					}
 
 					try {
 						if (viewPath.EndsWith(".cshtml") || viewPath.EndsWith(".vbhtml")) {
-							if (String.IsNullOrEmpty(modelClass)) {
+							if (string.IsNullOrEmpty(modelClass)) {
 								widgetText = RenderPartialToString(viewPath);
 							} else {
 								Type objType = ReflectionUtilities.GetTypeFromString(modelClass);
 
-								Object model = Activator.CreateInstance(objType);
+								object model = Activator.CreateInstance(objType);
 
 								if (model is IWidgetRawData) {
 									(model as IWidgetRawData).RawWidgetData = widget.ControlProperties;
@@ -749,7 +749,7 @@ namespace Carrotware.CMS.UI.Components {
 					widgetText = msg.ToHtmlString();
 				}
 
-				widgetText = widgetText ?? String.Empty;
+				widgetText = widgetText ?? string.Empty;
 
 				if (SecurityData.AdvancedEditMode) {
 					if (widget.IsWidgetActive) {
@@ -758,39 +758,41 @@ namespace Carrotware.CMS.UI.Components {
 						sStatusTemplate = "<a href=\"javascript:cmsActivateWidgetLink('[[ITEM_ID]]');\" id=\"cmsActivateWidgetLink\" class=\"cmsWidgetBarLink cmsWidgetBarIconActive\" alt=\"Activate\" title=\"Activate\">  Enable</a>";
 					}
 
-					widgetWrapper = masterWidgetWrapper;
-					widgetWrapper = widgetWrapper.Replace("[[STATUS_LINK]]", sStatusTemplate);
-					widgetWrapper = widgetWrapper.Replace("[[WIDGET_PATH]]", widget.ControlPath);
-					widgetWrapper = widgetWrapper.Replace("[[sequence]]", widget.WidgetOrder.ToString());
-					widgetWrapper = widgetWrapper.Replace("[[ITEM_ID]]", widget.Root_WidgetID.ToString());
+					var sbWidget = new StringBuilder();
+					sbWidget.Append(masterWidgetWrapper);
+
+					sbWidget.Replace("[[STATUS_LINK]]", sStatusTemplate);
+					sbWidget.Replace("[[WIDGET_PATH]]", widget.ControlPath);
+					sbWidget.Replace("[[sequence]]", widget.WidgetOrder.ToString());
+					sbWidget.Replace("[[ITEM_ID]]", widget.Root_WidgetID.ToString());
 
 					CMSPlugin plug = (from p in CmsPage.Plugins
 									  where p.FilePath.ToLowerInvariant() == widget.ControlPath.ToLowerInvariant()
 									  select p).FirstOrDefault();
 
-					string captionPrefix = String.Empty;
+					string captionPrefix = string.Empty;
 
 					if (!widget.IsWidgetActive) {
-						captionPrefix = String.Format("{0} {1}", CMSConfigHelper.InactivePagePrefix, captionPrefix);
+						captionPrefix = string.Format("{0} {1}", CMSConfigHelper.InactivePagePrefix, captionPrefix);
 					}
 					if (widget.IsRetired) {
-						captionPrefix = String.Format("{0} {1}", CMSConfigHelper.RetiredPagePrefix, captionPrefix);
+						captionPrefix = string.Format("{0} {1}", CMSConfigHelper.RetiredPagePrefix, captionPrefix);
 					}
 					if (widget.IsUnReleased) {
-						captionPrefix = String.Format("{0} {1}", CMSConfigHelper.UnreleasedPagePrefix, captionPrefix);
+						captionPrefix = string.Format("{0} {1}", CMSConfigHelper.UnreleasedPagePrefix, captionPrefix);
 					}
 					if (widget.IsWidgetPendingDelete) {
-						captionPrefix = String.Format("{0} {1}", CMSConfigHelper.PendingDeletePrefix, captionPrefix);
+						captionPrefix = string.Format("{0} {1}", CMSConfigHelper.PendingDeletePrefix, captionPrefix);
 					}
 
 					if (plug != null) {
-						string sysControl = (plug.SystemPlugin ? "[CMS]" : String.Empty);
-						widgetWrapper = widgetWrapper.Replace("[[WIDGET_CAPTION]]", String.Format("{0}  {1}  {2}", captionPrefix, plug.Caption, sysControl).Trim());
+						string sysControl = (plug.SystemPlugin ? "[CMS]" : string.Empty);
+						sbWidget.Replace("[[WIDGET_CAPTION]]", string.Format("{0}  {1}  {2}", captionPrefix, plug.Caption, sysControl).Trim());
 					} else {
-						widgetWrapper = widgetWrapper.Replace("[[WIDGET_CAPTION]]", String.Format("{0}  UNTITLED", captionPrefix).Trim());
+						sbWidget.Replace("[[WIDGET_CAPTION]]", string.Format("{0}  UNTITLED", captionPrefix).Trim());
 					}
 
-					StringBuilder sbMenu = new StringBuilder();
+					var sbMenu = new StringBuilder();
 					sbMenu.AppendLine();
 					if (lstMenus != null) {
 						foreach (var d in lstMenus) {
@@ -798,20 +800,22 @@ namespace Carrotware.CMS.UI.Components {
 						}
 					}
 
-					widgetWrapper = widgetWrapper.Replace("[[MENU_ITEMS]]", sbMenu.ToString().Trim());
-					widgetWrapper = widgetWrapper.Replace("[[WIDGET_CAPTION]]", widget.ControlPath + captionPrefix);
+					sbWidget.Replace("[[MENU_ITEMS]]", sbMenu.ToString().Trim());
+					sbWidget.Replace("[[WIDGET_CAPTION]]", widget.ControlPath + captionPrefix);
 
-					widgetWrapper = widgetWrapper.Replace("[[CONTENT]]", widgetText);
+					sbWidget.Replace("[[CONTENT]]", widgetText);
+
+					widgetWrapper = sbWidget.ToString();
 				} else {
 					widgetWrapper = widgetText;
 				}
 
-				if (!String.IsNullOrEmpty(widgetWrapper)) {
+				if (!string.IsNullOrEmpty(widgetWrapper)) {
 					sb.AppendLine(widgetWrapper);
 				}
 			}
 
-			string bodyText = String.Empty;
+			string bodyText = string.Empty;
 
 			if (SecurityData.AdvancedEditMode) {
 				bodyText = sWidgetZone.Replace("[[CONTENT]]", sb.ToString());

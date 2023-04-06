@@ -562,16 +562,27 @@ namespace Carrotware.CMS.Core {
 			return ResetPassword(adminEmailPath, email);
 		}
 
+		public static string ReadEmbededScript(string sResouceName) {
+			string sReturn = null;
+
+			Assembly _assembly = Assembly.GetExecutingAssembly();
+			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(sResouceName))) {
+				sReturn = stream.ReadToEnd();
+			}
+
+			return sReturn;
+		}
+
 		public bool ResetPassword(string resetUri, string email) {
 			HttpRequest request = HttpContext.Current.Request;
 			ApplicationUser user = null;
-			string code = String.Empty;
+			string code = string.Empty;
 
 			if (resetUri.StartsWith("/")) {
 				resetUri = resetUri.Substring(1);
 			}
 
-			if (!String.IsNullOrEmpty(email)) {
+			if (!string.IsNullOrEmpty(email)) {
 				using (var securityHelper = new SecurityHelper()) {
 					user = securityHelper.UserManager.FindByEmail(email);
 
@@ -582,15 +593,10 @@ namespace Carrotware.CMS.Core {
 			}
 
 			if (user != null) {
-				string sBody = String.Empty;
-				Assembly _assembly = Assembly.GetExecutingAssembly();
+				string sBody = ReadEmbededScript("Carrotware.CMS.Core.Security.EmailForgotPassMsg.txt");
 
-				using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream("Carrotware.CMS.Core.Security.EmailForgotPassMsg.txt"))) {
-					sBody = oTextStream.ReadToEnd();
-				}
-
-				string strHTTPHost = String.Empty;
-				try { strHTTPHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { strHTTPHost = String.Empty; }
+				string strHTTPHost = string.Empty;
+				try { strHTTPHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { strHTTPHost = string.Empty; }
 
 				string hostName = strHTTPHost.ToLowerInvariant();
 
@@ -599,14 +605,14 @@ namespace Carrotware.CMS.Core {
 					strHTTPPrefix = request.ServerVariables["SERVER_PORT_SECURE"] == "1" ? "https://" : "http://";
 				} catch { strHTTPPrefix = "http://"; }
 
-				strHTTPHost = String.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLowerInvariant();
+				strHTTPHost = string.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLowerInvariant();
 
-				var resetTokenUrl = String.Format("{0}/{1}?userId={2}&code={3}", strHTTPHost, resetUri, user.Id, HttpUtility.UrlEncode(code));
+				var resetTokenUrl = string.Format("{0}/{1}?userId={2}&code={3}", strHTTPHost, resetUri, user.Id, HttpUtility.UrlEncode(code));
 
 				sBody = sBody.Replace("{%%UserName%%}", user.UserName);
 				sBody = sBody.Replace("{%%SiteURL%%}", strHTTPHost);
 				sBody = sBody.Replace("{%%Version%%}", CurrentDLLVersion);
-				sBody = sBody.Replace("{%%AdminFolderPath%%}", String.Format("{0}{1}", strHTTPHost, SiteData.AdminFolderPath));
+				sBody = sBody.Replace("{%%AdminFolderPath%%}", string.Format("{0}{1}", strHTTPHost, SiteData.AdminFolderPath));
 
 				sBody = sBody.Replace("{%%ResetURL%%}", resetTokenUrl);
 
@@ -616,7 +622,7 @@ namespace Carrotware.CMS.Core {
 					sBody = sBody.Replace("{%%Time%%}", DateTime.Now.ToString());
 				}
 
-				EmailHelper.SendMail(null, user.Email, String.Format("Reset Password {0}", hostName), sBody, false);
+				EmailHelper.SendMail(null, user.Email, string.Format("Reset Password {0}", hostName), sBody, false);
 
 				return true;
 			} else {

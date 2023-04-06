@@ -1,11 +1,10 @@
 ﻿using Carrotware.CMS.Core;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -21,24 +20,11 @@ namespace Carrotware.CMS.UI.Components {
 
 	public class ControlUtilities {
 
-		private static Page WebPage {
-			get {
-				if (_Page == null) {
-					_Page = new Page();
-					_Page.AppRelativeVirtualPath = "~/";
-				}
-				return _Page;
-			}
-		}
-
-		private static Page _Page;
-
 		public static string GetWebResourceUrl(Type type, string resource) {
-			string sPath = String.Empty;
+			string sPath = string.Empty;
 
 			try {
-				sPath = WebPage.ClientScript.GetWebResourceUrl(type, resource);
-				sPath = HttpUtility.HtmlEncode(sPath);
+				sPath = CarrotWeb.GetWebResourceUrl(type, resource);
 			} catch { }
 
 			return sPath;
@@ -48,12 +34,12 @@ namespace Carrotware.CMS.UI.Components {
 			return GetWebResourceUrl(typeof(ControlUtilities), resource);
 		}
 
-		public static string GetManifestResourceStream(string sResouceName) {
+		public static string ReadEmbededScript(string sResouceName) {
 			string sReturn = null;
 
 			Assembly _assembly = Assembly.GetExecutingAssembly();
-			using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream(sResouceName))) {
-				sReturn = oTextStream.ReadToEnd();
+			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(sResouceName))) {
+				sReturn = stream.ReadToEnd();
 			}
 
 			return sReturn;

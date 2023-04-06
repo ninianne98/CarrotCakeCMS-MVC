@@ -1,0 +1,38 @@
+﻿[
+  {
+    "outputFile": "bootstrap/green.css",
+    "inputFile": "bootstrap/green.less"
+  },
+  {
+    "outputFile": "bootstrap/violet.css",
+    "inputFile": "bootstrap/violet.less"
+  },
+  {
+    "outputFile": "bootstrap/blue.css",
+    "inputFile": "bootstrap/blue.less"
+  },
+  {
+    "outputFile": "bootstrap/grey.css",
+    "inputFile": "bootstrap/grey.less"
+  },
+  {
+    "outputFile": "bootstrap/orange.css",
+    "inputFile": "bootstrap/orange.less"
+  },
+  {
+    "outputFile": "bootstrap/purple.css",
+    "inputFile": "bootstrap/purple.less"
+  },
+  {
+    "outputFile": "bootstrap/red.css",
+    "inputFile": "bootstrap/red.less"
+  },
+  {
+    "outputFile": "bootstrap/teal.css",
+    "inputFile": "bootstrap/teal.less"
+  },
+  {
+    "outputFile": "bootstrap/plum.css",
+    "inputFile": "bootstrap/plum.less"
+  }
+]

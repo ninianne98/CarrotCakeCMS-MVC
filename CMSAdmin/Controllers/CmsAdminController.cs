@@ -258,7 +258,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 			}
 
-			return Json(String.Empty);
+			return Json(string.Empty);
 		}
 
 		[HttpGet]
@@ -271,8 +271,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult FileBrowser(FileBrowserModel model) {
-			string msg = String.Empty;
-			string msgCss = String.Empty;
+			string msg = string.Empty;
+			string msgCss = string.Empty;
 
 			if (ModelState.IsValid) {
 				model.UploadFile();
@@ -323,7 +323,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			if (!model.HasLoaded) {
 				loaded = false;
-				ModelState.AddModelError(String.Empty, "No Items Selected For Import");
+				ModelState.AddModelError(string.Empty, "No Items Selected For Import");
 			}
 
 			model = new SiteImportNativeModel(model.ImportID);
@@ -348,7 +348,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			ModelState.Clear();
 			bool loaded = true;
 
-			if (model.DownloadImages && String.IsNullOrEmpty(model.SelectedFolder)) {
+			if (model.DownloadImages && string.IsNullOrEmpty(model.SelectedFolder)) {
 				ModelState.AddModelError("SelectedFolder", "If download images is selected, you must select a target folder.");
 			}
 
@@ -359,7 +359,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				if (!model.HasLoaded) {
 					loaded = false;
-					ModelState.AddModelError(String.Empty, "No Items Selected For Import");
+					ModelState.AddModelError(string.Empty, "No Items Selected For Import");
 				}
 			}
 
@@ -396,7 +396,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult ContentImport(FileUpModel model) {
-			string sXML = String.Empty;
+			string sXML = string.Empty;
 
 			if (model.PostedFile != null) {
 				using (StreamReader sr = new StreamReader(model.PostedFile.InputStream)) {
@@ -404,8 +404,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 			}
 
-			string sTest = String.Empty;
-			if (!String.IsNullOrEmpty(sXML) && sXML.Length > 500) {
+			string sTest = string.Empty;
+			if (!string.IsNullOrEmpty(sXML) && sXML.Length > 500) {
 				sTest = sXML.Substring(0, 250).ToLowerInvariant();
 
 				try {
@@ -595,7 +595,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			DatabaseUpdate du = new DatabaseUpdate(true);
 
-			if (!String.IsNullOrEmpty(signout)) {
+			if (!string.IsNullOrEmpty(signout)) {
 				SignOut();
 			}
 
@@ -637,7 +637,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				du.HandleResponse(lst, DatabaseUpdate.LastSQLError);
 			}
 
-			model.HasExceptions = lst.Where(x => !String.IsNullOrEmpty(x.ExceptionText)).Any();
+			model.HasExceptions = lst.Where(x => !string.IsNullOrEmpty(x.ExceptionText)).Any();
 			model.Messages = lst;
 
 			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
@@ -755,7 +755,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				case SignInStatus.Failure:
 				default:
-					ModelState.AddModelError(String.Empty, "Invalid login attempt.");
+					ModelState.AddModelError(string.Empty, "Invalid login attempt.");
 
 					if (user != null && user.LockoutEndDateUtc.HasValue && user.LockoutEndDateUtc.Value < DateTime.UtcNow) {
 						user.LockoutEndDateUtc = null;
@@ -884,7 +884,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 											DisplayNameCurrent2 = "(UTC" +
 																	(z.GetUtcOffset(now).Hours != 0 ?
 																			(z.GetUtcOffset(now).Hours >= 0 ? "+" : "-") + z.GetUtcOffset(now).ToString("hh\\:mm")
-																			: String.Empty) + ") "
+																			: string.Empty) + ") "
 																	+ (z.IsDaylightSavingTime(now) ? z.DaylightName : z.StandardName),
 											DisplayNameCurrent = z.DisplayName,
 											DisplayName = z.DisplayName,
@@ -1028,7 +1028,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult SiteAddUser(SiteModel model) {
 			ModelState.Clear();
 
-			if (String.IsNullOrEmpty(model.NewUserId)) {
+			if (string.IsNullOrEmpty(model.NewUserId)) {
 				ModelState.AddModelError("NewUserId", "The New User field is required.");
 			}
 
@@ -1036,7 +1036,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			Helper.ForceValidation(ModelState, model);
 
 			if (ModelState.IsValid) {
-				if (!String.IsNullOrEmpty(model.NewUserId)) {
+				if (!string.IsNullOrEmpty(model.NewUserId)) {
 					ExtendedUserData exUsr = new ExtendedUserData(new Guid(model.NewUserId));
 					exUsr.AddToSite(site.SiteID);
 
@@ -1312,7 +1312,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult PageAddEdit(ContentPageModel model) {
 			Helper.ForceValidation(ModelState, model);
-			model.Mode = (String.IsNullOrEmpty(model.Mode) || model.Mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
+			model.Mode = SiteData.EditMode(model.Mode);
 			ViewBag.ContentEditMode = model.Mode;
 
 			if (ModelState.IsValid) {
@@ -1346,7 +1346,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpGet]
 		public ActionResult ContentSnippetAddEdit(Guid? id, Guid? versionid, string mode) {
-			ViewBag.ContentEditMode = (String.IsNullOrEmpty(mode) || mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
+			ViewBag.ContentEditMode = SiteData.EditMode(mode);
 
 			ContentSnippet model = null;
 			if (id.HasValue) {
@@ -1371,7 +1371,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateInput(false)]
 		[ValidateAntiForgeryToken]
 		public ActionResult ContentSnippetAddEdit(ContentSnippet model, string mode) {
-			ViewBag.ContentEditMode = (String.IsNullOrEmpty(mode) || mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
+			ViewBag.ContentEditMode = SiteData.EditMode(mode);
 			Helper.ForceValidation(ModelState, model);
 
 			if (ModelState.IsValid) {
@@ -1418,7 +1418,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult BlogPostAddEdit(ContentPageModel model) {
 			Helper.ForceValidation(ModelState, model);
-			model.Mode = (String.IsNullOrEmpty(model.Mode) || model.Mode.Trim().ToLowerInvariant() != "raw") ? "html" : "raw";
+			model.Mode = SiteData.EditMode(model.Mode);
 			ViewBag.ContentEditMode = model.Mode;
 
 			if (ModelState.IsValid) {
@@ -1494,7 +1494,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						foreach (var v in itm.Options) {
 							if (v.Selected) {
 								var pp = new WidgetProps();
-								pp.KeyName = String.Format("{0}|{1}", itm.Name, checkedPosition);
+								pp.KeyName = string.Format("{0}|{1}", itm.Name, checkedPosition);
 								pp.KeyValue = v.Key.ToString();
 								props.Add(pp);
 								checkedPosition++;
@@ -1899,7 +1899,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 			}
 
-			model.SelectedAction = String.Empty;
+			model.SelectedAction = string.Empty;
 
 			lstContent = pageHelper.GetContentByDateRange(this.SiteID, model.SearchDate, dateRangeDays, model.PageType,
 							model.PageActive, model.ShowInSiteMap, model.ShowInSiteNav, model.BlockIndex);
@@ -1933,13 +1933,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			DateTime dateEnd = DateTime.MaxValue;
 			SiteExport.ExportType ExportWhat = SiteExport.ExportType.AllData;
 
-			if (!String.IsNullOrEmpty(datebegin)) {
+			if (!string.IsNullOrEmpty(datebegin)) {
 				dateBegin = Convert.ToDateTime(datebegin).Date;
 			}
-			if (!String.IsNullOrEmpty(dateend)) {
+			if (!string.IsNullOrEmpty(dateend)) {
 				dateEnd = Convert.ToDateTime(dateend).Date;
 			}
-			if (!String.IsNullOrEmpty(exportwhat)) {
+			if (!string.IsNullOrEmpty(exportwhat)) {
 				ExportWhat = (SiteExport.ExportType)Enum.Parse(typeof(SiteExport.ExportType), exportwhat, true);
 			}
 
@@ -1950,7 +1950,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				ContentPageExport content = ContentImportExportUtils.GetExportPage(SiteData.CurrentSiteID, guidContentID);
 				theXML = ContentImportExportUtils.GetExportXML<ContentPageExport>(content);
 
-				fileName = String.Format("page_{0}_{1}", content.ThePage.NavMenuText, guidContentID);
+				fileName = string.Format("page_{0}_{1}", content.ThePage.NavMenuText, guidContentID);
 			} else {
 				SiteExport site = ContentImportExportUtils.GetExportSite(SiteData.CurrentSiteID, ExportWhat);
 
@@ -1975,10 +1975,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				theXML = ContentImportExportUtils.GetExportXML<SiteExport>(site);
 
-				fileName = String.Format("site_{0}_{1}", site.TheSite.SiteName, site.TheSite.SiteID);
+				fileName = string.Format("site_{0}_{1}", site.TheSite.SiteName, site.TheSite.SiteID);
 			}
 
-			fileName = String.Format("{0}-{1:yyyy-MM-dd}.xml", fileName, SiteData.CurrentSite.Now).Replace(" ", "_");
+			fileName = string.Format("{0}-{1:yyyy-MM-dd}.xml", fileName, SiteData.CurrentSite.Now).Replace(" ", "_");
 
 			return File(Encoding.UTF8.GetBytes(theXML), "application/octet-stream", fileName);
 		}
@@ -2033,7 +2033,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult PageTemplateUpdate(PageTemplateUpdateModel model) {
 			PagedData<ContentPage> pagedData = model.Page;
 
-			if (!String.IsNullOrEmpty(model.SelectedTemplate)) {
+			if (!string.IsNullOrEmpty(model.SelectedTemplate)) {
 				List<Guid> lstUpd = pagedData.DataSource.Where(x => x.Selected).Select(x => x.Root_ContentID).ToList();
 
 				if (lstUpd.Any()) {
@@ -2042,7 +2042,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					//return RedirectToAction("PageTemplateUpdate");
 				}
 
-				model.SelectedTemplate = String.Empty;
+				model.SelectedTemplate = string.Empty;
 			}
 
 			pagedData.InitOrderBy(x => x.NavMenuText);
@@ -2272,7 +2272,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public ActionResult PageWidgets(Guid id) {
 			WidgetListModel model = new WidgetListModel(id);
-			model.PlaceholderName = String.Empty;
+			model.PlaceholderName = string.Empty;
 
 			ShowSaved();
 
@@ -2357,7 +2357,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult SiteSkinEdit(string path, string alt) {
 			SiteSkinModel model = null;
 
-			if (String.IsNullOrEmpty(alt)) {
+			if (string.IsNullOrEmpty(alt)) {
 				model = new SiteSkinModel(path);
 			} else {
 				model = new SiteSkinModel(path, alt);
@@ -2375,7 +2375,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (ModelState.IsValid) {
 				model.SaveFile();
 
-				if (!String.IsNullOrEmpty(model.AltPath)) {
+				if (!string.IsNullOrEmpty(model.AltPath)) {
 					return RedirectToAction("SiteSkinEdit", new { @path = model.EncodedPath, @alt = model.EncodePath(model.AltPath) });
 				}
 				return RedirectToAction("SiteSkinEdit", new { @path = model.EncodedPath });
@@ -2452,11 +2452,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				PostComment model2 = PostComment.GetContentCommentByID(comment.ContentCommentID);
 				model2.CommenterEmail = comment.CommenterEmail;
 				model2.CommenterName = comment.CommenterName;
-				model2.CommenterURL = comment.CommenterURL ?? String.Empty;
+				model2.CommenterURL = comment.CommenterURL ?? string.Empty;
 
 				model2.IsApproved = comment.IsApproved;
 				model2.IsSpam = comment.IsSpam;
-				model2.PostCommentText = comment.PostCommentText ?? String.Empty;
+				model2.PostCommentText = comment.PostCommentText ?? string.Empty;
 
 				model2.Save();
 
@@ -2577,7 +2577,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult BlogPostTemplateUpdate(PostTemplateUpdateModel model) {
 			PagedData<ContentPage> pagedData = model.Page;
 
-			if (!String.IsNullOrEmpty(model.SelectedTemplate)) {
+			if (!string.IsNullOrEmpty(model.SelectedTemplate)) {
 				List<Guid> lstUpd = pagedData.DataSource.Where(x => x.Selected).Select(x => x.Root_ContentID).ToList();
 
 				if (lstUpd.Any()) {
@@ -2586,7 +2586,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					//return RedirectToAction("BlogPostTemplateUpdate");
 				}
 
-				model.SelectedTemplate = String.Empty;
+				model.SelectedTemplate = string.Empty;
 			}
 
 			pagedData.InitOrderBy(x => x.GoLiveDate, false);
@@ -2679,7 +2679,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult RoleAddEdit(string id) {
 			RoleModel model = null;
 
-			if (!String.IsNullOrEmpty(id)) {
+			if (!string.IsNullOrEmpty(id)) {
 				model = new RoleModel(id);
 			} else {
 				model = new RoleModel();
@@ -2744,7 +2744,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		[CmsAdminAuthorize]
 		public ActionResult RoleAddUser(RoleModel model) {
-			if (String.IsNullOrEmpty(model.NewUserId)) {
+			if (string.IsNullOrEmpty(model.NewUserId)) {
 				ModelState.AddModelError("NewUserId", "The New User field is required.");
 			}
 
@@ -2752,7 +2752,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			UserRole role = model.Role;
 
 			if (ModelState.IsValid) {
-				if (!String.IsNullOrEmpty(model.NewUserId)) {
+				if (!string.IsNullOrEmpty(model.NewUserId)) {
 					SecurityData.AddUserToRole(new Guid(model.NewUserId), role.RoleName);
 				}
 
@@ -2800,30 +2800,30 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 			SiteData.CurrentSite.Save();
 
-			if (!String.IsNullOrEmpty(model.BlogPages)) {
+			if (!string.IsNullOrEmpty(model.BlogPages)) {
 				pageHelper.UpdateAllBlogTemplates(this.SiteID, model.BlogPages);
 			}
-			if (!String.IsNullOrEmpty(model.AllPages)) {
+			if (!string.IsNullOrEmpty(model.AllPages)) {
 				pageHelper.UpdateAllPageTemplates(this.SiteID, model.AllPages);
 			}
 
-			if (!String.IsNullOrEmpty(model.TopPages)) {
+			if (!string.IsNullOrEmpty(model.TopPages)) {
 				pageHelper.UpdateTopPageTemplates(this.SiteID, model.TopPages);
 			}
-			if (!String.IsNullOrEmpty(model.SubPages)) {
+			if (!string.IsNullOrEmpty(model.SubPages)) {
 				pageHelper.UpdateSubPageTemplates(this.SiteID, model.SubPages);
 			}
 
-			if (pageHome != null && !String.IsNullOrEmpty(model.HomePage)) {
+			if (pageHome != null && !string.IsNullOrEmpty(model.HomePage)) {
 				pageHome.TemplateFile = model.HomePage;
 				pageHome.ApplyTemplate();
 			}
-			if (pageIndex != null && !String.IsNullOrEmpty(model.IndexPage)) {
+			if (pageIndex != null && !string.IsNullOrEmpty(model.IndexPage)) {
 				pageIndex.TemplateFile = model.IndexPage;
 				pageIndex.ApplyTemplate();
 			}
 
-			if (!String.IsNullOrEmpty(model.AllContent)) {
+			if (!string.IsNullOrEmpty(model.AllContent)) {
 				pageHelper.UpdateAllContentTemplates(this.SiteID, model.AllContent);
 			}
 
@@ -2847,8 +2847,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				PageHead = "Home",
 				FileName = "/home",
 				PageText = SiteData.StarterHomePageSample,
-				LeftPageText = String.Empty,
-				RightPageText = String.Empty,
+				LeftPageText = string.Empty,
+				RightPageText = string.Empty,
 				NavOrder = 0,
 				IsLatestVersion = true,
 				PageActive = true,

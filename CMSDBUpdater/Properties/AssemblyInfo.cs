@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Web.UI;
+//using System.Web.UI;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -35,19 +35,19 @@ using System.Web.UI;
 [assembly: AssemblyVersion("4.3.*")]
 //  [assembly: AssemblyFileVersion("4.3.0.0")]
 
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER01.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER02.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER03.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER04.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER05.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER06.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER07.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER08.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER09.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER10.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER11.sql", "text/plain")]
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER12.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER01.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER02.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER03.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER04.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER05.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER06.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER07.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER08.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER09.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER10.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER11.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.ALTER12.sql", "text/plain")]
 
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.CREATE01.sql", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DataScripts.CREATE01.sql", "text/plain")]
 
-[assembly: WebResource("Carrotware.CMS.DBUpdater.DatabaseChecks.xml", "text/plain")]
+//[assembly: WebResource("Carrotware.CMS.DBUpdater.DatabaseChecks.xml", "text/plain")]
