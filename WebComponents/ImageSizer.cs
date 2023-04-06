@@ -20,8 +20,8 @@ namespace Carrotware.Web.UI.Components {
 		public ImageSizer() {
 			this.ThumbSize = 150;
 			this.ScaleImage = true;
-			this.ImageUrl = String.Empty;
-			this.Title = String.Empty;
+			this.ImageUrl = string.Empty;
+			this.Title = string.Empty;
 		}
 
 		public string HandlerURL {
@@ -36,7 +36,7 @@ namespace Carrotware.Web.UI.Components {
 			get {
 				string imgURL = this.ImageUrl;
 				if (!imgURL.StartsWith(this.HandlerURL)) {
-					imgURL = String.Format("{0}?thumb={1}&square={2}&scale={3}", this.HandlerURL, HttpUtility.UrlEncode(this.ImageUrl), this.ThumbSize, this.ScaleImage);
+					imgURL = string.Format("{0}?thumb={1}&square={2}&scale={3}", this.HandlerURL, HttpUtility.UrlEncode(this.ImageUrl), this.ThumbSize, this.ScaleImage);
 				}
 				return imgURL;
 			}
@@ -46,7 +46,7 @@ namespace Carrotware.Web.UI.Components {
 			get {
 				string imgURL = this.ImageUrl;
 				if (!imgURL.StartsWith(this.HandlerURL)) {
-					imgURL = String.Format("{0}?square={1}&scale={2}&thumb=", this.HandlerURL, this.ThumbSize, this.ScaleImage);
+					imgURL = string.Format("{0}?square={1}&scale={2}&thumb=", this.HandlerURL, this.ThumbSize, this.ScaleImage);
 				}
 				return imgURL;
 			}

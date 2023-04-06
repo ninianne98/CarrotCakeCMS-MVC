@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 
 /*
@@ -37,8 +35,8 @@ namespace Carrotware.Web.UI.Components {
 			this.CellColor = ColorTranslator.FromHtml("#ffffff");
 			this.CellColor = ColorTranslator.FromHtml("#ffffff");
 			this.CellColor = ColorTranslator.FromHtml("#ffffff");
-			this.JavascriptForDate = String.Empty;
-			this.OverrideCssFile = String.Empty;
+			this.JavascriptForDate = string.Empty;
+			this.OverrideCssFile = string.Empty;
 
 			this.HilightDateList = new List<DateTime>();
 			this.CalendarDate = DateTime.Now.Date;
@@ -118,7 +116,7 @@ namespace Carrotware.Web.UI.Components {
 			} else {
 				List<string> lstDates = new List<string>();
 
-				if (!String.IsNullOrEmpty(this.HilightDates)) {
+				if (!string.IsNullOrEmpty(this.HilightDates)) {
 					lstDates = this.HilightDates.Split(';').AsEnumerable().ToList();
 				}
 				dates = (from dd in lstDates select Convert.ToDateTime(dd)).ToList();
@@ -161,7 +159,7 @@ namespace Carrotware.Web.UI.Components {
 
 					if ((dayOfMonth >= 1) && (dayOfMonth <= iDaysInMonth)) {
 						cellDate = new DateTime(YearNumber, MonthNumber, dayOfMonth);
-						if (!String.IsNullOrEmpty(JavascriptForDate)) {
+						if (!string.IsNullOrEmpty(JavascriptForDate)) {
 							strCaption = "&nbsp;<a href=\"javascript:" + JavascriptForDate + "('" + cellDate.ToString("yyyy-MM-dd") + "')\">" + dayOfMonth.ToString() + "&nbsp;";
 						} else {
 							strCaption = "&nbsp;" + dayOfMonth.ToString() + "&nbsp;";
@@ -201,32 +199,29 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public override string GetHead() {
-			if (String.IsNullOrEmpty(this.OverrideCssFile)) {
-				string sCSS = String.Empty;
+			if (string.IsNullOrEmpty(this.OverrideCssFile)) {
 
-				Assembly _assembly = Assembly.GetExecutingAssembly();
+				var sCSS = CarrotWeb.GetManifestResourceText(this.GetType(), "Carrotware.Web.UI.Components.calendar.txt");
+				var sb = new StringBuilder(sCSS);
 
-				using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream("Carrotware.Web.UI.Components.calendar.txt"))) {
-					sCSS = oTextStream.ReadToEnd();
-				}
+				sb.Replace("{WEEKDAY_CHEX}", ColorTranslator.ToHtml(this.WeekdayColor));
+				sb.Replace("{WEEKDAY_BGHEX}", ColorTranslator.ToHtml(this.WeekdayBackground));
+				sb.Replace("{CELL_CHEX}", ColorTranslator.ToHtml(this.CellColor));
+				sb.Replace("{CELL_BGHEX}", ColorTranslator.ToHtml(this.CellBackground));
 
-				sCSS = sCSS.Replace("{WEEKDAY_CHEX}", ColorTranslator.ToHtml(this.WeekdayColor));
-				sCSS = sCSS.Replace("{WEEKDAY_BGHEX}", ColorTranslator.ToHtml(this.WeekdayBackground));
-				sCSS = sCSS.Replace("{CELL_CHEX}", ColorTranslator.ToHtml(this.CellColor));
-				sCSS = sCSS.Replace("{CELL_BGHEX}", ColorTranslator.ToHtml(this.CellBackground));
+				sb.Replace("{TODAY_CHEX}", ColorTranslator.ToHtml(this.TodayColor));
+				sb.Replace("{TODAY_BGHEX}", ColorTranslator.ToHtml(this.TodayBackground));
+				sb.Replace("{TODAYSEL_BDR}", ColorTranslator.ToHtml(this.TodaySelectBorder));
+				sb.Replace("{TODAY_LNK}", ColorTranslator.ToHtml(this.TodayLink));
 
-				sCSS = sCSS.Replace("{TODAY_CHEX}", ColorTranslator.ToHtml(this.TodayColor));
-				sCSS = sCSS.Replace("{TODAY_BGHEX}", ColorTranslator.ToHtml(this.TodayBackground));
-				sCSS = sCSS.Replace("{TODAYSEL_BDR}", ColorTranslator.ToHtml(this.TodaySelectBorder));
-				sCSS = sCSS.Replace("{TODAY_LNK}", ColorTranslator.ToHtml(this.TodayLink));
+				sb.Replace("{NORMAL_CHEX}", ColorTranslator.ToHtml(this.NormalColor));
+				sb.Replace("{NORMAL_BGHEX}", ColorTranslator.ToHtml(this.NormalBackground));
+				sb.Replace("{NORMALSEL_BDR}", ColorTranslator.ToHtml(this.NormalSelectBorder));
+				sb.Replace("{NORMAL_LNK}", ColorTranslator.ToHtml(this.NormalLink));
 
-				sCSS = sCSS.Replace("{NORMAL_CHEX}", ColorTranslator.ToHtml(this.NormalColor));
-				sCSS = sCSS.Replace("{NORMAL_BGHEX}", ColorTranslator.ToHtml(this.NormalBackground));
-				sCSS = sCSS.Replace("{NORMALSEL_BDR}", ColorTranslator.ToHtml(this.NormalSelectBorder));
-				sCSS = sCSS.Replace("{NORMAL_LNK}", ColorTranslator.ToHtml(this.NormalLink));
+				sb.Replace("{CALENDAR_ID}", "#" + this.ElementId);
 
-				sCSS = sCSS.Replace("{CALENDAR_ID}", "#" + this.ElementId);
-				sCSS = "\r\n<style type=\"text/css\">\r\n" + sCSS + "\r\n</style>\r\n";
+				sCSS = "\r\n<style type=\"text/css\">\r\n" + sb.ToString() + "\r\n</style>\r\n";
 
 				return sCSS;
 			} else {

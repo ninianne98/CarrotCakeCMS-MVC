@@ -27,8 +27,8 @@ namespace Carrotware.Web.UI.Components {
 
 		public static bool SendMail(string fromEmail, string emailTo, string subjectLine, string bodyText, bool isHTML) {
 			List<string> lst = new List<string>();
-			if (String.IsNullOrEmpty(emailTo)) {
-				emailTo = String.Empty;
+			if (string.IsNullOrEmpty(emailTo)) {
+				emailTo = string.Empty;
 			}
 			//emailTo = emailTo.Replace(",", ";");
 
@@ -46,7 +46,7 @@ namespace Carrotware.Web.UI.Components {
 			HttpContext context = HttpContext.Current;
 			EMailSettings mailSettings = EMailSettings.GetEMailSettings();
 
-			if (String.IsNullOrEmpty(fromEmail)) {
+			if (string.IsNullOrEmpty(fromEmail)) {
 				fromEmail = mailSettings.ReturnAddress;
 			}
 
@@ -87,8 +87,8 @@ namespace Carrotware.Web.UI.Components {
 
 				using (SmtpClient client = new SmtpClient()) {
 					if (mailSettings.DeliveryMethod == SmtpDeliveryMethod.Network
-							&& !String.IsNullOrEmpty(mailSettings.MailUserName)
-							&& !String.IsNullOrEmpty(mailSettings.MailPassword)) {
+							&& !string.IsNullOrEmpty(mailSettings.MailUserName)
+							&& !string.IsNullOrEmpty(mailSettings.MailPassword)) {
 						client.Host = mailSettings.MailDomainName;
 						client.Credentials = new NetworkCredential(mailSettings.MailUserName, mailSettings.MailPassword);
 					} else {

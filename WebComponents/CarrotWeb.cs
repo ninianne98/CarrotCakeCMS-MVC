@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
+using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.UI;
 using System.Web.WebPages;
+using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -86,58 +85,92 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public static string DateKey() {
-			return DateKey(15);
+			return GenerateTick(DateTime.UtcNow).ToString();
+			//return DateKey(15);
 		}
 
 		public static string DateKey(int interval) {
 			DateTime now = DateTime.UtcNow;
 			TimeSpan d = TimeSpan.FromMinutes(interval);
 			DateTime dt = new DateTime(((now.Ticks + d.Ticks - 1) / d.Ticks) * d.Ticks);
-			byte[] dateStringBytes = ASCIIEncoding.ASCII.GetBytes(dt.ToString("U"));
+			byte[] dateStringBytes = Encoding.ASCII.GetBytes(dt.ToString("U"));
 
 			return Convert.ToBase64String(dateStringBytes);
 		}
 
-		private static Page _Page;
+		private static string _resourceBase = "carrotwarewebresource.ashx";
 
-		private static Page WebPage {
-			get {
-				if (_Page == null) {
-					_Page = new Page();
-					_Page.AppRelativeVirtualPath = "~/";
-				}
-				return _Page;
+		private static long GenerateTick(DateTime dateIn) {
+			int roundTo = 12;
+			dateIn = dateIn.AddMinutes(-2);
+			int iMin = roundTo * (dateIn.Minute / roundTo);
+
+			DateTime dateOut1 = dateIn.AddMinutes(0 - dateIn.Minute).AddMinutes(iMin);
+
+			var dateOut = new DateTime(dateOut1.Year, dateOut1.Month, dateOut1.Day, dateOut1.Hour, dateOut1.Minute, dateOut1.Minute, (2 * dateOut1.DayOfYear), DateTimeKind.Utc);
+
+			return dateOut.Ticks;
+		}
+
+		private static string GetInternalResourceName(string resource) {
+			if (resource.ToLowerInvariant().StartsWith("carrotware.web.ui")) {
+				return resource;
 			}
+
+			return string.Format("Carrotware.Web.UI.Components.{0}", resource);
+		}
+
+		internal static string GetWebResourceUrl(string resource) {
+			return GetWebResourceUrl(typeof(CarrotWeb), GetInternalResourceName(resource));
 		}
 
 		public static string GetWebResourceUrl(Type type, string resource) {
-			string sPath = String.Empty;
+			string sUri = string.Empty;
 
-			if (!resource.StartsWith("Carrotware.Web.UI")) {
-				resource = String.Format("Carrotware.Web.UI.Components.(0}", resource);
-			}
+			var asmb = type.Assembly.ManifestModule.Name;
 
 			try {
-				sPath = WebPage.ClientScript.GetWebResourceUrl(type, resource);
-				sPath = HttpUtility.HtmlEncode(sPath);
+				sUri = string.Format("/{0}?r={1}&t={2}", _resourceBase, HttpUtility.HtmlEncode(Utils.EncodeBase64(resource + ":" + asmb)), DateKey());
 			} catch { }
 
-			return sPath;
+			return sUri;
 		}
 
-		public static string GetManifestResourceStream(string resource) {
-			string returnText = null;
-
-			if (!resource.StartsWith("Carrotware.Web.UI")) {
-				resource = String.Format("Carrotware.Web.UI.Components.(0}", resource);
+		private static Assembly GetAssembly(Type type, string[] res) {
+			var _assembly = Assembly.GetAssembly(type);
+			if (res.Length > 1) {
+				var dir = AppDomain.CurrentDomain.RelativeSearchPath;
+				_assembly = Assembly.LoadFrom(Path.Combine(dir, res[1]));
 			}
 
-			Assembly _assembly = Assembly.GetExecutingAssembly();
-			using (StreamReader oTextStream = new StreamReader(_assembly.GetManifestResourceStream(resource))) {
-				returnText = oTextStream.ReadToEnd();
+			return _assembly;
+		}
+
+		public static string GetManifestResourceText(Type type, string resource) {
+			string returnText = null;
+			var res = resource.Split(':');
+
+			var _assembly = GetAssembly(type, res);
+
+			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(res[0]))) {
+				returnText = stream.ReadToEnd();
 			}
 
 			return returnText;
+		}
+
+		public static byte[] GetManifestResourceBytes(Type type, string resource) {
+			byte[] returnBytes = null;
+			var res = resource.Split(':');
+
+			var _assembly = GetAssembly(type, res);
+
+			using (var stream = _assembly.GetManifestResourceStream(res[0])) {
+				returnBytes = new byte[stream.Length];
+				stream.Read(returnBytes, 0, returnBytes.Length);
+			}
+
+			return returnBytes;
 		}
 
 		public static CarrotWebGrid<T> CarrotWebGrid<T>() where T : class {
@@ -168,8 +201,8 @@ namespace Carrotware.Web.UI.Components {
 			return grid;
 		}
 
-		public static string DisplayNameFor<T>(Expression<Func<T, Object>> expression) {
-			string propertyName = String.Empty;
+		public static string DisplayNameFor<T>(Expression<Func<T, object>> expression) {
+			string propertyName = string.Empty;
 			PropertyInfo propInfo = null;
 			Type type = null;
 
@@ -181,7 +214,7 @@ namespace Carrotware.Web.UI.Components {
 				propInfo = type.GetProperty(propertyName);
 			}
 
-			if (!String.IsNullOrEmpty(propertyName) && type != null) {
+			if (!string.IsNullOrEmpty(propertyName) && type != null) {
 				DisplayAttribute attribute1 = propInfo.GetCustomAttributes(typeof(DisplayAttribute), true).FirstOrDefault() as DisplayAttribute;
 				if (attribute1 != null) {
 					return attribute1.Name;
@@ -209,11 +242,11 @@ namespace Carrotware.Web.UI.Components {
 				}
 			}
 
-			return String.Empty;
+			return string.Empty;
 		}
 
 		public static HtmlString ValidationMultiMessageFor<T>(this HtmlHelper<T> htmlHelper,
-			Expression<Func<T, Object>> property, object listAttributes = null, bool messageAsSpan = false) {
+			Expression<Func<T, object>> property, object listAttributes = null, bool messageAsSpan = false) {
 			MemberExpression memberExpression = property.Body as MemberExpression ??
 									((UnaryExpression)property.Body).Operand as MemberExpression;
 
@@ -225,15 +258,15 @@ namespace Carrotware.Web.UI.Components {
 
 				if (stateDictionary[propertyName] != null) {
 					StringBuilder sb = new StringBuilder();
-					sb.Append(String.Empty);
+					sb.Append(string.Empty);
 					string validationClass = "field-validation-valid";
 
 					foreach (var err in stateDictionary[propertyName].Errors) {
-						if (!String.IsNullOrEmpty(err.ErrorMessage.Trim())) {
+						if (!string.IsNullOrEmpty(err.ErrorMessage.Trim())) {
 							if (messageAsSpan) {
-								sb.AppendLine(String.Format("<span>{0}</span> ", err.ErrorMessage.Trim()));
+								sb.AppendLine(string.Format("<span>{0}</span> ", err.ErrorMessage.Trim()));
 							} else {
-								sb.AppendLine(String.Format("<li>{0}</li>", err.ErrorMessage.Trim()));
+								sb.AppendLine(string.Format("<li>{0}</li>", err.ErrorMessage.Trim()));
 							}
 							validationClass = "field-validation-error";
 						}
@@ -253,7 +286,7 @@ namespace Carrotware.Web.UI.Components {
 						listAttribs.Add("class", validationClass);
 					} else {
 						string origCss = listAttribs["class"].ToString();
-						listAttribs["class"] = String.Format("{0} {1}", validationClass, origCss.Trim());
+						listAttribs["class"] = string.Format("{0} {1}", validationClass, origCss.Trim());
 					}
 
 					msgBuilder.MergeAttributes(listAttribs);
@@ -267,7 +300,7 @@ namespace Carrotware.Web.UI.Components {
 				}
 			}
 
-			return new HtmlString(String.Empty);
+			return new HtmlString(string.Empty);
 		}
 
 		public static MvcHtmlString MetaTag(string Name, string Content) {

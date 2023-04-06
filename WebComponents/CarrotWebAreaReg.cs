@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -64,6 +64,13 @@ namespace Carrotware.Web.UI.Components {
 					defaults: new { controller = "Home", action = "GetCarrotHelp", id = UrlParameter.Optional },
 					namespaces: _namespaces.ToArray()
 			);
+
+			context.MapRoute(
+				name: this.AreaName + "_GetWebResource",
+				url: "carrotwarewebresource.ashx/{id}",
+				defaults: new { controller = "Home", action = "GetWebResource", id = UrlParameter.Optional },
+				namespaces: _namespaces.ToArray()
+);
 		}
 	}
 }

@@ -1,0 +1,127 @@
+﻿@violet: #614791;
+@plum: #854085;
+@purple: #673BB7;
+@green: #6F997D;
+@blue: #3F51B5;
+@red: #A4262C;
+@orange: #CA5010;
+@teal: #038387;
+@grey: #707070;
+
+
+.bootstrapColorTheme(@themeColor) {
+	@inverseColor: darken(@themeColor, 12%);
+	@navColor: lighten(@themeColor, 7%);
+	@hoverColor: lighten(@themeColor, 35%);
+	@linkColor: darken(@themeColor, 7%);
+
+	.navbar-inverse {
+		background-color: @inverseColor;
+	}
+
+	.navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+		background-color: @navColor;
+	}
+
+	.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+		background-color: @navColor;
+	}
+
+	.dropdown-menu {
+		background-color: @navColor;
+	}
+
+	.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+		background-color: @hoverColor;
+	}
+
+	.navbar-inverse {
+		background-image: none;
+	}
+
+	.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+		background-image: none;
+	}
+
+	.navbar-inverse {
+		border-color: @linkColor;
+	}
+
+	.navbar-inverse .navbar-brand {
+		color: #FFFFFF;
+	}
+
+	.navbar-inverse .navbar-brand:hover {
+		color: #FFFFFF;
+	}
+
+	.navbar-inverse .navbar-nav > li > a {
+		color: #FFFFFF;
+	}
+
+	.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+		color: #FFFFFF;
+	}
+
+	.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+		color: #FFFFFF;
+	}
+
+	.navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+		color: #FFFFFF;
+	}
+
+	.dropdown-menu > li > a {
+		color: #FFFFFF;
+	}
+
+	.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+		color: @inverseColor;
+	}
+
+	.navbar-inverse .navbar-nav > .dropdown > a .caret {
+		border-top-color: #FFFFFF;
+	}
+
+	.navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
+		border-top-color: #FFFFFF;
+	}
+
+	.navbar-inverse .navbar-nav > .dropdown > a .caret {
+		border-bottom-color: #FFFFFF;
+	}
+
+	.navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
+		border-bottom-color: #FFFFFF;
+	}
+
+	a {
+		color: @linkColor;
+	}
+
+	a:focus, a:hover {
+		color: @navColor;
+	}
+
+	.pagination > li > a,
+	.pagination > li > span {
+		color: @inverseColor;
+	}
+
+	.pagination > li > a:hover,
+	.pagination > li > span:hover,
+	.pagination > li > a:focus,
+	.pagination > li > span:focus {
+		color: @navColor;
+	}
+
+	.pagination > .active > a,
+	.pagination > .active > span,
+	.pagination > .active > a:hover,
+	.pagination > .active > span:hover,
+	.pagination > .active > a:focus,
+	.pagination > .active > span:focus {
+		background-color: @inverseColor;
+		border-color: @inverseColor;
+	}
+}

@@ -37,9 +37,9 @@
 			</td>
 			<td>
 				@{
-	SplitDateTime gld = new SplitDateTime();
-	gld.CombinedDateTime = Model.ContentPage.GoLiveDate;
-	gld.FieldName = Html.NameFor(model => model.ContentPage.GoLiveDate).ToString();
+					SplitDateTime gld = new SplitDateTime();
+					gld.CombinedDateTime = Model.ContentPage.GoLiveDate;
+					gld.FieldName = Html.NameFor(model => model.ContentPage.GoLiveDate).ToString();
 				}
 
 				@Html.Partial("_datetime", gld)
@@ -51,9 +51,9 @@
 			</td>
 			<td>
 				@{
-	SplitDateTime rdt = new SplitDateTime();
-	rdt.CombinedDateTime = Model.ContentPage.RetireDate;
-	rdt.FieldName = Html.NameFor(model => model.ContentPage.RetireDate).ToString();
+					SplitDateTime rdt = new SplitDateTime();
+					rdt.CombinedDateTime = Model.ContentPage.RetireDate;
+					rdt.FieldName = Html.NameFor(model => model.ContentPage.RetireDate).ToString();
 				}
 
 				@Html.Partial("_datetime", rdt)
@@ -64,7 +64,7 @@
 				titlebar:
 			</td>
 			<td>
-				@Html.TextBoxFor(m => m.ContentPage.TitleBar, new { size = "60", @class = "form-control-xlg", onblur = "AutoGeneratePageFilename()" })
+				@Html.TextBoxFor(m => m.ContentPage.TitleBar, new { size = "60", @class = "form-control-xlg" })
 				@Html.ValidationMessageFor(m => m.ContentPage.TitleBar, "", new { @class = "validationError" })
 			</td>
 		</tr>
@@ -117,11 +117,11 @@
 				<b>find:</b> <span id="spanResults"></span>
 				<br />
 				@{
-	var usr = Model.CreditUser;
-	string usrCap = String.Empty;
-	if (usr != null) {
-		usrCap = String.Format("{0} ({1})", usr.UserName, usr.Email);
-	}
+					var usr = Model.CreditUser;
+					string usrCap = String.Empty;
+					if (usr != null) {
+						usrCap = String.Format("{0} ({1})", usr.UserName, usr.Email);
+					}
 				}
 
 				@Html.TextBox("txtSearchUser", usrCap, new { maxlength = "256", @class = "form-control-lg" })
@@ -225,7 +225,7 @@
 		</div>
 	</div>
 
-}
+					}
 
 <script type="text/javascript">
 	$(document).ready(function () {

@@ -218,7 +218,7 @@
 				"Yes": function () {
 					cmsMakeOKToLeave();
 					cmsRecordCancellation();
-					window.setTimeout("location.href = '@SiteFilename.PageIndexURL';", 500);
+					window.setTimeout("location.href = '@SiteFilename.BlogPostIndexURL';", 500);
 					cmsAlertModalClose();
 				}
 			};
@@ -385,9 +385,9 @@
 				</td>
 				<td>
 					@{
-	SplitDateTime gld = new SplitDateTime();
-	gld.CombinedDateTime = Model.ContentPage.GoLiveDate;
-	gld.FieldName = Html.NameFor(model => model.ContentPage.GoLiveDate).ToString();
+						SplitDateTime gld = new SplitDateTime();
+						gld.CombinedDateTime = Model.ContentPage.GoLiveDate;
+						gld.FieldName = Html.NameFor(model => model.ContentPage.GoLiveDate).ToString();
 					}
 
 					@Html.Partial("_datetime", gld)
@@ -399,9 +399,9 @@
 				</td>
 				<td>
 					@{
-	SplitDateTime rdt = new SplitDateTime();
-	rdt.CombinedDateTime = Model.ContentPage.RetireDate;
-	rdt.FieldName = Html.NameFor(model => model.ContentPage.RetireDate).ToString();
+						SplitDateTime rdt = new SplitDateTime();
+						rdt.CombinedDateTime = Model.ContentPage.RetireDate;
+						rdt.FieldName = Html.NameFor(model => model.ContentPage.RetireDate).ToString();
 					}
 
 					@Html.Partial("_datetime", rdt)
@@ -493,11 +493,11 @@
 					<b>find:</b> <span id="spanResults"></span>
 					<br />
 					@{
-	var usr = Model.CreditUser;
-	string usrCap = String.Empty;
-	if (usr != null) {
-		usrCap = String.Format("{0} ({1})", usr.UserName, usr.Email);
-	}
+						var usr = Model.CreditUser;
+						string usrCap = String.Empty;
+						if (usr != null) {
+							usrCap = String.Format("{0} ({1})", usr.UserName, usr.Email);
+						}
 					}
 
 					@Html.TextBox("txtSearchUser", usrCap, new { maxlength = "256", @class = "form-control-lg" })
@@ -704,7 +704,7 @@
 		</div>
 	</div>
 
-}
+						}
 
 <div style="display: none">
 	@using (Html.BeginForm("DeleteContentPage", RouteConfig.AdminCtrlr)) {

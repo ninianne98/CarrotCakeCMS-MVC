@@ -32,6 +32,8 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,12 +60,16 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.3.1.7705, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -75,31 +81,31 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    <Reference Include="System.Web.Mvc, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.0\lib\net45\System.Web.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Optimization, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.0\lib\net45\System.Web.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.WebPages.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq">
@@ -110,8 +116,8 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebGrease, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -119,13 +125,6 @@
     <Compile Include="BaseTwoPartWebComponent.cs" />
     <Compile Include="BaseWebComponent.cs" />
     <Compile Include="Captcha2.cs" />
-    <Compile Include="captcha\CAPTCHA2.aspx.cs">
-      <DependentUpon>CAPTCHA2.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="captcha\CAPTCHA2.aspx.designer.cs">
-      <DependentUpon>CAPTCHA2.aspx.cs</DependentUpon>
-    </Compile>
     <Compile Include="captcha\CaptchaImage.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -150,6 +149,7 @@
     <Compile Include="ITwoPartWebComponent.cs" />
     <Compile Include="IValidateHuman.cs" />
     <Compile Include="IWebComponent.cs" />
+    <Compile Include="Bootstrap.cs" />
     <Compile Include="ReflectionUtilities.cs" />
     <Compile Include="SimpleStyle.cs" />
     <Compile Include="ImageSizer.cs" />
@@ -164,9 +164,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="calendar.txt" />
-    <EmbeddedResource Include="captcha\CAPTCHA2.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-bg_glass_100_b7d7c4_1x400.png" />
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-bg_glass_100_dff6e8_1x400.png" />
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-bg_glass_50_468b5e_1x400.png" />
@@ -199,7 +196,7 @@
     <EmbeddedResource Include="jquerybasic\jquery-ui-black.css" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="jquery-1-6-4.js" />
+    <EmbeddedResource Include="jquery\jquery-1-6-4.js" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -235,7 +232,7 @@
     <EmbeddedResource Include="jquerybasic\blue\ui-icons_ffffff_256x240.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="jquery-1-7-2.js" />
+    <EmbeddedResource Include="jquery\jquery-1-7-2.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="jquerybasic\purple\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -298,25 +295,25 @@
     <EmbeddedResource Include="jquerybasic\jquery-ui-lightgreen.css" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="jqueryui-1-9-2.js" />
-    <EmbeddedResource Include="jqueryui-1-7-3.js" />
-    <EmbeddedResource Include="jqueryui-1-8-24.js" />
+    <EmbeddedResource Include="jquery\jqueryui-1-9-2.js" />
+    <EmbeddedResource Include="jquery\jqueryui-1-7-3.js" />
+    <EmbeddedResource Include="jquery\jqueryui-1-8-24.js" />
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-bg_flat_15_f9cecd_40x100.png" />
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-bg_highlight-soft_25_fbf9ee_1x100.png" />
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-icons_cd0a0a_256x240.png" />
-    <EmbeddedResource Include="jquery-1-8-3.js" />
-    <EmbeddedResource Include="jquery-1-9-1.js" />
-    <EmbeddedResource Include="jqueryui-1-10-2.js" />
+    <EmbeddedResource Include="jquery\jquery-1-8-3.js" />
+    <EmbeddedResource Include="jquery\jquery-1-9-1.js" />
+    <EmbeddedResource Include="jquery\jqueryui-1-10-2.js" />
     <EmbeddedResource Include="jquerybasic\silver\animated-overlay.gif" />
     <EmbeddedResource Include="jquerybasic\purple\animated-overlay.gif" />
     <EmbeddedResource Include="jquerybasic\lightgreen\animated-overlay.gif" />
     <EmbeddedResource Include="jquerybasic\green\animated-overlay.gif" />
     <EmbeddedResource Include="jquerybasic\blue\animated-overlay.gif" />
     <EmbeddedResource Include="jquerybasic\black\animated-overlay.gif" />
-    <EmbeddedResource Include="jquery-1-2-1-mig.js" />
-    <EmbeddedResource Include="jquery-1-10-2.js" />
-    <EmbeddedResource Include="jqueryui-1-11-4.js" />
-    <EmbeddedResource Include="jquery-1-11-3.js" />
+    <EmbeddedResource Include="jquery\jquery-1-2-1-mig.js" />
+    <EmbeddedResource Include="jquery\jquery-1-10-2.js" />
+    <EmbeddedResource Include="jquery\jqueryui-1-11-4.js" />
+    <EmbeddedResource Include="jquery\jquery-1-11-3.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="carrotHelp.js" />
@@ -333,13 +330,95 @@
     <EmbeddedResource Include="captcha2\scissors.png" />
     <EmbeddedResource Include="captcha2\snowflake.png" />
     <EmbeddedResource Include="captcha2\web.png" />
-    <EmbeddedResource Include="jquery-1-3-0-mig.js" />
-    <EmbeddedResource Include="jquery-1-12-0.js" />
-    <EmbeddedResource Include="unobtrusive-ajax.js" />
+    <EmbeddedResource Include="jquery\jquery-1-3-0-mig.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bootstrap\blue.css">
+      <DependentUpon>blue.less</DependentUpon>
+    </Content>
+    <Content Include="bootstrap\blue.less" />
+    <Content Include="bootstrap\plum.css">
+      <DependentUpon>plum.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="jquery\jquery-1-12-4.js" />
+    <EmbeddedResource Include="jquery\jquery-unobtrusive-ajax.min.js" />
+    <EmbeddedResource Include="jquery\jquery-validate.unobtrusive.min.js" />
+    <EmbeddedResource Include="bootstrap\plum.min.css">
+      <DependentUpon>plum.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\_colors.less" />
+    <EmbeddedResource Include="bootstrap\blue.min.css">
+      <DependentUpon>blue.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\green.css">
+      <DependentUpon>green.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\green.min.css">
+      <DependentUpon>green.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\grey.css">
+      <DependentUpon>grey.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\grey.min.css">
+      <DependentUpon>grey.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\orange.css">
+      <DependentUpon>orange.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\orange.min.css">
+      <DependentUpon>orange.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\purple.css">
+      <DependentUpon>purple.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\purple.min.css">
+      <DependentUpon>purple.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\red.css">
+      <DependentUpon>red.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\red.min.css">
+      <DependentUpon>red.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\teal.css">
+      <DependentUpon>teal.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\teal.min.css">
+      <DependentUpon>teal.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\violet.css">
+      <DependentUpon>violet.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\violet.min.css">
+      <DependentUpon>violet.css</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
+    <EmbeddedResource Include="bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <EmbeddedResource Include="bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <EmbeddedResource Include="bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <EmbeddedResource Include="bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="bootstrap\green.less" />
+    <None Include="bootstrap\grey.less" />
+    <None Include="bootstrap\orange.less" />
+    <None Include="bootstrap\plum.less" />
+    <None Include="bootstrap\purple.less" />
+    <None Include="bootstrap\red.less" />
+    <None Include="bootstrap\teal.less" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="bootstrap\bootstrap.min.css" />
+    <EmbeddedResource Include="bootstrap\bootstrap.min.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="bootstrap\fonts\glyphicons-halflings-regular.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bootstrap\violet.less" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

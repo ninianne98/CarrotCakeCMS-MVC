@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -40,17 +39,14 @@ namespace Carrotware.Web.UI.Components {
 
 		public bool UseJqueryMigrate { get; set; }
 
-		public static string GetWebResourceUrl(string resource) {
-			return CarrotWeb.GetWebResourceUrl(typeof(jquerybasic), resource);
-		}
 
 		private jquery _jq = new jquery();
 		private jqueryui _jqui = new jqueryui();
 
 		public override string GetHtml() {
-			string sJQFile = String.Empty;
+			string sJQFile = string.Empty;
 			StringBuilder sb = new StringBuilder();
-			sb.AppendLine(String.Empty);
+			sb.AppendLine(string.Empty);
 
 			if (!this.StylesheetOnly) {
 				_jq.JQVersion = this.JQVersion;
@@ -62,28 +58,28 @@ namespace Carrotware.Web.UI.Components {
 
 			switch (this.SelectedSkin) {
 				case jQueryTheme.GlossyBlack:
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquerybasic.jquery-ui-black.css");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquerybasic.jquery-ui-black.css");
 					break;
 
 				case jQueryTheme.Purple:
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquerybasic.jquery-ui-purple.css");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquerybasic.jquery-ui-purple.css");
 					break;
 
 				case jQueryTheme.Green:
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquerybasic.jquery-ui-green.css");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquerybasic.jquery-ui-green.css");
 					break;
 
 				case jQueryTheme.Blue:
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquerybasic.jquery-ui-blue.css");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquerybasic.jquery-ui-blue.css");
 					break;
 
 				case jQueryTheme.LightGreen:
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquerybasic.jquery-ui-lightgreen.css");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquerybasic.jquery-ui-lightgreen.css");
 					break;
 
 				case jQueryTheme.Silver:
 				default:
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquerybasic.jquery-ui-silver.css");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquerybasic.jquery-ui-silver.css");
 					break;
 			}
 

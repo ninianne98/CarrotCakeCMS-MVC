@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -30,16 +29,12 @@ namespace Carrotware.Web.UI.Components {
 
 		public bool UseJqueryMigrate { get; set; }
 
-		public static string GetWebResourceUrl(string resource) {
-			return CarrotWeb.GetWebResourceUrl(typeof(jquery), resource);
-		}
-
 		private static string _generalUri = null;
 
 		public static string GeneralUri {
 			get {
-				if (String.IsNullOrEmpty(_generalUri)) {
-					_generalUri = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-8-3.js");
+				if (string.IsNullOrEmpty(_generalUri)) {
+					_generalUri = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-11-3.js");
 				}
 
 				return _generalUri;
@@ -49,10 +44,10 @@ namespace Carrotware.Web.UI.Components {
 		public override string GetHtml() {
 			StringBuilder sb = new StringBuilder();
 
-			string sJQFile = String.Empty;
+			string sJQFile = string.Empty;
 			string jqVer = JQVersion;
 
-			if (!String.IsNullOrEmpty(jqVer) && jqVer.Length > 2) {
+			if (!string.IsNullOrEmpty(jqVer) && jqVer.Length > 2) {
 				if (jqVer.LastIndexOf(".") != jqVer.IndexOf(".")) {
 					jqVer = jqVer.Substring(0, jqVer.LastIndexOf("."));
 				}
@@ -63,32 +58,32 @@ namespace Carrotware.Web.UI.Components {
 				case "2.0":
 				case "1.11":
 					jqVer = "1.11.3";
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-11-3.js");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-11-3.js");
 					break;
 
 				case "1.12":
-					jqVer = "1.12.0";
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-12-0.js");
+					jqVer = "1.12.4";
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-12-4.js");
 					break;
 
 				case "1.10":
 					jqVer = "1.10.2";
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-10-2.js");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-10-2.js");
 					break;
 
 				case "1.9":
 					jqVer = "1.9.1";
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-9-1.js");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-9-1.js");
 					break;
 
 				case "1.8":
 					jqVer = "1.8.3";
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-8-3.js");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-8-3.js");
 					break;
 
 				case "1.7":
 					jqVer = "1.7.2";
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-7-2.js");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-7-2.js");
 					break;
 
 				case "1":
@@ -97,36 +92,38 @@ namespace Carrotware.Web.UI.Components {
 				case "1.5":
 				case "1.6":
 					jqVer = "1.6.4";
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-6-4.js");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-6-4.js");
 					break;
 
 				default:
 					jqVer = "1.11.3";
-					sJQFile = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-11-3.js");
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-11-3.js");
 					break;
 			}
 
 			sb.AppendLine("<!-- JQuery v. " + jqVer + " --> <script src=\"" + sJQFile + "\" type=\"text/javascript\"></script> ");
 
 			if (this.UseJqueryMigrate) {
-				string sJQFileMig = String.Empty;
+				string sJQFileMig = string.Empty;
 
 				if (jqVer.StartsWith("1.9") || jqVer.StartsWith("1.10") || jqVer.StartsWith("1.11")) {
-					sJQFileMig = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-2-1-mig.js");
+					sJQFileMig = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-2-1-mig.js");
 				}
 
 				if (jqVer.StartsWith("1.12") || jqVer.StartsWith("1.13")) {
-					sJQFileMig = GetWebResourceUrl("Carrotware.Web.UI.Components.jquery-1-3-0-mig.js");
+					sJQFileMig = CarrotWeb.GetWebResourceUrl("jquery.jquery-1-3-0-mig.js");
 				}
 
-				if (!String.IsNullOrEmpty(sJQFileMig)) {
+				if (!string.IsNullOrEmpty(sJQFileMig)) {
 					sb.AppendLine("<!-- jQuery Migrate Plugin --> <script src=\"" + sJQFileMig + "\" type=\"text/javascript\"></script> ");
 				}
 			}
 
-			string sAjax = GetWebResourceUrl("Carrotware.Web.UI.Components.unobtrusive-ajax.js");
+			//string sVAjax = CarrotWeb.GetWebResourceUrl("jquery.validate-unobtrusive.min.js");
+			//sb.AppendLine("<!-- Unobtrusive Validate --> <script src=\"" + sVAjax + "\" type=\"text/javascript\"></script> ");
 
-			sb.AppendLine("<!-- Unobtrusive Ajax --> <script src=\"" + sAjax + "\" type=\"text/javascript\"></script> ");
+			string sJqAjax = CarrotWeb.GetWebResourceUrl("jquery.jquery-unobtrusive-ajax.min.js");
+			sb.AppendLine("<!-- Unobtrusive Ajax --> <script src=\"" + sJqAjax + "\" type=\"text/javascript\"></script> ");
 
 			string key = CarrotWeb.DateKey();
 

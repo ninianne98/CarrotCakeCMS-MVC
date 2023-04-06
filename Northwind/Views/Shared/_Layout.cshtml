@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Northwind.Code
+
+<!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
@@ -6,9 +8,41 @@
 	<title>@ViewBag.Title - My ASP.NET Application</title>
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/modernizr")
-	@Scripts.Render("~/bundles/jquery")
-	@Scripts.Render("~/bundles/bootstrap")
 
+	@(new jquery())
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver })
+	@*@(new Bootstrap() { SelectedSkin= Bootstrap.BootstrapColorScheme.Violet })*@
+	@(new Bootstrap() { SelectedSkin = Helper.BootstrapColorScheme })
+
+	@*@Scripts.Render("~/bundles/jquery")*@
+	@*@Scripts.Render("~/bundles/bootstrap")*@
+
+	<script>
+		$(document).ready(function () {
+			fixButtons();
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			fixButtons();
+			setTimeout("fixButtons();", 500);
+		});
+
+		function fixButtons() {
+			$("button").addClass('btn btn-lg');
+			$("input[type=button]").addClass('btn btn-lg btn-default');
+			$("input[type=submit]").addClass('btn btn-lg btn-default');
+			$("input[type=text]").addClass('form-control');
+			$("input[type=password]").addClass('form-control');
+			$("select").addClass('form-control');
+		}
+	</script>
+
+	<script src="~/Scripts/chosen.jquery.js"></script>
+	<script src="~/Scripts/jquery.ui.timepicker.js"></script>
+	<link href="~/assets/chosen.css" rel="stylesheet" />
+	<link href="~/assets/jquery.ui.timepicker.css" rel="stylesheet" />
+
+	@*<link href="~/content/violet.css" rel="stylesheet" />*@
 	<script src="~/Scripts/Common.js"></script>
 	<link href="~/Content/Site.css" rel="stylesheet" />
 </head>
@@ -23,23 +57,36 @@
 				</button>
 				@Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
 			</div>
+
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li>@Html.ActionLink("Home", "Index", "Home")</li>
-					<li>@Html.ActionLink("About", "About", "Home")</li>
-					<li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+					@using (CarrotWeb.BeginWrappedItem("li", "Index", "Home", new { @class = "active" }, null)) {
+						@Html.ActionLink("Home", "Index", "Home")
+					}
+					@using (CarrotWeb.BeginWrappedItem("li", "Sampler", "Home", new { @class = "active" }, null)) {
+						@Html.ActionLink("Sampler", "Sampler", "Home")
+					}
+					@using (CarrotWeb.BeginWrappedItem("li", "Contact", "Home", new { @class = "active" }, null)) {
+						@Html.ActionLink("Contact", "Contact", "Home")
+					}
 
-					<li class="dropdown">
+					@using (CarrotWeb.BeginWrappedItem("li", "TestProductSearch;TestProductSearchMulti", "Home", new { @class = "active dropdown" }, new { @class = "dropdown" })) {
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Public Test <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li>@Html.ActionLink("Product Search", "TestProductSearch", "Home")</li>
+							<li>@Html.ActionLink("Product Search Multi", "TestProductSearchMulti", "Home")</li>
+						</ul>
+					}
+
+					@using (CarrotWeb.BeginWrappedItem("li", "*", "Admin", new { @class = "active dropdown" }, new { @class = "dropdown" })) {
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Test <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li>@Html.ActionLink("Employees", "Employees", "Admin")</li>
 							<li>@Html.ActionLink("Suppliers", "Suppliers", "Admin")</li>
 							<li>@Html.ActionLink("Products", "Products", "Admin")</li>
-
 							<li>@Html.ActionLink("Products 2", "Products2", "Admin")</li>
-							@*<li>@Html.ActionLink("Products 3", "Products3", "Admin")</li>*@
 						</ul>
-					</li>
+					}
 				</ul>
 			</div>
 		</div>

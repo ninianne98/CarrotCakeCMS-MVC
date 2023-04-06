@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -19,10 +19,10 @@ namespace Carrotware.Web.UI.Components {
 	public class FileData {
 
 		public FileData() {
-			this.FolderPath = String.Empty;
+			this.FolderPath = string.Empty;
 			this.FileName = "unknown";
 			this.FileSize = 0;
-			this.FileExtension = String.Empty;
+			this.FileExtension = string.Empty;
 			this.FileSizeFriendly = "0B";
 			this.FileDate = Convert.ToDateTime("1900-01-01");
 			this.MimeType = "x-application/octet-stream";
@@ -39,7 +39,7 @@ namespace Carrotware.Web.UI.Components {
 
 		public string FullFileName {
 			get {
-				return String.Format("/{0}/{1}", this.FolderPath, this.FileName).Replace(@"///", @"/").Replace(@"//", @"/").Replace(@"//", @"/");
+				return string.Format("/{0}/{1}", this.FolderPath, this.FileName).Replace(@"///", @"/").Replace(@"//", @"/").Replace(@"//", @"/");
 			}
 		}
 
@@ -49,14 +49,14 @@ namespace Carrotware.Web.UI.Components {
 
 			if (obj is FileData) {
 				FileData p = (FileData)obj;
-				return (String.Format("{0}", this.FullFileName).ToLowerInvariant() == String.Format("{0}", p.FullFileName).ToLowerInvariant());
+				return (string.Format("{0}", this.FullFileName).ToLowerInvariant() == string.Format("{0}", p.FullFileName).ToLowerInvariant());
 			} else {
 				return false;
 			}
 		}
 
 		public override int GetHashCode() {
-			return String.Format("{0}", this.FullFileName).ToLowerInvariant().GetHashCode();
+			return string.Format("{0}", this.FullFileName).ToLowerInvariant().GetHashCode();
 		}
 	}
 
@@ -95,7 +95,7 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public void IncludeAllFiletypes() {
-			_blockedTypes = String.Empty;
+			_blockedTypes = string.Empty;
 		}
 
 		public FileData GetFolderInfo(string sQuery, string myFile) {
@@ -112,7 +112,7 @@ namespace Carrotware.Web.UI.Components {
 				myFileName = myFile;
 				f.FileName = Path.GetFileName(myFileName).Trim();
 				if (myFile.Length >= sPath.Length) {
-					f.FolderPath = String.Format("/{0}/{1}/", sQuery, myFile.Substring(sPath.Length)).Replace(@"\", @"/").Replace(@"///", @"/").Replace(@"//", @"/").Replace(@"//", @"/");
+					f.FolderPath = string.Format("/{0}/{1}/", sQuery, myFile.Substring(sPath.Length)).Replace(@"\", @"/").Replace(@"///", @"/").Replace(@"//", @"/").Replace(@"//", @"/");
 				}
 				f.FileDate = Convert.ToDateTime(Directory.GetLastWriteTime(myFile));
 			} else {
@@ -156,9 +156,9 @@ namespace Carrotware.Web.UI.Components {
 			sQuery = MakeFilePathUniform(sQuery);
 			string sPath = MakeFileFolderPath(sQuery);
 
-			string myFileName = String.Empty;
+			string myFileName = string.Empty;
 			DateTime myFileDate = Convert.ToDateTime("1899-01-01");
-			string myFileSizeF = String.Empty;
+			string myFileSizeF = string.Empty;
 			long myFileSize;
 
 			FileData f = new FileData();
@@ -186,7 +186,7 @@ namespace Carrotware.Web.UI.Components {
 				f.FileDate = myFileDate;
 				f.FileSize = myFileSize;
 				f.FileSizeFriendly = myFileSizeF;
-				if (!String.IsNullOrEmpty(MyFile.Extension)) {
+				if (!string.IsNullOrEmpty(MyFile.Extension)) {
 					f.FileExtension = MyFile.Extension.ToLowerInvariant();
 				} else {
 					f.FileExtension = ".";
@@ -210,7 +210,7 @@ namespace Carrotware.Web.UI.Components {
 
 		public static string MakeFilePathUniform(string sDirPath) {
 			string _path = "/";
-			if (!String.IsNullOrEmpty(sDirPath)) {
+			if (!string.IsNullOrEmpty(sDirPath)) {
 				_path = @"/" + sDirPath;
 
 				if (!Directory.Exists(WWWPath + _path)) {
@@ -234,7 +234,7 @@ namespace Carrotware.Web.UI.Components {
 		public static string MakeWebFolderPath(string sDirPath) {
 			string sPathPrefix = "/";
 
-			if (!String.IsNullOrEmpty(sDirPath)) {
+			if (!string.IsNullOrEmpty(sDirPath)) {
 				sPathPrefix = sDirPath.Replace(WWWPath, @"/");
 			}
 			sPathPrefix = MakeFilePathUniform(sPathPrefix);
@@ -394,6 +394,7 @@ namespace Carrotware.Web.UI.Components {
 					_dict.Add(".dwg", "application/acad");
 					_dict.Add(".dxf", "application/dxf");
 					_dict.Add(".el", "text/x-script.elisp");
+					_dict.Add(".eot", "font/eot");
 					_dict.Add(".eps", "application/postscript");
 					_dict.Add(".es", "application/x-esrehber");
 					_dict.Add(".etx", "text/x-setext");
@@ -433,6 +434,7 @@ namespace Carrotware.Web.UI.Components {
 					_dict.Add(".ico", "image/x-icon");
 					_dict.Add(".imap", "application/x-httpd-imap");
 					_dict.Add(".inf", "application/inf");
+					_dict.Add(".ini", "text/plain");
 					_dict.Add(".it", "audio/it");
 					_dict.Add(".java", "text/plain");
 					_dict.Add(".jpe", "image/jpeg");
@@ -477,6 +479,7 @@ namespace Carrotware.Web.UI.Components {
 					_dict.Add(".oga", "audio/ogg");
 					_dict.Add(".ogg", "video/ogg");
 					_dict.Add(".ogv", "video/ogg");
+					_dict.Add(".otf", "font/otf");
 					_dict.Add(".p", "text/x-pascal");
 					_dict.Add(".pas", "text/pascal");
 					_dict.Add(".pbm", "image/x-portable-bitmap");
@@ -525,6 +528,8 @@ namespace Carrotware.Web.UI.Components {
 					_dict.Add(".tgz", "application/x-compressed");
 					_dict.Add(".tif", "image/tiff");
 					_dict.Add(".tiff", "image/tiff");
+					_dict.Add(".ttf", "font/ttf");
+					_dict.Add(".txt", "text/plain");
 					_dict.Add(".uu", "application/octet-stream");
 					_dict.Add(".uue", "text/x-uuencode");
 					_dict.Add(".vbhtml", "text/aspx");
@@ -536,6 +541,8 @@ namespace Carrotware.Web.UI.Components {
 					_dict.Add(".vsw", "application/x-visio");
 					_dict.Add(".wav", "audio/wav");
 					_dict.Add(".wmf", "windows/metafile");
+					_dict.Add(".woff", "font/woff");
+					_dict.Add(".woff2", "font/woff2");
 					_dict.Add(".word", "application/msword");
 					_dict.Add(".wp", "application/wordperfect");
 					_dict.Add(".wri", "application/mswrite");

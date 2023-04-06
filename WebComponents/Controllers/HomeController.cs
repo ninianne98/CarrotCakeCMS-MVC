@@ -1,11 +1,12 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
+using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -61,7 +62,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			int iHeight = iThumb;
 			int iWidth = iThumb;
 
-			if (!String.IsNullOrEmpty(sImageUri)) {
+			if (!string.IsNullOrEmpty(sImageUri)) {
 				sImgPath = Server.MapPath(sImageUri);
 				if (System.IO.File.Exists(sImgPath)) {
 					using (Bitmap bmpOriginal = new Bitmap(sImgPath)) {
@@ -132,6 +133,52 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			return bmpNew;
 		}
 
+		public ActionResult GetWebResource(string r, string t) {
+			var context = System.Web.HttpContext.Current;
+			context.Response.Cache.VaryByParams["r"] = true;
+			context.Response.Cache.VaryByParams["t"] = true;
+
+			DoCacheMagic(context, 5);
+
+			var mime = "text/plain";
+			string resource = Utils.DecodeBase64(r);
+
+			var res = resource.Split(':');
+			var ext = Path.GetExtension(res[0]);
+
+			if (FileDataHelper.MimeTypes.ContainsKey(ext)) {
+				mime = FileDataHelper.MimeTypes[ext];
+			}
+
+			if (mime.ToLowerInvariant().StartsWith("text")) {
+				var txt = CarrotWeb.GetManifestResourceText(this.GetType(), resource);
+				var sb = new StringBuilder(txt);
+
+				try {
+					Regex _webResourceRegEx = new Regex(@"<%\s*=\s*(?<rt>WebResource)\(""(?<rn>[^""]*)""\)\s*%>", RegexOptions.Singleline);
+					MatchCollection matches = _webResourceRegEx.Matches(txt);
+
+					foreach (Match m in matches) {
+						var orig = m.Value;
+						Group g = m.Groups["rn"];
+						string resourceName = g.Value;
+
+						sb.Replace(orig, CarrotWeb.GetWebResourceUrl(resourceName));
+					}
+				} catch (Exception ex) { }
+
+				txt = sb.ToString();
+
+				var byteArray = Encoding.UTF8.GetBytes(txt);
+				stream = new MemoryStream(byteArray);
+			} else {
+				var bytes = CarrotWeb.GetManifestResourceBytes(this.GetType(), resource);
+				stream = new MemoryStream(bytes);
+			}
+
+			return File(stream, mime);
+		}
+
 		public ActionResult GetCaptchaImage(string fgcolor, string bgcolor, string ncolor) {
 			var context = System.Web.HttpContext.Current;
 			context.Response.Cache.VaryByParams["fgcolor"] = true;
@@ -166,19 +213,24 @@ namespace Carrotware.Web.UI.Components.Controllers {
 
 			DoCacheMagic(context, 10);
 
-			string sBody = CarrotWeb.GetManifestResourceStream("Carrotware.Web.UI.Components.carrotHelp.js");
-			DateTime timeAM = DateTime.Now.Date.AddHours(6);  // 6AM
-			DateTime timePM = DateTime.Now.Date.AddHours(12);  // 6PM
+			var sb = new StringBuilder();
+			sb.Append(CarrotWeb.GetManifestResourceText(this.GetType(), "Carrotware.Web.UI.Components.carrotHelp.js"));
 
-			sBody = sBody.Replace("[[TIMESTAMP]]", DateTime.UtcNow.ToString("u"));
+			DateTime timeAM = DateTime.Now.Date.AddHours(7);  // 7AM
+			DateTime timePM = DateTime.Now.Date.AddHours(17);  // 5PM
 
-			sBody = sBody.Replace("[[SHORTDATEPATTERN]]", CarrotWeb.ShortDatePattern);
-			sBody = sBody.Replace("[[SHORTTIMEPATTERN]]", CarrotWeb.ShortTimePattern);
-			sBody = sBody.Replace("[[SHORTDATEFORMATPATTERN]]", CarrotWeb.ShortDateFormatPattern);
-			sBody = sBody.Replace("[[SHORTDATETIMEFORMATPATTERN]]", CarrotWeb.ShortDateTimeFormatPattern);
+			sb.Replace("[[TIMESTAMP]]", DateTime.UtcNow.ToString("u"));
 
-			sBody = sBody.Replace("[[AM_TIMEPATTERN]]", timeAM.ToString("tt"));
-			sBody = sBody.Replace("[[PM_TIMEPATTERN]]", timePM.ToString("tt"));
+			sb.Replace("[[SHORTDATEPATTERN]]", CarrotWeb.ShortDatePattern);
+			sb.Replace("[[SHORTTIMEPATTERN]]", CarrotWeb.ShortTimePattern);
+
+			sb.Replace("[[SHORTDATEFORMATPATTERN]]", CarrotWeb.ShortDateFormatPattern);
+			sb.Replace("[[SHORTDATETIMEFORMATPATTERN]]", CarrotWeb.ShortDateTimeFormatPattern);
+
+			sb.Replace("[[AM_TIMEPATTERN]]", timeAM.ToString("tt"));
+			sb.Replace("[[PM_TIMEPATTERN]]", timePM.ToString("tt"));
+
+			string sBody = sb.ToString();
 
 			var byteArray = Encoding.UTF8.GetBytes(sBody);
 			stream = new MemoryStream(byteArray);
@@ -225,7 +277,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			DateTime? dtModSince = null;
 			string modSince = context.Request.Headers.Get("If-Modified-Since");
 
-			if (!String.IsNullOrEmpty(modSince)) {
+			if (!string.IsNullOrEmpty(modSince)) {
 				dtModSince = DateTime.Parse(modSince);
 				dtModSince = dtModSince.Value.ToUniversalTime();
 			}

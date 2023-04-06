@@ -75,7 +75,7 @@ namespace Carrotware.Web.UI.Components {
 		public CarrotGridImageColumn()
 			: base() {
 			this.ImagePairs = new List<CarrotImageColumnData>();
-			this.DefaultImagePath = HttpUtility.HtmlEncode(CarrotWeb.GetWebResourceUrl(this.GetType(), IconResourcePaperclip));
+			this.DefaultImagePath = HttpUtility.HtmlEncode(CarrotWeb.GetWebResourceUrl(IconResourcePaperclip));
 			this.Mode = CarrotGridColumnType.ImageEnum;
 		}
 
@@ -125,8 +125,8 @@ namespace Carrotware.Web.UI.Components {
 			: base() {
 			this.ImageAttributes = null;
 
-			this.ImagePathTrue = HttpUtility.HtmlEncode(CarrotWeb.GetWebResourceUrl(this.GetType(), IconResourceAffirm));
-			this.ImagePathFalse = HttpUtility.HtmlEncode(CarrotWeb.GetWebResourceUrl(this.GetType(), IconResourceNegative));
+			this.ImagePathTrue = HttpUtility.HtmlEncode(CarrotWeb.GetWebResourceUrl(IconResourceAffirm));
+			this.ImagePathFalse = HttpUtility.HtmlEncode(CarrotWeb.GetWebResourceUrl(IconResourceNegative));
 			this.AlternateTextTrue = "True";
 			this.AlternateTextFalse = "False";
 

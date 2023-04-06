@@ -1,8 +1,8 @@
 ﻿using Carrotware.CMS.Interface;
 using Carrotware.CMS.Interface.Controllers;
+using Northwind.Code;
 using Northwind.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -14,10 +14,20 @@ namespace Northwind.Controllers {
 			return View();
 		}
 
-		public ActionResult About() {
-			ViewBag.Message = "Your application description page.";
+		[HttpGet]
+		public ActionResult Sampler() {
+			SelectSkin model = new SelectSkin();
 
-			return View();
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult Sampler(SelectSkin model) {
+			var scheme = model.SelectedItem;
+
+			Helper.SetBootstrapColor(scheme);
+
+			return RedirectToAction("Sampler");
 		}
 
 		public ActionResult Contact() {
@@ -67,6 +77,21 @@ namespace Northwind.Controllers {
 		}
 
 		[HttpGet]
+		public ActionResult TestProductSearch() {
+			ProductSearch model = null;
+			model = InitProductSearch(model);
+
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult TestProductSearch(ProductSearch model) {
+			model = InitProductSearch(model);
+
+			return View(model);
+		}
+
+		[HttpGet]
 		[WidgetActionSettingModel(typeof(MultiOptions))]
 		public ActionResult ProductSearchMulti() {
 			MultiOptions settings = new MultiOptions();
@@ -76,19 +101,6 @@ namespace Northwind.Controllers {
 				settings.LoadData();
 			}
 
-			//ProductSearch model = new ProductSearch();
-			//using (var db = new NorthwindDataContext()) {
-			//	if (settings.CategoryIDs.Any()) {
-			//		model.Options = (from c in db.Categories
-			//						 where settings.CategoryIDs.Contains(c.CategoryID)
-			//						 select c).ToList();
-
-			//		model.Results = (from p in db.Products
-			//						 where settings.CategoryIDs.Contains(p.CategoryID.Value)
-			//						 select p).ToList();
-			//	}
-			//}
-
 			ProductSearch model = settings.GetData();
 
 			if (String.IsNullOrEmpty(settings.AlternateViewFile)) {
@@ -97,6 +109,35 @@ namespace Northwind.Controllers {
 				model.AltViewName = settings.AlternateViewFile;
 				return PartialView(settings.AlternateViewFile, model);
 			}
+		}
+
+		[HttpGet]
+		public ActionResult TestProductSearchMulti() {
+			var model = new TestModel();
+
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult TestProductSearchMulti(TestModel model) {
+			var opts = new MultiOptions();
+			opts.AlternateViewFile = model.SelectedView;
+			if (model.SelectedCategories != null) {
+				opts.CategoryIDs = model.SelectedCategories.Select(x => Convert.ToInt32(x)).ToList();
+			}
+			this.WidgetPayload = opts;
+
+			var settings = new MultiOptions();
+			if (this.WidgetPayload is MultiOptions) {
+				settings = (MultiOptions)this.WidgetPayload;
+				settings.LoadData();
+			}
+
+			ProductSearch data = settings.GetData();
+			data.AltViewName = settings.AlternateViewFile;
+			model.ProductSearch = data;
+
+			return View(model);
 		}
 
 		public ProductSearch InitProductSearch(ProductSearch model) {

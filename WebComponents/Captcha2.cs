@@ -1,12 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
+using System.Web;
+using System;
+
+/*
+* CarrotCake CMS (MVC5)
+* http://www.carrotware.com/
+*
+* Copyright 2015, Samantha Copeland
+* Dual licensed under the MIT or GPL Version 3 licenses.
+*
+* Date: August 2015
+*/
 
 namespace Carrotware.Web.UI.Components {
+
 	public class Captcha2 : BaseWebComponent, IValidateHuman {
 
 		public Captcha2() {
@@ -14,14 +23,14 @@ namespace Carrotware.Web.UI.Components {
 			this.Instructions = "Select the name of the item shown in the image above from the list below.";
 
 			this.ImageOptions = new Dictionary<string, string>();
-			string imgPfx = "Carrotware.Web.UI.Components.captcha2";
+			string imgPfx = "captcha2";
 
-			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(this.GetType(), String.Format("{0}.bouquet.png", imgPfx)), "Bouquet");
-			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(this.GetType(), String.Format("{0}.pen.png", imgPfx)), "Pen");
-			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(this.GetType(), String.Format("{0}.pepper.png", imgPfx)), "Pepper");
-			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(this.GetType(), String.Format("{0}.scissors.png", imgPfx)), "Scissors");
-			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(this.GetType(), String.Format("{0}.snowflake.png", imgPfx)), "Snowflake");
-			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(this.GetType(), String.Format("{0}.web.png", imgPfx)), "Web");
+			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(string.Format("{0}.bouquet.png", imgPfx)), "Bouquet");
+			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(string.Format("{0}.pen.png", imgPfx)), "Pen");
+			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(string.Format("{0}.pepper.png", imgPfx)), "Pepper");
+			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(string.Format("{0}.scissors.png", imgPfx)), "Scissors");
+			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(string.Format("{0}.snowflake.png", imgPfx)), "Snowflake");
+			this.ImageOptions.Add(CarrotWeb.GetWebResourceUrl(string.Format("{0}.web.png", imgPfx)), "Web");
 		}
 
 		public Dictionary<string, string> ImageOptions { get; set; }
@@ -46,7 +55,7 @@ namespace Carrotware.Web.UI.Components {
 			if (this.IsWebView) {
 				return this.SessionKeyValue.Key;
 			} else {
-				return String.Empty;
+				return string.Empty;
 			}
 		}
 
@@ -58,7 +67,7 @@ namespace Carrotware.Web.UI.Components {
 
 		public KeyValuePair<string, string> SessionKeyValue {
 			get {
-				string imageName = String.Empty;
+				string imageName = string.Empty;
 				KeyValuePair<string, string> randImg = new KeyValuePair<string, string>("Fake", "Value");
 				if (this.IsWebView && this.ImageOptions.Any()) {
 					var rand = new Random();
@@ -68,11 +77,11 @@ namespace Carrotware.Web.UI.Components {
 						if (HttpContext.Current.Session[SessionKey] != null) {
 							imageName = HttpContext.Current.Session[SessionKey].ToString();
 						} else {
-							imageName = String.Format("{0}|{1}", randImg.Key, randImg.Value);
+							imageName = string.Format("{0}|{1}", randImg.Key, randImg.Value);
 							HttpContext.Current.Session[SessionKey] = imageName;
 						}
 					} catch {
-						imageName = String.Format("{0}|{1}", randImg.Key, randImg.Value);
+						imageName = string.Format("{0}|{1}", randImg.Key, randImg.Value);
 						HttpContext.Current.Session[SessionKey] = imageName;
 					}
 				}
@@ -83,10 +92,9 @@ namespace Carrotware.Web.UI.Components {
 			}
 		}
 
-
 		//=============================
 		public bool ValidateValue(string testValue) {
-			if (String.IsNullOrEmpty(testValue)) {
+			if (string.IsNullOrEmpty(testValue)) {
 				return false;
 			}
 

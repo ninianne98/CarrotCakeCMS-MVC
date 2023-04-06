@@ -19,10 +19,10 @@ namespace Carrotware.Web.UI.Components {
 
 		public EMailSettings() {
 			this.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
-			this.MailDomainName = String.Empty;
-			this.MailUserName = String.Empty;
-			this.MailPassword = String.Empty;
-			this.ReturnAddress = String.Empty;
+			this.MailDomainName = string.Empty;
+			this.MailUserName = string.Empty;
+			this.MailPassword = string.Empty;
+			this.ReturnAddress = string.Empty;
 		}
 
 		public SmtpDeliveryMethod DeliveryMethod { get; set; }
@@ -59,11 +59,11 @@ namespace Carrotware.Web.UI.Components {
 				}
 			}
 
-			if (String.IsNullOrEmpty(mailSettings.MailDomainName)) {
+			if (string.IsNullOrEmpty(mailSettings.MailDomainName)) {
 				mailSettings.MailDomainName = context.Request.ServerVariables["SERVER_NAME"];
 			}
 
-			if (String.IsNullOrEmpty(mailSettings.ReturnAddress)) {
+			if (string.IsNullOrEmpty(mailSettings.ReturnAddress)) {
 				mailSettings.ReturnAddress = "no-reply@" + mailSettings.MailDomainName;
 			}
 
