@@ -354,7 +354,7 @@ function cmsPreviewTemplate2() {
 
 	setTimeout("cmsSetIframeRealSrc('cmsFrameEditorPreview');", 500);
 
-	window.frames["cmsFrameEditorPreview"].location.reload();
+	$('#cmsFrameEditorPreview')[0].contentWindow.location.reload(true);
 }
 
 var cmsTemplateListPreviewer = "#cmsTemplateList"

@@ -15,11 +15,11 @@
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 
-	<div style="margin-bottom: 25px;">
+	<div style="margin-bottom: 25px; max-width:94%;">
 		@*<div id="divCenter">
 				<a href="javascript:cmsToggleTinyMCE('@Html.IdFor(m => m.PageText)');">Show/Hide Editor</a>
 			</div>*@
-		@Html.TextAreaFor(m => m.PageText, new { rows = "20", cols = "100", @class = @editCSS, @style = "height: 300px; width: 800px;" })
+		@Html.TextAreaFor(m => m.PageText, new { rows = "20", cols = "100", @class = @editCSS, @style = "height: 300px; width: 750px;" })
 		<br>
 	</div>
 	<div style="margin-top: 25px;">

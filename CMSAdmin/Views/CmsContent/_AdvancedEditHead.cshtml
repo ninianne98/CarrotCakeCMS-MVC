@@ -1,4 +1,6 @@
-﻿@using Carrotware.Web.UI.Components
+﻿@{
+	var versionKey = string.Format("cms={0}&ts={1}", SiteData.CurrentDLLVersion, string.Format("{0:yyyyMMddHH}", DateTime.UtcNow));
+}
 
 @*
 	<!-- jQuery CDN -->
@@ -11,13 +13,13 @@
 *@
 
 <!-- Adv Edit Head -->
-<script src="~/Assets/Admin/Includes/jquery.simplemodal.js" type="text/javascript"></script>
-<script src="~/Assets/Admin/Includes/jquery.blockUI.js" type="text/javascript"></script>
-<script src="~/Assets/Admin/Includes/base64.js" type="text/javascript"></script>
-<script src="~/Assets/Admin/Includes/advanced-editor.js" type="text/javascript"></script>
+<script src="~/Assets/Admin/Includes/jquery.simplemodal.js?@versionKey" type="text/javascript"></script>
+<script src="~/Assets/Admin/Includes/jquery.blockUI.js?@versionKey" type="text/javascript"></script>
+<script src="~/Assets/Admin/Includes/base64.js?@versionKey" type="text/javascript"></script>
+<script src="~/Assets/Admin/Includes/advanced-editor.js?@versionKey" type="text/javascript"></script>
 
-<link href="~/Assets/Admin/Includes/advanced-editor-reset.css" rel="stylesheet" type="text/css" />
-<link href="~/Assets/Admin/glossyseagreen/jquery-ui-glossyseagreen-scoped2.css" rel="stylesheet" type="text/css" />
-<link href="~/Assets/Admin/glossyseagreen/jquery-ui-glossyseagreen-scoped.css" rel="stylesheet" type="text/css" />
-<link href="~/Assets/Admin/Includes/modal.css" rel="stylesheet" type="text/css" />
-<link href="~/Assets/Admin/Includes/advanced-editor.css" rel="stylesheet" type="text/css" />
+<link href="~/Assets/Admin/Includes/advanced-editor-reset.css?@versionKey" rel="stylesheet" type="text/css" />
+<link href="~/Assets/Admin/glossyseagreen/jquery-ui-glossyseagreen-scoped2.css?@versionKey" rel="stylesheet" type="text/css" />
+<link href="~/Assets/Admin/glossyseagreen/jquery-ui-glossyseagreen-scoped.css?@versionKey" rel="stylesheet" type="text/css" />
+<link href="~/Assets/Admin/Includes/modal.css?@versionKey" rel="stylesheet" type="text/css" />
+<link href="~/Assets/Admin/Includes/advanced-editor.css?@versionKey" rel="stylesheet" type="text/css" />

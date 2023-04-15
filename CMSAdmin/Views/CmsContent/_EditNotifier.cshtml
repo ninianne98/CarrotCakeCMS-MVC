@@ -1,19 +1,22 @@
 ﻿@inherits CmsWebViewPage
 
 @{
+	var versionKey = string.Format("cms={0}&ts={1}", SiteData.CurrentDLLVersion, string.Format("{0:yyyyMMddHH}", DateTime.UtcNow));
+
+	string indexText = "CONTENT INDEX";
 	string indexPage = SiteFilename.PageIndexURL;
 	string editPage = SiteFilename.PageAddEditURL;
 
 	if (CmsPage.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+		indexText = "BLOG INDEX";
 		indexPage = SiteFilename.BlogPostIndexURL;
 		editPage = SiteFilename.BlogPostAddEditURL;
 	}
-
 }
 
 <!-- Edit Notify Body -->
 
-<link href="~/Assets/Admin/includes/edit-notifier.css" rel="stylesheet" type="text/css" />
+<link href="~/Assets/Admin/includes/edit-notifier.css?@versionKey" rel="stylesheet" type="text/css" />
 
 <div style="clear: both;">
 	&nbsp;
@@ -21,9 +24,10 @@
 
 <div class="cmsNavFooterBox">
 	<p class="cmsFooterP">
-		<a class="cmsFooterLinks" target="_blank" href="@String.Format("{0}/{1}", editPage, CmsPage.ThePage.Root_ContentID)">EDIT</a>
+		<a class="cmsFooterLinks" target="_top" href="@SiteFilename.DashboardURL">DASHBOARD</a>
 		<a class="cmsFooterLinks" target="_top" href="@String.Format("{0}?{1}=true", CmsPage.ThePage.FileName, SiteData.AdvancedEditParameter)">ADVANCED EDIT</a>
-		<a class="cmsFooterLinks" target="_top" href="@indexPage">CONTENT INDEX</a>
+		<a class="cmsFooterLinks" target="_blank" href="@String.Format("{0}/{1}", editPage, CmsPage.ThePage.Root_ContentID)">EDIT</a>
+		<a class="cmsFooterLinks" target="_top" href="@indexPage">@indexText</a>
 		<a class="cmsFooterLinks" target="_top" href="@SiteFilename.ModuleIndexURL">MODULE INDEX</a>
 	</p>
 	<p class="cmsFooterP">
@@ -83,8 +87,8 @@
 <div id="cmsAdminToolbox1" class="cmsNavigationBlock">
 	<div class="cmsNavBox2">
 		<div class="cmsNavBox1">
-			<a class="cmsNavImageLink" target="_blank" href="@String.Format("{0}/{1}", editPage, CmsPage.ThePage.Root_ContentID)">
-				<img alt="EDIT" title="EDIT" src="~/Assets/Admin/Images/application_edit.png" />
+			<a class="cmsNavImageLink" target="_top" href="@SiteFilename.DashboardURL">
+				<img alt="DASHBOARD" title="DASHBOARD" src="~/Assets/Admin/Images/layout_content.png" />
 			</a>
 		</div>
 		<div class="cmsNavBox1">
@@ -93,8 +97,13 @@
 			</a>
 		</div>
 		<div class="cmsNavBox1">
-			<a title="CONTENT INDEX" class="cmsNavImageLink" target="_top" href="@indexPage">
-				<img alt="CONTENT INDEX" title="CONTENT INDEX" src="~/Assets/Admin/Images/table.png" />
+			<a class="cmsNavImageLink" target="_blank" href="@String.Format("{0}/{1}", editPage, CmsPage.ThePage.Root_ContentID)">
+				<img alt="EDIT" title="EDIT" src="~/Assets/Admin/Images/application_edit.png" />
+			</a>
+		</div>
+		<div class="cmsNavBox1">
+			<a title="@indexText" class="cmsNavImageLink" target="_top" href="@indexPage">
+				<img alt="@indexText" title="@indexText" src="~/Assets/Admin/Images/table.png" />
 			</a>
 		</div>
 		<div class="cmsNavBox2">
@@ -108,8 +117,8 @@
 <div id="cmsAdminToolbox2" class="cmsNavigationBlock">
 	<div class="cmsNavBox2">
 		<div class="cmsNavBox1">
-			<a class="cmsNavImageLink" target="_blank" href="@String.Format("{0}/{1}", editPage, CmsPage.ThePage.Root_ContentID)">
-				<img alt="EDIT" title="EDIT" src="~/Assets/Admin/Images/application_edit.png" />
+			<a class="cmsNavImageLink" target="_top" href="@SiteFilename.DashboardURL">
+				<img alt="DASHBOARD" title="DASHBOARD" src="~/Assets/Admin/Images/layout_content.png" />
 			</a>
 		</div>
 		<div class="cmsNavBox1">
@@ -118,8 +127,13 @@
 			</a>
 		</div>
 		<div class="cmsNavBox1">
-			<a title="CONTENT INDEX" class="cmsNavImageLink" target="_top" href="@indexPage">
-				<img alt="CONTENT INDEX" title="CONTENT INDEX" src="~/Assets/Admin/Images/table.png" />
+			<a class="cmsNavImageLink" target="_blank" href="@String.Format("{0}/{1}", editPage, CmsPage.ThePage.Root_ContentID)">
+				<img alt="EDIT" title="EDIT" src="~/Assets/Admin/Images/application_edit.png" />
+			</a>
+		</div>
+		<div class="cmsNavBox1">
+			<a title="@indexText" class="cmsNavImageLink" target="_top" href="@indexPage">
+				<img alt="@indexText" title="@indexText" src="~/Assets/Admin/Images/table.png" />
 			</a>
 		</div>
 		<div class="cmsNavBox2">
@@ -128,12 +142,4 @@
 			</a>
 		</div>
 	</div>
-</div>
-
-<div style="display: none;">
-	<img src="~/Assets/Admin/images/ui-anim_basic_16x16.gif" alt="anim_basic_16x16" />
-	<img src="~/Assets/Admin/images/x.png" alt="x" />
-	<img src="~/Assets/Admin/images/mini-spinner3-6F997D.gif" alt="spinner" />
-	<img src="~/Assets/Admin/images/Ring-64px-A7B2A0.gif" alt="ring" />
-	<img src="~/Assets/Admin/images/ani-smallbar.gif" alt="bar" />
 </div>

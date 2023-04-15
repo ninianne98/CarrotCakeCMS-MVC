@@ -31,6 +31,7 @@ function TinyMCEParamInit(winWidth, winHeight, allowResize) {
 		theme_advanced_resizing: tinyBrowseResize,
 		theme_advanced_source_editor_width: tinyBrowseWidth,
 		theme_advanced_source_editor_height: tinyBrowseHeight,
+		flash_video_player_url: false,
 		relative_urls: false,
 		remove_script_host: true,
 		content_css: "/Assets/Admin/includes/richedit.css",
