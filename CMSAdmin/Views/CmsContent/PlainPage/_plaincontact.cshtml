@@ -12,29 +12,30 @@
 			if (!cmt.ViewData.Model.IsSaved) {
 				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
 				<div>
-					<label>Name</label><br />
+					<label for="@cmt.IdFor(m => m.CommenterName)">Name</label><br />
 					@cmt.TextBoxFor(m => m.CommenterName)
 					@cmt.ValidationMessageFor(m => m.CommenterName, "", new { @class = "text-danger" })
 				</div>
 
 				<div>
-					<label>Email</label><br />
+					<label for="@cmt.IdFor(m => m.CommenterEmail)">Email</label><br />
 					@cmt.TextBoxFor(m => m.CommenterEmail)
 					@cmt.ValidationMessageFor(m => m.CommenterEmail, "", new { @class = "text-danger" })
 				</div>
 
 				<div>
-					<label>Your Comments</label>
+					<label for="@cmt.IdFor(m => m.PostCommentText)">Your Comments</label>
 					@cmt.ValidationMessageFor(m => m.PostCommentText, "", new { @class = "text-danger" })
 					<br />
 					@cmt.TextAreaFor(m => m.PostCommentText, new { rows = "5", cols = "50" })
 				</div>
 
 				<div>
-					@cap<br />
-					@cap.Instructions <br />
+					<div> @cap </div>
+					<label for="@cmt.IdFor(m => m.ValidationValue)">@cap.Instructions</label><br />
 					@cmt.TextBoxFor(m => m.ValidationValue)
 					@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
+					<br />
 				</div>
 
 				<br />

@@ -2,6 +2,7 @@
 using Carrotware.Web.UI.Components;
 using System.Drawing;
 using System.Text;
+using System.Web;
 using System;
 
 /*
@@ -21,6 +22,7 @@ namespace Carrotware.CMS.UI.Components {
 		public TwoLevelNavigation()
 			: base() {
 			this.ElementId = "TwoLevelNavigation";
+			this.CssSelected = "selected";
 
 			this.FontSize = new SizeUnit("14px");
 			this.MenuFontSize = this.FontSize;
@@ -37,6 +39,29 @@ namespace Carrotware.CMS.UI.Components {
 			this.SelFGColor = Color.Empty;
 			this.SubBGColor = Color.Empty;
 			this.SubFGColor = Color.Empty;
+		}
+
+		public TwoLevelNavigation(string f, string bg, string ubg, string fc, string bc,
+				string hbc, string hfc, string uf, string sbg, string sfg,
+				string bc2, string fc2) : this() {
+			this.AutoStylingDisabled = false;
+			this.FontSize = new SizeUnit(f);
+			this.MenuFontSize = this.FontSize;
+
+			this.BGColor = CarrotWeb.DecodeColor(bg);
+			this.UnSelBGColor = CarrotWeb.DecodeColor(ubg);
+			this.ForeColor = CarrotWeb.DecodeColor(fc);
+			this.BackColor = CarrotWeb.DecodeColor(bc);
+
+			this.HoverBGColor = CarrotWeb.DecodeColor(hbc);
+			this.HoverFGColor = CarrotWeb.DecodeColor(hfc);
+
+			this.UnSelFGColor = CarrotWeb.DecodeColor(uf);
+			this.SelBGColor = CarrotWeb.DecodeColor(sbg);
+			this.SelFGColor = CarrotWeb.DecodeColor(sfg);
+
+			this.SubBGColor = CarrotWeb.DecodeColor(bc2);
+			this.SubFGColor = CarrotWeb.DecodeColor(fc2);
 		}
 
 		private void FlipColor() {
@@ -91,16 +116,24 @@ namespace Carrotware.CMS.UI.Components {
 			this.NavigationData = navHelper.GetTwoLevelNavigation(SiteData.CurrentSiteID, !SecurityData.IsAuthEditor);
 		}
 
-		public override string GetHead() {
-			FlipColor();
+		public static string NavigationStylePath {
+			get {
+				return "/carrotcakenavstyle.ashx";
+			}
+		}
 
+		public string GenerateCSS() {
 			string sCSSText = string.Empty;
 
 			if (!this.AutoStylingDisabled) {
+				FlipColor();
+
 				var sb = new StringBuilder();
 				sb.Append(ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components.TopMenu.txt"));
 
-				if (sb != null && sb.Length > 0) {
+				if (sb != null && sb.Length > 1) {
+					sb.Replace("[[TIMESTAMP]]", DateTime.UtcNow.ToString("u"));
+
 					sb.Replace("{FORE_HEX}", ColorTranslator.ToHtml(this.ForeColor).ToLowerInvariant());
 					sb.Replace("{BG_HEX}", ColorTranslator.ToHtml(this.BGColor).ToLowerInvariant());
 
@@ -146,12 +179,37 @@ namespace Carrotware.CMS.UI.Components {
 						sb.Replace("{TOP_BACKGROUND_STYLE}", "");
 					}
 
-					sb.Replace("{MENU_ID}", "#" + this.ElementId + "");
-					sb.Replace("{MENU_WRAPPER_ID}", "#" + this.ElementId + "-wrapper");
+					sb.Replace("{MENU_ID}", string.Format("#{0}", this.ElementId));
+					sb.Replace("{MENU_WRAPPER_ID}", string.Format("#{0}-wrapper", this.ElementId));
 
-					sCSSText = "\r\n\t<style type=\"text/css\">\r\n" + sb.ToString() + "\r\n\t</style>\r\n";
+					sCSSText = sb.ToString();
 				}
 			}
+
+			return sCSSText;
+		}
+
+		public override string GetHead() {
+			string sCSSText = string.Empty;
+
+			if (!this.AutoStylingDisabled) {
+				var sb = new StringBuilder();
+
+				sb.Append(string.Format("{0}?el={1}&sel={2}&f={3}", NavigationStylePath, HttpUtility.HtmlEncode(Utils.EncodeBase64(ElementId)), HttpUtility.HtmlEncode(Utils.EncodeBase64(CssSelected)), this.FontSize));
+
+				sb.Append(string.Format("&bg={0}&ubg={1}&fc={2}&bc={3}", CarrotWeb.EncodeColor(this.BGColor), CarrotWeb.EncodeColor(this.UnSelBGColor), CarrotWeb.EncodeColor(this.ForeColor), CarrotWeb.EncodeColor(this.BackColor)));
+				sb.Append(string.Format("&hbc={0}&hfc={1}", CarrotWeb.EncodeColor(this.HoverBGColor), CarrotWeb.EncodeColor(this.HoverFGColor)));
+				sb.Append(string.Format("&uf={0}&sbg={1}&sfg={2}", CarrotWeb.EncodeColor(this.UnSelFGColor), CarrotWeb.EncodeColor(this.SelBGColor), CarrotWeb.EncodeColor(this.SelFGColor)));
+				sb.Append(string.Format("&bc2={0}&fc2={1}", CarrotWeb.EncodeColor(this.SubBGColor), CarrotWeb.EncodeColor(this.SubFGColor)));
+				if (!string.IsNullOrWhiteSpace(CssTopBackground)) {
+					sb.Append(string.Format("&tbg={0}", HttpUtility.HtmlEncode(CssTopBackground)));
+				}
+				sb.Append(string.Format("&ts={0}", CarrotWeb.DateKey()));
+
+				sCSSText = UrlPaths.CreateCssTag(string.Format("Nav CSS: {0}", this.ElementId), sb.ToString());
+			}
+
+			//sCSSText = "\r\n\t<style type=\"text/css\">\r\n" + GenerateCSS() + "\r\n\t</style>\r\n";
 
 			return sCSSText;
 		}

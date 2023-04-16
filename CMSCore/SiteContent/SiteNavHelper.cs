@@ -1,10 +1,10 @@
 ﻿using Carrotware.CMS.Data;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -76,10 +76,10 @@ namespace Carrotware.CMS.Core {
 			navData.PageHead = "NONE";
 			navData.TitleBar = "NONE";
 			navData.PageActive = false;
-			navData.PageText = "NO PAGE CONTENT";
-			navData.EditDate = DateTime.Now.Date.AddDays(-1);
+			navData.PageText = "<p>NO PAGE CONTENT</p>" + SiteNavHelperMock.SampleBody;
+			navData.EditDate = DateTime.Now.Date.AddDays(-3);
 			navData.CreateDate = DateTime.Now.Date.AddDays(-10);
-			navData.GoLiveDate = DateTime.Now.Date.AddDays(1);
+			navData.GoLiveDate = DateTime.Now.Date.AddDays(2);
 			navData.RetireDate = DateTime.Now.Date.AddDays(90);
 			navData.ContentType = ContentPageType.PageType.ContentEntry;
 			return navData;
@@ -104,12 +104,12 @@ namespace Carrotware.CMS.Core {
 
 			while (n < iCount) {
 				SiteNav nav = GetSamplerView();
-				nav.NavOrder = n;
-				nav.NavMenuText = nav.NavMenuText + " " + n.ToString();
+				nav.NavOrder = rootParentID.HasValue ? n * 100 : n;
+				nav.NavMenuText = nav.NavMenuText;
 				nav.CreateDate = nav.CreateDate.AddHours((0 - n) * 25);
 				nav.EditDate = nav.CreateDate.AddHours((0 - n) * 16);
-				nav.GoLiveDate = DateTime.Now.Date.AddMinutes(-5);
-				nav.RetireDate = DateTime.Now.Date.AddDays(90);
+				nav.GoLiveDate = DateTime.Now.Date.AddDays((-2 * n) - 3);
+				nav.RetireDate = DateTime.Now.Date.AddDays(45);
 				nav.CommentCount = (n * 2) + 1;
 				nav.ShowInSiteNav = true;
 				nav.ShowInSiteMap = true;
@@ -119,11 +119,23 @@ namespace Carrotware.CMS.Core {
 					nav.ContentID = Guid.NewGuid();
 					//nav.FileName = nav.FileName.Replace(".aspx", nav.NavOrder.ToString() + ".aspx");
 					nav.FileName = "/#";
-					if (rootParentID != null) {
-						nav.NavMenuText = nav.NavMenuText + " - " + rootParentID.Value.ToString().Substring(0, 4);
-					}
+					//if (rootParentID != null) {
+					//	nav.NavMenuText = nav.NavMenuText + " - " + rootParentID.Value.ToString().Substring(0, 4);
+					//}
 				}
 				nav.Parent_ContentID = rootParentID;
+
+				var caption = string.Empty;
+				if (rootParentID.HasValue) {
+					caption = SiteNavHelperMock.GetRandomCaption();
+					caption = string.Format("{0} {1}", caption, rootParentID.ToString().Substring(0, 3));
+				} else {
+					caption = SiteNavHelperMock.GetCaption(n);
+				}
+
+				nav.TitleBar = string.Format("{0} T", caption);
+				nav.NavMenuText = string.Format("{0} N", caption);
+				nav.PageHead = string.Format("{0} H", caption);
 
 				navList.Add(nav);
 				n++;
@@ -145,16 +157,23 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string GetSampleBody(string sContentSampleNumber) { // SampleContent2
-			if (string.IsNullOrEmpty(sContentSampleNumber)) {
+			if (string.IsNullOrWhiteSpace(sContentSampleNumber)) {
 				sContentSampleNumber = "SampleContent2";
 			}
 
-			string sFile2 = " <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mi arcu, lacinia scelerisque blandit nec, mattis non nibh.</p> \r\n <p> Curabitur quis urna at massa placerat auctor. Quisque et mauris sapien, a consectetur nulla.</p>";
+			var sbFile = new StringBuilder();
+			sbFile.Append(SiteNavHelperMock.SampleBody);
+
+			try {
+				var sFile = CoreHelper.ReadEmbededScript(string.Format("Carrotware.CMS.Core.SiteContent.Mock.{0}.txt", sContentSampleNumber));
+				if (!string.IsNullOrWhiteSpace(sFile)) {
+					sbFile.Clear();
+					sbFile.Append(sFile);
+				}
+			} catch { }
 
 			try {
 				Assembly _assembly = Assembly.GetExecutingAssembly();
-
-				sFile2 = SiteData.ReadEmbededScript(string.Format("Carrotware.CMS.Core.SiteContent.Mock.{0}.txt", sContentSampleNumber));
 
 				List<string> imageNames = (from i in _assembly.GetManifestResourceNames()
 										   where i.Contains("SiteContent.Mock.sample")
@@ -162,12 +181,12 @@ namespace Carrotware.CMS.Core {
 										   select i).ToList();
 
 				foreach (string img in imageNames) {
-					var imgURL = CMSConfigHelper.GetWebResourceUrl(typeof(SiteNav), img);
-					sFile2 = sFile2.Replace(img, imgURL);
+					var imgURL = CoreHelper.GetWebResourceUrl(img);
+					sbFile.Replace(img, imgURL);
 				}
 			} catch { }
 
-			return sFile2;
+			return sbFile.ToString();
 		}
 
 		private static SequentialGuid _seq = new SequentialGuid();
@@ -187,15 +206,16 @@ namespace Carrotware.CMS.Core {
 
 		internal static SiteNav GetSamplerView() {
 			string sFile2 = GetSampleBody();
+			var caption = SiteNavHelperMock.GetRandomCaption();
 
 			SiteNav navNew = new SiteNav();
 			navNew.Root_ContentID = SeqGuid.NextGuid;
 			navNew.ContentID = Guid.NewGuid();
 
 			navNew.NavOrder = -1;
-			navNew.TitleBar = "Template Preview - TITLE";
-			navNew.NavMenuText = "Template PV - NAV";
-			navNew.PageHead = "Template Preview - HEAD";
+			navNew.TitleBar = string.Format("{0} T", caption);
+			navNew.NavMenuText = string.Format("{0} N", caption);
+			navNew.PageHead = string.Format("{0} H", caption);
 			navNew.PageActive = true;
 			navNew.ShowInSiteNav = true;
 			navNew.ShowInSiteMap = true;
@@ -204,7 +224,7 @@ namespace Carrotware.CMS.Core {
 			navNew.CreateDate = DateTime.Now.Date.AddHours(-38);
 			navNew.GoLiveDate = navNew.EditDate.AddHours(-5);
 			navNew.RetireDate = navNew.CreateDate.AddYears(5);
-			navNew.PageText = "<h2>Content CENTER</h2>\r\n";
+			navNew.PageText = "<h2>Content CENTER</h2>\r\n" + SiteNavHelperMock.SampleBody;
 
 			navNew.TemplateFile = SiteData.PreviewTemplateFile;
 
@@ -223,41 +243,6 @@ namespace Carrotware.CMS.Core {
 			navNew.EditUserId = SecurityData.CurrentUserGuid;
 
 			return navNew;
-		}
-	}
-
-	//=====================
-	internal class SequentialGuid {
-		private int _b0 = 1;
-		private int _b1 = 1;
-		private int _b2 = 1;
-		private int _b3 = 1;
-		private int _b4 = 1;
-		private int _b5 = 1;
-
-		internal SequentialGuid() { }
-
-		internal Guid NextGuid {
-			get {
-				var tempGuid = Guid.Empty;
-				var bytes = tempGuid.ToByteArray();
-
-				bytes[0] = (byte)_b0;
-				bytes[1] = (byte)_b1;
-				bytes[2] = (byte)_b2;
-				bytes[3] = (byte)_b3;
-				bytes[4] = (byte)_b4;
-				bytes[5] = (byte)_b5;
-
-				_b0 = _b0 + 3;
-				_b1 = _b1 + 5;
-				_b2 = _b2 + 11;
-				_b3 = _b3 + 9;
-				_b4 = _b4 + 7;
-				_b5 = _b5 + 13;
-
-				return new Guid(bytes);
-			}
 		}
 	}
 }

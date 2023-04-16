@@ -1,16 +1,15 @@
 ﻿using Carrotware.CMS.Data;
-using Carrotware.CMS.Security;
 using Carrotware.CMS.Security.Models;
+using Carrotware.CMS.Security;
 using Carrotware.Web.UI.Components;
 using Microsoft.AspNet.Identity;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Security.Principal;
-using System.Web;
+using System.Text;
 using System.Web.Caching;
+using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -235,7 +234,7 @@ namespace Carrotware.CMS.Core {
 			bool keyVal = false;
 
 			if (SiteData.IsWebView && IsAuthenticated) {
-				string key = String.Format("{0}_{1}", keyIsAdmin, SecurityData.CurrentUserIdentityName);
+				string key = string.Format("{0}_{1}", keyIsAdmin, SecurityData.CurrentUserIdentityName);
 				if (HttpContext.Current.Cache[key] != null) {
 					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
 				} else {
@@ -251,7 +250,7 @@ namespace Carrotware.CMS.Core {
 			bool keyVal = false;
 
 			if (SiteData.IsWebView && IsAuthenticated) {
-				string key = String.Format("{0}_{1}_{2}", keyIsSiteEditor, SecurityData.CurrentUserIdentityName, SiteData.CurrentSiteID);
+				string key = string.Format("{0}_{1}_{2}", keyIsSiteEditor, SecurityData.CurrentUserIdentityName, SiteData.CurrentSiteID);
 				if (HttpContext.Current.Cache[key] != null) {
 					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
 				} else {
@@ -319,7 +318,7 @@ namespace Carrotware.CMS.Core {
 				return UserPrincipal.Identity.GetUserName();
 			}
 
-			return String.Empty;
+			return string.Empty;
 		}
 
 		public static bool IsUserInRole(string groupName) {
@@ -332,7 +331,7 @@ namespace Carrotware.CMS.Core {
 			bool keyVal = false;
 
 			if (SiteData.IsWebView && IsAuthenticated) {
-				string key = String.Format("{0}_{1}_{2}", keyIsUserInRole, userName, groupName);
+				string key = string.Format("{0}_{1}_{2}", keyIsUserInRole, userName, groupName);
 
 				if (HttpContext.Current.Cache[key] != null) {
 					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
@@ -380,7 +379,7 @@ namespace Carrotware.CMS.Core {
 				UserProfile currentUser = null;
 				if (SiteData.IsWebView && IsAuthenticated) {
 					string userName = SecurityData.CurrentUserIdentityName;
-					string key = String.Format("cms_CurrentUserProfile_{0}", userName);
+					string key = string.Format("cms_CurrentUserProfile_{0}", userName);
 
 					if (HttpContext.Current.Cache[key] != null) {
 						currentUser = (UserProfile)HttpContext.Current.Cache[key];
@@ -414,7 +413,7 @@ namespace Carrotware.CMS.Core {
 
 				if (SiteData.IsWebView && IsAuthenticated) {
 					string userName = SecurityData.CurrentUserIdentityName;
-					string key = String.Format("cms_CurrentExUser_{0}", userName);
+					string key = string.Format("cms_CurrentExUser_{0}", userName);
 
 					if (HttpContext.Current.Cache[key] != null) {
 						currentUser = (ExtendedUserData)HttpContext.Current.Cache[key];
@@ -494,11 +493,11 @@ namespace Carrotware.CMS.Core {
 				if (SiteData.IsWebView && IsAuthenticated) {
 					return UserPrincipal.Identity.Name.ToLowerInvariant();
 				}
-				return String.Empty;
+				return string.Empty;
 			}
 		}
 
-		private static object newUsrLock = new Object();
+		private static object newUsrLock = new object();
 
 		public IdentityResult CreateApplicationUser(ApplicationUser user, out ExtendedUserData newusr) {
 			return AttemptCreateApplicationUser(user, SecurityData.GenerateSimplePassword(), out newusr);
@@ -513,7 +512,7 @@ namespace Carrotware.CMS.Core {
 			var result = new IdentityResult();
 
 			lock (newUsrLock) {
-				if (user != null && !String.IsNullOrEmpty(user.Id)) {
+				if (user != null && !string.IsNullOrEmpty(user.Id)) {
 					using (var securityHelper = new SecurityHelper()) {
 						result = securityHelper.UserManager.Create(user, password);
 
@@ -537,7 +536,7 @@ namespace Carrotware.CMS.Core {
 		public IdentityResult ResetPassword(ApplicationUser user, string code, string password) {
 			IdentityResult result = new IdentityResult();
 
-			if (user != null && !String.IsNullOrEmpty(user.Id)) {
+			if (user != null && !string.IsNullOrEmpty(user.Id)) {
 				using (var securityHelper = new SecurityHelper()) {
 					result = securityHelper.UserManager.ResetPassword(user.Id, code, password);
 
@@ -557,20 +556,9 @@ namespace Carrotware.CMS.Core {
 				adminFolder = adminFolder.Substring(0, adminFolder.Length - 1);
 			}
 
-			string adminEmailPath = String.Format("{0}/ResetPassword", adminFolder);
+			string adminEmailPath = string.Format("{0}/ResetPassword", adminFolder);
 
 			return ResetPassword(adminEmailPath, email);
-		}
-
-		public static string ReadEmbededScript(string sResouceName) {
-			string sReturn = null;
-
-			Assembly _assembly = Assembly.GetExecutingAssembly();
-			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(sResouceName))) {
-				sReturn = stream.ReadToEnd();
-			}
-
-			return sReturn;
 		}
 
 		public bool ResetPassword(string resetUri, string email) {
@@ -593,34 +581,36 @@ namespace Carrotware.CMS.Core {
 			}
 
 			if (user != null) {
-				string sBody = ReadEmbededScript("Carrotware.CMS.Core.Security.EmailForgotPassMsg.txt");
+				var sbBody = new StringBuilder();
+				sbBody.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.Security.EmailForgotPassMsg.txt"));
 
-				string strHTTPHost = string.Empty;
-				try { strHTTPHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { strHTTPHost = string.Empty; }
+				string httpHost = string.Empty;
+				try { httpHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { httpHost = string.Empty; }
+				string hostName = httpHost.ToLowerInvariant();
 
-				string hostName = strHTTPHost.ToLowerInvariant();
-
-				string strHTTPPrefix = "http://";
+				string hostPrefix = "http://";
 				try {
-					strHTTPPrefix = request.ServerVariables["SERVER_PORT_SECURE"] == "1" ? "https://" : "http://";
-				} catch { strHTTPPrefix = "http://"; }
+					hostPrefix = request.ServerVariables["SERVER_PORT_SECURE"] == "1" ? "https://" : "http://";
+				} catch { hostPrefix = "http://"; }
 
-				strHTTPHost = string.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLowerInvariant();
+				httpHost = string.Format("{0}{1}", hostPrefix, hostName).ToLowerInvariant();
 
-				var resetTokenUrl = string.Format("{0}/{1}?userId={2}&code={3}", strHTTPHost, resetUri, user.Id, HttpUtility.UrlEncode(code));
+				var resetTokenUrl = string.Format("{0}/{1}?userId={2}&code={3}", httpHost, resetUri, user.Id, HttpUtility.UrlEncode(code));
 
-				sBody = sBody.Replace("{%%UserName%%}", user.UserName);
-				sBody = sBody.Replace("{%%SiteURL%%}", strHTTPHost);
-				sBody = sBody.Replace("{%%Version%%}", CurrentDLLVersion);
-				sBody = sBody.Replace("{%%AdminFolderPath%%}", string.Format("{0}{1}", strHTTPHost, SiteData.AdminFolderPath));
+				sbBody.Replace("{%%UserName%%}", user.UserName);
+				sbBody.Replace("{%%SiteURL%%}", httpHost);
+				sbBody.Replace("{%%Version%%}", CurrentDLLVersion);
+				sbBody.Replace("{%%AdminFolderPath%%}", string.Format("{0}{1}", httpHost, SiteData.AdminFolderPath));
 
-				sBody = sBody.Replace("{%%ResetURL%%}", resetTokenUrl);
+				sbBody.Replace("{%%ResetURL%%}", resetTokenUrl);
 
 				if (SiteData.CurretSiteExists) {
-					sBody = sBody.Replace("{%%Time%%}", SiteData.CurrentSite.Now.ToString());
+					sbBody.Replace("{%%Time%%}", SiteData.CurrentSite.Now.ToString());
 				} else {
-					sBody = sBody.Replace("{%%Time%%}", DateTime.Now.ToString());
+					sbBody.Replace("{%%Time%%}", DateTime.Now.ToString());
 				}
+
+				var sBody = sbBody.ToString();
 
 				EmailHelper.SendMail(null, user.Email, string.Format("Reset Password {0}", hostName), sBody, false);
 
@@ -714,7 +704,7 @@ namespace Carrotware.CMS.Core {
 		private static string alphaUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		private static string alphaLower = "abcdefghijklmnopqrstuvwxyz";
 		private static string numericChars = "1234567890";
-		private static string specialChars = "@#$%}{";
+		private static string specialChars = "@!$}{";
 
 		private static string allChars = alphaUpper + alphaLower + numericChars + specialChars;
 
@@ -737,25 +727,35 @@ namespace Carrotware.CMS.Core {
 		public static string GenerateSimplePassword() {
 			int length = GeneratedPasswordLength;
 
-			Random rand = new Random();
-			string generatedPassword = String.Empty;
+			string generatedPassword = SelectRandomString(allChars, 4);
 
 			for (int i = 0; i < length; i++) {
-				double dbl = rand.NextDouble();
-				if (i == 0) {
-					generatedPassword += alphaUpper.ToCharArray()[(int)Math.Floor(dbl * alphaUpper.Length)];
-				} else if (i == length - 3) {
-					generatedPassword += alphaLower.ToCharArray()[(int)Math.Floor(dbl * alphaLower.Length)];
-				} else if (i == length - 5) {
-					generatedPassword += numericChars.ToCharArray()[(int)Math.Floor(dbl * numericChars.Length)];
-				} else if (i == length - 7) {
-					generatedPassword += specialChars.ToCharArray()[(int)Math.Floor(dbl * specialChars.Length)];
+				if (i == 0 || i == 7) {
+					generatedPassword += SelectRandomChar(alphaUpper);
+				} else if (i == 2 || i == 5) {
+					generatedPassword += SelectRandomChar(alphaLower);
+				} else if (i == 4 || i == 3) {
+					generatedPassword += SelectRandomChar(numericChars);
+				} else if (i == 6 || i == 1) {
+					generatedPassword += SelectRandomChar(specialChars);
 				} else {
-					generatedPassword += allChars.ToCharArray()[(int)Math.Floor(dbl * allChars.Length)];
+					generatedPassword += SelectRandomString(allChars, 3);
 				}
 			}
 
 			return generatedPassword;
 		}
+
+		private static string SelectRandomString(string sourceString, int take) {
+			return new string(sourceString.OrderBy(x => Guid.NewGuid()).Take(take).ToArray());
+		}
+
+		private static char SelectRandomChar(string sourceString) {
+			return SelectRandomString(sourceString, 1).FirstOrDefault();
+			//var rand = new Random();
+			//int index = rand.Next(sourceString.Length - 1);
+			//return sourceString.ToCharArray()[index];
+		}
+
 	}
 }

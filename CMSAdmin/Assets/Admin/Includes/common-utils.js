@@ -18,10 +18,6 @@ function AjaxBtnLoad() {
 		alwaysOpen: false
 	});
 
-	//$(function () {
-	//	$("#jqradioset, .jqradioset").buttonset();
-	//});
-
 	$("input:button, input:submit, input:reset, button").button();
 
 	initCheckboxStyle();

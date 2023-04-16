@@ -40,8 +40,8 @@ namespace Carrotware.CMS.Core {
 
 			//this.NavMenuText = "PAGE " + this.Root_ContentID.ToString().ToLowerInvariant();
 			//this.FileName = "/" + this.Root_ContentID.ToString().ToLowerInvariant();
-			this.NavMenuText = String.Empty;
-			this.FileName = String.Empty;
+			this.NavMenuText = string.Empty;
+			this.FileName = string.Empty;
 			this.TemplateFile = SiteData.DefaultTemplateFilename;
 
 			this.BlockIndex = false;
@@ -104,7 +104,7 @@ namespace Carrotware.CMS.Core {
 				this.TemplateFile = c.TemplateFile;
 				this.Thumbnail = c.PageThumbnail;
 
-				if (String.IsNullOrEmpty(this.PageSlug) && this.ContentType == ContentPageType.PageType.BlogEntry) {
+				if (string.IsNullOrEmpty(this.PageSlug) && this.ContentType == ContentPageType.PageType.BlogEntry) {
 					this.PageSlug = c.FileName;
 				}
 
@@ -182,8 +182,8 @@ namespace Carrotware.CMS.Core {
 		}
 
 		private void FixMeta() {
-			this.MetaKeyword = String.IsNullOrEmpty(this.MetaKeyword) ? String.Empty : this.MetaKeyword;
-			this.MetaDescription = String.IsNullOrEmpty(this.MetaDescription) ? String.Empty : this.MetaDescription;
+			this.MetaKeyword = string.IsNullOrEmpty(this.MetaKeyword) ? string.Empty : this.MetaKeyword;
+			this.MetaDescription = string.IsNullOrEmpty(this.MetaDescription) ? string.Empty : this.MetaDescription;
 		}
 
 		private void SaveKeywordsAndTags(CarrotCMSDataContext _db) {
@@ -301,7 +301,7 @@ namespace Carrotware.CMS.Core {
 		public void SaveTrackbacks() {
 			SiteData site = SiteData.GetSiteFromCache(this.SiteID);
 
-			if (!String.IsNullOrEmpty(this.NewTrackBackURLs)) {
+			if (!string.IsNullOrEmpty(this.NewTrackBackURLs)) {
 				this.NewTrackBackURLs = this.NewTrackBackURLs.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n\n", "\n");
 				string[] TBURLs = this.NewTrackBackURLs.Split('\n');
 				foreach (string sURL in TBURLs) {
@@ -716,7 +716,7 @@ namespace Carrotware.CMS.Core {
 
 		public MvcHtmlString PageTextPlainSummaryMedium {
 			get {
-				string txt = this.PageText ?? String.Empty;
+				string txt = this.PageText ?? string.Empty;
 				txt = txt.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ").Replace("&nbsp;", " ").Replace('\u00A0', ' '); //.Replace(".", "&#46;").Replace("@", " &#40;&#97;&#116;&#41; ");
 
 				txt = Regex.Replace(txt, @"<!--(\n|.)*-->", " ");
@@ -771,7 +771,7 @@ namespace Carrotware.CMS.Core {
 				}
 
 				if (this.ContentType == ContentPageType.PageType.BlogEntry) {
-					if (String.IsNullOrEmpty(this.PageSlug) || String.IsNullOrEmpty(this.FileName)) {
+					if (string.IsNullOrEmpty(this.PageSlug) || string.IsNullOrEmpty(this.FileName)) {
 						ValidationResult err = new ValidationResult("File Name is required", new string[] { "PageSlug" });
 						_errors.Add(err);
 					}

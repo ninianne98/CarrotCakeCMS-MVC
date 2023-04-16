@@ -8,6 +8,8 @@
 	var cats = CmsPage.GetSiteCategories(10, true);
 	var tags = CmsPage.GetSiteTags(10, true);
 	var dates = CmsPage.GetSiteDates(12);
+
+	var usr = CmsPage.BylineUser;
 }
 
 @section Banner {
@@ -32,7 +34,10 @@
 					<article>
 						<header>
 							<h2>@CmsPage.Heading</h2>
-							@*<span class="byline">Augue praesent a lacus at urna congue rutrum</span>*@
+							<span class="byline">
+								By
+								@usr.FullName_FirstLast
+							</span>
 						</header>
 
 						<div>

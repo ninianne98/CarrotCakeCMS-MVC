@@ -8,6 +8,8 @@
 
 	var pagecat = CmsPage.GetPageCategories(10);
 	var pagetag = CmsPage.GetPageTags(10);
+
+	var usr = CmsPage.BylineUser;
 }
 
 @section SideBar {
@@ -33,6 +35,13 @@
 			}
 		</li>
 	</ul>
+}
+
+@section BlogAuthor {
+	<p>
+		By
+		@usr.FullName_FirstLast
+	</p>
 }
 
 @section MetaTags {

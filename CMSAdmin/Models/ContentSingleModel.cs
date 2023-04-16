@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Carrotware.CMS.Core;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -15,7 +16,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 	public class ContentSingleModel {
 
 		public ContentSingleModel() {
-			this.Mode = "raw";
+			this.Mode = SiteData.RawMode;
 		}
 
 		public Guid PageId { get; set; }

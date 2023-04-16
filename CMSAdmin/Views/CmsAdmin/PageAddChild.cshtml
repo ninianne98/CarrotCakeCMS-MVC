@@ -26,7 +26,7 @@
 		var thePage = '';
 
 		function exportPage() {
-			window.open('@String.Format("{0}?id={1}", SiteFilename.ContentExportURL, Model.ContentPage.Root_ContentID)');
+			window.open('@string.Format("{0}?id={1}", SiteFilename.ContentExportURL, Model.ContentPage.Root_ContentID)');
 		}
 
 		function AutoGeneratePageFilename() {
@@ -258,11 +258,11 @@
 					<b>find:</b> <span id="spanResults"></span>
 					<br />
 					@{
-		var usr = Model.CreditUser;
-		string usrCap = String.Empty;
-		if (usr != null) {
-			usrCap = String.Format("{0} ({1})", usr.UserName, usr.Email);
-		}
+						var usr = Model.CreditUser;
+						string usrCap = string.Empty;
+						if (usr != null) {
+							usrCap = string.Format("{0} ({1})", usr.UserName, usr.Email);
+						}
 					}
 
 					@Html.TextBox("txtSearchUser", usrCap, new { maxlength = "256", @class = "form-control-lg" })
@@ -301,11 +301,11 @@
 				<td>
 					<!-- parent page plugin-->
 					@{
-		var drill = new SitePageDrillDownModel {
-			FieldName = Html.NameFor(m => m.ContentPage.Parent_ContentID).ToString(),
-			CurrentPageID = Model.ContentPage.Root_ContentID,
-			SelectedPageID = Model.ContentPage.Parent_ContentID
-		};
+						var drill = new SitePageDrillDownModel {
+							FieldName = Html.NameFor(m => m.ContentPage.Parent_ContentID).ToString(),
+							CurrentPageID = Model.ContentPage.Root_ContentID,
+							SelectedPageID = Model.ContentPage.Parent_ContentID
+						};
 					}
 
 					@Html.Partial("_SitePageDrillDown", drill)
@@ -357,35 +357,35 @@
 
 			<input type="submit" name="btnSave" value="Create" id="btnSave" />
 		</div>
-	}
+						}
 
-	<script type="text/javascript">
-		function SubmitPage() {
-			var ret = cmsPreSaveTrigger();
-			ClickSaveBtn();
-		}
+						<script type="text/javascript">
+							function SubmitPage() {
+								var ret = cmsPreSaveTrigger();
+								ClickSaveBtn();
+							}
 
-		function ClickSaveBtn() {
-			$('#btnSave').click();
-			return true;
-		}
-	</script>
-} else {
-	<h2>
-		The page
-		<a id="lnkNew" target="_blank" href="@Model.ContentPage.FileName">
-			@Model.ContentPage.FileName
-			<img class="imgNoBorder" src="~/Assets/Admin/images/html2.png" title="Visit page" alt="Visit page" />
-		</a>
-		has been created.
-	</h2>
-	<h3>
-		<a href="@Url.Action("PageAddChild", new { @id = Model.ParentID })" id="lnkCreatePage">
-			<img class="imgNoBorder" src="~/Assets/Admin/images/add.png" alt="Add" title="Add" />
-			Create Another Page
-		</a>
-	</h3>
-}
+							function ClickSaveBtn() {
+								$('#btnSave').click();
+								return true;
+							}
+						</script>
+						} else {
+							<h2>
+								The page
+								<a id="lnkNew" target="_blank" href="@Model.ContentPage.FileName">
+									@Model.ContentPage.FileName
+									<img class="imgNoBorder" src="~/Assets/Admin/images/html2.png" title="Visit page" alt="Visit page" />
+								</a>
+								has been created.
+							</h2>
+							<h3>
+								<a href="@Url.Action("PageAddChild", new { @id = Model.ParentID })" id="lnkCreatePage">
+									<img class="imgNoBorder" src="~/Assets/Admin/images/add.png" alt="Add" title="Add" />
+									Create Another Page
+								</a>
+							</h3>
+						}
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>

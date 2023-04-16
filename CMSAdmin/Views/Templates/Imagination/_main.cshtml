@@ -29,7 +29,7 @@
 	pager.IgnoreSitePath = true;
 	pager.FetchData();
 
-	string imgPath = String.Empty;
+	string imgPath = string.Empty;
 
 	List<string> imgs = new List<string>();
 	imgs.Add(@"/Assets/Imagination/images/pics01.jpg");
@@ -146,7 +146,7 @@
 
 			<div class="row">
 				@foreach (var p in pager.DataSource) {
-					if (String.IsNullOrEmpty(p.Thumbnail)) {
+					if (string.IsNullOrEmpty(p.Thumbnail)) {
 						imgPath = imgs.Where(x => x != imgPath).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
 					} else {
 						imgPath = p.Thumbnail;
@@ -209,7 +209,7 @@
 	<!-- Copyright -->
 	<div id="copyright">
 		<div class="container">
-			@Html.Raw(String.Format("&copy;  {0}, {1}. All rights reserved.", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
+			@Html.Raw(string.Format("&copy;  {0}, {1}. All rights reserved.", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
 			<br />
 			Design: <a target="_blank" href="http://templated.co">TEMPLATED</a>
 			Images: <a target="_blank" href="http://unsplash.com">Unsplash</a>

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Linq;
 using System.Text;
-using System.Web;
-using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using System.Web.Mvc;
 using System.Web.WebPages;
+using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -57,11 +57,11 @@ namespace Carrotware.Web.UI.Components {
 						col.Sortable = false;
 					}
 
-					if (String.IsNullOrEmpty(column.HeaderText) && column.HasHeadingText) {
+					if (string.IsNullOrEmpty(column.HeaderText) && column.HasHeadingText) {
 						column.HeaderText = col.ColumnName.Replace(".", " ").Replace("_", " ");
 
 						string displayName = CarrotWeb.DisplayNameFor<T>(property);
-						if (!String.IsNullOrEmpty(displayName)) {
+						if (!string.IsNullOrEmpty(displayName)) {
 							column.HeaderText = displayName;
 						}
 					}
@@ -87,14 +87,14 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		protected string DataFieldName(string columnName) {
-			string fldName = String.Format("{0}DataSource[{1}].{2}", this.FieldNamePrefix, this.RowNumber, columnName);
+			string fldName = string.Format("{0}DataSource[{1}].{2}", this.FieldNamePrefix, this.RowNumber, columnName);
 			if (!this.UseDataPage) {
-				if (String.IsNullOrEmpty(this.FieldNamePrefix)) {
-					//fldName = fldName.Replace(String.Format("DataSource[{0}]", this.RowNumber), String.Format("[{0}]", this.RowNumber));
-					fldName = String.Format("[{0}].{1}", this.RowNumber, columnName);
+				if (string.IsNullOrEmpty(this.FieldNamePrefix)) {
+					//fldName = fldName.Replace(string.Format("DataSource[{0}]", this.RowNumber), string.Format("[{0}]", this.RowNumber));
+					fldName = string.Format("[{0}].{1}", this.RowNumber, columnName);
 				} else {
-					//fldName = fldName.Replace(String.Format(".DataSource[{0}]", this.RowNumber), String.Format("[{0}]", this.RowNumber));
-					fldName = String.Format("{0}[{1}].{2}", this.FieldNamePrefix, this.RowNumber, columnName).Replace(".[", "[");
+					//fldName = fldName.Replace(string.Format(".DataSource[{0}]", this.RowNumber), string.Format("[{0}]", this.RowNumber));
+					fldName = string.Format("{0}[{1}].{2}", this.FieldNamePrefix, this.RowNumber, columnName).Replace(".[", "[");
 				}
 			}
 			return fldName;
@@ -110,7 +110,7 @@ namespace Carrotware.Web.UI.Components {
 
 			string fldName = DataFieldName(columnName);
 
-			MvcHtmlString formFld = new MvcHtmlString(String.Empty);
+			MvcHtmlString formFld = new MvcHtmlString(string.Empty);
 
 			switch (fldType) {
 				case GridFormFieldType.Checkbox:
@@ -152,13 +152,13 @@ namespace Carrotware.Web.UI.Components {
 
 			string fldName = DataFieldName(columnName);
 
-			MvcHtmlString formFld = new MvcHtmlString(String.Empty);
+			MvcHtmlString formFld = new MvcHtmlString(string.Empty);
 
 			if (val != null && selectList.SelectedValue == null) {
 				selectList = new SelectList(selectList.Items, selectList.DataValueField, selectList.DataTextField, val);
 			}
 
-			if (!String.IsNullOrEmpty(optionLabel)) {
+			if (!string.IsNullOrEmpty(optionLabel)) {
 				formFld = _htmlHelper.DropDownList(fldName, selectList, optionLabel, htmlAttributes);
 			} else {
 				formFld = _htmlHelper.DropDownList(fldName, selectList, htmlAttributes);
@@ -169,8 +169,8 @@ namespace Carrotware.Web.UI.Components {
 
 		public MvcHtmlString CheckBoxListFor(Expression<Func<T, Object>> property, MultiSelectList selectList, string selectedFieldName, object chkboxAttributes = null, object listAttributes = null) {
 			T row = this.DataPage.DataSource[this.RowNumber];
-			string columnName = String.Empty;
-			selectedFieldName = String.IsNullOrEmpty(selectedFieldName) ? "Selected" : selectedFieldName;
+			string columnName = string.Empty;
+			selectedFieldName = string.IsNullOrEmpty(selectedFieldName) ? "Selected" : selectedFieldName;
 
 			if (property.Body.NodeType == ExpressionType.Call) {
 				var methodCallExpression = (MethodCallExpression)property.Body;
@@ -181,16 +181,16 @@ namespace Carrotware.Web.UI.Components {
 
 			string fldName = DataFieldName(columnName);
 
-			MvcHtmlString formFld = new MvcHtmlString(String.Empty);
+			MvcHtmlString formFld = new MvcHtmlString(string.Empty);
 
 			StringBuilder sbChk = new StringBuilder();
 			int i = 0;
 			using (new WrappedItem(sbChk, "dl", listAttributes)) {
 				foreach (var opt in selectList) {
 					sbChk.AppendLine("<dt>"
-						+ _htmlHelper.Hidden(String.Format("{0}[{1}].{2}", fldName, i, selectList.DataValueField), opt.Value)
-						+ _htmlHelper.CheckBox(String.Format("{0}[{1}].{2}", fldName, i, selectedFieldName), opt.Selected, chkboxAttributes)
-						+ String.Format("  {0}</dt> ", opt.Text));
+						+ _htmlHelper.Hidden(string.Format("{0}[{1}].{2}", fldName, i, selectList.DataValueField), opt.Value)
+						+ _htmlHelper.CheckBox(string.Format("{0}[{1}].{2}", fldName, i, selectedFieldName), opt.Selected, chkboxAttributes)
+						+ string.Format("  {0}</dt> ", opt.Text));
 
 					i++;
 				}
@@ -231,17 +231,17 @@ namespace Carrotware.Web.UI.Components {
 						using (new WrappedItem(sb, "tr", new { rowNbr = this.RowNumber })) {
 							foreach (var col in this.Columns) {
 								using (new WrappedItem(sb, "td", col.BodyAttributes)) {
-									string cellContents = String.Empty;
+									string cellContents = string.Empty;
 
 									if (col is ICarrotGridColumnExt) {
 										var colExt = (ICarrotGridColumnExt)col;
 										Object val = row.GetPropValueFromColumnName(colExt.ColumnName);
 
-										string imgPath = String.Empty;
+										string imgPath = string.Empty;
 										switch (col.Mode) {
 											case CarrotGridColumnType.Standard:
 
-												cellContents = String.Format(colExt.CellFormatString, val);
+												cellContents = string.Format(colExt.CellFormatString, val);
 												break;
 
 											case CarrotGridColumnType.ImageEnum:
@@ -257,7 +257,7 @@ namespace Carrotware.Web.UI.Components {
 												}
 
 												if (ic is CarrotGridImageColumn) {
-													string imageAltText = String.Format(colExt.CellFormatString, val);
+													string imageAltText = string.Format(colExt.CellFormatString, val);
 													if (imgData != null) {
 														imageAltText = imgData.ImageAltText;
 													}

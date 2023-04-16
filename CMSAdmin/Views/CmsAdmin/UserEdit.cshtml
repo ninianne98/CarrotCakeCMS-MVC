@@ -1,5 +1,4 @@
 ﻿@model UserModel
-
 @{
 	ViewBag.Title = "User Edit";
 }
@@ -119,14 +118,14 @@
 						</thead>
 						<tbody>
 							@for (int j = 0; j < Model.RoleOptions.Count; j++) {
-								<tr>
-									<td>
-										@Html.CheckBoxFor(x => Model.RoleOptions[j].Selected)
-										@Html.HiddenFor(x => Model.RoleOptions[j].Value)
-										@Html.HiddenFor(x => Model.RoleOptions[j].Text)
-									</td>
-									<td>@Model.RoleOptions[j].Text</td>
-								</tr>
+							<tr>
+								<td>
+									@Html.CheckBoxFor(x => Model.RoleOptions[j].Selected)
+									@Html.HiddenFor(x => Model.RoleOptions[j].Value)
+									@Html.HiddenFor(x => Model.RoleOptions[j].Text)
+								</td>
+								<td>@Model.RoleOptions[j].Text</td>
+							</tr>
 							}
 						</tbody>
 					</table>
@@ -155,15 +154,15 @@
 							@for (int j = 0; j < Model.SiteOptions.Count; j++) {
 								var site = Model.AllSites.Where(m => m.SiteID.ToString().ToLowerInvariant() == Model.SiteOptions[j].Value).FirstOrDefault();
 
-								<tr>
-									<td>
-										@Html.CheckBoxFor(x => Model.SiteOptions[j].Selected)
-										@Html.HiddenFor(x => Model.SiteOptions[j].Value)
-										@Html.HiddenFor(x => Model.SiteOptions[j].Text)
-									</td>
-									<td>@site.SiteName</td>
-									<td>@site.MainURL</td>
-								</tr>
+							<tr>
+								<td>
+									@Html.CheckBoxFor(x => Model.SiteOptions[j].Selected)
+									@Html.HiddenFor(x => Model.SiteOptions[j].Value)
+									@Html.HiddenFor(x => Model.SiteOptions[j].Text)
+								</td>
+								<td>@site.SiteName</td>
+								<td>@site.MainURL</td>
+							</tr>
 							}
 						</tbody>
 					</table>
@@ -180,27 +179,26 @@
 	<div style="display: none">
 		<input type="submit" name="btnSave" value="btnSave" id="btnSave" />
 	</div>
-
-	<script type="text/javascript">
-
-		function SubmitPage() {
-			var sc = SaveCommon();
-			setTimeout("ClickSaveBtn();", 500);
-			return true;
-		}
-
-		function ClickSaveBtn() {
-			$('#btnSave').click();
-		}
-
-		function SaveCommon() {
-			var ret = cmsPreSaveTrigger();
-			return true;
-		}
-
-		$(document).ready(function () {
-			cmsInputEnterBlock();
-		});
-	</script>
-
 }
+
+<script type="text/javascript">
+
+	function SubmitPage() {
+		var sc = SaveCommon();
+		setTimeout("ClickSaveBtn();", 500);
+		return true;
+	}
+
+	function ClickSaveBtn() {
+		$('#btnSave').click();
+	}
+
+	function SaveCommon() {
+		var ret = cmsPreSaveTrigger();
+		return true;
+	}
+
+	$(document).ready(function () {
+		cmsInputEnterBlock();
+	});
+</script>

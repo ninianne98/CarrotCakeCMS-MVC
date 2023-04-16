@@ -3,17 +3,7 @@
 @{
 	Layout = "_main.cshtml";
 
-	List<TypeHeadingOption> heads = new List<TypeHeadingOption>();
-	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateIndex, LabelText = "Date:" });
-	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateDayIndex, LabelText = "Day:", FormatText = "{0:dddd, d MMMM yyyy}" });
-	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateMonthIndex, LabelText = "Month:", FormatText = "{0:MMM yyyy}" });
-	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateYearIndex, LabelText = "Year:", FormatText = "{0:yyyy}" });
-	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.CategoryIndex, LabelText = "Category:" });
-	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.TagIndex, LabelText = "Tag:" });
-	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.AuthorIndex, LabelText = "Content by " });
-	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.SearchResults, LabelText = "Search results for:", FormatText = " [ {0} ] " });
-
-	CmsPage.TypeLabelPrefixes = heads;
+	CmsPage.TypeLabelPrefixes = CmsPage.GetDefaultTypeHeadingOptions();
 
 	var pager = new PagedDataSummary();
 	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;

@@ -80,11 +80,11 @@ namespace Carrotware.Web.UI.Components {
 						break;
 				}
 
-				bootstrapColor = "<!-- Bootstrap CSS - " + this.SelectedSkin.ToString() + " --> <link href=\"" + colorUri + "\" type=\"text/css\" rel=\"stylesheet\" />\r\n";
+				bootstrapColor = UrlPaths.CreateCssTag(string.Format("Bootstrap CSS {0}", this.SelectedSkin), colorUri);
 			}
 
-			return ("\r\n<!-- Bootstrap --> <script src=\"" + bootstrapJS + "\" type=\"text/javascript\"></script> \r\n"
-					+ "<!-- Bootstrap CSS --> <link href=\"" + bootstrapCSS + "\" type=\"text/css\" rel=\"stylesheet\" />\r\n"
+			return (UrlPaths.CreateJavascriptTag("Bootstrap", bootstrapJS) + " \r\n"
+					+ UrlPaths.CreateCssTag("Bootstrap CSS", bootstrapCSS) + "\r\n"
 					+ bootstrapColor);
 		}
 	}

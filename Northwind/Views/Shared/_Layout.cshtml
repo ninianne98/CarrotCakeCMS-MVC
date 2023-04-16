@@ -9,7 +9,7 @@
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/modernizr")
 
-	@(new jquery())
+	@*@(new jquery())*@
 	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver })
 	@*@(new Bootstrap() { SelectedSkin= Bootstrap.BootstrapColorScheme.Violet })*@
 	@(new Bootstrap() { SelectedSkin = Helper.BootstrapColorScheme })

@@ -1,15 +1,14 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using System;
+using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Web;
 using System.Xml.Serialization;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -25,6 +24,15 @@ namespace Carrotware.CMS.UI.Components {
 
 	//==================================================
 	public class SiteSearch {
+		public SiteSearch() {
+
+		}
+
+		public void RestoreQueryString() {
+			if (HttpContext.Current.Request.QueryString[SiteData.SearchQueryParameter] != null) {
+				this.query = HttpContext.Current.Request.QueryString[SiteData.SearchQueryParameter].ToString();
+			}
+		}
 
 		[StringLength(128)]
 		public string query { get; set; }
@@ -88,7 +96,7 @@ namespace Carrotware.CMS.UI.Components {
 		public void SendMail(PostComment pc, ContentPage page) {
 			HttpRequest request = HttpContext.Current.Request;
 
-			if (this.Settings.NotifyEditors || !String.IsNullOrEmpty(this.Settings.DirectEmailKeyName)) {
+			if (this.Settings.NotifyEditors || !string.IsNullOrEmpty(this.Settings.DirectEmailKeyName)) {
 				List<string> emails = new List<string>();
 
 				if (this.Settings.NotifyEditors && page != null) {
@@ -103,7 +111,7 @@ namespace Carrotware.CMS.UI.Components {
 					}
 				}
 
-				if (!String.IsNullOrEmpty(this.Settings.DirectEmailKeyName)) {
+				if (!string.IsNullOrEmpty(this.Settings.DirectEmailKeyName)) {
 					emails.Add(ConfigurationManager.AppSettings[this.Settings.DirectEmailKeyName].ToString());
 				}
 
@@ -117,9 +125,9 @@ namespace Carrotware.CMS.UI.Components {
 					strHTTPPrefix = request.ServerVariables["SERVER_PORT_SECURE"] == "1" ? "https://" : "http://";
 				} catch { strHTTPPrefix = "http://"; }
 
-				strHTTPHost = String.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLowerInvariant();
+				strHTTPHost = string.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLowerInvariant();
 
-				string mailSubject = String.Format("Comment Form From {0}", hostName);
+				string mailSubject = string.Format("Comment Form From {0}", hostName);
 
 				string sBody = "Name:   " + pc.CommenterName
 					+ "\r\nEmail:   " + pc.CommenterEmail
@@ -128,11 +136,11 @@ namespace Carrotware.CMS.UI.Components {
 					+ "\r\nComment:\r\n" + HttpUtility.HtmlEncode(pc.PostCommentText)
 					+ "\r\n=================\r\n"
 					+ "\r\nIP:   " + pc.CommenterIP
-					+ "\r\nSite URL:   " + String.Format("{0}{1}", strHTTPHost, page.FileName)
+					+ "\r\nSite URL:   " + string.Format("{0}{1}", strHTTPHost, page.FileName)
 					+ "\r\nSite Time:   " + SiteData.CurrentSite.Now.ToString()
 					+ "\r\nUTC Time:   " + DateTime.UtcNow.ToString();
 
-				string sEmail = String.Join(";", emails);
+				string sEmail = string.Join(";", emails);
 
 				EmailHelper.SendMail(null, sEmail, mailSubject, sBody, false);
 			}
@@ -156,7 +164,7 @@ namespace Carrotware.CMS.UI.Components {
 		public void ReconstructSettings() {
 			this.Settings = null;
 
-			if (!String.IsNullOrEmpty(this.EncodedSettings)) {
+			if (!string.IsNullOrEmpty(this.EncodedSettings)) {
 				string sXML = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
 				XmlSerializer xmlSerializer = new XmlSerializer(typeof(LogoutInfoSettings));
 				using (StringReader stringReader = new StringReader(sXML)) {

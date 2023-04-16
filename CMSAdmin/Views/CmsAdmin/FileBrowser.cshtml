@@ -3,6 +3,8 @@
 @{
 	ViewBag.Title = "File Browser";
 	Layout = null;
+
+	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
 }
 
 <!DOCTYPE html>
@@ -16,15 +18,15 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.LightGreen, UseJqueryMigrate = true })
 
-	<link href="~/Assets/Admin/Includes/uploadfile.css" rel="stylesheet" />
-	<script src="~/Assets/Admin/Includes/jquery.form.min.js"></script>
-	<script src="~/Assets/Admin/Includes/jquery.uploadfile.min.js"></script>
+	<link href="~/Assets/Admin/Includes/uploadfile.css" rel="stylesheet" type="text/css" />
+	<script src="~/Assets/Admin/Includes/jquery.form.min.js?@versionKey" type="text/javascript"></script>
+	<script src="~/Assets/Admin/Includes/jquery.uploadfile.min.js?@versionKey" type="text/javascript"></script>
 
-	<link href="~/Assets/iCheck/iCheck.css" rel="stylesheet" />
-	<script src="~/Assets/iCheck/icheck.min.js"></script>
-	<script src="~/Assets/Admin/Includes/icheck.init.js"></script>
+	<link href="~/Assets/iCheck/iCheck.css" rel="stylesheet" type="text/css" />
+	<script src="~/Assets/iCheck/icheck.min.js?@versionKey" type="text/javascript"></script>
+	<script src="~/Assets/Admin/Includes/icheck.init.js?@versionKey" type="text/javascript"></script>
 
-	<link href="~/Assets/Admin/Includes/filebrowser.css" rel="stylesheet" />
+	<link href="~/Assets/Admin/Includes/filebrowser.css" rel="stylesheet" type="text/css" />
 
 	<script type="text/javascript">
 		$(document).ready(function () {
@@ -90,8 +92,8 @@
 
 	@if (Model.UseTinyMCE) {
 		<text>
-			<script type="text/javascript" src="~/Assets/tiny_mce/tiny_mce.js"></script>
-			<script type="text/javascript" src="~/Assets/tiny_mce/tiny_mce_popup.js"></script>
+			<script src="~/Assets/tiny_mce/tiny_mce.js?@versionKey" type="text/javascript"></script>
+			<script src="~/Assets/tiny_mce/tiny_mce_popup.js?@versionKey" type="text/javascript"></script>
 
 			<script type="text/javascript">
 
@@ -291,36 +293,36 @@
 							@{
 					int j = 0;
 					foreach (var f in Model.Files) {
-						<tr>
-							<td>
-								@Html.CheckBoxFor(m => Model.Files[j].SelectedItem)
-								@Html.HiddenFor(m => Model.Files[j].FileName)
-							</td>
-							<td>
-								<img src="@String.Format("/Assets/Admin/images/{0}.png", Model.FileImageLink(f.MimeType))" alt="filetype" />
-							</td>
-							<td>
-								<div class="ImgGroup" id="imgContainerGroup">
-									<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'file')">
-										<a id="lnkContent" href='@Model.CreateFileLink(String.Format( "{0}{1}", f.FolderPath, f.FileName ))'>
-											@f.FileName
-										</a>
-									</div>
-									<div id="imgWrapper" style="display: none;">
-										<img id="imgThmbnail" filetype="@Model.FileImageLink(f.MimeType)" alt="" src="@Model.CreateFileSrc(f.FolderPath, f.FileName, f.MimeType)" />
-									</div>
-								</div>
-							</td>
-							<td>
-								@String.Format("{0}", f.FileDate)
-							</td>
-							<td>
-								&nbsp;
-							</td>
-							<td>
-								@String.Format("{0}", f.FileSizeFriendly)
-							</td>
-						</tr>
+									<tr>
+										<td>
+											@Html.CheckBoxFor(m => Model.Files[j].SelectedItem)
+											@Html.HiddenFor(m => Model.Files[j].FileName)
+										</td>
+										<td>
+											<img src="@String.Format("/Assets/Admin/images/{0}.png", Model.FileImageLink(f.MimeType))" alt="filetype" />
+										</td>
+										<td>
+											<div class="ImgGroup" id="imgContainerGroup">
+												<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'file')">
+													<a id="lnkContent" href='@Model.CreateFileLink(String.Format( "{0}{1}", f.FolderPath, f.FileName ))'>
+														@f.FileName
+													</a>
+												</div>
+												<div id="imgWrapper" style="display: none;">
+													<img id="imgThmbnail" filetype="@Model.FileImageLink(f.MimeType)" alt="" src="@Model.CreateFileSrc(f.FolderPath, f.FileName, f.MimeType)" />
+												</div>
+											</div>
+										</td>
+										<td>
+											@String.Format("{0}", f.FileDate)
+										</td>
+										<td>
+											&nbsp;
+										</td>
+										<td>
+											@String.Format("{0}", f.FileSizeFriendly)
+										</td>
+									</tr>
 
 						j++;
 					}
@@ -337,32 +339,32 @@
 				}
 			</div>
 
-			if (!Model.Thumbnails) {
-				<p>
-					<br />
-					<input type="submit" name="btnRemove" value="Delete Checked" id="btnRemove" />
-				</p>
-			}
-			<p>
-				<br />
-				Selected File:
-				<input name="txtSelectedFile" type="text" size="50" id="txtSelectedFile" />
+								if (!Model.Thumbnails) {
+									<p>
+										<br />
+										<input type="submit" name="btnRemove" value="Delete Checked" id="btnRemove" />
+									</p>
+								}
+								<p>
+									<br />
+									Selected File:
+									<input name="txtSelectedFile" type="text" size="50" id="txtSelectedFile" />
 
-				@if (Model.ReturnMode) {
-					<input type="button" name="btnReturnFile" value="Select File" onclick="return cmsSetFileNameReturn();" id="btnReturnFile" />
+									@if (Model.ReturnMode) {
+										<input type="button" name="btnReturnFile" value="Select File" onclick="return cmsSetFileNameReturn();" id="btnReturnFile" />
 				} @*else {
-						<input type="button" name="btnSelectedFile" value="Return Selection" onclick="FileBrowserDialogue.mySubmit();" id="btnSelectedFile" />
-					}*@
+												<input type="button" name="btnSelectedFile" value="Return Selection" onclick="FileBrowserDialogue.mySubmit();" id="btnSelectedFile" />
+											}*@
 			</p>
 
-			if (!Model.UseTinyMCE) {
-				<div style="display: none">
-					<input type="button" id="Submit1" name="insert" value="Select" onclick="cmsSetFileName();return false;" />
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<input type="button" id="Button1" name="cancel" value="Cancel" onclick="window.close();" />
-				</div>
-			}
-		}
+								if (!Model.UseTinyMCE) {
+									<div style="display: none">
+										<input type="button" id="Submit1" name="insert" value="Select" onclick="cmsSetFileName();return false;" />
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="button" id="Button1" name="cancel" value="Cancel" onclick="window.close();" />
+									</div>
+									}
+								}
 	</div>
 
 	@if (Model.UseTinyMCE) {

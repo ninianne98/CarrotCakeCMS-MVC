@@ -1,0 +1,48 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	if (CmsPage.IsBlogPost || CmsPage.IsSiteIndex) {
+		var cats = CmsPage.GetSiteCategories(10, true);
+		var tags = CmsPage.GetSiteTags(10, true);
+		var dates = CmsPage.GetSiteDates(6);
+
+		if (dates.Any()) {
+			<h1>Dates</h1>
+			<ul class="sidemenu">
+				@foreach (var itm in dates) {
+					<li class="child-nav">
+						<a href="@itm.DateURL">
+							@String.Format("{0} ({1})", itm.DateCaption, itm.Count)
+						</a>
+					</li>
+				}
+			</ul>
+		}
+
+		if (cats.Any()) {
+			<h1>Category</h1>
+			<ul class="sidemenu">
+				@foreach (var itm in cats) {
+					<li class="child-nav">
+						<a href="@itm.CategoryURL">
+							@String.Format("{0} ({1})", itm.CategoryText, itm.PublicUseCount)
+						</a>
+					</li>
+				}
+			</ul>
+		}
+
+		if (tags.Any()) {
+			<h1>Tags</h1>
+			<ul class="sidemenu">
+				@foreach (var itm in tags) {
+					<li class="child-nav">
+						<a href="@itm.TagURL">
+							@String.Format("{0} ({1})", itm.TagText, itm.PublicUseCount)
+						</a>
+					</li>
+				}
+			</ul>
+		}
+	}
+}

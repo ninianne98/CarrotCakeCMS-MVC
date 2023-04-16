@@ -32,8 +32,8 @@ namespace Carrotware.Web.UI.Components {
 			this.FooterOuterTag = "ul";
 			this.FooterTag = "li";
 
-			this.FieldIdPrefix = String.Empty;
-			this.FieldNamePrefix = String.Empty;
+			this.FieldIdPrefix = string.Empty;
+			this.FieldNamePrefix = string.Empty;
 
 			this.SortDescIndicator = "&nbsp;&#9660;";
 			this.SortAscIndicator = "&nbsp;&#9650;";
@@ -76,10 +76,10 @@ namespace Carrotware.Web.UI.Components {
 		public void ConfigName(IHtmlString name) {
 			this.FieldNamePrefix = name.ToString();
 
-			if (String.IsNullOrEmpty(this.FieldNamePrefix)) {
-				this.FieldNamePrefix = String.Empty;
+			if (string.IsNullOrEmpty(this.FieldNamePrefix)) {
+				this.FieldNamePrefix = string.Empty;
 			} else {
-				this.FieldNamePrefix = String.Format("{0}.", this.FieldNamePrefix);
+				this.FieldNamePrefix = string.Format("{0}.", this.FieldNamePrefix);
 			}
 
 			this.FieldIdPrefix = this.FieldNamePrefix.Replace(".", "_").Replace("]", "_").Replace("[", "_");
@@ -105,33 +105,33 @@ namespace Carrotware.Web.UI.Components {
 
 			Object val = propInfo.GetValue(this.PagedDataBase, null);
 
-			string fldName = String.Format("{0}{1}", this.FieldNamePrefix, columnName);
-			string str = val == null ? String.Empty : val.ToString();
+			string fldName = string.Format("{0}{1}", this.FieldNamePrefix, columnName);
+			string str = val == null ? string.Empty : val.ToString();
 
 			sb.AppendLine(_htmlHelper.Hidden(fldName, str).ToString());
 		}
 
 		protected StringBuilder BuildHeadScript(StringBuilder sb) {
 			string frm = "form:first";
-			if (!String.IsNullOrEmpty(this.HtmlFormId)) {
-				frm = String.Format("#{0}", this.HtmlFormId);
+			if (!string.IsNullOrEmpty(this.HtmlFormId)) {
+				frm = string.Format("#{0}", this.HtmlFormId);
 			}
 
 			if (this.UseDataPage) {
-				sb.AppendLine(String.Empty);
+				sb.AppendLine(string.Empty);
 				sb.AppendLine("	<script type=\"text/javascript\">");
 				sb.AppendLine("	function __clickHead(fld) {");
-				sb.AppendLine(String.Format("		$('#{0}SortByNew').val(fld);", this.FieldIdPrefix));
-				sb.AppendLine(String.Format("		$('{0}')[0].submit();", frm));
+				sb.AppendLine(string.Format("		$('#{0}SortByNew').val(fld);", this.FieldIdPrefix));
+				sb.AppendLine(string.Format("		$('{0}')[0].submit();", frm));
 				sb.AppendLine("	}");
-				sb.AppendLine(String.Empty);
+				sb.AppendLine(string.Empty);
 				sb.AppendLine("	function __clickPage(nbr, fld) {");
 				sb.AppendLine("		$('#' + fld).val(nbr);");
 				sb.AppendLine("		$('#' + fld).focus();");
-				sb.AppendLine(String.Format("		$('{0}')[0].submit();", frm));
+				sb.AppendLine(string.Format("		$('{0}')[0].submit();", frm));
 				sb.AppendLine("	}");
 				sb.AppendLine("	</script>");
-				sb.AppendLine(String.Empty);
+				sb.AppendLine(string.Empty);
 
 				FormHelper(x => x.OrderBy, sb);
 				FormHelper(x => x.SortByNew, sb);
@@ -154,7 +154,7 @@ namespace Carrotware.Web.UI.Components {
 							if (col is ICarrotGridColumnExt) {
 								var colExt = (ICarrotGridColumnExt)col;
 								if (colExt.Sortable && this.UseDataPage) {
-									string js = String.Format("javascript:__clickHead('{0}')", colExt.ColumnName);
+									string js = string.Format("javascript:__clickHead('{0}')", colExt.ColumnName);
 
 									IDictionary<string, object> tagAttrib = InitAttrib(colExt.HeadLinkAttributes);
 
@@ -186,15 +186,15 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		protected virtual IHtmlString CreateBody() {
-			return new HtmlString(String.Empty);
+			return new HtmlString(string.Empty);
 		}
 
 		public virtual void SetupFooter(string outer, object outerAttrib, string inner, object selAttrib, object noselAttrib) {
-			this.FooterOuterTag = String.IsNullOrEmpty(outer) ? "ul" : outer;
+			this.FooterOuterTag = string.IsNullOrEmpty(outer) ? "ul" : outer;
 
 			this.htmlFootAttrib = outerAttrib;
 
-			this.FooterTag = String.IsNullOrEmpty(inner) ? "li" : inner;
+			this.FooterTag = string.IsNullOrEmpty(inner) ? "li" : inner;
 
 			this.htmlFootSel = selAttrib;
 			this.htmlFootNotSel = noselAttrib;
@@ -206,11 +206,11 @@ namespace Carrotware.Web.UI.Components {
 			if (this.PagedDataBase.TotalPages > 1) {
 				using (new WrappedItem(sb, this.FooterOuterTag, this.htmlFootAttrib)) {
 					foreach (var i in this.PagedDataBase.PageNumbers) {
-						string clickFn = String.Format("javascript:__clickPage('{0}','{1}PageNumber')", i, this.FieldIdPrefix);
+						string clickFn = string.Format("javascript:__clickPage('{0}','{1}PageNumber')", i, this.FieldIdPrefix);
 
 						using (new WrappedItem(_htmlHelper, sb, this.FooterTag, i, this.PagedDataBase.PageNumber, this.htmlFootSel, this.htmlFootNotSel)) {
 							using (new WrappedItem(sb, "a", new { @href = clickFn })) {
-								sb.Append(String.Format(" {0} ", i));
+								sb.Append(string.Format(" {0} ", i));
 							}
 						}
 					}
@@ -224,7 +224,7 @@ namespace Carrotware.Web.UI.Components {
 			this.PagedDataBase.TotalRecords = 0;
 			this.PagedDataBase.PageNumber = 1;
 
-			string cellContents = String.Empty;
+			string cellContents = string.Empty;
 
 			StringBuilder sb = new StringBuilder();
 

@@ -23,7 +23,7 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public void ProcessRequest(HttpContext context) {
-			if (context.Request.Path.ToLowerInvariant() == "/carrotwarecaptcha.axd") {
+			if (context.Request.Path.ToLowerInvariant() == UrlPaths.CaptchaPath.ToLower()) {
 				DoCaptcha(context);
 			}
 		}

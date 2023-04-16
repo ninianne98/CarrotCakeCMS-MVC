@@ -1,0 +1,27 @@
+﻿@inherits CmsWebViewPage
+@{
+
+	var cats = CmsPage.GetSiteCategories(10, true);
+	var tags = CmsPage.GetSiteTags(10, true);
+}
+
+<div>
+	@if (cats.Any()) {
+		<h2>Categories</h2>
+		<ul class="list-style1">
+			@foreach (var itm in cats) {
+				<li><a href="@itm.Uri">@itm.Text @string.Format(" ({0})", itm.Count)</a></li>
+				}
+		</ul>
+	}
+</div>
+<div>
+	@if (tags.Any()) {
+		<h2>Tags</h2>
+		<ul class="list-style1">
+			@foreach (var itm in tags) {
+				<li><a href="@itm.Uri">@itm.Text @string.Format(" ({0})", itm.Count)</a></li>
+				}
+		</ul>
+	}
+</div>

@@ -1,11 +1,12 @@
-﻿using System.Drawing.Drawing2D;
+﻿using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Web.Mvc;
-using System.Web;
 using System;
 
 /*
@@ -20,13 +21,13 @@ using System;
 
 namespace Carrotware.Web.UI.Components.Controllers {
 
-	public class HomeController : Controller {
-		protected MemoryStream stream = new MemoryStream();
+	public class HomeController : BaseController {
+		protected MemoryStream _stream = new MemoryStream();
 
 		protected override void Dispose(bool disposing) {
 			base.Dispose(disposing);
 
-			stream.Dispose();
+			_stream.Dispose();
 		}
 
 		public ActionResult GetImageThumb(string thumb, bool? scale, int? square) {
@@ -98,7 +99,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 
 							graphics.DrawString(sImageUri, font, textBrush, sidePadding, topPadding);
 
-							bmpThumb.Save(stream, ImageFormat.Png);
+							bmpThumb.Save(_stream, ImageFormat.Png);
 
 							textBrush.Dispose();
 							font.Dispose();
@@ -111,10 +112,10 @@ namespace Carrotware.Web.UI.Components.Controllers {
 				return null;
 			}
 
-			bmpThumb.Save(stream, ImageFormat.Png);
+			bmpThumb.Save(_stream, ImageFormat.Png);
 			bmpThumb.Dispose();
 
-			return File(stream.ToArray(), "image/png");
+			return File(_stream.ToArray(), "image/png");
 		}
 
 		private Bitmap ResizeBitmap(Bitmap bmpIn, int w, int h) {
@@ -136,7 +137,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 		public ActionResult GetWebResource(string r, string t) {
 			var context = System.Web.HttpContext.Current;
 			context.Response.Cache.VaryByParams["r"] = true;
-			context.Response.Cache.VaryByParams["t"] = true;
+			context.Response.Cache.VaryByParams["ts"] = true;
 
 			DoCacheMagic(context, 5);
 
@@ -151,45 +152,79 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			}
 
 			if (mime.ToLowerInvariant().StartsWith("text")) {
+				var assembly = CarrotWeb.GetAssembly(res);
+
 				var txt = CarrotWeb.GetManifestResourceText(this.GetType(), resource);
 				var sb = new StringBuilder(txt);
 
+				//because things like css might have images that are in the dll with the css
 				try {
-					Regex _webResourceRegEx = new Regex(@"<%\s*=\s*(?<rt>WebResource)\(""(?<rn>[^""]*)""\)\s*%>", RegexOptions.Singleline);
-					MatchCollection matches = _webResourceRegEx.Matches(txt);
+					Regex webResourceRegEx = new Regex(@"<%\s*=\s*(?<rt>WebResource)\(""(?<rn>[^""]*)""\)\s*%>", RegexOptions.Singleline);
+					MatchCollection matches = webResourceRegEx.Matches(txt);
 
-					foreach (Match m in matches) {
-						var orig = m.Value;
-						Group g = m.Groups["rn"];
-						string resourceName = g.Value;
+					if (matches.Count > 0) {
+						List<string> resNames = assembly.GetManifestResourceNames().ToList();
 
-						sb.Replace(orig, CarrotWeb.GetWebResourceUrl(resourceName));
+						foreach (Match m in matches) {
+							var orig = m.Value;
+							Group g = m.Groups["rn"];
+
+							string resourceName = g.Value;
+
+							var shortestNamespace = assembly.GetTypes()
+													.Where(x => x != null && !string.IsNullOrEmpty(x.Namespace))
+													.OrderBy(n => n.Namespace.Length)
+													.Select(n => n.Namespace)
+													.FirstOrDefault();
+
+							//var altResourceName1 = string.Format("{0}.{1}", CarrotWeb.TrimAssemblyName(assembly), resourceName);
+							var altResourceName2 = string.Format("{0}.{1}", shortestNamespace, resourceName);
+
+							//validate that the resource is even there, and match the case that it is stored with
+							var embeddedName = resNames.Where(x => x.ToLowerInvariant() == resourceName.ToLowerInvariant()
+											//|| x.ToLowerInvariant() == altResourceName1.ToLowerInvariant()
+											|| x.ToLowerInvariant() == altResourceName2.ToLowerInvariant()).FirstOrDefault();
+
+							//if plugging in the namespace didn't do it, just get trailing matches
+							if (string.IsNullOrWhiteSpace(embeddedName)) {
+								embeddedName = resNames.OrderByDescending(x => x.Length)
+											.Where(x => x.ToLowerInvariant().EndsWith(resourceName.ToLowerInvariant()))
+											.FirstOrDefault();
+							}
+
+							// only do the sub if the name is found
+							if (!string.IsNullOrWhiteSpace(embeddedName)) {
+								// search the same assembly as had the initial file that was loaded
+								sb.Replace(orig, CarrotWeb.GetWebResourceUrl(assembly, embeddedName));
+							}
+						}
 					}
 				} catch (Exception ex) { }
 
 				txt = sb.ToString();
 
 				var byteArray = Encoding.UTF8.GetBytes(txt);
-				stream = new MemoryStream(byteArray);
+				_stream = new MemoryStream(byteArray);
 			} else {
 				var bytes = CarrotWeb.GetManifestResourceBytes(this.GetType(), resource);
-				stream = new MemoryStream(bytes);
+				_stream = new MemoryStream(bytes);
 			}
 
-			return File(stream, mime);
+			return File(_stream, mime);
 		}
 
 		public ActionResult GetCaptchaImage(string fgcolor, string bgcolor, string ncolor) {
 			var context = System.Web.HttpContext.Current;
+			context.Response.Cache.VaryByParams["ts"] = true;
 			context.Response.Cache.VaryByParams["fgcolor"] = true;
 			context.Response.Cache.VaryByParams["bgcolor"] = true;
 			context.Response.Cache.VaryByParams["ncolor"] = true;
 
 			DoCacheMagic(context, 3);
 
-			Color f = ColorTranslator.FromHtml(CaptchaImage.FGColorDef);
-			Color b = ColorTranslator.FromHtml(CaptchaImage.BGColorDef);
-			Color n = ColorTranslator.FromHtml(CaptchaImage.NColorDef);
+			Color f = CarrotWeb.DecodeColor(fgcolor);
+			Color b = CarrotWeb.DecodeColor(bgcolor);
+			Color n = CarrotWeb.DecodeColor(ncolor);
 
 			Bitmap bmpCaptcha = CaptchaImage.GetCaptchaImage(f, b, n);
 
@@ -201,10 +236,32 @@ namespace Carrotware.Web.UI.Components.Controllers {
 				return File(bb, "image/png");
 			}
 
-			bmpCaptcha.Save(stream, ImageFormat.Png);
+			bmpCaptcha.Save(_stream, ImageFormat.Png);
 			bmpCaptcha.Dispose();
 
-			return File(stream.ToArray(), "image/png");
+			return File(_stream.ToArray(), "image/png");
+		}
+
+		public ActionResult GetCarrotCalendarCss(string el, string wc, string wb, string cc, string cb,
+												string tc, string tb, string tsb, string tl,
+												string nc, string nb, string nsb, string nl) {
+			var context = System.Web.HttpContext.Current;
+			context.Response.Cache.VaryByParams["el"] = true;
+			context.Response.Cache.VaryByParams["ts"] = true;
+			DoCacheMagic(context, 7);
+
+			var cal = new Calendar(wc, wb, cc, cb, tc, tb, tsb,
+									tl, nc, nb, nsb, nl);
+
+			cal.ElementId = Utils.DecodeBase64(el).Replace("{", "").Replace(">", "").Replace("<", "").Replace(">", "")
+									.Replace("'", "").Replace("\\", "").Replace("//", "").Replace(":", "");
+
+			var txt = cal.GenerateCSS();
+			var byteArray = Encoding.UTF8.GetBytes(txt);
+
+			_stream = new MemoryStream(byteArray);
+
+			return File(_stream, "text/css");
 		}
 
 		public ActionResult GetCarrotHelp(string id) {
@@ -213,11 +270,11 @@ namespace Carrotware.Web.UI.Components.Controllers {
 
 			DoCacheMagic(context, 10);
 
-			var sb = new StringBuilder();
-			sb.Append(CarrotWeb.GetManifestResourceText(this.GetType(), "Carrotware.Web.UI.Components.carrotHelp.js"));
-
 			DateTime timeAM = DateTime.Now.Date.AddHours(7);  // 7AM
 			DateTime timePM = DateTime.Now.Date.AddHours(17);  // 5PM
+
+			var sb = new StringBuilder();
+			sb.Append(CarrotWeb.GetManifestResourceText("carrotHelp.js"));
 
 			sb.Replace("[[TIMESTAMP]]", DateTime.UtcNow.ToString("u"));
 
@@ -233,56 +290,9 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			string sBody = sb.ToString();
 
 			var byteArray = Encoding.UTF8.GetBytes(sBody);
-			stream = new MemoryStream(byteArray);
+			_stream = new MemoryStream(byteArray);
 
-			return File(stream, "text/javascript");
-		}
-
-		protected void DoCacheMagic(HttpContext context, int interval) {
-			DateTime now = DateTime.Now;
-
-			DateTime dtModified = GetFauxModDate(10);
-			DateTime? dtM = GetModDate(context);
-
-			string strModifed = dtModified.ToUniversalTime().ToString("r");
-			context.Response.AppendHeader("Last-Modified", strModifed);
-			context.Response.AppendHeader("Date", strModifed);
-			context.Response.Cache.SetLastModified(dtModified);
-
-			DateTime dtExpire = now.ToUniversalTime().AddMinutes(interval);
-			context.Response.Cache.SetExpires(dtExpire);
-			context.Response.Cache.SetValidUntilExpires(true);
-			context.Response.Cache.SetCacheability(HttpCacheability.Private);
-
-			if (dtM == null || dtM.Value != dtModified) {
-				context.Response.StatusCode = (int)System.Net.HttpStatusCode.OK;
-				context.Response.StatusDescription = "OK";
-			} else {
-				context.Response.StatusCode = (int)System.Net.HttpStatusCode.NotModified;
-				context.Response.SuppressContent = true;
-			}
-		}
-
-		protected DateTime GetFauxModDate(int interval) {
-			DateTime now = DateTime.Now;
-
-			DateTime dtMod = now.AddMinutes(-90);
-			TimeSpan ts = TimeSpan.FromMinutes(interval);
-			DateTime dtModified = new DateTime(((dtMod.Ticks + ts.Ticks - 1) / ts.Ticks) * ts.Ticks);
-
-			return dtModified;
-		}
-
-		protected DateTime? GetModDate(HttpContext context) {
-			DateTime? dtModSince = null;
-			string modSince = context.Request.Headers.Get("If-Modified-Since");
-
-			if (!string.IsNullOrEmpty(modSince)) {
-				dtModSince = DateTime.Parse(modSince);
-				dtModSince = dtModSince.Value.ToUniversalTime();
-			}
-
-			return dtModSince;
+			return File(_stream, "text/javascript");
 		}
 	}
 }

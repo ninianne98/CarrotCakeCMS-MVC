@@ -16,9 +16,9 @@ namespace Carrotware.CMS.Core {
 	public class UserProfile {
 
 		public UserProfile() {
-			this.Id = String.Empty;
+			this.Id = string.Empty;
 			this.UserId = Guid.Empty;
-			this.UserName = String.Empty;
+			this.UserName = string.Empty;
 		}
 
 		internal UserProfile(membership_User mu, carrot_UserData ud) {
@@ -49,7 +49,7 @@ namespace Carrotware.CMS.Core {
 				this.UserKey = ud.UserKey;
 			} else {
 				this.UserId = Guid.Empty;
-				this.UserKey = String.Empty;
+				this.UserKey = string.Empty;
 			}
 		}
 

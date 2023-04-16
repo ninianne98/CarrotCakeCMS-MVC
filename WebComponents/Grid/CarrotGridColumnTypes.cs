@@ -21,7 +21,7 @@ namespace Carrotware.Web.UI.Components {
 		public CarrotGridTemplateColumn() {
 			this.Order = 0;
 			this.Mode = CarrotGridColumnType.Template;
-			this.HeaderText = String.Empty;
+			this.HeaderText = string.Empty;
 			this.HasHeadingText = true;
 		}
 
@@ -43,8 +43,8 @@ namespace Carrotware.Web.UI.Components {
 			this.Order = 0;
 			this.Sortable = false;
 			this.HasHeadingText = true;
-			this.ColumnName = String.Empty;
-			this.HeaderText = String.Empty;
+			this.ColumnName = string.Empty;
+			this.HeaderText = string.Empty;
 			this.CellFormatString = " {0} ";
 
 			this.HeadAttributes = null;
@@ -70,7 +70,7 @@ namespace Carrotware.Web.UI.Components {
 	//=========================
 
 	public class CarrotGridImageColumn : CarrotGridColumn {
-		protected string IconResourcePaperclip = "Carrotware.Web.UI.Components.Grid.attach.png";
+		protected string IconResourcePaperclip = "Grid.attach.png";
 
 		public CarrotGridImageColumn()
 			: base() {
@@ -87,7 +87,7 @@ namespace Carrotware.Web.UI.Components {
 	public class CarrotImageColumnData {
 
 		public CarrotImageColumnData()
-			: this(String.Empty, String.Empty, String.Empty) {
+			: this(string.Empty, string.Empty, string.Empty) {
 		}
 
 		public CarrotImageColumnData(string key, string image, string label) {
@@ -118,8 +118,8 @@ namespace Carrotware.Web.UI.Components {
 	//=========================
 
 	public class CarrotGridBooleanImageColumn : CarrotGridColumn {
-		protected string IconResourceAffirm = "Carrotware.Web.UI.Components.Grid.accept.png";
-		protected string IconResourceNegative = "Carrotware.Web.UI.Components.Grid.cancel.png";
+		protected string IconResourceAffirm = "Grid.accept.png";
+		protected string IconResourceNegative = "Grid.cancel.png";
 
 		public CarrotGridBooleanImageColumn()
 			: base() {

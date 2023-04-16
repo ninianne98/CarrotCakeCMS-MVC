@@ -1,8 +1,8 @@
 ﻿using Carrotware.CMS.Data;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -48,7 +48,7 @@ namespace Carrotware.CMS.Core {
 		public string RoleName { get; set; }
 
 		[Display(Name = "Lowercase Name")]
-		public string LoweredRoleName { get { return (this.RoleName ?? String.Empty).ToLowerInvariant(); } }
+		public string LoweredRoleName { get { return (this.RoleName ?? string.Empty).ToLowerInvariant(); } }
 
 		public void Save() {
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {

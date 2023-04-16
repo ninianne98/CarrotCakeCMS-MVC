@@ -40,7 +40,7 @@
 
 	<title>@CmsPage.Titlebar</title>
 
-	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Blue })
+	@(new jquerybasic() { JQVersion = "2", SelectedSkin = jquerybasic.jQueryTheme.Blue })
 
 	<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:700italic,400,300,700' rel='stylesheet' type='text/css'>
 	<!--[if lte IE 8]><script src="/Assets/Aqueous/js/html5shiv.js" type="text/javascript"></script><![endif]-->
@@ -108,7 +108,7 @@
 				<div class="container">
 					@*<nav id="nav">
 							@if (CmsPage.TopNav.Any()) {
-								string tabSelCSS = String.Empty;
+								string tabSelCSS = string.Empty;
 
 								<ul>
 									@foreach (var n in CmsPage.TopNav) {
@@ -151,7 +151,7 @@
 							<header>
 								<h2>
 									@itm.NavigationText
-									@String.Format(" | {0:d}", itm.GoLiveDate)
+									@string.Format(" | {0:d}", itm.GoLiveDate)
 								</h2>
 							</header>
 							<p>
@@ -176,7 +176,7 @@
 	<!-- Copyright -->
 	<div id="copyright">
 		<div class="container">
-			@Html.Raw(String.Format("&copy;  {0}, {1}. ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
+			@Html.Raw(string.Format("&copy;  {0}, {1}. ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
 			All rights reserved.
 			<br />
 			Site built with <a target="_blank" href="http://www.carrotcakecms.com/">carrotcake cms</a> <br />

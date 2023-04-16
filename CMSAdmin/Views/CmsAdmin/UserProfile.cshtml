@@ -81,7 +81,7 @@
 			<input type="button" name="btnSaveButton" value="Save" id="btnSaveButton" onclick="SubmitPage();" />
 		</p>
 		<div style="display: none">
-			<input type="submit" name="btnSaveEmail" value="Submit" id="btnSaveEmail" />
+			<input type="submit" name="btnSave" value="Submit" id="btnSave" />
 		</div>
 	</div>
 }
@@ -91,16 +91,15 @@
 	function SubmitPage() {
 		var sc = SaveCommon();
 		setTimeout("ClickSaveBtn();", 500);
-		return ret;
+		return true;
 	}
 
 	function ClickSaveBtn() {
-		$('#btnSaveEmail').click();
+		$('#btnSave').click();
 	}
 
 	function SaveCommon() {
 		var ret = cmsPreSaveTrigger();
-
 		return true;
 	}
 

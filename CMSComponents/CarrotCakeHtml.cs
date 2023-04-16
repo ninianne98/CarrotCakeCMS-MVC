@@ -307,11 +307,11 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static string SiteMapUri {
-			get { return "/sitemap.ashx"; }
+			get { return SiteFilename.SiteMapUri; }
 		}
 
 		public static string RssUri {
-			get { return "/rss.ashx"; }
+			get { return SiteFilename.RssFeedUri; }
 		}
 
 		public static HtmlString Rss(SiteData.RSSFeedInclude mode) {
@@ -524,6 +524,25 @@ namespace Carrotware.CMS.UI.Components {
 			TextRight,
 		}
 
+		public enum CommonWidgetZone {
+			phCenterTop,
+			phCenterBottom,
+			phRightTop,
+			phRightBottom,
+			phLeftTop,
+			phLeftBottom,
+			phWidgetZone01,
+			phWidgetZone02,
+			phWidgetZone03,
+			phWidgetZone04,
+			phWidgetZone05,
+			phWidgetZone06,
+			phWidgetZone07,
+			phWidgetZone08,
+			phWidgetZone09,
+			phWidgetZone10,
+		}
+
 		public static HtmlString RenderBody(TextFieldZone zone) {
 			string bodyText = string.Empty;
 
@@ -566,31 +585,40 @@ namespace Carrotware.CMS.UI.Components {
 						break;
 				}
 
-				string sTextZone = ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._TextZone.cshtml");
-				sTextZone = sTextZone.Replace("[[CONTENT]]", m.Content);
-				sTextZone = sTextZone.Replace("[[AREA_NAME]]", m.AreaName.ToString());
-				sTextZone = sTextZone.Replace("[[zone]]", m.Zone);
+				var sb = new StringBuilder();
+				sb.Append(ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._TextZone.cshtml"));
 
-				bodyText = sTextZone ?? string.Empty;
+				sb.Replace("[[CONTENT]]", m.Content);
+				sb.Replace("[[AREA_NAME]]", m.AreaName.ToString());
+				sb.Replace("[[zone]]", m.Zone);
+				sb.Replace("[[htmltext]]", SiteData.HtmlMode);
+				sb.Replace("[[rawtext]]", SiteData.RawMode);
+
+				bodyText = sb.ToString() ?? string.Empty;
 			}
 
 			return new HtmlString(bodyText);
 		}
 
+		public static HtmlString RenderWidget(CommonWidgetZone placeHolderName) {
+			return RenderWidget(placeHolderName.ToString());
+		}
+
 		public static HtmlString RenderWidget(string placeHolderName) {
-			var sb = new StringBuilder();
-			string sWidgetZone = string.Empty;
-			string masterWidgetWrapper = string.Empty;
+			var sbWidgetbBody = new StringBuilder();
+			var sbWidgetZone = new StringBuilder();
+			var sbMasterWidgetWrapper = new StringBuilder();
 			string widgetMenuTemplate = string.Empty;
 			string sStatusTemplate = string.Empty;
 
 			if (SecurityData.AdvancedEditMode) {
 				widgetMenuTemplate = "<li id=\"liMenu\"><a href=\"javascript:[[JS_CALL]]\" id=\"cmsMenuEditLink\" class=\"cmsWidgetBarLink cmsWidgetBarIconPencil\" alt=\"[[CAP]]\" title=\"[[CAP]]\"> [[CAP]]</a></li>";
-				sWidgetZone = ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._WidgetZone.cshtml");
-				masterWidgetWrapper = ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._WidgetWrapper.cshtml");
 
-				sWidgetZone = sWidgetZone.Replace("[[PLACEHOLDER]]", placeHolderName);
-				masterWidgetWrapper = masterWidgetWrapper.Replace("[[PLACEHOLDER]]", placeHolderName);
+				sbWidgetZone.Append(ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._WidgetZone.cshtml"));
+				sbMasterWidgetWrapper.Append(ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._WidgetWrapper.cshtml"));
+
+				sbWidgetZone.Replace("[[PLACEHOLDER]]", placeHolderName);
+				sbMasterWidgetWrapper.Replace("[[PLACEHOLDER]]", placeHolderName);
 			}
 
 			int iWidgetCount = 0;
@@ -759,7 +787,7 @@ namespace Carrotware.CMS.UI.Components {
 					}
 
 					var sbWidget = new StringBuilder();
-					sbWidget.Append(masterWidgetWrapper);
+					sbWidget.Append(sbMasterWidgetWrapper);
 
 					sbWidget.Replace("[[STATUS_LINK]]", sStatusTemplate);
 					sbWidget.Replace("[[WIDGET_PATH]]", widget.ControlPath);
@@ -811,16 +839,16 @@ namespace Carrotware.CMS.UI.Components {
 				}
 
 				if (!string.IsNullOrEmpty(widgetWrapper)) {
-					sb.AppendLine(widgetWrapper);
+					sbWidgetbBody.AppendLine(widgetWrapper);
 				}
 			}
 
 			string bodyText = string.Empty;
 
 			if (SecurityData.AdvancedEditMode) {
-				bodyText = sWidgetZone.Replace("[[CONTENT]]", sb.ToString());
+				bodyText = sbWidgetZone.Replace("[[CONTENT]]", sbWidgetbBody.ToString()).ToString();
 			} else {
-				bodyText = sb.ToString();
+				bodyText = sbWidgetbBody.ToString();
 			}
 
 			return new HtmlString(bodyText);

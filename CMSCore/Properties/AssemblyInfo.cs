@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
-//using System.Web.UI;
 
 // [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bOR [Net.SecurityProtocolType]::Tls12
 
@@ -36,19 +35,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("5.5.*")]
 //  [assembly: AssemblyFileVersion("5.4.0.0")]
-
-
-//[assembly: WebResource("Carrotware.CMS.Core.SiteContent.Default.htm", "text/plain")]
-//[assembly: WebResource("Carrotware.CMS.Core.SiteContent.ErrorFormat.htm", "text/plain")]
-
-//[assembly: WebResource("Carrotware.CMS.Core.Security.EmailForgotPassMsg.txt", "text/plain")]
-//[assembly: WebResource("Carrotware.CMS.Core.SiteContent.FirstPage.txt", "text/plain")]
-
-//[assembly: WebResource("Carrotware.CMS.Core.SiteContent.Mock.SampleContent1.txt", "text/html", PerformSubstitution = true)]
-//[assembly: WebResource("Carrotware.CMS.Core.SiteContent.Mock.SampleContent1.txt", "text/html", PerformSubstitution = true)]
-//[assembly: WebResource("Carrotware.CMS.Core.SiteContent.Mock.SampleContent3.txt", "text/html", PerformSubstitution = true)]
-
-//[assembly: WebResource("Carrotware.CMS.Core.SiteContent.Mock.sample1.png", "image/png")]
-//[assembly: WebResource("Carrotware.CMS.Core.SiteContent.Mock.sample2.png", "image/png")]
-//[assembly: WebResource("Carrotware.CMS.Core.SiteContent.Mock.sample3.png", "image/png")]
-//[assembly: WebResource("Carrotware.CMS.Core.SiteContent.Mock.sample4.png", "image/png")]

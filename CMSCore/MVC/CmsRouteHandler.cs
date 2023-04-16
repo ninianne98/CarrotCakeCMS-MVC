@@ -1,7 +1,7 @@
 ﻿using Carrotware.CMS.DBUpdater;
-using System;
-using System.Web;
 using System.Web.Mvc;
+using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -21,21 +21,22 @@ namespace Carrotware.CMS.Core {
 		protected override IHttpHandler GetHttpHandler(System.Web.Routing.RequestContext requestCtx) {
 			string requestedUri = (string)requestCtx.RouteData.Values["RequestedUri"];
 
-			requestedUri = String.IsNullOrEmpty(requestedUri) ? String.Empty : requestedUri.ToLowerInvariant();
+			requestedUri = string.IsNullOrEmpty(requestedUri) ? string.Empty : requestedUri.ToLowerInvariant();
+
 			if (!requestedUri.StartsWith("/")) {
-				requestedUri = String.Format("/{0}", requestedUri);
+				requestedUri = string.Format("/{0}", requestedUri);
 			}
 			if (requestedUri.EndsWith("/")) {
 				requestedUri = requestedUri.Substring(0, requestedUri.Length - 1);
 			}
 
 			if (requestedUri.EndsWith(".ashx")) {
-				if (requestedUri == "/rss.ashx") {
+				if (requestedUri == SiteFilename.RssFeedUri) {
 					requestCtx.RouteData.Values["controller"] = ContentCtrlr;
 					requestCtx.RouteData.Values["action"] = "RSSFeed";
 					return base.GetHttpHandler(requestCtx);
 				}
-				if (requestedUri == "/sitemap.ashx") {
+				if (requestedUri == SiteFilename.SiteMapUri) {
 					requestCtx.RouteData.Values["controller"] = ContentCtrlr;
 					requestCtx.RouteData.Values["action"] = "SiteMap";
 					return base.GetHttpHandler(requestCtx);
@@ -51,7 +52,7 @@ namespace Carrotware.CMS.Core {
 				requestCtx.RouteData.Values["action"] = "PageNotFound";
 				requestCtx.RouteData.Values["id"] = null;
 
-				SiteData.WriteDebugException("cmsroutehandler ashx not matched", new Exception(String.Format("RequestedUri: {0}", requestedUri)));
+				SiteData.WriteDebugException("cmsroutehandler ashx not matched", new Exception(string.Format("RequestedUri: {0}", requestedUri)));
 
 				return base.GetHttpHandler(requestCtx);
 			} else if (requestedUri.EndsWith(".aspx")) {
@@ -93,16 +94,16 @@ namespace Carrotware.CMS.Core {
 
 						requestCtx.RouteData.Values["controller"] = ContentCtrlr;
 						if (navData != null) {
-							SiteData.WriteDebugException("cmsroutehandler != null", new Exception(String.Format("Default: {0}", navData.FileName)));
+							SiteData.WriteDebugException("cmsroutehandler != null", new Exception(string.Format("Default: {0}", navData.FileName)));
 							requestCtx.RouteData.Values["action"] = "Default";
 						} else {
-							SiteData.WriteDebugException("cmsroutehandler == null", new Exception(String.Format("_PageNotFound: {0}", sCurrentPage)));
+							SiteData.WriteDebugException("cmsroutehandler == null", new Exception(string.Format("_PageNotFound: {0}", sCurrentPage)));
 							requestCtx.RouteData.Values["action"] = "PageNotFound";
 						}
 						requestCtx.RouteData.Values["id"] = null;
 					}
 				} catch (Exception ex) {
-					SiteData.WriteDebugException("cmsroutehandler_exception_uri", new Exception(String.Format("Exception: {0}", sCurrentPage)));
+					SiteData.WriteDebugException("cmsroutehandler_exception_uri", new Exception(string.Format("Exception: {0}", sCurrentPage)));
 
 					if (DatabaseUpdate.SystemNeedsChecking(ex) || DatabaseUpdate.AreCMSTablesIncomplete()) {
 						requestCtx.RouteData.Values["controller"] = ContentCtrlr;

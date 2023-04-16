@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.WebPages;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -142,14 +142,36 @@ namespace Carrotware.CMS.Core {
 		public SiteData TheSite { get; set; }
 		public List<Widget> TheWidgets { get; set; }
 
-		private string _pageTitle = String.Empty;
+		public bool IsSiteIndex {
+			get {
+				return this.TheSite != null && this.ThePage != null
+						&& this.TheSite.Blog_Root_ContentID.HasValue
+						&& this.ThePage.Root_ContentID == this.TheSite.Blog_Root_ContentID.Value;
+			}
+		}
+
+		public bool IsBlogPost {
+			get {
+				return this.ThePage != null
+						&& this.ThePage.ContentType == ContentPageType.PageType.BlogEntry;
+			}
+		}
+
+		public bool IsPageContent {
+			get {
+				return this.ThePage != null
+						&& this.ThePage.ContentType == ContentPageType.PageType.ContentEntry;
+			}
+		}
+
+		private string _pageTitle = string.Empty;
 
 		public MvcHtmlString Titlebar {
 			get {
 				LoadHeadCaption();
 
-				if (String.IsNullOrEmpty(_pageTitle)) {
-					string sPrefix = String.Empty;
+				if (string.IsNullOrEmpty(_pageTitle)) {
+					string sPrefix = string.Empty;
 
 					if (!this.ThePage.PageActive) {
 						sPrefix = "* UNPUBLISHED * ";
@@ -162,7 +184,7 @@ namespace Carrotware.CMS.Core {
 					}
 					string sPattern = sPrefix + SiteData.CurrentTitlePattern;
 
-					_pageTitle = String.Format(sPattern, this.TheSite.SiteName, this.TheSite.SiteTagline, this.ThePage.TitleBar, this.ThePage.PageHead, this.ThePage.NavMenuText, this.ThePage.GoLiveDate, this.ThePage.EditDate);
+					_pageTitle = string.Format(sPattern, this.TheSite.SiteName, this.TheSite.SiteTagline, this.ThePage.TitleBar, this.ThePage.PageHead, this.ThePage.NavMenuText, this.ThePage.GoLiveDate, this.ThePage.EditDate);
 				}
 
 				return new MvcHtmlString(_pageTitle);
@@ -182,7 +204,7 @@ namespace Carrotware.CMS.Core {
 		private void LoadHeadCaption() {
 			if (this.TheSite.Blog_Root_ContentID == this.ThePage.Root_ContentID
 				&& _headingText == null && this.TypeLabelPrefixes.Any()) {
-				_headingText = String.Empty;
+				_headingText = string.Empty;
 				using (ContentPageHelper pageHelper = new ContentPageHelper()) {
 					PageViewType pvt = pageHelper.GetBlogHeadingFromURL(this.TheSite, SiteData.CurrentScriptName);
 					_headingText = pvt.ExtraTitle;
@@ -197,18 +219,32 @@ namespace Carrotware.CMS.Core {
 					}
 
 					if (titleOpts != null) {
-						if (!String.IsNullOrEmpty(titleOpts.FormatText)) {
+						if (!string.IsNullOrEmpty(titleOpts.FormatText)) {
 							pvt.ExtraTitle = string.Format(titleOpts.FormatText, pvt.RawValue);
 							_headingText = pvt.ExtraTitle;
 						}
-						if (!String.IsNullOrEmpty(titleOpts.LabelText)) {
-							this.ThePage.PageHead = String.Format("{0} {1}", titleOpts.LabelText, _headingText);
+						if (!string.IsNullOrEmpty(titleOpts.LabelText)) {
+							this.ThePage.PageHead = string.Format("{0} {1}", titleOpts.LabelText, _headingText);
 							this.ThePage.TitleBar = this.ThePage.PageHead;
 							_headingText = this.ThePage.PageHead;
 						}
 					}
 				}
 			}
+		}
+
+		public List<TypeHeadingOption> GetDefaultTypeHeadingOptions() {
+			var heads = new List<TypeHeadingOption>();
+			heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateIndex, LabelText = "Date:" });
+			heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateDayIndex, LabelText = "Day:", FormatText = "{0:dddd, d MMMM yyyy}" });
+			heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateMonthIndex, LabelText = "Month:", FormatText = "{0:MMM yyyy}" });
+			heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateYearIndex, LabelText = "Year:", FormatText = "{0:yyyy}" });
+			heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.CategoryIndex, LabelText = "Category:" });
+			heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.TagIndex, LabelText = "Tag:" });
+			heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.AuthorIndex, LabelText = "Content by " });
+			heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.SearchResults, LabelText = "Search results for:", FormatText = " [ {0} ] " });
+
+			return heads;
 		}
 
 		public List<TypeHeadingOption> TypeLabelPrefixes { get; set; }
@@ -448,6 +484,69 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		private ExtendedUserData _user = null;
+
+		public ExtendedUserData GetUserInfo() {
+			return this.EditUser;
+		}
+
+		public ExtendedUserData EditUser {
+			get {
+				if (_user == null && this.ThePage.EditUserId.HasValue) {
+					_user = new ExtendedUserData(this.ThePage.EditUserId.Value);
+				}
+				return _user;
+			}
+		}
+
+		private ExtendedUserData _crUser = null;
+
+		public ExtendedUserData GetCreateUserInfo() {
+			return this.CreateUser;
+		}
+
+		public ExtendedUserData CreateUser {
+			get {
+				if (_crUser == null) {
+					_crUser = new ExtendedUserData(this.ThePage.CreateUserId);
+				}
+				return _crUser;
+			}
+		}
+
+		private ExtendedUserData _creditUser = null;
+
+		public ExtendedUserData GetCreditUserInfo() {
+			return this.CreditUser;
+		}
+
+		public ExtendedUserData CreditUser {
+			get {
+				if (_creditUser == null && this.ThePage.CreditUserId.HasValue) {
+					_creditUser = new ExtendedUserData(this.ThePage.CreditUserId.Value);
+				}
+				return _creditUser;
+			}
+		}
+
+		private ExtendedUserData _bylineUser = null;
+
+		public ExtendedUserData BylineUser {
+			get {
+				if (_bylineUser == null && this.ThePage.CreditUserId.HasValue) {
+					_bylineUser = this.CreditUser;
+				}
+				if (_bylineUser == null && this.ThePage.EditUserId.HasValue) {
+					_bylineUser = this.EditUser;
+				}
+				if (_bylineUser == null) {
+					_bylineUser = this.CreateUser;
+				}
+
+				return _bylineUser;
+			}
+		}
+
 		public List<SiteNav> GetSiteUpdates(ListContentType contentType, List<string> lstCategorySlugs) {
 			return GetSiteUpdates(contentType, -1, null, lstCategorySlugs);
 		}
@@ -635,7 +734,7 @@ namespace Carrotware.CMS.Core {
 		public List<ContentDateTally> GetSiteDates(int takeTop, string dateFormat) {
 			var lst = GetSiteDates(takeTop);
 
-			if (String.IsNullOrEmpty(dateFormat)) {
+			if (string.IsNullOrEmpty(dateFormat)) {
 				dateFormat = "MMMM yyyy";
 			}
 

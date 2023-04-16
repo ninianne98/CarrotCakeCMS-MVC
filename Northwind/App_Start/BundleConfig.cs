@@ -22,8 +22,8 @@ namespace Northwind {
 					  "~/Scripts/respond.js"));
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
-					  "~/Content/bootstrap.css",
-					  "~/Content/violet.css",
+					  //"~/Content/bootstrap.css",
+					  //"~/Content/violet.css",
 					  "~/Content/themes/base/all.css",
 					  "~/Content/site.css"));
 		}

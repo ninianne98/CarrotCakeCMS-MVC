@@ -4,22 +4,18 @@
 	ViewBag.Title = "Edit Content";
 	Layout = CarrotLayout.Popup;
 
-	string editCSS = "mceEditor";
+	string editCSS = "rawEditor";
 
-	if (Model.Mode.ToLowerInvariant() == "plain") {
-		editCSS = "rawEditor";
+	if (Model.Mode.ToLowerInvariant() == SiteData.HtmlMode) {
+		editCSS = "mceEditor";
 	}
-
 }
 
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 
-	<div style="margin-bottom: 25px; max-width:94%;">
-		@*<div id="divCenter">
-				<a href="javascript:cmsToggleTinyMCE('@Html.IdFor(m => m.PageText)');">Show/Hide Editor</a>
-			</div>*@
-		@Html.TextAreaFor(m => m.PageText, new { rows = "20", cols = "100", @class = @editCSS, @style = "height: 300px; width: 750px;" })
+	<div style="margin-bottom: 25px; width: 825px;  height: 275px; width: 90%; height: 75%;">
+		@Html.TextAreaFor(m => m.PageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 300px; width: 850px;" })
 		<br>
 	</div>
 	<div style="margin-top: 25px;">

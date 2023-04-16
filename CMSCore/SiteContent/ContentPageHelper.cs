@@ -1,14 +1,14 @@
 ﻿using Carrotware.CMS.Data;
 using Carrotware.Web.UI.Components;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
+using System.Text;
 using System.Transactions;
 using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -255,9 +255,9 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string ScrubFilename(Guid rootContentID, string fileName) {
-			string newFileName = String.Format("{0}", fileName).Trim();
+			string newFileName = string.Format("{0}", fileName).Trim();
 
-			if (String.IsNullOrEmpty(newFileName)) {
+			if (string.IsNullOrEmpty(newFileName)) {
 				newFileName = rootContentID.ToString();
 			}
 
@@ -287,7 +287,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		private static string ScrubSpecial(string sInput) {
-			sInput = String.Format("{0}", sInput).Trim();
+			sInput = string.Format("{0}", sInput).Trim();
 
 			Encoding iso = Encoding.GetEncoding("ISO-8859-8");  //use ISO-8859-8 to auto drop accent chars
 			Encoding utf8 = Encoding.UTF8;
@@ -334,10 +334,10 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string ScrubSlug(string slugValue) {
-			string newSlug = String.Format("{0}", slugValue).Trim();
+			string newSlug = string.Format("{0}", slugValue).Trim();
 
-			newSlug = newSlug.Replace(@"\", String.Empty);
-			newSlug = newSlug.Replace(@"/", String.Empty);
+			newSlug = newSlug.Replace(@"\", string.Empty);
+			newSlug = newSlug.Replace(@"/", string.Empty);
 
 			newSlug = ScrubSpecial(newSlug);
 
@@ -348,21 +348,21 @@ namespace Carrotware.CMS.Core {
 			string newFilePath = ScrubFilePath(filePath);
 
 			if (!newFilePath.EndsWith(@"/")) {
-				newFilePath = String.Format("{0}/", newFilePath).Trim();
+				newFilePath = string.Format("{0}/", newFilePath).Trim();
 			}
 
 			return newFilePath;
 		}
 
 		private static string ScrubFilePath(string filePath) {
-			string newFilePath = String.Format("{0}", filePath).Trim().Replace(@"//", @"/").Replace(@"\", @"/");
+			string newFilePath = string.Format("{0}", filePath).Trim().Replace(@"//", @"/").Replace(@"\", @"/");
 
 			string[] newPaths = newFilePath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
 			newPaths = newPaths.ToList().Select(x => ScrubSpecial(x)).ToArray();
-			newFilePath = String.Join("/", newPaths.ToArray());
+			newFilePath = string.Join("/", newPaths.ToArray());
 
 			if (!newFilePath.StartsWith(@"/")) {
-				newFilePath = String.Format("/{0}", newFilePath).Trim();
+				newFilePath = string.Format("/{0}", newFilePath).Trim();
 			}
 
 			return newFilePath;
@@ -370,9 +370,9 @@ namespace Carrotware.CMS.Core {
 
 		public PageViewType GetBlogHeadingFromURL(SiteData currentSite, string sFilterPath) {
 			Guid siteID = currentSite.SiteID;
-			PageViewType pvt = new PageViewType { ExtraTitle = String.Empty, CurrentViewType = PageViewType.ViewType.SinglePage, RawValue = null };
+			PageViewType pvt = new PageViewType { ExtraTitle = string.Empty, CurrentViewType = PageViewType.ViewType.SinglePage, RawValue = null };
 
-			string sTitle = String.Empty;
+			string sTitle = string.Empty;
 
 			if (currentSite.CheckIsBlogCategoryPath(sFilterPath)) {
 				pvt.CurrentViewType = PageViewType.ViewType.CategoryIndex;
@@ -431,7 +431,7 @@ namespace Carrotware.CMS.Core {
 				}
 
 				pvt.RawValue = sSearchTerm;
-				sTitle = String.Format(" '{0}' ", sSearchTerm);
+				sTitle = string.Format(" '{0}' ", sSearchTerm);
 			}
 
 			pvt.ExtraTitle = sTitle;
@@ -622,11 +622,11 @@ namespace Carrotware.CMS.Core {
 				pageNumber = 0;
 			}
 
-			if (String.IsNullOrEmpty(sortField)) {
+			if (string.IsNullOrEmpty(sortField)) {
 				sortField = "CreateDate";
 			}
 
-			if (String.IsNullOrEmpty(sortDir)) {
+			if (string.IsNullOrEmpty(sortDir)) {
 				sortDir = "DESC";
 			}
 
@@ -638,7 +638,7 @@ namespace Carrotware.CMS.Core {
 						 where p.ToLowerInvariant().Trim() == sortField.ToLowerInvariant().Trim()
 						 select p).FirstOrDefault();
 
-			if (!String.IsNullOrEmpty(sortField)) {
+			if (!string.IsNullOrEmpty(sortField)) {
 				IsContentProp = ReflectionUtilities.DoesPropertyExist(typeof(vw_carrot_Content), sortField);
 			}
 
@@ -776,7 +776,7 @@ namespace Carrotware.CMS.Core {
 			navData.PageHead = "NONE";
 			navData.TitleBar = "NONE";
 			navData.PageActive = false;
-			navData.PageText = "<p>NO PAGE CONTENT</p>";
+			navData.PageText = "<p>NO PAGE CONTENT</p>" + SiteNavHelperMock.SampleBody;
 			navData.EditDate = DateTime.Now.Date.AddDays(-1);
 			navData.CreateDate = DateTime.Now.Date.AddDays(-10);
 			navData.GoLiveDate = DateTime.Now.Date.AddDays(1);
@@ -786,14 +786,17 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static ContentPage GetSamplerView() {
-			string sFile1 = string.Empty;
-			string sFile2 = string.Empty;
+			var sbFile1 = new StringBuilder();
+			var sbFile2 = new StringBuilder();
+
+			SiteNavHelperMock.ResetCaption();
+			var caption = SiteNavHelperMock.GetNextCaption();
 
 			try {
 				Assembly _assembly = Assembly.GetExecutingAssembly();
 
-				sFile1 = SiteData.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Mock.SampleContent1.txt");
-				sFile2 = SiteData.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Mock.SampleContent2.txt");
+				sbFile1.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Mock.SampleContent1.txt"));
+				sbFile2.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Mock.SampleContent2.txt"));
 
 				List<string> imageNames = (from i in _assembly.GetManifestResourceNames()
 										   where i.ToLowerInvariant().Contains("sitecontent.mock.sample")
@@ -801,9 +804,9 @@ namespace Carrotware.CMS.Core {
 										   select i).ToList();
 
 				foreach (string img in imageNames) {
-					var imgURL = CMSConfigHelper.GetWebResourceUrl(typeof(ContentPage), img);
-					sFile1 = sFile1.Replace(img, imgURL);
-					sFile2 = sFile2.Replace(img, imgURL);
+					var imgURL = CoreHelper.GetWebResourceUrl(img);
+					sbFile1.Replace(img, imgURL);
+					sbFile2.Replace(img, imgURL);
 				}
 			} catch { }
 
@@ -813,25 +816,25 @@ namespace Carrotware.CMS.Core {
 			pageNew.SiteID = SiteData.CurrentSiteID;
 			pageNew.Parent_ContentID = null;
 
-			pageNew.PageText = "<h2>Content CENTER</h2>\r\n" + sFile1;
-			pageNew.LeftPageText = "<h2>Content LEFT</h2>\r\n" + sFile2;
-			pageNew.RightPageText = "<h2>Content RIGHT</h2>\r\n" + sFile2;
+			pageNew.PageText = "<h2>Content CENTER</h2>\r\n" + SiteData.StarterHomePageSample + "\r\n" + sbFile1;
+			pageNew.LeftPageText = "<h2>Content LEFT</h2>\r\n" + sbFile2;
+			pageNew.RightPageText = "<h2>Content RIGHT</h2>\r\n" + sbFile2;
 
 			pageNew.IsLatestVersion = true;
 			pageNew.NavOrder = -1;
-			pageNew.TitleBar = "Template Preview - TITLE";
-			pageNew.NavMenuText = "Template PV - NAV";
-			pageNew.PageHead = "Template Preview - HEAD";
+			pageNew.TitleBar = string.Format("{0} TT", caption);
+			pageNew.NavMenuText = string.Format("{0} NN", caption);
+			pageNew.PageHead = string.Format("{0} HH", caption);
 			pageNew.PageActive = true;
 			pageNew.ShowInSiteNav = true;
 			pageNew.ShowInSiteMap = true;
 
 			pageNew.EditUserId = SecurityData.CurrentUserGuid;
 
-			pageNew.EditDate = DateTime.Now.Date.AddHours(-8);
-			pageNew.CreateDate = DateTime.Now.Date.AddHours(-38);
-			pageNew.GoLiveDate = pageNew.EditDate.AddHours(-5);
-			pageNew.RetireDate = pageNew.CreateDate.AddYears(5);
+			pageNew.EditDate = DateTime.Now.Date.AddHours(-45);
+			pageNew.CreateDate = DateTime.Now.Date.AddHours(-90);
+			pageNew.GoLiveDate = pageNew.EditDate.AddHours(-48);
+			pageNew.RetireDate = pageNew.CreateDate.AddYears(10);
 
 			pageNew.TemplateFile = SiteData.PreviewTemplateFile;
 			pageNew.FileName = SiteData.PreviewTemplateFilePage;
@@ -1073,31 +1076,31 @@ namespace Carrotware.CMS.Core {
 		public bool ExistingPagesBeginWith(SiteData site) {
 			int iTot = 0;
 
-			string p1 = String.Format("/{0}/{1}", site.Blog_FolderPath, site.Blog_CategoryPath).Replace("//", "/");
+			string p1 = string.Format("/{0}/{1}", site.Blog_FolderPath, site.Blog_CategoryPath).Replace("//", "/");
 			iTot += GetPagesBeginingWith(site.SiteID, p1).Count();
 			if (iTot > 0) {
 				return true;
 			}
 
-			p1 = String.Format("/{0}/{1}", site.Blog_FolderPath, site.Blog_TagPath).Replace("//", "/");
+			p1 = string.Format("/{0}/{1}", site.Blog_FolderPath, site.Blog_TagPath).Replace("//", "/");
 			iTot += GetPagesBeginingWith(site.SiteID, p1).Count();
 			if (iTot > 0) {
 				return true;
 			}
 
-			p1 = String.Format("/{0}/{1}", site.Blog_FolderPath, site.Blog_DatePath).Replace("//", "/");
+			p1 = string.Format("/{0}/{1}", site.Blog_FolderPath, site.Blog_DatePath).Replace("//", "/");
 			iTot += GetPagesBeginingWith(site.SiteID, p1).Count();
 			if (iTot > 0) {
 				return true;
 			}
 
-			p1 = String.Format("/{0}/{1}", site.Blog_FolderPath, site.Blog_EditorPath).Replace("//", "/");
+			p1 = string.Format("/{0}/{1}", site.Blog_FolderPath, site.Blog_EditorPath).Replace("//", "/");
 			iTot += GetPagesBeginingWith(site.SiteID, p1).Count();
 			if (iTot > 0) {
 				return true;
 			}
 
-			string p2 = String.Format("/{0}", site.Blog_FolderPath).ToLowerInvariant().Replace("//", "/");
+			string p2 = string.Format("/{0}", site.Blog_FolderPath).ToLowerInvariant().Replace("//", "/");
 			iTot += GetPagesEquals(site.SiteID, p2).Count();
 
 			return (iTot) > 0;

@@ -1,10 +1,8 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Web.Mvc;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -20,29 +18,22 @@ namespace Carrotware.CMS.UI.Components {
 
 	public class ControlUtilities {
 
-		public static string GetWebResourceUrl(Type type, string resource) {
-			string sPath = string.Empty;
+		public static string ReadEmbededScript(string sResouceName) {
+			return CarrotWeb.GetManifestResourceText(typeof(ControlUtilities), sResouceName);
+		}
 
-			try {
-				sPath = CarrotWeb.GetWebResourceUrl(type, resource);
-			} catch { }
-
-			return sPath;
+		public static byte[] ReadEmbededBinary(string sResouceName) {
+			return CarrotWeb.GetManifestResourceBytes(typeof(ControlUtilities), sResouceName);
 		}
 
 		public static string GetWebResourceUrl(string resource) {
-			return GetWebResourceUrl(typeof(ControlUtilities), resource);
-		}
+			string sPath = string.Empty;
 
-		public static string ReadEmbededScript(string sResouceName) {
-			string sReturn = null;
+			try {
+				sPath = CarrotWeb.GetWebResourceUrl(typeof(ControlUtilities), resource);
+			} catch { }
 
-			Assembly _assembly = Assembly.GetExecutingAssembly();
-			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(sResouceName))) {
-				sReturn = stream.ReadToEnd();
-			}
-
-			return sReturn;
+			return sPath;
 		}
 
 		public static SiteNav IdentifyLinkAsInactive(SiteNav nav) {

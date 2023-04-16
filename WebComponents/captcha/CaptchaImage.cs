@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -21,47 +19,27 @@ namespace Carrotware.Web.UI.Components {
 
 	public static class CaptchaImage {
 
-		public static string EncodeColor(string ColorCode) {
-			string sColor = "";
-			if (!String.IsNullOrEmpty(ColorCode)) {
-				sColor = ColorCode;
-				sColor = sColor.Replace("#", "HEX-");
-				sColor = HttpUtility.HtmlEncode(sColor);
-			}
-			return sColor;
-		}
-
-		public static string DecodeColor(string ColorCode) {
-			string sColor = "";
-			if (!String.IsNullOrEmpty(ColorCode)) {
-				sColor = ColorCode;
-				sColor = HttpUtility.HtmlDecode(sColor);
-				sColor = sColor.Replace("HEX-", "#");
-			}
-			return sColor;
-		}
-
 		public static string BGColorDef {
 			get {
 				string s = "#EEEEEE";
-				try { s = (string)HttpContext.Current.Request.QueryString["bgcolor"]; } catch { }
-				return ((s == null) ? "#EEEEEE" : DecodeColor(s));
+				try { s = HttpContext.Current.Request.QueryString["bgcolor"].ToString(); } catch { }
+				return ((s == null) ? "#EEEEEE" : CarrotWeb.DecodeColorString(s));
 			}
 		}
 
 		public static string NColorDef {
 			get {
 				string s = "#C46314";
-				try { s = (string)HttpContext.Current.Request.QueryString["ncolor"]; } catch { }
-				return ((s == null) ? "#C46314" : DecodeColor(s));
+				try { s = HttpContext.Current.Request.QueryString["ncolor"].ToString(); } catch { }
+				return ((s == null) ? "#C46314" : CarrotWeb.DecodeColorString(s));
 			}
 		}
 
 		public static string FGColorDef {
 			get {
 				string s = "#69785F";
-				try { s = (string)HttpContext.Current.Request.QueryString["fgcolor"]; } catch { }
-				return ((s == null) ? "#69785F" : DecodeColor(s));
+				try { s = HttpContext.Current.Request.QueryString["fgcolor"].ToString(); } catch { }
+				return ((s == null) ? "#69785F" : CarrotWeb.DecodeColorString(s));
 			}
 		}
 
@@ -72,7 +50,7 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public static bool Validate(string testValue) {
-			if (String.IsNullOrEmpty(testValue)) {
+			if (string.IsNullOrEmpty(testValue)) {
 				return false;
 			}
 

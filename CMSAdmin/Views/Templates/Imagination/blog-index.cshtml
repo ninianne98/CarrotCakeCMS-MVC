@@ -61,7 +61,7 @@
 									</b>
 									<br />
 									by @{
-							var usr = item.GetUserInfo();
+										var usr = item.BylineUser;
 									}
 									@usr.FullName_FirstLast
 									<br />
@@ -74,20 +74,19 @@
 									</a>
 								</p>
 							</div>
+										}
 
-						}
+										<div class="pagerfooterlinks">
+											@foreach (var i in pager.PageNumbers) {
+												using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+													using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+														@String.Format(" {0} ", i)
+													}
+												}
+											}
+										</div>
 
-						<div class="pagerfooterlinks">
-							@foreach (var i in pager.PageNumbers) {
-								using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
-									using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
-										@String.Format(" {0} ", i)
-									}
-								}
-							}
-						</div>
-
-					}
+										}
 				</section>
 			</div>
 		</div>

@@ -1,0 +1,54 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 10;
+	pager.IgnoreSitePath = false;
+	pager.FetchData();
+}
+
+@section SideBar {
+
+	@Html.Partial("_catmeta")
+
+}
+
+@section PagedDataSection {
+
+	@if (pager != null) {
+
+		foreach (var item in pager.DataSource) {
+			var usr = item.BylineUser;
+
+			<div class="post">
+				<h2 class="title"><a href="@item.FileName">@item.NavigationText</a></h2>
+				<p class="meta">
+					<span class="date">@string.Format("{0:MMMM d, yyyy}", item.GoLiveDate)</span>
+					<span class="posted">Posted by @usr.FullName_FirstLast</span>
+				</p>
+				<div style="clear: both;">&nbsp;</div>
+				<div class="entry">
+					<p>@item.PageTextPlainSummary</p>
+					<p class="links"><a href="@item.FileName">Read More</a> </p>
+				</div>
+			</div>
+		}
+
+		<div class="pagerfooterlinks">
+			@foreach (var i in pager.PageNumbers) {
+				using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap ui-corner-all" }, new { @class = "pagerlink ui-corner-all" })) {
+					using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+						@String.Format(" {0} ", i)
+					}
+				}
+			}
+		</div>
+
+		<div style="clear: both;">
+		</div>
+		<br />
+	}
+}

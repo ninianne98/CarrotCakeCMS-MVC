@@ -84,7 +84,7 @@ namespace Carrotware.Web.UI.Components {
 			}
 
 			if (this.SelectedSkin != jQueryTheme.NotUsed) {
-				sb.AppendLine("<!-- JQuery UI CSS " + SelectedSkin.ToString() + " --> <link href=\"" + sJQFile + "\" type=\"text/css\" rel=\"stylesheet\" /> \r\n");
+				sb.AppendLine(UrlPaths.CreateCssTag(string.Format("JQuery UI CSS {0}", this.SelectedSkin), sJQFile));
 			}
 
 			return sb.ToString().Trim();

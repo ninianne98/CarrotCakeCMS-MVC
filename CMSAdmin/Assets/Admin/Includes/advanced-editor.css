@@ -62,8 +62,8 @@
 		-webkit-border-radius: 6px;
 	}
 
-.cmsGlossySeaGreen input[type="submit"], .cmsGlossySeaGreen input[type="reset"], .cmsGlossySeaGreen input[type="button"],
-.cmsGlossySeaGreen .button, .cmsGlossySeaGreen .ui-dialog-buttonpane button {
+.cms-seagreen input[type="submit"], .cms-seagreen input[type="reset"], .cms-seagreen input[type="button"],
+.cms-seagreen .button, .cms-seagreen .ui-dialog-buttonpane button {
 	min-width: 2em;
 	padding: 0.6em 0.8em;
 	border: 1px solid #8E908E;
@@ -74,37 +74,31 @@
 	-webkit-border-radius: 6px;
 }
 
-#cmsToolBoxWrap .btn, .cmsGlossySeaGreen button, .cmsGlossySeaGreen .btn, #cmsGlossySeaGreenID .btn, #cmsModalFrame .btn {
+#cmsToolBoxWrap .btn, .cms-seagreen button, .cms-seagreen .btn, #cms-seagreen-id .btn, #cmsModalFrame .btn {
 	border: 1px solid #8E908E;
 	color: #676F6A;
 }
 
-	#cmsToolBoxWrap .btn-primary, .cmsGlossySeaGreen .btn-primary, .cmsGlossySeaGreen button.btn-primary,
-	#cmsGlossySeaGreenID .btn-primary, #cmsGlossySeaGreenID input.btn-primary {
+	#cmsToolBoxWrap .btn-primary, .cms-seagreen .btn-primary, .cms-seagreen button.btn-primary,
+	#cms-seagreen-id .btn-primary, #cms-seagreen-id input.btn-primary {
 		font-weight: bold;
 		background-color: #ECFAF1;
 	}
 
-.cmsGlossySeaGreen .ui-widget P {
+.cms-seagreen .ui-widget P {
 	line-height: normal;
 	font-weight: normal;
 }
 
-.cmsGlossySeaGreen .ui-dialog-titlebar, .cmsGlossySeaGreen .ui-dialog-titlebar a, #cmsGlossySeaGreenID .ui-dialog-titlebar, #cmsGlossySeaGreenID .ui-dialog-titlebar a, .cmsGlossySeaGreen .ui-widget-header, #cmsGlossySeaGreenID .ui-widget-header {
+.cms-seagreen .ui-dialog-titlebar, .cms-seagreen .ui-dialog-titlebar a, #cms-seagreen-id .ui-dialog-titlebar, #cms-seagreen-id .ui-dialog-titlebar a, .cms-seagreen .ui-widget-header, #cms-seagreen-id .ui-widget-header {
 	color: #676F6A;
 }
 
-.cmsGlossySeaGreen .ui-front, #cmsGlossySeaGreenID .ui-front {
+.cms-seagreen .ui-front, #cms-seagreen-id .ui-front {
 	z-index: 10000000;
 }
 
-#cmsGlossySeaGreenID .jqradioset, #cmsGlossySeaGreenID .jqradioset .ui-button,
-#cmsGlossySeaGreenID .jqradioset label, #cmsGlossySeaGreenID .jqradioset span {
-	margin: 0 !important;
-	padding: 4px !important;
-}
-
-#cmsGlossySeaGreenID *, #cmsGlossySeaGreenID *:before, #cmsGlossySeaGreenID *:after {
+#cms-seagreen-id *, #cms-seagreen-id *:before, #cms-seagreen-id *:after {
 	box-sizing: unset;
 	-moz-box-sizing: unset;
 	-webkit-box-sizing: unset;
@@ -126,7 +120,7 @@
 	max-width: 275px;
 }
 
-#cmsJQTabedToolbox {
+#cmsTabbedToolbox {
 	min-height: 100px;
 	width: 260px;
 	margin: 0;
@@ -134,20 +128,30 @@
 	margin: 0 auto;
 }
 
-	#cmsJQTabedToolbox ul.ui-tabs-nav {
-		margin: 2px 2px 0 2px;
-		padding: 3px 3px 0 3px;
+	#cmsTabbedToolbox ul.ui-tabs-nav {
+		margin: 2px 2px 0 2px !important;
+		padding: 3px 3px 0 3px !important;
 	}
 
-		#cmsJQTabedToolbox ul.ui-tabs-nav li {
-			margin: 2px 2px -1px 2px;
-			padding: 4px 4px 4px 4px;
-			border-bottom-width: 0px;
+		#cmsTabbedToolbox ul.ui-tabs-nav a {
+			margin: 2px 2px 2px 2px !important;
+			padding: 2px 2px 2px 2px !important;
 		}
 
-	#cmsJQTabedToolbox .ui-tabs-panel {
+		#cmsTabbedToolbox ul.ui-tabs-nav li {
+			margin: 2px 2px -1px 2px !important;
+			padding: 3px 3px 3px 3px !important;
+			border-bottom-width: 0px !important;
+		}
+
+	#cmsTabbedToolbox .ui-tabs-panel {
 		margin: 0;
 		border: solid 0px #ffffff !important;
+	}
+
+	#cmsTabbedToolbox .cmsToolboxTab {
+		margin: 1px 1px 1px 1px !important;
+		padding: 2px 2px 2px 2px !important;
 	}
 
 #cmsMainToolbox {
@@ -228,12 +232,32 @@
 	text-align: right !important;
 }
 
-.cmsPreviewButtons {
-	float: right;
-	margin: 5px 0px 0px 0px !important;
+#cmsPreviewControls {
+	line-height: normal !important;
+	margin-left: 60px !important;
+	margin-right: 60px !important;
+	min-width: 550px !important;
+}
+
+#cmsPreviewTab a {
+	padding: 6px 9px !important;
+}
+
+.cmsPreview-Right, .cmsPreview-Left {
+	margin: 5px 0px 5px 0px !important;
 	padding: 0 !important;
 	font-size: 12px !important;
 	line-height: normal !important;
+}
+
+.cmsPreview-Left {
+	margin-left: 50px !important;
+	float: left !important;
+}
+
+.cmsPreview-Right {
+	margin-right: 50px !important;
+	float: right !important;
 }
 
 p.cmsToolItem {
@@ -293,6 +317,13 @@ p.cmsToolItem {
 	font-weight: normal;
 	line-height: normal;
 	font-size: 11px;
+	overflow: auto !important;
+	height: 290px !important;
+	width: 240px !important;
+	padding: 2px !important;
+	margin: 4px !important;
+	float: left !important;
+	border: solid 1px #000 !important;
 }
 
 #cmsTemplateList {

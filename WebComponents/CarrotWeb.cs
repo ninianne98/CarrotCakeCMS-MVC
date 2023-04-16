@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq.Expressions;
@@ -84,6 +85,49 @@ namespace Carrotware.Web.UI.Components {
 			}
 		}
 
+		//================================
+		public static string EncodeColor(Color color) {
+			var colorCode = ColorTranslator.ToHtml(color);
+
+			string sColor = string.Empty;
+			if (!string.IsNullOrEmpty(colorCode)) {
+				sColor = colorCode.ToLowerInvariant();
+				sColor = sColor.Replace("#", string.Empty);
+				sColor = sColor.Replace("HEX-", string.Empty);
+				sColor = HttpUtility.HtmlEncode(sColor);
+			}
+			return sColor;
+		}
+
+		public static string DecodeColorString(string colorCode) {
+			string sColor = string.Empty;
+			if (!string.IsNullOrEmpty(colorCode)) {
+				sColor = colorCode;
+				sColor = HttpUtility.HtmlDecode(sColor);
+				sColor = sColor.Replace("HEX-", string.Empty);
+				if (!sColor.StartsWith("#")) {
+					sColor = string.Format("#{0}", sColor);
+				}
+			}
+
+			return sColor;
+		}
+
+		public static Color DecodeColor(string colorCode) {
+			string sColor = DecodeColorString(colorCode);
+
+			if (sColor.ToLowerInvariant().EndsWith("transparent")) {
+				return Color.Transparent;
+			}
+			if (sColor == "#" || string.IsNullOrWhiteSpace(sColor)
+					|| sColor.ToLowerInvariant().EndsWith("empty")) {
+				return Color.Empty;
+			}
+
+			return ColorTranslator.FromHtml(sColor);
+		}
+
+		//================================
 		public static string DateKey() {
 			return GenerateTick(DateTime.UtcNow).ToString();
 			//return DateKey(15);
@@ -97,8 +141,6 @@ namespace Carrotware.Web.UI.Components {
 
 			return Convert.ToBase64String(dateStringBytes);
 		}
-
-		private static string _resourceBase = "carrotwarewebresource.ashx";
 
 		private static long GenerateTick(DateTime dateIn) {
 			int roundTo = 12;
@@ -125,34 +167,81 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public static string GetWebResourceUrl(Type type, string resource) {
+			var asmb = type.Assembly;
+
+			return GetWebResourceUrl(asmb, resource);
+		}
+
+		public static string GetWebResourceUrl(Assembly assembly, string resource) {
 			string sUri = string.Empty;
 
-			var asmb = type.Assembly.ManifestModule.Name;
+			var asmb = assembly.ManifestModule.Name;
+			var resName = HttpUtility.HtmlEncode(Utils.EncodeBase64(string.Format("{0}:{1}", resource, asmb)));
 
 			try {
-				sUri = string.Format("/{0}?r={1}&t={2}", _resourceBase, HttpUtility.HtmlEncode(Utils.EncodeBase64(resource + ":" + asmb)), DateKey());
-			} catch { }
+				var ver = assembly.GetName().Version.ToString().Replace(".", string.Empty);
+				sUri = string.Format("{0}?r={1}&ts={2}-{3}", UrlPaths.ResourcePath, resName, ver, DateKey());
+			} catch {
+				sUri = string.Format("{0}?r={1}&ts={2}", UrlPaths.ResourcePath, resName, DateKey());
+			}
 
 			return sUri;
 		}
 
-		private static Assembly GetAssembly(Type type, string[] res) {
-			var _assembly = Assembly.GetAssembly(type);
+		internal static Assembly GetAssembly(Type type, string resource) {
+			return GetAssembly(type, resource.Split(':'));
+		}
+
+		internal static Assembly GetAssembly(Type type, string[] res) {
 			if (res.Length > 1) {
 				var dir = AppDomain.CurrentDomain.RelativeSearchPath;
-				_assembly = Assembly.LoadFrom(Path.Combine(dir, res[1]));
+				return Assembly.LoadFrom(Path.Combine(dir, res[1]));
 			}
 
-			return _assembly;
+			return Assembly.GetAssembly(type);
+		}
+
+		internal static Assembly GetAssembly(string[] res) {
+			return GetAssembly(typeof(CarrotWeb), res);
+		}
+
+		internal static Assembly GetAssembly(string resource) {
+			return GetAssembly(typeof(CarrotWeb), resource);
+		}
+
+		internal static string GetManifestResourceText(string resource) {
+			return GetManifestResourceText(typeof(CarrotWeb), GetInternalResourceName(resource));
+		}
+
+		internal static byte[] GetManifestResourceBytes(string resource) {
+			return GetManifestResourceBytes(typeof(CarrotWeb), GetInternalResourceName(resource));
+		}
+
+		internal static string TrimAssemblyName(Assembly assembly) {
+			var asmb = assembly.ManifestModule.Name;
+			return asmb.Substring(0, asmb.Length - 4);
+		}
+
+		internal static string[] FixResourceName(Assembly assembly, string[] res) {
+			if (res.Length > 1) {
+				var asmbName = TrimAssemblyName(assembly);
+
+				if (!res[0].StartsWith(asmbName)) {
+					res[0] = string.Format("{0}.{1}", asmbName, res[0]);
+				}
+			}
+
+			return res;
 		}
 
 		public static string GetManifestResourceText(Type type, string resource) {
 			string returnText = null;
 			var res = resource.Split(':');
 
-			var _assembly = GetAssembly(type, res);
+			var assembly = GetAssembly(type, res);
+			res = FixResourceName(assembly, res);
 
-			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(res[0]))) {
+			using (var stream = new StreamReader(assembly.GetManifestResourceStream(res[0]))) {
 				returnText = stream.ReadToEnd();
 			}
 
@@ -163,9 +252,10 @@ namespace Carrotware.Web.UI.Components {
 			byte[] returnBytes = null;
 			var res = resource.Split(':');
 
-			var _assembly = GetAssembly(type, res);
+			var assembly = GetAssembly(type, res);
+			res = FixResourceName(assembly, res);
 
-			using (var stream = _assembly.GetManifestResourceStream(res[0])) {
+			using (var stream = assembly.GetManifestResourceStream(res[0])) {
 				returnBytes = new byte[stream.Length];
 				stream.Read(returnBytes, 0, returnBytes.Length);
 			}
@@ -173,6 +263,7 @@ namespace Carrotware.Web.UI.Components {
 			return returnBytes;
 		}
 
+		//================================
 		public static CarrotWebGrid<T> CarrotWebGrid<T>() where T : class {
 			return new CarrotWebGrid<T>(Html);
 		}

@@ -30,15 +30,15 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public void SetNoiseColor(string colorCode) {
-			this.NoiseColor = ColorTranslator.FromHtml(colorCode);
+			this.NoiseColor = CarrotWeb.DecodeColor(colorCode);
 		}
 
 		public void SetForeColor(string colorCode) {
-			this.ForeColor = ColorTranslator.FromHtml(colorCode);
+			this.ForeColor = CarrotWeb.DecodeColor(colorCode);
 		}
 
 		public void SetBackColor(string colorCode) {
-			this.BackColor = ColorTranslator.FromHtml(colorCode);
+			this.BackColor = CarrotWeb.DecodeColor(colorCode);
 		}
 
 		public string CaptchaText { get; set; }
@@ -81,7 +81,7 @@ namespace Carrotware.Web.UI.Components {
 			var key = CaptchaImage.SessionKeyValue;
 
 			var imgBuilder = new TagBuilder("img");
-			imgBuilder.MergeAttribute("src", GetCaptchaImageURI());
+			imgBuilder.MergeAttribute("src", this.GetCaptchaImageURI());
 			imgBuilder.MergeAttribute("alt", key);
 			imgBuilder.MergeAttribute("title", key);
 
@@ -93,12 +93,12 @@ namespace Carrotware.Web.UI.Components {
 
 		private string GetCaptchaImageURI() {
 			if (this.IsWebView) {
-				return "/CarrotwareCaptcha.ashx?t=" + DateTime.Now.Ticks +
-						"&fgcolor=" + CaptchaImage.EncodeColor(ColorTranslator.ToHtml(this.ForeColor)) +
-						"&bgcolor=" + CaptchaImage.EncodeColor(ColorTranslator.ToHtml(this.BackColor)) +
-						"&ncolor=" + CaptchaImage.EncodeColor(ColorTranslator.ToHtml(this.NoiseColor));
+				return string.Format("{0}?ts={1}", UrlPaths.CaptchaPath, DateTime.Now.Ticks) +
+						"&fgcolor=" + CarrotWeb.EncodeColor(this.ForeColor) +
+						"&bgcolor=" + CarrotWeb.EncodeColor(this.BackColor) +
+						"&ncolor=" + CarrotWeb.EncodeColor(this.NoiseColor);
 			} else {
-				return "/CarrotwareCaptcha.ashx?t=" + DateTime.Now.Ticks;
+				return UrlPaths.CaptchaPath + "?t=" + DateTime.Now.Ticks;
 			}
 		}
 

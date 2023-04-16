@@ -20,14 +20,14 @@
 	ViewBag.Title = CmsPage.Titlebar;
 	ViewBag.SiteName = CmsPage.TheSite.SiteName;
 
-	TwoLevelNavigation nav = new TwoLevelNavigation() {
+	var nav = new TwoLevelNavigation() {
 		FontSize = new SizeUnit("16px"),
-		ForeColor = System.Drawing.ColorTranslator.FromHtml("#ffffff"),
-		BackColor = System.Drawing.ColorTranslator.FromHtml("#453E37"),
-		SelFGColor = System.Drawing.ColorTranslator.FromHtml("#ffffff"),
-		SelBGColor = System.Drawing.ColorTranslator.FromHtml("#2E2925"),
-		SubBGColor = System.Drawing.ColorTranslator.FromHtml("#DA802A"),
-		SubFGColor = System.Drawing.ColorTranslator.FromHtml("#ffffff"),
+		ForeColor = CarrotWeb.DecodeColor("#ffffff"),
+		BackColor = CarrotWeb.DecodeColor("#453E37"),
+		SelFGColor = CarrotWeb.DecodeColor("#ffffff"),
+		SelBGColor = CarrotWeb.DecodeColor("#2E2925"),
+		SubBGColor = CarrotWeb.DecodeColor("#DA802A"),
+		SubFGColor = CarrotWeb.DecodeColor("#ffffff"),
 		CssSelected = "current_page_item",
 		ElementId = "navigation"
 	};
@@ -89,6 +89,7 @@
 
 						<div class="post">
 							<h2 class="title">@CmsPage.Heading</h2>
+							@RenderSection("BlogAuthor", required: false)
 							<div>
 								@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
 								@RenderBody()
@@ -114,7 +115,7 @@
 					<div id="sidebar">
 						<ul>
 							<li>
-								<h2>Searh Here:</h2>
+								<h2>Search Here:</h2>
 								<div id="search">
 									@{
 										using (var srchFrm = CarrotCakeHtml.BeginSearchForm(new { @class = "search" })) {

@@ -43,7 +43,7 @@
 	@if (pager != null) {
 
 		foreach (var item in pager.DataSource) {
-			var usr = item.GetUserInfo();
+			var usr = item.BylineUser;
 
 			<div class="post">
 				<h2 class="title"><a href="@item.FileName">@item.NavigationText</a></h2>

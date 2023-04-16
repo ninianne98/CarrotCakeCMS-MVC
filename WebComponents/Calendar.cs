@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Web;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -19,28 +20,48 @@ namespace Carrotware.Web.UI.Components {
 	public class Calendar : BaseTwoPartWebComponent {
 
 		public Calendar() {
+			this.ElementId = "cal";
+
 			this.CellColor = ColorTranslator.FromHtml("#ffffff");
 			this.CellBackground = ColorTranslator.FromHtml("#00509F");
 			this.WeekdayColor = ColorTranslator.FromHtml("#000000");
 			this.WeekdayBackground = ColorTranslator.FromHtml("#00C87F");
+
 			this.TodayColor = ColorTranslator.FromHtml("#FFFF80");
 			this.TodayBackground = ColorTranslator.FromHtml("#800080");
 			this.TodaySelectBorder = ColorTranslator.FromHtml("#FFFF80");
 			this.NormalColor = ColorTranslator.FromHtml("#004040");
+
 			this.NormalBackground = ColorTranslator.FromHtml("#D8D8EB");
 			this.NormalSelectBorder = ColorTranslator.FromHtml("#FF0080");
 			this.TodayLink = ColorTranslator.FromHtml("#FFFF80");
 			this.NormalLink = ColorTranslator.FromHtml("#004040");
-			this.CellColor = ColorTranslator.FromHtml("#ffffff");
-			this.CellColor = ColorTranslator.FromHtml("#ffffff");
-			this.CellColor = ColorTranslator.FromHtml("#ffffff");
-			this.CellColor = ColorTranslator.FromHtml("#ffffff");
+
 			this.JavascriptForDate = string.Empty;
 			this.OverrideCssFile = string.Empty;
 
 			this.HilightDateList = new List<DateTime>();
 			this.CalendarDate = DateTime.Now.Date;
-			this.ElementId = "cal";
+		}
+
+		public Calendar(string wc, string wb, string cc, string cb,
+							string tc, string tb, string tsb, string tl,
+							string nc, string nb, string nsb, string nl) : this() {
+
+			this.WeekdayColor = CarrotWeb.DecodeColor(wc);
+			this.WeekdayBackground = CarrotWeb.DecodeColor(wb);
+			this.CellColor = CarrotWeb.DecodeColor(cc);
+			this.CellBackground = CarrotWeb.DecodeColor(cb);
+
+			this.TodayColor = CarrotWeb.DecodeColor(tc);
+			this.TodayBackground = CarrotWeb.DecodeColor(tb);
+			this.TodaySelectBorder = CarrotWeb.DecodeColor(tsb);
+			this.TodayLink = CarrotWeb.DecodeColor(tl);
+
+			this.NormalColor = CarrotWeb.DecodeColor(nc);
+			this.NormalBackground = CarrotWeb.DecodeColor(nb);
+			this.NormalSelectBorder = CarrotWeb.DecodeColor(nsb);
+			this.NormalLink = CarrotWeb.DecodeColor(nl);
 		}
 
 		public Color CellColor { get; set; }
@@ -191,41 +212,50 @@ namespace Carrotware.Web.UI.Components {
 				}
 			}
 
-
-
 			sb.AppendLine("</table>");
+
+			return sb.ToString();
+		}
+
+		public string GenerateCSS() {
+			var sb = new StringBuilder();
+			sb.Append(CarrotWeb.GetManifestResourceText("calendar.txt"));
+
+			sb.Replace("[[TIMESTAMP]]", DateTime.UtcNow.ToString("u"));
+
+			sb.Replace("{WEEKDAY_CHEX}", ColorTranslator.ToHtml(this.WeekdayColor));
+			sb.Replace("{WEEKDAY_BGHEX}", ColorTranslator.ToHtml(this.WeekdayBackground));
+			sb.Replace("{CELL_CHEX}", ColorTranslator.ToHtml(this.CellColor));
+			sb.Replace("{CELL_BGHEX}", ColorTranslator.ToHtml(this.CellBackground));
+
+			sb.Replace("{TODAY_CHEX}", ColorTranslator.ToHtml(this.TodayColor));
+			sb.Replace("{TODAY_BGHEX}", ColorTranslator.ToHtml(this.TodayBackground));
+			sb.Replace("{TODAYSEL_BDR}", ColorTranslator.ToHtml(this.TodaySelectBorder));
+			sb.Replace("{TODAY_LNK}", ColorTranslator.ToHtml(this.TodayLink));
+
+			sb.Replace("{NORMAL_CHEX}", ColorTranslator.ToHtml(this.NormalColor));
+			sb.Replace("{NORMAL_BGHEX}", ColorTranslator.ToHtml(this.NormalBackground));
+			sb.Replace("{NORMALSEL_BDR}", ColorTranslator.ToHtml(this.NormalSelectBorder));
+			sb.Replace("{NORMAL_LNK}", ColorTranslator.ToHtml(this.NormalLink));
+
+			sb.Replace("{CALENDAR_ID}", string.Format("#{0}", this.ElementId));
 
 			return sb.ToString();
 		}
 
 		public override string GetHead() {
 			if (string.IsNullOrEmpty(this.OverrideCssFile)) {
+				var sb = new StringBuilder();
 
-				var sCSS = CarrotWeb.GetManifestResourceText(this.GetType(), "Carrotware.Web.UI.Components.calendar.txt");
-				var sb = new StringBuilder(sCSS);
+				sb.Append(string.Format("{0}?el={1}", UrlPaths.CalendarStylePath, HttpUtility.HtmlEncode(Utils.EncodeBase64(ElementId))));
+				sb.Append(string.Format("&wc={0}&wb={1}&cc={2}&cb={3}", CarrotWeb.EncodeColor(this.WeekdayColor), CarrotWeb.EncodeColor(this.WeekdayBackground), CarrotWeb.EncodeColor(this.CellColor), CarrotWeb.EncodeColor(this.CellBackground)));
+				sb.Append(string.Format("&tc={0}&tb={1}&tsb={2}&tl={3}", CarrotWeb.EncodeColor(this.TodayColor), CarrotWeb.EncodeColor(this.TodayBackground), CarrotWeb.EncodeColor(this.TodaySelectBorder), CarrotWeb.EncodeColor(this.TodayLink)));
+				sb.Append(string.Format("&nc={0}&nb={1}&nsb={2}&nl={3}", CarrotWeb.EncodeColor(this.NormalColor), CarrotWeb.EncodeColor(this.NormalBackground), CarrotWeb.EncodeColor(this.NormalSelectBorder), CarrotWeb.EncodeColor(this.NormalLink)));
+				sb.Append(string.Format("&ts={0}", CarrotWeb.DateKey()));
 
-				sb.Replace("{WEEKDAY_CHEX}", ColorTranslator.ToHtml(this.WeekdayColor));
-				sb.Replace("{WEEKDAY_BGHEX}", ColorTranslator.ToHtml(this.WeekdayBackground));
-				sb.Replace("{CELL_CHEX}", ColorTranslator.ToHtml(this.CellColor));
-				sb.Replace("{CELL_BGHEX}", ColorTranslator.ToHtml(this.CellBackground));
-
-				sb.Replace("{TODAY_CHEX}", ColorTranslator.ToHtml(this.TodayColor));
-				sb.Replace("{TODAY_BGHEX}", ColorTranslator.ToHtml(this.TodayBackground));
-				sb.Replace("{TODAYSEL_BDR}", ColorTranslator.ToHtml(this.TodaySelectBorder));
-				sb.Replace("{TODAY_LNK}", ColorTranslator.ToHtml(this.TodayLink));
-
-				sb.Replace("{NORMAL_CHEX}", ColorTranslator.ToHtml(this.NormalColor));
-				sb.Replace("{NORMAL_BGHEX}", ColorTranslator.ToHtml(this.NormalBackground));
-				sb.Replace("{NORMALSEL_BDR}", ColorTranslator.ToHtml(this.NormalSelectBorder));
-				sb.Replace("{NORMAL_LNK}", ColorTranslator.ToHtml(this.NormalLink));
-
-				sb.Replace("{CALENDAR_ID}", "#" + this.ElementId);
-
-				sCSS = "\r\n<style type=\"text/css\">\r\n" + sb.ToString() + "\r\n</style>\r\n";
-
-				return sCSS;
+				return UrlPaths.CreateCssTag(string.Format("Calendar CSS: {0}", this.ElementId), sb.ToString());
 			} else {
-				return "<link rel=\"stylesheet\" href=\"" + this.OverrideCssFile + "\" type=\"text/css\" />";
+				return UrlPaths.CreateCssTag(this.OverrideCssFile);
 			}
 		}
 	}

@@ -1,14 +1,14 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Web;
-using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
+using System.Web.Mvc;
+using System.Web;
 using System.Xml.Serialization;
+using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -44,21 +44,30 @@ namespace Carrotware.CMS.UI.Components {
 			frmBuilder.MergeAttributes(frmAttribs);
 
 			string frmTag = frmBuilder.ToString(TagRenderMode.StartTag)
-				//+ Environment.NewLine
-				//+ helper.AntiForgeryToken().ToString()  // only put in if using a post
-				//+ Environment.NewLine
-				//+ frmID.ToString(TagRenderMode.SelfClosing)
+							//+ Environment.NewLine
+							//+ helper.AntiForgeryToken().ToString()  // only put in if using a post
+							//+ Environment.NewLine
+							//+ frmID.ToString(TagRenderMode.SelfClosing)
 							+ Environment.NewLine;
 
 			_helper.ViewContext.Writer.Write(frmTag);
 		}
 
 		public HtmlHelper<SiteSearch> GetModelHelper() {
-			SiteSearch model = new SiteSearch();
+			return GetModelHelper(false);
+		}
+
+		public HtmlHelper<SiteSearch> GetModelHelper(bool restoreQuery) {
+			var model = new SiteSearch();
+
 			if (_helper.ViewData["CMS_searchform"] != null) {
 				model = _helper.ViewData["CMS_searchform"] as SiteSearch;
 			} else {
 				model = new SiteSearch();
+			}
+
+			if (restoreQuery) {
+				model.RestoreQueryString();
 			}
 
 			return new HtmlHelper<SiteSearch>(_helper.ViewContext, new WrapperForHtmlHelper<SiteSearch>(model));
@@ -144,13 +153,13 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions = new AjaxOptions();
 				ajaxOptions.InsertionMode = InsertionMode.Replace;
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
+			if (string.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
 				ajaxOptions.HttpMethod = "POST";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
+			if (string.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
 				ajaxOptions.UpdateTargetId = "frmContact";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.OnFailure)) {
+			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 
@@ -190,7 +199,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			_settings.UseValidateHuman = true;
 			_settings.ValidateHumanClass = validateHuman.GetType().AssemblyQualifiedName;
-			if (!String.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
+			if (!string.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
 				_settings.ValidationFailText = validateHuman.AltValidationFailText;
 			}
 
@@ -321,13 +330,13 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions = new AjaxOptions();
 				ajaxOptions.InsertionMode = InsertionMode.Replace;
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
+			if (string.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
 				ajaxOptions.HttpMethod = "POST";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
+			if (string.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
 				ajaxOptions.UpdateTargetId = "frmLogin";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.OnFailure)) {
+			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 
@@ -473,13 +482,13 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions = new AjaxOptions();
 				ajaxOptions.InsertionMode = InsertionMode.Replace;
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
+			if (string.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
 				ajaxOptions.HttpMethod = "POST";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
+			if (string.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
 				ajaxOptions.UpdateTargetId = "frmLogout";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.OnFailure)) {
+			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 
@@ -597,13 +606,13 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions = new AjaxOptions();
 				ajaxOptions.InsertionMode = InsertionMode.Replace;
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
+			if (string.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
 				ajaxOptions.HttpMethod = "POST";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
+			if (string.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
 				ajaxOptions.UpdateTargetId = "frmForgotPassword";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.OnFailure)) {
+			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 
@@ -738,13 +747,13 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions = new AjaxOptions();
 				ajaxOptions.InsertionMode = InsertionMode.Replace;
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
+			if (string.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
 				ajaxOptions.HttpMethod = "POST";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
+			if (string.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
 				ajaxOptions.UpdateTargetId = "frmResetPassword";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.OnFailure)) {
+			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 
@@ -891,13 +900,13 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions = new AjaxOptions();
 				ajaxOptions.InsertionMode = InsertionMode.Replace;
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
+			if (string.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
 				ajaxOptions.HttpMethod = "POST";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
+			if (string.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
 				ajaxOptions.UpdateTargetId = "frmChangePassword";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.OnFailure)) {
+			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 
@@ -1037,13 +1046,13 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions = new AjaxOptions();
 				ajaxOptions.InsertionMode = InsertionMode.Replace;
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
+			if (string.IsNullOrEmpty(ajaxOptions.HttpMethod)) {
 				ajaxOptions.HttpMethod = "POST";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
+			if (string.IsNullOrEmpty(ajaxOptions.UpdateTargetId)) {
 				ajaxOptions.UpdateTargetId = "frmChangeProfile";
 			}
-			if (String.IsNullOrEmpty(ajaxOptions.OnFailure)) {
+			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 

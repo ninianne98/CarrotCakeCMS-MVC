@@ -261,10 +261,10 @@ namespace Carrotware.CMS.Core {
 
 		public ExtendedUserData BylineUser {
 			get {
-				if (_bylineUser == null) {
+				if (_bylineUser == null && this.CreditUserId.HasValue) {
 					_bylineUser = this.CreditUser;
 				}
-				if (_bylineUser == null) {
+				if (_bylineUser == null && this.EditUserId.HasValue) {
 					_bylineUser = this.EditUser;
 				}
 				if (_bylineUser == null) {

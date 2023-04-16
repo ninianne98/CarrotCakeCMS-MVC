@@ -17,7 +17,7 @@ using System;
 namespace Carrotware.Web.UI.Components {
 
 	public class CarrotWebAreaReg : AreaRegistration {
-		protected string _areaName = String.Empty;
+		protected string _areaName = string.Empty;
 		private List<string> _namespaces = null;
 
 		public CarrotWebAreaReg()
@@ -25,7 +25,7 @@ namespace Carrotware.Web.UI.Components {
 			Assembly asmbly = this.GetType().Assembly;
 
 			_namespaces = asmbly.GetTypes().Select(t => t.Namespace)
-								.Where(x => !String.IsNullOrEmpty(x))
+								.Where(x => !string.IsNullOrEmpty(x))
 								.Distinct().ToList();
 
 			string assemblyName = asmbly.ManifestModule.Name;
@@ -45,32 +45,34 @@ namespace Carrotware.Web.UI.Components {
 
 		public override void RegisterArea(AreaRegistrationContext context) {
 			context.MapRoute(
-						name: this.AreaName + "_GetImageThumb",
-						url: "carrotwarethumb.ashx/{id}",
-						defaults: new { controller = "Home", action = "GetImageThumb", id = UrlParameter.Optional },
-						namespaces: _namespaces.ToArray()
-					);
+					name: this.AreaName + "_GetImageThumb",
+					url: UrlPaths.ThumbnailPath.Replace("/", "") + "/{id}",
+					defaults: new { controller = "Home", action = "GetImageThumb", id = UrlParameter.Optional },
+					namespaces: _namespaces.ToArray());
 
 			context.MapRoute(
 					name: this.AreaName + "_GetCaptchaImage",
-					url: "carrotwarecaptcha.ashx/{id}",
+					url: UrlPaths.CaptchaPath.Replace("/", "") + "/{id}",
 					defaults: new { controller = "Home", action = "GetCaptchaImage", id = UrlParameter.Optional },
-					namespaces: _namespaces.ToArray()
-				);
+					namespaces: _namespaces.ToArray());
 
 			context.MapRoute(
 					name: this.AreaName + "_GetCarrotHelp",
-					url: "carrotwarehelper.ashx/{id}",
+					url: UrlPaths.HelperPath.Replace("/", "") + "/{id}",
 					defaults: new { controller = "Home", action = "GetCarrotHelp", id = UrlParameter.Optional },
-					namespaces: _namespaces.ToArray()
-			);
+					namespaces: _namespaces.ToArray());
 
 			context.MapRoute(
-				name: this.AreaName + "_GetWebResource",
-				url: "carrotwarewebresource.ashx/{id}",
-				defaults: new { controller = "Home", action = "GetWebResource", id = UrlParameter.Optional },
-				namespaces: _namespaces.ToArray()
-);
+					name: this.AreaName + "_GetCarrotCalendarCss",
+					url: UrlPaths.CalendarStylePath.Replace("/", "") + "/{id}",
+					defaults: new { controller = "Home", action = "GetCarrotCalendarCss", id = UrlParameter.Optional },
+					namespaces: _namespaces.ToArray());
+
+			context.MapRoute(
+					name: this.AreaName + "_GetWebResource",
+					url: UrlPaths.ResourcePath.Replace("/", "") + "/{id}",
+					defaults: new { controller = "Home", action = "GetWebResource", id = UrlParameter.Optional },
+					namespaces: _namespaces.ToArray());
 		}
 	}
 }

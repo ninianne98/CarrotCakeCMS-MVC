@@ -1,0 +1,235 @@
+﻿@inherits CmsWebViewPage
+
+@*
+	Design by Free CSS Templates
+	http://www.freecsstemplates.org
+	Released for free under a Creative Commons Attribution 2.5 License
+
+	Name       : WaterDrops
+
+	Description: A two-column, fixed-width design with dark color scheme.
+	Version    : 1.0
+	Released   : 20120902
+
+	Conversion to CarrotCake CMS MVC Template: Carrotware
+*@
+
+@{
+	Layout = null;
+
+	bool bHome = ViewBag.WaterDropsShowHome ?? false;
+
+	ViewBag.Title = CmsPage.Titlebar;
+	ViewBag.SiteName = CmsPage.TheSite.SiteName;
+
+	var nav = new TwoLevelNavigation() {
+		FontSize = new SizeUnit("18px"),
+		ForeColor = CarrotWeb.DecodeColor("#ffffff"),
+		BackColor = CarrotWeb.DecodeColor("#513256"),
+		UnSelFGColor = CarrotWeb.DecodeColor("#CE92A6"),
+		HoverFGColor = CarrotWeb.DecodeColor("#ffffff"),
+		HoverBGColor = CarrotWeb.DecodeColor("#CE92A6"),
+		CssSelected = "current_page_item",
+		CssHasChildren = "sub",
+		ElementId = "navigation"
+	};
+
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 3;
+	pager.IgnoreSitePath = false;
+	pager.FetchData();
+}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	@CarrotCakeHtml.MetaTags()
+	@CarrotCakeHtml.Rss()
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>@CmsPage.Titlebar</title>
+
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet" type="text/css" />
+
+	<link href="~/Assets/Waterdrops/style.css" rel="stylesheet" type="text/css" media="screen" />
+	@CarrotWeb.RenderTwoPartControlBodyCss(nav)
+
+	@CarrotWeb.RenderControlToHtml((new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Purple }))
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			buttonStyleWater()
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			buttonStyleWater()
+		});
+
+		function buttonStyleWater() {
+			$("input:button, input:submit, input:reset, button").button();
+
+			$("#search input").removeClass("ui-button ui-widget ui-state-default ui-state-hover");
+		}
+	</script>
+
+	@CarrotCakeHtml.IncludeHead()
+</head>
+<body>
+	@{ if (bHome) {
+			<div id="header-wrapper">
+				<div id="header-med" class="container">
+					<div id="logo-full">
+						<h1><a href="~/">@ViewBag.SiteName</a></h1>
+						<p>@CmsPage.TheSite.SiteTagline</p>
+					</div>
+					<div id="navmenu-wrapper">
+						@CarrotWeb.RenderTwoPartControlBody(nav)
+					</div>
+				</div>
+				<div id="banner" class="container">
+					<div class="image-style">
+						<img src="~/Assets/WaterDrops/images/img03.jpg" width="970" height="320" alt="" />
+					</div>
+				</div>
+			</div>
+		} else {
+			<div id="header-wrapper-sub">
+				<div id="header-med" class="container">
+					<div id="logo-full">
+						<h1><a href="~/">@ViewBag.SiteName</a></h1>
+						<p>@CmsPage.TheSite.SiteTagline</p>
+					</div>
+					<div id="navmenu-wrapper">
+						@CarrotWeb.RenderTwoPartControlBody(nav)
+					</div>
+				</div>
+				<div id="banner-sub" class="container">
+					<div class="image-style">
+						<img runat="server" id="imgHead" src="~/Assets/WaterDrops/images/img03b.jpg" width="970" height="200" alt="" />
+					</div>
+				</div>
+			</div>
+			}
+	}
+	<!-- end #header -->
+
+	<div id="wrapper">
+		<div id="page" class="container">
+			<div id="content">
+				<div class="post">
+					<h2 class="title">@CmsPage.Heading</h2>
+					@RenderSection("BlogAuthor", required: false)
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterTop)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+						@RenderBody()
+					</div>
+					<div>
+						@RenderSection("MetaTags", required: false)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterBottom)
+					</div>
+
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftTop)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextLeft)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftBottom)
+					</div>
+				</div>
+				<div>
+					@RenderSection("PagedDataSection", required: false)
+				</div>
+
+				<div>
+					@Html.Partial("_contactform")
+				</div>
+				<div style="clear: both;">
+					&nbsp;
+				</div>
+			</div>
+			<!-- end #content -->
+
+			<div id="sidebar">
+				<div id="box1">
+					<h2>Search Here:</h2>
+					<div id="search">
+						@{
+							using (var srchFrm = CarrotCakeHtml.BeginSearchForm(new { @class = "search" })) {
+								var srch = srchFrm.GetModelHelper(true);
+								<p>
+									@srch.TextBoxFor(x => x.query, new { @class = "search-text" })
+									<input type="submit" data-theme="none" class="search-submit" value="Search" />
+								</p>
+							}
+						}
+					</div>
+					<div style="clear: both;">&nbsp;</div>
+				</div>
+				<div>
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightTop)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextRight)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightBottom)
+					</div>
+					<div>
+						@RenderSection("SideBar", required: false)
+					</div>
+				</div>
+			</div>
+			<!-- end #sidebar -->
+			<div style="clear: both;">
+				&nbsp;
+			</div>
+		</div>
+		<!-- end #page -->
+	</div>
+
+	<div id="footer-content" class="container">
+		<div id="footer-bg">
+			@{
+				int idx = 1;
+
+				foreach (var p in pager.DataSource) {
+
+					<div id="@string.Format("column{0}", idx)">
+						<h2>
+							<a href="@p.FileName">@p.NavigationText</a>
+						</h2>
+						<p>
+							@p.PageTextPlainSummary
+						</p>
+					</div>
+
+					idx++;
+				}
+			}
+		</div>
+	</div>
+
+	<div id="footer">
+		<p>
+			@Html.Raw(string.Format("&copy; {0}, {1} ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
+			All rights reserved
+			| Design by <a target="_blank" href="http://www.freecsstemplates.org">FCT</a>
+			| Photos by <a href="http://fotogrph.com/">Fotogrph</a>
+			| Site built with <a target="_blank" href="http://www.carrotcakecms.com/">carrotcake cms</a>
+		</p>
+	</div>
+	<!-- end #footer -->
+
+	@CarrotCakeHtml.IncludeFooter()
+</body>
+</html>

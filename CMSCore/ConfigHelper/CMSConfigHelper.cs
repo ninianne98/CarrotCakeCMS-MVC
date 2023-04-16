@@ -93,16 +93,6 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public static string GetWebResourceUrl(Type type, string resource) {
-			string sPath = string.Empty;
-
-			try {
-				sPath = CarrotWeb.GetWebResourceUrl(type, resource);
-			} catch { }
-
-			return sPath;
-		}
-
 		public static string DomainName {
 			get {
 				var domName = HttpContext.Current.Request.ServerVariables["HTTP_HOST"];

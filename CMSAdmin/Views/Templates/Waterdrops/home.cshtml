@@ -1,0 +1,56 @@
+@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	ViewBag.WaterDropsShowHome = true;
+
+	var cats = CmsPage.GetSiteCategories(10, true);
+	var tags = CmsPage.GetSiteTags(10, true);
+
+	var pagecat = CmsPage.GetPageCategories(10);
+	var pagetag = CmsPage.GetPageTags(10);
+
+	var dates = CmsPage.GetSiteDates(8);
+}
+
+@section SideBar {
+	<div>
+		@if (CmsPage.ChildNav.Any()) {
+			<h2>Child Pages</h2>
+			<ul class="list-style1">
+				@foreach (var itm in CmsPage.ChildNav) {
+					<li>
+						<a href="@itm.FileName">@itm.NavigationText</a>
+					</li>
+				}
+			</ul>
+		}
+	</div>
+	<div>
+		@if (CmsPage.SiblingNav.Any()) {
+			<h2>Sibling Pages</h2>
+			<ul class="list-style1">
+				@foreach (var itm in CmsPage.SiblingNav) {
+					<li>
+						<a href="@itm.FileName">@itm.NavigationText</a>
+					</li>
+				}
+			</ul>
+		}
+	</div>
+	<div>
+		@if (dates.Any()) {
+			<h2>Dates</h2>
+			<ul class="list-style1">
+				@foreach (var itm in dates) {
+					<li>
+						<a href="@itm.Uri">@itm.Text</a>
+					</li>
+				}
+			</ul>
+		}
+	</div>
+
+	@Html.Partial("_catmeta")
+}

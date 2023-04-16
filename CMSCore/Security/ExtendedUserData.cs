@@ -72,7 +72,7 @@ namespace Carrotware.CMS.Core {
 		public string UserBio { get; set; }
 
 		[Display(Name = "URL")]
-		public string EditorURL { get { return ContentPageHelper.ScrubFilename(this.UserId, String.Format("/{0}/{1}", SiteData.CurrentSite.BlogEditorFolderPath, this.UserName)); } }
+		public string EditorURL { get { return ContentPageHelper.ScrubFilename(this.UserId, string.Format("/{0}/{1}", SiteData.CurrentSite.BlogEditorFolderPath, this.UserName)); } }
 
 		public override string ToString() {
 			return this.FullName_FirstLast;
@@ -81,10 +81,10 @@ namespace Carrotware.CMS.Core {
 		[Display(Name = "First + Last")]
 		public string FullName_FirstLast {
 			get {
-				if (!String.IsNullOrEmpty(this.LastName)) {
-					return String.Format("{0} {1}", this.FirstName, this.LastName);
+				if (!string.IsNullOrEmpty(this.LastName)) {
+					return string.Format("{0} {1}", this.FirstName, this.LastName);
 				} else {
-					if (!String.IsNullOrEmpty(this.UserName)) {
+					if (!string.IsNullOrEmpty(this.UserName)) {
 						return this.UserName;
 					} else {
 						return "Unknown User";
@@ -96,10 +96,10 @@ namespace Carrotware.CMS.Core {
 		[Display(Name = "Last, First")]
 		public string FullName_LastFirst {
 			get {
-				if (!String.IsNullOrEmpty(this.LastName)) {
-					return String.Format("{0}, {1}", this.LastName, this.FirstName);
+				if (!string.IsNullOrEmpty(this.LastName)) {
+					return string.Format("{0}, {1}", this.LastName, this.FirstName);
 				} else {
-					if (!String.IsNullOrEmpty(this.UserName)) {
+					if (!string.IsNullOrEmpty(this.UserName)) {
 						return this.UserName;
 					} else {
 						return "Unknown User";
@@ -159,9 +159,9 @@ namespace Carrotware.CMS.Core {
 
 		internal void LoadUserData(vw_carrot_UserData c) {
 			this.UserId = Guid.Empty;
-			this.Email = String.Empty;
-			this.UserName = String.Empty;
-			this.UserKey = String.Empty;
+			this.Email = string.Empty;
+			this.UserName = string.Empty;
+			this.UserKey = string.Empty;
 
 			if (c != null) {
 				this.Id = c.Id;

@@ -16,14 +16,14 @@
 	ViewBag.Title = CmsPage.Titlebar;
 	ViewBag.SiteName = CmsPage.TheSite.SiteName;
 
-	TwoLevelNavigation nav = new TwoLevelNavigation() {
+	var nav = new TwoLevelNavigation() {
 		FontSize = new SizeUnit("10px"),
-		ForeColor = System.Drawing.ColorTranslator.FromHtml("#FFFFFF"),
-		BackColor = System.Drawing.ColorTranslator.FromHtml("#F4845A"),
+		ForeColor = CarrotWeb.DecodeColor("#FFFFFF"),
+		BackColor = CarrotWeb.DecodeColor("#F4845A"),
 		ElementId = "nav"
 	};
 
-	List<TypeHeadingOption> heads = new List<TypeHeadingOption>();
+	var heads = new List<TypeHeadingOption>();
 	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateIndex, LabelText = "Date:" });
 	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateDayIndex, LabelText = "Day:", FormatText = "{0:dddd, d MMMM yyyy}" });
 	heads.Add(new TypeHeadingOption { KeyValue = PageViewType.ViewType.DateMonthIndex, LabelText = "Month:", FormatText = "{0:MMM yyyy}" });
@@ -51,7 +51,7 @@
 
 	<link rel="stylesheet" href="~/Assets/citrus-island/CitrusIsland.css" type="text/css" />
 
-	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver, UseJqueryMigrate = true })
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver, JQVersion = "1.11", UseJqueryMigrate = true })
 
 	@CarrotCakeHtml.GetSiteCanonicalURL()
 
@@ -101,7 +101,7 @@
 		<div id="main">
 			<h1>@CmsPage.Heading</h1>
 			<div>
-				@CarrotCakeHtml.RenderWidget("phCenterTop")
+				@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterTop)
 			</div>
 
 			<div>
@@ -128,7 +128,7 @@
 
 			@RenderSection("PagedDataSection", required: false)
 			<div>
-				@CarrotCakeHtml.RenderWidget("phCenterBottom")
+				@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterBottom)
 			</div>
 
 			<hr />

@@ -1,0 +1,39 @@
+@inherits CmsWebViewPage
+
+@{
+	Layout = "_main.cshtml";
+
+	var pagecat = CmsPage.GetPageCategories(10);
+	var pagetag = CmsPage.GetPageTags(10);
+
+	var usr = CmsPage.BylineUser;
+}
+
+@section SideBar {
+
+	@Html.Partial("_catmeta")
+
+}
+
+@section BlogAuthor {
+	<p>
+		By
+		@usr.FullName_FirstLast
+	</p>
+}
+
+@section MetaTags {
+
+	<div class="meta">
+		@foreach (var itm in pagecat) {
+			<span class="meta-item"><a href="@itm.Uri">@itm.Text</a></span>
+		}
+	</div>
+
+	<div class="meta">
+		@foreach (var itm in pagetag) {
+			<span class="meta-item"><a href="@itm.Uri">@itm.Text</a></span>
+		}
+	</div>
+
+}

@@ -20,7 +20,7 @@ namespace Carrotware.Web.UI.Components {
 
 		public static string DefaultJQUIVersion {
 			get {
-				return "1.11";
+				return "1.13";
 			}
 		}
 
@@ -31,7 +31,7 @@ namespace Carrotware.Web.UI.Components {
 		public static string GeneralUri {
 			get {
 				if (string.IsNullOrEmpty(_generalUri)) {
-					_generalUri = CarrotWeb.GetWebResourceUrl("jquery.jqueryui-1-11-4.js");
+					_generalUri = CarrotWeb.GetWebResourceUrl("jquery.jqueryui-1-13-2.js");
 				}
 
 				return _generalUri;
@@ -70,13 +70,23 @@ namespace Carrotware.Web.UI.Components {
 					break;
 
 				case "1.11":
-				default:
 					jqVer = "1.11.4";
 					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jqueryui-1-11-4.js");
 					break;
+
+				case "1.12":
+					jqVer = "1.12.1";
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jqueryui-1-12-1.js");
+					break;
+
+				case "1.13":
+				default:
+					jqVer = "1.13.2";
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jqueryui-1-13-2.js");
+					break;
 			}
 
-			return ("<!-- JQuery UI v. " + jqVer + " --> <script src=\"" + sJQFile + "\" type=\"text/javascript\"></script> ").Trim();
+			return UrlPaths.CreateJavascriptTag(string.Format("JQuery UI v.{0}", jqVer), sJQFile).Trim();
 		}
 	}
 }

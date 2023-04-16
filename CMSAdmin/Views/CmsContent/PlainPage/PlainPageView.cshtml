@@ -5,7 +5,7 @@
 
 	var pager = new PagedDataSummary();
 
-	if (CmsPage.TheSite.Blog_Root_ContentID.HasValue && CmsPage.ThePage.Root_ContentID == CmsPage.TheSite.Blog_Root_ContentID.Value) {
+	if (CmsPage.IsSiteIndex) {
 		pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
 		pager.PageSize = 10;
 		pager.IgnoreSitePath = false;
@@ -15,18 +15,23 @@
 		pager.ContentType = PagedDataSummary.SummaryContentType.Unknown;
 	}
 
+	CmsPage.TypeLabelPrefixes = CmsPage.GetDefaultTypeHeadingOptions();
+
 	ViewBag.Title = CmsPage.Titlebar;
 	ViewBag.SiteName = CmsPage.TheSite.SiteName;
 
-	TwoLevelNavigation nav = new TwoLevelNavigation() {
+	var nav = new TwoLevelNavigation() {
 		FontSize = new SizeUnit("14px"),
-		ForeColor = System.Drawing.ColorTranslator.FromHtml("#424242"),
-		SelFGColor = System.Drawing.ColorTranslator.FromHtml("#ffffff"),
-		SubBGColor = System.Drawing.ColorTranslator.FromHtml("#787878"),
-		SubFGColor = System.Drawing.ColorTranslator.FromHtml("#ffffff"),
-		UnSelBGColor = System.Drawing.ColorTranslator.FromHtml("#808080"),
-		UnSelFGColor = System.Drawing.ColorTranslator.FromHtml("#eeeeee"),
+		ForeColor = CarrotWeb.DecodeColor("#424242"),
+		SelFGColor = CarrotWeb.DecodeColor("#ffffff"),
+		SubBGColor = CarrotWeb.DecodeColor("#787878"),
+		SubFGColor = CarrotWeb.DecodeColor("#ffffff"),
+		UnSelBGColor = CarrotWeb.DecodeColor("#808080"),
+		UnSelFGColor = CarrotWeb.DecodeColor("#eeeeee"),
 	};
+
+	var cssUri = Helper.GetWebResourceUrl("Views.CmsContent.PlainPage.plain.css");
+	cssUri = string.Format("{0}&cms={1}&ts={2}", cssUri, SiteData.CurrentDLLVersion, CarrotWeb.DateKey());
 }
 
 <!DOCTYPE html>
@@ -43,7 +48,13 @@
 	@CarrotCakeHtml.MetaTags()
 	@CarrotCakeHtml.Rss()
 
-	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.GlossyBlack, UseJqueryMigrate = true })
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.GlossyBlack, JQVersion = "1.11", UseJqueryMigrate = true })
+
+	<link href="@Html.Raw(cssUri)" rel="stylesheet" type="text/css" />
+
+	<title>@CmsPage.Titlebar</title>
+
+	@CarrotWeb.RenderTwoPartControlBodyCss(nav)
 
 	<script type="text/javascript">
 		function doButtonStyle() {
@@ -58,270 +69,6 @@
 			doButtonStyle();
 		});
 	</script>
-
-	<title>@CmsPage.Titlebar</title>
-
-	<style type="text/css">
-		body {
-			margin: 0;
-			padding: 0;
-			background: #FFFFFF;
-			font-family: Arial, Helvetica, sans-serif;
-			font-size: 12px;
-			color: #787878;
-		}
-
-		h1, h2, h3 {
-			margin: 0;
-			padding: 0;
-			font-weight: normal;
-			color: #000000;
-			margin-bottom: 5px;
-		}
-
-		h1 {
-			font-size: 2.5em;
-		}
-
-		h2 {
-			font-size: 2em;
-		}
-
-		h3 {
-			font-size: 1.5em;
-		}
-
-		p, ul, ol {
-			margin-top: 0;
-			line-height: 180%;
-		}
-
-		a {
-			text-decoration: none;
-			color: #424242;
-		}
-
-			a:hover {
-				text-decoration: underline;
-				color: #333333;
-			}
-
-		#wrapper {
-			width: 980px;
-			margin: 0 auto;
-			padding: 0;
-		}
-
-		/* Header */
-
-		#header {
-			clear: both;
-			width: 980px;
-			height: 300px;
-			margin: 0 auto;
-			padding: 0;
-		}
-
-		/* Menu */
-
-		#menu {
-			width: 940px;
-			margin: 0 auto;
-			padding: 0;
-			padding-bottom: 10px;
-		}
-
-		/* Page */
-
-		#page {
-			width: 940px;
-			margin: 0 auto;
-			padding: 0 0 0 0;
-		}
-
-		#page-bgtop {
-			padding: 10px 0;
-		}
-
-		/* Content */
-
-		#content {
-			float: right;
-			width: 590px;
-			padding: 20px 0 0 0;
-		}
-
-		.text-danger {
-			color: #990000;
-		}
-
-		.searchbox {
-			background: #ffffff url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAABGdBTUEAAK/INwWK6QAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC42/Ixj3wAAAWlJREFUKM9t0L1LglEUx/Hv82jklPVUlDZEYBAJjVnwEC01hoQUEQ1B9gf0AkJTEeRQg2tLoLSJuPQHBC4Ojb0MJdSQVGCI7957vS2lFP3OeD6cwzmGBnYDZgTbsDSNQj1TiyaytGPCftiRbo3WYkX/p78ck6PO9Gq4A4ydgCPdvFhP4GcExTO3p1tsloNX2Z8JEZFfjzPPON248DG7dy7zRDorbJFiEjcKhULgxldJmXYbOKxmEg8SgUSgUAw1klg/wKmQIBFoFAqNQgpE54pqQYV4RiJRKCSSvApVC21Qz7SWeeAD8Y0+ybkOGrk2qEW1J7pNlkdKlHnk5ixnu9T0xNr3HzTBcNdRPd9I1ZMSHfIczpg+SlzyMPzyBoYGFgNETBurRbXU7V5hDAf3nLSE9/3N0PzO5IY/vsQgBa45f+qbcv7pc5cYoxhfAIqM9FVM9D/l3ejRc9r72jug+Rdo+i3nca9Lo/kCQxOt+BiAd1oAAAAASUVORK5CYII=") no-repeat scroll 4px 4px;
-			padding: 0.1em 0.1em 0.1em 25px;
-			font-size: 14pt;
-			width: 175px;
-		}
-
-		.post {
-			margin-bottom: 15px;
-		}
-
-			.post .title {
-				height: 40px;
-				margin-bottom: 10px;
-				padding: 12px 0 0 0;
-				letter-spacing: -.5px;
-				color: #82050B;
-			}
-
-				.post .title a {
-					color: #82050B;
-					border: none;
-				}
-
-			.post .entry {
-				padding: 0 0 20px 0;
-				padding-bottom: 20px;
-				text-align: justify;
-			}
-
-		.links {
-			padding-top: 20px;
-			font-size: 12px;
-			font-weight: bold;
-		}
-
-		/* Sidebar */
-
-		#sidebar {
-			float: left;
-			width: 290px;
-			margin: 0;
-			padding: 0 0 0 0;
-			color: #787878;
-		}
-
-			#sidebar ul {
-				margin: 0;
-				padding: 0;
-				list-style: none;
-			}
-
-			#sidebar li {
-				margin: 0;
-				padding: 0;
-			}
-
-				#sidebar li ul {
-					margin: 0 0;
-					padding-bottom: 30px;
-				}
-
-				#sidebar li li {
-					line-height: 25px;
-					margin: 0 30px 15px;
-					border-left: none;
-					border-bottom: dotted 1px #737373;
-				}
-
-			#sidebar h2 {
-				height: 30px;
-				padding-left: 30px;
-				letter-spacing: -.5px;
-				font-size: 1.8em;
-			}
-
-			#sidebar p {
-				margin: 0 0;
-				padding: 0 30px 20px 30px;
-				text-align: justify;
-			}
-
-			#sidebar a {
-				border: none;
-			}
-
-				#sidebar a:hover {
-					text-decoration: underline;
-					color: #8A8A8A;
-				}
-
-		/* Footer */
-
-		#footer {
-			height: 50px;
-			margin: 0 auto;
-			padding: 0 0 15px 0;
-			background: #ECECEC;
-			border-top: 1px solid #DEDEDE;
-			font-family: Arial, Helvetica, sans-serif;
-		}
-
-			#footer p {
-				margin: 0;
-				padding-top: 20px;
-				line-height: normal;
-				font-size: 9px;
-				text-transform: uppercase;
-				text-align: center;
-				color: #A0A0A0;
-			}
-
-			#footer a {
-				color: #8A8A8A;
-			}
-
-		/* OTHER */
-
-		.aligncenter, div.aligncenter {
-			display: block;
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.alignleft {
-			float: left;
-		}
-
-		.alignright {
-			float: right;
-		}
-
-		/* pager */
-
-		.pagerfooterlinks {
-			line-height: normal;
-			color: #ffffff;
-		}
-
-			.pagerfooterlinks .pagerlink {
-				margin: 2px 2px 2px 2px;
-				padding: 5px 5px 5px 5px;
-				border: 2px solid #333333;
-				background-color: #cccccc;
-				float: left;
-			}
-
-				.pagerfooterlinks .pagerlink a {
-					margin: 2px 2px 2px 2px;
-					padding: 5px 5px 5px 5px;
-					font-weight: bold;
-					color: #666666;
-				}
-
-					.pagerfooterlinks .pagerlink a.selected {
-						color: #ffffff;
-						font-weight: bold;
-					}
-
-			.pagerfooterlinks .selectedwrap {
-				color: #ffffff;
-				background-color: #333333;
-				font-weight: bold;
-			}
-	</style>
-
-	@CarrotWeb.RenderTwoPartControlBodyCss(nav)
 
 	@CarrotCakeHtml.IncludeHead()
 </head>
@@ -353,7 +100,7 @@
 							<li>
 								@{
 									using (var srchFrm = CarrotCakeHtml.BeginSearchForm()) {
-										var srch = srchFrm.GetModelHelper();
+										var srch = srchFrm.GetModelHelper(true);
 										<table>
 											<tr>
 												<td>@srch.TextBoxFor(x => x.query, new { @size = "25", @class = "searchbox" })</td>
@@ -374,54 +121,63 @@
 								</li>*@
 							<li>
 								<div>
-									@CarrotCakeHtml.RenderWidget("phLeftTop")
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftTop)
 								</div>
 								<div>
 									@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextLeft)
 								</div>
 								<div>
-									@CarrotCakeHtml.RenderWidget("phLeftBottom")
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftBottom)
 								</div>
 							</li>
-							<li>
-								@if (CmsPage.ChildNav.Any()) {
-									<h1>Child Pages</h1>
-									<ul class="sidemenu">
-										@foreach (var itm in CmsPage.ChildNav) {
-											<li class="child-nav"><a href="@itm.FileName">@itm.NavigationText</a></li>
-										}
-									</ul>
-								}
-							</li>
-							<li>
-								@if (CmsPage.SiblingNav.Any()) {
-									<h1>Sibling Pages</h1>
-									<ul class="sidemenu">
-										@foreach (var itm in CmsPage.SiblingNav) {
-											<li class="child-nav"><a href="@itm.FileName">@itm.NavigationText</a></li>
-										}
-									</ul>
-								}
-							</li>
-							<li>
-								@{
-									var updates = CmsPage.GetSiteUpdates(10);
-									if (updates.Any()) {
-										<h1>Recent Updates</h1>
+							@if (CmsPage.IsPageContent == true) {
+								<li>
+									@if (CmsPage.ChildNav.Any()) {
+										<h1>Child Pages</h1>
 										<ul class="sidemenu">
-											@foreach (var itm in updates) {
-												<li class="child-nav">
-													<a href="@itm.FileName">
-														@itm.NavigationText
-														@String.Format(" ({0:d})", itm.GoLiveDate)
-													</a>
-												</li>
+											@foreach (var itm in CmsPage.ChildNav) {
+												<li class="child-nav"><a href="@itm.FileName">@itm.NavigationText</a></li>
 											}
 										</ul>
 									}
-								}
-							</li>
+								</li>
+								<li>
+									@if (CmsPage.SiblingNav.Any()) {
+										<h1>Sibling Pages</h1>
+										<ul class="sidemenu">
+											@foreach (var itm in CmsPage.SiblingNav) {
+												<li class="child-nav"><a href="@itm.FileName">@itm.NavigationText</a></li>
+											}
+										</ul>
+									}
+								</li>
+								<li>
+									@{
+										var updates = CmsPage.GetSiteUpdates(10);
+										if (updates.Any()) {
+											<h1>Recent Updates</h1>
+											<ul class="sidemenu">
+												@foreach (var itm in updates) {
+													<li class="child-nav">
+														<a href="@itm.FileName">
+															@itm.NavigationText
+															@string.Format(" ({0:d})", itm.GoLiveDate)
+														</a>
+													</li>
+												}
+											</ul>
+										}
+									}
+								</li>
+										}
+
+							@if (CmsPage.IsBlogPost || CmsPage.IsSiteIndex) {
+								<li>
+									@Html.Partial("_planblogdata")
+								</li>
+							}
 						</ul>
+
 					</div>
 					<!-- end #sidebar -->
 					<div id="content">
@@ -431,29 +187,29 @@
 							</h2>
 							<div class="entry">
 								<div>
-									@CarrotCakeHtml.RenderWidget("phCenterTop")
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterTop)
 								</div>
 								<div>
 									@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
 								</div>
-								@if (CmsPage.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+								@if (CmsPage.IsBlogPost) {
 									var pagecat = CmsPage.GetPageCategories(25);
 									var pagetag = CmsPage.GetPageTags(25);
 
 									<div class="meta">
 										@foreach (var itm in pagecat) {
-											<span class="meta-item @String.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
+											<span class="meta-item @string.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
 										}
 									</div>
 
 									<div class="meta">
 										@foreach (var itm in pagetag) {
-											<span class="meta-item @String.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
+											<span class="meta-item @string.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
 										}
 									</div>
 								}
 								<div>
-									@CarrotCakeHtml.RenderWidget("phCenterBottom")
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterBottom)
 								</div>
 								<div>
 									@Html.Partial("_plaincontact")
@@ -463,13 +219,13 @@
 							</div>
 							<div class="entry">
 								<div>
-									@CarrotCakeHtml.RenderWidget("phRightTop")
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightTop)
 								</div>
 								<div>
 									@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextRight)
 								</div>
 								<div>
-									@CarrotCakeHtml.RenderWidget("phRightBottom")
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightBottom)
 								</div>
 							</div>
 						</div>
@@ -482,11 +238,11 @@
 								<div>
 									<p>
 										<b class="green" style="font-size: 110%;">
-											<a href="@item.FileName">@item.NavigationText</a> &nbsp;|&nbsp; @String.Format("{0:d}", item.GoLiveDate)
+											<a href="@item.FileName">@item.NavigationText</a> &nbsp;|&nbsp; @string.Format("{0:d}", item.GoLiveDate)
 										</b>
 										<br />
 										by @{
-								var usr = item.GetUserInfo();
+											var usr = item.BylineUser;
 										}
 										@usr.FullName_FirstLast
 										<br />
@@ -498,28 +254,28 @@
 											Read more
 										</a>
 										<span class="comments">
-											@String.Format(" Comments ({0}) ", item.CommentCount)
+											@string.Format(" Comments ({0}) ", item.CommentCount)
 										</span><span class="date">
-											@String.Format("{0:MMMM d, yyyy}", item.GoLiveDate)
+											@string.Format("{0:MMMM d, yyyy}", item.GoLiveDate)
 										</span>
 									</p>
 								</div>
-							}
+											}
 
-							<div class="pagerfooterlinks">
-								@foreach (var i in pager.PageNumbers) {
-									using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
-										using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
-											@String.Format(" {0} ", i)
-										}
-									}
-								}
-							</div>
+											<div class="pagerfooterlinks">
+												@foreach (var i in pager.PageNumbers) {
+													using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+														using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+															@String.Format(" {0} ", i)
+														}
+													}
+												}
+											</div>
 
-							<div style="clear: both;">
-							</div>
-							<br />
-						}
+											<div style="clear: both;">
+											</div>
+											<br />
+											}
 
 						<div style="clear: both;">
 							&nbsp;
@@ -539,7 +295,7 @@
 
 	<div id="footer">
 		<p>
-			@Html.Raw(String.Format("&copy;  {0}, {1} ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
+			@Html.Raw(string.Format("&copy;  {0}, {1} ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
 			All rights reserved.
 		</p>
 	</div>
