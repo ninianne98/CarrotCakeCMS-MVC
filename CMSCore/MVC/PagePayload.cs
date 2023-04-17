@@ -484,66 +484,39 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		private ExtendedUserData _user = null;
-
 		public ExtendedUserData GetUserInfo() {
-			return this.EditUser;
+			return this.ThePage.GetUserInfo();
 		}
 
 		public ExtendedUserData EditUser {
 			get {
-				if (_user == null && this.ThePage.EditUserId.HasValue) {
-					_user = new ExtendedUserData(this.ThePage.EditUserId.Value);
-				}
-				return _user;
+				return this.ThePage.EditUser;
 			}
 		}
 
-		private ExtendedUserData _crUser = null;
-
 		public ExtendedUserData GetCreateUserInfo() {
-			return this.CreateUser;
+			return this.ThePage.GetCreateUserInfo();
 		}
 
 		public ExtendedUserData CreateUser {
 			get {
-				if (_crUser == null) {
-					_crUser = new ExtendedUserData(this.ThePage.CreateUserId);
-				}
-				return _crUser;
+				return this.ThePage.CreateUser;
 			}
 		}
 
-		private ExtendedUserData _creditUser = null;
-
 		public ExtendedUserData GetCreditUserInfo() {
-			return this.CreditUser;
+			return this.ThePage.GetCreditUserInfo();
 		}
 
 		public ExtendedUserData CreditUser {
 			get {
-				if (_creditUser == null && this.ThePage.CreditUserId.HasValue) {
-					_creditUser = new ExtendedUserData(this.ThePage.CreditUserId.Value);
-				}
-				return _creditUser;
+				return this.ThePage.CreditUser;
 			}
 		}
 
-		private ExtendedUserData _bylineUser = null;
-
 		public ExtendedUserData BylineUser {
 			get {
-				if (_bylineUser == null && this.ThePage.CreditUserId.HasValue) {
-					_bylineUser = this.CreditUser;
-				}
-				if (_bylineUser == null && this.ThePage.EditUserId.HasValue) {
-					_bylineUser = this.EditUser;
-				}
-				if (_bylineUser == null) {
-					_bylineUser = this.CreateUser;
-				}
-
-				return _bylineUser;
+				return this.ThePage.BylineUser;
 			}
 		}
 
