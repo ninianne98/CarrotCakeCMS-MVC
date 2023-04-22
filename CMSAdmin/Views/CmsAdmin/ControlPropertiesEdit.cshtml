@@ -57,7 +57,7 @@
 					@Html.TextBoxFor(modelItem => Model.Properties[i].TextValue, new { maxlength = "1024", size = 75 })
 				}
 				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.RichHTMLTextBox) {
-					@Html.TextAreaFor(modelItem => Model.Properties[i].TextValue, new { @class = "mceEditor", cols = "60", rows = "5" })
+					@Html.TextAreaFor(modelItem => Model.Properties[i].TextValue, new { @class = "mceEditor", cols = "60", rows = "8" })
 				}
 				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.MultiLineTextBox) {
 					@Html.TextAreaFor(modelItem => Model.Properties[i].TextValue, new { cols = "60", rows = "5" })

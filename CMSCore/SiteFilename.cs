@@ -52,7 +52,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string LoginURL {
-			get { return SiteData.AdminFolderPath + "Login"; }
+			get { return SiteData.AdminFolderPath + LoginAction; }
 		}
 
 		public static string NotAuthorizedURL {
@@ -76,7 +76,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string SiteInfoURL {
-			get { return SiteData.AdminFolderPath + "SiteInfo"; }
+			get { return SiteData.AdminFolderPath + SiteInfoAction; }
 		}
 
 		public static string SiteIndexURL {
@@ -245,6 +245,22 @@ namespace Carrotware.CMS.Core {
 
 		public static string MainSiteSpecialViewFoot {
 			get { return "~/Views/CmsContent/_SpecialFoot.cshtml"; }
+		}
+
+		public static string IndexAction {
+			get { return "Index"; }
+		}
+
+		public static string SiteInfoAction {
+			get { return "SiteInfo"; }
+		}
+
+		public static string LogOffAction {
+			get { return "LogOff"; }
+		}
+
+		public static string LoginAction {
+			get { return "Login"; }
 		}
 	}
 }

@@ -27,6 +27,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public bool CreateHomePage { get; set; }
 
+		public bool CreateIndexPage { get; set; }
+
 		public SiteData Site { get; set; }
 
 		public void Load(SiteData model) {
@@ -38,7 +40,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			IEnumerable<ValidationResult> oldErrors = this.Site.Validate(validationContext);
 
 			foreach (ValidationResult s in oldErrors) {
-				List<string> mbrs = s.MemberNames.ToList().Select(m => String.Format("Site.{0}", m)).ToList();
+				List<string> mbrs = s.MemberNames.ToList().Select(m => string.Format("Site.{0}", m)).ToList();
 
 				errors.Add(new ValidationResult(s.ErrorMessage, mbrs));
 			}

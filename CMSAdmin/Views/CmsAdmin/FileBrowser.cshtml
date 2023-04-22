@@ -1,13 +1,11 @@
 ﻿@model FileBrowserModel
-
+<!DOCTYPE html>
 @{
 	ViewBag.Title = "File Browser";
 	Layout = null;
 
 	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
 }
-
-<!DOCTYPE html>
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
@@ -18,7 +16,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.LightGreen, UseJqueryMigrate = true })
 
-	<link href="~/Assets/Admin/Includes/uploadfile.css" rel="stylesheet" type="text/css" />
+	<link href="~/Assets/Admin/Includes/uploadfile.css?@versionKey" rel="stylesheet" type="text/css" />
 	<script src="~/Assets/Admin/Includes/jquery.form.min.js?@versionKey" type="text/javascript"></script>
 	<script src="~/Assets/Admin/Includes/jquery.uploadfile.min.js?@versionKey" type="text/javascript"></script>
 
@@ -26,30 +24,54 @@
 	<script src="~/Assets/iCheck/icheck.min.js?@versionKey" type="text/javascript"></script>
 	<script src="~/Assets/Admin/Includes/icheck.init.js?@versionKey" type="text/javascript"></script>
 
-	<link href="~/Assets/Admin/Includes/filebrowser.css" rel="stylesheet" type="text/css" />
+	<link href="~/Assets/Admin/Includes/filebrowser.css?@versionKey" rel="stylesheet" type="text/css" />
 
 	<script type="text/javascript">
+		var imgFileExt = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'webp'];
+		var defaultImage = '/Assets/Admin/images/LargeDoc.png';
+
+		var imgPreviewId = '#imgWrapperMain';
+		var imgRealId = '#imgRealPreview';
+		var imgThumbId = '#imgThmbnailPreview';
+		var imgSizeId = '#imgPreviewCaption';
+		var selFile = '#filePickerFileName';
+		var selFileImgPrev = '#imgThmbnailSelected';
+		var fileZone = '#fileZone';
+
 		$(document).ready(function () {
 			$("input:button, input:submit, input:reset, button").button();
+
+			$(selFile).val('');
 		});
-	</script>
-	<script type="text/javascript">
-		var selFile = '#txtSelectedFile';
-		function SetFile(val) {
-			var fldN = selFile;
-			var fld = $(fldN);
-			fld.val(val);
+
+		//=========================
+
+		function SetFile(uri) {
+			var fld = $(selFile);
+
+			fld.val(uri);
+			fld.blur();
+		}
+
+		function cmsUpdateFileName() {
+			$(selFileImgPrev).attr('src', defaultImage);
+
+			var uri = $(selFile).val();
+			var uriExt = uri.substr(uri.lastIndexOf('.') + 1);
+			if ($.inArray(uriExt.toLowerCase(), imgFileExt) > -1) {
+				$(selFileImgPrev).attr('src', uri);
+			}
 		}
 
 		function cmsSetFileName() {
-			var fldN = selFile;
-			var fld = $(fldN);
+			var fld = $(selFile);
+
 			window.opener.cmsSetFileName(fld.val());
 		}
 
 		function cmsSetFileNameReturn() {
-			var fldN = selFile;
-			var fld = $(fldN);
+			var fld = $(selFile);
+
 			window.parent.cmsSetFileNameReturn(fld.val());
 
 			return false;
@@ -57,7 +79,30 @@
 	</script>
 
 	<script type="text/javascript">
+		var dropResults = '.ajax-file-upload-container';
+		var clrBtnFiles = '#btnClearUploads';
+
+		function clearUploads() {
+			if ($(dropResults).html().length > 10) {
+				$(clrBtnFiles).hide();
+				$(dropResults).html('');
+			}
+			return false;
+		}
+
 		$(document).ready(function () {
+			$(clrBtnFiles).hide();
+
+			$("#fileuploader").on('drop', function (e) {
+				setTimeout(function () {
+					if ($(dropResults).html().length > 10) {
+						$(clrBtnFiles).show();
+					}
+				}, 900);
+
+				return true;
+			});
+
 			$("#fileuploader").uploadFile({
 				url: "@Url.Action("AjaxFileUpload", RouteConfig.AdminCtrlr)",
 				fileName: "@Html.IdFor(m => m.PostedFiles)",
@@ -68,9 +113,9 @@
 
 				uploadButtonClass: "ajax-file-upload-none",
 				uploadStr: "  ",
-				dragDropStr: "<span>Drag files here to upload</span>",
-				statusBarWidth: 400,
-				dragdropWidth: 400,
+				dragDropStr: "<span>Drag files here to upload <button style='display:none;' id='btnClearUploads' onclick='clearUploads();return false;'>clear uploads</button> </span>",
+				statusBarWidth: 525,
+				dragdropWidth: 525,
 				showPreview: true,
 				previewHeight: "auto",
 				previewWidth: "100px",
@@ -92,68 +137,31 @@
 
 	@if (Model.UseTinyMCE) {
 		<text>
-			<script src="~/Assets/tiny_mce/tiny_mce.js?@versionKey" type="text/javascript"></script>
-			<script src="~/Assets/tiny_mce/tiny_mce_popup.js?@versionKey" type="text/javascript"></script>
+			@*<script src="~/Assets/tinymce/tinymce.min.js?@versionKey" type="text/javascript"></script>*@
 
 			<script type="text/javascript">
+				function tinySubmit() {
+					var fld = $(selFile);
+					var uri = fld.val();
 
-				var FileBrowserDialogue = {
-					init: function () {
-						if (tinyMCE.selectedInstance != null) {
-							tinyMCE.selectedInstance.fileBrowserAlreadyOpen = true;
-						}
-						// Here goes your code for setting your custom things onLoad.
-					},
-					mySubmit: function () {
+					var imgReal = $(imgRealId);
+					$(imgReal).attr('src', '');
+					var h = -1;
+					var w = -1;
+					$(imgReal).attr('src', uri);
 
-						var fldN = '#txtSelectedFile';
-						var fld = $(fldN);
-						var URL = fld.val();
-						var win = tinyMCEPopup.getWindowArg("window");
-						// insert information now
-						if (win.document != null) {
-							win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = URL;
-						}
-						// are we an image browser
-						if (typeof (win.ImageDialog) != "undefined") {
-							// we are, so update image dimensions and preview if necessary
-							if (win.ImageDialog.getImageData) win.ImageDialog.getImageData();
-							if (win.ImageDialog.showPreviewImage) win.ImageDialog.showPreviewImage(URL);
+					var uriExt = uri.substr(uri.lastIndexOf('.') + 1);
+
+					// wait a tiny bit so the image can load
+					setTimeout(function () {
+						if ($.inArray(uriExt.toLowerCase(), imgFileExt) > -1) {
+							h = $(imgReal).height();
+							w = $(imgReal).width();
 						}
 
-						// close popup window
-						tinyMCEPopup.close();
-					}
+						window.parent.cmsFileBrowseSetUri(uri, h, w);
+					}, 600);
 				}
-
-				tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
-
-				myInitFunction = function () {
-
-					// patch TinyMCEPopup.close
-					tinyMCEPopup.close_original = tinyMCEPopup.close;
-					tinyMCEPopup.close = function () {
-						// remove blocking of opening another file browser window
-						if (tinyMCE.selectedInstance != null) {
-							tinyMCE.selectedInstance.fileBrowserAlreadyOpen = false;
-						}
-
-						// call original function to close the file browser window
-						tinyMCEPopup.close_original();
-					};
-				}
-
-				myExitFunction = function () {
-					if (tinyMCE != null) {
-						if (tinyMCE.selectedInstance != null) {
-							tinyMCE.selectedInstance.fileBrowserAlreadyOpen = false;
-						}
-					}
-				}
-
-				window.onbeforeunload = myExitFunction;
-
-				tinyMCEPopup.executeOnLoad('myInitFunction();');
 			</script>
 		</text>
 	}
@@ -201,28 +209,6 @@
 			</table>
 		</div>
 
-		@*@using (Html.BeginForm("FileBrowser", RouteConfig.AdminCtrlr, FormMethod.Post, new { enctype = "multipart/form-data" })) {
-				@Html.AntiForgeryToken()
-				<p>
-					<br />
-					Select a file to upload to the current folder:<br />
-					@Html.TextBoxFor(m => m.PostedFile, new { type = "file" })
-
-					@Html.HiddenFor(m => m.QueryPath)
-					@Html.HiddenFor(m => m.ReturnMode)
-					@Html.HiddenFor(m => m.UseTinyMCE)
-					@Html.HiddenFor(m => m.ViewMode)
-
-					<input type="submit" name="btnUpload" value="Upload" id="btnUpload" /><br />
-					@Html.CheckBoxFor(m => m.EscapeSpaces)
-					Change spaces to dashes
-					<br />
-					<span class="@Model.FileMsgCss" id="lblWarning">
-						@Model.FileMsg
-					</span>
-				</p>
-			}*@
-
 		@using (Html.BeginForm("AjaxFileUpload", RouteConfig.AdminCtrlr, FormMethod.Post, new { enctype = "multipart/form-data" })) {
 			@Html.AntiForgeryToken()
 			<p>
@@ -257,8 +243,8 @@
 										<img id="imgThmbnail" filetype="@Model.FileImageLink(f.MimeType)" alt="" src="@Model.CreateFileSrc(f.FolderPath, f.FileName, f.MimeType)" />
 									</div>
 									<div style="margin: 3px;" id="imgSubContainer">
-										<a id="lnkContent" href='@Model.CreateFileLink(String.Format( "{0}{1}", f.FolderPath, f.FileName ))'>
-											@CarrotWeb.ImageSizer(String.Format("{0}{1}", f.FolderPath, f.FileName), f.FileName, 50, true, null)
+										<a id="lnkContent" href='@Model.CreateFileLink(string.Format("{0}{1}", f.FolderPath, f.FileName))'>
+											@CarrotWeb.ImageSizer(string.Format("{0}{1}", f.FolderPath, f.FileName), f.FileName, 50, true, null)
 										</a>
 									</div>
 									<div style="margin: 3px; text-align: center;">
@@ -291,8 +277,8 @@
 							</tr>
 
 							@{
-					int j = 0;
-					foreach (var f in Model.Files) {
+								int j = 0;
+								foreach (var f in Model.Files) {
 									<tr>
 										<td>
 											@Html.CheckBoxFor(m => Model.Files[j].SelectedItem)
@@ -304,7 +290,7 @@
 										<td>
 											<div class="ImgGroup" id="imgContainerGroup">
 												<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'file')">
-													<a id="lnkContent" href='@Model.CreateFileLink(String.Format( "{0}{1}", f.FolderPath, f.FileName ))'>
+													<a id="lnkContent" href='@Model.CreateFileLink(String.Format("{0}{1}", f.FolderPath, f.FileName))'>
 														@f.FileName
 													</a>
 												</div>
@@ -323,14 +309,14 @@
 											@String.Format("{0}", f.FileSizeFriendly)
 										</td>
 									</tr>
-
-						j++;
-					}
+									j++;
+								}
 							}
 						</table>
 					</div>
 				}
 			</div>
+
 			<div>
 				@if (!Model.Thumbnails) {
 					<a href="@Model.ThumbViewLink" id="lnkThumbView">View Image Thumbnails</a>
@@ -338,67 +324,71 @@
 					<a href="@Model.FileViewLink" id="lnkFileview">View All Files</a>
 				}
 			</div>
+			<div>
+				<div style="float: left;">
+					<div style="float: left;">
+						@if (!Model.Thumbnails) {
+							<p>
+								<br />
+								<input type="submit" name="btnRemove" value="Delete Checked" id="btnRemove" />
+							</p>
+						}
+						<p>
+							<br />
+							Selected File:
+							<input name="filePickerFileName" type="text" size="55" id="filePickerFileName" onchange="cmsUpdateFileName();return false;" onblur="cmsUpdateFileName();return false;" />
 
-								if (!Model.Thumbnails) {
-									<p>
-										<br />
-										<input type="submit" name="btnRemove" value="Delete Checked" id="btnRemove" />
-									</p>
+							@if (Model.ReturnMode & !Model.UseTinyMCE) {
+								<input type="button" name="btnReturnFile" value="Select File" onclick="return cmsSetFileNameReturn();" id="btnReturnFile" />
+							}
+						</p>
+					</div>
+
+					@if (!Model.UseTinyMCE) {
+						<div style="display: none;float:left;">
+							<input type="button" id="Submit1" name="insert" value="Select" onclick="cmsSetFileName();return false;" />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<input type="button" id="Button1" name="cancel" value="Cancel" onclick="window.close();" />
+						</div>
+					}
+
+					<div style="clear: both; height:110px">
+						@if (Model.UseTinyMCE) {
+							<br class="clear" />
+							<div class="mceActionPanel fileBrowserButtons">
+								@if (Model.ReturnMode) {
+									<input type="button" id="insert" name="insert" value="Select" onclick="tinySubmit();return false;" />
 								}
-								<p>
-									<br />
-									Selected File:
-									<input name="txtSelectedFile" type="text" size="50" id="txtSelectedFile" />
+								<input type="button" id="cancel" name="cancel" value="Cancel" onclick="window.parent.cmsFileBrowseClose();" />
+							</div>
+						}
+					</div>
+				</div>
 
-									@if (Model.ReturnMode) {
-										<input type="button" name="btnReturnFile" value="Select File" onclick="return cmsSetFileNameReturn();" id="btnReturnFile" />
-				} @*else {
-												<input type="button" name="btnSelectedFile" value="Return Selection" onclick="FileBrowserDialogue.mySubmit();" id="btnSelectedFile" />
-											}*@
-			</p>
-
-								if (!Model.UseTinyMCE) {
-									<div style="display: none">
-										<input type="button" id="Submit1" name="insert" value="Select" onclick="cmsSetFileName();return false;" />
-										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										<input type="button" id="Button1" name="cancel" value="Cancel" onclick="window.close();" />
-									</div>
-									}
+				<div class="ui-widget-header ui-corner-all" style="margin: auto; margin: 5px 0 0 25px; height:160px; width:325px; float:left; display:block; border: 1px solid #666;">
+					<img style="max-height: 99%; max-width: 99%; display: block; margin:2px;  margin-left: auto; margin-right: auto;" id="imgThmbnailSelected" src="~/Assets/Admin/images/LargeDoc.png" />
+				</div>
+			</div>
 								}
 	</div>
-
-	@if (Model.UseTinyMCE) {
-		<br class="clear" />
-		<div class="mceActionPanel">
-			<input type="button" id="insert" name="insert" value="Select" onclick="FileBrowserDialogue.mySubmit();return false;" />
-			<input type="button" id="cancel" name="cancel" value="Cancel" onclick="tinyMCEPopup.close();" />
-		</div>
-	}
 
 	<div id="imgWrapperMain" style="display: none;">
 		<div style="padding: 5px; min-height: 10px; min-width: 10px;">
 			<div id="imgPreviewCaption">
 				0x0
 			</div>
-			<img alt="document" id="imgThmbnailPreview" src="~/Assets/Admin/images/document.png" class="thumbPreview" />
+			<img alt="document" id="imgThmbnailPreview" src="~/Assets/Admin/images/LargeDoc.png" class="thumbPreview" />
 		</div>
 	</div>
-	<div style="display: block; margin-left: -9999px; float: left; max-height: 9000px; max-width: 9000px;">
-		<img alt="document" id="imgRealPreview" src="~/Assets/Admin/images/document.png" />
+	<div style="display: block; margin-left: -9999px; margin-top: -9999px; float: left; max-height: 9000px; max-width: 9000px;">
+		<img alt="document" id="imgRealPreview" src="~/Assets/Admin/images/LargeDoc.png" />
 	</div>
 
 	<script type="text/javascript">
-		var imgSrc = '/Assets/Admin/images/document.png';
-
-		var imgPreviewId = 'imgWrapperMain';
-		var imgRealId = 'imgRealPreview';
-		var imgThumbId = 'imgThmbnailPreview';
-		var imgSizeId = 'imgPreviewCaption';
-
-		var divImgLayer = $('#' + imgPreviewId);
-		var imgDim = $('#' + imgSizeId);
-		var imgThumb = $('#' + imgThumbId);
-		var imgReal = $('#' + imgRealId);
+		var divImgLayer = $(imgPreviewId);
+		var imgDim = $(imgSizeId);
+		var imgThumb = $(imgThumbId);
+		var imgReal = $(imgRealId);
 
 		function hideImg(obj) {
 			var theNode = $(obj).parent();
@@ -407,27 +397,27 @@
 			$(divImgLayer).attr('style', 'display:none;');
 			$(divImgLayer).attr('class', '');
 
-			$(imgThumb).attr('src', imgSrc);
+			$(imgThumb).attr('src', defaultImage);
 			$(imgThumb).attr('width', 64);
 			$(imgThumb).attr('height', 64);
 			$(imgThumb).removeAttr("width").attr("width");
 			$(imgThumb).removeAttr("height").attr("height");
 
-			$(imgReal).attr('src', imgSrc);
+			$(imgReal).attr('src', defaultImage);
 
 			$(imgDim).html('<br />');
 		}
 
 		function showImg(obj, mode) {
 			var theNode = $(obj).parent();
-			var imgSrc = $(theNode).find('img');
-			var imgtype = $(imgSrc).attr('filetype');
+			var defaultImage = $(theNode).find('img');
+			var imgtype = $(defaultImage).attr('filetype');
 
 			if (imgtype.indexOf('image') >= 0) {
 
-				var val = $(imgSrc).attr('src');
-				var grp = $('#fileZone').attr('id');
-				var pos = $('#fileZone').offset();
+				var val = $(defaultImage).attr('src');
+				var grp = $(fileZone).attr('id');
+				var pos = $(fileZone).offset();
 
 				$(divImgLayer).attr('style', '');
 

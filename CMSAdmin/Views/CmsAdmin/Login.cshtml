@@ -1,12 +1,12 @@
 ﻿@model Carrotware.CMS.Security.Models.LoginViewModel
 
 @{
-	Layout = "~/Views/CmsAdmin/_LayoutPublic.cshtml";
+	Layout = CarrotLayout.Public;
 
 	ViewBag.Title = "Login";
 }
 
-@using (Html.BeginForm("Login", RouteConfig.AdminCtrlr, FormMethod.Post, new { role = "form" })) {
+@using (Html.BeginForm(SiteFilename.LoginAction, RouteConfig.AdminCtrlr, FormMethod.Post, new { role = "form" })) {
 	@Html.AntiForgeryToken()
 
 	<table style="width: 300px;">

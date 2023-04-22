@@ -1,106 +1,145 @@
-﻿var tinyBrowseHeight = 300;
-var tinyBrowseWidth = 500;
+﻿if (typeof jQuery === 'undefined') {
+	throw new Error('Tiny config JavaScript requires jQuery')
+}
+
+var tinyBrowseHeight = 400;
+var tinyBrowseWidth = 600;
 var tinyBrowseResize = false;
 
-function TinyMCEParamInit(winWidth, winHeight, allowResize) {
+function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 	tinyBrowseHeight = parseInt(winHeight);
 	tinyBrowseWidth = parseInt(winWidth);
 	tinyBrowseResize = allowResize;
 
-	tinyMCE.init({
-		//		mode : "textareas",
-		//		theme : "advanced",
-		//		theme_advanced_toolbar_location : "top",
-		//		theme_advanced_toolbar_align : "left",
-		//		document_base_url : "http://www.site.com/path1/"
+	/*
+	menu: {
+		file: { title: 'File', items: 'newdocument restoredraft | preview | print ' },
+		edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
+		view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen' },
+		insert: { title: 'Insert', items: 'image link media template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime' },
+		format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align lineheight | forecolor backcolor | removeformat' },
+		tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
+		table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' },
+		help: { title: 'Help', items: 'help' }
+	}
+	 */
 
-		mode: "textareas",
-		theme: "advanced",
-		editor_selector: "mceEditor",
-		skin: "o2k7",
-		skin_variant: "silver",
-		plugins: "advimage,advlink,advlist,media,inlinepopups,searchreplace,visualblocks,paste,table,preview,insertpreformattedtext",
-		file_browser_callback: "cmsFileBrowserCallback",
-		theme_advanced_buttons1: "bold,italic,underline,strikethrough,sub,sup,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,forecolor,backcolor,|,outdent,indent,blockquote,|,bullist,numlist,|,fileupbtn,cleanup,removeformat,help",
-		theme_advanced_buttons2: "search,replace,|,undo,redo,|,tablecontrols,|,pastetext,pasteword,|,link,unlink,anchor,image,media,|,insertpreformattedtext,code,preview,visualblocks",
-		theme_advanced_buttons3: "",
-		theme_advanced_toolbar_location: "top",
-		theme_advanced_toolbar_align: "left",
-		theme_advanced_statusbar_location: "bottom",
-		//theme_advanced_resize_horizontal: true,
-		theme_advanced_resizing: tinyBrowseResize,
-		theme_advanced_source_editor_width: tinyBrowseWidth,
-		theme_advanced_source_editor_height: tinyBrowseHeight,
-		flash_video_player_url: false,
+	tinymce.init({
+		selector: "textarea.mceEditor",
+		file_picker_types: 'file image media',
+		file_picker_callback: cmsTinyFileBrowserCallback,
+		plugins: 'image imagetools link lists media charmap searchreplace visualblocks paste print table preview code codesample help',
+		toolbar1: 'formatselect | bold italic underline strikethrough sub sup | forecolor backcolor | alignleft aligncenter alignright alignjustify outdent indent | help | ',
+		toolbar2: 'undo redo searchreplace | blockquote bullist numlist | removeformat pastetext | link unlink anchor image media customfilebrowser | charmap codesample code preview visualblocks',
+		removed_menuitems: 'newdocument help',
+		codesample_languages: [
+		   { text: 'HTML', value: 'markup' },
+		   { text: 'XML', value: 'xml' },
+		   { text: 'Bash', value: 'bash' },
+		   { text: 'JavaScript', value: 'javascript' },
+		   { text: 'CSS', value: 'css' },
+		   { text: 'SQL', value: 'sql' },
+		   { text: 'PHP', value: 'php' },
+		   { text: 'Ruby', value: 'ruby' },
+		   { text: 'Python', value: 'python' },
+		   { text: 'Java', value: 'java' },
+		   { text: 'C', value: 'c' },
+		   { text: 'C#', value: 'csharp' },
+		   { text: 'C++', value: 'cpp' }
+		],
+		resize: tinyBrowseResize,
+		width: tinyBrowseWidth,
+		height: tinyBrowseHeight,
 		relative_urls: false,
 		remove_script_host: true,
-		content_css: "/Assets/Admin/includes/richedit.css",
-
-		// Add a custom button
-		setup: function (ed) {
-			ed.addButton('fileupbtn', {
-				title: 'File Upload',
-				image: '/Assets/tiny_mce/insertfile.gif',
-				onclick: function () {
-					ed.focus();
-					var x = cmsFileBrowserCallback(ed, '', '', this);
+		setup: function (editor) {
+			editor.ui.registry.addButton('customfilebrowser', {
+				icon: 'document-properties',
+				tooltip: 'File Browser',
+				onAction: function (_) {
+					cmsTinyFileBrowser('0');
 				}
 			});
-		}
+		},
+		content_css: "/Assets/Admin/includes/richedit.css"
 	});
 }
 
-// http://wiki.moxiecode.com/index.php/TinyMCE:Custom_filebrowser
-function cmsFileBrowserCallback(field_name, url, type, win) {
-	var sURL = adminUri + "FileBrowser?useTiny=1&viewmode=file&fldrpath=/";
-	setTimeout("tinyResetFileBrowserOpenStatus();", 500);
+function cmsTinyFileBrowserCallback(callback, value, meta) {
+	cmsTinyFileBrowser('1');
+}
 
-	// block multiple file browser windows
-	if (!tinyMCE.selectedInstance.fileBrowserAlreadyOpen) {
-		tinyMCE.selectedInstance.fileBrowserAlreadyOpen = true; // but now it will be
+function cmsTinyFileBrowser(fld) {
+	var sURL = adminUri + "FileBrowser?useTiny=1&returnvalue=" + fld + "&viewmode=file&fldrpath=/";
 
-		tinyMCE.activeEditor.windowManager.open({
-			file: sURL,
-			title: 'File Browser',
-			width: tinyBrowseWidth,
-			height: tinyBrowseHeight,
-			resizable: "no",
-			scrollbars: "yes",
-			status: "yes",
-			inline: "yes",
-			close_previous: "yes"
-		}, {
-			window: win,
-			input: field_name
-		});
-	}
-
-	setTimeout("tinyResetFileBrowserOpenStatus();", 1000);
+	tinymce.activeEditor.windowManager.openUrl({
+		url: sURL,
+		title: 'File Browser',
+		resizable: "no",
+		scrollbars: "yes",
+		status: "yes",
+		inline: "yes",
+		close_previous: "yes"
+	});
 
 	return false;
 }
 
-function tinyResetFileBrowserOpenStatus() {
-	tinyMCE.selectedInstance.fileBrowserAlreadyOpen = false;
+function cmsFileBrowseClose() {
+	tinymce.activeEditor.windowManager.close();
+}
+
+function cmsFileBrowseSetUri(uri, h, w) {
+	var isMedia = true;
+	var sl = $("label:contains('Source')");
+	var hl = $("label:contains('Height')")
+	var wl = $("label:contains('Width')");
+
+	if (sl.length < 1) {
+		isMedia = false;
+		sl = $("label:contains('URL')");
+	}
+
+	var src = $(sl).attr('for');
+	$('#' + src).val(uri);
+	$('#' + src).blur();
+
+	if (isMedia) {
+		var hh = $(hl).attr('for');
+		var ww = $(wl).attr('for');
+		if (hh.length > 0 && h > 0) {
+			$('#' + hh).val(h);
+		}
+		if (ww.length > 0 && w > 0) {
+			$('#' + ww).val(w);
+		}
+	}
+
+	//$('.tox-form__group input[type=url]').val(uri);
+	//$('.tox-form__group input[type=url]').blur();
+
+	cmsFileBrowseClose();
 }
 
 function cmsPreSaveTrigger() {
-	var tgr = tinyMCE.triggerSave();
+	var tgr = tinymce.triggerSave();
 	return true;
 }
 
 function cmsToggleTinyMCE(id) {
-	if (!tinyMCE.get(id)) {
+	if (!tinymce.get(id)) {
 		$('#' + id).addClass("mceEditor");
 		$('#' + id).removeClass("rawEditor");
-		tinyMCE.execCommand('mceAddControl', false, id);
+		tinymce.execCommand('mceAddControl', false, id);
 	} else {
 		$('#' + id).addClass("rawEditor");
 		$('#' + id).removeClass("mceEditor");
-		tinyMCE.execCommand('mceFocus', false, id);
-		tinyMCE.execCommand('mceRemoveControl', false, id);
+		tinymce.execCommand('mceFocus', false, id);
+		tinymce.execCommand('mceRemoveControl', false, id);
 	}
 }
+
+//==================================
 
 var fldName = '';
 var winBrowse = null;
@@ -112,7 +151,6 @@ function cmsFileBrowserOpen(fldN) {
 	if (winBrowse != null) {
 		winBrowse.close();
 	}
-	//winBrowse = window.open(adminUri + 'FileBrowser?useTiny=0&viewmode=file&fldrpath=/', '_winBrowse', 'resizable=yes,location=no,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=yes,width=650,height=500,left=50,top=50');
 
 	ShowWindowNoRefresh(adminUri + 'FileBrowser?useTiny=0&viewmode=file&fldrpath=/');
 
@@ -127,6 +165,8 @@ function cmsSetFileName(v) {
 	winBrowse.close();
 	winBrowse = null;
 }
+
+//===================
 
 var adminUri = "/c3-admin/";
 

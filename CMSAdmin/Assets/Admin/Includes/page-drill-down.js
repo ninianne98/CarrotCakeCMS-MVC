@@ -6,6 +6,7 @@ var thisPage = '';
 var menuOuter = 'menuitemsouter';
 var menuInner = 'menuitemsinner';
 var menuPath = 'menupath';
+var menuHead = 'menuhead';
 
 var bMoused = false;
 var bLoad = true;
@@ -92,6 +93,18 @@ function makeMenuClickable() {
 			cmsMakeOKToLeave();
 			setTimeout("cmsMakeNotOKToLeave();", 500);
 		});
+	});
+
+	$("#" + menuHead).on("onmouseout", function () {
+		hideMnu();
+	});
+
+	$("#" + menuHead).on("onmouseover", function () {
+		mouseNode();
+	});
+
+	$("#menuhead, .pageNodeDrillDown6").on("dblclick", function () {
+		mouseNode();
 	});
 }
 

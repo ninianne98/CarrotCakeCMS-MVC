@@ -32,7 +32,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		public CmsContentController()
 			: base() {
-			this.TemplateFile = String.Empty;
+			this.TemplateFile = string.Empty;
 			this.WidgetCount = 0;
 		}
 
@@ -55,7 +55,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				if (DatabaseUpdate.LastSQLError != null) {
 					SiteData.WriteDebugException("cmscontentcontroller_default_inc", DatabaseUpdate.LastSQLError);
 				} else {
-					SiteData.WriteDebugException("cmscontentcontroller_default_inc", new Exception(String.Format("Requesting: {0} {1}", Request.Path, this.DisplayTemplateFile)));
+					SiteData.WriteDebugException("cmscontentcontroller_default_inc", new Exception(string.Format("Requesting: {0} {1}", Request.Path, this.DisplayTemplateFile)));
 				}
 
 				return View("_EmptyHome");
@@ -83,7 +83,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult Default(FormCollection model) {
 			_page = PagePayload.GetCurrentContent();
 
-			Object frm = null;
+			object frm = null;
 
 			if (Request.Form["form_type"] != null) {
 				string formMode = Request.Form["form_type"].ToString().ToLowerInvariant();
@@ -140,13 +140,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					Response.Cache.SetExpires(dtExpire);
 				}
 
-				SiteData.WriteDebugException("cmscontentcontroller_defaultview _page != null", new Exception(String.Format("Loading: {0} {1} {2}", _page.ThePage.FileName, _page.ThePage.TemplateFile, this.DisplayTemplateFile)));
+				SiteData.WriteDebugException("cmscontentcontroller_defaultview _page != null", new Exception(string.Format("Loading: {0} {1} {2}", _page.ThePage.FileName, _page.ThePage.TemplateFile, this.DisplayTemplateFile)));
 
 				return View(this.DisplayTemplateFile);
 			} else {
 				string sFileRequested = Request.Path;
 
-				SiteData.WriteDebugException("cmscontentcontroller_defaultview _page == null", new Exception(String.Format("Requesting: {0} {1}", sFileRequested, this.DisplayTemplateFile)));
+				SiteData.WriteDebugException("cmscontentcontroller_defaultview _page == null", new Exception(string.Format("Requesting: {0} {1}", sFileRequested, this.DisplayTemplateFile)));
 
 				DateTime dtModified = DateTime.Now.Date;
 				string strModifed = dtModified.ToString("r");
@@ -159,7 +159,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					return View("_EmptyHome");
 				} else {
 					Response.StatusCode = 404;
-					Response.AppendHeader("Status", "HTTP/1.1 404 Object Not Found");
+					Response.AppendHeader("Status", "HTTP/1.1 404 object Not Found");
 					SiteData.WriteDebugException("cmscontentcontroller_httpnotfound", new Exception("HttpNotFound"));
 					return HttpNotFound();
 				}
@@ -170,10 +170,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			//SiteData.Perform404Redirect(Request.Path);
 
 			Response.StatusCode = 404;
-			Response.AppendHeader("Status", "HTTP/1.1 404 Object Not Found");
-			SiteData.WriteDebugException("cmscontentcontroller_pagenotfound", new Exception(String.Format("HttpNotFound: {0}", Request.Path)));
+			Response.AppendHeader("Status", "HTTP/1.1 404 object Not Found");
+			SiteData.WriteDebugException("cmscontentcontroller_pagenotfound", new Exception(string.Format("HttpNotFound: {0}", Request.Path)));
 
-			throw new HttpException(404, String.Format("HTTP/1.1 404 Object Not Found: {0}", Request.Path));
+			throw new HttpException(404, string.Format("HTTP/1.1 404 object Not Found: {0}", Request.Path));
 
 			return HttpNotFound();
 		}
@@ -201,7 +201,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		protected string DisplayTemplateFile {
 			get {
-				if (_page != null && _page.ThePage != null && !String.IsNullOrEmpty(_page.ThePage.TemplateFile)
+				if (_page != null && _page.ThePage != null && !string.IsNullOrEmpty(_page.ThePage.TemplateFile)
 					&& System.IO.File.Exists(Server.MapPath(_page.ThePage.TemplateFile))) {
 					return _page.ThePage.TemplateFile;
 				} else {
@@ -244,7 +244,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
 					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
-					model.ValidationValue = String.Empty;
+					model.ValidationValue = string.Empty;
 				}
 			}
 
@@ -260,19 +260,19 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				pc.IsSpam = false;
 				pc.CommenterIP = sIP;
 				pc.CommenterName = Server.HtmlEncode(model.CommenterName);
-				pc.CommenterEmail = Server.HtmlEncode(model.CommenterEmail ?? String.Empty);
+				pc.CommenterEmail = Server.HtmlEncode(model.CommenterEmail ?? string.Empty);
 				pc.PostCommentText = Server.HtmlEncode(model.PostCommentText); //.Replace("<", "&lt;").Replace(">", "&gt;");
-				pc.CommenterURL = Server.HtmlEncode(model.CommenterURL ?? String.Empty);
+				pc.CommenterURL = Server.HtmlEncode(model.CommenterURL ?? string.Empty);
 
 				pc.Save();
 
 				model.IsSaved = true;
 
-				model.CommenterName = String.Empty;
-				model.CommenterEmail = String.Empty;
-				model.PostCommentText = String.Empty;
-				model.CommenterURL = String.Empty;
-				model.ValidationValue = String.Empty;
+				model.CommenterName = string.Empty;
+				model.CommenterEmail = string.Empty;
+				model.PostCommentText = string.Empty;
+				model.CommenterURL = string.Empty;
+				model.ValidationValue = string.Empty;
 
 				this.ViewData[ContactInfo.Key] = model;
 				model.SendMail(pc, _page.ThePage);
@@ -317,17 +317,17 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
 					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
-					model.ValidationValue = String.Empty;
+					model.ValidationValue = string.Empty;
 				}
 			}
 
 			string confirmView = settings.PostPartialName;
-			if (!String.IsNullOrEmpty(settings.PostPartialName)) {
+			if (!string.IsNullOrEmpty(settings.PostPartialName)) {
 				confirmView = settings.PostPartialConfirmation;
 			}
 
 			string confirmUri = settings.Uri;
-			if (!String.IsNullOrEmpty(settings.ConfirmUri)) {
+			if (!string.IsNullOrEmpty(settings.ConfirmUri)) {
 				confirmUri = settings.ConfirmUri;
 			}
 
@@ -361,17 +361,17 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
 					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
-					model.ValidationValue = String.Empty;
+					model.ValidationValue = string.Empty;
 				}
 			}
 
-			if (String.IsNullOrEmpty(settings.UserCode)) {
-				ModelState.AddModelError(String.Empty, "Reset code not provided.");
+			if (string.IsNullOrEmpty(settings.UserCode)) {
+				ModelState.AddModelError(string.Empty, "Reset code not provided.");
 			}
 
 			if (ModelState.IsValid) {
 				string confirmView = settings.PostPartialName;
-				if (!String.IsNullOrEmpty(settings.PostPartialName)) {
+				if (!string.IsNullOrEmpty(settings.PostPartialName)) {
 					confirmView = settings.PostPartialConfirmation;
 				}
 
@@ -414,13 +414,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
 					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
-					model.ValidationValue = String.Empty;
+					model.ValidationValue = string.Empty;
 				}
 			}
 
 			if (ModelState.IsValid && SecurityData.IsAuthenticated) {
 				string successView = settings.PostPartialName;
-				if (!String.IsNullOrEmpty(settings.PostPartialName)) {
+				if (!string.IsNullOrEmpty(settings.PostPartialName)) {
 					successView = settings.PostPartialSuccess;
 				}
 
@@ -458,13 +458,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
 					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
-					model.ValidationValue = String.Empty;
+					model.ValidationValue = string.Empty;
 				}
 			}
 
 			if (ModelState.IsValid && SecurityData.IsAuthenticated) {
 				string successView = settings.PostPartialName;
-				if (!String.IsNullOrEmpty(settings.PostPartialName)) {
+				if (!string.IsNullOrEmpty(settings.PostPartialName)) {
 					successView = settings.PostPartialSuccess;
 				}
 
@@ -524,7 +524,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
 					ModelState.AddModelError("ValidationValue", model.ValidateHuman.AltValidationFailText);
-					model.ValidationValue = String.Empty;
+					model.ValidationValue = string.Empty;
 				}
 			}
 
@@ -542,25 +542,25 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						break;
 
 					case SignInStatus.RequiresVerification:
-						if (!String.IsNullOrEmpty(settings.PostPartialNameVerification)) {
+						if (!string.IsNullOrEmpty(settings.PostPartialNameVerification)) {
 							partialName = settings.PostPartialNameVerification;
 						}
 						break;
 
 					case SignInStatus.LockedOut:
 
-						ModelState.AddModelError(String.Empty, "User locked out.");
+						ModelState.AddModelError(string.Empty, "User locked out.");
 
-						if (!String.IsNullOrEmpty(settings.PostPartialNameLockout)) {
+						if (!string.IsNullOrEmpty(settings.PostPartialNameLockout)) {
 							partialName = settings.PostPartialNameLockout;
 						}
 						break;
 
 					case SignInStatus.Failure:
 					default:
-						ModelState.AddModelError(String.Empty, "Invalid login attempt.");
+						ModelState.AddModelError(string.Empty, "Invalid login attempt.");
 
-						if (!String.IsNullOrEmpty(settings.PostPartialNameFailure)) {
+						if (!string.IsNullOrEmpty(settings.PostPartialNameFailure)) {
 							partialName = settings.PostPartialNameFailure;
 						}
 

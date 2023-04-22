@@ -62,9 +62,11 @@ H3 {
 }
 
 #cms-simplemodal-container, .cms-simplemodal-container {
-	height: 400px;
-	width: 650px;
-	z-index: 5100;
+	min-height: 440px;
+	height: 70%;
+	min-width: 700px;
+	width: 80%;
+	z-index: 51000;
 }
 
 #cms-basic-modal-content, #cmsModalFrame, #cmsAjaxMainDiv2 {

@@ -563,7 +563,7 @@ function SetIframeRealSrc(theFrameID) {
 function LaunchWindow(theURL) {
 	TheURL = theURL;
 
-	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="90%" height="500" realsrc="' + TheURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
+	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="90%" height="550" realsrc="' + TheURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
 
 	setTimeout("SetIframeRealSrc('cmsFrameEditor');", 1500);
 
@@ -592,7 +592,7 @@ function ShowWindowPop(theURL) {
 function LaunchWindowPop(theURL) {
 	TheURL = theURL;
 
-	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="640" height="390" realsrc="' + TheURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
+	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="768" height="400" realsrc="' + TheURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
 
 	setTimeout("SetIframeRealSrc('cmsFrameEditor');", 1500);
 
@@ -638,7 +638,11 @@ function DirtyPageRefresh() {
 			overlayCSS: { backgroundColor: '#FFFFFF', opacity: 0.6, border: '0px solid #000000' }
 		});
 
-		setTimeout("__doPostBack('PageRefresh', 'JavaScript');", 800);
+		var url = (window.location != window.parent.location)
+					? document.referrer
+					: document.location.href;
+
+		window.setTimeout("location.href = \'" + url + "?carrottick=" + timeTick + "\'", 800);
 	} else {
 		$("#cmsAjaxMainDiv").block({
 			message: htmlAjaxSpinnerTable,
@@ -713,8 +717,7 @@ $(document).ready(function () {
 var fldNameRet = '';
 
 function cmsFileBrowserOpenReturn(fldN) {
-	fldN = '#' + fldN;
-	var fld = $(fldN);
+	var fld = $('#' + fldN);
 	fldNameRet = fld.attr('id');
 
 	ShowWindowNoRefresh(adminUri + 'FileBrowser?returnvalue=1&viewmode=file&fldrpath=/');
@@ -723,8 +726,7 @@ function cmsFileBrowserOpenReturn(fldN) {
 }
 
 function cmsFileBrowserOpenReturnPop(fldN) {
-	fldN = '#' + fldN;
-	var fld = $(fldN);
+	var fld = $('#' + fldN);
 	fldNameRet = fld.attr('id');
 
 	ShowWindowNoRefreshPop(adminUri + 'FileBrowser?returnvalue=1&viewmode=file&fldrpath=/');
@@ -733,8 +735,7 @@ function cmsFileBrowserOpenReturnPop(fldN) {
 }
 
 function cmsSetFileNameReturn(v) {
-	var fldN = '#' + fldNameRet;
-	var fld = $(fldN);
+	var fld = $('#' + fldNameRet);
 	fld.val(v);
 
 	setTimeout("$.modal.close();", 200);

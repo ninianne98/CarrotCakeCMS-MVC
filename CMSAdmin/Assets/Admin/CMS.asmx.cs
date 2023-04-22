@@ -32,7 +32,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			}
 
 			if (!(SecurityData.IsAdmin || SecurityData.IsSiteEditor)) {
-				throw new Exception("Not Authorizeed!");
+				throw new Exception("Not Authorized!");
 			}
 		}
 

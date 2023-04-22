@@ -126,16 +126,16 @@
 
 .ajax-upload-dragdrop {
 	border: 2px dotted #A5A5C7;
-	width: 425px;
+	width: 525px;
 	color: #7dad8e;
 	text-align: left;
 	vertical-align: middle;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
 	margin: 10px 0;
-	background: url('../images/cloud-up.png') no-repeat left center;
-	padding: 10px 5px 25px 64px;
+	background: transparent url('../images/cloud-up.png') no-repeat 38px 6px scroll;
+	padding: 10px 10px 25px 100px;
 	font-size: 14pt;
 }
 
@@ -153,3 +153,20 @@
 		font-size: 14pt;
 		font-weight: bolder;
 	}
+
+	.ajax-upload-dragdrop button {
+		border: 1px solid #A5A5C7;
+		background-color: #7dad8e;
+		color: #FFFFFF;
+		font-size: 14px;
+		font-weight: 600;
+		margin: 5px;
+		-moz-border-radius: 4px;
+		-webkit-border-radius: 4px;
+		border-radius: 4px;
+		padding: 5px 5px 5px 5px;
+	}
+
+		.ajax-upload-dragdrop button:hover {
+			background-color: #468b5e;
+		}

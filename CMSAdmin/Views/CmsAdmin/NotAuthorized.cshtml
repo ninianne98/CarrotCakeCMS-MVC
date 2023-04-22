@@ -1,7 +1,7 @@
 ﻿@{
 	ViewBag.Title = "Not Authorized";
 
-	Layout = "~/Views/CmsAdmin/_LayoutPublic.cshtml";
+	Layout = CarrotLayout.Public;
 }
 
 <div style="float:left">
@@ -19,7 +19,7 @@
 }
 <div>
 	@if (Request.IsAuthenticated) {
-		using (Html.BeginForm("LogOff", RouteConfig.AdminCtrlr, FormMethod.Post, new { id = "logoutForm" })) {
+		using (Html.BeginForm(SiteFilename.LogOffAction, RouteConfig.AdminCtrlr, FormMethod.Post, new { id = "logoutForm" })) {
 			@Html.AntiForgeryToken()
 
 			<input type="submit" name="btnLogout" value="Logout" id="btnLogout" />

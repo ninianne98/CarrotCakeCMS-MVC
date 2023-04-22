@@ -38,19 +38,20 @@ namespace Carrotware.CMS.DBUpdater {
 		public DatabaseUpdate(bool clearTest) {
 			if (clearTest) {
 				DatabaseUpdate.LastSQLError = null;
+				DatabaseUpdate.ResetSQLState();
 				TestDatabaseWithQuery();
 			}
 		}
 
-		public static string ReadEmbededScript(string sResouceName) {
-			string sReturn = null;
+		public static string ReadEmbededScript(string resouceName) {
+			var sb = new StringBuilder();
 
-			Assembly _assembly = Assembly.GetExecutingAssembly();
-			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(sResouceName))) {
-				sReturn = stream.ReadToEnd();
+			var assembly = Assembly.GetExecutingAssembly();
+			using (var stream = new StreamReader(assembly.GetManifestResourceStream(resouceName))) {
+				sb.Append(stream.ReadToEnd());
 			}
 
-			return sReturn;
+			return sb.ToString();
 		}
 
 		private void TestDatabaseWithQuery() {
@@ -64,10 +65,10 @@ namespace Carrotware.CMS.DBUpdater {
 		}
 
 		private static string SetConn() {
-			string _connStr = String.Empty;
+			string _connStr = string.Empty;
 
 			if (ConfigurationManager.ConnectionStrings["CarrotwareCMSConnectionString"] != null) {
-				ConnectionStringSettings conString = ConfigurationManager.ConnectionStrings["CarrotwareCMSConnectionString"];
+				var conString = ConfigurationManager.ConnectionStrings["CarrotwareCMSConnectionString"];
 				_connStr = conString.ConnectionString;
 			}
 
@@ -201,17 +202,17 @@ namespace Carrotware.CMS.DBUpdater {
 
 			DatabaseUpdateMessage item = new DatabaseUpdateMessage();
 
-			if (!String.IsNullOrEmpty(sMsg)) {
+			if (!string.IsNullOrEmpty(sMsg)) {
 				item.Message = sMsg;
 
 				if (execMessage != null) {
 					item.AlteredData = execMessage.RanUpdate;
 					item.Response = execMessage.Response;
 
-					if (execMessage.LastException != null && !String.IsNullOrEmpty(execMessage.LastException.Message)) {
+					if (execMessage.LastException != null && !string.IsNullOrEmpty(execMessage.LastException.Message)) {
 						item.HasException = true;
 						item.ExceptionText = execMessage.LastException.Message;
-						if (execMessage.LastException.InnerException != null && !String.IsNullOrEmpty(execMessage.LastException.InnerException.Message)) {
+						if (execMessage.LastException.InnerException != null && !string.IsNullOrEmpty(execMessage.LastException.InnerException.Message)) {
 							item.InnerExceptionText = execMessage.LastException.InnerException.Message;
 						}
 					}
@@ -229,12 +230,12 @@ namespace Carrotware.CMS.DBUpdater {
 			return "Update " + (iCount).ToString() + " ";
 		}
 
-		private static object updateLocker = new Object();
+		private static object updateLocker = new object();
 
 		public DatabaseUpdateStatus PerformUpdates() {
 			DatabaseUpdateStatus status = new DatabaseUpdateStatus();
 			bool bUpdate = true;
-			List<DatabaseUpdateMessage> lst = new List<DatabaseUpdateMessage>();
+			var lst = new List<DatabaseUpdateMessage>();
 
 			lock (updateLocker) {
 				if (!DoCMSTablesExist()) {
@@ -359,13 +360,13 @@ namespace Carrotware.CMS.DBUpdater {
 			return res;
 		}
 
-		private static object logLocker = new Object();
+		private static object logLocker = new object();
 
-		public static void WriteDebugException(string sSrc, Exception objErr) {
-			WriteDebugException(false, sSrc, objErr);
+		public static void WriteDebugException(string debugSource, Exception objErr) {
+			WriteDebugException(false, debugSource, objErr);
 		}
 
-		public static void WriteDebugException(bool bWriteError, string sSrc, Exception objErr) {
+		public static void WriteDebugException(bool bWriteError, string debugSource, Exception objErr) {
 #if DEBUG
 			bWriteError = true; // always write errors when debug build
 #endif
@@ -373,7 +374,7 @@ namespace Carrotware.CMS.DBUpdater {
 			if (bWriteError && objErr != null) {
 				StringBuilder sb = new StringBuilder();
 
-				sb.AppendLine("----------------  " + sSrc.ToUpperInvariant() + " - " + DateTime.Now.ToString() + "  ----------------");
+				sb.AppendLine("----------------  " + debugSource.ToUpperInvariant() + " - " + DateTime.Now.ToString() + "  ----------------");
 
 				sb.AppendLine("[" + objErr.GetType().ToString() + "] " + objErr.Message);
 
@@ -402,7 +403,7 @@ namespace Carrotware.CMS.DBUpdater {
 
 		public static bool TablesIncomplete {
 			get {
-				string tablesIncomplete = String.Empty;
+				string tablesIncomplete = string.Empty;
 				bool c = true;
 
 				if (HttpContext.Current.Cache[ContentSqlStateKey] != null) {
@@ -485,7 +486,9 @@ namespace Carrotware.CMS.DBUpdater {
 						bool bTestResult = SQLUpdateNugget.EvalNuggetKey("DoUsersExist");
 
 						return bTestResult;
-					} catch (Exception ex) { }
+					} catch (Exception ex) {
+						WriteDebugException("usersexist", ex);
+					}
 				}
 
 				return false;
@@ -543,37 +546,37 @@ namespace Carrotware.CMS.DBUpdater {
 			return res;
 		}
 
-		private List<string> SplitScriptAtGo(string sSQLQuery) {
-			sSQLQuery += "\r\n\r\nGO\r\n\r\n";
-			sSQLQuery = sSQLQuery.Replace("\r\n", "\n");
+		private List<string> SplitScriptAtGo(string sqlQuery) {
+			sqlQuery += "\r\n\r\nGO\r\n\r\n";
+			sqlQuery = sqlQuery.Replace("\r\n", "\n");
 
-			string[] splitcommands = sSQLQuery.Split(new string[] { "GO\n" }, StringSplitOptions.RemoveEmptyEntries);
+			string[] splitcommands = sqlQuery.Split(new string[] { "GO\n" }, StringSplitOptions.RemoveEmptyEntries);
 			List<string> commandList = new List<string>(splitcommands);
 			return commandList;
 		}
 
 		#region Execute SQL statements
 
-		public Exception ExecScriptContents(string sScriptContents, bool bIgnoreErr) {
+		public Exception ExecScriptContents(string scriptContents, bool bIgnoreErr) {
 			string _connStr = SetConn();
 
-			return ExecScriptContents(_connStr, sScriptContents, bIgnoreErr);
+			return ExecScriptContents(_connStr, scriptContents, bIgnoreErr);
 		}
 
-		public Exception ExecScriptContents(string sConnectionString, string sScriptContents, bool bIgnoreErr) {
-			return ExecNonQuery(sConnectionString, sScriptContents, bIgnoreErr);
+		public Exception ExecScriptContents(string connectionString, string scriptContents, bool bIgnoreErr) {
+			return ExecNonQuery(connectionString, scriptContents, bIgnoreErr);
 		}
 
-		private Exception ExecFileContents(string sResourceName, bool bIgnoreErr) {
+		private Exception ExecFileContents(string resouceName, bool bIgnoreErr) {
 			string _connStr = SetConn();
 
-			return ExecFileContents(_connStr, sResourceName, bIgnoreErr);
+			return ExecFileContents(_connStr, resouceName, bIgnoreErr);
 		}
 
-		private Exception ExecFileContents(string sConnectionString, string sResourceName, bool bIgnoreErr) {
-			string sScriptContents = ReadEmbededScript(sResourceName);
+		private Exception ExecFileContents(string connectionString, string resourceName, bool ignoreErr) {
+			string scriptContents = ReadEmbededScript(resourceName);
 
-			Exception response = ExecScriptContents(sConnectionString, sScriptContents, bIgnoreErr);
+			Exception response = ExecScriptContents(connectionString, scriptContents, ignoreErr);
 
 			return response;
 		}
@@ -582,7 +585,7 @@ namespace Carrotware.CMS.DBUpdater {
 
 		#region Work with data keys
 
-		private static object schemaCheckLocker = new Object();
+		private static object schemaCheckLocker = new object();
 
 		//private static string SchemaKey = "cms_GetDbSchemaVersion";
 
@@ -634,8 +637,8 @@ namespace Carrotware.CMS.DBUpdater {
 				}
 			}
 
-			if (d != null && String.IsNullOrEmpty(d.DataValue)) {
-				d.DataValue = String.Empty;
+			if (d != null && string.IsNullOrEmpty(d.DataValue)) {
+				d.DataValue = string.Empty;
 			}
 
 			return d;
@@ -675,57 +678,62 @@ namespace Carrotware.CMS.DBUpdater {
 
 		#region General database routines
 
-		private Exception ExecNonQuery(string sConnectionString, string sSQLQuery, bool bIgnoreErr) {
+		private Exception ExecNonQuery(string connectionString, string sqlQuery, bool bIgnoreErr) {
 			Exception exc = new Exception("");
 
-			using (SqlConnection myConnection = new SqlConnection(sConnectionString)) {
-				myConnection.Open();
+			using (SqlConnection cn = new SqlConnection(connectionString)) {
+				cn.Open();
 
-				List<string> cmdLst = SplitScriptAtGo(sSQLQuery);
+				List<string> cmdLst = SplitScriptAtGo(sqlQuery);
 
 				if (!bIgnoreErr) {
 					try {
 						foreach (string cmdStr in cmdLst) {
-							using (SqlCommand myCommand = myConnection.CreateCommand()) {
-								myCommand.CommandText = cmdStr;
-								myCommand.Connection = myConnection;
-								myCommand.CommandTimeout = 360;
-								int ret = myCommand.ExecuteNonQuery();
+							using (SqlCommand cmd = cn.CreateCommand()) {
+								cmd.CommandText = cmdStr;
+								cmd.Connection = cn;
+								cmd.CommandTimeout = 360;
+								int ret = cmd.ExecuteNonQuery();
 							}
 						}
 					} catch (Exception ex) {
 						exc = ex;
+						WriteDebugException("execnonquery-ignore", ex);
 					} finally {
-						myConnection.Close();
+						cn.Close();
 					}
 				} else {
-					StringBuilder sb = new StringBuilder();
+					var sb = new StringBuilder();
 					foreach (string cmdStr in cmdLst) {
 						try {
-							using (SqlCommand myCommand = myConnection.CreateCommand()) {
-								myCommand.CommandText = cmdStr;
-								myCommand.Connection = myConnection;
-								myCommand.CommandTimeout = 360;
-								int ret = myCommand.ExecuteNonQuery();
+							using (SqlCommand cmd = cn.CreateCommand()) {
+								cmd.CommandText = cmdStr;
+								cmd.Connection = cn;
+								cmd.CommandTimeout = 360;
+								int ret = cmd.ExecuteNonQuery();
 							}
 						} catch (Exception ex) {
-							sb.Append(ex.Message.ToString() + "\n~~~~~~~~~~~~~~~~~~~~~~~~\n");
+							sb.Append(ex.Message + "\n" + ex.StackTrace + "\n~~~~~~~~~~~~~~~~~~~~~~~~\n");
+							if (ex.InnerException != null) {
+								sb.Append(ex.InnerException.Message + "\n" + ex.InnerException.StackTrace + "\n~~~~~~~~~~~~~~~~~~~~~~~~\n");
+							}
+							WriteDebugException("execnonquery", ex);
 						}
 					}
 					exc = new Exception(sb.ToString());
-					myConnection.Close();
+					cn.Close();
 				}
 			}
 
 			return exc;
 		}
 
-		private static void ExecuteNonQueryCommands(string sConnectionString, string sSQLQuery, List<SqlParameter> SqlParms) {
+		private static void ExecuteNonQueryCommands(string connectionString, string sqlQuery, List<SqlParameter> SqlParms) {
 			DataTable dt = new DataTable();
 
-			using (SqlConnection cn = new SqlConnection(sConnectionString)) {
+			using (SqlConnection cn = new SqlConnection(connectionString)) {
 				cn.Open();
-				using (SqlCommand cmd = new SqlCommand(sSQLQuery, cn)) {
+				using (SqlCommand cmd = new SqlCommand(sqlQuery, cn)) {
 					cmd.CommandType = CommandType.Text;
 
 					foreach (var p in SqlParms) {
@@ -738,11 +746,11 @@ namespace Carrotware.CMS.DBUpdater {
 			}
 		}
 
-		private static DataTable ExecuteDataTableCommands(string sConnectionString, string sSQLQuery, List<SqlParameter> SqlParms) {
+		private static DataTable ExecuteDataTableCommands(string connectionString, string sqlQuery, List<SqlParameter> SqlParms) {
 			DataTable dt = new DataTable();
 
-			using (SqlConnection cn = new SqlConnection(sConnectionString)) {
-				using (SqlCommand cmd = new SqlCommand(sSQLQuery, cn)) {
+			using (SqlConnection cn = new SqlConnection(connectionString)) {
+				using (SqlCommand cmd = new SqlCommand(sqlQuery, cn)) {
 					cn.Open();
 					cmd.CommandType = CommandType.Text;
 
@@ -762,17 +770,17 @@ namespace Carrotware.CMS.DBUpdater {
 			return dt;
 		}
 
-		public static DataTable GetDataTable(string sSQLQuery) {
+		public static DataTable GetDataTable(string sqlQuery) {
 			string _connStr = SetConn();
 
-			return GetDataTable(_connStr, sSQLQuery);
+			return GetDataTable(_connStr, sqlQuery);
 		}
 
-		private static DataTable GetDataTable(string sConnectionString, string sSQLQuery) {
+		private static DataTable GetDataTable(string connectionString, string sqlQuery) {
 			DataTable dt = new DataTable();
 
-			using (SqlConnection cn = new SqlConnection(sConnectionString)) {
-				using (SqlCommand cmd = new SqlCommand(sSQLQuery, cn)) {
+			using (SqlConnection cn = new SqlConnection(connectionString)) {
+				using (SqlCommand cmd = new SqlCommand(sqlQuery, cn)) {
 					cn.Open();
 					cmd.CommandType = CommandType.Text;
 					using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {
@@ -785,27 +793,27 @@ namespace Carrotware.CMS.DBUpdater {
 			return dt;
 		}
 
-		public static DataTable GetTestData(string sSQLQuery) {
-			return GetTestData(sSQLQuery, null);
+		public static DataTable GetTestData(string sqlQuery) {
+			return GetTestData(sqlQuery, null);
 		}
 
-		public static DataTable GetTestData(string sSQLQuery, List<SqlParameter> SqlParms) {
+		public static DataTable GetTestData(string sqlQuery, List<SqlParameter> SqlParms) {
 			string _connStr = SetConn();
 
-			return GetTestData(_connStr, sSQLQuery, SqlParms);
+			return GetTestData(_connStr, sqlQuery, SqlParms);
 		}
 
-		public static DataTable GetTestData(string sConnectionString, string sSQLQuery, List<SqlParameter> SqlParms) {
+		public static DataTable GetTestData(string connectionString, string sqlQuery, List<SqlParameter> SqlParms) {
 			DataTable dt = new DataTable();
 
 			try {
-				using (SqlConnection cn = new SqlConnection(sConnectionString)) {
+				using (SqlConnection cn = new SqlConnection(connectionString)) {
 					cn.Open(); // throws if invalid
 
 					DatabaseUpdate.FailedSQL = false;
 
 					using (SqlCommand cmd = cn.CreateCommand()) {
-						cmd.CommandText = sSQLQuery;
+						cmd.CommandText = sqlQuery;
 
 						if (SqlParms != null) {
 							foreach (var p in SqlParms) {
@@ -824,22 +832,23 @@ namespace Carrotware.CMS.DBUpdater {
 			} catch (SqlException sqlEx) {
 				DatabaseUpdate.LastSQLError = sqlEx;
 				DatabaseUpdate.FailedSQL = true;
+				WriteDebugException("gettestdata", sqlEx);
 			}
 
 			return dt;
 		}
 
-		private static DataSet GetDataSet(string sSQLQuery) {
+		private static DataSet GetDataSet(string sqlQuery) {
 			string _connStr = SetConn();
 
-			return GetDataSet(_connStr, sSQLQuery);
+			return GetDataSet(_connStr, sqlQuery);
 		}
 
-		private static DataSet GetDataSet(string sConnectionString, string sSQLQuery) {
+		private static DataSet GetDataSet(string connectionString, string sqlQuery) {
 			DataSet ds = new DataSet();
 
-			using (SqlConnection cn = new SqlConnection(sConnectionString)) {
-				using (SqlCommand cmd = new SqlCommand(sSQLQuery, cn)) {
+			using (SqlConnection cn = new SqlConnection(connectionString)) {
+				using (SqlCommand cmd = new SqlCommand(sqlQuery, cn)) {
 					cn.Open();
 					cmd.CommandType = CommandType.Text;
 					using (SqlDataAdapter da = new SqlDataAdapter(cmd)) {

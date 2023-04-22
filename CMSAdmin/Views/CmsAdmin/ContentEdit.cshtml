@@ -14,8 +14,8 @@
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 
-	<div style="margin-bottom: 25px; width: 825px;  height: 275px; width: 90%; height: 75%;">
-		@Html.TextAreaFor(m => m.PageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 300px; width: 850px;" })
+	<div style="margin-bottom: 25px; width: 850px;  height: 325px; width: 90%; height: 75%;">
+		@Html.TextAreaFor(m => m.PageText, new { rows = "18", cols = "90", @class = @editCSS, style = "height: 300px; width: 825px;" })
 		<br>
 	</div>
 	<div style="margin-top: 25px;">

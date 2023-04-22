@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.WebPages;
-using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -27,6 +27,15 @@ namespace Carrotware.CMS.Core {
 			if (SiteData.CurretSiteExists) {
 				this.TheSite = SiteData.CurrentSite;
 			}
+		}
+
+		public static PagePayload GetSamplerPayload(Controller c) {
+			var page = new PagePayload();
+			page.ThePage = ContentPageHelper.GetSamplerView();
+			page.ThePage.TemplateFile = SiteData.PreviewTemplateFile;
+
+			c.ViewData[ViewDataKey] = page;
+			return page;
 		}
 
 		public static PagePayload GetCurrentContent() {

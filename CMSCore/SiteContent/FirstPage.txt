@@ -2,15 +2,15 @@
 <h2>This is the homepage</h2>
 
 <p>This website is being built with CarrotCake CMS, an open source c# project. CarrotCake is a 
-	template-based ASP.Net CMS (<a href="http://en.wikipedia.org/wiki/Content_management_system" target="_blank">content management system</a>) 
-	built with C#, SQL server, <a href="http://jqueryui.com/" target="_blank">jQueryUI</a>, and 
-	<a href="http://www.tinymce.com/" target="_blank">TinyMCE</a>. If you have found this software useful or have
-	published a site with CarrotCake, we'd love to <a href="http://www.carrotware.com/contact" target="_blank">hear</a> from you.</p>
+	template-based ASP.Net CMS (<a target="_blank" href="http://en.wikipedia.org/wiki/Content_management_system">content management system</a>) 
+	built with C#, SQL server, <a target="_blank" href="http://jqueryui.com/">jQueryUI</a>, and 
+	<a target="_blank" href="https://www.tiny.cloud/">TinyMCE</a>. If you have found this software useful or have
+	published a site with CarrotCake, we'd love to <a target="_blank" href="http://www.carrotware.com/contact">hear</a> from you.</p>
 
 <p>Source code and documentation is available on 
-	<a href="https://github.com/ninianne98/CarrotCakeCMS-MVC" target="_blank">GitHub</a> or
-	<a href="https://sourceforge.net/projects/carrotcakecmsmvc/" target="_blank">SourceForge</a>.
-	Documentation and assemblies can be found <a href="http://www.carrotware.com/carrotcake-download" target="_blank">here</a>. </p>
+	<a target="_blank" href="https://github.com/ninianne98/CarrotCakeCMS-MVC">GitHub</a> or
+	<a target="_blank" href="https://sourceforge.net/projects/carrotcakecmsmvc/">SourceForge</a>.
+	Documentation and assemblies can be found <a target="_blank" href="http://www.carrotware.com/carrotcake-download">here</a>.</p>
 
 <p>Some features include: blogging engine, configurable date based blog post URLs, blog post content association with categories and tags, 
 	assignment/customization of category and tag URL patterns, simple content feedback collection and review, blog post pagination/indexes 
@@ -18,4 +18,10 @@
 	formatting patterns, RSS feed support for posts and pages, import and export of site content, and import of content from WordPress XML 
 	export files (tested against versions 2.9, 3.0, 3.4, and 3.5).</p>
 
-<p>To learn more about CarrotCake CMS, visit <a href="http://www.carrotcakecms.com/" target="_blank">carrotcake cms</a>.</p>
+<p>To learn more about CarrotCake CMS, visit <a target="_blank" href="http://www.carrotcakecms.com/">carrotcake cms</a>.</p>
+
+<p>
+	<a target="_blank" href="http://www.carrotware.com/" target="_blank" border="0">
+		<img src="/Assets/Admin/Images/carrotpower.png" alt="carrot" title="carrot" />
+	</a>
+</p>

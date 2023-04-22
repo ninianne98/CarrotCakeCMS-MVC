@@ -1,15 +1,15 @@
 ﻿using Carrotware.CMS.Data;
-using Carrotware.CMS.Security.Models;
 using Carrotware.CMS.Security;
+using Carrotware.CMS.Security.Models;
 using Carrotware.Web.UI.Components;
 using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
-using System.Web.Caching;
 using System.Web;
-using System;
+using System.Web.Caching;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -232,36 +232,40 @@ namespace Carrotware.CMS.Core {
 
 		public static bool GetIsAdminFromCache() {
 			bool keyVal = false;
-
-			if (SiteData.IsWebView && IsAuthenticated) {
-				string key = string.Format("{0}_{1}", keyIsAdmin, SecurityData.CurrentUserIdentityName);
-				if (HttpContext.Current.Cache[key] != null) {
-					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
-				} else {
-					keyVal = IsUserInRole(SecurityData.CMSGroup_Admins);
-					HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(30), Cache.NoSlidingExpiration);
+			try {
+				if (SiteData.IsWebView && IsAuthenticated) {
+					string key = string.Format("{0}_{1}", keyIsAdmin, SecurityData.CurrentUserIdentityName);
+					if (HttpContext.Current.Cache[key] != null) {
+						keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
+					} else {
+						keyVal = IsUserInRole(SecurityData.CMSGroup_Admins);
+						HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(30), Cache.NoSlidingExpiration);
+					}
 				}
+			} catch (Exception ex) {
+				SiteData.WriteDebugException("getisadminfromcache", ex);
 			}
-
 			return keyVal;
 		}
 
 		public static bool GetIsSiteEditorFromCache() {
 			bool keyVal = false;
+			try {
+				if (SiteData.IsWebView && IsAuthenticated) {
+					string key = string.Format("{0}_{1}_{2}", keyIsSiteEditor, SecurityData.CurrentUserIdentityName, SiteData.CurrentSiteID);
+					if (HttpContext.Current.Cache[key] != null) {
+						keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
+					} else {
+						ExtendedUserData usrEx = SecurityData.CurrentExUser;
 
-			if (SiteData.IsWebView && IsAuthenticated) {
-				string key = string.Format("{0}_{1}_{2}", keyIsSiteEditor, SecurityData.CurrentUserIdentityName, SiteData.CurrentSiteID);
-				if (HttpContext.Current.Cache[key] != null) {
-					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
-				} else {
-					ExtendedUserData usrEx = SecurityData.CurrentExUser;
+						keyVal = (IsEditor || usrEx.IsEditor) && usrEx.MemberSiteIDs.Contains(SiteData.CurrentSiteID);
 
-					keyVal = (IsEditor || usrEx.IsEditor) && usrEx.MemberSiteIDs.Contains(SiteData.CurrentSiteID);
-
-					HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(30), Cache.NoSlidingExpiration);
+						HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(30), Cache.NoSlidingExpiration);
+					}
 				}
+			} catch (Exception ex) {
+				SiteData.WriteDebugException("getissiteeditorfromcache", ex);
 			}
-
 			return keyVal;
 		}
 
@@ -277,10 +281,10 @@ namespace Carrotware.CMS.Core {
 					if (SiteData.IsWebView && IsAuthenticated) {
 						return IsUserInRole(SecurityData.CMSGroup_Editors);
 					}
-					return false;
 				} catch (Exception ex) {
-					return false;
+					SiteData.WriteDebugException("iseditor", ex);
 				}
+				return false;
 			}
 		}
 
@@ -290,10 +294,10 @@ namespace Carrotware.CMS.Core {
 					if (SiteData.IsWebView && IsAuthenticated) {
 						return IsUserInRole(SecurityData.CMSGroup_Users);
 					}
-					return false;
 				} catch (Exception ex) {
-					return false;
+					SiteData.WriteDebugException("isusers", ex);
 				}
+				return false;
 			}
 		}
 
@@ -358,6 +362,16 @@ namespace Carrotware.CMS.Core {
 			get {
 				if (SiteData.IsWebView && IsAuthenticated) {
 					return AdvancedEditMode || IsAdmin || IsSiteEditor;
+				} else {
+					return false;
+				}
+			}
+		}
+
+		public static bool IsAuthUser {
+			get {
+				if (SiteData.IsWebView && IsAuthenticated) {
+					return IsAdmin || IsSiteEditor || IsUsers;
 				} else {
 					return false;
 				}

@@ -142,39 +142,29 @@ function cmsResetToolbarScroll() {
 }
 
 function cmsMenuFixImages() {
-	$(".cmsWidgetBarIconCog").each(function (i) {
-		cmsFixGeneralImage(this, 'cog.png');
+	var styleIcons = [
+		{ styleName: '.cmsWidgetBarIconCog', img: 'cog.png' },
+		{ styleName: '.cmsWidgetBarIconCross', img: 'cross.png' },
+		{ styleName: '.cmsWidgetBarIconDup', img: 'shape_ungroup.png' },
+		{ styleName: '.cmsWidgetBarIconTime', img: 'clock_edit.png' },
+		{ styleName: '.cmsWidgetBarIconCopy', img: 'table_go.png' },
+		{ styleName: '.cmsWidgetBarIconPencil', img: 'pencil.png' },
+		{ styleName: '.cmsWidgetBarIconPencil2', img: 'pencil.png' },
+		{ styleName: '.cmsWidgetBarIconActive', img: 'tick.png' },
+		{ styleName: '.cmsWidgetBarIconWidget', img: 'application_view_tile.png' },
+		{ styleName: '.cmsWidgetBarIconWidget2', img: 'hourglass.png' },
+		{ styleName: '.cmsWidgetBarIconShrink', img: 'arrow_in.png' }
+	];
+
+	$.each(styleIcons, function (i, o) {
+		//console.log(styleIcons[i].styleName);
+		var styleName = styleIcons[i].styleName;
+		var imgIcon = styleIcons[i].img;
+
+		$(styleName).each(function (j) {
+			cmsFixGeneralImage(this, imgIcon);
+		});
 	});
-	$(".cmsWidgetBarIconCross").each(function (i) {
-		cmsFixGeneralImage(this, 'cross.png');
-	});
-	$(".cmsWidgetBarIconDup").each(function (i) {
-		cmsFixGeneralImage(this, 'shape_ungroup.png');
-	});
-	$(".cmsWidgetBarIconTime").each(function (i) {
-		cmsFixGeneralImage(this, 'clock_edit.png');
-	});
-	$(".cmsWidgetBarIconCopy").each(function (i) {
-		cmsFixGeneralImage(this, 'table_go.png');
-	});
-	$(".cmsWidgetBarIconPencil").each(function (i) {
-		cmsFixGeneralImage(this, 'pencil.png');
-	});
-	$(".cmsWidgetBarIconPencil2").each(function (i) {
-		cmsFixGeneralImage(this, 'pencil.png');
-	});
-	$(".cmsWidgetBarIconActive").each(function (i) {
-		cmsFixGeneralImage(this, 'tick.png');
-	});
-	$(".cmsWidgetBarIconWidget").each(function (i) {
-		cmsFixGeneralImage(this, 'application_view_tile.png');
-	});
-	$(".cmsWidgetBarIconWidget2").each(function (i) {
-		cmsFixGeneralImage(this, 'hourglass.png');
-	});
-	//$(".cmsWidgetBarIconShrink").each(function (i) {
-	//cmsFixGeneralImage(this, 'Shrink', 'Shrink', 'arrow_in.png');
-	//});
 }
 
 function cmsBlockImageEdits(elm) {
@@ -1081,6 +1071,84 @@ function cmsStyleButtons() {
 	cmsDoStyleButtons('.cms-seagreen input[type="submit"]');
 	cmsDoStyleButtons('.cms-seagreen button');
 	cmsDoStyleButtons('.ui-dialog-buttonpane button');
+
+	$(".cmsWidgetControlItem").on("dblclick", function () {
+		cmsDblClickWidget(this);
+	});
+
+	$(".cmsWidgetControlTitle").on("dblclick", function () {
+		cmsDblClickWidgetTarget(this);
+	});
+}
+
+var cmsLastWidget = '';
+var cmsLastWidgetName = '';
+var cmsLastWidgetTarget = '';
+
+function cmsDblClickWidget(item) {
+	cmsLastWidget = $(item).find('#cmsCtrlID').val();
+	cmsLastWidgetName = $.trim($(item).find('.cmsToolItem').text());
+
+	$('#CMSaddconfirmmsg .cms-widget-name').text(cmsLastWidgetName);
+
+	//console.log("cmsDblClickWidget:  " + cmsLastWidgetName);
+	cmsClickAddWidget();
+}
+
+function cmsDblClickWidgetTarget(item) {
+	cmsLastWidgetTarget = $.trim($(item).find('#cmsWidgetContainerName').text());
+
+	$('#CMSaddconfirmmsg .cms-widget-target').text(cmsLastWidgetTarget);
+
+	//console.log("cmsDblClickWidgetTarget:  " + cmsLastWidgetTarget);
+	cmsClickAddWidget();
+}
+
+function cmsCreateNewWidget() {
+	var widget = '<div id="cmsToolItemDiv" class="cmsToolItem cmsToolItemWrapper cms-seagreen"> \r\n ' +
+					'<div class="cmsWidgetControlItem cmsWidgetToolboxItem cmsWidgetCtrlPath cms-seagreen" id="cmsControl"> \r\n ' +
+					'<p class="cmsToolItem ui-widget-header cms-seagreen"> ' + cmsLastWidgetName + ' </p> \r\n ' +
+					'<input type="hidden" id="cmsCtrlID" value="' + cmsLastWidget + '" /> \r\n ' +
+					'<input type="hidden" id="cmsCtrlOrder" value="-1" /> \r\n ' +
+					'</div> \r\n ' +
+				 '</div>';
+
+	var zone = $('#cms_' + cmsLastWidgetTarget);
+
+	zone.prepend(widget);
+
+	setTimeout("cmsBuildOrderAndUpdateWidgets();", 500);
+
+	// reset once "dropped"
+	cmsLastWidget = '';
+	cmsLastWidgetTarget = '';
+}
+
+function cmsClickAddWidget() {
+	if (cmsLastWidget.length > 1
+			&& cmsLastWidgetTarget.length > 1) {
+		$("#CMSaddconfirm").dialog({
+			open: function () {
+				$(this).parents('.ui-dialog-buttonpane button:eq(0)').focus();
+			},
+
+			resizable: false,
+			height: 250,
+			width: 400,
+			modal: true,
+			buttons: {
+				"No": function () {
+					$(this).dialog("close");
+				},
+				"Yes": function () {
+					cmsCreateNewWidget();
+					$(this).dialog("close");
+				}
+			}
+		});
+
+		cmsFixDialog('CMSaddconfirmmsg');
+	}
 }
 
 function cmsDoStyleButtons(fltPrefix) {

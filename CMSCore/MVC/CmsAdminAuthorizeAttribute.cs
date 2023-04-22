@@ -41,7 +41,7 @@ namespace Carrotware.CMS.Core {
 			} else {
 				if (!filterContext.HttpContext.User.Identity.IsAuthenticated) {
 					if (filterContext.HttpContext.Request.Path.ToLowerInvariant() != SiteFilename.LoginURL.ToLowerInvariant()) {
-						filterContext.Result = new RedirectResult(String.Format("{0}?returnUrl={1}", SiteFilename.LoginURL, HttpUtility.UrlEncode(filterContext.HttpContext.Request.Path)));
+						filterContext.Result = new RedirectResult(string.Format("{0}?returnUrl={1}", SiteFilename.LoginURL, HttpUtility.UrlEncode(filterContext.HttpContext.Request.Path)));
 					} else {
 						filterContext.Result = new RedirectResult(SiteFilename.LoginURL);
 					}

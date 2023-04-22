@@ -40,22 +40,27 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			string controller = vals["controller"].ToString().ToLowerInvariant();
 
 			if (this.User.Identity.IsAuthenticated) {
+				//carveouts for setup
 				List<string> lstOKNoSiteActions = new List<string>();
+				lstOKNoSiteActions.Add("login");
+				lstOKNoSiteActions.Add("logoff");
+				lstOKNoSiteActions.Add("about");
 				lstOKNoSiteActions.Add("siteinfo");
 				lstOKNoSiteActions.Add("filebrowser");
-				lstOKNoSiteActions.Add("about");
 				lstOKNoSiteActions.Add("userindex");
 				lstOKNoSiteActions.Add("roleindex");
 				lstOKNoSiteActions.Add("userprofile");
 				lstOKNoSiteActions.Add("changepassword");
-				lstOKNoSiteActions.Add("login");
-				lstOKNoSiteActions.Add("logoff");
 
+				//carvouts for anon pages
 				List<string> lstInitSiteActions = new List<string>();
 				lstInitSiteActions.Add("login");
+				lstInitSiteActions.Add("logoff");
+				lstInitSiteActions.Add("about");
 				lstInitSiteActions.Add("forgotpassword");
 				lstInitSiteActions.Add("createfirstadmin");
 				lstInitSiteActions.Add("databasesetup");
+				lstInitSiteActions.Add("notauthorized");
 
 				try {
 					if (!lstInitSiteActions.Contains(action)) {
@@ -76,6 +81,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						return;
 					} else {
 						//something bad has gone down, toss back the error
+						SiteData.WriteDebugException("onauthorization", ex);
 						throw;
 					}
 				}
@@ -92,7 +98,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			get { return SiteData.CurrentDLLVersion; }
 		}
 
-		protected Guid SiteID {
+		protected Guid CurrentSiteID {
 			get {
 				return SiteData.CurrentSiteID;
 			}
@@ -101,11 +107,16 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		//
 		// POST: /Account/LogOff
 		[HttpPost]
+		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
 		public ActionResult LogOff() {
 			SignOut();
+			//after signout, take to login
+			if (!SecurityData.IsAuthenticated) {
+				return RedirectToAction(SiteFilename.LoginAction);
+			}
 
-			return RedirectToAction("Index");
+			return RedirectToAction(SiteFilename.IndexAction);
 		}
 
 		[HttpGet]
@@ -591,15 +602,16 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[AllowAnonymous]
 		public ActionResult DatabaseSetup(string signout) {
-			DatabaseSetupModel model = new DatabaseSetupModel();
-
-			DatabaseUpdate du = new DatabaseUpdate(true);
+			var model = new DatabaseSetupModel();
 
 			if (!string.IsNullOrEmpty(signout)) {
 				SignOut();
+				Response.Redirect(SiteFilename.DatabaseSetupURL);
 			}
 
-			List<DatabaseUpdateMessage> lst = new List<DatabaseUpdateMessage>();
+			DatabaseUpdate du = new DatabaseUpdate(true);
+
+			var lst = new List<DatabaseUpdateMessage>();
 			model.Messages = lst;
 
 			if (DatabaseUpdate.LastSQLError != null) {
@@ -681,7 +693,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					SecurityData.AddUserToRole(model.UserName, SecurityData.CMSGroup_Admins);
 					SecurityData.AddUserToRole(model.UserName, SecurityData.CMSGroup_Users);
 
-					return RedirectToAction("Index");
+					return RedirectToAction(SiteFilename.IndexAction);
 				}
 
 				AddErrors(result);
@@ -813,6 +825,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[AllowAnonymous]
 		public ActionResult NotAuthorized() {
+			//if (SecurityData.IsAuthenticated) {
+			//	SignOut();
+			//}
+
 			return View();
 		}
 
@@ -852,13 +868,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			CMSConfigHelper.CleanUpSerialData();
 
-			model.Pages = pageHelper.GetSitePageCount(this.SiteID, ContentPageType.PageType.ContentEntry);
-			model.Posts = pageHelper.GetSitePageCount(this.SiteID, ContentPageType.PageType.BlogEntry);
+			model.Pages = pageHelper.GetSitePageCount(this.CurrentSiteID, ContentPageType.PageType.ContentEntry);
+			model.Posts = pageHelper.GetSitePageCount(this.CurrentSiteID, ContentPageType.PageType.BlogEntry);
 
-			model.Categories = ContentCategory.GetSiteCount(this.SiteID);
-			model.Tags = ContentTag.GetSiteCount(this.SiteID);
+			model.Categories = ContentCategory.GetSiteCount(this.CurrentSiteID);
+			model.Tags = ContentTag.GetSiteCount(this.CurrentSiteID);
 
-			model.Snippets = pageHelper.GetSiteSnippetCount(this.SiteID);
+			model.Snippets = pageHelper.GetSiteSnippetCount(this.CurrentSiteID);
 
 			return View(model);
 		}
@@ -929,7 +945,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				if (item == null || (item != null && item.ContentCategoryID == Guid.Empty)) {
 					item = new ContentCategory();
-					item.SiteID = SiteID;
+					item.SiteID = CurrentSiteID;
 					item.ContentCategoryID = Guid.NewGuid();
 				}
 
@@ -980,7 +996,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				if (item == null || (item != null && item.ContentTagID == Guid.Empty)) {
 					item = new ContentTag();
-					item.SiteID = SiteID;
+					item.SiteID = CurrentSiteID;
 					item.ContentTagID = Guid.NewGuid();
 				}
 
@@ -1096,7 +1112,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (!bNewSite) {
 				site = siteHelper.GetCurrentSite();
 			} else {
-				site = SiteData.InitNewSite(this.SiteID);
+				site = SiteData.InitNewSite(this.CurrentSiteID);
 			}
 
 			return View(new SiteDataModel(site));
@@ -1114,7 +1130,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				if (site == null) {
 					bNewSite = true;
 					site = new SiteData();
-					site.SiteID = SiteID;
+					site.SiteID = this.CurrentSiteID;
 				}
 
 				var timezoneOld = site.TimeZoneIdentifier;
@@ -1126,18 +1142,27 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				if (datePatternOld != model.Site.Blog_DatePattern || timezoneOld != model.Site.TimeZoneIdentifier) {
 					using (ContentPageHelper cph = new ContentPageHelper()) {
-						cph.BulkBlogFileNameUpdateFromDate(this.SiteID);
+						cph.BulkBlogFileNameUpdateFromDate(this.CurrentSiteID);
 					}
 				}
 
 				if (model.CreateHomePage) {
-					CreateEmptyHome();
+					var ph = CreateEmptyHome();
+				}
+
+				if (model.CreateIndexPage) {
+					// treat as homepage, too, if home page is not created
+					var nav = model.CreateHomePage ? 100 : 0;
+
+					var idx = CreateEmptyIndex(nav);
+					site.Blog_Root_ContentID = idx.Root_ContentID;
+					site.Save();
 				}
 
 				if (bNewSite) {
-					return RedirectToAction("Index");
+					return RedirectToAction(SiteFilename.IndexAction);
 				} else {
-					return RedirectToAction("SiteInfo");
+					return RedirectToAction(SiteFilename.SiteInfoAction);
 				}
 			}
 
@@ -1156,7 +1181,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				cmsHelper.ResetConfigs();
 			}
 
-			return RedirectToAction("SiteInfo");
+			return RedirectToAction(SiteFilename.SiteInfoAction);
 		}
 
 		[HttpGet]
@@ -1379,7 +1404,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				if (item == null) {
 					item = new ContentSnippet();
 					item.Root_ContentSnippetID = Guid.Empty;
-					item.SiteID = SiteID;
+					item.SiteID = this.CurrentSiteID;
 					item.CreateUserId = SecurityData.CurrentUserGuid;
 					item.CreateDate = SiteData.CurrentSite.Now;
 				}
@@ -1442,7 +1467,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult DeleteContentPage(ContentPageModel model) {
 			using (ContentPageHelper cph = new ContentPageHelper()) {
-				cph.RemoveContent(this.SiteID, model.ContentPage.Root_ContentID);
+				cph.RemoveContent(this.CurrentSiteID, model.ContentPage.Root_ContentID);
 			}
 
 			if (model.ContentPage.ContentType == ContentPageType.PageType.BlogEntry) {
@@ -1609,7 +1634,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			List<SiteMapOrder> model = new List<SiteMapOrder>();
 
 			using (SiteMapOrderHelper orderHelper = new SiteMapOrderHelper()) {
-				model = (from c in orderHelper.GetSiteFileList(this.SiteID)
+				model = (from c in orderHelper.GetSiteFileList(this.CurrentSiteID)
 						 orderby c.NavOrder, c.NavMenuText
 						 select c).ToList();
 			}
@@ -1619,7 +1644,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		protected ActionResult SiteMapResult(string viewName, bool? saved, List<SiteMapOrder> model) {
 			using (SiteMapOrderHelper orderHelper = new SiteMapOrderHelper()) {
-				orderHelper.UpdateSiteMap(this.SiteID, model);
+				orderHelper.UpdateSiteMap(this.CurrentSiteID, model);
 			}
 
 			SetSaved(saved);
@@ -1631,7 +1656,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult FixOrphan() {
 			using (SiteMapOrderHelper orderHelper = new SiteMapOrderHelper()) {
-				orderHelper.FixOrphanPages(this.SiteID);
+				orderHelper.FixOrphanPages(this.CurrentSiteID);
 			}
 
 			return RedirectToAction("SiteMap");
@@ -1640,7 +1665,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult FixBlog() {
-			pageHelper.FixBlogNavOrder(this.SiteID);
+			pageHelper.FixBlogNavOrder(this.CurrentSiteID);
 
 			return RedirectToAction("SiteMap");
 		}
@@ -1653,8 +1678,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			ContentPageModel model = new ContentPageModel();
 
-			var pageContentsParent = pageHelper.FindContentByID(this.SiteID, id);
-			var pageContents = new ContentPage(this.SiteID, ContentPageType.PageType.ContentEntry);
+			var pageContentsParent = pageHelper.FindContentByID(this.CurrentSiteID, id);
+			var pageContents = new ContentPage(this.CurrentSiteID, ContentPageType.PageType.ContentEntry);
 
 			if (pageContentsParent != null && pageContentsParent.ContentType == ContentPageType.PageType.ContentEntry) {
 				pageContents.Parent_ContentID = id;
@@ -1678,7 +1703,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			if (ModelState.IsValid && model.ParentID.HasValue) {
 				var pageContents = model.ContentPage;
-				pageContents.SiteID = this.SiteID;
+				pageContents.SiteID = this.CurrentSiteID;
 				pageContents.ContentType = ContentPageType.PageType.ContentEntry;
 
 				pageContents.SavePageEdit();
@@ -1710,7 +1735,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			} else {
 				using (SiteMapOrderHelper orderHelper = new SiteMapOrderHelper()) {
 					var lst = orderHelper.ParseChildPageData(model.Sort, model.Root_ContentID);
-					orderHelper.UpdateSiteMap(SiteData.CurrentSiteID, lst);
+					orderHelper.UpdateSiteMap(this.CurrentSiteID, lst);
 				}
 
 				SetSaved();
@@ -1813,7 +1838,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult PageHistory(Guid? id, Guid? versionid) {
 			ShowSaved("Selected items removed", "No items selected to remove");
 
-			PageHistoryModel model = new PageHistoryModel(this.SiteID);
+			PageHistoryModel model = new PageHistoryModel(this.CurrentSiteID);
 
 			if (id.HasValue) {
 				model.SetCurrent(id.Value);
@@ -1832,7 +1857,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			List<Guid> lstDel = model.History.DataSource.Where(x => x.Selected).Select(x => x.ContentID).ToList();
 
 			if (lstDel.Any()) {
-				pageHelper.RemoveVersions(this.SiteID, lstDel);
+				pageHelper.RemoveVersions(this.CurrentSiteID, lstDel);
 				SetSaved(true);
 			} else {
 				SetSaved(false);
@@ -1891,7 +1916,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 							fieldDev = ContentPageHelper.UpdateField.MarkIncludeInSiteNavNo;
 						}
 
-						pageHelper.MarkSelectedPublished(SiteData.CurrentSiteID, lstUpd, fieldDev);
+						pageHelper.MarkSelectedPublished(this.CurrentSiteID, lstUpd, fieldDev);
 					}
 
 					ModelState.Clear();
@@ -1901,7 +1926,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			model.SelectedAction = string.Empty;
 
-			lstContent = pageHelper.GetContentByDateRange(this.SiteID, model.SearchDate, dateRangeDays, model.PageType,
+			lstContent = pageHelper.GetContentByDateRange(this.CurrentSiteID, model.SearchDate, dateRangeDays, model.PageType,
 							model.PageActive, model.ShowInSiteMap, model.ShowInSiteNav, model.BlockIndex);
 
 			model.Pages = lstContent;
@@ -1947,18 +1972,18 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			string fileName = "export.xml";
 
 			if (guidContentID != Guid.Empty) {
-				ContentPageExport content = ContentImportExportUtils.GetExportPage(SiteData.CurrentSiteID, guidContentID);
+				ContentPageExport content = ContentImportExportUtils.GetExportPage(this.CurrentSiteID, guidContentID);
 				theXML = ContentImportExportUtils.GetExportXML<ContentPageExport>(content);
 
 				fileName = string.Format("page_{0}_{1}", content.ThePage.NavMenuText, guidContentID);
 			} else {
-				SiteExport site = ContentImportExportUtils.GetExportSite(SiteData.CurrentSiteID, ExportWhat);
+				SiteExport site = ContentImportExportUtils.GetExportSite(this.CurrentSiteID, ExportWhat);
 
 				site.ThePages.RemoveAll(x => x.ThePage.GoLiveDate < dateBegin);
 				site.ThePages.RemoveAll(x => x.ThePage.GoLiveDate > dateEnd);
 
 				if (guidNodeID != Guid.Empty) {
-					List<Guid> lst = pageHelper.GetPageHierarchy(SiteData.CurrentSiteID, guidNodeID);
+					List<Guid> lst = pageHelper.GetPageHierarchy(this.CurrentSiteID, guidNodeID);
 					site.ThePages.RemoveAll(x => !lst.Contains(x.OriginalRootContentID) && x.ThePage.ContentType == ContentPageType.PageType.ContentEntry);
 				}
 
@@ -1992,14 +2017,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			var srt = pagedData.ParseSort();
 
 			if (model.SelectedSearch == PageIndexModel.SearchBy.AllPages) {
-				pagedData.TotalRecords = pageHelper.GetSitePageCount(this.SiteID, ContentPageType.PageType.ContentEntry, false);
-				pagedData.DataSource = pageHelper.GetPagedSortedContent(this.SiteID, ContentPageType.PageType.ContentEntry, false, pagedData.PageSize, pagedData.PageNumberZeroIndex, pagedData.OrderBy);
+				pagedData.TotalRecords = pageHelper.GetSitePageCount(this.CurrentSiteID, ContentPageType.PageType.ContentEntry, false);
+				pagedData.DataSource = pageHelper.GetPagedSortedContent(this.CurrentSiteID, ContentPageType.PageType.ContentEntry, false, pagedData.PageSize, pagedData.PageNumberZeroIndex, pagedData.OrderBy);
 			} else {
 				IQueryable<ContentPage> query = null;
 				if (!model.ParentPageID.HasValue) {
-					query = pageHelper.GetTopNavigation(this.SiteID, false).AsQueryable();
+					query = pageHelper.GetTopNavigation(this.CurrentSiteID, false).AsQueryable();
 				} else {
-					query = pageHelper.GetParentWithChildNavigation(this.SiteID, model.ParentPageID.Value, false).AsQueryable();
+					query = pageHelper.GetParentWithChildNavigation(this.CurrentSiteID, model.ParentPageID.Value, false).AsQueryable();
 				}
 
 				query = query.SortByParm<ContentPage>(srt.SortField, srt.SortDirection);
@@ -2037,7 +2062,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				List<Guid> lstUpd = pagedData.DataSource.Where(x => x.Selected).Select(x => x.Root_ContentID).ToList();
 
 				if (lstUpd.Any()) {
-					pageHelper.BulkUpdateTemplate(this.SiteID, lstUpd, model.SelectedTemplate);
+					pageHelper.BulkUpdateTemplate(this.CurrentSiteID, lstUpd, model.SelectedTemplate);
 
 					//return RedirectToAction("PageTemplateUpdate");
 				}
@@ -2052,12 +2077,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			IQueryable<ContentPage> query = null;
 
 			if (model.SelectedSearch == PageTemplateUpdateModel.SearchBy.AllPages) {
-				query = pageHelper.GetAllLatestContentList(this.SiteID).AsQueryable();
+				query = pageHelper.GetAllLatestContentList(this.CurrentSiteID).AsQueryable();
 			} else {
 				if (!model.ParentPageID.HasValue) {
-					query = pageHelper.GetTopNavigation(this.SiteID, false).AsQueryable();
+					query = pageHelper.GetTopNavigation(this.CurrentSiteID, false).AsQueryable();
 				} else {
-					query = pageHelper.GetParentWithChildNavigation(this.SiteID, model.ParentPageID.Value, false).AsQueryable();
+					query = pageHelper.GetParentWithChildNavigation(this.CurrentSiteID, model.ParentPageID.Value, false).AsQueryable();
 				}
 			}
 
@@ -2314,13 +2339,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			history.ToggleSort();
 			var srt = history.ParseSort();
 
-			history.TotalRecords = EditHistory.GetHistoryListCount(SiteData.CurrentSiteID, model.GetLatestOnly, model.SearchDate, model.SelectedUserID);
+			history.TotalRecords = EditHistory.GetHistoryListCount(this.CurrentSiteID, model.GetLatestOnly, model.SearchDate, model.SelectedUserID);
 
 			if (history.TotalRecords > 0 && (history.PageNumber > history.TotalPages)) {
 				history.PageNumber = history.TotalPages;
 			}
 
-			history.DataSource = EditHistory.GetHistoryList(history.OrderBy, history.PageNumberZeroIndex, history.PageSize, SiteData.CurrentSiteID, model.GetLatestOnly, model.SearchDate, model.SelectedUserID);
+			history.DataSource = EditHistory.GetHistoryList(history.OrderBy, history.PageNumberZeroIndex, history.PageSize, this.CurrentSiteID, model.GetLatestOnly, model.SearchDate, model.SelectedUserID);
 
 			ModelState.Clear();
 
@@ -2502,13 +2527,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			pagedData.ToggleSort();
 
 			if (!model.Root_ContentID.HasValue) {
-				pagedData.TotalRecords = PostComment.GetCommentCountBySiteAndType(SiteData.CurrentSiteID, model.PageType, model.IsApproved, model.IsSpam);
+				pagedData.TotalRecords = PostComment.GetCommentCountBySiteAndType(this.CurrentSiteID, model.PageType, model.IsApproved, model.IsSpam);
 			} else {
 				pagedData.TotalRecords = PostComment.GetCommentCountByContent(model.Root_ContentID.Value, model.IsApproved, model.IsSpam);
 			}
 
 			if (!model.Root_ContentID.HasValue) {
-				pagedData.DataSource = PostComment.GetCommentsBySitePageNumber(SiteData.CurrentSiteID, pagedData.PageNumberZeroIndex, pagedData.PageSize, pagedData.OrderBy, model.PageType, model.IsApproved, model.IsSpam);
+				pagedData.DataSource = PostComment.GetCommentsBySitePageNumber(this.CurrentSiteID, pagedData.PageNumberZeroIndex, pagedData.PageSize, pagedData.OrderBy, model.PageType, model.IsApproved, model.IsSpam);
 			} else {
 				pagedData.DataSource = PostComment.GetCommentsByContentPageNumber(model.Root_ContentID.Value, pagedData.PageNumberZeroIndex, pagedData.PageSize, pagedData.OrderBy, model.IsApproved, model.IsSpam);
 			}
@@ -2541,10 +2566,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			var srt = pagedData.ParseSort();
 
 			if (model.SelectedSearch == PageIndexModel.SearchBy.AllPages) {
-				pagedData.TotalRecords = pageHelper.GetSitePageCount(this.SiteID, ContentPageType.PageType.BlogEntry, false);
-				pagedData.DataSource = pageHelper.GetPagedSortedContent(this.SiteID, ContentPageType.PageType.BlogEntry, false, pagedData.PageSize, pagedData.PageNumberZeroIndex, pagedData.OrderBy);
+				pagedData.TotalRecords = pageHelper.GetSitePageCount(this.CurrentSiteID, ContentPageType.PageType.BlogEntry, false);
+				pagedData.DataSource = pageHelper.GetPagedSortedContent(this.CurrentSiteID, ContentPageType.PageType.BlogEntry, false, pagedData.PageSize, pagedData.PageNumberZeroIndex, pagedData.OrderBy);
 			} else {
-				IQueryable<ContentPage> query = pageHelper.GetPostsByDateRange(this.SiteID, model.SearchDate, model.SelectedRange, false).AsQueryable();
+				IQueryable<ContentPage> query = pageHelper.GetPostsByDateRange(this.CurrentSiteID, model.SearchDate, model.SelectedRange, false).AsQueryable();
 				query = query.SortByParm<ContentPage>(srt.SortField, srt.SortDirection);
 
 				pagedData.DataSource = query.ToList();
@@ -2581,7 +2606,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				List<Guid> lstUpd = pagedData.DataSource.Where(x => x.Selected).Select(x => x.Root_ContentID).ToList();
 
 				if (lstUpd.Any()) {
-					pageHelper.BulkUpdateTemplate(this.SiteID, lstUpd, model.SelectedTemplate);
+					pageHelper.BulkUpdateTemplate(this.CurrentSiteID, lstUpd, model.SelectedTemplate);
 
 					//return RedirectToAction("BlogPostTemplateUpdate");
 				}
@@ -2596,9 +2621,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			IQueryable<ContentPage> query = null;
 
 			if (model.SelectedSearch == PostTemplateUpdateModel.SearchBy.AllPages) {
-				query = pageHelper.GetAllLatestBlogList(this.SiteID).AsQueryable();
+				query = pageHelper.GetAllLatestBlogList(this.CurrentSiteID).AsQueryable();
 			} else {
-				query = pageHelper.GetPostsByDateRange(this.SiteID, model.SearchDate, model.SelectedRange, false).AsQueryable();
+				query = pageHelper.GetPostsByDateRange(this.CurrentSiteID, model.SearchDate, model.SelectedRange, false).AsQueryable();
 			}
 
 			query = query.SortByParm<ContentPage>(srt.SortField, srt.SortDirection);
@@ -2770,7 +2795,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult SiteTemplateUpdate() {
 			SiteTemplateUpdateModel model = new SiteTemplateUpdateModel();
 
-			ContentPage pageHome = pageHelper.FindHome(this.SiteID, true);
+			ContentPage pageHome = pageHelper.FindHome(this.CurrentSiteID, true);
 			ContentPage pageIndex = null;
 
 			if (pageHome != null) {
@@ -2779,7 +2804,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				model.HomePageLink = pageHome.FileName;
 
 				if (SiteData.CurrentSite.Blog_Root_ContentID.HasValue) {
-					pageIndex = pageHelper.FindContentByID(this.SiteID, SiteData.CurrentSite.Blog_Root_ContentID.Value);
+					pageIndex = pageHelper.FindContentByID(this.CurrentSiteID, SiteData.CurrentSite.Blog_Root_ContentID.Value);
 					model.IndexPageID = SiteData.CurrentSite.Blog_Root_ContentID.Value;
 					model.IndexPage = pageIndex.TemplateFile.ToLowerInvariant();
 				}
@@ -2791,27 +2816,27 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult SiteTemplateUpdate(SiteTemplateUpdateModel model) {
-			ContentPage pageHome = pageHelper.FindHome(this.SiteID, true);
+			ContentPage pageHome = pageHelper.FindHome(this.CurrentSiteID, true);
 			ContentPage pageIndex = null;
 
 			SiteData.CurrentSite.Blog_Root_ContentID = model.IndexPageID;
 			if (model.IndexPageID.HasValue) {
-				pageIndex = pageHelper.FindContentByID(this.SiteID, model.IndexPageID.Value);
+				pageIndex = pageHelper.FindContentByID(this.CurrentSiteID, model.IndexPageID.Value);
 			}
 			SiteData.CurrentSite.Save();
 
 			if (!string.IsNullOrEmpty(model.BlogPages)) {
-				pageHelper.UpdateAllBlogTemplates(this.SiteID, model.BlogPages);
+				pageHelper.UpdateAllBlogTemplates(this.CurrentSiteID, model.BlogPages);
 			}
 			if (!string.IsNullOrEmpty(model.AllPages)) {
-				pageHelper.UpdateAllPageTemplates(this.SiteID, model.AllPages);
+				pageHelper.UpdateAllPageTemplates(this.CurrentSiteID, model.AllPages);
 			}
 
 			if (!string.IsNullOrEmpty(model.TopPages)) {
-				pageHelper.UpdateTopPageTemplates(this.SiteID, model.TopPages);
+				pageHelper.UpdateTopPageTemplates(this.CurrentSiteID, model.TopPages);
 			}
 			if (!string.IsNullOrEmpty(model.SubPages)) {
-				pageHelper.UpdateSubPageTemplates(this.SiteID, model.SubPages);
+				pageHelper.UpdateSubPageTemplates(this.CurrentSiteID, model.SubPages);
 			}
 
 			if (pageHome != null && !string.IsNullOrEmpty(model.HomePage)) {
@@ -2824,17 +2849,17 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 
 			if (!string.IsNullOrEmpty(model.AllContent)) {
-				pageHelper.UpdateAllContentTemplates(this.SiteID, model.AllContent);
+				pageHelper.UpdateAllContentTemplates(this.CurrentSiteID, model.AllContent);
 			}
 
 			return RedirectToAction("SiteTemplateUpdate");
 		}
 
-		private void CreateEmptyHome() {
+		private ContentPage CreateShellPage() {
 			DateTime dtSite = CMSConfigHelper.CalcNearestFiveMinTime(SiteData.CurrentSite.Now);
 
-			ContentPage pageContents = new ContentPage {
-				SiteID = SiteID,
+			var pageContents = new ContentPage {
+				SiteID = this.CurrentSiteID,
 				Root_ContentID = Guid.NewGuid(),
 				ContentID = Guid.NewGuid(),
 				EditDate = SiteData.CurrentSite.Now,
@@ -2842,14 +2867,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				CreateDate = SiteData.CurrentSite.Now,
 				GoLiveDate = dtSite.AddMinutes(-5),
 				RetireDate = dtSite.AddYears(200),
-				TitleBar = "Home",
-				NavMenuText = "Home",
-				PageHead = "Home",
-				FileName = "/home",
-				PageText = SiteData.StarterHomePageSample,
+				TitleBar = "Title",
+				NavMenuText = "Title",
+				PageHead = "Title",
+				FileName = "/title",
+				PageText = string.Empty,
 				LeftPageText = string.Empty,
 				RightPageText = string.Empty,
-				NavOrder = 0,
+				NavOrder = -1,
 				IsLatestVersion = true,
 				PageActive = true,
 				ShowInSiteNav = true,
@@ -2860,20 +2885,43 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				TemplateFile = SiteData.DefaultTemplateFilename
 			};
 
+			return pageContents;
+		}
+
+		private ContentPage CreateEmptyHome() {
+			var pageContents = CreateShellPage();
+
+			pageContents.TitleBar = "Home";
+			pageContents.NavMenuText = "Home";
+			pageContents.PageHead = "Home";
+			pageContents.FileName = "/home";
+			pageContents.PageText = SiteData.StarterHomePageSample;
+			pageContents.NavOrder = 0;
+
 			pageContents.SavePageEdit();
+
+			return pageContents;
+		}
+
+		private ContentPage CreateEmptyIndex(int nav) {
+			var pageContents = CreateShellPage();
+
+			pageContents.TitleBar = "Index";
+			pageContents.NavMenuText = "Index";
+			pageContents.PageHead = "Index";
+			pageContents.FileName = "/index";
+			pageContents.PageText = nav >= 1 ? "<p>Search Results</p>" : SiteData.StarterHomePageSample;
+			pageContents.NavOrder = nav;
+
+			pageContents.SavePageEdit();
+
+			return pageContents;
 		}
 
 		public ActionResult TemplatePreview() {
-			PagePayload _page = new PagePayload();
-			_page.ThePage = ContentPageHelper.GetSamplerView();
-			_page.ThePage.TemplateFile = SiteData.PreviewTemplateFile;
+			var page = PagePayload.GetSamplerPayload(this);
 
-			_page.TheSite = SiteData.CurrentSite;
-			_page.TheWidgets = new List<Widget>();
-
-			this.ViewData[PagePayload.ViewDataKey] = _page;
-
-			return View(SiteData.PreviewTemplateFile);
+			return View(page.ThePage.TemplateFile);
 		}
 
 		protected void AddErrors(IdentityResult result) {
@@ -2883,7 +2931,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		private void RedirectIfUsersExist() {
 			if (DatabaseUpdate.UsersExist) {
 				Response.Redirect(SiteFilename.DashboardURL);
-				//return RedirectToAction("Dashboard");
 			}
 		}
 
@@ -2892,14 +2939,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				return Redirect(returnUrl);
 			}
 
-			return RedirectToAction("Index");
+			return RedirectToAction(SiteFilename.IndexAction);
 		}
 
 		public ActionResult TextWidgetIndex() {
 			List<CMSTextWidgetPicker> model = new List<CMSTextWidgetPicker>();
 
 			using (CMSConfigHelper cfg = new CMSConfigHelper()) {
-				model = cfg.GetAllWidgetSettings(this.SiteID);
+				model = cfg.GetAllWidgetSettings(this.CurrentSiteID);
 			}
 
 			return View(model);
@@ -2909,7 +2956,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult TextWidgetIndex(List<CMSTextWidgetPicker> model) {
 			foreach (CMSTextWidgetPicker w in model) {
 				TextWidget ww = new TextWidget();
-				ww.SiteID = this.SiteID;
+				ww.SiteID = this.CurrentSiteID;
 				ww.TextWidgetID = w.TextWidgetPickerID;
 				ww.TextWidgetAssembly = w.AssemblyString;
 
@@ -2939,6 +2986,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		protected void SignOut() {
 			securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			Session.Clear();
 		}
 
 		protected override void Dispose(bool disposing) {

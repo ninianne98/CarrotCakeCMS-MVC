@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
@@ -40,6 +38,12 @@ namespace Carrotware.CMS.Interface {
 			}
 		}
 
+		public static string Public {
+			get {
+				return "~/Views/CmsAdmin/_LayoutPublic.cshtml";
+			}
+		}
+
 		public static string PopupFunction {
 			get {
 				return ConfigurationManager.AppSettings["LayoutPopupOpenFunction"] != null
@@ -49,7 +53,7 @@ namespace Carrotware.CMS.Interface {
 		}
 
 		public static HtmlString WritePopupLink(string Uri) {
-			return new HtmlString(String.Format("{0}('{1}')", PopupFunction, Uri));
+			return new HtmlString(string.Format("{0}('{1}')", PopupFunction, Uri));
 		}
 
 		public static string CurrentScriptName {

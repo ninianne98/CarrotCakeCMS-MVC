@@ -220,9 +220,9 @@
 													<input name="btnAddPage" type="button" id="btnAddPage" value="Add New Page" onclick="cmsShowAddPage();" />
 												</p>
 												@if (CmsPage.ThePage.ContentType == ContentPageType.PageType.ContentEntry) {
-													<p>
-														<input name="btnSortChildPages" type="button" id="btnSortChildPages" value="Sort Child/Sub Pages" onclick="cmsSortChildren();" />
-													</p>
+												<p>
+													<input name="btnSortChildPages" type="button" id="btnSortChildPages" value="Sort Child/Sub Pages" onclick="cmsSortChildren();" />
+												</p>
 												}
 												<p>
 													<input name="btnSiteMap" type="button" id="btnSiteMap" value="Site Map" onclick="cmsEditSiteMap();" />
@@ -265,6 +265,11 @@
 		<div id="CMSremoveconfirm" title="Remove Widget?" class="cms-seagreen">
 			<p id="CMSremoveconfirmmsg">
 				Are you sure you want to remove this widget?
+			</p>
+		</div>
+		<div id="CMSaddconfirm" title="Add Widget?" class="cms-seagreen">
+			<p id="CMSaddconfirmmsg">
+				Would you like to add "<b class="cms-widget-name">W</b>" to placeholder "<b class="cms-widget-target">T</b>"?
 			</p>
 		</div>
 		<div id="CMSsavedconfirm" title="Page Saved!" class="cms-seagreen">

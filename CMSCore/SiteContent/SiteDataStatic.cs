@@ -791,15 +791,20 @@ namespace Carrotware.CMS.Core {
 			get {
 				if (_adminFolderPath == null) {
 					string _defPath = "/c3-admin/";
-					CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
-					if (config.MainConfig != null && !string.IsNullOrEmpty(config.MainConfig.AdminFolderPath)) {
-						_adminFolderPath = config.MainConfig.AdminFolderPath;
-						_adminFolderPath = string.Format("/{0}/", _adminFolderPath).Replace(@"\", "/").Replace("///", "/").Replace("//", "/").Replace("//", "/").Trim();
-					} else {
-						_adminFolderPath = _defPath;
-					}
-					if (string.IsNullOrEmpty(_adminFolderPath) || _adminFolderPath.Length < 2) {
-						_adminFolderPath = _defPath;
+					try {
+						CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+						if (config.MainConfig != null && !string.IsNullOrEmpty(config.MainConfig.AdminFolderPath)) {
+							_adminFolderPath = config.MainConfig.AdminFolderPath;
+							_adminFolderPath = string.Format("/{0}/", _adminFolderPath).Replace(@"\", "/").Replace("///", "/").Replace("//", "/").Replace("//", "/").Trim();
+						} else {
+							_adminFolderPath = _defPath;
+						}
+						if (string.IsNullOrEmpty(_adminFolderPath) || _adminFolderPath.Length < 2) {
+							_adminFolderPath = _defPath;
+						}
+					} catch (Exception ex) {
+						SiteData.WriteDebugException("adminfolderpath", ex);
+						return _defPath;
 					}
 				}
 				return _adminFolderPath;

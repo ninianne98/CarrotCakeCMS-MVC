@@ -23,11 +23,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		private string defaultBrowseMode = "file";
 
 		public FileBrowserModel() {
-			this.FileMsg = String.Empty;
-			this.FileMsgCss = String.Empty;
+			this.FileMsg = string.Empty;
+			this.FileMsgCss = string.Empty;
 
-			this.QueryPath = String.Empty;
-			this.ViewMode = String.Empty;
+			this.QueryPath = string.Empty;
+			this.ViewMode = string.Empty;
 
 			this.EscapeSpaces = true;
 		}
@@ -40,7 +40,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.QueryPath = this.QueryPath.StartsWith(@"/") ? this.QueryPath : @"/" + this.QueryPath;
 			this.QueryPath.Replace("//", "/").Replace("//", "/");
 
-			if (String.IsNullOrEmpty(this.QueryPath) || this.QueryPath == @"/") {
+			if (string.IsNullOrEmpty(this.QueryPath) || this.QueryPath == @"/") {
 				this.QueryPath = @"/";
 				this.UpLinkVisible = false;
 			} else {
@@ -57,11 +57,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 			if (this.UpLinkVisible) {
 				string sUrlUp = this.QueryPath.Substring(0, this.QueryPath.Substring(0, this.QueryPath.Length - 2).LastIndexOf('/')) + @"/";
-				this.UpLink = String.Format(linkPatt, SiteData.CurrentScriptName, HttpUtility.UrlEncode(sUrlUp), this.UseTinyMCE, this.ReturnMode, this.ViewMode);
+				this.UpLink = string.Format(linkPatt, SiteData.CurrentScriptName, HttpUtility.UrlEncode(sUrlUp), this.UseTinyMCE, this.ReturnMode, this.ViewMode);
 			}
 
-			this.ThumbViewLink = String.Format(linkPatt, SiteData.CurrentScriptName, HttpUtility.UrlEncode(this.QueryPath), this.UseTinyMCE, this.ReturnMode, "thumb");
-			this.FileViewLink = String.Format(linkPatt, SiteData.CurrentScriptName, HttpUtility.UrlEncode(this.QueryPath), this.UseTinyMCE, this.ReturnMode, "file");
+			this.ThumbViewLink = string.Format(linkPatt, SiteData.CurrentScriptName, HttpUtility.UrlEncode(this.QueryPath), this.UseTinyMCE, this.ReturnMode, "thumb");
+			this.FileViewLink = string.Format(linkPatt, SiteData.CurrentScriptName, HttpUtility.UrlEncode(this.QueryPath), this.UseTinyMCE, this.ReturnMode, "file");
 
 			this.Dirs = helpFile.GetFolders(this.QueryPath);
 			this.Files = helpFile.GetFiles(this.QueryPath);
@@ -158,12 +158,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		}
 
 		public string CreateFileLink(string sPath) {
-			return String.Format("javascript:SetFile('{0}');", sPath);
+			return string.Format("javascript:SetFile('{0}');", sPath);
 		}
 
 		public string CreateFileSrc(string sPath, string sFile, string sMime) {
 			if (this.FileImageLink(sMime).ToLowerInvariant() == "image") {
-				return String.Format("{0}{1}", sPath, sFile).ToLowerInvariant();
+				return string.Format("{0}{1}", sPath, sFile).ToLowerInvariant();
 			} else {
 				return "/Assets/Admin/images/document.png";
 			}
@@ -181,8 +181,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		}
 
 		public void UploadFile() {
-			this.FileMsg = String.Empty;
-			this.FileMsgCss = String.Empty;
+			this.FileMsg = string.Empty;
+			this.FileMsgCss = string.Empty;
 
 			try {
 				if (this.PostedFile != null) {
@@ -198,10 +198,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 						this.PostedFile.SaveAs(Path.Combine(sPath, uploadedFileName));
 
-						this.FileMsg = String.Format("file [{0}] uploaded!", uploadedFileName);
+						this.FileMsg = string.Format("file [{0}] uploaded!", uploadedFileName);
 						this.FileMsgCss = "uploadSuccess";
 					} else {
-						this.FileMsg = String.Format("[{0}] is a blocked filetype.", uploadedFileName);
+						this.FileMsg = string.Format("[{0}] is a blocked filetype.", uploadedFileName);
 						this.FileMsgCss = "uploadBlocked";
 					}
 				} else {
@@ -211,6 +211,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			} catch (Exception ex) {
 				this.FileMsg = ex.ToString();
 				this.FileMsgCss = "uploadFail";
+				SiteData.WriteDebugException("uploadfile", ex);
 			}
 		}
 	}
@@ -242,7 +243,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					string uploadedFileName = postedFile.FileName;
 
 					if (!(from b in helpFile.BlockedTypes
-						  where uploadedFileName.ToLowerInvariant().EndsWith(String.Format(".{0}", b).ToLowerInvariant())
+						  where uploadedFileName.ToLowerInvariant().EndsWith(string.Format(".{0}", b).ToLowerInvariant())
 						  select b).Any()) {
 						if (this.EscapeSpaces) {
 							uploadedFileName = uploadedFileName.Replace(" ", "-");
@@ -259,11 +260,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					}
 				}
 			} catch (Exception ex) {
-				SiteData.WriteDebugException("fileupload", ex);
+				SiteData.WriteDebugException("ajax-fileupload", ex);
 				throw;
 			}
 
-			return String.Empty;
+			return string.Empty;
 		}
 	}
 }

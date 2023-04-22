@@ -1,13 +1,11 @@
-﻿@{
+﻿<!DOCTYPE html>
+@{
 	Layout = null;
 
 	bool siteExists = SiteData.CurretSiteExists;
 
 	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
-
 }
-
-<!DOCTYPE html>
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
@@ -43,7 +41,6 @@
 	<script src="~/Assets/Admin/includes/common-utils.js?@versionKey" type="text/javascript"></script>
 
 	<script type="text/javascript">
-
 		$(document).ready(function () {
 			AjaxBtnLoad();
 		});
@@ -54,13 +51,13 @@
 	</script>
 
 	<!-- TinyMCE -->
-	<script src="~/Assets/tiny_mce/tiny_mce.js?@versionKey" type="text/javascript"></script>
+	<script src="~/Assets/tinymce/tinymce.min.js?@versionKey" type="text/javascript"></script>
 	<script src="~/Assets/Admin/includes/tinymce-config.js?@versionKey" type="text/javascript"></script>
 	<script type="text/javascript">
 		var bTinyLoaded = false;
 		function AjaxTinyLoad() {
 			if (!bTinyLoaded) {
-				TinyMCEParamInit("700", "500", false);
+				cmsTinyMceInit("875", "500", false);
 			}
 			bTinyLoaded = true;
 		}
@@ -88,15 +85,15 @@
 				</div>
 				<h3>
 					@if (SiteData.CurrentSite != null) {
-						if (!String.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)
-									&& !String.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)) {
+				if (!String.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)
+							&& !String.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)) {
 							@String.Format("{0}:  {1}", SiteData.CurrentSite.SiteName, SiteData.CurrentSite.SiteTagline)
-						} else {
+				} else {
 							@String.Format("{0}  {1}", SiteData.CurrentSite.SiteName, SiteData.CurrentSite.SiteTagline)
-						}
-					} else {
+				}
+			} else {
 						<span>&nbsp;</span>
-					}
+			}
 				</h3>
 
 				<div class="widthshim">
@@ -123,7 +120,7 @@
 							<li id="tabStatusChange"><a href="@SiteFilename.SiteContentStatusChangeURL">Bulk Change Status</a> </li>
 							<li id="tabExportSite"><a href="@SiteFilename.SiteExportURL">Export Site</a> </li>
 							<li id="tabImportContent"><a href="@SiteFilename.ContentImportURL">Import Content</a> </li>
-						}
+				}
 					</ul>
 				}
 
@@ -264,7 +261,7 @@
 			</form>
 
 			@if (Request.IsAuthenticated) {
-				using (Html.BeginForm("LogOff", RouteConfig.AdminCtrlr, new { area = "" }, FormMethod.Post, new { id = "logoutForm" })) {
+				using (Html.BeginForm(SiteFilename.LogOffAction, RouteConfig.AdminCtrlr, new { area = "" }, FormMethod.Post, new { id = "logoutForm" })) {
 					@Html.AntiForgeryToken()
 
 					<input type="submit" name="btnLogout" value="Logout" id="btnLogout" />
@@ -286,7 +283,7 @@
 							@SiteData.CurrentSite.TimeZoneIdentifier
 						</span>
 						<br />
-					}
+			}
 				</p>
 			</div>
 			<div class="widthshim">

@@ -1,10 +1,9 @@
-﻿@{
+﻿<!DOCTYPE html>
+@{
 	Layout = null;
 
 	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
 }
-
-<!DOCTYPE html>
 <!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
 <!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
@@ -37,10 +36,8 @@
 	<script src="~/Assets/Admin/includes/jquery.simplemodal.js?@versionKey" type="text/javascript"></script>
 	<script src="~/Assets/Admin/includes/jquery.blockUI.js?@versionKey" type="text/javascript"></script>
 	<script src="~/Assets/Admin/Includes/chosen.jquery.min.js?@versionKey" type="text/javascript"></script>
-	@if (SecurityData.IsAuthenticated) {
+	@if (SecurityData.IsAuthUser) {
 		<script src="~/Assets/Admin/includes/common-utils.js?@versionKey" type="text/javascript"></script>
-	}
-	@if (SecurityData.IsAuthenticated) {
 		<script type="text/javascript">
 
 			$(document).ready(function () {
@@ -51,13 +48,11 @@
 				AjaxBtnLoad();
 			});
 		</script>
-	}
-	@if (SecurityData.IsAuthenticated) {
-	<!-- TinyMCE -->
-		<script src="~/Assets/tiny_mce/tiny_mce.js?@versionKey" type="text/javascript"></script>
+		<!-- TinyMCE -->
+		<script src="~/Assets/tinymce/tinymce.min.js?@versionKey" type="text/javascript"></script>
 		<script src="~/Assets/Admin/includes/tinymce-config.js?@versionKey" type="text/javascript"></script>
-		<script type="text/javascript">
 
+		<script type="text/javascript">
 			var pnl = '#divSavedAlert';
 			var fld = '#hdnShowSaveLayer';
 			var timer1 = '';
@@ -91,7 +86,7 @@
 			var bTinyLoaded = false;
 			function AjaxTinyLoad() {
 				if (!bTinyLoaded) {
-					TinyMCEParamInit("650", "400", true);
+					cmsTinyMceInit("775", "450", true);
 				}
 				bTinyLoaded = true;
 			}
@@ -107,7 +102,7 @@
 				AjaxScriptLoad();
 			});
 		</script>
-	<!-- /TinyMCE -->
+		<!-- /TinyMCE -->
 	}
 	@RenderSection("scripts", required: false)
 </head>
