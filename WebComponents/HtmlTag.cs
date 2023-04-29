@@ -142,7 +142,7 @@ namespace Carrotware.Web.UI.Components {
 		protected StringBuilder CreateOutput() {
 			var sb = new StringBuilder();
 			string[] hrefs = new string[] { "a", "link" };
-			string[] srcs = new string[] { "audio", "embed", "iframe", "img", "input", "link", "script", "source", "track", "video" };
+			string[] srcs = new string[] { "audio", "embed", "iframe", "img", "input", "script", "source", "track", "video" };
 
 			if (hrefs.Contains(this.Tag)) {
 				sb.Append(string.Format(" href=\"{0}\" ", this.Uri));
