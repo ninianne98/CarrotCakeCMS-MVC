@@ -1,15 +1,15 @@
 ﻿using Carrotware.CMS.Data;
 using Carrotware.Web.UI.Components;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web.Caching;
 using System.Web;
+using System.Web.Caching;
 using System.Xml.Serialization;
-using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -114,7 +114,7 @@ namespace Carrotware.CMS.Core {
 			string fileTypes = null;
 
 			CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
-			if (config.FileManagerConfig != null && !String.IsNullOrEmpty(config.FileManagerConfig.BlockedExtensions)) {
+			if (config.FileManagerConfig != null && !string.IsNullOrEmpty(config.FileManagerConfig.BlockedExtensions)) {
 				fileTypes = config.FileManagerConfig.BlockedExtensions;
 			}
 
@@ -347,10 +347,10 @@ namespace Carrotware.CMS.Core {
 
 							foreach (var p in _p2.Where(x => x.FilePath.ToLowerInvariant().EndsWith("html")).Select(x => x)) {
 								string[] path = p.FilePath.Split(':');
-								if (path.Length > 2 && !String.IsNullOrEmpty(path[2])
+								if (path.Length > 2 && !string.IsNullOrEmpty(path[2])
 											&& (path[2].ToLowerInvariant().EndsWith(".cshtml") || path[2].ToLowerInvariant().EndsWith(".vbhtml"))) {
 									path[2] = "~" + sPathPrefix + path[2];
-									p.FilePath = String.Join(":", path);
+									p.FilePath = string.Join(":", path);
 								}
 							}
 
@@ -380,7 +380,7 @@ namespace Carrotware.CMS.Core {
 				sPathPrefix = sPathPrefix + "/";
 			}
 
-			if (!String.IsNullOrEmpty(sPathPrefix)) {
+			if (!string.IsNullOrEmpty(sPathPrefix)) {
 				DataSet ds = ReadDataSetConfig(CMSConfigFileType.PublicCtrl, sPathPrefix);
 
 				_plugins = (from d in ds.Tables[0].AsEnumerable()
@@ -498,11 +498,11 @@ namespace Carrotware.CMS.Core {
 							var _ctrls = (from d in ds.Tables[1].AsEnumerable()
 										  select new CMSAdminModuleMenu {
 											  Caption = d.Field<string>("pluginlabel"),
-											  SortOrder = String.IsNullOrEmpty(d.Field<string>("menuorder")) ? -1 : int.Parse(d.Field<string>("menuorder")),
+											  SortOrder = string.IsNullOrEmpty(d.Field<string>("menuorder")) ? -1 : int.Parse(d.Field<string>("menuorder")),
 											  Action = d.Field<string>("action"),
 											  Controller = d.Field<string>("controller"),
-											  UsePopup = String.IsNullOrEmpty(d.Field<string>("usepopup")) ? false : Convert.ToBoolean(d.Field<string>("usepopup")),
-											  IsVisible = String.IsNullOrEmpty(d.Field<string>("visible")) ? false : Convert.ToBoolean(d.Field<string>("visible")),
+											  UsePopup = string.IsNullOrEmpty(d.Field<string>("usepopup")) ? false : Convert.ToBoolean(d.Field<string>("usepopup")),
+											  IsVisible = string.IsNullOrEmpty(d.Field<string>("visible")) ? false : Convert.ToBoolean(d.Field<string>("visible")),
 											  AreaKey = d.Field<string>("area")
 										  }).OrderBy(x => x.Caption).OrderBy(x => x.SortOrder).ToList();
 
@@ -755,7 +755,7 @@ namespace Carrotware.CMS.Core {
 
 					_sites = (from d in ds.Tables[0].AsEnumerable()
 							  select new DynamicSite {
-								  DomainName = String.IsNullOrEmpty(d.Field<string>("domname")) ? string.Empty : d.Field<string>("domname").ToLowerInvariant(),
+								  DomainName = string.IsNullOrEmpty(d.Field<string>("domname")) ? string.Empty : d.Field<string>("domname").ToLowerInvariant(),
 								  SiteID = new Guid(d.Field<string>("siteid"))
 							  }).ToList();
 
@@ -861,7 +861,7 @@ namespace Carrotware.CMS.Core {
 		public static TimeZoneInfo GetSiteTimeZoneInfo(string timeZoneIdentifier) {
 			TimeZoneInfo oTZ = GetLocalTimeZoneInfo();
 
-			if (!String.IsNullOrEmpty(timeZoneIdentifier)) {
+			if (!string.IsNullOrEmpty(timeZoneIdentifier)) {
 				try { oTZ = TimeZoneInfo.FindSystemTimeZoneById(timeZoneIdentifier); } catch { }
 			}
 
@@ -906,8 +906,27 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public static SiteNav IdentifyLinkAsInactive(SiteNav nav) {
-			if (nav != null) {
+		public static List<SiteNav> TweakData(List<SiteNav> navs) {
+			if (navs != null) {
+				navs.RemoveAll(x => x.ShowInSiteNav == false && x.ContentType == ContentPageType.PageType.ContentEntry);
+
+				navs.ForEach(q => FixNavLinkText(q));
+			}
+
+			return navs;
+		}
+
+		public static string EncodeNavText(string text) {
+			return HttpUtility.HtmlEncode(text);
+		}
+
+		public static SiteNav FixNavLinkText(SiteNav nav) {
+			if (nav != null && !nav.MadeSafe) {
+				nav.MadeSafe = true;
+				nav.NavMenuText = EncodeNavText(nav.NavMenuText);
+				nav.PageHead = EncodeNavText(nav.PageHead);
+				nav.TitleBar = EncodeNavText(nav.TitleBar);
+
 				if (!nav.PageActive) {
 					nav.NavMenuText = InactivePagePrefix + nav.NavMenuText;
 					nav.PageHead = InactivePagePrefix + nav.PageHead;
@@ -927,8 +946,13 @@ namespace Carrotware.CMS.Core {
 			return nav;
 		}
 
-		public static ContentPage IdentifyLinkAsInactive(ContentPage cp) {
-			if (cp != null) {
+		public static ContentPage FixNavLinkText(ContentPage cp) {
+			if (cp != null && !cp.MadeSafe) {
+				cp.MadeSafe = true;
+				cp.NavMenuText = EncodeNavText(cp.NavMenuText);
+				cp.PageHead = EncodeNavText(cp.PageHead);
+				cp.TitleBar = EncodeNavText(cp.TitleBar);
+
 				if (!cp.PageActive) {
 					cp.NavMenuText = InactivePagePrefix + cp.NavMenuText;
 					cp.PageHead = InactivePagePrefix + cp.PageHead;
@@ -996,7 +1020,7 @@ namespace Carrotware.CMS.Core {
 					} else {
 						if (SiteData.CurrentScriptName.ToLowerInvariant().StartsWith(SiteData.AdminFolderPath)) {
 							Guid guidPage = Guid.Empty;
-							if (!String.IsNullOrEmpty(HttpContext.Current.Request.QueryString["pageid"])) {
+							if (!string.IsNullOrEmpty(HttpContext.Current.Request.QueryString["pageid"])) {
 								guidPage = new Guid(HttpContext.Current.Request.QueryString["pageid"].ToString());
 							}
 							filePage = pageHelper.FindContentByID(SiteData.CurrentSiteID, guidPage);
@@ -1013,7 +1037,7 @@ namespace Carrotware.CMS.Core {
 				ContentPage c = null;
 				try {
 					string sXML = GetSerialized(keyAdminContent);
-					if (!String.IsNullOrEmpty(sXML)) {
+					if (!string.IsNullOrEmpty(sXML)) {
 						XmlSerializer xmlSerializer = new XmlSerializer(typeof(ContentPage));
 						Object genpref = null;
 						using (StringReader stringReader = new StringReader(sXML)) {
@@ -1043,7 +1067,7 @@ namespace Carrotware.CMS.Core {
 			get {
 				List<Widget> c = null;
 				string sXML = GetSerialized(keyAdminWidget);
-				if (!String.IsNullOrEmpty(sXML)) {
+				if (!string.IsNullOrEmpty(sXML)) {
 					XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Widget>));
 					Object genpref = null;
 					using (StringReader stringReader = new StringReader(sXML)) {

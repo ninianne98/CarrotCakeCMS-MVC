@@ -135,7 +135,8 @@ namespace Carrotware.CMS.Core {
 				}
 			}
 
-			CMSConfigHelper.IdentifyLinkAsInactive(this.ThePage);
+			CMSConfigHelper.FixNavLinkText(this.ThePage);
+
 			Guid guidContentID = Guid.Empty;
 
 			if (this.ThePage != null) {
@@ -327,7 +328,7 @@ namespace Carrotware.CMS.Core {
 						_parentnav = navHelper.GetParentPageNavigation(this.TheSite.SiteID, this.ThePage.Root_ContentID);
 					}
 					if (_parentnav != null) {
-						_parentnav = CMSConfigHelper.IdentifyLinkAsInactive(_parentnav);
+						_parentnav = CMSConfigHelper.FixNavLinkText(_parentnav);
 					}
 				}
 
@@ -344,7 +345,7 @@ namespace Carrotware.CMS.Core {
 						_hometnav = navHelper.FindHome(this.TheSite.SiteID);
 					}
 					if (_hometnav != null) {
-						_hometnav = CMSConfigHelper.IdentifyLinkAsInactive(_hometnav);
+						_hometnav = CMSConfigHelper.FixNavLinkText(_hometnav);
 					}
 				}
 
@@ -361,7 +362,7 @@ namespace Carrotware.CMS.Core {
 						using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 							_blogidxnav = navHelper.GetLatestVersion(this.TheSite.SiteID, this.TheSite.Blog_Root_ContentID.Value);
 						}
-						_blogidxnav = CMSConfigHelper.IdentifyLinkAsInactive(_blogidxnav);
+						_blogidxnav = CMSConfigHelper.FixNavLinkText(_blogidxnav);
 					}
 				}
 
@@ -742,15 +743,8 @@ namespace Carrotware.CMS.Core {
 
 		// ======================================
 
-		private List<SiteNav> TweakData(List<SiteNav> nav) {
-			if (nav != null) {
-				nav.RemoveAll(x => x.ShowInSiteNav == false && x.ContentType == ContentPageType.PageType.ContentEntry);
-				//nav.RemoveAll(x => x.ShowInSiteMap == false && x.ContentType == ContentPageType.PageType.ContentEntry);
-
-				nav.ForEach(q => CMSConfigHelper.IdentifyLinkAsInactive(q));
-			}
-
-			return nav;
+		private List<SiteNav> TweakData(List<SiteNav> navs) {
+			return CMSConfigHelper.TweakData(navs);
 		}
 	}
 

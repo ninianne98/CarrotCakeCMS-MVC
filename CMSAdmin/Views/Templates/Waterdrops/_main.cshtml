@@ -1,5 +1,5 @@
 ﻿@inherits CmsWebViewPage
-
+<!DOCTYPE html>
 @*
 	Design by Free CSS Templates
 	http://www.freecsstemplates.org
@@ -13,7 +13,6 @@
 
 	Conversion to CarrotCake CMS MVC Template: Carrotware
 *@
-
 @{
 	Layout = null;
 
@@ -40,10 +39,7 @@
 	pager.IgnoreSitePath = false;
 	pager.FetchData();
 }
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
 	@CarrotCakeHtml.MetaTags()
 	@CarrotCakeHtml.Rss()
@@ -90,7 +86,7 @@
 				</div>
 				<div id="banner" class="container">
 					<div class="image-style">
-						<img src="~/Assets/WaterDrops/images/img03.jpg" width="970" height="320" alt="" />
+						<img id="imgHead" src="~/Assets/WaterDrops/images/img03.jpg" width="970" height="320" alt="" />
 					</div>
 				</div>
 			</div>
@@ -107,7 +103,7 @@
 				</div>
 				<div id="banner-sub" class="container">
 					<div class="image-style">
-						<img runat="server" id="imgHead" src="~/Assets/WaterDrops/images/img03b.jpg" width="970" height="200" alt="" />
+						<img id="imgHead" src="~/Assets/WaterDrops/images/img03b.jpg" width="970" height="200" alt="" />
 					</div>
 				</div>
 			</div>

@@ -16,11 +16,11 @@ namespace Carrotware.Web.UI.Components {
 	public abstract class BaseTwoPartWebComponent : BaseWebComponent, ITwoPartWebComponent {
 
 		public virtual string GetBody() {
-			return String.Empty;
+			return string.Empty;
 		}
 
 		public virtual string GetHead() {
-			return String.Empty;
+			return string.Empty;
 		}
 
 		public virtual HtmlString RenderBody() {

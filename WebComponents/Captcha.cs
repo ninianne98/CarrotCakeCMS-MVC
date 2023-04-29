@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Web;
 using System.Web.Mvc;
-using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -25,7 +26,6 @@ namespace Carrotware.Web.UI.Components {
 			this.Instructions = "Please enter the code from the image above in the box below.";
 			this.IsValidMessage = "Code correct!";
 			this.IsNotValidMessage = "Code incorrect, try again!";
-
 			this.AltValidationFailText = "Failed to validate CAPTCHA.";
 		}
 
@@ -75,20 +75,17 @@ namespace Carrotware.Web.UI.Components {
 			return this.IsValid;
 		}
 
-		public object imageAttributes { get; set; }
+		public object ImageAttributes { get; set; }
 
 		public override string GetHtml() {
 			var key = CaptchaImage.SessionKeyValue;
 
-			var imgBuilder = new TagBuilder("img");
-			imgBuilder.MergeAttribute("src", this.GetCaptchaImageURI());
+			var imgBuilder = new HtmlTag("img", this.GetCaptchaImageURI());
 			imgBuilder.MergeAttribute("alt", key);
 			imgBuilder.MergeAttribute("title", key);
+			imgBuilder.MergeAttributes(this.ImageAttributes);
 
-			var imgAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(imageAttributes);
-			imgBuilder.MergeAttributes(imgAttribs);
-
-			return imgBuilder.ToString(TagRenderMode.SelfClosing);
+			return imgBuilder.RenderSelfClosingTag();
 		}
 
 		private string GetCaptchaImageURI() {

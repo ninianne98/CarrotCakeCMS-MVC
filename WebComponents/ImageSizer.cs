@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Web;
+﻿using System.Web;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -55,6 +53,7 @@ namespace Carrotware.Web.UI.Components {
 
 		// allow alt to be different from Title, but set alt to title if not directly set
 		private string _alt = null;
+
 		public string Alt {
 			get {
 				if (string.IsNullOrWhiteSpace(_alt)) {
@@ -69,18 +68,15 @@ namespace Carrotware.Web.UI.Components {
 
 		public int ThumbSize { get; set; }
 		public bool ScaleImage { get; set; }
-		public object imageAttributes { get; set; }
+		public object ImageAttributes { get; set; }
 
 		public string ToHtmlString() {
-			var imgBuilder = new TagBuilder("img");
-			imgBuilder.MergeAttribute("src", this.ImageThumbUrl);
-			imgBuilder.MergeAttribute("alt", HttpUtility.UrlEncode(this.Alt));
-			imgBuilder.MergeAttribute("title", HttpUtility.UrlEncode(this.Title));
+			var imgBuilder = new HtmlTag("img", this.ImageThumbUrl);
+			imgBuilder.MergeAttributes(this.ImageAttributes);
+			imgBuilder.MergeAttribute("alt", this.Alt);
+			imgBuilder.MergeAttribute("title", this.Title);
 
-			var imgAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(imageAttributes);
-			imgBuilder.MergeAttributes(imgAttribs);
-
-			return imgBuilder.ToString(TagRenderMode.SelfClosing);
+			return imgBuilder.RenderSelfClosingTag();
 		}
 	}
 }

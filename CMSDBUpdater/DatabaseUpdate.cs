@@ -25,7 +25,7 @@ namespace Carrotware.CMS.DBUpdater {
 	public class DatabaseUpdate {
 		public static SqlException LastSQLError { get; set; }
 
-		public static string CurrentDbVersion { get { return "20200915"; } }
+		public static string CurrentDbVersion { get { return DbVersion02; } }
 
 		public static string DbVersion00 { get { return "20150829"; } }
 
@@ -128,7 +128,7 @@ namespace Carrotware.CMS.DBUpdater {
 					res.Response = "Created Database";
 					res.RanUpdate = true;
 					// change version key when the DB creation is re-scripted
-					SetDbSchemaVersion(DatabaseUpdate.DbVersion01);
+					SetDbSchemaVersion(DatabaseUpdate.DbVersion02);
 					return res;
 				}
 
@@ -210,6 +210,8 @@ namespace Carrotware.CMS.DBUpdater {
 					item.Response = execMessage.Response;
 
 					if (execMessage.LastException != null && !string.IsNullOrEmpty(execMessage.LastException.Message)) {
+						WriteDebugException("handleresponse", execMessage.LastException);
+
 						item.HasException = true;
 						item.ExceptionText = execMessage.LastException.Message;
 						if (execMessage.LastException.InnerException != null && !string.IsNullOrEmpty(execMessage.LastException.InnerException.Message)) {
@@ -244,6 +246,8 @@ namespace Carrotware.CMS.DBUpdater {
 					HandleResponse(lst, "Database already exists");
 				}
 
+				bool isDbCurrent = false;
+
 				bUpdate = DatabaseNeedsUpdate();
 
 				DataInfo ver = GetDbSchemaVersion();
@@ -254,18 +258,25 @@ namespace Carrotware.CMS.DBUpdater {
 					if (ver.DataValue != DatabaseUpdate.CurrentDbVersion) {
 						ver = GetDbSchemaVersion();
 
+						var oldupdates = new string[] { "2015", "2016", "2017", "2018", "2019" };
+
 						if (ver.DataValue != DatabaseUpdate.CurrentDbVersion) {
 							ver = GetDbSchemaVersion();
 
-							if (ver.DataValue.StartsWith("2015") || ver.DataValue.StartsWith("2016")) {
+							if (oldupdates.Where(x => ver.DataValue.StartsWith(x)).Any()) {
 								HandleResponse(lst, BuildUpdateString(iUpdate++), AlterStep01());
 								HandleResponse(lst, BuildUpdateString(iUpdate++), AlterStep02());
 							}
 						}
 					} else {
-						HandleResponse(lst, "Database up-to-date [" + ver.DataValue + "] ");
+						isDbCurrent = true;
 					}
 				} else {
+					isDbCurrent = true;
+				}
+
+				if (isDbCurrent) {
+					HandleResponse(lst, BuildUpdateString(iUpdate++), Refresh01());
 					HandleResponse(lst, "Database up-to-date [" + ver.DataValue + "] ");
 				}
 
@@ -546,6 +557,17 @@ namespace Carrotware.CMS.DBUpdater {
 			return res;
 		}
 
+		public DatabaseUpdateResponse Refresh01() {
+			DatabaseUpdateResponse res = new DatabaseUpdateResponse();
+
+			res.LastException = ExecFileContents("Carrotware.CMS.DBUpdater.DataScripts.REFRESH01.sql", false);
+			res.Response = "Refreshed views and sprocs";
+			res.RanUpdate = true;
+
+			SetDbSchemaVersion(DatabaseUpdate.DbVersion02);
+			return res;
+		}
+
 		private List<string> SplitScriptAtGo(string sqlQuery) {
 			sqlQuery += "\r\n\r\nGO\r\n\r\n";
 			sqlQuery = sqlQuery.Replace("\r\n", "\n");
@@ -592,12 +614,6 @@ namespace Carrotware.CMS.DBUpdater {
 		public static DataInfo GetDbSchemaVersion() {
 			DataInfo di = null;
 			lock (schemaCheckLocker) {
-				//if (HttpContext.Current.Cache[ContentKey] != null) {
-				//	try { di = (DataInfo)HttpContext.Current.Cache[ContentKey]; } catch { }
-				//} else {
-				//	di = GetDataKeyValue("DBSchema");
-				//	HttpContext.Current.Cache.Insert(ContentKey, di, null, DateTime.Now.AddSeconds(5), Cache.NoSlidingExpiration);
-				//}
 
 				di = GetDataKeyValue("DBSchema");
 

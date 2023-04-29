@@ -529,6 +529,8 @@ namespace Carrotware.CMS.Core {
 		[Display(Name = "In Site Nav")]
 		public bool ShowInSiteNav { get; set; }
 
+		public bool MadeSafe { get; set; }
+
 		[Required]
 		public Guid SiteID { get; set; }
 

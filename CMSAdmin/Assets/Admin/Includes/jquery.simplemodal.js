@@ -15,26 +15,26 @@
 * SimpleModal.
 *
 * There are two ways to call SimpleModal:
-* 1) As a chained function on a jQuery object, like $('#myDiv').modal();.
+* 1) As a chained function on a jQuery object, like $('#myDiv').simplemodal();.
 * This call would place the DOM object, #myDiv, inside a modal dialog.
 * Chaining requires a jQuery object. An optional options object can be
 * passed as a parameter.
 *
-* @example $('<div>my data</div>').modal({options});
-* @example $('#myDiv').modal({options});
-* @example jQueryObject.modal({options});
+* @example $('<div>my data</div>').simplemodal({options});
+* @example $('#myDiv').simplemodal({options});
+* @example jQueryObject.simplemodal({options});
 *
-* 2) As a stand-alone function, like $.modal(data). The data parameter
+* 2) As a stand-alone function, like $.simplemodal(data). The data parameter
 * is required and an optional options object can be passed as a second
 * parameter. This method provides more flexibility in the types of data
 * that are allowed. The data could be a DOM object, a jQuery object, HTML
 * or a string.
 *
-* @example $.modal('<div>my data</div>', {options});
-* @example $.modal('my data', {options});
-* @example $.modal($('#myDiv'), {options});
-* @example $.modal(jQueryObject, {options});
-* @example $.modal(document.getElementById('myDiv'), {options});
+* @example $.simplemodal('<div>my data</div>', {options});
+* @example $.simplemodal('my data', {options});
+* @example $.simplemodal($('#myDiv'), {options});
+* @example $.simplemodal(jQueryObject, {options});
+* @example $.simplemodal(document.getElementById('myDiv'), {options});
 *
 * A SimpleModal call can contain multiple elements, but only one modal
 * dialog can be created at a time. Which means that all of the matched
@@ -87,64 +87,64 @@
 	browser.boxModel = (document.compatMode === "CSS1Compat");
 
 	/*
-	* Create and display a modal dialog.
+	* Create and display a simplemodal dialog.
 	*
 	* @param {string, object} data A string, jQuery object or DOM object
 	* @param {object} [options] An optional object containing options overrides
 	*/
-	$.modal = function (data, options) {
-		return $.modal.impl.init(data, options);
+	$.simplemodal = function (data, options) {
+		return $.simplemodal.impl.init(data, options);
 	};
 
 	/*
-	* Close the modal dialog.
+	* Close the simplemodal dialog.
 	*/
-	$.modal.close = function () {
-		$.modal.impl.close();
+	$.simplemodal.close = function () {
+		$.simplemodal.impl.close();
 	};
 
 	/*
-	* Set focus on first or last visible input in the modal dialog. To focus on the last
-	* element, call $.modal.focus('last'). If no input elements are found, focus is placed
+	* Set focus on first or last visible input in the simplemodal dialog. To focus on the last
+	* element, call $.simplemodal.focus('last'). If no input elements are found, focus is placed
 	* on the data wrapper element.
 	*/
-	$.modal.focus = function (pos) {
-		$.modal.impl.focus(pos);
+	$.simplemodal.focus = function (pos) {
+		$.simplemodal.impl.focus(pos);
 	};
 
 	/*
-	* Determine and set the dimensions of the modal dialog container.
+	* Determine and set the dimensions of the simplemodal dialog container.
 	* setPosition() is called if the autoPosition option is true.
 	*/
-	$.modal.setContainerDimensions = function () {
-		$.modal.impl.setContainerDimensions();
+	$.simplemodal.setContainerDimensions = function () {
+		$.simplemodal.impl.setContainerDimensions();
 	};
 
 	/*
-	* Re-position the modal dialog.
+	* Re-position the simplemodal dialog.
 	*/
-	$.modal.setPosition = function () {
-		$.modal.impl.setPosition();
+	$.simplemodal.setPosition = function () {
+		$.simplemodal.impl.setPosition();
 	};
 
 	/*
-	* Update the modal dialog. If new dimensions are passed, they will be used to determine
+	* Update the simplemodal dialog. If new dimensions are passed, they will be used to determine
 	* the dimensions of the container.
 	*
 	* setContainerDimensions() is called, which in turn calls setPosition(), if enabled.
 	* Lastly, focus() is called is the focus option is true.
 	*/
-	$.modal.update = function (height, width) {
-		$.modal.impl.update(height, width);
+	$.simplemodal.update = function (height, width) {
+		$.simplemodal.impl.update(height, width);
 	};
 
 	/*
-	* Chained function to create a modal dialog.
+	* Chained function to create a simplemodal dialog.
 	*
 	* @param {object} [options] An optional object containing options overrides
 	*/
-	$.fn.modal = function (options) {
-		return $.modal.impl.init(this, options);
+	$.fn.simplemodal = function (options) {
+		return $.simplemodal.impl.init(this, options);
 	};
 
 	/*
@@ -176,17 +176,17 @@
 	* fixed:			(Boolean:true) If true, the container will use a fixed position. If false, it will use a
 	absolute position (the dialog will scroll with the page)
 	* position:		(Array:null) Position of container [top, left]. Can be number of pixels or percentage
-	* persist:			(Boolean:false) Persist the data across modal calls? Only used for existing
-	DOM elements. If true, the data will be maintained across modal calls, if false,
+	* persist:			(Boolean:false) Persist the data across simplemodal calls? Only used for existing
+	DOM elements. If true, the data will be maintained across simplemodal calls, if false,
 	the data will be reverted to its original state.
-	* modal:			(Boolean:true) User will be unable to interact with the page below the modal or tab away from the dialog.
+	* simplemodal:			(Boolean:true) User will be unable to interact with the page below the simplemodal or tab away from the dialog.
 	If false, the overlay, iframe, and certain events will be disabled allowing the user to interact
 	with the page below the dialog.
 	* onOpen:			(Function:null) The callback function used in place of SimpleModal's open
-	* onShow:			(Function:null) The callback function used after the modal dialog has opened
+	* onShow:			(Function:null) The callback function used after the simplemodal dialog has opened
 	* onClose:			(Function:null) The callback function used in place of SimpleModal's close
 	*/
-	$.modal.defaults = {
+	$.simplemodal.defaults = {
 		appendTo: 'body',
 		focus: true,
 		opacity: 50,
@@ -211,24 +211,24 @@
 		fixed: true,
 		position: null,
 		persist: false,
-		modal: true,
+		simplemodal: true,
 		onOpen: null,
 		onShow: null,
 		onClose: null
 	};
 
 	/*
-	* Main modal object
+	* Main simplemodal object
 	* o = options
 	*/
-	$.modal.impl = {
+	$.simplemodal.impl = {
 		/*
-		* Contains the modal dialog elements and is the object passed
+		* Contains the simplemodal dialog elements and is the object passed
 		* back to the callback (onOpen, onShow, onClose) functions
 		*/
 		d: {},
 		/*
-		* Initialize the modal dialog
+		* Initialize the simplemodal dialog
 		*/
 		init: function (data, options) {
 			var s = this;
@@ -241,7 +241,7 @@
 			browser.ieQuirks = browser.msie && !browser.boxModel;
 
 			// merge defaults and user options
-			s.o = $.extend({}, $.modal.defaults, options);
+			s.o = $.extend({}, $.simplemodal.defaults, options);
 
 			// keep track of z-index
 			s.zIndex = s.o.zIndex;
@@ -280,14 +280,14 @@
 				return s;
 			}
 
-			// create the modal overlay, container and, if necessary, iframe
+			// create the simplemodal overlay, container and, if necessary, iframe
 			s.create(data);
 			data = null;
 
-			// display the modal dialog
+			// display the simplemodal dialog
 			s.open();
 
-			// useful for adding events/manipulating data in the modal dialog
+			// useful for adding events/manipulating data in the simplemodal dialog
 			if ($.isFunction(s.o.onShow)) {
 				s.o.onShow.apply(s, [s.d]);
 			}
@@ -296,7 +296,7 @@
 			return s;
 		},
 		/*
-		* Create and add the modal overlay and container to the page
+		* Create and add the simplemodal overlay and container to the page
 		*/
 		create: function (data) {
 			var s = this;
@@ -305,7 +305,7 @@
 			s.getDimensions();
 
 			// add an iframe to prevent select options from bleeding through
-			if (s.o.modal && browser.ie6) {
+			if (s.o.simplemodal && browser.ie6) {
 				s.d.iframe = $('<iframe src="javascript:false;"></iframe>')
 					.css($.extend(s.o.iframeCss, {
 						display: 'none',
@@ -327,8 +327,8 @@
 				.css($.extend(s.o.overlayCss, {
 					display: 'none',
 					opacity: s.o.opacity / 100,
-					height: s.o.modal ? d[0] : 0,
-					width: s.o.modal ? d[1] : 0,
+					height: s.o.simplemodal ? d[0] : 0,
+					width: s.o.simplemodal ? d[1] : 0,
 					position: 'fixed',
 					left: 0,
 					top: 0,
@@ -388,7 +388,7 @@
 			});
 
 			// bind the overlay click to the close function, if enabled
-			if (s.o.modal && s.o.close && s.o.overlayClose) {
+			if (s.o.simplemodal && s.o.close && s.o.overlayClose) {
 				s.d.overlay.bind('click.simplemodal', function (e) {
 					e.preventDefault();
 					s.close();
@@ -397,7 +397,7 @@
 
 			// bind keydown events
 			doc.bind('keydown.simplemodal', function (e) {
-				if (s.o.modal && e.keyCode === 9) { // TAB
+				if (s.o.simplemodal && e.keyCode === 9) { // TAB
 					s.watchTab(e);
 				}
 				else if ((s.o.close && s.o.escClose) && e.keyCode === 27) { // ESC
@@ -417,7 +417,7 @@
 				if (browser.ie6 || browser.ieQuirks) {
 					s.fixIE();
 				}
-				else if (s.o.modal) {
+				else if (s.o.simplemodal) {
 					// update the iframe & overlay
 					s.d.iframe && s.d.iframe.css({ height: w[0], width: w[1] });
 					s.d.overlay.css({ height: d[0], width: d[1] });
@@ -440,7 +440,7 @@
 			var s = this, p = s.o.position;
 
 			// simulate fixed position - adapted from BlockUI
-			$.each([s.d.iframe || null, !s.o.modal ? null : s.d.overlay, s.d.container.css('position') === 'fixed' ? s.d.container : null], function (i, el) {
+			$.each([s.d.iframe || null, !s.o.simplemodal ? null : s.d.overlay, s.d.container.css('position') === 'fixed' ? s.d.container : null], function (i, el) {
 				if (el) {
 					var bch = 'document.body.clientHeight', bcw = 'document.body.clientWidth',
 						bsh = 'document.body.scrollHeight', bsl = 'document.body.scrollLeft',
@@ -628,7 +628,7 @@
 			}
 		},
 		/*
-		* Open the modal dialog elements
+		* Open the simplemodal dialog elements
 		* - Note: If you use the onOpen callback, you must "show" the
 		*         overlay and container elements manually
 		*         (the iframe will be handled by SimpleModal)
@@ -655,7 +655,7 @@
 			s.bindEvents();
 		},
 		/*
-		* Close the modal dialog
+		* Close the simplemodal dialog
 		* - Note: If you use an onClose callback, you must remove the
 		*         overlay, container and iframe elements manually
 		*

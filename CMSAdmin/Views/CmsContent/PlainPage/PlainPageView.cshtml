@@ -31,7 +31,9 @@
 	};
 
 	var cssUri = Helper.GetWebResourceUrl("Views.CmsContent.PlainPage.plain.css");
-	cssUri = string.Format("{0}&cms={1}&ts={2}", cssUri, SiteData.CurrentDLLVersion, CarrotWeb.DateKey());
+
+	var cssTag = new HtmlTag(HtmlTag.EasyTag.Stylesheet);
+	cssTag.Uri = string.Format("{0}&cms={1}&ts={2}", cssUri, SiteData.CurrentDLLVersion, CarrotWeb.DateKey());
 }
 
 <!DOCTYPE html>
@@ -50,7 +52,7 @@
 
 	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.GlossyBlack, JQVersion = "1.11", UseJqueryMigrate = true })
 
-	<link href="@Html.Raw(cssUri)" rel="stylesheet" type="text/css" />
+	@(cssTag.EmitHtmlSelfClosingTag())
 
 	<title>@CmsPage.Titlebar</title>
 

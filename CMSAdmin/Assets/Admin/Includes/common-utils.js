@@ -608,16 +608,16 @@ function LaunchWindowPop(theURL) {
 }
 
 function LoadWindow() {
-	$("#cms-basic-modal-content").modal({
+	$("#cms-basic-modal-content").simplemodal({
 		onClose: function (dialog) {
-			//$.modal.close(); // must call this!
-			setTimeout("$.modal.close();", 800);
+			//$.simplemodal.close(); // must call this!
+			setTimeout("$.simplemodal.close();", 800);
 			$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv"></div>');
 			DirtyPageRefresh();
 		}
 	});
 	IsDirty = 0;
-	$('#cms-basic-modal-content').modal();
+	$('#cms-basic-modal-content').simplemodal();
 	return false;
 }
 
@@ -738,7 +738,7 @@ function cmsSetFileNameReturn(v) {
 	var fld = $('#' + fldNameRet);
 	fld.val(v);
 
-	setTimeout("$.modal.close();", 200);
+	setTimeout("$.simplemodal.close();", 200);
 
 	return false;
 }

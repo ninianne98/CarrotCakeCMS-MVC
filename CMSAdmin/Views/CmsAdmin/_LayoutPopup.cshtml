@@ -86,7 +86,9 @@
 			var bTinyLoaded = false;
 			function AjaxTinyLoad() {
 				if (!bTinyLoaded) {
-					cmsTinyMceInit("775", "450", true);
+					var modalSizeW = window.parent.$("#cms-simplemodal-container").width();
+					var tinyW = modalSizeW - 150;
+					cmsTinyMceInit(tinyW, 450, true);
 				}
 				bTinyLoaded = true;
 			}

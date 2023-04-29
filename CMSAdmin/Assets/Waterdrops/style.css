@@ -83,8 +83,7 @@ a {
 	width: 960px;
 	height: 200px;
 	margin: 0 auto;
-	padding: 0px 0px 1.5em 0px;
-	clear: both;
+	padding: 0px 20px;
 	background: url(images/img01.jpg) no-repeat left top;
 }
 
@@ -354,6 +353,7 @@ a {
 #contactForm {
 	border: 0;
 	margin: 0;
+	float: left;
 	clear: both;
 }
 
@@ -363,6 +363,8 @@ a {
 	}
 
 	#contactForm .text-danger {
+		color: #861F40;
+		font-weight: 600;
 		margin-left: 5px;
 		padding-left: 5px;
 	}
@@ -399,6 +401,18 @@ a {
 	padding: 20px;
 }
 
+#calendar caption {
+	color: #861F40;
+	font-size: 1.75em;
+	font-weight: 600;
+}
+
+#calendar thead {
+	color: #371E3C;
+	font-size: 1.25em;
+	font-weight: 500;
+}
+
 #calendar table {
 	width: 100%;
 }
@@ -407,8 +421,16 @@ a {
 	text-align: center;
 }
 
+#calendar #prev {
+	text-align: left;
+}
+
 #calendar #next {
 	text-align: right;
+}
+
+#calendar #prev, #calendar #next {
+	font-size: 1.4em;
 }
 
 /* Three Column Footer Content */

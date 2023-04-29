@@ -40,7 +40,7 @@ namespace Carrotware.CMS.UI.Components {
 		public SummaryContentType ContentType { get; set; }
 
 		public string GetSearchTerm() {
-			string sSearchTerm = String.Empty;
+			string sSearchTerm = string.Empty;
 
 			if (HttpContext.Current.Request.QueryString[SiteData.SearchQueryParameter] != null) {
 				sSearchTerm = HttpContext.Current.Request.QueryString[SiteData.SearchQueryParameter].ToString();
@@ -52,10 +52,10 @@ namespace Carrotware.CMS.UI.Components {
 		public string GetUrl(int pageNbr) {
 			if (this.ContentType == SummaryContentType.SiteSearch) {
 				string sSearchTerm = GetSearchTerm();
-				return String.Format("{0}?{1}={2}&{3}={4}", SiteData.CurrentScriptName, SiteData.SearchQueryParameter, HttpUtility.UrlEncode(sSearchTerm), this.PageNumbParm, pageNbr);
+				return string.Format("{0}?{1}={2}&{3}={4}", SiteData.CurrentScriptName, SiteData.SearchQueryParameter, HttpUtility.UrlEncode(sSearchTerm), this.PageNumbParm, pageNbr);
 			}
 
-			return String.Format("{0}?{1}={2}", SiteData.CurrentScriptName, this.PageNumbParm, pageNbr);
+			return string.Format("{0}?{1}={2}", SiteData.CurrentScriptName, this.PageNumbParm, pageNbr);
 		}
 
 		public void FetchData() {
@@ -63,18 +63,18 @@ namespace Carrotware.CMS.UI.Components {
 
 			string sPagePath = SiteData.CurrentScriptName;
 
-			if (String.IsNullOrEmpty(this.OrderBy)) {
+			if (string.IsNullOrEmpty(this.OrderBy)) {
 				this.InitOrderByDescending(x => x.GoLiveDate);
 			}
 
 			List<SiteNav> lstContents = new List<SiteNav>();
 
-			string sSearchTerm = String.Empty;
+			string sSearchTerm = string.Empty;
 
 			ContentPageType.PageType viewContentType = ContentPageType.PageType.BlogEntry;
 
 			if (this.IgnoreSitePath) {
-				sPagePath = String.Format("/siteid-{0}", SiteData.CurrentSiteID);
+				sPagePath = string.Format("/siteid-{0}", SiteData.CurrentSiteID);
 			}
 
 			if (SiteData.IsWebView) {
@@ -139,7 +139,7 @@ namespace Carrotware.CMS.UI.Components {
 				}
 			}
 
-			lstContents.ToList().ForEach(q => CMSConfigHelper.IdentifyLinkAsInactive(q));
+			lstContents = ControlUtilities.TweakData(lstContents);
 
 			this.DataSource = lstContents;
 		}

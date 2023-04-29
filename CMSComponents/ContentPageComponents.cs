@@ -1,8 +1,5 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -78,7 +75,7 @@ namespace Carrotware.CMS.UI.Components {
 
 							object objData = ReflectionUtilities.GetPropertyValue(navNext, sField);
 							if (objData != null) {
-								sFieldValue = String.Format("{0}", objData);
+								sFieldValue = string.Format("{0}", objData);
 							}
 
 							this.NavigateText = sFieldValue;
@@ -86,28 +83,27 @@ namespace Carrotware.CMS.UI.Components {
 
 						this.NavigateUrl = navNext.FileName;
 					} else {
-						this.NavigateUrl = String.Empty;
+						this.NavigateUrl = string.Empty;
 					}
 				}
 			} else {
-				this.NavigateUrl = String.Empty;
+				this.NavigateUrl = string.Empty;
 			}
 
-			if (!String.IsNullOrEmpty(this.NavigateUrl)) {
-				var lnkBuilder = new TagBuilder("a");
-				lnkBuilder.MergeAttribute("href", this.NavigateUrl);
-
+			if (!string.IsNullOrEmpty(this.NavigateUrl)) {
+				var lnkBuilder = new HtmlTag("a");
+				lnkBuilder.Uri = this.NavigateUrl;
 				lnkBuilder.InnerHtml = this.NavigateUrl;
-				if (!String.IsNullOrEmpty(this.NavigateText)) {
+
+				if (!string.IsNullOrEmpty(this.NavigateText)) {
 					lnkBuilder.InnerHtml = this.NavigateText;
 				}
 
-				var lnkAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(linkAttributes);
-				lnkBuilder.MergeAttributes(lnkAttribs);
+				lnkBuilder.MergeAttributes(linkAttributes);
 
-				return lnkBuilder.ToString(TagRenderMode.Normal);
+				return lnkBuilder.RenderTag();
 			} else {
-				return String.Empty;
+				return string.Empty;
 			}
 		}
 	}
@@ -119,8 +115,8 @@ namespace Carrotware.CMS.UI.Components {
 			this.ThumbSize = 100;
 			this.ScaleImage = true;
 			this.PerformURLResize = false;
-			this.ImageUrl = String.Empty;
-			this.ImgSrc = String.Empty;
+			this.ImageUrl = string.Empty;
+			this.ImgSrc = string.Empty;
 			this.ContentPage = null;
 		}
 
@@ -154,12 +150,12 @@ namespace Carrotware.CMS.UI.Components {
 			this.ImgSrc = this.ContentPage.Thumbnail;
 			this.Title = this.ContentPage.NavMenuText;
 
-			if (String.IsNullOrEmpty(this.ImgSrc)) {
+			if (string.IsNullOrEmpty(this.ImgSrc)) {
 				// if page itself has no image, see if the image had been specified directly
 				this.ImgSrc = this.ImageUrl;
 			}
 
-			if (!String.IsNullOrEmpty(this.ImgSrc)) {
+			if (!string.IsNullOrEmpty(this.ImgSrc)) {
 				if (this.PerformURLResize) {
 					ImageSizer imgSzr = new ImageSizer();
 					imgSzr.ImageUrl = this.ImgSrc;
@@ -169,24 +165,22 @@ namespace Carrotware.CMS.UI.Components {
 					this.ImgSrc = imgSzr.ImageThumbUrl;
 				}
 			} else {
-				this.ImgSrc = String.Empty;
+				this.ImgSrc = string.Empty;
 			}
 
-			if (!String.IsNullOrEmpty(this.ImgSrc)) {
-				var imgBuilder = new TagBuilder("img");
-				imgBuilder.MergeAttribute("src", this.ImgSrc);
+			if (!string.IsNullOrEmpty(this.ImgSrc)) {
+				var imgBuilder = new HtmlTag("img");
+				imgBuilder.Uri = this.ImgSrc;
+				imgBuilder.MergeAttributes(imageAttributes);
 
-				if (!String.IsNullOrEmpty(this.Title)) {
+				if (!string.IsNullOrEmpty(this.Title)) {
 					imgBuilder.MergeAttribute("alt", this.Title);
 					imgBuilder.MergeAttribute("title", this.Title);
 				}
 
-				var imgAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(imageAttributes);
-				imgBuilder.MergeAttributes(imgAttribs);
-
-				return imgBuilder.ToString(TagRenderMode.SelfClosing);
+				return imgBuilder.RenderSelfClosingTag();
 			} else {
-				return String.Empty;
+				return string.Empty;
 			}
 		}
 	}
@@ -225,7 +219,7 @@ namespace Carrotware.CMS.UI.Components {
 				pageUri = SiteData.DefaultDirectoryFilename;
 			}
 
-			string lnk = String.Format("<link rel=\"canonical\" href=\"{0}\" />", pageUri);
+			string lnk = string.Format("<link rel=\"canonical\" href=\"{0}\" />", pageUri);
 
 			if (this.Enable301Redirect) {
 				HttpContext ctx = HttpContext.Current;

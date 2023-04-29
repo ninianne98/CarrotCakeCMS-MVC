@@ -23,12 +23,12 @@
 	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.LightGreen, UseJqueryMigrate = true })
 
 	<link href="~/Assets/iCheck/iCheck.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/Includes/fauxstrap.css" rel="stylesheet" type="text/css" />
+	<link href="~/Assets/Admin/Includes/fauxstrap.css?@versionKey" rel="stylesheet" type="text/css" />
 	<link href="~/Assets/Admin/Includes/chosen.min.css" rel="stylesheet" type="text/css" />
 	<link href="~/Assets/Admin/includes/jquery.ui.timepicker.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/modal.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/main.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/common.css" rel="stylesheet" type="text/css" />
+	<link href="~/Assets/Admin/includes/modal.css?@versionKey" rel="stylesheet" type="text/css" />
+	<link href="~/Assets/Admin/includes/main.css?@versionKey" rel="stylesheet" type="text/css" />
+	<link href="~/Assets/Admin/includes/common.css?@versionKey" rel="stylesheet" type="text/css" />
 	<link href="~/Assets/Admin/includes/TableStyles.css" rel="stylesheet" type="text/css" />
 
 	<script src="~/Assets/iCheck/icheck.min.js?@versionKey" type="text/javascript"></script>
@@ -57,7 +57,7 @@
 		var bTinyLoaded = false;
 		function AjaxTinyLoad() {
 			if (!bTinyLoaded) {
-				cmsTinyMceInit("875", "500", false);
+				cmsTinyMceInit(875, 500, false);
 			}
 			bTinyLoaded = true;
 		}
@@ -85,15 +85,15 @@
 				</div>
 				<h3>
 					@if (SiteData.CurrentSite != null) {
-				if (!String.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)
-							&& !String.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)) {
+						if (!string.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)
+						&& !string.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)) {
 							@String.Format("{0}:  {1}", SiteData.CurrentSite.SiteName, SiteData.CurrentSite.SiteTagline)
-				} else {
+						} else {
 							@String.Format("{0}  {1}", SiteData.CurrentSite.SiteName, SiteData.CurrentSite.SiteTagline)
-				}
-			} else {
+						}
+					} else {
 						<span>&nbsp;</span>
-			}
+					}
 				</h3>
 
 				<div class="widthshim">
@@ -120,7 +120,7 @@
 							<li id="tabStatusChange"><a href="@SiteFilename.SiteContentStatusChangeURL">Bulk Change Status</a> </li>
 							<li id="tabExportSite"><a href="@SiteFilename.SiteExportURL">Export Site</a> </li>
 							<li id="tabImportContent"><a href="@SiteFilename.ContentImportURL">Import Content</a> </li>
-				}
+						}
 					</ul>
 				}
 
@@ -237,7 +237,6 @@
 		</div>
 
 		<script type="text/javascript">
-
 			function LogoutLink() {
 				var opts = {
 					"No": function () { cmsAlertModalClose(); },
@@ -283,7 +282,7 @@
 							@SiteData.CurrentSite.TimeZoneIdentifier
 						</span>
 						<br />
-			}
+					}
 				</p>
 			</div>
 			<div class="widthshim">
@@ -295,7 +294,7 @@
 	<div>
 		@{
 			string partialView = Helper.InsertSpecialView(Helper.ViewLocation.AdminMainFooter);
-			if (!String.IsNullOrEmpty(partialView)) {
+			if (!string.IsNullOrEmpty(partialView)) {
 				@Html.Partial(partialView)
 			}
 		}

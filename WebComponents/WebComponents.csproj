@@ -147,6 +147,7 @@
     <Compile Include="Grid\CarrotGridColumnTypes.cs" />
     <Compile Include="Grid\ICarrotGridColumn.cs" />
     <Compile Include="Grid\PagedDataTable.cs" />
+    <Compile Include="HtmlTag.cs" />
     <Compile Include="ITwoPartWebComponent.cs" />
     <Compile Include="IValidateHuman.cs" />
     <Compile Include="IWebComponent.cs" />

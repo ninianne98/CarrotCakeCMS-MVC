@@ -15,6 +15,8 @@
 }
 
 #cmsModalFrame {
+	height: 99%;
+	width: 99%;
 	display: block;
 	clear: both;
 }
@@ -22,14 +24,15 @@
 #cmsFrameEditor {
 	margin: 0;
 	padding: 0;
-	height: 98%;
+	height: 99%;
 	width: 100%;
 }
 
 #cmsFrameEditorPreview, #cmsAjaxMainDiv3 {
 	margin: 0;
 	padding: 0;
-	width: 100%;
+	width: 99%;
+	height: 99%;
 }
 
 #cmsFrameEditorPreview {
@@ -42,7 +45,7 @@
 #cmsToolBoxWrap {
 	margin: 0;
 	padding: 0;
-	line-height: normal;
+	line-height: normal !important;
 	text-align: left;
 	font-size: small;
 	font-family: 'Segoe UI',Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
@@ -50,10 +53,9 @@
 	z-index: 99100;
 }
 
-	#cmsToolBoxWrap input[type="submit"], #cmsToolBoxWrap input[type="reset"], #cmsToolBoxWrap input[type="button"],
+	#cmsToolBoxWrap input[type="submit"], #cmsToolBoxWrap input[type="reset"], #cmsToolBoxWrap input[type="button"], #cmsToolBoxWrap select,
 	#cmsToolBoxWrap .button, #cmsToolBoxWrap .ui-dialog-buttonpane button, #cmsModalFrame button, #cmsModalFrame .button, #cmsModalFrame input[type="button"] {
 		min-width: 3em;
-		padding: 0.6em 0.8em;
 		border: 1px solid #8E908E;
 		background-color: #CEE4D7;
 		color: #676F6A;
@@ -62,10 +64,13 @@
 		-webkit-border-radius: 6px;
 	}
 
-.cms-seagreen input[type="submit"], .cms-seagreen input[type="reset"], .cms-seagreen input[type="button"],
+.cms-seagreen input[type="submit"], .cms-seagreen input[type="reset"], .cms-seagreen input[type="button"], .cms-seagreen select,
 .cms-seagreen .button, .cms-seagreen .ui-dialog-buttonpane button {
 	min-width: 2em;
-	padding: 0.6em 0.8em;
+	margin: 2px 4px 2px 4px !important;
+	padding: 3px 8px 3px 8px !important;
+	height: 2em !important;
+	line-height: 20px !important;
 	border: 1px solid #8E908E;
 	background-color: #CEE4D7;
 	color: #676F6A;
@@ -234,9 +239,10 @@
 
 #cmsPreviewControls {
 	line-height: normal !important;
-	margin-left: 60px !important;
-	margin-right: 60px !important;
-	min-width: 550px !important;
+	margin-left: 50px !important;
+	margin-right: 50px !important;
+	min-width: 600px !important;
+	min-height: 50px !important;
 }
 
 #cmsPreviewTab a {
@@ -253,11 +259,13 @@
 .cmsPreview-Left {
 	margin-left: 50px !important;
 	float: left !important;
+	min-width: 200px !important;
 }
 
 .cmsPreview-Right {
 	margin-right: 50px !important;
 	float: right !important;
+	min-width: 250px !important;
 }
 
 p.cmsToolItem {
@@ -327,9 +335,12 @@ p.cmsToolItem {
 }
 
 #cmsTemplateList {
-	color: #000000;
-	background: #FFFFFF;
-	min-width: 150px;
+	padding: 2px !important;
+	height: 2em !important;
+	color: #000000 !important;
+	background: #FFFFFF !important;
+	min-width: 125px !important;
+	margin-right: 10px !important;
 }
 
 /* widget/text zones */

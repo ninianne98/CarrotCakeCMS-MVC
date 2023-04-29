@@ -354,7 +354,7 @@ function cmsWideMobile() {
 }
 
 function cmWideTablet() {
-	cmsWidePreview('760px');
+	cmsWidePreview('750px');
 }
 
 function cmsWideDesk() {
@@ -373,17 +373,6 @@ function cmsPreviewTemplate() {
 	cmsLaunchWindowOnly(cmsTemplatePreview + "?carrot_templatepreview=" + tmpl);
 
 	var editFrame = $('#cmsModalFrame');
-	var editIFrame = $('#cmsFrameEditor');
-
-	var frmHgt = 440;
-	var hgt = ($(window).height() * 0.75) - 95;
-
-	if (hgt > frmHgt) {
-		frmHgt = hgt;
-	}
-
-	$(editIFrame).attr('width', '100%');
-	$(editIFrame).attr('height', frmHgt);
 
 	var templateList = '';
 
@@ -406,7 +395,7 @@ function cmsPreviewTemplate() {
 					+ ' <div class="cmsPreview-Right">' + ddlPreview + btnClose + btnApply + '</div> </div>'
 					+ ' </div>');
 
-	window.setTimeout("cmsPreviewStyling();", 300);
+	window.setTimeout("cmsPreviewStyling();", 250);
 
 	$(cmsTemplateListPreviewer).val(tmplReal);
 
@@ -434,7 +423,28 @@ function cmsPreviewStyling() {
 	$('#cmsPreviewTab').addClass('ui-corner-all');
 	$('#cmsPreviewTab li').addClass('ui-widget ui-state-default ui-corner-all');
 
+	window.setTimeout("cmsSetPreviewSize()", 500);
+	window.setTimeout("cmsSetPreviewSize()", 750);
+	window.setTimeout("cmsSetPreviewSize()", 1500);
+
 	window.setTimeout("$('#cmsPreviewTab').tabs('option', 'active', 0);", 250);
+}
+
+function cmsSetPreviewSize() {
+	var modSel = '#cms-simplemodal-container';
+	var frameSel = '#cmsModalFrame';
+
+	var modH = $(modSel).css('height');
+	var modW = $(modSel).css('width');
+
+	var frmH = parseFloat(modH) - 85;
+	var frmW = parseFloat(modW) - 30;
+
+	$(frameSel).css('height', frmH);
+	$(frameSel).attr('height', frmH);
+
+	$(frameSel).css('width', frmW);
+	$(frameSel).attr('width', frmW);
 }
 
 function cmsLateBtnStyle() {
@@ -1236,16 +1246,16 @@ function cmsLaunchWindow(theURL) {
 function cmsLoadWindow() {
 	cmsSaveToolbarPosition();
 
-	$("#cms-basic-modal-content").modal({
+	$("#cms-basic-modal-content").simplemodal({
 		onClose: function (dialog) {
-			//$.modal.close(); // must call this!
-			setTimeout("$.modal.close();", 800);
-			$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv"></div>');
+			//$.simplemodal.close(); // must call this!
+			setTimeout("$.simplemodal.close();", 800);
+			cmsResetIframe();
 			cmsDirtyPageRefresh();
 		}
 	});
 
-	$('#cms-basic-modal-content').modal();
+	$('#cms-basic-modal-content').simplemodal();
 	cmsStyleButtons();
 	return false;
 }
@@ -1258,7 +1268,7 @@ function cmsSetIframeRealSrc(theFrameID) {
 function cmsSetiFrameSource(theURL) {
 	var TheURL = theURL;
 
-	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="90%" height="500" realsrc="' + TheURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
+	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="96%" height="500" realsrc="' + TheURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
 
 	setTimeout("cmsSetIframeRealSrc('cmsFrameEditor');", 750);
 
@@ -1285,23 +1295,33 @@ function cmsLaunchWindowOnly(theURL) {
 function cmsLoadWindowOnly() {
 	cmsSaveToolbarPosition();
 
-	$("#cms-basic-modal-content").modal({
+	$("#cms-basic-modal-content").simplemodal({
 		onClose: function (dialog) {
-			//$.modal.close(); // must call this!
-			setTimeout("$.modal.close();", 800);
-			$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv"></div>');
+			//$.simplemodal.close(); // must call this!
+			setTimeout("$.simplemodal.close();", 800);
+			cmsResetIframe();
 		}
 	});
 
-	$('#cms-basic-modal-content').modal();
+	$('#cms-basic-modal-content').simplemodal();
 	cmsStyleButtons();
 	return false;
 }
 
+function cmsResetIframe() {
+	var frameSel = '#cmsModalFrame';
+
+	$(frameSel).css('width', '98%');
+	$(frameSel).attr('width', '98%');
+	$(frameSel).css('height', '99%');
+	$(frameSel).attr('height', '99%');
+	$(frameSel).html('<div id="cmsAjaxMainDiv"></div>');
+}
+
 function cmsCloseModalWin() {
 	cmsSaveToolbarPosition();
-	setTimeout("$.modal.close();", 250);
-	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv"></div>');
+	cmsResetIframe();
+	setTimeout("$.simplemodal.close();", 250);
 }
 
 function cmsDirtyPageRefresh() {

@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Linq.Expressions;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
-using System.Web;
-using System;
+using System.Xml.Linq;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -125,6 +126,78 @@ namespace Carrotware.Web.UI.Components {
 			}
 
 			return ColorTranslator.FromHtml(sColor);
+		}
+
+		public static string HtmlFormat(StringBuilder input) {
+			if (input != null) {
+				return HtmlFormat(input.ToString());
+			}
+
+			return string.Empty;
+		}
+
+		public static string HtmlFormat(string input) {
+			if (!string.IsNullOrWhiteSpace(input)) {
+				bool autoAddTypes = false;
+				var subs = new Dictionary<string, int>();
+				subs.Add("ndash", 150);
+				subs.Add("mdash", 151);
+				subs.Add("nbsp", 153);
+				subs.Add("trade", 153);
+				subs.Add("copy", 169);
+				subs.Add("reg", 174);
+				subs.Add("laquo", 171);
+				subs.Add("raquo", 187);
+				subs.Add("lsquo", 145);
+				subs.Add("rsquo", 146);
+				subs.Add("ldquo", 147);
+				subs.Add("rdquo", 148);
+				subs.Add("bull", 149);
+				subs.Add("amp", 38);
+				subs.Add("quot", 34);
+
+				var subs2 = new Dictionary<string, int>();
+				subs2.Add("ndash", 150);
+				subs2.Add("mdash", 151);
+				subs2.Add("nbsp", 153);
+				subs2.Add("trade", 153);
+				subs2.Add("copy", 169);
+				subs2.Add("reg", 174);
+				subs2.Add("laquo", 171);
+				subs2.Add("raquo", 187);
+				subs2.Add("bull", 149);
+
+				string docType = string.Empty;
+
+				if (!input.ToLowerInvariant().StartsWith("<!doctype")) {
+					autoAddTypes = true;
+
+					docType = "<!DOCTYPE html [ ";
+					foreach (var s in subs) {
+						docType += string.Format(" <!ENTITY {0} \"&#{1};\"> ", s.Key, s.Value);
+					}
+					docType += " ]>".Replace("  ", " ");
+
+					input = docType + Environment.NewLine + input;
+				}
+
+				var doc = XDocument.Parse(input);
+
+				if (autoAddTypes) {
+					var sb = new StringBuilder();
+					sb.Append(doc.ToString().Replace(docType, string.Empty));
+
+					foreach (var s in subs2) {
+						sb.Replace(Convert.ToChar(s.Value).ToString(), string.Format("&{0};", s.Key));
+					}
+
+					return sb.ToString();
+				}
+
+				return doc.ToString();
+			}
+
+			return string.Empty;
 		}
 
 		//================================
@@ -363,24 +436,17 @@ namespace Carrotware.Web.UI.Components {
 						}
 					}
 
-					TagBuilder msgBuilder = new TagBuilder("ul");
+					var msgBuilder = new HtmlTag("ul");
 					if (messageAsSpan) {
-						msgBuilder = new TagBuilder("span");
+						msgBuilder = new HtmlTag("span");
 					}
 
-					var listAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(listAttributes);
 					// can be overwritten
 					msgBuilder.MergeAttribute("data-valmsg-replace", "true");
 
-					// append if present, provide if none
-					if (!listAttribs.ContainsKey("class")) {
-						listAttribs.Add("class", validationClass);
-					} else {
-						string origCss = listAttribs["class"].ToString();
-						listAttribs["class"] = string.Format("{0} {1}", validationClass, origCss.Trim());
-					}
+					msgBuilder.MergeAttribute("class", validationClass);
 
-					msgBuilder.MergeAttributes(listAttribs);
+					msgBuilder.MergeAttributes(listAttributes);
 
 					// force the data-valmsg-for value to match the property name
 					msgBuilder.MergeAttribute("data-valmsg-for", propertyName);
@@ -395,11 +461,11 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public static MvcHtmlString MetaTag(string Name, string Content) {
-			var metaTag = new TagBuilder("meta");
+			var metaTag = new HtmlTag("meta");
 			metaTag.MergeAttribute("name", Name);
 			metaTag.MergeAttribute("content", Content);
 
-			return MvcHtmlString.Create(metaTag.ToString(TagRenderMode.SelfClosing));
+			return MvcHtmlString.Create(metaTag.RenderSelfClosingTag());
 		}
 
 		public static MvcHtmlString ActionImage(string actionName,
@@ -411,21 +477,17 @@ namespace Carrotware.Web.UI.Components {
 													object linkAttributes = null) {
 			var url = new UrlHelper(Html.ViewContext.RequestContext);
 
-			var anchorBuilder = new TagBuilder("a");
-			anchorBuilder.MergeAttribute("href", url.Action(actionName, controllerName, routeValues));
+			var anchorBuilder = new HtmlTag("a");
+			anchorBuilder.Uri = url.Action(actionName, controllerName, routeValues);
+			anchorBuilder.MergeAttributes(linkAttributes);
 
-			var lnkAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(linkAttributes);
-			anchorBuilder.MergeAttributes(lnkAttribs);
-
-			var imgBuilder = new TagBuilder("img");
-			imgBuilder.MergeAttribute("src", url.Content(imagePath));
+			var imgBuilder = new HtmlTag("img");
+			imgBuilder.Uri = url.Content(imagePath);
 			imgBuilder.MergeAttribute("alt", imageAltText);
 			imgBuilder.MergeAttribute("title", imageAltText);
+			imgBuilder.MergeAttributes(imageAttributes);
 
-			var imgAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(imageAttributes);
-			imgBuilder.MergeAttributes(imgAttribs);
-
-			string imgHtml = imgBuilder.ToString(TagRenderMode.SelfClosing);
+			string imgHtml = imgBuilder.RenderSelfClosingTag();
 
 			anchorBuilder.InnerHtml = imgHtml;
 
@@ -454,7 +516,7 @@ namespace Carrotware.Web.UI.Components {
 			img.Title = Title;
 			img.ThumbSize = ThumbSize;
 			img.ScaleImage = ScaleImage;
-			img.imageAttributes = imageAttributes;
+			img.ImageAttributes = imageAttributes;
 
 			return new MvcHtmlString(img.ToHtmlString());
 		}

@@ -35,20 +35,17 @@ namespace Carrotware.Web.UI.Components {
 
 		public Dictionary<string, string> ImageOptions { get; set; }
 
-		public object imageAttributes { get; set; }
+		public object ImageAttributes { get; set; }
 
 		public override string GetHtml() {
 			string val = this.SessionKeyValue.Value;
 
-			var imgBuilder = new TagBuilder("img");
-			imgBuilder.MergeAttribute("src", GetCaptchaImageURI());
+			var imgBuilder = new HtmlTag("img", GetCaptchaImageURI());
 			imgBuilder.MergeAttribute("alt", val);
 			imgBuilder.MergeAttribute("title", val);
+			imgBuilder.MergeAttributes(this.ImageAttributes);
 
-			var imgAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(imageAttributes);
-			imgBuilder.MergeAttributes(imgAttribs);
-
-			return imgBuilder.ToString(TagRenderMode.SelfClosing);
+			return imgBuilder.RenderSelfClosingTag();
 		}
 
 		private string GetCaptchaImageURI() {

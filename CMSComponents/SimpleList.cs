@@ -23,7 +23,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public SimpleList()
 			: base() {
-			this.CssClass = String.Empty;
+			this.CssClass = string.Empty;
 			this.CssSelected = "selected";
 			this.ElementId = "list";
 
@@ -49,6 +49,9 @@ namespace Carrotware.CMS.UI.Components {
 		public string CssItem { get; set; }
 
 		[Widget(WidgetAttribute.FieldMode.TextBox)]
+		public string CssAnchor { get; set; }
+
+		[Widget(WidgetAttribute.FieldMode.TextBox)]
 		public string CssSelected { get; set; }
 
 		public List<SiteNav> NavigationData { get; set; }
@@ -63,75 +66,85 @@ namespace Carrotware.CMS.UI.Components {
 			try {
 				string sFoundVal = this.GetParmValue("ElementId", this.WidgetClientID);
 
-				if (!String.IsNullOrEmpty(sFoundVal)) {
+				if (!string.IsNullOrEmpty(sFoundVal)) {
 					this.ElementId = sFoundVal;
 				}
 			} catch (Exception ex) { }
 
 			try {
-				string sFoundVal = this.GetParmValue("CssClass", String.Empty);
+				string sFoundVal = this.GetParmValue("CssClass", string.Empty);
 
-				if (!String.IsNullOrEmpty(sFoundVal)) {
+				if (!string.IsNullOrEmpty(sFoundVal)) {
 					this.CssClass = sFoundVal;
 				}
 			} catch (Exception ex) { }
 
 			try {
-				string sFoundVal = this.GetParmValue("CssItem", String.Empty);
+				string sFoundVal = this.GetParmValue("CssItem", string.Empty);
 
-				if (!String.IsNullOrEmpty(sFoundVal)) {
+				if (!string.IsNullOrEmpty(sFoundVal)) {
 					this.CssItem = sFoundVal;
+				}
+			} catch (Exception ex) { }
+
+			try {
+				string sFoundVal = this.GetParmValue("CssAnchor", string.Empty);
+
+				if (!string.IsNullOrEmpty(sFoundVal)) {
+					this.CssAnchor = sFoundVal;
 				}
 			} catch (Exception ex) { }
 
 			try {
 				string sFoundVal = this.GetParmValue("CssSelected", "selected");
 
-				if (!String.IsNullOrEmpty(sFoundVal)) {
+				if (!string.IsNullOrEmpty(sFoundVal)) {
 					this.CssSelected = sFoundVal;
 				}
 			} catch (Exception ex) { }
 		}
 
-		protected virtual void TweakData() { }
+		protected virtual void TweakData() {
+			this.NavigationData = ControlUtilities.TweakData(this.NavigationData);
+		}
 
 		public override string ToHtmlString() {
+			var output = new StringBuilder();
 			LoadData();
 			TweakData();
 
-			string sItemCss = String.Empty;
-
-			StringBuilder output = new StringBuilder();
-
-			if (!String.IsNullOrEmpty(this.CssClass)) {
-				output.AppendLine("<ul id=\"" + this.ElementId + "\" class=\"" + this.CssClass + "\">");
-			} else {
-				output.AppendLine("<ul id=\"" + this.ElementId + "\" >");
-			}
+			var list = new HtmlTag("ul");
+			list.SetAttribute("id", this.ElementId);
+			list.MergeAttribute("class", this.CssClass);
+			output.AppendLine(list.OpenTag());
 
 			if (this.NavigationData != null && this.NavigationData.Any()) {
 				foreach (var n in this.NavigationData) {
+					var item = new HtmlTag("li");
+					var link = new HtmlTag("a");
+
+					item.MergeAttribute("class", this.CssItem);
+					link.MergeAttribute("class", this.CssAnchor);
+
 					if (SiteData.IsFilenameCurrentPage(n.FileName)
 								|| (n.NavOrder == 0 && SiteData.IsCurrentLikelyHomePage)
 								|| ControlUtilities.AreFilenamesSame(n.FileName, this.CmsPage.ThePage.FileName)) {
-						sItemCss = String.Format(" {0} {1} ", this.CssItem, this.CssSelected).Trim();
-					} else {
-						sItemCss = String.Format(" {0} ", this.CssItem).Trim();
+						item.MergeAttribute("class", this.CssSelected);
+						link.MergeAttribute("class", this.CssSelected);
 					}
 
-					if (!String.IsNullOrEmpty(sItemCss)) {
-						output.Append("<li class=\"" + sItemCss + "\">");
-					} else {
-						output.Append("<li>");
-					}
+					link.Uri = n.FileName;
+					link.InnerHtml = n.NavMenuText;
 
-					output.Append(" <a href=\"" + n.FileName + "\">" + n.NavMenuText + "</a> </li>" + Environment.NewLine);
+					item.InnerHtml = link.RenderTag();
+
+					output.AppendLine(item.RenderTag());
 				}
 			}
 
-			output.AppendLine("</ul>");
+			output.AppendLine(list.CloseTag());
 
-			return output.ToString();
+			return ControlUtilities.HtmlFormat(output);
 		}
 	}
 
@@ -190,7 +203,7 @@ namespace Carrotware.CMS.UI.Components {
 			try {
 				string sFoundVal = this.GetParmValue("SortNavBy", SortOrder.SortAsc.ToString());
 
-				if (!String.IsNullOrEmpty(sFoundVal)) {
+				if (!string.IsNullOrEmpty(sFoundVal)) {
 					this.SortNavBy = (SortOrder)Enum.Parse(typeof(SortOrder), sFoundVal, true);
 				}
 			} catch (Exception ex) { }

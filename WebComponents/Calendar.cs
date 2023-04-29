@@ -104,9 +104,9 @@ namespace Carrotware.Web.UI.Components {
 
 		public override string GetBody() {
 			StringBuilder sb = new StringBuilder();
-			string CtrlID = this.ElementId;
-
 			sb.AppendLine();
+
+			string CtrlID = this.ElementId;
 
 			DateTime today = DateTime.Today.Date;
 			DateTime thisMonth = DateTime.Today.Date;
@@ -214,7 +214,7 @@ namespace Carrotware.Web.UI.Components {
 
 			sb.AppendLine("</table>");
 
-			return sb.ToString();
+			return CarrotWeb.HtmlFormat(sb);
 		}
 
 		public string GenerateCSS() {

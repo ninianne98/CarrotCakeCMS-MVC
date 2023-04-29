@@ -37,6 +37,7 @@ namespace Carrotware.CMS.Core {
 		MvcHtmlString HeadingText { get; }
 		Guid? Parent_ContentID { get; set; }
 		Guid Root_ContentID { get; set; }
+		bool MadeSafe { get; set; }
 		Guid SiteID { get; set; }
 		bool ShowInSiteNav { get; set; }
 		string TemplateFile { get; set; }
@@ -50,7 +51,9 @@ namespace Carrotware.CMS.Core {
 		List<ContentCategory> ContentCategories { get; set; }
 
 		ExtendedUserData GetUserInfo();
+
 		ExtendedUserData GetCreditUserInfo();
+
 		ExtendedUserData BylineUser { get; }
 	}
 }

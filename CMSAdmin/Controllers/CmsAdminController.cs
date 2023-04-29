@@ -635,7 +635,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					lst = du.MergeMessages(lst, status.Messages);
 				} else {
 					DataInfo ver = DatabaseUpdate.GetDbSchemaVersion();
+
 					du.HandleResponse(lst, "Database up-to-date [" + ver.DataValue + "] ");
+					du.HandleResponse(lst, du.BuildUpdateString(1), du.Refresh01());
 				}
 
 				bUpdate = du.DatabaseNeedsUpdate();

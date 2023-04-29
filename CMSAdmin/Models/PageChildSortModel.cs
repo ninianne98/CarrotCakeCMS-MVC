@@ -19,7 +19,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public PageChildSortModel() {
 			this.SortOptions = new Dictionary<string, string>();
-			this.SelectedSort = String.Empty;
+			this.SelectedSort = string.Empty;
 			this.SortChild = false;
 
 			this.SortOptions.Add("alpha", "Alphabetical (asc)");
@@ -43,7 +43,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 				lstNav = navHelper.GetChildNavigation(SiteData.CurrentSiteID, this.Root_ContentID, !SecurityData.IsAuthEditor);
 			}
 
-			if (!String.IsNullOrEmpty(this.SelectedSort)) {
+			if (!string.IsNullOrEmpty(this.SelectedSort)) {
 				switch (this.SelectedSort) {
 					case "alpha":
 						lstNav = lstNav.OrderBy(x => x.NavMenuText).ToList();
@@ -75,7 +75,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 				}
 			}
 
-			lstNav.ToList().ForEach(q => CMSConfigHelper.IdentifyLinkAsInactive(q));
+			lstNav.ToList().ForEach(q => CMSConfigHelper.FixNavLinkText(q));
 
 			this.Pages = lstNav;
 		}

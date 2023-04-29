@@ -93,8 +93,8 @@
 
 			if not exists(select * from dbo.[carrot_DataInfo] where [DataKey] = @DataKey) begin
 
-			insert into dbo.[carrot_DataInfo]([DataKey], [DataValue])
-			values (@DataKey, @DataValue)
+			insert into dbo.[carrot_DataInfo]([DataInfoID], [DataKey], [DataValue])
+			values (NewID(), @DataKey, @DataValue)
 
 			end else begin
 

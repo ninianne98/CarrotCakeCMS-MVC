@@ -24,6 +24,10 @@ namespace Carrotware.CMS.UI.Components {
 			this.ElementId = "cal";
 		}
 
+		public PostCalendar(string id) {
+			this.ElementId = id;
+		}
+
 		protected ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper();
 
 		public string CalendarHead { get; set; }
@@ -81,33 +85,33 @@ namespace Carrotware.CMS.UI.Components {
 
 			sb.AppendLine();
 
-			string sCSS = String.Empty;
-			if (!String.IsNullOrEmpty(this.CssClass)) {
+			string sCSS = string.Empty;
+			if (!string.IsNullOrEmpty(this.CssClass)) {
 				sCSS = " class=\"" + this.CssClass + "\" ";
 			}
 
-			string sCssClassTable = String.Empty;
-			if (!String.IsNullOrEmpty(this.CssClassTable)) {
+			string sCssClassTable = string.Empty;
+			if (!string.IsNullOrEmpty(this.CssClassTable)) {
 				sCssClassTable = " class=\"" + this.CssClassTable + "\" ";
 			}
-			string sCssClassCaption = String.Empty;
-			if (!String.IsNullOrEmpty(this.CssClassCaption)) {
+			string sCssClassCaption = string.Empty;
+			if (!string.IsNullOrEmpty(this.CssClassCaption)) {
 				sCssClassCaption = " class=\"" + this.CssClassCaption + "\" ";
 			}
-			string sCssClassDayHead = String.Empty;
-			if (!String.IsNullOrEmpty(this.CssClassDayHead)) {
+			string sCssClassDayHead = string.Empty;
+			if (!string.IsNullOrEmpty(this.CssClassDayHead)) {
 				sCssClassDayHead = " class=\"" + this.CssClassDayHead + "\" ";
 			}
-			string sCssClassTableBody = String.Empty;
-			if (!String.IsNullOrEmpty(this.CssClassTableBody)) {
+			string sCssClassTableBody = string.Empty;
+			if (!string.IsNullOrEmpty(this.CssClassTableBody)) {
 				sCssClassTableBody = " class=\"" + this.CssClassTableBody + "\" ";
 			}
-			string sCssClassDateLink = String.Empty;
-			if (!String.IsNullOrEmpty(this.CssClassDateLink)) {
+			string sCssClassDateLink = string.Empty;
+			if (!string.IsNullOrEmpty(this.CssClassDateLink)) {
 				sCssClassDateLink = " class=\"" + this.CssClassDateLink + "\" ";
 			}
-			string sCssClassTableFoot = String.Empty;
-			if (!String.IsNullOrEmpty(this.CssClassTableFoot)) {
+			string sCssClassTableFoot = string.Empty;
+			if (!string.IsNullOrEmpty(this.CssClassTableFoot)) {
 				sCssClassTableFoot = " class=\"" + this.CssClassTableFoot + "\" ";
 			}
 
@@ -116,7 +120,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			sb.AppendLine("<div" + sCSS + " id=\"" + this.ElementId + "\"> ");
 
-			if (!String.IsNullOrEmpty(this.CalendarHead)) {
+			if (!string.IsNullOrEmpty(this.CalendarHead)) {
 				sb.AppendLine("<h2 class=\"calendar-caption\">" + this.CalendarHead + "  </h2> ");
 			}
 
@@ -150,8 +154,8 @@ namespace Carrotware.CMS.UI.Components {
 
 			sb.AppendLine("		<tbody id=\"" + this.ElementId + "-body\"  " + sCssClassTableBody + ">");
 			while ((dayOfMonth <= daysInMonth) && (dayOfMonth <= 31) && (dayOfMonth >= -7)) {
-				for (int DayIndex = 0; DayIndex <= dayOfWeek; DayIndex++) {
-					if (DayIndex == 0) {
+				for (int dayIndex = 0; dayIndex <= dayOfWeek; dayIndex++) {
+					if (dayIndex == 0) {
 						sb.AppendLine("			<tr id=\"" + this.ElementId + "-week" + weekNumber.ToString() + "\"> ");
 						weekNumber++;
 					}
@@ -161,29 +165,30 @@ namespace Carrotware.CMS.UI.Components {
 					if ((dayOfMonth >= 1) && (dayOfMonth <= daysInMonth)) {
 						cellDate = new DateTime(yearNumber, monthNumber, dayOfMonth);
 
+						var cal = (from n in lstCalendar
+								   where n.PostDate.Date == cellDate.Date
+								   select n).FirstOrDefault();
+
 						string sTD = "<td";
 						if (cellDate.Date == SiteData.CurrentSite.Now.Date) {
 							sTD = "<td id=\"today\"";
 						}
 
-						ContentDateLinks cal = (from n in lstCalendar
-												where n.PostDate.Date == cellDate.Date
-												select n).FirstOrDefault();
 						if (cal != null) {
-							sb.AppendLine("			" + sTD + " " + sCssClassDateLink + ">");
-							sb.AppendLine("				<a href=\"" + cal.DateURL + "\"> " + cellDate.Day.ToString() + " </a>");
+							sb.Append("			" + sTD + " " + sCssClassDateLink + "> ");
+							sb.Append("<a href=\"" + cal.DateURL + "\"> " + cellDate.Day.ToString() + " </a>");
 						} else {
-							sb.AppendLine("			" + sTD + ">");
-							sb.AppendLine("				" + cellDate.Day.ToString() + " ");
+							sb.Append("			" + sTD + "> ");
+							sb.Append(cellDate.Day.ToString());
 						}
-						sb.AppendLine("			</td>");
+						sb.Append(" </td>");
 					} else {
-						sb.AppendLine("			<td class=\"pad\"> </td>");
+						sb.Append("			<td class=\"pad\"> </td>");
 					}
 
 					dayOfMonth++;
 
-					if (DayIndex == dayOfWeek) {
+					if (dayIndex == dayOfWeek) {
 						sb.AppendLine("		</tr>");
 					}
 				}
@@ -212,7 +217,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			sb.AppendLine("</div> ");
 
-			return sb.ToString();
+			return ControlUtilities.HtmlFormat(sb);
 		}
 
 		public string GetHtml() {

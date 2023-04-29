@@ -99,6 +99,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div id="cmsToolBoxWrap" class="cmsToolbarAlignmentL">
 			<div id="cmsAdminToolbox" class="cms-seagreen cmsToolbox2 cmsToolbox3">
 				<div class="cmsInsideArea">
@@ -129,7 +130,7 @@
 									<p>
 										<span class="ui-icon ui-icon-info" style="float: left; margin: 3px;"></span>
 										<span>
-											@Html.Raw(String.Format("Read only mode. User '{0}' is currently editing the page.<br />  Click <b><a href=\"{1}\">here</a></b> to return to the browse view. <br />", lockUsername, CmsPage.ThePage.FileName))
+											@Html.Raw(string.Format("Read only mode. User '{0}' is currently editing the page.<br />  Click <b><a href=\"{1}\">here</a></b> to return to the browse view. <br />", lockUsername, CmsPage.ThePage.FileName))
 										</span>
 									</p>
 								</div>
@@ -138,7 +139,6 @@
 
 							<div id="cmsMainToolbox" class="cms-seagreen">
 								<div id="pnlCMSEditZone">
-
 									<div id="cmsTabbedToolbox" class="cmsTabs">
 										<ul>
 											<li><a href="#cmsTabIdx-tabs-1">Widgets</a></li>
@@ -194,6 +194,8 @@
 													@Html.DropDownList("ddlCmsTemplateList", new SelectList(CmsPage.Templates, "TemplatePath", "Caption", CmsPage.ThePage.TemplateFile.ToLowerInvariant()), new { @class = "cmsAdvEditTemplatePicker" })
 												</p>
 												<p class="cmsCenter5px">
+												</p>
+												<p class="cmsCenter5px">
 													<input name="btnTemplate" type="button" id="btnTemplate" value="Apply" onclick="cmsUpdateTemplate();" />
 													&nbsp;&nbsp;&nbsp;
 													<input name="btnPreview" type="button" id="btnPreview" value="Preview" onclick="cmsPreviewTemplate();" />
@@ -220,9 +222,9 @@
 													<input name="btnAddPage" type="button" id="btnAddPage" value="Add New Page" onclick="cmsShowAddPage();" />
 												</p>
 												@if (CmsPage.ThePage.ContentType == ContentPageType.PageType.ContentEntry) {
-												<p>
-													<input name="btnSortChildPages" type="button" id="btnSortChildPages" value="Sort Child/Sub Pages" onclick="cmsSortChildren();" />
-												</p>
+													<p>
+														<input name="btnSortChildPages" type="button" id="btnSortChildPages" value="Sort Child/Sub Pages" onclick="cmsSortChildren();" />
+													</p>
 												}
 												<p>
 													<input name="btnSiteMap" type="button" id="btnSiteMap" value="Site Map" onclick="cmsEditSiteMap();" />

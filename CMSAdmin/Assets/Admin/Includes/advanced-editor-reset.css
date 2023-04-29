@@ -3,11 +3,24 @@
    License: none (public domain)
 */
 
-.cms-seagreen div, .cms-seagreen span, .cms-seagreen applet, .cms-seagreen object, .cms-seagreen iframe, .cms-seagreen h1, .cms-seagreen h2, .cms-seagreen h3, .cms-seagreen h4, .cms-seagreen h5, .cms-seagreen h6, .cms-seagreen p, .cms-seagreen blockquote, .cms-seagreen pre, .cms-seagreen a, .cms-seagreen abbr, .cms-seagreen acronym, .cms-seagreen address, .cms-seagreen big, .cms-seagreen cite, .cms-seagreen code, .cms-seagreen del, .cms-seagreen dfn, .cms-seagreen em, .cms-seagreen img, .cms-seagreen ins, .cms-seagreen kbd, .cms-seagreen q, .cms-seagreen s, .cms-seagreen samp, .cms-seagreen small, .cms-seagreen strike, .cms-seagreen strong, .cms-seagreen sub, .cms-seagreen sup, .cms-seagreen tt, .cms-seagreen var, .cms-seagreen b, .cms-seagreen u, .cms-seagreen i, .cms-seagreen center, .cms-seagreen dl, .cms-seagreen dt, .cms-seagreen dd, .cms-seagreen ol, .cms-seagreen ul, .cms-seagreen li, .cms-seagreen fieldset, .cms-seagreen form, .cms-seagreen label, .cms-seagreen legend, .cms-seagreen table, .cms-seagreen caption, .cms-seagreen tbody, .cms-seagreen tfoot, .cms-seagreen thead, .cms-seagreen tr, .cms-seagreen th, .cms-seagreen td, .cms-seagreen article, .cms-seagreen aside, .cms-seagreen canvas, .cms-seagreen details, .cms-seagreen embed, .cms-seagreen figure, .cms-seagreen figcaption, .cms-seagreen footer, .cms-seagreen header, .cms-seagreen hgroup, .cms-seagreen menu, .cms-seagreen nav, .cms-seagreen output, .cms-seagreen ruby, .cms-seagreen section, .cms-seagreen summary, .cms-seagreen time, .cms-seagreen mark, .cms-seagreen audio, .cms-seagreen video {
-	margin: 1px;
+.cms-seagreen div, .cms-seagreen span, .cms-seagreen applet, .cms-seagreen object, .cms-seagreen iframe, .cms-seagreen h1,
+.cms-seagreen h2, .cms-seagreen h3, .cms-seagreen h4, .cms-seagreen h5, .cms-seagreen h6, .cms-seagreen p, .cms-seagreen blockquote,
+.cms-seagreen pre, .cms-seagreen a, .cms-seagreen abbr, .cms-seagreen acronym, .cms-seagreen address, .cms-seagreen big,
+.cms-seagreen cite, .cms-seagreen code, .cms-seagreen del, .cms-seagreen dfn, .cms-seagreen em, .cms-seagreen img, .cms-seagreen ins,
+.cms-seagreen kbd, .cms-seagreen q, .cms-seagreen s, .cms-seagreen samp, .cms-seagreen small, .cms-seagreen strike, .cms-seagreen strong,
+.cms-seagreen sub, .cms-seagreen sup, .cms-seagreen tt, .cms-seagreen var, .cms-seagreen b, .cms-seagreen u, .cms-seagreen i,
+.cms-seagreen center, .cms-seagreen dl, .cms-seagreen dt, .cms-seagreen dd, .cms-seagreen ol, .cms-seagreen ul, .cms-seagreen li,
+.cms-seagreen fieldset, .cms-seagreen form, .cms-seagreen label, .cms-seagreen legend, .cms-seagreen table, .cms-seagreen caption,
+.cms-seagreen tbody, .cms-seagreen tfoot, .cms-seagreen thead, .cms-seagreen tr, .cms-seagreen th, .cms-seagreen td, .cms-seagreen article,
+.cms-seagreen aside, .cms-seagreen canvas, .cms-seagreen details, .cms-seagreen embed, .cms-seagreen figure, .cms-seagreen figcaption,
+.cms-seagreen footer, .cms-seagreen header, .cms-seagreen hgroup, .cms-seagreen menu, .cms-seagreen nav, .cms-seagreen output, .cms-seagreen ruby,
+.cms-seagreen section, .cms-seagreen summary, .cms-seagreen time, .cms-seagreen mark, .cms-seagreen audio, .cms-seagreen video {
+	margin: 2px;
 	padding: 1px;
 	border: 0;
 	font-size: 100%;
+	letter-spacing: normal;
+	font-family: Lucida Grande, Lucida Sans Arial, Arial, sans-serif;
 	font: inherit;
 	vertical-align: baseline;
 	font-size: 12px;
@@ -15,7 +28,37 @@
 	background: transparent;
 	background-color: transparent;
 	border: 0px solid transparent;
+	color: #676F6A;
+	line-height: normal;
+	height: auto;
 }
+
+.cms-seagreen input, .cms-seagreen button, #cms-seagreen-id input, #cms-seagreen-id button {
+	height: 2em;
+	display: inline-block;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+.cms-seagreen select, #cms-seagreen-id select {
+	height: auto;
+	display: inline-block;
+	-moz-appearance: menulist;
+	-webkit-appearance: menulist;
+	-ms-appearance: menulist;
+	appearance: menulist;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+	.cms-seagreen input:focus, .cms-seagreen button:focus, #cms-seagreen-id input:focus, #cms-seagreen-id button:focus,
+	.cms-seagreen select:focus, #cms-seagreen-id select:focus {
+		border-color: #bad9c6;
+		outline: 0;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(200, 220, 200, .6);
+		box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(210, 230, 215, .6);
+	}
+
 /* HTML5 display-role reset for older browsers */
 .cms-seagreen article, .cms-seagreen aside, .cms-seagreen details, .cms-seagreen figcaption, .cms-seagreen figure, .cms-seagreen footer, .cms-seagreen header, .cms-seagreen hgroup, .cms-seagreen menu, .cms-seagreen nav, .cms-seagreen section {
 	display: block;
@@ -93,14 +136,20 @@
 		margin: 4px;
 		padding: 6px;
 		text-transform: none;
+		line-height: 20px;
+		height: 2em;
 	}
 
 	.cms-seagreen .ui-dialog .ui-dialog-buttonset button, #cms-seagreen-id .ui-dialog .ui-dialog-buttonset button {
 		margin: 4px;
 		padding: 6px;
+		line-height: 20px;
+		height: 2em;
 	}
 
 	.cms-seagreen .ui-dialog button.ui-button .ui-button-text, #cms-seagreen-id .ui-dialog button.ui-button .ui-button-text {
 		margin: 0px;
 		padding: 2px;
+		line-height: 20px;
+		height: 2em;
 	}

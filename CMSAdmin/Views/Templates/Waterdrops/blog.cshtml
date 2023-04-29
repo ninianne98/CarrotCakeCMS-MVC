@@ -10,9 +10,11 @@
 }
 
 @section SideBar {
+	<div id="calendar_wrap">
+		@( new PostCalendar("calendar") )
+	</div>
 
 	@Html.Partial("_catmeta")
-
 }
 
 @section BlogAuthor {

@@ -1,17 +1,17 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface;
 using Carrotware.Web.UI.Components;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Web.Mvc.Ajax;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Ajax;
 using System.Web.Routing;
 using System.Web.WebPages;
-using System.Web;
-using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -336,25 +336,21 @@ namespace Carrotware.CMS.UI.Components {
 											object linkAttributes = null) {
 			var url = new UrlHelper(Html.ViewContext.RequestContext);
 
-			var anchorBuilder = new TagBuilder("a");
-			anchorBuilder.MergeAttribute("href", string.Format("{0}?type={1}", CarrotCakeHtml.RssUri, mode));
-
-			var lnkAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(linkAttributes);
-			anchorBuilder.MergeAttributes(lnkAttribs);
+			var anchorBuilder = new HtmlTag("a");
+			anchorBuilder.Uri = string.Format("{0}?type={1}", CarrotCakeHtml.RssUri, mode);
+			anchorBuilder.MergeAttributes(linkAttributes);
 
 			if (string.IsNullOrEmpty(imagePath)) {
 				imagePath = ControlUtilities.GetWebResourceUrl("Carrotware.CMS.UI.Components.feed.png");
 			}
 
-			var imgBuilder = new TagBuilder("img");
-			imgBuilder.MergeAttribute("src", url.Content(imagePath));
+			var imgBuilder = new HtmlTag("img");
+			imgBuilder.Uri = url.Content(imagePath);
 			imgBuilder.MergeAttribute("alt", imageAltText);
 			imgBuilder.MergeAttribute("title", imageAltText);
+			imgBuilder.MergeAttributes(imageAttributes);
 
-			var imgAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(imageAttributes);
-			imgBuilder.MergeAttributes(imgAttribs);
-
-			string imgHtml = imgBuilder.ToString(TagRenderMode.SelfClosing);
+			string imgHtml = imgBuilder.RenderSelfClosingTag();
 
 			anchorBuilder.InnerHtml = imgHtml;
 
@@ -366,11 +362,9 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static MvcHtmlString RssTextLink(SiteData.RSSFeedInclude mode, string linkText = "RSS", object linkAttributes = null) {
-			var anchorBuilder = new TagBuilder("a");
-			anchorBuilder.MergeAttribute("href", string.Format("{0}?type={1}", CarrotCakeHtml.RssUri, mode));
-
-			var lnkAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(linkAttributes);
-			anchorBuilder.MergeAttributes(lnkAttribs);
+			var anchorBuilder = new HtmlTag("a");
+			anchorBuilder.Uri = string.Format("{0}?type={1}", CarrotCakeHtml.RssUri, mode);
+			anchorBuilder.MergeAttributes(linkAttributes);
 
 			anchorBuilder.InnerHtml = linkText;
 
@@ -389,7 +383,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			sb.AppendLine(RenderPartialToString(SiteFilename.MainSiteSpecialViewHead));
 
-			return new HtmlString(sb.ToString());
+			return new HtmlString(sb.ToString().Trim());
 		}
 
 		public static HtmlString IncludeFooter() {
@@ -413,7 +407,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			sb.AppendLine(RenderPartialToString(SiteFilename.MainSiteSpecialViewFoot));
 
-			return new HtmlString(sb.ToString());
+			return new HtmlString(sb.ToString().Trim());
 		}
 
 		public static string GenerateUrl() {
@@ -715,6 +709,8 @@ namespace Carrotware.CMS.UI.Components {
 							widgetText = GetResultViewStringFromController(objectPrefix, objType, obj);
 						}
 					} catch (Exception ex) {
+						SiteData.WriteDebugException("renderwidget-class", ex);
+
 						LiteralMessage msg = new LiteralMessage(ex, widgetKey, widget.ControlPath);
 						obj = msg;
 						widgetText = msg.ToHtmlString();
@@ -767,6 +763,8 @@ namespace Carrotware.CMS.UI.Components {
 							}
 						}
 					} catch (Exception ex) {
+						SiteData.WriteDebugException("renderwidget-view", ex);
+
 						LiteralMessage msg = new LiteralMessage(ex, widgetKey, widget.ControlPath);
 						widgetText = msg.ToHtmlString();
 					}

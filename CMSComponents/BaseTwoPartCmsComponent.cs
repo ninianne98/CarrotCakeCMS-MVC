@@ -20,12 +20,14 @@ namespace Carrotware.CMS.UI.Components {
 		public virtual string GetBody() {
 			TweakData();
 
-			StringBuilder output = new StringBuilder();
-			return WriteTopLevel(output).ToString();
+			var output = new StringBuilder();
+			output = WriteTopLevel(output);
+
+			return ControlUtilities.HtmlFormat(output);
 		}
 
 		public virtual string GetHead() {
-			return String.Empty;
+			return string.Empty;
 		}
 
 		public virtual HtmlString RenderBody() {

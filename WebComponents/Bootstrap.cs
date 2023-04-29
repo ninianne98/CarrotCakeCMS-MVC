@@ -1,4 +1,6 @@
-﻿/*
+﻿using System.Web;
+
+/*
 * CarrotCake CMS (MVC5)
 * http://www.carrotware.com/
 *
@@ -84,8 +86,8 @@ namespace Carrotware.Web.UI.Components {
 			}
 
 			return (UrlPaths.CreateJavascriptTag("Bootstrap", bootstrapJS) + " \r\n"
-					+ UrlPaths.CreateCssTag("Bootstrap CSS", bootstrapCSS) + "\r\n"
-					+ bootstrapColor);
+							+ UrlPaths.CreateCssTag("Bootstrap CSS", bootstrapCSS) + "\r\n"
+							+ bootstrapColor);
 		}
 	}
 }

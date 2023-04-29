@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
-using System.Web;
-using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -255,15 +255,13 @@ namespace Carrotware.Web.UI.Components {
 														imageAltText = imgData.ImageAltText;
 													}
 
-													var imgBuilder = new TagBuilder("img");
-													imgBuilder.MergeAttribute("src", url.Content(imgPath));
+													var imgBuilder = new HtmlTag("img");
+													imgBuilder.Uri = url.Content(imgPath);
 													imgBuilder.MergeAttribute("alt", imageAltText);
 													imgBuilder.MergeAttribute("title", imageAltText);
+													imgBuilder.MergeAttributes(ic.ImageAttributes);
 
-													var imgAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(ic.ImageAttributes);
-													imgBuilder.MergeAttributes(imgAttribs);
-
-													cellContents = imgBuilder.ToString(TagRenderMode.SelfClosing);
+													cellContents = imgBuilder.RenderSelfClosingTag();
 												}
 												break;
 
@@ -281,15 +279,13 @@ namespace Carrotware.Web.UI.Components {
 
 													string sTxt = imageState ? bic.AlternateTextTrue : bic.AlternateTextFalse;
 
-													var imgBuilder = new TagBuilder("img");
-													imgBuilder.MergeAttribute("src", url.Content(imgPath));
+													var imgBuilder = new HtmlTag("img");
+													imgBuilder.Uri = url.Content(imgPath);
 													imgBuilder.MergeAttribute("alt", sTxt);
 													imgBuilder.MergeAttribute("title", sTxt);
+													imgBuilder.MergeAttributes(bic.ImageAttributes);
 
-													var imgAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(bic.ImageAttributes);
-													imgBuilder.MergeAttributes(imgAttribs);
-
-													cellContents = imgBuilder.ToString(TagRenderMode.SelfClosing);
+													cellContents = imgBuilder.RenderSelfClosingTag();
 												}
 
 												break;

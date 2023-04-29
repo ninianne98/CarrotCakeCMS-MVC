@@ -3,6 +3,8 @@
 @{
 	Layout = "_main.cshtml";
 
+	CmsPage.TypeLabelPrefixes = CmsPage.GetDefaultTypeHeadingOptions();
+
 	var pager = new PagedDataSummary();
 	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
 	pager.PageSize = 10;
@@ -11,9 +13,11 @@
 }
 
 @section SideBar {
+	<div id="calendar_wrap">
+		@( new PostCalendar("calendar") )
+	</div>
 
 	@Html.Partial("_catmeta")
-
 }
 
 @section PagedDataSection {

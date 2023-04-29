@@ -1,8 +1,9 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
-using System.Collections.Generic;
-using System.Web.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Web.Mvc;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -16,7 +17,7 @@ using System;
 
 namespace Carrotware.CMS.UI.Components {
 
-	public class ControlUtilities {
+	public static class ControlUtilities {
 
 		public static string ReadEmbededScript(string sResouceName) {
 			return CarrotWeb.GetManifestResourceText(typeof(ControlUtilities), sResouceName);
@@ -36,8 +37,12 @@ namespace Carrotware.CMS.UI.Components {
 			return sPath;
 		}
 
-		public static SiteNav IdentifyLinkAsInactive(SiteNav nav) {
-			return CMSConfigHelper.IdentifyLinkAsInactive(nav);
+		public static List<SiteNav> TweakData(List<SiteNav> navs) {
+			return CMSConfigHelper.TweakData(navs);
+		}
+
+		public static SiteNav FixNavLinkText(SiteNav nav) {
+			return CMSConfigHelper.FixNavLinkText(nav);
 		}
 
 		public static List<SiteNav> GetPageNavTree() {
@@ -91,6 +96,14 @@ namespace Carrotware.CMS.UI.Components {
 			}
 
 			return (sParm1.ToLowerInvariant() == sParm2.ToLowerInvariant()) ? true : false;
+		}
+
+		public static string HtmlFormat(StringBuilder input) {
+			return CarrotWeb.HtmlFormat(input);
+		}
+
+		public static string HtmlFormat(string input) {
+			return CarrotWeb.HtmlFormat(input);
 		}
 	}
 

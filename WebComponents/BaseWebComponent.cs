@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -32,7 +31,7 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public virtual string GetHtml() {
-			return String.Empty;
+			return string.Empty;
 		}
 
 		public virtual HtmlString RenderHtml() {

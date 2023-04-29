@@ -1,6 +1,5 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,8 +22,8 @@ namespace Carrotware.CMS.UI.Components {
 			this.DisplayAsList = false;
 			this.TextDivider = "&gt;";
 			this.CssSelected = "selected";
-			this.CssWrapper = String.Empty;
-			this.CssClass = String.Empty;
+			this.CssWrapper = string.Empty;
+			this.CssClass = string.Empty;
 			this.ElementId = "breadcrumb";
 		}
 
@@ -38,12 +37,13 @@ namespace Carrotware.CMS.UI.Components {
 		public ContentPage ContentPage { get; set; }
 
 		public override string GetHtml() {
-			List<SiteNav> lstNav = new List<SiteNav>();
-			StringBuilder sb = new StringBuilder();
-			SiteNav pageNav = this.ContentPage.GetSiteNav();
-			string sParent = pageNav.FileName.ToLowerInvariant();
+			var output = new StringBuilder();
+			var lstNav = new List<SiteNav>();
 
-			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
+			var pageNav = this.ContentPage.GetSiteNav();
+			string currentPageFile = pageNav.FileName.ToLowerInvariant();
+
+			using (var navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				if (SiteData.CurretSiteExists && SiteData.CurrentSite.Blog_Root_ContentID.HasValue &&
 					pageNav.ContentType == ContentPageType.PageType.BlogEntry) {
 					lstNav = navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, SiteData.CurrentSite.Blog_Root_ContentID.Value, !SecurityData.IsAuthEditor);
@@ -55,54 +55,65 @@ namespace Carrotware.CMS.UI.Components {
 				} else {
 					lstNav = navHelper.GetPageCrumbNavigation(SiteData.CurrentSiteID, pageNav.Root_ContentID, !SecurityData.IsAuthEditor);
 				}
-				lstNav.RemoveAll(x => x.ShowInSiteNav == false && x.ContentType == ContentPageType.PageType.ContentEntry);
 			}
 
-			lstNav.ForEach(q => ControlUtilities.IdentifyLinkAsInactive(q));
+			lstNav = ControlUtilities.TweakData(lstNav);
 
-			string sCSS = String.Empty;
-			if (!String.IsNullOrEmpty(this.CssClass)) {
-				sCSS = " class=\"" + this.CssClass + "\" ";
-			}
-
-			string sSelCSS = String.Format("{0} {1}", this.CssSelected, this.CssWrapper).Trim();
-
-			string sWrapCSS = String.Empty;
-			if (!String.IsNullOrEmpty(this.CssWrapper)) {
-				sWrapCSS = " class=\"" + this.CssWrapper + "\" ";
-			}
+			var outerTag = new HtmlTag("ul");
+			outerTag.SetAttribute("id", this.ElementId);
+			outerTag.MergeAttribute("class", this.CssClass);
 
 			if (this.DisplayAsList) {
-				sb.AppendLine("<ul" + sCSS + " id=\"" + this.ElementId + "\">");
-				foreach (SiteNav c in lstNav) {
-					if (SiteData.IsFilenameCurrentPage(c.FileName) || ControlUtilities.AreFilenamesSame(c.FileName, sParent)) {
-						sb.AppendLine("<li class=\"" + sSelCSS + "\">" + c.NavMenuText + "</li> ");
-					} else {
-						sb.AppendLine("<li" + sWrapCSS + "><a href=\"" + c.FileName + "\">" + c.NavMenuText + "</a></li> ");
-					}
-				}
-				sb.AppendLine("</ul>");
-			} else {
-				string sDivider = String.Format(" {0} ", this.TextDivider);
-				int iCtr = 1;
-				int iMax = lstNav.Count;
-				sb.AppendLine("<div" + sCSS + " id=\"" + this.ElementId + "\">");
-				foreach (SiteNav c in lstNav) {
-					if (SiteData.IsFilenameCurrentPage(c.FileName) || ControlUtilities.AreFilenamesSame(c.FileName, sParent)) {
-						sb.AppendLine("<span class=\"" + sSelCSS + "\">" + c.NavMenuText + " " + sDivider + "</span> ");
-					} else {
-						sb.AppendLine("<span" + sWrapCSS + "><a href=\"" + c.FileName + "\">" + c.NavMenuText + "</a> " + sDivider + "</span> ");
-					}
-					iCtr++;
+				outerTag = new HtmlTag("ul");
 
-					if (iCtr == iMax) {
-						sDivider = String.Empty;
+				output.AppendLine(outerTag.OpenTag());
+
+				foreach (SiteNav c in lstNav) {
+					var item = new HtmlTag("li");
+					var link = new HtmlTag("a");
+
+					item.MergeAttribute("class", this.CssWrapper);
+					link.Uri = c.FileName;
+					link.InnerHtml = c.NavMenuText;
+
+					if (SiteData.IsFilenameCurrentPage(c.FileName) || ControlUtilities.AreFilenamesSame(c.FileName, currentPageFile)) {
+						item.MergeAttribute("class", this.CssSelected);
+						item.InnerHtml = c.NavMenuText;
+					} else {
+						item.InnerHtml = link.RenderTag();
 					}
+
+					output.AppendLine(item.RenderTag());
 				}
-				sb.AppendLine("</div>");
+
+				output.AppendLine(outerTag.CloseTag());
+			} else {
+				outerTag = new HtmlTag("div");
+
+				output.AppendLine(outerTag.OpenTag());
+
+				foreach (SiteNav c in lstNav) {
+					var item = new HtmlTag("span");
+					var link = new HtmlTag("a");
+
+					item.MergeAttribute("class", this.CssWrapper);
+					link.Uri = c.FileName;
+					link.InnerHtml = c.NavMenuText;
+
+					if (SiteData.IsFilenameCurrentPage(c.FileName) || ControlUtilities.AreFilenamesSame(c.FileName, currentPageFile)) {
+						item.MergeAttribute("class", this.CssSelected);
+						item.InnerHtml = c.NavMenuText;
+					} else {
+						item.InnerHtml = link.RenderTag() + string.Format(" {0} ", this.TextDivider);
+					}
+
+					output.AppendLine(item.RenderTag());
+				}
+
+				output.AppendLine(outerTag.CloseTag());
 			}
 
-			return sb.ToString();
+			return ControlUtilities.HtmlFormat(output);
 		}
 	}
 }
