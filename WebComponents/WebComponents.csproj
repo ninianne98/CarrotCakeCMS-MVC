@@ -125,9 +125,7 @@
     <Compile Include="BaseTwoPartWebComponent.cs" />
     <Compile Include="BaseWebComponent.cs" />
     <Compile Include="Captcha2.cs" />
-    <Compile Include="captcha\CaptchaImage.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="captcha\CaptchaImage.cs" />
     <Compile Include="CarrotWebAreaReg.cs" />
     <Compile Include="Calendar.cs" />
     <Compile Include="Captcha.cs" />
@@ -225,22 +223,9 @@
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-icons_468b5e_256x240.png" />
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-icons_cd0a0a_256x240.png" />
     <EmbeddedResource Include="jquerybasic\lightgreen\ui-icons_ffffff_256x240.png" />
-    <EmbeddedResource Include="jquerybasic\purple\ui-icons_454545_256x240.png" />
-    <EmbeddedResource Include="jquerybasic\purple\ui-icons_734d99_256x240.png" />
-    <EmbeddedResource Include="jquerybasic\purple\ui-icons_8d78a5_256x240.png" />
-    <EmbeddedResource Include="jquerybasic\purple\ui-icons_a8a3ae_256x240.png" />
-    <EmbeddedResource Include="jquerybasic\purple\ui-icons_ebccce_256x240.png" />
     <EmbeddedResource Include="jquerybasic\purple\ui-icons_ffffff_256x240.png" />
-    <EmbeddedResource Include="jquerybasic\silver\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <EmbeddedResource Include="jquerybasic\silver\ui-bg_glass_65_ffffff_1x400.png" />
-    <EmbeddedResource Include="jquerybasic\silver\ui-bg_glass_75_dadada_1x400.png" />
-    <EmbeddedResource Include="jquerybasic\silver\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <EmbeddedResource Include="jquerybasic\silver\ui-bg_glass_95_fef1ec_1x400.png" />
-    <EmbeddedResource Include="jquerybasic\silver\ui-bg_highlight-soft_75_cccccc_1x100.png" />
     <EmbeddedResource Include="jquerybasic\silver\ui-icons_222222_256x240.png" />
     <EmbeddedResource Include="jquerybasic\silver\ui-icons_2e83ff_256x240.png" />
-    <EmbeddedResource Include="jquerybasic\silver\ui-icons_454545_256x240.png" />
-    <EmbeddedResource Include="jquerybasic\silver\ui-icons_888888_256x240.png" />
     <EmbeddedResource Include="jquerybasic\silver\ui-icons_cd0a0a_256x240.png" />
     <EmbeddedResource Include="jquery\jquery-1-6-4.js" />
   </ItemGroup>
@@ -303,13 +288,31 @@
     <EmbeddedResource Include="jquery\jquery-mig-1-3-0.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bootstrap\amethystorchid.css">
+      <DependentUpon>amethystorchid.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="jquerybasic\silver\ui-bg_glass_100_bbbbbb_1x400.png" />
+    <EmbeddedResource Include="jquerybasic\silver\ui-bg_glass_100_dedede_1x400.png" />
+    <EmbeddedResource Include="jquerybasic\silver\ui-bg_glass_100_e9e9e9_1x400.png" />
+    <EmbeddedResource Include="jquerybasic\silver\ui-bg_glass_100_eaeaea_1x400.png" />
+    <EmbeddedResource Include="jquerybasic\silver\ui-bg_glass_100_ffffff_1x400.png" />
+    <EmbeddedResource Include="jquerybasic\silver\ui-bg_hexagon_80_eeeeee_12x10.png" />
+    <EmbeddedResource Include="jquerybasic\silver\ui-icons_333333_256x240.png" />
+    <EmbeddedResource Include="jquerybasic\purple\ui-bg_glass_100_d3c4ec_1x400.png" />
+    <EmbeddedResource Include="jquerybasic\purple\ui-bg_glass_50_774499_1x400.png" />
+    <EmbeddedResource Include="jquerybasic\purple\ui-bg_glass_80_d3c4ec_1x400.png" />
+    <EmbeddedResource Include="jquerybasic\purple\ui-bg_hexagon_90_eeeeee_12x10.png" />
+    <EmbeddedResource Include="jquerybasic\purple\ui-bg_highlight-hard_100_f3eff6_1x100.png" />
+    <EmbeddedResource Include="jquerybasic\purple\ui-icons_2e83ff_256x240.png" />
+    <EmbeddedResource Include="jquerybasic\purple\ui-icons_774499_256x240.png" />
+    <EmbeddedResource Include="jquerybasic\purple\ui-icons_cd0a0a_256x240.png" />
+    <EmbeddedResource Include="bootstrap\amethystorchid.min.css">
+      <DependentUpon>amethystorchid.css</DependentUpon>
+    </EmbeddedResource>
     <Content Include="bootstrap\blue.css">
       <DependentUpon>blue.less</DependentUpon>
     </Content>
-    <Content Include="bootstrap\blue.less" />
-    <Content Include="bootstrap\plum.css">
-      <DependentUpon>plum.less</DependentUpon>
-    </Content>
+    <None Include="bootstrap\blue.less" />
     <EmbeddedResource Include="jquery\jqueryui-1-12-1.js" />
     <EmbeddedResource Include="jquery\jqueryui-1-13-2.js" />
     <EmbeddedResource Include="jquery\jquery-mig-1-4-1.js" />
@@ -318,8 +321,203 @@
     <EmbeddedResource Include="jquery\jquery-1-12-4.js" />
     <EmbeddedResource Include="jquery\jquery-unobtrusive-ajax.min.js" />
     <EmbeddedResource Include="jquery\jquery-validate.unobtrusive.min.js" />
-    <EmbeddedResource Include="bootstrap\plum.min.css">
-      <DependentUpon>plum.css</DependentUpon>
+    <Content Include="bootstrap\burntcoral.css">
+      <DependentUpon>burntcoral.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\burntcoral.min.css">
+      <DependentUpon>burntcoral.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\buttercream.css">
+      <DependentUpon>buttercream.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\buttercream.min.css">
+      <DependentUpon>buttercream.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\cerulean.css">
+      <DependentUpon>cerulean.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\cerulean.min.css">
+      <DependentUpon>cerulean.css</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="bootstrap\classicblue.css">
+      <DependentUpon>classicblue.less</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="bootstrap\classicblue.min.css">
+      <DependentUpon>classicblue.css</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="bootstrap\darkblue.css">
+      <DependentUpon>darkblue.less</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="bootstrap\darkblue.min.css">
+      <DependentUpon>darkblue.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\darken.css">
+      <DependentUpon>darken.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\darken.min.css">
+      <DependentUpon>darken.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\darkgreen.css">
+      <DependentUpon>darkgreen.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\darkgreen.min.css">
+      <DependentUpon>darkgreen.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\darkorange.css">
+      <DependentUpon>darkorange.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\darkorange.min.css">
+      <DependentUpon>darkorange.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\darkpurple.css">
+      <DependentUpon>darkpurple.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\darkpurple.min.css">
+      <DependentUpon>darkpurple.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\classicgreen.css">
+      <DependentUpon>classicgreen.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\classicgreen.min.css">
+      <DependentUpon>classicgreen.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\classicorange.css">
+      <DependentUpon>classicorange.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\classicorange.min.css">
+      <DependentUpon>classicorange.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\classicplum.css">
+      <DependentUpon>classicplum.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\classicplum.min.css">
+      <DependentUpon>classicplum.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\classicpurple.css">
+      <DependentUpon>classicpurple.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\classicpurple.min.css">
+      <DependentUpon>classicpurple.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\classicred.css">
+      <DependentUpon>classicred.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\classicred.min.css">
+      <DependentUpon>classicred.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\classicteal.css">
+      <DependentUpon>classicteal.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\classicteal.min.css">
+      <DependentUpon>classicteal.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\classicviolet.css">
+      <DependentUpon>classicviolet.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\classicviolet.min.css">
+      <DependentUpon>classicviolet.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\darkred.css">
+      <DependentUpon>darkred.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\darkred.min.css">
+      <DependentUpon>darkred.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\desertmist.css">
+      <DependentUpon>desertmist.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\desertmist.min.css">
+      <DependentUpon>desertmist.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\frenchblue.css">
+      <DependentUpon>frenchblue.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\frenchblue.min.css">
+      <DependentUpon>frenchblue.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\greenash.css">
+      <DependentUpon>greenash.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\greenash.min.css">
+      <DependentUpon>greenash.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\illuminating.css">
+      <DependentUpon>illuminating.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\illuminating.min.css">
+      <DependentUpon>illuminating.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\inkwell.css">
+      <DependentUpon>inkwell.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\inkwell.min.css">
+      <DependentUpon>inkwell.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\lightblue.css">
+      <DependentUpon>lightblue.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\lightblue.min.css">
+      <DependentUpon>lightblue.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\lightgreen.css">
+      <DependentUpon>lightgreen.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\lightgreen.min.css">
+      <DependentUpon>lightgreen.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\lightpurple.css">
+      <DependentUpon>lightpurple.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\lightpurple.min.css">
+      <DependentUpon>lightpurple.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\magenta.css">
+      <DependentUpon>magenta.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\magenta.min.css">
+      <DependentUpon>magenta.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\marigold.css">
+      <DependentUpon>marigold.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\marigold.min.css">
+      <DependentUpon>marigold.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\mint.css">
+      <DependentUpon>mint.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\mint.min.css">
+      <DependentUpon>mint.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\raspberrysorbet.css">
+      <DependentUpon>raspberrysorbet.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\raspberrysorbet.min.css">
+      <DependentUpon>raspberrysorbet.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\rust.css">
+      <DependentUpon>rust.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\rust.min.css">
+      <DependentUpon>rust.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\ultimategray.css">
+      <DependentUpon>ultimategray.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\ultimategray.min.css">
+      <DependentUpon>ultimategray.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\willow.css">
+      <DependentUpon>willow.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\willow.min.css">
+      <DependentUpon>willow.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap\yellow.css">
+      <DependentUpon>yellow.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap\yellow.min.css">
+      <DependentUpon>yellow.css</DependentUpon>
     </EmbeddedResource>
     <Content Include="bootstrap\_colors.less" />
     <EmbeddedResource Include="bootstrap\blue.min.css">
@@ -361,24 +559,51 @@
     <EmbeddedResource Include="bootstrap\teal.min.css">
       <DependentUpon>teal.css</DependentUpon>
     </EmbeddedResource>
-    <Content Include="bootstrap\violet.css">
-      <DependentUpon>violet.less</DependentUpon>
-    </Content>
-    <EmbeddedResource Include="bootstrap\violet.min.css">
-      <DependentUpon>violet.css</DependentUpon>
-    </EmbeddedResource>
     <None Include="app.config" />
     <EmbeddedResource Include="bootstrap\fonts\glyphicons-halflings-regular.eot" />
     <EmbeddedResource Include="bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <EmbeddedResource Include="bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <EmbeddedResource Include="bootstrap\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="bootstrap\green.less" />
+    <None Include="bootstrap\burntcoral.less" />
+    <None Include="bootstrap\buttercream.less" />
+    <None Include="bootstrap\desertmist.less" />
+    <None Include="bootstrap\frenchblue.less" />
+    <None Include="bootstrap\green.less" />
+    <None Include="bootstrap\amethystorchid.less" />
+    <None Include="bootstrap\cerulean.less" />
+    <None Include="bootstrap\classicblue.less" />
+    <None Include="bootstrap\classicgreen.less" />
+    <None Include="bootstrap\darkblue.less" />
+    <None Include="bootstrap\darken.less" />
+    <None Include="bootstrap\darkgreen.less" />
+    <None Include="bootstrap\darkorange.less" />
+    <None Include="bootstrap\darkred.less" />
+    <None Include="bootstrap\greenash.less" />
     <None Include="bootstrap\grey.less" />
+    <None Include="bootstrap\illuminating.less" />
+    <None Include="bootstrap\inkwell.less" />
+    <None Include="bootstrap\lightblue.less" />
+    <None Include="bootstrap\lightgreen.less" />
+    <None Include="bootstrap\lightpurple.less" />
+    <None Include="bootstrap\magenta.less" />
+    <None Include="bootstrap\marigold.less" />
+    <None Include="bootstrap\mint.less" />
     <None Include="bootstrap\orange.less" />
-    <None Include="bootstrap\plum.less" />
+    <None Include="bootstrap\classicorange.less" />
+    <None Include="bootstrap\classicplum.less" />
     <None Include="bootstrap\purple.less" />
+    <None Include="bootstrap\classicpurple.less" />
+    <None Include="bootstrap\raspberrysorbet.less" />
     <None Include="bootstrap\red.less" />
+    <None Include="bootstrap\classicred.less" />
+    <None Include="bootstrap\rust.less" />
     <None Include="bootstrap\teal.less" />
+    <None Include="bootstrap\classicteal.less" />
+    <None Include="bootstrap\classicviolet.less" />
+    <None Include="bootstrap\ultimategray.less" />
+    <None Include="bootstrap\willow.less" />
+    <None Include="bootstrap\yellow.less" />
+    <None Include="bootstrap\darkpurple.less" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -386,14 +611,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="bootstrap\bootstrap.min.css.map" />
     <EmbeddedResource Include="bootstrap\bootstrap.min.css" />
     <EmbeddedResource Include="bootstrap\bootstrap.min.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="bootstrap\fonts\glyphicons-halflings-regular.svg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="bootstrap\violet.less" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

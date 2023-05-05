@@ -1,15 +1,50 @@
-﻿@violet: #614791;
-@plum: #854085;
-@purple: #673BB7;
-@green: #6F997D;
-@blue: #3F51B5;
-@red: #A4262C;
-@orange: #CA5010;
-@teal: #038387;
+﻿@classicviolet: #614791;
+@classicplum: #854085;
+@classicpurple: #673BB7;
+@classicgreen: #6F997D;
+@classicblue: #3F51B5;
+@classicred: #A4262C;
+@classicorange: #CA5010;
+@classicteal: #038387;
 @grey: #707070;
 
+@lightgreen: #99b433;
+@green: #00a300;
+@darkgreen: #1e7145;
+@magenta: #ff0097;
+@lightpurple: #9f00a7;
+@purple: #7e3878;
+@darkpurple: #603cba;
+@darken: #1d1d1d;
+@teal: #00aba9;
+@lightblue: #eff4ff;
+@blue: #2d89ef;
+@darkblue: #2b5797;
+@yellow: #ffc40d;
+@orange: #e3a21a;
+@darkorange: #da532c;
+@red: #ee1111;
+@darkred: #b91d47;
+@marigold: #FDAC53;
+@cerulean: #9BB7D4;
+@rust: #B55A30;
+@illuminating: #F5DF4D;
+@frenchblue: #0072B5;
+@greenash: #A0DAA9;
+@burntcoral: #E9897E;
+@mint: #00A170;
+@amethystorchid: #926AA6;
+@raspberrysorbet: #D2386C;
+@inkwell: #363945;
+@ultimategray: #939597;
+@buttercream: #EFE1CE;
+@desertmist: #E0B589;
+@willow: #9A8B4F;
 
-.bootstrapColorTheme(@themeColor) {
+@black: #0a0a0a;
+@white: #efefef;
+
+.bootstrapColorTheme(@navText, @themeColor) {
 	@inverseColor: darken(@themeColor, 12%);
 	@navColor: lighten(@themeColor, 7%);
 	@hoverColor: lighten(@themeColor, 35%);
@@ -48,31 +83,31 @@
 	}
 
 	.navbar-inverse .navbar-brand {
-		color: #FFFFFF;
+		color: @navText;
 	}
 
 	.navbar-inverse .navbar-brand:hover {
-		color: #FFFFFF;
+		color: @navText;
 	}
 
 	.navbar-inverse .navbar-nav > li > a {
-		color: #FFFFFF;
+		color: @navText;
 	}
 
 	.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
-		color: #FFFFFF;
+		color: @navText;
 	}
 
 	.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-		color: #FFFFFF;
+		color: @navText;
 	}
 
 	.navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
-		color: #FFFFFF;
+		color: @navText;
 	}
 
 	.dropdown-menu > li > a {
-		color: #FFFFFF;
+		color: @navText;
 	}
 
 	.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
@@ -80,19 +115,19 @@
 	}
 
 	.navbar-inverse .navbar-nav > .dropdown > a .caret {
-		border-top-color: #FFFFFF;
+		border-top-color: @navText;
 	}
 
 	.navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
-		border-top-color: #FFFFFF;
+		border-top-color: @navText;
 	}
 
 	.navbar-inverse .navbar-nav > .dropdown > a .caret {
-		border-bottom-color: #FFFFFF;
+		border-bottom-color: @navText;
 	}
 
 	.navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
-		border-bottom-color: #FFFFFF;
+		border-bottom-color: @navText;
 	}
 
 	a {

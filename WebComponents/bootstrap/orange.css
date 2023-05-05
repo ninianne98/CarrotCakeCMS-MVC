@@ -1,10 +1,10 @@
 ﻿.navbar-inverse {
-  background-color: #913a0c;
+  background-color: #ac7b14;
 }
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-  background-color: #eb5d13;
+  background-color: #e8af38;
 }
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .open > a,
@@ -13,14 +13,14 @@
 .navbar-inverse .navbar-nav > .open > a,
 .navbar-inverse .navbar-nav > .open > a:hover,
 .navbar-inverse .navbar-nav > .open > a:focus {
-  background-color: #eb5d13;
+  background-color: #e8af38;
 }
 .dropdown-menu {
-  background-color: #eb5d13;
+  background-color: #e8af38;
 }
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
-  background-color: #f7b796;
+  background-color: #f7e3b9;
 }
 .navbar-inverse {
   background-image: none;
@@ -30,66 +30,66 @@
   background-image: none;
 }
 .navbar-inverse {
-  border-color: #a9430d;
+  border-color: #c38b16;
 }
 .navbar-inverse .navbar-brand {
-  color: #FFFFFF;
+  color: #efefef;
 }
 .navbar-inverse .navbar-brand:hover {
-  color: #FFFFFF;
+  color: #efefef;
 }
 .navbar-inverse .navbar-nav > li > a {
-  color: #FFFFFF;
+  color: #efefef;
 }
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-  color: #FFFFFF;
+  color: #efefef;
 }
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .open > a,
 .navbar-inverse .navbar-nav > .open > a:hover,
 .navbar-inverse .navbar-nav > .open > a:focus {
-  color: #FFFFFF;
+  color: #efefef;
 }
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > .active > a:focus {
-  color: #FFFFFF;
+  color: #efefef;
 }
 .dropdown-menu > li > a {
-  color: #FFFFFF;
+  color: #efefef;
 }
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
-  color: #913a0c;
+  color: #ac7b14;
 }
 .navbar-inverse .navbar-nav > .dropdown > a .caret {
-  border-top-color: #FFFFFF;
+  border-top-color: #efefef;
 }
 .navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
-  border-top-color: #FFFFFF;
+  border-top-color: #efefef;
 }
 .navbar-inverse .navbar-nav > .dropdown > a .caret {
-  border-bottom-color: #FFFFFF;
+  border-bottom-color: #efefef;
 }
 .navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
-  border-bottom-color: #FFFFFF;
+  border-bottom-color: #efefef;
 }
 a {
-  color: #a9430d;
+  color: #c38b16;
 }
 a:focus,
 a:hover {
-  color: #eb5d13;
+  color: #e8af38;
 }
 .pagination > li > a,
 .pagination > li > span {
-  color: #913a0c;
+  color: #ac7b14;
 }
 .pagination > li > a:hover,
 .pagination > li > span:hover,
 .pagination > li > a:focus,
 .pagination > li > span:focus {
-  color: #eb5d13;
+  color: #e8af38;
 }
 .pagination > .active > a,
 .pagination > .active > span,
@@ -97,6 +97,6 @@ a:hover {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background-color: #913a0c;
-  border-color: #913a0c;
+  background-color: #ac7b14;
+  border-color: #ac7b14;
 }

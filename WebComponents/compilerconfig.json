@@ -1,38 +1,166 @@
 ﻿[
-  {
-    "outputFile": "bootstrap/green.css",
-    "inputFile": "bootstrap/green.less"
-  },
-  {
-    "outputFile": "bootstrap/violet.css",
-    "inputFile": "bootstrap/violet.less"
-  },
-  {
-    "outputFile": "bootstrap/blue.css",
-    "inputFile": "bootstrap/blue.less"
-  },
-  {
-    "outputFile": "bootstrap/grey.css",
-    "inputFile": "bootstrap/grey.less"
-  },
-  {
-    "outputFile": "bootstrap/orange.css",
-    "inputFile": "bootstrap/orange.less"
-  },
-  {
-    "outputFile": "bootstrap/purple.css",
-    "inputFile": "bootstrap/purple.less"
-  },
-  {
-    "outputFile": "bootstrap/red.css",
-    "inputFile": "bootstrap/red.less"
-  },
-  {
-    "outputFile": "bootstrap/teal.css",
-    "inputFile": "bootstrap/teal.less"
-  },
-  {
-    "outputFile": "bootstrap/plum.css",
-    "inputFile": "bootstrap/plum.less"
-  }
+	{
+		"outputFile": "bootstrap/lightgreen.css",
+		"inputFile": "bootstrap/lightgreen.less"
+	},
+	{
+		"outputFile": "bootstrap/green.css",
+		"inputFile": "bootstrap/green.less"
+	},
+	{
+		"outputFile": "bootstrap/darkgreen.css",
+		"inputFile": "bootstrap/darkgreen.less"
+	},
+	{
+		"outputFile": "bootstrap/magenta.css",
+		"inputFile": "bootstrap/magenta.less"
+	},
+	{
+		"outputFile": "bootstrap/lightpurple.css",
+		"inputFile": "bootstrap/lightpurple.less"
+	},
+	{
+		"outputFile": "bootstrap/purple.css",
+		"inputFile": "bootstrap/purple.less"
+	},
+	{
+		"outputFile": "bootstrap/darkpurple.css",
+		"inputFile": "bootstrap/darkpurple.less"
+	},
+	{
+		"outputFile": "bootstrap/darken.css",
+		"inputFile": "bootstrap/darken.less"
+	},
+	{
+		"outputFile": "bootstrap/teal.css",
+		"inputFile": "bootstrap/teal.less"
+	},
+	{
+		"outputFile": "bootstrap/lightblue.css",
+		"inputFile": "bootstrap/lightblue.less"
+	},
+	{
+		"outputFile": "bootstrap/blue.css",
+		"inputFile": "bootstrap/blue.less"
+	},
+	{
+		"outputFile": "bootstrap/darkblue.css",
+		"inputFile": "bootstrap/darkblue.less"
+	},
+	{
+		"outputFile": "bootstrap/yellow.css",
+		"inputFile": "bootstrap/yellow.less"
+	},
+	{
+		"outputFile": "bootstrap/orange.css",
+		"inputFile": "bootstrap/orange.less"
+	},
+	{
+		"outputFile": "bootstrap/darkorange.css",
+		"inputFile": "bootstrap/darkorange.less"
+	},
+	{
+		"outputFile": "bootstrap/red.css",
+		"inputFile": "bootstrap/red.less"
+	},
+	{
+		"outputFile": "bootstrap/darkred.css",
+		"inputFile": "bootstrap/darkred.less"
+	},
+	{
+		"outputFile": "bootstrap/marigold.css",
+		"inputFile": "bootstrap/marigold.less"
+	},
+	{
+		"outputFile": "bootstrap/cerulean.css",
+		"inputFile": "bootstrap/cerulean.less"
+	},
+	{
+		"outputFile": "bootstrap/rust.css",
+		"inputFile": "bootstrap/rust.less"
+	},
+	{
+		"outputFile": "bootstrap/illuminating.css",
+		"inputFile": "bootstrap/illuminating.less"
+	},
+	{
+		"outputFile": "bootstrap/frenchblue.css",
+		"inputFile": "bootstrap/frenchblue.less"
+	},
+	{
+		"outputFile": "bootstrap/greenash.css",
+		"inputFile": "bootstrap/greenash.less"
+	},
+	{
+		"outputFile": "bootstrap/burntcoral.css",
+		"inputFile": "bootstrap/burntcoral.less"
+	},
+	{
+		"outputFile": "bootstrap/mint.css",
+		"inputFile": "bootstrap/mint.less"
+	},
+	{
+		"outputFile": "bootstrap/amethystorchid.css",
+		"inputFile": "bootstrap/amethystorchid.less"
+	},
+	{
+		"outputFile": "bootstrap/raspberrysorbet.css",
+		"inputFile": "bootstrap/raspberrysorbet.less"
+	},
+	{
+		"outputFile": "bootstrap/inkwell.css",
+		"inputFile": "bootstrap/inkwell.less"
+	},
+	{
+		"outputFile": "bootstrap/ultimategray.css",
+		"inputFile": "bootstrap/ultimategray.less"
+	},
+	{
+		"outputFile": "bootstrap/buttercream.css",
+		"inputFile": "bootstrap/buttercream.less"
+	},
+	{
+		"outputFile": "bootstrap/desertmist.css",
+		"inputFile": "bootstrap/desertmist.less"
+	},
+	{
+		"outputFile": "bootstrap/willow.css",
+		"inputFile": "bootstrap/willow.less"
+	},
+	{
+		"outputFile": "bootstrap/classicviolet.css",
+		"inputFile": "bootstrap/classicviolet.less"
+	},
+	{
+		"outputFile": "bootstrap/classicplum.css",
+		"inputFile": "bootstrap/classicplum.less"
+	},
+	{
+		"outputFile": "bootstrap/classicpurple.css",
+		"inputFile": "bootstrap/classicpurple.less"
+	},
+	{
+		"outputFile": "bootstrap/classicgreen.css",
+		"inputFile": "bootstrap/classicgreen.less"
+	},
+	{
+		"outputFile": "bootstrap/classicblue.css",
+		"inputFile": "bootstrap/classicblue.less"
+	},
+	{
+		"outputFile": "bootstrap/classicred.css",
+		"inputFile": "bootstrap/classicred.less"
+	},
+	{
+		"outputFile": "bootstrap/classicorange.css",
+		"inputFile": "bootstrap/classicorange.less"
+	},
+	{
+		"outputFile": "bootstrap/classicteal.css",
+		"inputFile": "bootstrap/classicteal.less"
+	},
+	{
+		"outputFile": "bootstrap/grey.css",
+		"inputFile": "bootstrap/grey.less"
+	}
 ]

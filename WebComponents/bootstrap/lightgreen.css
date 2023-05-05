@@ -1,0 +1,102 @@
+﻿.navbar-inverse {
+  background-color: #708425;
+}
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+  background-color: #adc941;
+}
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a:focus {
+  background-color: #adc941;
+}
+.dropdown-menu {
+  background-color: #adc941;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  background-color: #dde9b1;
+}
+.navbar-inverse {
+  background-image: none;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  background-image: none;
+}
+.navbar-inverse {
+  border-color: #81982b;
+}
+.navbar-inverse .navbar-brand {
+  color: #0a0a0a;
+}
+.navbar-inverse .navbar-brand:hover {
+  color: #0a0a0a;
+}
+.navbar-inverse .navbar-nav > li > a {
+  color: #0a0a0a;
+}
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+  color: #0a0a0a;
+}
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a:focus {
+  color: #0a0a0a;
+}
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+  color: #0a0a0a;
+}
+.dropdown-menu > li > a {
+  color: #0a0a0a;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #708425;
+}
+.navbar-inverse .navbar-nav > .dropdown > a .caret {
+  border-top-color: #0a0a0a;
+}
+.navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
+  border-top-color: #0a0a0a;
+}
+.navbar-inverse .navbar-nav > .dropdown > a .caret {
+  border-bottom-color: #0a0a0a;
+}
+.navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
+  border-bottom-color: #0a0a0a;
+}
+a {
+  color: #81982b;
+}
+a:focus,
+a:hover {
+  color: #adc941;
+}
+.pagination > li > a,
+.pagination > li > span {
+  color: #708425;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  color: #adc941;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  background-color: #708425;
+  border-color: #708425;
+}

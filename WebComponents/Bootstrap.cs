@@ -1,6 +1,4 @@
-﻿using System.Web;
-
-/*
+﻿/*
 * CarrotCake CMS (MVC5)
 * http://www.carrotware.com/
 *
@@ -19,15 +17,49 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public enum BootstrapColorScheme {
-			Blue,
-			Green,
-			Grey,
-			Orange,
+			ClassicBlue,
+			ClassicGreen,
+			ClassicOrange,
 			Plum,
-			Purple,
-			Red,
-			Teal,
+			ClassicPlum,
+			ClassicPurple,
+			ClassicRed,
+			ClassicTeal,
 			Violet,
+			ClassicViolet,
+			Grey,
+			LightGreen,
+			Green,
+			DarkGreen,
+			Magenta,
+			LightPurple,
+			Purple,
+			DarkPurple,
+			Darken,
+			Teal,
+			LightBlue,
+			Blue,
+			DarkBlue,
+			Yellow,
+			Orange,
+			DarkOrange,
+			Red,
+			DarkRed,
+			Marigold,
+			Cerulean,
+			Rust,
+			Illuminating,
+			FrenchBlue,
+			GreenAsh,
+			BurntCoral,
+			Mint,
+			AmethystOrchid,
+			RaspberrySorbet,
+			Inkwell,
+			UltimateGray,
+			Buttercream,
+			DesertMist,
+			Willow,
 			NotUsed
 		}
 
@@ -43,44 +75,14 @@ namespace Carrotware.Web.UI.Components {
 			var bootstrapColor = string.Empty;
 
 			if (this.SelectedSkin != BootstrapColorScheme.NotUsed) {
-				var colorUri = string.Empty;
-				switch (this.SelectedSkin) {
-					case BootstrapColorScheme.Blue:
-						colorUri = GetWebResourceUrl("bootstrap.blue.min.css");
-						break;
-
-					case BootstrapColorScheme.Green:
-						colorUri = GetWebResourceUrl("bootstrap.green.min.css");
-						break;
-
-					case BootstrapColorScheme.Grey:
-						colorUri = GetWebResourceUrl("bootstrap.grey.min.css");
-						break;
-
-					case BootstrapColorScheme.Orange:
-						colorUri = GetWebResourceUrl("bootstrap.orange.min.css");
-						break;
-
-					case BootstrapColorScheme.Plum:
-						colorUri = GetWebResourceUrl("bootstrap.plum.min.css");
-						break;
-
-					case BootstrapColorScheme.Purple:
-						colorUri = GetWebResourceUrl("bootstrap.purple.min.css");
-						break;
-
-					case BootstrapColorScheme.Red:
-						colorUri = GetWebResourceUrl("bootstrap.red.min.css");
-						break;
-
-					case BootstrapColorScheme.Teal:
-						colorUri = GetWebResourceUrl("bootstrap.teal.min.css");
-						break;
-
-					case BootstrapColorScheme.Violet:
-						colorUri = GetWebResourceUrl("bootstrap.violet.min.css");
-						break;
+				if (this.SelectedSkin == BootstrapColorScheme.Violet) {
+					this.SelectedSkin = BootstrapColorScheme.ClassicViolet;
 				}
+				if (this.SelectedSkin == BootstrapColorScheme.Plum) {
+					this.SelectedSkin = BootstrapColorScheme.ClassicPlum;
+				}
+
+				var colorUri = GetWebResourceUrl(string.Format("bootstrap.{0}.min.css", this.SelectedSkin.ToString().ToLowerInvariant()));
 
 				bootstrapColor = UrlPaths.CreateCssTag(string.Format("Bootstrap CSS {0}", this.SelectedSkin), colorUri);
 			}
