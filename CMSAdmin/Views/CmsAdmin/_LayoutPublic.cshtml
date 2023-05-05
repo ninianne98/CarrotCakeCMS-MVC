@@ -2,15 +2,9 @@
 @{
 	Layout = null;
 }
-<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
 <html lang="en">
-<!--<![endif]-->
 <head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
 	<link href="~/Assets/Admin/includes/normalize.css" rel="stylesheet" type="text/css" />
 	<title>
 		@String.Format("{0} - {1}", SiteData.CarrotCakeCMSVersionMM, ViewBag.Title)
@@ -71,56 +65,89 @@
 	<meta name="robots" content="noindex,nofollow,noarchive" />
 </head>
 <body>
-	<div class="wrappedcontent">
-		<div class="box-top-center">
-			<div class="box-top-left">
+	<div class="wrappedcontent box-all">
+		<div style="clear:both;"></div>
+		<div class="wrappedcontent-inner">
+			<div style="height: 20px; width: 18px; float: right; border: 1px solid #ffffff; clear: both;">
+				<a href="~/">
+					<img class="imgNoBorder" src="~/Assets/Admin/Images/house_go.png" alt="Homepage" title="Homepage" />
+				</a>
 			</div>
-			<div class="box-top-right">
-			</div>
+
+			@RenderBody()
 		</div>
-		<div class="box-inner">
-			<div class="box-right">
-				<div class="box-left">
-					<div class="wrappedcontent-inner">
-						<div style="height: 20px; width: 18px; float: right; border: 1px solid #ffffff; clear: both;">
-							<a href="~/">
-								<img class="imgNoBorder" src="~/Assets/Admin/Images/house_go.png" alt="Homepage" title="Homepage" />
-							</a>
+		<div class="box-buildversion">
+			<p>
+				&nbsp;
+			</p>
+			<p>
+				@SiteData.CarrotCakeCMSVersion
+
+				<a href="javascript:ShowAbout()"><img class="imgNoBorder" src="~/Assets/Admin/Images/information.png" alt="information" title="information" /></a>
+			</p>
+			<p>
+				Database Status
+				<a href="@SiteFilename.DatabaseSetupURL"><img class="imgNoBorder" src="~/Assets/Admin/Images/database.png" alt="database" title="database" /></a>
+				&nbsp;&nbsp;&nbsp;
+				Login
+				<a href="@SiteFilename.LoginURL"><img class="imgNoBorder" src="~/Assets/Admin/Images/user.png" alt="login" title="login" /></a>
+			</p>
+		</div>
+		<div class="box-carrot">
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+
+	@*<div class="wrappedcontent">
+			<div class="box-top-center">
+				<div class="box-top-left">
+				</div>
+				<div class="box-top-right">
+				</div>
+			</div>
+			<div class="box-inner">
+				<div class="box-right">
+					<div class="box-left">
+						<div class="wrappedcontent-inner">
+							<div style="height: 20px; width: 18px; float: right; border: 1px solid #ffffff; clear: both;">
+								<a href="~/">
+									<img class="imgNoBorder" src="~/Assets/Admin/Images/house_go.png" alt="Homepage" title="Homepage" />
+								</a>
+							</div>
+
+							@RenderBody()
 						</div>
+						<div class="box-buildversion">
+							<p>
+								&nbsp;
+							</p>
+							<p>
+								@SiteData.CarrotCakeCMSVersion
 
-						@RenderBody()
-					</div>
-					<div class="box-buildversion">
-						<p>
-							&nbsp;
-						</p>
-						<p>
-							@SiteData.CarrotCakeCMSVersion
-
-							<a href="javascript:ShowAbout()"><img class="imgNoBorder" src="~/Assets/Admin/Images/information.png" alt="information" title="information" /></a>
-						</p>
-						<p>
-							Database Status
-							<a href="@SiteFilename.DatabaseSetupURL"><img class="imgNoBorder" src="~/Assets/Admin/Images/database.png" alt="database" title="database" /></a>
-							&nbsp;&nbsp;&nbsp;
-							Login
-							<a href="@SiteFilename.LoginURL"><img class="imgNoBorder" src="~/Assets/Admin/Images/user.png" alt="login" title="login" /></a>
-						</p>
-					</div>
-					<div class="box-carrot">
+								<a href="javascript:ShowAbout()"><img class="imgNoBorder" src="~/Assets/Admin/Images/information.png" alt="information" title="information" /></a>
+							</p>
+							<p>
+								Database Status
+								<a href="@SiteFilename.DatabaseSetupURL"><img class="imgNoBorder" src="~/Assets/Admin/Images/database.png" alt="database" title="database" /></a>
+								&nbsp;&nbsp;&nbsp;
+								Login
+								<a href="@SiteFilename.LoginURL"><img class="imgNoBorder" src="~/Assets/Admin/Images/user.png" alt="login" title="login" /></a>
+							</p>
+						</div>
+						<div class="box-carrot">
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div style="clear: both;">
-		</div>
-		<div class="box-bottom-center">
-			<div class="box-bottom-left">
+			<div style="clear: both;">
 			</div>
-			<div class="box-bottom-right">
+			<div class="box-bottom-center">
+				<div class="box-bottom-left">
+				</div>
+				<div class="box-bottom-right">
+				</div>
 			</div>
-		</div>
-	</div>
+		</div>*@
 
 	<div style="display: none">
 

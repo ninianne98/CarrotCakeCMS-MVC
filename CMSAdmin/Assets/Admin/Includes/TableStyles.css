@@ -53,7 +53,7 @@
 	}
 
 	.datatable input.inputBlocked {
-		background: #808080;
+		background: #a0a0a0;
 		cursor: crosshair;
 	}
 

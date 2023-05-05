@@ -72,7 +72,11 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 	});
 }
 
+var lastMetaRequest = null;
+
 function cmsTinyFileBrowserCallback(callback, value, meta) {
+	lastMetaRequest = meta;
+
 	cmsTinyFileBrowser('1');
 }
 
@@ -97,21 +101,38 @@ function cmsFileBrowseClose() {
 }
 
 function cmsFileBrowseSetUri(uri, h, w) {
-	var isMedia = true;
+	var isImage = true;
 	var sl = $("label:contains('Source')");
 	var hl = $("label:contains('Height')")
 	var wl = $("label:contains('Width')");
 
 	if (sl.length < 1) {
-		isMedia = false;
+		isImage = false;
 		sl = $("label:contains('URL')");
+	}
+
+	if (lastMetaRequest != null) {
+		if (lastMetaRequest.fieldname == "src" && lastMetaRequest.filetype == "image") {
+			isImage = true;
+			sl = $("label:contains('Source')");
+		}
+		if (lastMetaRequest.fieldname == "source" && lastMetaRequest.filetype == "media") {
+			sl = $("label:contains('Source')");
+		}
+		if (lastMetaRequest.fieldname == "altsource" && lastMetaRequest.filetype == "media") {
+			sl = $("label:contains('Alternative source URL')");
+		}
+		if (lastMetaRequest.fieldname == "poster" && lastMetaRequest.filetype == "image") {
+			sl = $("label:contains('Media poster (Image URL)')");
+		}
+		lastMetaRequest = null;
 	}
 
 	var src = $(sl).attr('for');
 	$('#' + src).val(uri);
 	$('#' + src).blur();
 
-	if (isMedia) {
+	if (isImage) {
 		var hh = $(hl).attr('for');
 		var ww = $(wl).attr('for');
 		if (hh.length > 0 && h > 0) {
@@ -121,9 +142,6 @@ function cmsFileBrowseSetUri(uri, h, w) {
 			$('#' + ww).val(w);
 		}
 	}
-
-	//$('.tox-form__group input[type=url]').val(uri);
-	//$('.tox-form__group input[type=url]').blur();
 
 	cmsFileBrowseClose();
 }

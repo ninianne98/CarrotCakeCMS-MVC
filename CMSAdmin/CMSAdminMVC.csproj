@@ -443,7 +443,6 @@
     <Content Include="Assets\Admin\Images\logonbox-topcenter.png" />
     <Content Include="Assets\Admin\Images\logonbox-topleft.png" />
     <Content Include="Assets\Admin\Images\logonbox-topright.png" />
-    <Content Include="Assets\Admin\Images\logonbox.gif" />
     <Content Include="Assets\Admin\Images\magifier_zoom_out.png" />
     <Content Include="Assets\Admin\Images\magnifier.png" />
     <Content Include="Assets\Admin\Images\menu-gradient.png" />

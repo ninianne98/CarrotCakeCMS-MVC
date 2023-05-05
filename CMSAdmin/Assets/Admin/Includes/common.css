@@ -451,7 +451,6 @@ table.centered {
 /*
 drilldown stuff
 */
-
 div.scroll {
 	height: 100px;
 	width: 340px;
@@ -485,42 +484,53 @@ div.menuitems {
 }
 
 .pageNodeDrillDown1 {
-	padding: 0;
-	margin: 0;
+	padding: 1px 0 0 0;
+	margin: 1px 0 0 0;
 	float: left;
 	min-height: 45px;
 }
 
 .pageNodeDrillDown2 {
-	padding: 0;
-	margin: 2px;
+	padding: 4px;
+	margin: 2px 2px 5px 3px;
 	float: left;
 }
 
 .pageNodeDrillDown3 {
-	padding: 4px;
-	margin: 2px;
+	padding: 2px 0 0 0;
+	margin: 0 4px 0 4px;
 	float: left;
 	margin-right: 5px;
 }
 
 .pageNodeDrillDown4 {
 	padding: 0;
-	margin: 2px;
+	margin: 0 4px 0 4px;
 	position: relative;
 	width: 100px;
 }
 
 .pageNodeDrillDown5 {
 	padding: 0;
-	margin: 2px;
+	margin: 0 2px 0 4px;
 	float: left;
 	margin-top: 0;
-	color: #676F6A;
 }
 
 .pageNodeDrillDown6 {
+	padding: 2px 0 0 0;
+	margin: 0 4px 0 4px;
+}
+
+.drill-placeholder {
+	height: 1.2em;
+	width: 0.5em;
+	margin: 2px;
 	padding: 2px;
-	margin: 0;
-	color: #676F6A;
+}
+
+.pageNodeDrillDown3 .ui-icon, .pageNodeDrillDown6 .ui-icon, .drill-placeholder {
+	float: right;
+	margin: 2px;
+	padding: 1px;
 }

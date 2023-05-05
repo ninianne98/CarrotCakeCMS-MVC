@@ -69,6 +69,13 @@ a {
 	margin-bottom: 10px;
 }
 
+.box-all {
+	padding: 2em 1.25em 2em 1.25em;
+	background: #ffffff;
+	border-radius: 25px;
+	border: 15px solid #111111;
+}
+
 .box-top-left, .box-top-right, .box-top-center, .box-bottom-left, .box-bottom-right, .box-bottom-center {
 	margin: 0px;
 	padding: 0px;

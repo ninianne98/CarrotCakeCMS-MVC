@@ -6,14 +6,9 @@
 
 	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
 }
-<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
-<html lang="en">
-<!--<![endif]-->
+<html>
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta charset="utf-8" />
 	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.LightGreen, UseJqueryMigrate = true })
 
 	<link href="~/Assets/Admin/Includes/uploadfile.css?@versionKey" rel="stylesheet" type="text/css" />
@@ -137,8 +132,6 @@
 
 	@if (Model.UseTinyMCE) {
 		<text>
-			@*<script src="~/Assets/tinymce/tinymce.min.js?@versionKey" type="text/javascript"></script>*@
-
 			<script type="text/javascript">
 				function tinySubmit() {
 					var fld = $(selFile);

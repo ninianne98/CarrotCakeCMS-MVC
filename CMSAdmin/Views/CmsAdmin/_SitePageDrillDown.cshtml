@@ -4,7 +4,6 @@
 }
 <!-- parent page plugin-->
 <!-- begin picker -->
-@*<script src="~/Assets/Admin/includes/common-utils.js?@versionKey" type="text/javascript"></script>*@
 <script src="~/Assets/Admin/Includes/page-drill-down.js?@versionKey" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -26,14 +25,14 @@
 @Html.Hidden(Model.FieldName, Model.SelectedPageID)
 
 <div style="float: left;">
-	<div id="menupath" class="pageNodeDrillDown1">
+	<div id="menupath" class="pageNodeDrillDown1 ui-widget">
 	</div>
-	<div class="pageNodeDrillDown5">
-		<div id="menuhead" onmouseout="hideMnu()" onmouseover="mouseNode()" class="menuitems pageNodeDrillDown4 ui-widget-header ui-corner-all">
-			<div class="pageNodeDrillDown6">
-				Pages <a title="Reset Path" href='javascript:void(0);' onclick='selectDrillItem(this);' data-rootcontent=''>
-					<span style="float: right;" class="ui-icon ui-icon-power">
-					</span>
+	<div class="pageNodeDrillDown5 ui-widget">
+		<div id="menuhead" onmouseout="hideMnu()" onmouseover="mouseNode()" class="menuitems pageNodeDrillDown4 ui-button ui-corner-all ui-widget">
+			<div class="pageNodeDrillDown6 ui-widget">
+				&nbsp;Pages
+				<a title="Reset Path" href='javascript:void(0);' onclick='selectDrillItem(this);' data-rootcontent=''>
+					<div class="ui-icon ui-icon-power"></div>
 				</a>
 			</div>
 		</div>
