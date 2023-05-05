@@ -88,7 +88,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 			GalleryGroup ge = null;
 
 			using (PhotoGalleryDataContext db = PhotoGalleryDataContext.GetDataContext()) {
-				if (!String.IsNullOrEmpty(galleryTitle)) {
+				if (!string.IsNullOrEmpty(galleryTitle)) {
 					ge = (from c in db.tblGalleries
 						  where c.SiteID == this.SiteID
 						  && c.GalleryTitle.ToLower() == galleryTitle.ToLower()
@@ -113,7 +113,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 			GalleryMetaData ge = null;
 
 			using (PhotoGalleryDataContext db = PhotoGalleryDataContext.GetDataContext()) {
-				if (!String.IsNullOrEmpty(galleryImage)) {
+				if (!string.IsNullOrEmpty(galleryImage)) {
 					ge = (from c in db.tblGalleryImageMetas
 						  where c.SiteID == this.SiteID
 						  && c.GalleryImage.ToLower() == galleryImage.ToLower()

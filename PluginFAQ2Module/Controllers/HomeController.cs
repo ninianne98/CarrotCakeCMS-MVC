@@ -1,14 +1,11 @@
 ﻿using CarrotCake.CMS.Plugins.FAQ2.Models;
 using Carrotware.CMS.Interface;
-using Carrotware.CMS.Interface.Controllers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 
-	public class HomeController : BaseDataWidgetController {
+	public class HomeController : BaseController {
 
 		public ActionResult Index() {
 			return View();
@@ -16,8 +13,8 @@ namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 
 		[WidgetActionSettingModel(typeof(FaqPublic))]
 		public ActionResult ShowFaqList() {
-			FaqItems model = new FaqItems();
-			FaqPublic payload = new FaqPublic();
+			var model = new FaqItems();
+			var payload = new FaqPublic();
 
 			if (this.WidgetPayload is FaqPublic) {
 				payload = (FaqPublic)this.WidgetPayload;
@@ -31,7 +28,11 @@ namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 				model.Items = payload.GetList();
 			}
 
-			if (String.IsNullOrEmpty(payload.AlternateViewFile)) {
+			if (model == null) {
+				model = new FaqItems();
+			}
+
+			if (string.IsNullOrEmpty(payload.AlternateViewFile)) {
 				return PartialView("FaqList", model);
 			} else {
 				return PartialView(payload.AlternateViewFile, model);
@@ -40,8 +41,8 @@ namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 
 		[WidgetActionSettingModel(typeof(FaqPublic))]
 		public ActionResult ShowRandomFaq() {
-			carrot_FaqItem model = new carrot_FaqItem();
-			FaqPublic payload = new FaqPublic();
+			var model = new carrot_FaqItem();
+			var payload = new FaqPublic();
 
 			if (this.WidgetPayload is FaqPublic) {
 				payload = (FaqPublic)this.WidgetPayload;
@@ -54,7 +55,12 @@ namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 				model = payload.GetRandomItem();
 			}
 
-			if (String.IsNullOrEmpty(payload.AlternateViewFile)) {
+			if (model == null) {
+				model = new carrot_FaqItem();
+				model.FaqCategoryID = payload.FaqCategoryID;
+			}
+
+			if (string.IsNullOrEmpty(payload.AlternateViewFile)) {
 				return PartialView("FaqItem", model);
 			} else {
 				return PartialView(payload.AlternateViewFile, model);
@@ -63,8 +69,8 @@ namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 
 		[WidgetActionSettingModel(typeof(FaqPublicTop))]
 		public ActionResult ShowFaqTopList() {
-			FaqItems model = new FaqItems();
-			FaqPublicTop payload = new FaqPublicTop();
+			var model = new FaqItems();
+			var payload = new FaqPublicTop();
 
 			if (this.WidgetPayload is FaqPublicTop) {
 				payload = (FaqPublicTop)this.WidgetPayload;
@@ -78,7 +84,7 @@ namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 				model.Items = payload.GetListTop(payload.TakeTop);
 			}
 
-			if (String.IsNullOrEmpty(payload.AlternateViewFile)) {
+			if (string.IsNullOrEmpty(payload.AlternateViewFile)) {
 				return PartialView("FaqList", model);
 			} else {
 				return PartialView(payload.AlternateViewFile, model);

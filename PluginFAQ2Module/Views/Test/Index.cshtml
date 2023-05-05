@@ -1,0 +1,35 @@
+﻿@model IEnumerable<CarrotCake.CMS.Plugins.FAQ2.carrot_FaqCategory>
+
+@{
+	ViewBag.Title = "Index";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table">
+	<tr>
+		<th></th>
+		<th></th>
+		<th></th>
+		<th>
+			@Html.DisplayNameFor(model => model.FAQTitle)
+		</th>
+	</tr>
+
+	@foreach (var item in Model) {
+		<tr>
+			<td>
+				@Html.ActionLink("Test 1", "TestView1", new { @id = item.FaqCategoryID })
+			</td>
+			<td>
+				@Html.ActionLink("Test 2", "TestView2", new { @id = item.FaqCategoryID })
+			</td>
+			<td>
+				@Html.ActionLink("Test 3", "TestView3", new { @id = item.FaqCategoryID, @top = 5 })
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.FAQTitle)
+			</td>
+		</tr>
+	}
+</table>

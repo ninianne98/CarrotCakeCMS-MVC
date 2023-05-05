@@ -1,17 +1,27 @@
-﻿using CarrotCake.CMS.Plugins.PhotoGallery.Models;
-using Carrotware.CMS.Interface;
-using Carrotware.CMS.Interface.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Carrotware.CMS.Interface;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
-	public class HomeController : BaseDataWidgetController {
+	public class HomeController : BasePublicController {
+
+		protected override void Initialize(RequestContext requestContext) {
+			base.Initialize(requestContext);
+
+			RouteValueDictionary vals = requestContext.RouteData.Values;
+
+			// use the test id to build a fake payload so the widget can be loaded for dev
+			string action = vals["action"].ToString().ToLowerInvariant();
+			string controller = vals["controller"].ToString().ToLowerInvariant();
+		}
 
 		public ActionResult Index() {
-			return View();
+			return View("Index");
+		}
+
+		public ActionResult Index2() {
+			return Index();
 		}
 
 		[WidgetActionSettingModel("CarrotCake.CMS.Plugins.PhotoGallery.GallerySettings, CarrotCake.CMS.Plugins.PhotoGallery")]
@@ -23,34 +33,9 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 				settings.LoadData();
 			}
 
-			GalleryModel model = new GalleryModel();
+			var model = BuildModel(settings);
 
-			if (settings != null) {
-				model.GalleryID = settings.GalleryID;
-				model.ShowHeading = settings.ShowHeading;
-				model.ScaleImage = settings.ScaleImage;
-				model.ThumbSize = settings.ThumbSize;
-				model.PrettyPhotoSkin = settings.PrettyPhotoSkin;
-
-				model.InstanceId = settings.WidgetClientID;
-
-				GalleryHelper gh = new GalleryHelper(settings.SiteID);
-
-				var gal = gh.GalleryGroupGetByID(model.GalleryID);
-
-				if (gal != null) {
-					model.Gallery = gal;
-					model.Images = (from g in gal.GalleryImages
-									where g.GalleryID == model.GalleryID
-									orderby g.ImageOrder ascending
-									select g).ToList();
-				} else {
-					model.Gallery = new GalleryGroup();
-					model.Images = new List<GalleryImageEntry>();
-				}
-			}
-
-			if (String.IsNullOrEmpty(settings.AlternateViewFile)) {
+			if (string.IsNullOrEmpty(settings.AlternateViewFile)) {
 				return PartialView(model);
 			} else {
 				return PartialView(settings.AlternateViewFile, model);

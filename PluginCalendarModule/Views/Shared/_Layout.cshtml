@@ -1,18 +1,30 @@
 ﻿<!DOCTYPE html>
+@{
+	Layout = null;
+
+	string areaName = ViewBag.WidgetAssemblyName;
+	string areaAlias = string.Format("{0}_Default", areaName);
+}
 <html>
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewBag.Title - My ASP.NET Application</title>
+	<title>@ViewBag.Title - @ViewBag.WidgetAssemblyName</title>
 	@CarrotWeb.RenderControlToHtml((new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver }))
+	@(new Bootstrap() { SelectedSkin = Bootstrap.BootstrapColorScheme.RaspberrySorbet })
 
-	<script src="~/Scripts/bootstrap.min.js"></script>
 	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-	<link href="~/Content/bootstrap.css" rel="stylesheet" type="text/css" />
-	<link href="~/Content/violet.css" rel="stylesheet" />
 
 	<script type="text/javascript">
 		$(document).ready(function () {
+			doStyles();
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			doStyles();
+		});
+
+		function doStyles() {
 			$("input:button, input:submit, input:reset, button").button();
 			$("input:button, input:submit, input:reset, button").addClass('btn');
 
@@ -26,11 +38,37 @@
 					constrainInput: true
 				});
 			});
-		});
+		}
 
 		function cmsPreSaveTrigger() {
 			return true;
 		}
+	</script>
+
+	<script src="http://localhost:10109/Assets/tinymce/tinymce.min.js?cms=5.5" type="text/javascript"></script>
+	<script src="http://localhost:10109/Assets/Admin/includes/tinymce-config.js?cms=5.5" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		var webSvc = 'http://localhost:10109/Assets/Admin/CMS.asmx';
+		var bTinyLoaded = false;
+
+		function cmsAjaxFailed() {
+		}
+
+		function AjaxTinyLoad() {
+			if (!bTinyLoaded) {
+				cmsTinyMceInit(875, 500, false);
+			}
+			bTinyLoaded = true;
+		}
+
+		$(document).ready(function () {
+			AjaxTinyLoad();
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			AjaxTinyLoad();
+		});
 	</script>
 
 	@RenderSection("scripts", required: false)
@@ -44,13 +82,21 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				@Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+				@Html.ActionLink("Widget: Calendar", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li>@Html.ActionLink("Admin", "Index", "Admin")</li>
+					@using (CarrotWeb.BeginWrappedItem("li", "TestView1;", "Test", new { @class = "active" }, null)) {
+						@Html.RouteLink("Display 1", areaAlias, new { action = "TestView1", controller = "Test" })
+					}
+					@using (CarrotWeb.BeginWrappedItem("li", "TestView2", "Test", new { @class = "active" }, null)) {
+						@Html.RouteLink("Display 2", areaAlias, new { action = "TestView2", controller = "Test" })
+					}
+					@using (CarrotWeb.BeginWrappedItem("li", "TestView3", "Test", new { @class = "active" }, null)) {
+						@Html.RouteLink("Display 3", areaAlias, new { action = "TestView3", controller = "Test" })
+					}
 
-					<li class="dropdown">
+					@using (CarrotWeb.BeginWrappedItem("li", "*", "Admin", new { @id = "tabAdmin", @class = "active dropdown" }, new { @id = "tabAdmin", @class = "dropdown" })) {
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Test <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li>@Html.ActionLink("Database", "CalendarDatabase", "Admin")</li>
@@ -58,7 +104,7 @@
 							<li>@Html.ActionLink("Add Event", "CalendarAdminAdd", "Admin")</li>
 							@*<li>@Html.ActionLink("Categories", "CalendarAdminCat", "Admin")</li>*@
 						</ul>
-					</li>
+					}
 				</ul>
 			</div>
 		</div>
@@ -68,7 +114,7 @@
 		@RenderBody()
 		<hr />
 		<footer>
-			<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+			<p>&copy; @DateTime.Now.Year - @areaName</p>
 		</footer>
 	</div>
 </body>

@@ -1,7 +1,6 @@
 ﻿using CarrotCake.CMS.Plugins.CalendarModule.Code;
 using CarrotCake.CMS.Plugins.CalendarModule.Models;
 using Carrotware.CMS.Interface;
-using Carrotware.CMS.Interface.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Web.Mvc;
 
 namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 
-	public class HomeController : BaseDataWidgetController {
+	public class HomeController : BaseController {
 		private dbCalendarDataContext db = dbCalendarDataContext.GetDataContext();
 
 		protected override void Dispose(bool disposing) {

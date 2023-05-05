@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Configuration;
 using System.Reflection;
 using System.Web.Mvc;
 
@@ -18,6 +17,14 @@ namespace Carrotware.CMS.Interface.Controllers {
 
 	public class BaseWidgetController : Controller, IWidgetController {
 
+		public string TestSiteID {
+			get {
+				return ConfigurationManager.AppSettings["TestSiteID"] != null
+					? ConfigurationManager.AppSettings["TestSiteID"].ToString()
+					: Guid.Empty.ToString();
+			}
+		}
+
 		public BaseWidgetController()
 			: base() {
 			Assembly asmbly = this.GetType().Assembly;
@@ -27,6 +34,8 @@ namespace Carrotware.CMS.Interface.Controllers {
 
 			this.ViewData[CarrotViewEngineWidget.Key] = assemblyName;
 			this.AssemblyName = assemblyName;
+
+			ViewBag.WidgetAssemblyName = assemblyName;
 		}
 
 		protected override void Dispose(bool disposing) {

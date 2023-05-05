@@ -9,10 +9,13 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 	public class GallerySettings : WidgetActionSettingModel {
 
 		public GallerySettings() {
+			this.GalleryID = Guid.Empty;
 			this.ScaleImage = true;
 			this.ShowHeading = false;
 			this.ThumbSize = 100;
 			this.PrettyPhotoSkin = "light_rounded";
+
+			this.LoadData();
 		}
 
 		public override bool EnableEdit {
@@ -100,7 +103,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 			try {
 				string sFoundVal = this.GetParmValue("GalleryID", Guid.Empty.ToString());
 
-				if (!String.IsNullOrEmpty(sFoundVal)) {
+				if (!string.IsNullOrEmpty(sFoundVal) && this.GalleryID == Guid.Empty) {
 					this.GalleryID = new Guid(sFoundVal);
 				}
 			} catch (Exception ex) { }
@@ -108,7 +111,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 			try {
 				string sFoundVal = this.GetParmValue("ShowHeading", "false");
 
-				if (!String.IsNullOrEmpty(sFoundVal)) {
+				if (!string.IsNullOrEmpty(sFoundVal)) {
 					this.ShowHeading = Convert.ToBoolean(sFoundVal);
 				}
 			} catch (Exception ex) { }
@@ -116,7 +119,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 			try {
 				string sFoundVal = this.GetParmValue("ScaleImage", "false");
 
-				if (!String.IsNullOrEmpty(sFoundVal)) {
+				if (!string.IsNullOrEmpty(sFoundVal)) {
 					this.ScaleImage = Convert.ToBoolean(sFoundVal);
 				}
 			} catch (Exception ex) { }
@@ -124,7 +127,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 			try {
 				string sFoundVal = this.GetParmValueDefaultEmpty("ThumbSize", "150");
 
-				if (!String.IsNullOrEmpty(sFoundVal)) {
+				if (!string.IsNullOrEmpty(sFoundVal)) {
 					this.ThumbSize = Convert.ToInt32(sFoundVal);
 				}
 			} catch (Exception ex) { }
@@ -132,7 +135,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 			try {
 				string sFoundVal = this.GetParmValue("PrettyPhotoSkin", "light_rounded");
 
-				if (!String.IsNullOrEmpty(sFoundVal)) {
+				if (!string.IsNullOrEmpty(sFoundVal)) {
 					this.PrettyPhotoSkin = sFoundVal;
 				}
 			} catch (Exception ex) { }

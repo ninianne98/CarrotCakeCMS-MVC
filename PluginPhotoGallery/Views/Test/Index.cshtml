@@ -1,42 +1,30 @@
 ﻿@model Carrotware.Web.UI.Components.PagedData<tblGalleryImage>
 
 @{
-	ViewBag.Title = "View";
+	ViewBag.Title = "View Images";
 }
-<style>
-	.tablepager li {
-		cursor: pointer;
-		float: left;
-		list-style: outside none none;
-		margin: 2px;
-		padding: 4px 0;
-		position: relative;
-	}
-
-	.tablepager a {
-		margin: 5px;
-		padding: 5px;
-	}
-</style>
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "sortTable" })) {
 	@Html.AntiForgeryToken()
 
-	var grid = CarrotWeb.CarrotWebGrid<tblGalleryImage>(Model);
+	var grid = CarrotWeb.CarrotWebGrid(Model);
 
 	grid.TableAttributes = new { @class = "table table-striped table-fixed-header" };
 	grid.THeadAttributes = new { @class = "header" };
 	grid.ConfigName(Html.NameFor(x => x));
 
-
-	grid.AddColumn(x => x.GalleryID, new CarrotGridColumn<tblGalleryImage> {
-		HeaderText = "ID",
-		FormatTemplate = @<text> @CarrotWeb.ActionImage("View", "Test", new { @id = @item.GalleryID }, "~/assets/admin/images/cog.png", @item.GalleryID.ToString(), null, null) </text>
+	grid.AddColumn(x => x.GalleryID, new CarrotGridTemplateColumn<tblGalleryImage> {
+		HeaderText = "Gallery",
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("GalleryView", "Test", new { @id = @item.GalleryID }, "~/assets/admin/images/chart_organisation.png", @item.GalleryID.ToString(), null, null) </text>
 	})
-		.AddColumn(x => x.GalleryImage, new CarrotGridColumn<tblGalleryImage> { HeaderText = "Name", Sortable = true })
-		.AddColumn(x => x.ImageOrder, new CarrotGridColumn<tblGalleryImage> { HeaderText = "Order", Sortable = true });
+	.AddColumn(x => x.GalleryImageID, new CarrotGridTemplateColumn<tblGalleryImage> {
+		HeaderText = "Pic",
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("View", "Test", new { @id = @item.GalleryImageID }, "~/assets/admin/images/image.png", @item.GalleryImageID.ToString(), null, null) </text>
+	})
+	.AddColumn(x => x.GalleryImage, new CarrotGridColumn { HeaderText = "Name", Sortable = true })
+	.AddColumn(x => x.ImageOrder, new CarrotGridColumn { HeaderText = "Order", Sortable = true });
 
 	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
 

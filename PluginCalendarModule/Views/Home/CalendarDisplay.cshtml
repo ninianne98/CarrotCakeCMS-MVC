@@ -2,7 +2,7 @@
 
 <div id="divCalendarResults">
 
-	@if (!String.IsNullOrEmpty(Model.StyleSheetPath)) {
+	@if (!string.IsNullOrEmpty(Model.StyleSheetPath)) {
 		<link href="@Model.StyleSheetPath" rel="stylesheet" type="text/css" />
 	}
 
@@ -28,8 +28,8 @@
 			HasHeadingText = false,
 			BodyAttributes = new { @class = "leftAlignCell" },
 			FormatTemplate = @<text>
-				<b> @item.EventTitle  </b> <br />
-				@Html.Raw(item.EventDetail) <br /><br />
+		<b> @item.EventTitle  </b> <br />
+		@Html.Raw(item.EventDetail) <br /><br />
 			</text>
 		});
 	}
@@ -110,13 +110,13 @@
 	</script>
 
 	@using (Ajax.BeginForm("CalendarDisplay", "Home",
-	new { area = WebHelper.AssemblyName },
-	new AjaxOptions {
-		HttpMethod = "POST",
-		InsertionMode = InsertionMode.Replace,
-		UpdateTargetId = "divCalendarResults",
-		OnFailure = "__OnAjaxRequestFailure"
-	})) {
+			new { area = WebHelper.AssemblyName },
+			new AjaxOptions {
+				HttpMethod = "POST",
+				InsertionMode = InsertionMode.Replace,
+				UpdateTargetId = "divCalendarResults",
+				OnFailure = "__OnAjaxRequestFailure"
+			})) {
 
 		@Html.AntiForgeryToken()
 

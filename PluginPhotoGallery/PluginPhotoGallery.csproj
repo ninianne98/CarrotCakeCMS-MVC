@@ -102,6 +102,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Admin\images\cog.png" />
     <Content Include="Assets\prettyPhoto\PhotoIcon.png" />
     <Content Include="Assets\prettyPhoto\dark_rounded\btnNext.png" />
     <Content Include="Assets\prettyPhoto\dark_rounded\btnPrevious.png" />
@@ -143,71 +144,10 @@
     <Content Include="Assets\prettyPhoto\light_square\loader.gif" />
     <Content Include="Assets\prettyPhoto\light_square\sprite.png" />
     <Content Include="Assets\prettyPhoto\prettyPhoto.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\themes\base\accordion.css" />
-    <Content Include="Content\themes\base\all.css" />
-    <Content Include="Content\themes\base\autocomplete.css" />
-    <Content Include="Content\themes\base\base.css" />
-    <Content Include="Content\themes\base\button.css" />
-    <Content Include="Content\themes\base\core.css" />
-    <Content Include="Content\themes\base\datepicker.css" />
-    <Content Include="Content\themes\base\dialog.css" />
-    <Content Include="Content\themes\base\draggable.css" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\menu.css" />
-    <Content Include="Content\themes\base\progressbar.css" />
-    <Content Include="Content\themes\base\resizable.css" />
-    <Content Include="Content\themes\base\selectable.css" />
-    <Content Include="Content\themes\base\selectmenu.css" />
-    <Content Include="Content\themes\base\slider.css" />
-    <Content Include="Content\themes\base\sortable.css" />
-    <Content Include="Content\themes\base\spinner.css" />
-    <Content Include="Content\themes\base\tabs.css" />
-    <Content Include="Content\themes\base\theme.css" />
-    <Content Include="Content\themes\base\tooltip.css" />
-    <Content Include="Content\violet.css" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <None Include="Scripts\jquery-1.11.3.intellisense.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\jquery-1.11.3.js" />
-    <Content Include="Scripts\jquery-1.11.3.min.js" />
-    <Content Include="Scripts\jquery-ui-1.11.4.js" />
-    <Content Include="Scripts\jquery-ui-1.11.4.min.js" />
-    <Content Include="Scripts\jquery-1.11.3.min.map" />
     <EmbeddedResource Include="tblGallery.sql" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -219,10 +159,12 @@
     <Compile Include="Code\GalleryMetaData.cs" />
     <Compile Include="Code\GallerySettings.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\BasePublicController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Models\EditPhotoGalleryModel.cs" />
     <Compile Include="Models\GalleryModel.cs" />
+    <Compile Include="Models\GalleryTest.cs" />
     <Compile Include="PhotoGallery.cs">
       <DependentUpon>PhotoGallery.dbml</DependentUpon>
     </Compile>
@@ -253,16 +195,18 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Test\Index.cshtml" />
-    <Content Include="Views\Test\Index - Copy.cshtml" />
-    <Content Include="Views\Test\Index - Copy %282%29.cshtml" />
-    <Content Include="Views\Test\Index - Copy %283%29.cshtml" />
-    <Content Include="Views\Test\Index - Copy %284%29.cshtml" />
     <Content Include="Views\Admin\GalleryDatabase.cshtml" />
     <Content Include="Views\Admin.config" />
     <Content Include="Views\Admin\EditGalleryPhotos.cshtml" />
     <Content Include="Views\Admin\EditImageMetaData.cshtml" />
     <Content Include="Views\Shared\_LayoutPop.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Test\Edit.cshtml" />
+    <Content Include="Views\Test\GalleryView.cshtml" />
+    <Content Include="Views\Test\TestShowPrettyPhotoGallery.cshtml" />
+    <Content Include="Views\Test\GalleryList.cshtml" />
+    <Content Include="Views\Test\View.cshtml" />
+    <Content Include="Views\Test\GalleryView2.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -272,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CMSDBUpdater\CMSDBUpdater.csproj">

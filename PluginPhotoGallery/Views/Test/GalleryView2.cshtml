@@ -1,0 +1,20 @@
+﻿@model CarrotCake.CMS.Plugins.PhotoGallery.Models.GalleryTest
+
+@{
+	//ViewBag.WidgetTitle = "Test Widget Display 2";
+}
+
+<h2>@ViewBag.WidgetTitle</h2>
+
+<p>
+	@Model.Settings.GalleryID
+</p>
+
+<div>
+	@Html.Raw(Model.RenderedContent)
+</div>
+
+<br />
+<p>
+	@Html.ActionLink("Back to List", "GalleryList")
+</p>

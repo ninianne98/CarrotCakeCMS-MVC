@@ -1,0 +1,41 @@
+﻿@model Carrotware.Web.UI.Components.PagedData<tblGallery>
+
+@{
+	ViewBag.Title = "Gallery List";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "sortTable" })) {
+	@Html.AntiForgeryToken()
+
+	var grid = CarrotWeb.CarrotWebGrid(Model);
+
+	grid.TableAttributes = new { @class = "table table-striped table-fixed-header" };
+	grid.THeadAttributes = new { @class = "header" };
+	grid.ConfigName(Html.NameFor(x => x));
+
+	grid.AddColumn(x => x.GalleryID, new CarrotGridTemplateColumn<tblGallery> {
+		HeaderText = "ID",
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("GalleryView", "Test", new { @id = @item.GalleryID }, "~/assets/admin/images/chart_organisation.png", @item.GalleryTitle, null, null) </text>
+	})
+	.AddColumn(x => x.GalleryID, new CarrotGridTemplateColumn<tblGallery> {
+		HeaderText = "ID2",
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("GalleryView2", "Test", new { @id = @item.GalleryID }, "~/assets/admin/images/chart_organisation.png", @item.GalleryTitle, null, null) </text>
+	})
+	.AddColumn(x => x.GalleryID, new CarrotGridTemplateColumn<tblGallery> {
+		HeaderText = "ID3",
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("GalleryView3", "Test", new { @id = @item.GalleryID }, "~/assets/admin/images/chart_organisation.png", @item.GalleryTitle, null, null) </text>
+	})
+	.AddColumn(x => x.GalleryID, new CarrotGridTemplateColumn<tblGallery> {
+		HeaderText = "ID4",
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("GalleryView4", "Test", new { @id = @item.GalleryID }, "~/assets/admin/images/chart_organisation.png", @item.GalleryTitle, null, null) </text>
+	})
+
+	.AddColumn(x => x.GalleryTitle, new CarrotGridColumn { HeaderText = "Name", Sortable = true });
+
+	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
+
+	@grid.Write()
+
+}

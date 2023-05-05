@@ -1,0 +1,60 @@
+﻿@model CarrotCake.CMS.Plugins.PhotoGallery.tblGalleryImage
+
+@{
+	ViewBag.Title = "View";
+
+	var img = new HtmlTag(HtmlTag.EasyTag.Image);
+	img.Uri = Model.GalleryImage;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+	<div class="col-md-10">
+		@img.EmitHtmlSelfClosingTag()
+	</div>
+</div>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div class="form-horizontal">
+		<hr />
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		@Html.HiddenFor(model => model.GalleryImageID)
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.GalleryImage, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.GalleryImage, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.GalleryImage, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.ImageOrder, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.ImageOrder, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.ImageOrder, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			@Html.LabelFor(model => model.GalleryID, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.GalleryID, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.GalleryID, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Save" class="btn btn-default" />
+			</div>
+		</div>
+	</div>
+}
+
+<div>
+	@Html.DisplayNameFor(model => model.GalleryImage)
+</div>
