@@ -1,0 +1,815 @@
+﻿@import "_colors.less";
+@import "_jquery-ui.less";
+
+.createAdvUI(@themeColor) {
+	@zone1: .cms-seagreen;
+	@zone2: #cms-seagreen-id;
+
+	.createAdvJQ(@zone1, @themeColor);
+	.createAdvJQ(@zone2, @themeColor);
+	.createAdvStylesUI(@themeColor);
+}
+
+.createAdvStylesUI(@themeColor) {
+	@themeToolbar: lighten(@themeColor, 9%);
+	@themeLight20: lighten(@themeColor, 20%);
+	@themeLight25: lighten(@themeColor, 25%);
+	@themeLight35: lighten(@themeColor, 35%);
+	@themeHover: mix(@themeLight25, #dddddd, 45%);
+	@themeDefault: mix(@themeLight25, #bbbbbb, 40%);
+
+	@themeHead: darken(@themeColor, 65%);
+	@themeHeadHover: darken(@themeColor, 40%);
+
+	@themeContentHead: lighten(@themeColor, 5%);
+	@themeWidgetHead: screen(@themeLight20, #222222);
+	@themeWidgetTool: screen(@themeLight20, #aaaaaa);
+
+	.cms-theme-color-code {
+		color: @themeColor;
+	}
+	/* General Editor Styles */
+	#cms-simplemodal-container, .cms-simplemodal-container {
+		min-height: 600px;
+		height: 75%;
+		min-width: 780px;
+		width: 85%;
+		z-index: 9950008;
+	}
+
+	#cms-basic-modal-content, #cmsModalFrame, #cmsAjaxMainDiv2 {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+		width: 100%;
+	}
+
+	#cmsModalFrame {
+		height: 99%;
+		width: 99%;
+		display: block;
+		clear: both;
+	}
+
+	#cmsFrameEditor {
+		margin: 0;
+		padding: 0;
+		height: 99%;
+		width: 100%;
+	}
+
+	#cmsFrameEditorPreview, #cmsAjaxMainDiv3 {
+		margin: 0;
+		padding: 0;
+		width: 99%;
+		height: 99%;
+	}
+
+	#cmsFrameEditorPreview {
+		display: block;
+		text-align: center;
+		margin: 0 auto;
+		border: 1px solid #999;
+	}
+
+	#cmsToolBoxWrap {
+		margin: 0;
+		padding: 0;
+		line-height: normal !important;
+		text-align: left;
+		font-size: small;
+		font-family: 'Segoe UI',Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+		position: absolute;
+		z-index: 99100;
+	}
+
+	#cmsToolBoxWrap input[type="submit"], #cmsToolBoxWrap input[type="reset"], #cmsToolBoxWrap input[type="button"], #cmsToolBoxWrap select,
+	#cmsToolBoxWrap .button, #cmsToolBoxWrap .ui-dialog-buttonpane button, #cmsModalFrame button, #cmsModalFrame .button, #cmsModalFrame input[type="button"] {
+		min-width: 3em;
+		border: 1px solid #898989;
+		background-color: @themeDefault;
+		color: @themeHead;
+		border-radius: 6px;
+		-moz-border-radius: 6px;
+		-webkit-border-radius: 6px;
+	}
+
+	.cms-seagreen input[type="submit"], .cms-seagreen input[type="reset"], .cms-seagreen input[type="button"], .cms-seagreen select,
+	.cms-seagreen .button, .cms-seagreen .ui-dialog-buttonpane button {
+		min-width: 2em;
+		margin: 2px 4px 2px 4px !important;
+		padding: 3px 8px 3px 8px !important;
+		height: 2em !important;
+		line-height: 20px !important;
+		border: 1px solid #898989;
+		background-color: @themeDefault;
+		color: @themeHead;
+		border-radius: 6px;
+		-moz-border-radius: 6px;
+		-webkit-border-radius: 6px;
+	}
+
+	#cmsToolBoxWrap .btn, .cms-seagreen button, .cms-seagreen .btn, #cms-seagreen-id .btn, #cmsModalFrame .btn {
+		border: 1px solid #898989;
+		color: @themeHead;
+	}
+
+	.cms-seagreen button:hover, #cms-seagreen-id button:hover,
+	.cms-seagreen input:hover, #cms-seagreen-id input:hover,
+	.cms-seagreen .btn:hover, #cms-seagreen-id .btn:hover {
+		background-color: @themeHover !important;
+		color: @themeHeadHover !important;
+	}
+
+	#cmsToolBoxWrap .btn-primary, .cms-seagreen .btn-primary, .cms-seagreen button.btn-primary,
+	#cms-seagreen-id .btn-primary, #cms-seagreen-id input.btn-primary {
+		font-weight: bold;
+		background-color: @themeHover;
+		color: @themeHeadHover;
+	}
+
+	.cms-seagreen .ui-widget P {
+		line-height: normal;
+		font-weight: normal;
+	}
+
+	.cms-seagreen .ui-dialog .ui-dialog-title, #cms-seagreen-id .ui-dialog .ui-dialog-title,
+	.cms-seagreen .ui-dialog-titlebar, .cms-seagreen .ui-dialog-titlebar a,
+	#cms-seagreen-id .ui-dialog-titlebar, #cms-seagreen-id .ui-dialog-titlebar a,
+	.cms-seagreen .ui-widget-header, #cms-seagreen-id .ui-widget-header {
+		color: contrast(@themeContentHead, @themeHead, #ffffff);
+	}
+
+	.cms-seagreen .ui-front, #cms-seagreen-id .ui-front {
+		z-index: 10000000;
+	}
+
+	.cms-seagreen .no-close .ui-dialog-titlebar-close,
+	#cms-seagreen-id .no-close .ui-dialog-titlebar-close {
+		display: none;
+	}
+
+	#cms-seagreen-id *, #cms-seagreen-id *:before, #cms-seagreen-id *:after {
+		box-sizing: unset;
+		-moz-box-sizing: unset;
+		-webkit-box-sizing: unset;
+	}
+
+	#cmsWidgetHead p, #cmsWidgetHead ul, #cmsWidgetHead ol, #cmsWidgetHead h1, #cmsWidgetHead h2, #cmsWidgetHead h3, #cmsWidgetHead div, #cmsWidgetHead span, #cmsWidgetHead input, #cmsWidgetHead select, #cmsWidgetHead button, #cmsWidgetHead textarea {
+		text-shadow: 0 0 0 transparent;
+		line-height: normal;
+		margin: 0px;
+		padding: 1px;
+		text-align: left;
+		font-size: small;
+		text-transform: none;
+		font-family: 'Segoe UI',Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+	}
+
+	.cmsAdvEditTemplatePicker {
+		min-width: 200px;
+		max-width: 275px;
+	}
+
+	#cmsTabbedToolbox {
+		min-height: 100px;
+		width: 260px;
+		margin: 0;
+		padding: 0;
+		margin: 0 auto;
+	}
+
+	#cmsTabbedToolbox ul.ui-tabs-nav {
+		margin: 2px 2px 0 2px !important;
+		padding: 3px 3px 0 3px !important;
+	}
+
+	#cmsTabbedToolbox ul.ui-tabs-nav a {
+		margin: 2px 2px 2px 2px !important;
+		padding: 2px 2px 2px 2px !important;
+	}
+
+	#cmsTabbedToolbox ul.ui-tabs-nav li {
+		margin: 2px 2px -1px 2px !important;
+		padding: 3px 3px 3px 3px !important;
+		border-bottom-width: 0px !important;
+	}
+
+	#cmsTabbedToolbox .ui-tabs-panel {
+		margin: 0;
+		border: solid 0px #ffffff !important;
+	}
+
+	#cmsTabbedToolbox .cmsToolboxTab {
+		margin: 1px 1px 1px 1px !important;
+		padding: 2px 2px 2px 2px !important;
+	}
+
+	#cmsMainToolbox {
+		padding: 2px;
+		font-size: 12px !important;
+		font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+		text-align: left !important;
+		min-height: 100px !important;
+	}
+
+	.cmsHighlightPH {
+		height: 30px !important;
+		margin: 5px !important;
+		padding: 5px !important;
+		background-color: #FFFFAA !important;
+		border: 2px dotted #676767 !important;
+		background-image: url('/Assets/Admin/images/dragbg.png') !important;
+	}
+
+	.cmsToolbox2 {
+		position: absolute;
+		top: 10px;
+		left: 10px;
+		z-index: 990000 !important;
+		padding: 5px !important;
+		margin: 5px !important;
+		border: solid 2px #000000 !important;
+		min-width: 275px !important;
+		min-height: 50px !important;
+		font-size: 12px !important;
+		line-height: normal !important;
+		font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+		color: #000000 !important;
+		background-color: #FFFFFF !important;
+	}
+
+	.cmsToolbox3 {
+		padding: 2px;
+		margin: 0px;
+		min-height: 300px;
+		width: 290px;
+	}
+
+	.cmsFloatRight {
+		margin: 2px !important;
+		float: right !important;
+	}
+
+	.cmsFloatLeft {
+		margin: 2px !important;
+		float: left !important;
+	}
+
+	.cmsInsideArea {
+		font-family: Arial, Helvetica, sans-serif !important;
+		z-index: 5000 !important;
+		border: 0px solid #dddddd !important;
+		font-size: 12px !important;
+		line-height: normal !important;
+	}
+
+	.cmsCenter5px, .cmsLeft5px, .cmsRight5px, .cmsPlain5px {
+		margin: 5px !important;
+		padding: 5px !important;
+		font-size: 12px !important;
+		line-height: normal !important;
+	}
+
+	.cmsCenter5px {
+		text-align: center !important;
+	}
+
+	.cmsLeft5px {
+		text-align: left !important;
+	}
+
+	.cmsRight5px {
+		text-align: right !important;
+	}
+
+	#cmsPreviewControls {
+		line-height: normal !important;
+		margin-left: 50px !important;
+		margin-right: 50px !important;
+		min-width: 600px !important;
+		min-height: 50px !important;
+	}
+
+	#cmsPreviewTab a {
+		padding: 6px 9px !important;
+	}
+
+	.cmsPreview-Right, .cmsPreview-Left {
+		margin: 5px 0px 5px 0px !important;
+		padding: 0 !important;
+		font-size: 12px !important;
+		line-height: normal !important;
+	}
+
+	.cmsPreview-Left {
+		margin-left: 50px !important;
+		float: left !important;
+		min-width: 200px !important;
+	}
+
+	.cmsPreview-Right {
+		margin-right: 50px !important;
+		float: right !important;
+		min-width: 250px !important;
+	}
+
+	p.cmsToolItem {
+		min-width: 200px;
+		margin: 0;
+		padding: 2px;
+		cursor: move;
+		clear: both;
+		padding: 2px;
+		margin: 2px;
+		font-size: 12px;
+		line-height: normal;
+		font-weight: bold;
+		border: 1px dashed #c0c0c0;
+		color: @themeHeadHover !important;
+		background-color: @themeWidgetTool !important;
+	}
+
+	.cmsTargetArea .ui-draggable, .cmsTargetArea .cmsToolItem {
+		width: 100% !important;
+	}
+
+	.cmsTargetArea .ui-draggable-dragging {
+		width: 100% !important;
+		width: 500px !important;
+	}
+
+	#cmsMainToolbox select, #cmsMainToolbox select:focus, #cmsMainToolbox select:hover, #cmsMainToolbox select option {
+		font-family: Arial, Helvetica, sans-serif !important;
+		margin: 0 !important;
+		padding: 2px !important;
+		color: #000000 !important;
+		background-color: #FFFFFF !important;
+		line-height: normal !important;
+		font-size: 11px !important;
+		font-weight: normal !important;
+	}
+
+	#cmsToolBoxWrap {
+		width: 350px !important;
+		min-height: 125px !important;
+		position: fixed !important;
+		top: 10px !important;
+		display: block !important;
+		clear: both !important;
+	}
+
+	.cmsToolbarAlignmentL {
+		left: 5px !important;
+	}
+
+	.cmsToolbarAlignmentR {
+		right: 5px !important;
+	}
+
+	#cmsToolBox {
+		font-weight: normal;
+		line-height: normal;
+		font-size: 11px;
+		overflow: auto !important;
+		height: 290px !important;
+		width: 240px !important;
+		padding: 2px !important;
+		margin: 4px !important;
+		float: left !important;
+		border: solid 1px #000 !important;
+	}
+
+	#cmsTemplateList {
+		padding: 2px !important;
+		height: 2em !important;
+		color: #000000 !important;
+		background-color: #FFFFFF !important;
+		min-width: 125px !important;
+		margin-right: 10px !important;
+	}
+	/* widget/text zones */
+	.cmsWidgetCtrlPath, .cmsWidgetToolboxItem, .cmsWidgetToolboxPath {
+		margin: 0;
+		padding: 0;
+		font-weight: normal;
+		line-height: normal;
+		font-size: 11px;
+		font-family: 'Segoe UI',Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+	}
+
+	.cmsWidgetToolboxPath {
+		font-size: 12px !important;
+		font-family: Arial, Helvetica, sans-serif !important;
+	}
+
+	.cmsWidgetToolboxItem {
+		min-height: 75px;
+		min-width: 150px;
+		padding: 2px;
+		margin: 2px;
+	}
+
+	.cmsToolItemWrapper {
+		margin: 0;
+		padding: 0;
+		font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+		font-weight: normal !important;
+		font-size: 12px !important;
+		line-height: normal !important;
+		text-align: left !important;
+		min-height: 55px !important;
+		margin-bottom: 5px !important;
+		color: #000000 !important;
+		background-color: #FFFFFF !important;
+		border: 1px dashed #c0c0c0 !important;
+	}
+
+	.cmsTargetMove {
+		min-height: 25px !important;
+	}
+
+	#cmsWidgetHead p, #cmsWidgetHead ul, #cmsWidgetHead ol, #cmsWidgetHead h1, #cmsWidgetHead h2, #cmsWidgetHead h3,
+	#cmsWidgetHead div, #cmsWidgetHead span, #cmsWidgetHead input, #cmsWidgetHead select,
+	#cmsWidgetHead button, #cmsWidgetHead textarea {
+		text-shadow: 0 0 0 transparent;
+		line-height: normal;
+		margin: 0px;
+		padding: 1px;
+		text-align: left;
+		font-size: small;
+		text-transform: none;
+		font-family: 'Segoe UI',Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+	}
+
+	#cmsControlPath, #cmsWidgetHead {
+		font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif !important;
+	}
+
+	#cmsWidgetHead, #cmsControlPath, #cmsWidgetContainerName {
+		color: @themeHead !important;
+	}
+
+	#cmsControlPath, #cmsWidgetContainerName {
+		float: left !important;
+		min-height: 30px !important;
+	}
+
+	#cmsWidgetHead {
+		cursor: move !important;
+		min-height: 24px !important;
+	}
+
+	#cmsWidgetControlTitle, #cmsWidgetContainerName {
+		min-height: 24px !important;
+	}
+
+	#cmsWidgetContainerName {
+		color: contrast(@themeWidgetHead, @themeHead, #ffffff) !important;
+	}
+
+	#cmsControl {
+		margin: 0px 0px 2px 0px;
+		padding: 0px 0px 2px 0px;
+		clear: both;
+	}
+
+	.cmsAjaxModalSpinner {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-top: -25px;
+		margin-left: -25px;
+	}
+	/* edit menu for widgets */
+	#cmsEditMenuList ul, #cmsEditMenuList li, #cmsEditMenuList a, #cmsEditMenuList img {
+		margin: 0;
+		padding: 0;
+		line-height: normal;
+		font-style: normal;
+		font-weight: 300;
+		text-shadow: 0 0 0 transparent;
+		padding: 1px;
+		text-align: left;
+		font-size: small;
+		font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+		background-color: transparent;
+		border: 0px solid transparent;
+		background-image: none;
+		position: relative;
+		cursor: pointer;
+	}
+
+	#cmsEditMenuList img {
+		margin: 0 !important;
+		padding: 0 !important;
+		background-color: transparent !important;
+		border: 0px solid transparent !important;
+		float: left;
+	}
+
+	#cmsEditMenuList ul, #cmsEditMenuList li {
+		margin: 0 !important;
+		padding: 0 !important;
+		background-color: transparent !important;
+		list-style-type: none !important;
+		list-style: none !important;
+		background-image: none !important;
+		cursor: pointer !important;
+	}
+
+	#cmsMnuParent img, .cmsWidgetCogIcon img, .cmsWidgetControlTitle img, .cmsContentContainerTitle img, .cmsWidgetTitleBar img, #cmsContentContainerHead img {
+		border: 0px solid transparent !important;
+		background-color: transparent !important;
+	}
+
+	#cmsEditMenuList ul > li:before, .cmsWidgetCogIcon ul > li:before, .cmsWidgetCogIcon, #cmsContentContainerHead ul > li:before {
+		margin: 0;
+		padding: 0;
+		bottom: auto;
+		top: auto;
+		display: inline;
+	}
+
+	#cmsEditMenuList .cmsMnuParent li .cmsMnuChildren {
+		margin: 0;
+		padding: 0;
+		clear: both !important;
+		display: none !important;
+		margin-top: 10px !important;
+	}
+
+	#cmsEditMenuList .cmsMnuParent li:hover .cmsMnuChildren {
+		display: block !important;
+	}
+
+	#cmsEditMenuList, #cmsEditMenuList .cmsWidgetBarIconCog {
+		float: right !important;
+	}
+
+	#cmsEditMenuList .cmsMnuChildren, #cmsEditMenuList .cmsWidgetBarIconCog {
+		clear: both !important;
+	}
+
+	#cmsEditMenuList .cmsMnuParent li a {
+		margin: 0;
+		padding: 0;
+		padding-top: 1px !important;
+		padding-right: 5px !important;
+	}
+
+	#cmsEditMenuList li.cmsWidgetBarIconCog a, #cmsEditMenuList li.cmsWidgetBarIconCog a img {
+		position: relative !important;
+		z-index: 99000 !important;
+	}
+
+	#cmsEditMenuList ul.cmsMnuChildren {
+		margin: 0;
+		padding: 0;
+		margin: 1px 0 1px 0 !important;
+		padding: 2px 1px 2px 1px !important;
+		width: 125px !important;
+		clear: both !important;
+		font-weight: bold !important;
+		border-width: 1px !important;
+		border-style: solid !important;
+		background-image: none !important;
+		background-color: transparent !important;
+		border-color: #000000 !important;
+		margin-top: -2px !important;
+		margin-left: -110px !important;
+		position: absolute !important;
+		z-index: 99010 !important;
+	}
+
+	#cmsEditMenuList ul.cmsWidgetMenu {
+		background-color: @themeWidgetTool !important;
+		color: @themeHeadHover !important;
+	}
+
+	#cmsEditMenuList ul.cmsWidgetContainerMenu {
+		background-color: @themeWidgetHead !important;
+		color: contrast(@themeWidgetHead, @themeHead, #ffffff) !important;
+	}
+
+	#cmsEditMenuList ul.cmsContentContainerMenu {
+		background-color: @themeContentHead !important;
+		color: contrast(@themeContentHead, @themeHead, #ffffff) !important;
+	}
+
+	#cmsEditMenuList > li {
+		float: none !important;
+		display: inline !important;
+		border: 0px solid transparent;
+	}
+
+	#cmsEditMenuList ul li, #cmsEditMenuList ul li ul li {
+		border: 0px solid transparent;
+	}
+
+	#cmsEditMenuList ul.cmsMnuChildren li {
+		margin: 0;
+		padding: 0;
+		padding: 0px !important;
+		margin: 1px !important;
+		overflow: hidden !important;
+	}
+
+	#cmsEditMenuList > ul.cmsMnuChildren li a, #cmsEditMenuList ul.cmsMnuParent li ul.cmsMnuChildren li a {
+		margin: 0;
+		padding: 0;
+		text-decoration: none !important;
+		width: 100% !important;
+		display: inline !important;
+		padding: 0px !important;
+		margin: 1px !important;
+		margin-bottom: 2px !important;
+		float: none !important;
+	}
+
+	#cmsEditMenuList ul.cmsMnuParent li ul.cmsMnuChildren li a {
+		display: block !important;
+		width: 99% !important;
+	}
+
+	#cmsEditMenuList ul.cmsMnuParent li ul.cmsMnuChildren li a img {
+		padding: 1px !important;
+		margin: 1px !important;
+		padding-right: 5px !important;
+		vertical-align: bottom !important;
+		float: none !important;
+	}
+	/* end menus */
+	/*  Widget Styles   */
+	.cmsSnippetOuter, .cmsSnippetInner {
+		margin: 0;
+		padding: 0;
+		line-height: normal;
+		text-align: left;
+		font-size: small;
+		clear: both;
+		font-family: 'Segoe UI',Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+		margin: 1px !important;
+		padding: 1px !important;
+		color: @themeHead !important;
+		background-color: #FFFFFF !important;
+		display: inline-block !important;
+	}
+
+	.cmsSnippetOuter {
+		border: 2px solid @themeContentHead !important;
+	}
+
+	.cmsSnippetInner {
+		border: 2px dashed @themeWidgetTool !important;
+	}
+
+	.cmsContentContainerTitle, .cmsWidgetControlTitle, .cmsWidgetTitleBar, .cmsWidgetTargetOuterControl #cmsControl.cmsWidgetToolboxItem p.cmsToolItem {
+		margin: 0;
+		padding: 0;
+		text-shadow: 0 0 0 transparent !important;
+		font-size: 12px !important;
+		line-height: normal !important;
+		font-weight: bold !important;
+		font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif !important;
+		color: #C0C0C0 !important;
+		background-color: @themeColor !important;
+		min-height: 24px !important;
+		margin: 0px !important;
+		padding: 1px !important;
+		border: 1px solid #c0c0c0 !important;
+	}
+
+	.cmsContentContainerTitle, .cmsContentContainerTitle a, .cmsContentContainerTitleText {
+		text-shadow: 0 0 0 transparent !important;
+		text-align: left !important;
+		color: contrast(@themeContentHead, @themeHead, #ffffff) !important;
+		background-color: @themeContentHead !important;
+		text-decoration: none !important;
+	}
+
+	.cmsContentContainerTitleText {
+		float: left !important;
+	}
+
+	.cmsWidgetControlTitle, .cmsWidgetControlTitle a {
+		text-shadow: 0 0 0 transparent !important;
+		text-align: left !important;
+		background-color: @themeWidgetHead !important;
+		color: contrast(@themeWidgetHead, @themeHead, #ffffff) !important;
+		text-decoration: none !important;
+	}
+
+	.cmsWidgetControlTitle #cmsEditMenuList-inner li:hover .cmsMnuChildren, .cmsWidgetControlTitle #cmsEditMenuList-inner li:hover .cmsMnuChildren a {
+		background-color: @themeWidgetHead !important;
+		color: contrast(@themeWidgetHead, @themeHead, #ffffff) !important;
+	}
+
+	.cmsWidgetTitleBar, .cmsWidgetTitleBar a, .cmsWidgetTargetOuterControl #cmsControl.cmsWidgetToolboxItem p.cmsToolItem {
+		text-shadow: 0 0 0 transparent !important;
+		text-align: left !important;
+		background-color: @themeWidgetTool !important;
+		color: @themeHeadHover !important;
+		text-decoration: none !important;
+	}
+
+	.cmsWidgetTargetOuterControl {
+		border: 1px solid #000000 !important;
+		margin: 0px !important;
+		padding: 1px !important;
+		margin-top: 5px !important;
+	}
+
+	.cmsWidgetContainerWrapper {
+		border: 1px solid #000000 !important;
+		margin: 0px !important;
+		padding: 1px !important;
+		margin-top: 3px !important;
+		clear: both;
+	}
+
+	.cmsWidgetControl {
+		width: 100%;
+		min-height: 20px !important;
+		border: 1px dashed #c0c0c0 !important;
+	}
+
+	.cmsContentContainerInnerTitle {
+		float: right !important;
+		color: @themeHead !important;
+		margin: 0px !important;
+		padding: 0px !important;
+		padding-right: 10px !important;
+		border: 0px solid #FFFFFF !important;
+		font-size: 12px !important;
+		line-height: normal !important;
+		font-weight: bold !important;
+		font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif !important;
+	}
+
+	.cmsContentContainer {
+		border: 1px solid #000000 !important;
+		margin: 0px !important;
+		padding: 1px !important;
+		margin-top: 5px !important;
+	}
+
+	#cmsAdminToolbox .ui-widget-header {
+		font-weight: bold;
+	}
+
+	#cmsAdminToolbox, #cmsAdminToolbox p, .cmsToolboxHead {
+		font-family: 'Segoe UI',Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+		font-size: 12px;
+		font-weight: normal;
+		padding: 5px 0px 5px 5px;
+		margin: 0px;
+		text-align: left;
+	}
+
+	.cmsToolboxHead {
+		padding: 1px !important;
+		margin: 0 !important;
+		text-align: left !important;
+	}
+
+	.cmsToolboxHeadCaption {
+		color: contrast(@themeContentHead, @themeHead, #ffffff) !important;
+		font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif !important;
+		padding: 2px !important;
+		margin: 0 !important;
+		font-size: 14px !important;
+		font-weight: bold !important;
+	}
+
+	.cmsVersion {
+		font-size: 8px !important;
+		clear: both;
+		width: 140px;
+		font-weight: normal;
+		text-align: center;
+		line-height: normal;
+		margin: 0 auto !important;
+	}
+
+	#cmsAdminToolbox {
+		font-family: 'Segoe UI',Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+		font-size: 12px;
+		font-weight: normal;
+		text-shadow: 0 0 0 transparent;
+		border-top-left-radius: 6px;
+		border-top-right-radius: 6px;
+		border-bottom-left-radius: 6px;
+		border-bottom-right-radius: 6px;
+		border-radius: 6px 6px 6px 6px;
+		box-shadow: 0 0 16px #000000;
+		-webkit-border-top-left-radius: 6px;
+		-webkit-border-top-right-radius: 6px;
+		-moz-border-radius-topleft: 6px;
+		-moz-border-radius-topright: 6px;
+		-webkit-border-bottom-right-radius: 6px;
+		-webkit-border-bottom-left-radius: 6px;
+		-moz-border-radius-bottomright: 6px;
+		-moz-border-radius-bottomleft: 6px;
+	}
+}

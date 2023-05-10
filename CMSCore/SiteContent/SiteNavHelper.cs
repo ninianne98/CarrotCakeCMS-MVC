@@ -1,10 +1,10 @@
 ﻿using Carrotware.CMS.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Web;
-using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -29,7 +29,6 @@ namespace Carrotware.CMS.Core {
 		public static ISiteNavHelper GetSiteNavHelper() {
 			if (SiteData.IsWebView) {
 				if ((SiteData.IsPageSampler || SiteData.IsPageReal) && !SiteData.IsCurrentPageSpecial) {
-					SiteNavHelper.SeqGuid = null;
 					return new SiteNavHelperMock();
 				} else {
 					return new SiteNavHelperReal();
@@ -43,7 +42,6 @@ namespace Carrotware.CMS.Core {
 			if (navMode == SiteNavMode.RealNav) {
 				return new SiteNavHelperReal();
 			} else {
-				SiteNavHelper.SeqGuid = null;
 				return new SiteNavHelperMock();
 			}
 		}
@@ -85,6 +83,26 @@ namespace Carrotware.CMS.Core {
 			return navData;
 		}
 
+		public static SiteNav GetEmptySearch() {
+			SiteNav navData = new SiteNav();
+			navData.ContentID = Guid.Empty;
+			navData.Root_ContentID = Guid.NewGuid();
+			navData.SiteID = SiteData.CurrentSiteID;
+			navData.TemplateFile = SiteData.DefaultTemplateFilename;
+			navData.FileName = SiteData.CurrentSite.SiteSearchPath;
+			navData.NavMenuText = "Search";
+			navData.PageHead = "Search";
+			navData.TitleBar = "Search";
+			navData.PageActive = true;
+			navData.PageText = "<p>Search Results</p>";
+			navData.EditDate = DateTime.Now.Date.AddDays(-30);
+			navData.CreateDate = DateTime.Now.Date.AddDays(-30);
+			navData.GoLiveDate = DateTime.Now.Date.AddDays(-30);
+			navData.RetireDate = DateTime.Now.Date.AddDays(90);
+			navData.ContentType = ContentPageType.PageType.ContentEntry;
+			return navData;
+		}
+
 		internal static List<SiteNav> GetSamplerFakeNav() {
 			return GetSamplerFakeNav(4, null);
 		}
@@ -98,9 +116,8 @@ namespace Carrotware.CMS.Core {
 		}
 
 		internal static List<SiteNav> GetSamplerFakeNav(int iCount, Guid? rootParentID) {
-			List<SiteNav> navList = new List<SiteNav>();
+			var navList = new List<SiteNav>();
 			int n = 0;
-			SeqGuid = null;
 
 			while (n < iCount) {
 				SiteNav nav = GetSamplerView();
@@ -115,13 +132,9 @@ namespace Carrotware.CMS.Core {
 				nav.ShowInSiteMap = true;
 
 				if (n > 0 || rootParentID != null) {
-					nav.Root_ContentID = SeqGuid.NextGuid;
-					nav.ContentID = Guid.NewGuid();
-					//nav.FileName = nav.FileName.Replace(".aspx", nav.NavOrder.ToString() + ".aspx");
-					nav.FileName = "/#";
-					//if (rootParentID != null) {
-					//	nav.NavMenuText = nav.NavMenuText + " - " + rootParentID.Value.ToString().Substring(0, 4);
-					//}
+					nav.Root_ContentID = Guid.NewGuid();
+					nav.ContentID = nav.Root_ContentID;
+					nav.FileName = "javascript:void(0);";
 				}
 				nav.Parent_ContentID = rootParentID;
 
@@ -189,28 +202,14 @@ namespace Carrotware.CMS.Core {
 			return sbFile.ToString();
 		}
 
-		private static SequentialGuid _seq = new SequentialGuid();
-
-		internal static SequentialGuid SeqGuid {
-			get {
-				if (_seq == null) {
-					_seq = new SequentialGuid();
-				}
-
-				return _seq;
-			}
-			set {
-				_seq = value;
-			}
-		}
-
 		internal static SiteNav GetSamplerView() {
 			string sFile2 = GetSampleBody();
 			var caption = SiteNavHelperMock.GetRandomCaption();
 
 			SiteNav navNew = new SiteNav();
-			navNew.Root_ContentID = SeqGuid.NextGuid;
-			navNew.ContentID = Guid.NewGuid();
+			navNew.Root_ContentID = Guid.NewGuid();
+			navNew.ContentID = navNew.Root_ContentID;
+			navNew.FileName = "javascript:void(0);";
 
 			navNew.NavOrder = -1;
 			navNew.TitleBar = string.Format("{0} T", caption);

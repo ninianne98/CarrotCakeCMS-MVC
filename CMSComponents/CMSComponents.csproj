@@ -141,7 +141,9 @@
     <Compile Include="BreadCrumbNavigation.cs" />
     <Compile Include="CarrotCakeAreaReg.cs" />
     <Compile Include="CarrotCakeHtml.cs" />
+    <Compile Include="TopLevelNavigation.cs" />
     <Compile Include="ChildNavigation.cs" />
+    <Compile Include="CmsSkin.cs" />
     <Compile Include="ContentPageComponents.cs" />
     <Compile Include="ContentPlainText.cs" />
     <Compile Include="ContentRichText.cs" />
@@ -168,6 +170,358 @@
     <Compile Include="TwoLevelNavigation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="editor\advedit.amethystorchid.css">
+      <DependentUpon>advedit.amethystorchid.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.amethystorchid.min.css">
+      <DependentUpon>advedit.amethystorchid.css</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.blueizis.css">
+      <DependentUpon>advedit.blueizis.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.blueizis.min.css">
+      <DependentUpon>advedit.blueizis.css</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.classic.css">
+      <DependentUpon>advedit.classic.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.classic.min.css">
+      <DependentUpon>advedit.classic.css</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.frenchblue.css">
+      <DependentUpon>advedit.frenchblue.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.frenchblue.min.css">
+      <DependentUpon>advedit.frenchblue.css</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.mauve.css">
+      <DependentUpon>advedit.mauve.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.mauve.min.css">
+      <DependentUpon>advedit.mauve.css</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.mosaicblue.css">
+      <DependentUpon>advedit.mosaicblue.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.mosaicblue.min.css">
+      <DependentUpon>advedit.mosaicblue.css</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.plum.css">
+      <DependentUpon>advedit.plum.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.plum.min.css">
+      <DependentUpon>advedit.plum.css</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.quetzalgreen.css">
+      <DependentUpon>advedit.quetzalgreen.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.quetzalgreen.min.css">
+      <DependentUpon>advedit.quetzalgreen.css</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.rust.css">
+      <DependentUpon>advedit.rust.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.rust.min.css">
+      <DependentUpon>advedit.rust.css</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.mauve.css">
+      <DependentUpon>logon.mauve.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.mauve.min.css">
+      <DependentUpon>logon.mauve.css</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.sandstone.css">
+      <DependentUpon>logon.sandstone.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.sandstone.min.css">
+      <DependentUpon>logon.sandstone.css</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.sugaralmond.css">
+      <DependentUpon>logon.sugaralmond.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.sugaralmond.min.css">
+      <DependentUpon>logon.sugaralmond.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.mauve.css">
+      <DependentUpon>main.mauve.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.mauve.min.css">
+      <DependentUpon>main.mauve.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.sandstone.css">
+      <DependentUpon>main.sandstone.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.sandstone.min.css">
+      <DependentUpon>main.sandstone.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.sugaralmond.css">
+      <DependentUpon>main.sugaralmond.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.sugaralmond.min.css">
+      <DependentUpon>main.sugaralmond.css</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.mauve.css">
+      <DependentUpon>popup.mauve.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.mauve.min.css">
+      <DependentUpon>popup.mauve.css</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.sandstone.css">
+      <DependentUpon>popup.sandstone.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.sandstone.min.css">
+      <DependentUpon>popup.sandstone.css</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.sugaralmond.css">
+      <DependentUpon>popup.sugaralmond.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.sugaralmond.min.css">
+      <DependentUpon>popup.sugaralmond.css</DependentUpon>
+    </Content>
+    <None Include="editor\advedit.mauve.less" />
+    <None Include="editor\advedit.sandstone.less" />
+    <None Include="editor\advedit.sugaralmond.less" />
+    <None Include="editor\notify.mauve.less" />
+    <None Include="editor\notify.sandstone.less" />
+    <None Include="editor\notify.sugaralmond.less" />
+    <None Include="editor\_advancededitor.less" />
+    <Content Include="editor\advedit.sandstone.css">
+      <DependentUpon>advedit.sandstone.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.sandstone.min.css">
+      <DependentUpon>advedit.sandstone.css</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.sugaralmond.css">
+      <DependentUpon>advedit.sugaralmond.less</DependentUpon>
+    </Content>
+    <Content Include="editor\advedit.sugaralmond.min.css">
+      <DependentUpon>advedit.sugaralmond.css</DependentUpon>
+    </Content>
+    <Content Include="editor\images\ui-bg_hexagon_90_eeeeee_12x10.png" />
+    <Content Include="editor\images\ui-icons_222222_256x240.png" />
+    <Content Include="editor\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="editor\images\ui-icons_333333_256x240.png" />
+    <Content Include="editor\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="editor\images\ui-icons_efefef_256x240.png" />
+    <Content Include="editor\notify.mauve.css">
+      <DependentUpon>notify.mauve.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.mauve.min.css">
+      <DependentUpon>notify.mauve.css</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.sandstone.css">
+      <DependentUpon>notify.sandstone.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.sandstone.min.css">
+      <DependentUpon>notify.sandstone.css</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.sugaralmond.css">
+      <DependentUpon>notify.sugaralmond.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.sugaralmond.min.css">
+      <DependentUpon>notify.sugaralmond.css</DependentUpon>
+    </Content>
+    <Content Include="editor\_jquery-ui.less" />
+    <Content Include="skins\logon.amethystorchid.css">
+      <DependentUpon>logon.amethystorchid.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.amethystorchid.min.css">
+      <DependentUpon>logon.amethystorchid.css</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.blueizis.css">
+      <DependentUpon>logon.blueizis.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.blueizis.min.css">
+      <DependentUpon>logon.blueizis.css</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.classic.css">
+      <DependentUpon>logon.classic.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.classic.min.css">
+      <DependentUpon>logon.classic.css</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.frenchblue.css">
+      <DependentUpon>logon.frenchblue.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.frenchblue.min.css">
+      <DependentUpon>logon.frenchblue.css</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.mosaicblue.css">
+      <DependentUpon>logon.mosaicblue.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.mosaicblue.min.css">
+      <DependentUpon>logon.mosaicblue.css</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.plum.css">
+      <DependentUpon>logon.plum.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.plum.min.css">
+      <DependentUpon>logon.plum.css</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.quetzalgreen.css">
+      <DependentUpon>logon.quetzalgreen.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.quetzalgreen.min.css">
+      <DependentUpon>logon.quetzalgreen.css</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.rust.css">
+      <DependentUpon>logon.rust.less</DependentUpon>
+    </Content>
+    <Content Include="skins\logon.rust.min.css">
+      <DependentUpon>logon.rust.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.amethystorchid.css">
+      <DependentUpon>main.amethystorchid.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.amethystorchid.min.css">
+      <DependentUpon>main.amethystorchid.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.blueizis.css">
+      <DependentUpon>main.blueizis.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.blueizis.min.css">
+      <DependentUpon>main.blueizis.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.classic.css">
+      <DependentUpon>main.classic.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.classic.min.css">
+      <DependentUpon>main.classic.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.frenchblue.css">
+      <DependentUpon>main.frenchblue.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.frenchblue.min.css">
+      <DependentUpon>main.frenchblue.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.mosaicblue.css">
+      <DependentUpon>main.mosaicblue.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.mosaicblue.min.css">
+      <DependentUpon>main.mosaicblue.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.plum.css">
+      <DependentUpon>main.plum.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.plum.min.css">
+      <DependentUpon>main.plum.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.quetzalgreen.css">
+      <DependentUpon>main.quetzalgreen.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.quetzalgreen.min.css">
+      <DependentUpon>main.quetzalgreen.css</DependentUpon>
+    </Content>
+    <Content Include="skins\main.rust.css">
+      <DependentUpon>main.rust.less</DependentUpon>
+    </Content>
+    <Content Include="skins\main.rust.min.css">
+      <DependentUpon>main.rust.css</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.amethystorchid.css">
+      <DependentUpon>notify.amethystorchid.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.amethystorchid.min.css">
+      <DependentUpon>notify.amethystorchid.css</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.blueizis.css">
+      <DependentUpon>notify.blueizis.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.blueizis.min.css">
+      <DependentUpon>notify.blueizis.css</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.classic.css">
+      <DependentUpon>notify.classic.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.classic.min.css">
+      <DependentUpon>notify.classic.css</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.frenchblue.css">
+      <DependentUpon>notify.frenchblue.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.frenchblue.min.css">
+      <DependentUpon>notify.frenchblue.css</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.mosaicblue.css">
+      <DependentUpon>notify.mosaicblue.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.mosaicblue.min.css">
+      <DependentUpon>notify.mosaicblue.css</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.plum.css">
+      <DependentUpon>notify.plum.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.plum.min.css">
+      <DependentUpon>notify.plum.css</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.quetzalgreen.css">
+      <DependentUpon>notify.quetzalgreen.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.quetzalgreen.min.css">
+      <DependentUpon>notify.quetzalgreen.css</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.rust.css">
+      <DependentUpon>notify.rust.less</DependentUpon>
+    </Content>
+    <Content Include="editor\notify.rust.min.css">
+      <DependentUpon>notify.rust.css</DependentUpon>
+    </Content>
+    <Content Include="skins\originals\advanced-editor.css" />
+    <Content Include="skins\originals\common.css" />
+    <Content Include="skins\originals\edit-notifier.css" />
+    <Content Include="skins\originals\fauxstrap.css" />
+    <Content Include="skins\originals\logon.css" />
+    <Content Include="skins\originals\main.css" />
+    <Content Include="skins\originals\mainpopup.css" />
+    <Content Include="skins\originals\TableStyles.css" />
+    <Content Include="skins\popup.amethystorchid.css">
+      <DependentUpon>popup.amethystorchid.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.amethystorchid.min.css">
+      <DependentUpon>popup.amethystorchid.css</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.blueizis.css">
+      <DependentUpon>popup.blueizis.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.blueizis.min.css">
+      <DependentUpon>popup.blueizis.css</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.classic.css">
+      <DependentUpon>popup.classic.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.classic.min.css">
+      <DependentUpon>popup.classic.css</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.frenchblue.css">
+      <DependentUpon>popup.frenchblue.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.frenchblue.min.css">
+      <DependentUpon>popup.frenchblue.css</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.mosaicblue.css">
+      <DependentUpon>popup.mosaicblue.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.mosaicblue.min.css">
+      <DependentUpon>popup.mosaicblue.css</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.plum.css">
+      <DependentUpon>popup.plum.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.plum.min.css">
+      <DependentUpon>popup.plum.css</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.quetzalgreen.css">
+      <DependentUpon>popup.quetzalgreen.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.quetzalgreen.min.css">
+      <DependentUpon>popup.quetzalgreen.css</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.rust.css">
+      <DependentUpon>popup.rust.less</DependentUpon>
+    </Content>
+    <Content Include="skins\popup.rust.min.css">
+      <DependentUpon>popup.rust.css</DependentUpon>
+    </Content>
     <EmbeddedResource Include="feed.png" />
     <Content Include="packages.config">
       <SubType>Designer</SubType>
@@ -195,8 +549,77 @@
     </None>
     <EmbeddedResource Include="_TextZone.cshtml" />
     <EmbeddedResource Include="_WidgetZone.cshtml" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <None Include="editor\advedit.amethystorchid.less" />
+    <None Include="editor\advedit.blueizis.less" />
+    <None Include="editor\advedit.classic.less" />
+    <None Include="editor\advedit.frenchblue.less" />
+    <None Include="editor\advedit.mosaicblue.less" />
+    <None Include="editor\advedit.plum.less" />
+    <None Include="editor\advedit.quetzalgreen.less" />
+    <None Include="editor\advedit.rust.less" />
+    <None Include="editor\_colors.less" />
+    <None Include="editor\_edit-notifier.less" />
+    <None Include="skins\logon.amethystorchid.less" />
+    <None Include="skins\logon.blueizis.less" />
+    <None Include="skins\logon.classic.less" />
+    <None Include="skins\logon.frenchblue.less" />
+    <None Include="skins\logon.mauve.less" />
+    <None Include="skins\logon.mosaicblue.less" />
+    <None Include="skins\logon.plum.less" />
+    <None Include="skins\logon.quetzalgreen.less" />
+    <None Include="skins\logon.rust.less" />
+    <None Include="skins\logon.sandstone.less" />
+    <None Include="skins\logon.sugaralmond.less" />
+    <None Include="skins\main.amethystorchid.less" />
+    <None Include="skins\main.blueizis.less" />
+    <None Include="skins\main.classic.less" />
+    <None Include="skins\main.frenchblue.less" />
+    <None Include="skins\main.mauve.less" />
+    <None Include="skins\main.mosaicblue.less" />
+    <None Include="skins\main.plum.less" />
+    <None Include="skins\main.quetzalgreen.less" />
+    <None Include="skins\main.rust.less" />
+    <None Include="editor\notify.amethystorchid.less" />
+    <None Include="editor\notify.blueizis.less" />
+    <None Include="editor\notify.classic.less" />
+    <None Include="editor\notify.frenchblue.less" />
+    <None Include="editor\notify.mosaicblue.less" />
+    <None Include="editor\notify.plum.less" />
+    <None Include="editor\notify.quetzalgreen.less" />
+    <None Include="editor\notify.rust.less" />
+    <None Include="skins\main.sandstone.less" />
+    <None Include="skins\main.sugaralmond.less" />
+    <None Include="skins\popup.amethystorchid.less" />
+    <None Include="skins\popup.blueizis.less" />
+    <None Include="skins\popup.classic.less" />
+    <None Include="skins\popup.frenchblue.less" />
+    <None Include="skins\popup.mauve.less" />
+    <None Include="skins\popup.mosaicblue.less" />
+    <None Include="skins\popup.plum.less" />
+    <None Include="skins\popup.quetzalgreen.less" />
+    <None Include="skins\popup.rust.less" />
+    <None Include="skins\popup.sandstone.less" />
+    <None Include="skins\popup.sugaralmond.less" />
+    <None Include="skins\_colors.less" />
+    <None Include="skins\_common.less" />
+    <None Include="skins\_fauxstrap.less" />
+    <None Include="skins\_logon-window.less" />
+    <None Include="skins\_logon.less" />
+    <None Include="skins\_main-popup.less" />
+    <None Include="skins\_main-window.less" />
+    <None Include="skins\_main.less" />
+    <None Include="skins\_popup.less" />
+    <None Include="skins\_TableStyles.less" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(ProjectDir)\skins\*.min.css" "$(SolutionDir)\CMSAdmin\Assets\Admin\skins\" /F /R /Y /I
+xcopy "$(ProjectDir)\editor\*.min.css" "$(SolutionDir)\CMSAdmin\Assets\Admin\editor\" /F /R /Y /I</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

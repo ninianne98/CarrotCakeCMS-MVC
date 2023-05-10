@@ -20,6 +20,7 @@ namespace Carrotware.CMS.Interface {
 			DropDownList,
 			CheckBoxList,
 			TextBox,
+			ColorBox,
 			MultiLineTextBox,
 			RichHTMLTextBox,
 			CheckBox

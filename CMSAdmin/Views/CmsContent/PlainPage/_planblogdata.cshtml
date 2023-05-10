@@ -7,7 +7,7 @@
 		var dates = CmsPage.GetSiteDates(6);
 
 		if (dates.Any()) {
-			<h1>Dates</h1>
+			<h2>Dates</h2>
 			<ul class="sidemenu">
 				@foreach (var itm in dates) {
 					<li class="child-nav">
@@ -20,7 +20,7 @@
 		}
 
 		if (cats.Any()) {
-			<h1>Category</h1>
+			<h2>Category</h2>
 			<ul class="sidemenu">
 				@foreach (var itm in cats) {
 					<li class="child-nav">
@@ -33,7 +33,7 @@
 		}
 
 		if (tags.Any()) {
-			<h1>Tags</h1>
+			<h2>Tags</h2>
 			<ul class="sidemenu">
 				@foreach (var itm in tags) {
 					<li class="child-nav">

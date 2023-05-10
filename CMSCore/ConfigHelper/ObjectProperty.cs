@@ -28,7 +28,7 @@ namespace Carrotware.CMS.Core {
 			this.CanRead = prop.CanRead;
 			this.CanWrite = prop.CanWrite;
 			this.Props = prop;
-			this.CompanionSourceFieldName = String.Empty;
+			this.CompanionSourceFieldName = string.Empty;
 			this.FieldMode = (prop.PropertyType == typeof(bool)) ?
 					WidgetAttribute.FieldMode.CheckBox : WidgetAttribute.FieldMode.TextBox;
 		}
@@ -111,7 +111,7 @@ namespace Carrotware.CMS.Core {
 					try {
 						string[] path = w.ControlPath.Split('|');
 						string viewPath = path[0];
-						string modelClass = String.Empty;
+						string modelClass = string.Empty;
 						if (path.Length > 1) {
 							modelClass = path[1];
 							Type objType = ReflectionUtilities.GetTypeFromString(modelClass);
@@ -143,12 +143,20 @@ namespace Carrotware.CMS.Core {
 			List<ObjectProperty> lstDefProps = ObjectProperty.GetObjectProperties(widget);
 
 			//require that widget be attributed to be on the list
-			List<string> limitedPropertyList = (from ww in widget.GetType().GetProperties()
+			List<string> widgetProperties = (from ww in widget.GetType().GetProperties()
 												where Attribute.IsDefined(ww, typeof(WidgetAttribute))
 												select ww.Name.ToLowerInvariant()).ToList();
 
+			List<string> limitedProperties = widgetProperties;
+			try {
+				if (widget is IWidgetLimitedProperties) {
+					limitedProperties = ((IWidgetLimitedProperties)widget).LimitedPropertyList;
+				}
+			} catch (Exception ex) { }
+
 			List<ObjectProperty> lstPropsToEdit = (from p in lstDefProps
-												   join l in limitedPropertyList on p.Name.ToLowerInvariant() equals l.ToLowerInvariant()
+												   join l in widgetProperties on p.Name.ToLowerInvariant() equals l.ToLowerInvariant()
+												   join lp in limitedProperties on p.Name.ToLowerInvariant() equals lp.ToLowerInvariant()
 												   where p.CanRead == true
 													   && p.CanWrite == true
 												   select p).ToList();
@@ -161,11 +169,11 @@ namespace Carrotware.CMS.Core {
 
 				string sListSourcePropertyName = (from p in lstDefProps
 												  where p.Name.ToLowerInvariant() == sName.ToLowerInvariant()
-														&& !String.IsNullOrEmpty(p.CompanionSourceFieldName)
+														&& !string.IsNullOrEmpty(p.CompanionSourceFieldName)
 												  select p.CompanionSourceFieldName).FirstOrDefault();
 
-				if (String.IsNullOrEmpty(sListSourcePropertyName)) {
-					sListSourcePropertyName = String.Empty;
+				if (string.IsNullOrEmpty(sListSourcePropertyName)) {
+					sListSourcePropertyName = string.Empty;
 				}
 
 				sourceProperty = (from p in lstDefProps
@@ -175,10 +183,10 @@ namespace Carrotware.CMS.Core {
 								  select p).FirstOrDefault();
 
 				if (dp.FieldMode != WidgetAttribute.FieldMode.CheckBoxList) {
-					string sDefTxt = String.Empty;
+					string sDefTxt = string.Empty;
 
 					if (lstItmVals != null && lstItmVals.Any()) {
-						dp.TextValue = lstItmVals != null ? lstItmVals.FirstOrDefault().KeyValue : String.Empty;
+						dp.TextValue = lstItmVals != null ? lstItmVals.FirstOrDefault().KeyValue : string.Empty;
 						dp.DefValue = dp.TextValue;
 					} else {
 						if (dp.DefValue != null) {

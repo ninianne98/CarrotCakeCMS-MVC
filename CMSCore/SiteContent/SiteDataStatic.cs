@@ -1,17 +1,17 @@
 ﻿using Carrotware.CMS.Data;
 using Carrotware.CMS.DBUpdater;
-using Carrotware.Web.UI.Components;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security;
 using System.Text;
-using System.Web.Caching;
 using System.Web;
+using System.Web.Caching;
 using System.Xml;
-using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -141,6 +141,20 @@ namespace Carrotware.CMS.Core {
 			}
 
 			return string.Format("{0}", filePath).Length < 2;
+		}
+
+		public static bool IsLikelyFakeSearch() {
+			if (!IsWebView) {
+				return false;
+			}
+
+			// no blog index is set, but the URL looks like a search is happening
+			return !CurrentSite.Blog_Root_ContentID.HasValue
+						&& (CurrentSite.IsBlogDateFolderPath
+								|| CurrentSite.IsBlogCategoryPath
+								|| CurrentSite.IsBlogTagPath
+								|| CurrentSite.IsBlogEditorFolderPath
+								|| CurrentSite.IsSiteSearchPath);
 		}
 
 		private static string SiteKeyPrefix = "cms_SiteData_";
@@ -304,7 +318,7 @@ namespace Carrotware.CMS.Core {
 
 				if (SecurityData.IsAdmin || SecurityData.IsSiteEditor) {
 					if (sCurrentPage.Length <= 1 || sCurrentPage == SiteData.DefaultDirectoryFilename) {
-						pageContents = pageHelper.FindHome(SiteData.CurrentSiteID);
+						pageContents = pageHelper.FindHome(SiteData.CurrentSiteID, false);
 					} else {
 						pageContents = pageHelper.FindByFilename(SiteData.CurrentSiteID, sCurrentPage);
 					}
@@ -322,6 +336,10 @@ namespace Carrotware.CMS.Core {
 
 				if ((SiteData.IsPageSampler || IsPageTemplate || !IsWebView) && pageContents == null) {
 					pageContents = ContentPageHelper.GetSamplerView();
+				}
+
+				if (pageContents == null && SiteData.IsLikelyFakeSearch()) {
+					pageContents = ContentPageHelper.GetEmptySearch();
 				}
 
 				if (IsPageTemplate) {
@@ -640,6 +658,9 @@ namespace Carrotware.CMS.Core {
 					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						return navHelper.GetLatestVersion(CurrentSite.SiteID, CurrentSite.Blog_Root_ContentID.Value);
 					}
+				} else {
+					// fake / mockup of a search page
+					return SiteNavHelper.GetEmptySearch();
 				}
 				return null;
 			}
@@ -661,8 +682,22 @@ namespace Carrotware.CMS.Core {
 			get { return "/"; }
 		}
 
+		[Display(Name = "Default - Plain L-R-C Content")]
 		public static string DefaultTemplateFilename {
 			get { return "~/Views/CmsContent/PlainPage/PlainPageView.cshtml".ToLowerInvariant(); }
+		}
+
+		[Display(Name = "Black 'n White - Plain L-R-C Content")]
+		public static string DefaultTemplateBWFilename {
+			get { return "~/Views/CmsContent/PlainPage/PlainPageBWView.cshtml".ToLowerInvariant(); }
+		}
+
+		public static List<string> DefaultTemplates {
+			get {
+				string[] _defaultTemplates = new string[] { DefaultTemplateFilename, DefaultTemplateBWFilename };
+
+				return _defaultTemplates.ToList();
+			}
 		}
 
 		public static string PreviewTemplateFilePage {
@@ -853,6 +888,9 @@ namespace Carrotware.CMS.Core {
 							if (site.Blog_Root_ContentID.HasValue) {
 								using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 									SiteNav blogNavPage = navHelper.GetLatestVersion(site.SiteID, site.Blog_Root_ContentID.Value);
+									if (blogNavPage == null) {
+										blogNavPage = SiteNavHelper.GetEmptySearch();
+									}
 									if (blogNavPage != null) {
 										sRequestedURL = blogNavPage.FileName;
 									}
@@ -877,7 +915,6 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string RssDocType { get { return "application/rss+xml"; } }
-
 
 		public static string RawMode { get { return "raw"; } }
 		public static string HtmlMode { get { return "html"; } }

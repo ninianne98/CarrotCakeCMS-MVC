@@ -103,7 +103,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 			try {
 				string sFoundVal = this.GetParmValue("GalleryID", Guid.Empty.ToString());
 
-				if (!string.IsNullOrEmpty(sFoundVal) && this.GalleryID == Guid.Empty) {
+				if (!string.IsNullOrEmpty(sFoundVal) && sFoundVal != Guid.Empty.ToString() && this.GalleryID == Guid.Empty) {
 					this.GalleryID = new Guid(sFoundVal);
 				}
 			} catch (Exception ex) { }

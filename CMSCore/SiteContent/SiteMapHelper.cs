@@ -29,8 +29,7 @@ namespace Carrotware.CMS.Core {
 			List<SiteNav> lstNav = new List<SiteNav>();
 
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-				//lstNav = navHelper.GetTwoLevelNavigation(SiteData.CurrentSiteID, true);
-				lstNav = navHelper.GetLevelDepthNavigation(SiteData.CurrentSiteID, 4, true);
+				lstNav = navHelper.GetLevelDepthNavigation(SiteData.CurrentSiteID, 5, true);
 			}
 			lstNav.RemoveAll(x => x.ShowInSiteMap == false);
 

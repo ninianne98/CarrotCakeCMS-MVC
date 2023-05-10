@@ -44,11 +44,14 @@
 @black: #0a0a0a;
 @white: #efefef;
 
-.bootstrapColorTheme(@navText, @themeColor) {
-	@inverseColor: darken(@themeColor, 12%);
+.bootstrapColorTheme(@themeColor) {
+	@navText: contrast(@themeColor, darken(@themeColor, 75%), lighten(@themeColor, 75%));
 	@navColor: lighten(@themeColor, 7%);
-	@hoverColor: lighten(@themeColor, 35%);
-	@linkColor: darken(@themeColor, 7%);
+	@inverseColor: darken(@themeColor, 12%);
+	@linkColor: contrast(@themeColor, darken(@themeColor, 10%), lighten(@themeColor, 10%));
+
+	@hoverColor: contrast(@themeColor, darken(@themeColor, 35%), lighten(@themeColor, 35%));
+	@hoverText: contrast(@hoverColor, darken(@themeColor, 65%), lighten(@themeColor, 65%));
 
 	.navbar-inverse {
 		background-color: @inverseColor;
@@ -68,6 +71,7 @@
 
 	.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
 		background-color: @hoverColor;
+		color: @hoverText;
 	}
 
 	.navbar-inverse {
@@ -111,7 +115,8 @@
 	}
 
 	.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
-		color: @inverseColor;
+		background-color: @hoverColor;
+		color: @hoverText;
 	}
 
 	.navbar-inverse .navbar-nav > .dropdown > a .caret {

@@ -154,9 +154,13 @@ namespace Carrotware.CMS.Core {
 
 		public bool IsSiteIndex {
 			get {
-				return this.TheSite != null && this.ThePage != null
+				var realSearch = this.TheSite != null && this.ThePage != null
 						&& this.TheSite.Blog_Root_ContentID.HasValue
 						&& this.ThePage.Root_ContentID == this.TheSite.Blog_Root_ContentID.Value;
+
+				var fakeSearch = SiteData.IsLikelyFakeSearch();
+
+				return fakeSearch || realSearch;
 			}
 		}
 
@@ -363,6 +367,9 @@ namespace Carrotware.CMS.Core {
 							_blogidxnav = navHelper.GetLatestVersion(this.TheSite.SiteID, this.TheSite.Blog_Root_ContentID.Value);
 						}
 						_blogidxnav = CMSConfigHelper.FixNavLinkText(_blogidxnav);
+					} else {
+						// fake / mockup of a search page
+						_blogidxnav = SiteNavHelper.GetEmptySearch();
 					}
 				}
 
@@ -464,7 +471,7 @@ namespace Carrotware.CMS.Core {
 		public string GeneratedFileName {
 			get {
 				if (this.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
-					return ContentPageHelper.CreateFileNameFromSlug(this.TheSite.SiteID, this.ThePage.GoLiveDate, this.ThePage.PageSlug);
+					return ContentPageHelper.CreateFileNameFromSlug(this.TheSite, this.ThePage.GoLiveDate, this.ThePage.PageSlug);
 				} else {
 					return this.ThePage.FileName;
 				}

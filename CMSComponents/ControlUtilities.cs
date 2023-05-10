@@ -59,8 +59,8 @@ namespace Carrotware.CMS.UI.Components {
 				if (pageNav == null || pageNav.SiteID == Guid.Empty) {
 					pageNav = new SiteNav();
 					pageNav.Root_ContentID = Guid.Empty;
-					pageNav.FileName = "/##/";
-					pageNav.TemplateFile = "/##/";
+					pageNav.FileName = "/#";
+					pageNav.TemplateFile = "/##/##/";
 				}
 
 				return pageNav;
@@ -74,7 +74,7 @@ namespace Carrotware.CMS.UI.Components {
 				if (pageNav == null) {
 					pageNav = new SiteNav();
 					pageNav.Root_ContentID = Guid.Empty;
-					pageNav.FileName = "/##/##/";
+					pageNav.FileName = "/#";
 					pageNav.TemplateFile = "/##/##/";
 				}
 

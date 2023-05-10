@@ -1,0 +1,19 @@
+﻿@import "_colors.less";
+@import "_fauxstrap.less";
+@import "_main-popup.less";
+@import "_common.less";
+@import "_TableStyles.less";
+
+.popupWindow(@themeColor) {
+	/*
+CarrotCake CMS Theme Stylesheet - Popup
+*/
+	.cms-theme-color-code {
+		color: @themeColor;
+	}
+
+	.fauxStrap(@themeColor);
+	.popupUI(@themeColor);
+	.commonTheme(@themeColor);
+	.tableStyles(@themeColor);
+}

@@ -635,9 +635,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					lst = du.MergeMessages(lst, status.Messages);
 				} else {
 					DataInfo ver = DatabaseUpdate.GetDbSchemaVersion();
-
+					int i = 1;
 					du.HandleResponse(lst, "Database up-to-date [" + ver.DataValue + "] ");
-					du.HandleResponse(lst, du.BuildUpdateString(1), du.Refresh01());
+					du.HandleResponse(lst, du.BuildUpdateString(i++), du.Refresh01());
 				}
 
 				bUpdate = du.DatabaseNeedsUpdate();
@@ -1532,6 +1532,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 					case WidgetAttribute.FieldMode.DropDownList:
 					case WidgetAttribute.FieldMode.TextBox:
+					case WidgetAttribute.FieldMode.ColorBox:
 					case WidgetAttribute.FieldMode.MultiLineTextBox:
 					case WidgetAttribute.FieldMode.RichHTMLTextBox:
 						p.KeyValue = itm.TextValue;
@@ -2367,7 +2368,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult SiteSkinIndex(PagedData<CMSTemplate> model) {
 			model.ToggleSort();
-			var templates = cmsHelper.Templates.Where(x => x.TemplatePath.ToLowerInvariant() != SiteData.DefaultTemplateFilename.ToLowerInvariant()).ToList();
+
+			var templates = cmsHelper.Templates.Where(t => !SiteData.DefaultTemplates.Contains(t.TemplatePath.ToLowerInvariant())).ToList();
 			var srt = model.ParseSort();
 
 			var query = ReflectionUtilities.SortByParm<CMSTemplate>(templates, srt.SortField, srt.SortDirection);

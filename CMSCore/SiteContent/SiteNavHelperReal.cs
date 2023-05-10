@@ -507,7 +507,7 @@ namespace Carrotware.CMS.Core {
 		public string GetBlogHeadingFromURL(SiteData currentSite, string sFilterPath) {
 			Guid siteID = currentSite.SiteID;
 
-			string sTitle = String.Empty;
+			string sTitle = string.Empty;
 
 			if (currentSite.CheckIsBlogCategoryPath(sFilterPath)) {
 				vw_carrot_CategoryURL query = CompiledQueries.cqGetCategoryByURL(db, siteID, sFilterPath);
@@ -673,11 +673,11 @@ namespace Carrotware.CMS.Core {
 				pageNumber = 0;
 			}
 
-			if (String.IsNullOrEmpty(sortField)) {
+			if (string.IsNullOrEmpty(sortField)) {
 				sortField = "CreateDate";
 			}
 
-			if (String.IsNullOrEmpty(sortDir)) {
+			if (string.IsNullOrEmpty(sortDir)) {
 				sortDir = "DESC";
 			}
 
@@ -689,7 +689,7 @@ namespace Carrotware.CMS.Core {
 						 where p.ToLowerInvariant().Trim() == sortField.ToLowerInvariant().Trim()
 						 select p).FirstOrDefault();
 
-			if (!String.IsNullOrEmpty(sortField)) {
+			if (!string.IsNullOrEmpty(sortField)) {
 				IsContentProp = ReflectionUtilities.DoesPropertyExist(typeof(vw_carrot_Content), sortField);
 			}
 

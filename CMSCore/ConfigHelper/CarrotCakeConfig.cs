@@ -127,6 +127,13 @@ namespace Carrotware.CMS.Core {
 			get { return (String)this["AdminFolderPath"]; }
 			set { this["AdminFolderPath"] = value; }
 		}
+
+		[Description("Override parameter for site skin")]
+		[ConfigurationProperty("SiteSkin", DefaultValue = "Classic", IsRequired = false)]
+		public String SiteSkin {
+			get { return (String)this["SiteSkin"]; }
+			set { this["SiteSkin"] = value; }
+		}
 	}
 
 	//==============================

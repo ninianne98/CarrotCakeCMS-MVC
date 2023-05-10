@@ -213,7 +213,7 @@ form.search {
 	}
 
 		#header h1#logo span {
-			color: #F18359;
+			color: #FF9966;
 		}
 
 	#header h2#slogan {
@@ -269,7 +269,7 @@ form.search {
 #sidebar {
 	float: left;
 	min-width: 50px;
-	width: 20%;
+	width: 24%;
 	margin: 0;
 	padding: 0;
 	display: inline;
@@ -302,7 +302,7 @@ form.search {
 #rightbar {
 	float: right;
 	min-width: 50px;
-	width: 20%;
+	width: 24%;
 	padding: 0;
 	margin: 0;
 }
@@ -317,7 +317,7 @@ form.search {
 }
 
 #calendar caption {
-	color: #F9864D;
+	color: #FF9966;
 	font-size: 1.75em;
 	font-weight: 600;
 	padding: 5px;
@@ -352,9 +352,9 @@ form.search {
 /* main column */
 #main {
 	float: left;
-	margin: 0 0 0 15px;
+	margin: 0 0 0 12px;
 	padding: 0;
-	width: 54%;
+	width: 48%;
 }
 
 .post-footer {

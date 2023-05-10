@@ -127,6 +127,23 @@ namespace Carrotware.CMS.Core {
 				using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 					sd = navHelper.GetLatestVersion(this.SiteID, this.Root_ContentID);
 				}
+				// in the case of stubbed data, which is not in the db, convert the content already present
+				if (sd == null) {
+					sd = new SiteNav();
+					sd.Root_ContentID = this.Root_ContentID;
+					sd.ContentID = this.ContentID;
+					sd.ContentType = this.ContentType;
+					sd.SiteID = this.SiteID;
+					sd.NavOrder = this.NavOrder;
+					sd.FileName = this.FileName;
+					sd.NavMenuText = this.NavMenuText;
+					sd.TitleBar = this.TitleBar;
+					sd.TemplateFile = this.TemplateFile;
+					sd.CreateDate = this.CreateDate;
+					sd.RetireDate = this.RetireDate;
+					sd.PageActive = this.PageActive;
+					sd.PageText = this.PageText;
+				}
 			}
 			return sd;
 		}
@@ -809,7 +826,7 @@ namespace Carrotware.CMS.Core {
 					}
 				}
 
-				theFileName = ContentPageHelper.CreateFileNameFromSlug(SiteData.CurrentSite.SiteID, dateGoLive, thePageSlug);
+				theFileName = ContentPageHelper.CreateFileNameFromSlug(SiteData.CurrentSite, dateGoLive, thePageSlug);
 
 				if (SiteData.IsPageSpecial(theFileName) || SiteData.IsLikelyHomePage(theFileName)) {
 					return false;

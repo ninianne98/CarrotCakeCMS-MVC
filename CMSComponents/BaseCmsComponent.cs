@@ -1,4 +1,5 @@
 ﻿using Carrotware.CMS.Core;
+using Carrotware.CMS.Interface;
 using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ using System.Text;
 
 namespace Carrotware.CMS.UI.Components {
 
-	public abstract class BaseCmsComponent : BaseWebComponent, ICmsChildrenComponent, ICmsMainComponent {
+	public abstract class BaseCmsComponent : BaseWebComponent, ICmsChildrenComponent, ICmsMainComponent, IWidget {
 		protected ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper();
 		protected HtmlTag _topTag = new HtmlTag("ul");
 
@@ -25,11 +26,20 @@ namespace Carrotware.CMS.UI.Components {
 			: base() {
 			LoadData();
 
+			try {
+				var name = this.GetType().ToString().Split('.');
+				this.ElementId = name[name.Length - 1].ToLowerInvariant();
+			} catch {
+				this.ElementId = "component";
+			}
+
 			this.CssSelected = "selected";
 			this.CssAnchor = string.Empty;
 			this.CssULClassTop = "parent";
 			this.CssULClassLower = "children";
 			this.CssHasChildren = "sub";
+
+			this.SiteID = SiteData.CurrentSite.SiteID;
 		}
 
 		public virtual bool MultiLevel {
@@ -38,12 +48,22 @@ namespace Carrotware.CMS.UI.Components {
 			}
 		}
 
+		[Widget(WidgetAttribute.FieldMode.TextBox)]
 		public string CssClass { get; set; }
+
 		public string CssItem { get; set; }
 		public string CssAnchor { get; set; }
+
+		[Widget(WidgetAttribute.FieldMode.TextBox)]
 		public string CssSelected { get; set; }
+
+		[Widget(WidgetAttribute.FieldMode.TextBox)]
 		public string CssULClassTop { get; set; }
+
+		[Widget(WidgetAttribute.FieldMode.TextBox)]
 		public string CssULClassLower { get; set; }
+
+		[Widget(WidgetAttribute.FieldMode.TextBox)]
 		public string CssHasChildren { get; set; }
 
 		public object ItemAttributes { get; set; }
@@ -56,6 +76,63 @@ namespace Carrotware.CMS.UI.Components {
 		public string ElementId { get; set; }
 
 		public List<SiteNav> NavigationData { get; set; }
+
+		//================
+
+		public Guid PageWidgetID { get; set; }
+
+		public Guid RootContentID { get; set; }
+
+		public Guid SiteID { get; set; }
+
+		[Widget(WidgetAttribute.FieldMode.TextBox)]
+		public string WidgetClientID { get; set; }
+
+		public virtual bool EnableEdit {
+			get { return false; }
+		}
+
+		public bool IsBeingEdited { get; set; }
+
+		public bool IsDynamicInserted { get; set; }
+
+		public Dictionary<string, string> PublicParmValues { get; set; }
+
+		public virtual Dictionary<string, string> JSEditFunctions {
+			get {
+				return new Dictionary<string, string>();
+			}
+		}
+
+		void IWidget.LoadData() {
+			if (this.PublicParmValues == null) {
+				this.PublicParmValues = new Dictionary<string, string>();
+			}
+
+			this.LoadData();
+		}
+
+		#region Common Parser Routines
+
+		public string GetParmValue(string sKey) {
+			return ParmParser.GetParmValue(this.PublicParmValues, sKey);
+		}
+
+		public string GetParmValue(string sKey, string sDefault) {
+			return ParmParser.GetParmValue(this.PublicParmValues, sKey, sDefault);
+		}
+
+		public string GetParmValueDefaultEmpty(string sKey, string sDefault) {
+			return ParmParser.GetParmValueDefaultEmpty(this.PublicParmValues, sKey, sDefault);
+		}
+
+		public List<string> GetParmValueList(string sKey) {
+			return ParmParser.GetParmValueList(this.PublicParmValues, sKey);
+		}
+
+		#endregion Common Parser Routines
+
+		//================
 
 		protected virtual void LoadData() {
 			_topTag = new HtmlTag("ul");
@@ -96,7 +173,6 @@ namespace Carrotware.CMS.UI.Components {
 
 		protected StringBuilder WriteListSuffix(StringBuilder output) {
 			output.Append(_topTag.CloseTag());
-
 			return output;
 		}
 

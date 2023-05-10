@@ -85,6 +85,7 @@ a {
 	margin: 0 auto;
 	padding: 0px 20px;
 	background: url(images/img01.jpg) no-repeat left top;
+	clear: both;
 }
 
 /* Banner */
@@ -92,12 +93,14 @@ a {
 #banner {
 	overflow: hidden;
 	height: 400px;
+	clear: both;
 	background: url(images/img04.jpg) no-repeat center bottom;
 }
 
 #banner-sub {
 	overflow: hidden;
 	height: 280px;
+	clear: both;
 	background: url(images/img04.jpg) no-repeat center bottom;
 }
 
@@ -220,6 +223,7 @@ a {
 	margin: 10px;
 	padding: 0;
 	font-size: 16px;
+	clear: both;
 }
 
 #menu {

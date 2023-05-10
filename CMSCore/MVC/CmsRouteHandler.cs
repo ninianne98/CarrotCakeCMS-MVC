@@ -92,6 +92,11 @@ namespace Carrotware.CMS.Core {
 							navData = SiteNavHelper.GetEmptyHome();
 						}
 
+						// use a fake search page when needed, but don't allow editing
+						if (!SecurityData.AdvancedEditMode && SiteData.IsLikelyFakeSearch() && navData == null) {
+							navData = SiteNavHelper.GetEmptySearch();
+						}
+
 						requestCtx.RouteData.Values["controller"] = ContentCtrlr;
 						if (navData != null) {
 							SiteData.WriteDebugException("cmsroutehandler != null", new Exception(string.Format("Default: {0}", navData.FileName)));

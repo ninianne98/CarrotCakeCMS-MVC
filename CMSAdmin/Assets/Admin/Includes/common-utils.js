@@ -364,7 +364,6 @@ var cmsDefaultValidDivID = 'formPrettyValidationSummary';
 
 $(document).ready(function () {
 	$('.pretty-validation-button').css('display', 'none');
-
 	if ($('#' + cmsDefaultValidDivID + ' ul li').length > 0) {
 		$('.pretty-validation-button').css('display', '');
 		cmsLoadPrettyValidationPopupMVC(cmsDefaultValidDivID);
@@ -372,7 +371,9 @@ $(document).ready(function () {
 });
 
 function cmsClickPrettyValidationPopupMVC() {
-	cmsLoadPrettyValidationPopupMVC(cmsDefaultValidDivID);
+	if ($('#' + cmsDefaultValidDivID + ' ul li').length > 0) {
+		cmsLoadPrettyValidationPopupMVC(cmsDefaultValidDivID);
+	}
 	return false;
 }
 

@@ -1,0 +1,150 @@
+﻿body {
+	background-color: #609973;
+	font-size: 12px;
+	font-family: Verdana, Helvetica, Sans-Serif;
+}
+
+a {
+	text-decoration: none;
+}
+
+	a:link {
+		color: #0191D8;
+	}
+
+	a:active {
+		color: #0191D8;
+	}
+
+	a:visited {
+		color: #0191D8;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
+.wrappedcontent {
+	width: 0px;
+	padding: 0px;
+	min-width: 480px;
+	margin: 0px auto;
+	margin-top: 100px;
+	border-collapse: collapse;
+	border-width: 0px;
+	border-style: solid;
+	border-color: #609973;
+}
+
+.wrappedcontent-inner {
+	font-size: 12px;
+	font-family: Verdana, Helvetica, Sans-Serif;
+	background-color: #ffffff;
+	margin: 0px;
+	padding: 0px;
+	margin-right: 30px;
+	margin-left: 30px;
+	overflow: hidden;
+	clear: both;
+}
+
+.box-buildversion {
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	margin-right: 5px;
+	margin-left: 30px;
+	margin-bottom: 10px;
+}
+
+.box-carrot {
+	margin: 0px;
+	padding: 0px;
+	float: right;
+	width: 80px;
+	height: 80px;
+	background: transparent url( ../images/carrot_sm.png ) no-repeat right top;
+	margin-right: 30px;
+	margin-left: 5px;
+	margin-bottom: 10px;
+}
+
+.box-top-left, .box-top-right, .box-top-center, .box-bottom-left, .box-bottom-right, .box-bottom-center {
+	margin: 0px;
+	padding: 0px;
+	height: 30px;
+}
+
+.box-top-left, .box-top-right, .box-bottom-left, .box-bottom-right {
+	width: 30px;
+}
+
+.box-top-left {
+	background-color: #609973;
+	background-image: url('../images/logonbox-topleft.png');
+	background-repeat: no-repeat;
+	background-position: left bottom;
+	float: left;
+}
+
+.box-top-right {
+	background-color: #609973;
+	background-image: url('../images/logonbox-topright.png');
+	background-position: right bottom;
+	background-repeat: no-repeat;
+	float: right;
+}
+
+.box-top-center {
+	background-image: url('../images/logonbox-topcenter.png');
+	background-repeat: repeat-x;
+	background-position: bottom;
+	clear: both;
+}
+
+.box-bottom-left {
+	background-color: #609973;
+	background-image: url('../images/logonbox-bottomleft.png');
+	background-position: left top;
+	background-repeat: no-repeat;
+	float: left;
+}
+
+.box-bottom-right {
+	background-color: #609973;
+	background-image: url('../images/logonbox-bottomright.png');
+	background-position: right top;
+	background-repeat: no-repeat;
+	float: right;
+}
+
+.box-bottom-center {
+	background-image: url('../images/logonbox-bottomcenter.png');
+	background-repeat: repeat-x;
+	background-position: top;
+	clear: both;
+}
+
+.box-left {
+	width: 100%;
+	min-height: 150px;
+	background-position: left top;
+	background-image: url('../images/logonbox-left.png');
+	background-repeat: repeat-y;
+	overflow: hidden;
+}
+
+.box-right {
+	width: 100%;
+	background-position: right top;
+	background-image: url('../images/logonbox-right.png');
+	background-repeat: repeat-y;
+	overflow: hidden;
+}
+
+.box-inner {
+	background-color: #ffffff;
+	margin: 0px;
+	padding: 0px;
+	clear: both;
+}

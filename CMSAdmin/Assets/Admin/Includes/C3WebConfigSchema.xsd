@@ -12,6 +12,21 @@
 			<xs:pattern value="[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}" />
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:simpleType name="color" final="restriction" >
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Classic" />
+			<xs:enumeration value="AmethystOrchid" />
+			<xs:enumeration value="BlueIzis" />
+			<xs:enumeration value="FrenchBlue" />
+			<xs:enumeration value="Mauve" />
+			<xs:enumeration value="MosaicBlue" />
+			<xs:enumeration value="Plum" />
+			<xs:enumeration value="QuetzalGreen" />
+			<xs:enumeration value="Rust" />
+			<xs:enumeration value="Sandstone" />
+			<xs:enumeration value="SugarAlmond" />
+		</xs:restriction>
+	</xs:simpleType>
 
 	<xs:element name="CarrotCakeCMS.Web">
 		<xs:complexType>
@@ -22,6 +37,7 @@
 							<xs:element name="Config">
 								<xs:complexType>
 									<xs:attribute name="SiteID" type="guid" use="optional" />
+									<xs:attribute name="SiteSkin" type="color" use="optional" />
 									<xs:attribute name="AdminFolderPath" type="xs:string" use="optional" />
 								</xs:complexType>
 							</xs:element>

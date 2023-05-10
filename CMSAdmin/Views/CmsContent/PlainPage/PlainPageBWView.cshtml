@@ -1,0 +1,300 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	Layout = null;
+
+	var pager = new PagedDataSummary();
+
+	if (CmsPage.IsSiteIndex) {
+		pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+		pager.PageSize = 10;
+		pager.IgnoreSitePath = false;
+		pager.FetchData();
+	} else {
+		pager.PageSize = 1;
+		pager.ContentType = PagedDataSummary.SummaryContentType.Unknown;
+	}
+
+	CmsPage.TypeLabelPrefixes = CmsPage.GetDefaultTypeHeadingOptions();
+
+	ViewBag.Title = CmsPage.Titlebar;
+	ViewBag.SiteName = CmsPage.TheSite.SiteName;
+
+	var nav = new TwoLevelNavigation() {
+		FontSize = new SizeUnit("15px"),
+		ElementId = "sitenav",
+		ForeColor = CarrotWeb.DecodeColor("#424242"),
+		SelFGColor = CarrotWeb.DecodeColor("#ffffff"),
+		SubBGColor = CarrotWeb.DecodeColor("#787878"),
+		SubFGColor = CarrotWeb.DecodeColor("#ffffff"),
+		UnSelBGColor = CarrotWeb.DecodeColor("#808080"),
+		UnSelFGColor = CarrotWeb.DecodeColor("#eeeeee"),
+	};
+
+	var cssUri = Helper.GetWebResourceUrl("Views.CmsContent.PlainPage.plain.css");
+
+	var cssTag = new HtmlTag(HtmlTag.EasyTag.Stylesheet);
+	cssTag.Uri = string.Format("{0}&cms={1}&ts={2}", cssUri, SiteData.CurrentDLLVersion, CarrotWeb.DateKey());
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	@CarrotCakeHtml.MetaTags()
+	@CarrotCakeHtml.Rss()
+
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.GlossyBlack, JQVersion = "1.11" })
+
+	@(cssTag.EmitHtmlSelfClosingTag())
+
+	<title>@CmsPage.Titlebar</title>
+
+	@CarrotWeb.RenderTwoPartControlBodyCss(nav)
+
+	<script type="text/javascript">
+		function doButtonStyle() {
+			$("input:button, input:submit, input:reset, button").button();
+		}
+
+		$(document).ready(function () {
+			doButtonStyle();
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			doButtonStyle();
+		});
+	</script>
+
+	@CarrotCakeHtml.IncludeHead()
+</head>
+<body>
+
+	<div id="wrapper">
+		<h1 id="logo">
+			<a href="~/">
+				@ViewBag.SiteName
+			</a>
+		</h1>
+		<p>
+		</p>
+		<div id="menu">
+			@CarrotWeb.RenderTwoPartControlBody(nav)
+		</div>
+		<div style="clear: both;">
+		</div>
+		<!-- end #menu -->
+		<div id="page">
+			<div id="BreadCrumbNavigation">
+				@CarrotCakeHtml.GetBreadCrumbNavigation()
+			</div>
+
+			<div id="page-bgtop">
+				<div id="page-bgbtm">
+					<div id="sidebar">
+						<ul>
+							<li>
+								@{
+									using (var srchFrm = CarrotCakeHtml.BeginSearchForm()) {
+										var srch = srchFrm.GetModelHelper(true);
+										<table>
+											<tr>
+												<td>@srch.TextBoxFor(x => x.query, new { @size = "25", @class = "searchbox" })</td>
+												@*<td><input type="submit" class="button" value="Search" /></td>*@
+											</tr>
+										</table>
+									}
+								}
+							</li>
+							<li>
+								@Html.Partial("_plainloginout")
+							</li>
+							@*<li>
+									@Html.Partial("_plainforgot")
+								</li>*@
+							@*<li>
+									@Html.Partial("_plainreset")
+								</li>*@
+							<li>
+								<div>
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftTop)
+								</div>
+								<div>
+									@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextLeft)
+								</div>
+								<div>
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftBottom)
+								</div>
+							</li>
+							@if (CmsPage.IsPageContent == true) {
+								<li>
+									@if (CmsPage.ChildNav.Any()) {
+										<h2>Child Pages</h2>
+										<ul class="sidemenu">
+											@foreach (var itm in CmsPage.ChildNav) {
+												<li class="child-nav"><a href="@itm.FileName">@itm.NavigationText</a></li>
+											}
+										</ul>
+									}
+								</li>
+								<li>
+									@if (CmsPage.SiblingNav.Any()) {
+										<h2>Sibling Pages</h2>
+										<ul class="sidemenu">
+											@foreach (var itm in CmsPage.SiblingNav) {
+												<li class="child-nav"><a href="@itm.FileName">@itm.NavigationText</a></li>
+											}
+										</ul>
+									}
+								</li>
+								<li>
+									@{
+										var updates = CmsPage.GetSiteUpdates(10);
+										if (updates.Any()) {
+											<h2>Recent Updates</h2>
+											<ul class="sidemenu">
+												@foreach (var itm in updates) {
+													<li class="child-nav">
+														<a href="@itm.FileName">
+															@itm.NavigationText
+															@string.Format(" ({0:d})", itm.GoLiveDate)
+														</a>
+													</li>
+												}
+											</ul>
+										}
+									}
+								</li>
+										}
+
+							@if (CmsPage.IsBlogPost || CmsPage.IsSiteIndex) {
+								<li>
+									@Html.Partial("_planblogdata")
+								</li>
+							}
+						</ul>
+					</div>
+					<!-- end #sidebar -->
+					<div id="content">
+						<div class="post">
+							<h2>
+								@CmsPage.Heading
+							</h2>
+							<div class="entry">
+								<div>
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterTop)
+								</div>
+								<div>
+									@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+								</div>
+								@if (CmsPage.IsBlogPost) {
+									var pagecat = CmsPage.GetPageCategories(25);
+									var pagetag = CmsPage.GetPageTags(25);
+
+									<div class="meta">
+										@foreach (var itm in pagecat) {
+											<span class="meta-item @string.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
+										}
+									</div>
+
+									<div class="meta">
+										@foreach (var itm in pagetag) {
+											<span class="meta-item @string.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a href="@itm.Uri">@itm.Text</a></span>
+										}
+									</div>
+								}
+								<div>
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterBottom)
+								</div>
+								<div>
+									@Html.Partial("_plaincontact")
+								</div>
+							</div>
+							<div style="clear: both;">
+							</div>
+							<div class="entry">
+								<div>
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightTop)
+								</div>
+								<div>
+									@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextRight)
+								</div>
+								<div>
+									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightBottom)
+								</div>
+							</div>
+						</div>
+
+						@if (pager != null && pager.DataSource != null) {
+							<div style="clear: both;">
+							</div>
+
+							foreach (var item in pager.DataSource) {
+								<div>
+									<p>
+										<b class="green" style="font-size: 110%;">
+											<a href="@item.FileName">@item.NavigationText</a> &nbsp;|&nbsp; @string.Format("{0:d}", item.GoLiveDate)
+										</b>
+										<br />
+										by @{
+											var usr = item.BylineUser;
+										}
+										@usr.FullName_FirstLast
+										<br />
+										@item.PageTextPlainSummary
+									</p>
+
+									<p class="post-footer align-right">
+										<a class="readmore" href="@item.FileName">
+											Read more
+										</a>
+										<span class="comments">
+											@string.Format(" Comments ({0}) ", item.CommentCount)
+										</span><span class="date">
+											@string.Format("{0:MMMM d, yyyy}", item.GoLiveDate)
+										</span>
+									</p>
+								</div>
+											}
+
+											<div class="pagerfooterlinks">
+												@foreach (var i in pager.PageNumbers) {
+													using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+														using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+															@String.Format(" {0} ", i)
+														}
+													}
+												}
+											</div>
+
+											<div style="clear: both;">
+											</div>
+											<br />
+											}
+
+						<div style="clear: both;">
+							&nbsp;
+						</div>
+					</div>
+					<!-- end #content -->
+					<div style="clear: both;">
+						&nbsp;
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end #page -->
+	</div>
+	<div style="clear: both;">
+	</div>
+
+	<div id="footer">
+		<p>
+			@Html.Raw(string.Format("&copy;  {0}, {1} ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
+			All rights reserved.
+		</p>
+	</div>
+
+	<!-- end #footer -->
+	@CarrotCakeHtml.IncludeFooter()
+</body>
+</html>

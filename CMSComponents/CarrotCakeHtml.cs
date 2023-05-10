@@ -399,8 +399,10 @@ namespace Carrotware.CMS.UI.Components {
 						IsPageTemplate = true;
 					}
 
-					if (!SiteData.IsPageSampler && !IsPageTemplate) {
-						sb.AppendLine(RenderPartialToString(SiteFilename.EditNotifierViewPath));
+					if (!SiteData.IsLikelyFakeSearch()) {
+						if (!SiteData.IsPageSampler && !IsPageTemplate) {
+							sb.AppendLine(RenderPartialToString(SiteFilename.EditNotifierViewPath));
+						}
 					}
 				}
 			}

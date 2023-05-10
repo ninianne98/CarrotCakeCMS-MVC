@@ -103,13 +103,28 @@ namespace Carrotware.CMS.Core {
 			List<SiteNav> lstNav = SiteNavHelper.GetSamplerFakeNav();
 			List<SiteNav> lstNav2 = new List<SiteNav>();
 
-			foreach (SiteNav l1 in lstNav) {
-				List<SiteNav> lst = SiteNavHelper.GetSamplerFakeNav(l1.Root_ContentID);
-				lstNav2 = lstNav2.Union(lst).ToList();
-
-				foreach (SiteNav l2 in lst) {
-					List<SiteNav> lst2 = SiteNavHelper.GetSamplerFakeNav(l2.Root_ContentID);
-					lstNav2 = lstNav2.Union(lst2).ToList();
+			if (iDepth >= 2) {
+				foreach (SiteNav l1 in lstNav) {
+					List<SiteNav> lst = SiteNavHelper.GetSamplerFakeNav(4, l1.Root_ContentID);
+					lstNav2 = lstNav2.Union(lst).ToList();
+					if (iDepth >= 3) {
+						foreach (SiteNav l2 in lst) {
+							List<SiteNav> lst2 = SiteNavHelper.GetSamplerFakeNav(3, l2.Root_ContentID);
+							lstNav2 = lstNav2.Union(lst2).ToList();
+							if (iDepth >= 4) {
+								foreach (SiteNav l3 in lst2) {
+									List<SiteNav> lst3 = SiteNavHelper.GetSamplerFakeNav(2, l2.Root_ContentID);
+									lstNav2 = lstNav2.Union(lst3).ToList();
+									if (iDepth >= 5) {
+										foreach (SiteNav l4 in lst3) {
+											List<SiteNav> lst4 = SiteNavHelper.GetSamplerFakeNav(2, l2.Root_ContentID);
+											lstNav2 = lstNav2.Union(lst4).ToList();
+										}
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 
@@ -124,7 +139,7 @@ namespace Carrotware.CMS.Core {
 												orderby ct descending
 												select new ContentCategory {
 													SiteID = Guid.NewGuid(),
-													CategoryURL = string.Format("#/archive/keyword/cat{0}", ct),
+													CategoryURL = string.Format("javascript:void(0);", ct),
 													CategoryText = string.Format("Meta Info Cat {0}", ct),
 													UseCount = ct + 2,
 													PublicUseCount = ct + 3
@@ -140,7 +155,7 @@ namespace Carrotware.CMS.Core {
 										   orderby ct descending
 										   select new ContentTag {
 											   SiteID = Guid.NewGuid(),
-											   TagURL = string.Format("#/archive/keyword/tag{0}", ct),
+											   TagURL = string.Format("javascript:void(0);", ct),
 											   TagText = string.Format("Meta Info Tag {0}", ct),
 											   UseCount = ct + 2,
 											   PublicUseCount = ct + 3

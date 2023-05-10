@@ -12,15 +12,17 @@ namespace Northwind.Models {
 		public SelectSkin() {
 			this.SelectedItem = Helper.BootstrapColorScheme;
 
-			this.Options = new Dictionary<string, string>();
+			var options = new List<SkinItem>();
 
 			foreach (Bootstrap.BootstrapColorScheme enumValue in Enum.GetValues(typeof(Bootstrap.BootstrapColorScheme))) {
-				this.Options.Add(enumValue.ToString(), enumValue.ToString());
+				options.Add(new SkinItem(enumValue));
 			}
+
+			this.Options = options.OrderBy(x => x.SkinName).ToList();
 		}
 
 		[Display(Name = "Option List")]
-		public Dictionary<string, string> Options { get; set; }
+		public List<SkinItem> Options { get; set; }
 
 		[Display(Name = "Selected Skin")]
 		public Bootstrap.BootstrapColorScheme SelectedItem { get; set; }

@@ -1,7 +1,10 @@
 ﻿using Carrotware.CMS.Core;
+using Carrotware.CMS.Interface;
 using Carrotware.Web.UI.Components;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Web;
 
@@ -17,7 +20,7 @@ using System.Web;
 
 namespace Carrotware.CMS.UI.Components {
 
-	public class TwoLevelNavigation : BaseTwoPartCmsComponent {
+	public class TwoLevelNavigation : BaseTwoPartCmsComponent, IWidgetLimitedProperties {
 
 		public TwoLevelNavigation()
 			: base() {
@@ -64,6 +67,29 @@ namespace Carrotware.CMS.UI.Components {
 			this.SubFGColor = CarrotWeb.DecodeColor(fc2);
 		}
 
+		public TwoLevelNavigation(string f, string mainColor) : this() {
+			var main = CarrotWeb.DecodeColor(mainColor);
+
+			var mainD1 = CmsSkin.DarkenColor(main, 0.25);
+			var mainD3 = CmsSkin.DarkenColor(main, 0.85);
+
+			var mainL2 = CmsSkin.LightenColor(main, 0.65);
+			var mainL3 = CmsSkin.LightenColor(main, 0.95);
+
+			this.AutoStylingDisabled = false;
+			this.FontSize = new SizeUnit(f);
+			this.MenuFontSize = this.FontSize;
+
+			this.ForeColor = main;
+			this.SubBGColor = mainD1;
+
+			this.UnSelBGColor = mainL2;
+			this.UnSelFGColor = mainD3;
+
+			this.SelFGColor = mainL3;
+			this.SubFGColor = mainL3;
+		}
+
 		private void FlipColor() {
 			this.HoverBGColor = this.HoverBGColor == Color.Empty ? this.ForeColor : this.HoverBGColor;
 			this.HoverFGColor = this.HoverFGColor == Color.Empty ? this.BackColor : this.HoverFGColor;
@@ -80,18 +106,22 @@ namespace Carrotware.CMS.UI.Components {
 			}
 		}
 
+		[Widget(WidgetAttribute.FieldMode.CheckBox)]
 		public bool AutoStylingDisabled { get; set; }
 
+		[Widget(WidgetAttribute.FieldMode.TextBox)]
 		public SizeUnit FontSize { get; set; }
 
 		public SizeUnit MenuFontSize { get; set; }
 
 		public string CssTopBackground { get; set; }
 
+		[Widget(WidgetAttribute.FieldMode.ColorBox)]
 		public Color ForeColor { get; set; }
 
 		public Color BGColor { get; set; }
 
+		[Widget(WidgetAttribute.FieldMode.ColorBox)]
 		public Color BackColor { get; set; }
 
 		public Color HoverBGColor { get; set; }
@@ -126,6 +156,10 @@ namespace Carrotware.CMS.UI.Components {
 			string sCSSText = string.Empty;
 
 			if (!this.AutoStylingDisabled) {
+				if (this.IsDynamicInserted && !string.IsNullOrEmpty(this.WidgetClientID)) {
+					this.ElementId = this.WidgetClientID;
+				}
+
 				FlipColor();
 
 				var sb = new StringBuilder();
@@ -212,6 +246,121 @@ namespace Carrotware.CMS.UI.Components {
 			//sCSSText = "\r\n\t<style type=\"text/css\">\r\n" + GenerateCSS() + "\r\n\t</style>\r\n";
 
 			return sCSSText;
+		}
+
+		protected void LoadWidgetSettings() {
+			if (this.IsDynamicInserted) {
+				if (!string.IsNullOrEmpty(this.WidgetClientID)) {
+					this.ElementId = this.WidgetClientID;
+				}
+
+				try {
+					string sFoundVal = this.GetParmValue("CssClass", string.Empty);
+
+					if (!string.IsNullOrEmpty(sFoundVal)) {
+						this.CssClass = sFoundVal;
+					}
+				} catch (Exception ex) { }
+
+				try {
+					string sFoundVal = this.GetParmValue("AutoStylingDisabled", "false");
+
+					if (!string.IsNullOrEmpty(sFoundVal)) {
+						this.AutoStylingDisabled = bool.Parse(sFoundVal);
+					}
+				} catch (Exception ex) { }
+
+				try {
+					string sFoundVal = this.GetParmValue("CssSelected", string.Empty);
+
+					if (!string.IsNullOrEmpty(sFoundVal)) {
+						this.CssSelected = sFoundVal;
+					}
+				} catch (Exception ex) { }
+
+				try {
+					string sFoundVal = this.GetParmValue("CssHasChildren", string.Empty);
+
+					if (!string.IsNullOrEmpty(sFoundVal)) {
+						this.CssHasChildren = sFoundVal;
+					}
+				} catch (Exception ex) { }
+
+				try {
+					string sFoundVal = this.GetParmValue("WidgetClientID", string.Empty);
+
+					if (!string.IsNullOrEmpty(sFoundVal)) {
+						this.WidgetClientID = sFoundVal;
+						this.ElementId = this.WidgetClientID;
+					}
+				} catch (Exception ex) { }
+
+				try {
+					string sFoundVal = this.GetParmValue("BackColor", string.Empty);
+
+					if (!string.IsNullOrEmpty(sFoundVal)) {
+						this.BackColor = ColorTranslator.FromHtml(sFoundVal);
+					}
+				} catch (Exception ex) { }
+
+				try {
+					string sFoundVal = this.GetParmValue("ForeColor", string.Empty);
+
+					if (!string.IsNullOrEmpty(sFoundVal)) {
+						this.ForeColor = ColorTranslator.FromHtml(sFoundVal);
+					}
+				} catch (Exception ex) { }
+
+				try {
+					string sFoundVal = this.GetParmValue("FontSize", string.Empty);
+
+					if (!string.IsNullOrEmpty(sFoundVal)) {
+						this.FontSize = new SizeUnit(sFoundVal);
+						this.MenuFontSize = this.FontSize;
+					}
+				} catch (Exception ex) { }
+			}
+		}
+
+		public override string ToHtmlString() {
+			LoadWidgetSettings();
+
+			return base.ToHtmlString();
+		}
+
+		public override bool EnableEdit {
+			get { return true; }
+		}
+
+		public List<string> LimitedPropertyList {
+			get {
+				List<string> lst = new List<string>();
+				lst.Add("CssClass");
+
+				lst.Add("CSSSelected");
+				lst.Add("CSSItem");
+				lst.Add("CSSHasChildren");
+
+				lst.Add("OverrideCSS");
+				lst.Add("ExtraCSS");
+				lst.Add("AutoStylingDisabled");
+				lst.Add("WrapList");
+				lst.Add("FontSize");
+				lst.Add("TopBackgroundStyle");
+				lst.Add("ForeColor");
+				lst.Add("BackColor");
+				lst.Add("BGColor");
+				lst.Add("HoverFGColor");
+				lst.Add("HoverBGColor");
+				lst.Add("UnSelFGColor");
+				lst.Add("UnSelBGColor");
+				lst.Add("SelFGColor");
+				lst.Add("SelBGColor");
+				lst.Add("SubFGColor");
+				lst.Add("SubBGColor");
+
+				return lst.Distinct().ToList();
+			}
 		}
 	}
 }

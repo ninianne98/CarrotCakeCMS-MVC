@@ -28,7 +28,7 @@
 	background: transparent;
 	background-color: transparent;
 	border: 0px solid transparent;
-	color: #676F6A;
+	color: #676767;
 	line-height: normal;
 	height: auto;
 }
@@ -53,10 +53,10 @@
 
 	.cms-seagreen input:focus, .cms-seagreen button:focus, #cms-seagreen-id input:focus, #cms-seagreen-id button:focus,
 	.cms-seagreen select:focus, #cms-seagreen-id select:focus {
-		border-color: #bad9c6;
+		border-color: #c0c0c0;
 		outline: 0;
-		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(200, 220, 200, .6);
-		box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(210, 230, 215, .6);
+		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(200, 200, 200, .6);
+		box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(220, 220, 220, .6);
 	}
 
 /* HTML5 display-role reset for older browsers */

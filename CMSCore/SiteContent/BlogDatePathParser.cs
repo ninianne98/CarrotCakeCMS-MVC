@@ -13,7 +13,7 @@
 namespace Carrotware.CMS.Core {
 
 	public class BlogDatePathParser {
-		private string _filename = String.Empty;
+		private string _filename = string.Empty;
 		private SiteData _site = new SiteData();
 
 		private DateTime _dateBegin = DateTime.MinValue;
@@ -76,10 +76,10 @@ namespace Carrotware.CMS.Core {
 
 		private void ParseString() {
 			_filename = _filename.Replace(@"\", "/").Replace("//", "/").Replace("//", "/");
-			string sFile = _filename.ToLowerInvariant().Replace(_site.BlogDateFolderPath, String.Empty);
+			string sFile = _filename.ToLowerInvariant().Replace(_site.BlogDateFolderPath, string.Empty);
 
 			if (sFile.EndsWith(SiteData.SiteSearchPageName) ||
-					sFile.EndsWith(String.Format("{0}.aspx", SiteData.SiteSearchPageName))) {
+					sFile.EndsWith(string.Format("{0}.aspx", SiteData.SiteSearchPageName))) {
 				sFile = sFile.Substring(0, sFile.ToLowerInvariant().LastIndexOf("/"));
 			}
 

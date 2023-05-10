@@ -1,14 +1,14 @@
 ﻿using Carrotware.CMS.Data;
 using Carrotware.Web.UI.Components;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Transactions;
 using System.Web;
-using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -24,7 +24,6 @@ namespace Carrotware.CMS.Core {
 
 	public class ContentPageHelper : IDisposable {
 		private CarrotCMSDataContext db = CarrotCMSDataContext.Create();
-		//private CarrotCMSDataContext db = CompiledQueries.dbConn;
 
 		public ContentPageHelper() { }
 
@@ -104,24 +103,35 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string CreateBlogDatePrefix(Guid siteID, DateTime goLiveDate) {
-			string FileName = "";
+			var site = SiteData.GetSiteFromCache(siteID);
 
-			var ss = SiteData.GetSiteFromCache(siteID);
-			if (ss.Blog_DatePattern.Length > 1) {
-				FileName = "/" + goLiveDate.ToString(ss.Blog_DatePattern) + "/";
-			} else {
-				FileName = "/";
-			}
-
-			return ScrubPath(FileName);
+			return CreateBlogDatePrefix(site, goLiveDate);
 		}
 
-		public static string CreateFileNameFromSlug(Guid siteID, DateTime goLiveDate, string PageSlug) {
-			string FileName = "";
+		public static string CreateBlogDatePrefix(SiteData site, DateTime goLiveDate) {
+			string fileName = "";
 
-			FileName = "/" + CreateBlogDatePrefix(siteID, goLiveDate) + "/" + PageSlug;
+			if (site.Blog_DatePattern.Length > 1) {
+				fileName = "/" + ScrubSpecial(goLiveDate.ToString(site.Blog_DatePattern)) + "/";
+			} else {
+				fileName = "/";
+			}
 
-			return ScrubFilename(Guid.Empty, FileName);
+			return ScrubPath(fileName);
+		}
+
+		public static string CreateFileNameFromSlug(Guid siteID, DateTime goLiveDate, string pageSlug) {
+			var site = SiteData.GetSiteFromCache(siteID);
+
+			return CreateFileNameFromSlug(site, goLiveDate, pageSlug);
+		}
+
+		public static string CreateFileNameFromSlug(SiteData site, DateTime goLiveDate, string pageSlug) {
+			string fileName = "";
+
+			fileName = "/" + CreateBlogDatePrefix(site, goLiveDate) + "/" + pageSlug;
+
+			return ScrubFilename(Guid.Empty, fileName);
 		}
 
 		public void BulkBlogFileNameUpdateFromDate(Guid siteID) {
@@ -144,8 +154,6 @@ namespace Carrotware.CMS.Core {
 
 		public void ResolveDuplicateBlogURLs(Guid siteID) {
 			SiteData site = SiteData.GetSiteFromCache(siteID);
-			string SiteDatePattern = site.Blog_DatePattern;
-
 			IQueryable<string> queryFindDups = CompiledQueries.cqBlogDupFileNames(db, siteID);
 
 			Guid contentTypeID = ContentPageType.GetIDByType(ContentPageType.PageType.BlogEntry);
@@ -156,25 +164,25 @@ namespace Carrotware.CMS.Core {
 
 				foreach (carrot_RootContent item in queryContentShareFilename) {
 					int c = -1;
-					string sNewFilename = ScrubFilename(item.Root_ContentID, "/" + item.GoLiveDate.ToString(SiteDatePattern) + "/" + item.PageSlug);
-					string sSlug = item.PageSlug;
+					string newFilename = ScrubFilename(item.Root_ContentID, CreateFileNameFromSlug(site, item.GoLiveDate, item.PageSlug));
+					string slug = item.PageSlug;
 
-					c = CompiledQueries.cqGetRootContentListNoMatchByURL(db, siteID, item.Root_ContentID, sNewFilename).Count();
+					c = CompiledQueries.cqGetRootContentListNoMatchByURL(db, siteID, item.Root_ContentID, newFilename).Count();
 
 					if (c > 0) {
-						sNewFilename = sNewFilename.Substring(0, sNewFilename.Length - 5) + "-" + item.CreateDate.ToString("yyyy-MM-dd");
-						sSlug = sSlug.Substring(0, sSlug.Length - 5) + "-" + item.CreateDate.ToString("yyyy-MM-dd");
+						newFilename = newFilename.Substring(0, newFilename.Length - 5) + "-" + item.CreateDate.ToString("yyyy-MM-dd");
+						slug = slug.Substring(0, slug.Length - 5) + "-" + item.CreateDate.ToString("yyyy-MM-dd");
 
-						c = CompiledQueries.cqGetRootContentListNoMatchByURL(db, siteID, item.Root_ContentID, sNewFilename).Count();
+						c = CompiledQueries.cqGetRootContentListNoMatchByURL(db, siteID, item.Root_ContentID, newFilename).Count();
 
 						if (c > 0) {
-							sNewFilename = sNewFilename.Substring(0, sNewFilename.Length - 5) + "-" + iDupCtr.ToString();
-							sSlug = sSlug.Substring(0, sSlug.Length - 5) + "-" + iDupCtr.ToString();
+							newFilename = newFilename.Substring(0, newFilename.Length - 5) + "-" + iDupCtr.ToString();
+							slug = slug.Substring(0, slug.Length - 5) + "-" + iDupCtr.ToString();
 						}
 					}
 
-					item.PageSlug = sSlug;
-					item.FileName = sNewFilename;
+					item.PageSlug = slug;
+					item.FileName = newFilename;
 					iDupCtr++;
 					db.SubmitChanges();
 				}
@@ -258,26 +266,24 @@ namespace Carrotware.CMS.Core {
 			string newFileName = string.Format("{0}", fileName).Trim();
 
 			if (string.IsNullOrEmpty(newFileName)) {
-				newFileName = rootContentID.ToString();
+				newFileName = "/" + rootContentID.ToString().ToLowerInvariant();
 			}
+
+			newFileName = newFileName.Replace(@"//", @"/").Replace(@"//", @"/");
 
 			if (newFileName.EndsWith(@"/")) {
 				newFileName = newFileName.Substring(0, newFileName.Length - 1);
-				newFileName = newFileName.Replace("//", "/");
 			}
 
-			if (newFileName.ToLowerInvariant().EndsWith(".aspx")) {
-				newFileName = newFileName.Substring(0, newFileName.Length - 5);
+			var ext = new string[] { ".aspx", ".cshtml", ".vbhtml", ".htm", ".html" };
+
+			foreach (var x in ext) {
+				if (newFileName.ToLowerInvariant().EndsWith(x)) {
+					newFileName = newFileName.Substring(0, newFileName.Length - x.Length);
+				}
 			}
 
 			newFileName = ScrubFilePath(newFileName).Trim();
-
-			if (newFileName.ToLowerInvariant().EndsWith(".htm")) {
-				newFileName = newFileName.Substring(0, newFileName.Length - 4);
-			}
-			if (newFileName.ToLowerInvariant().EndsWith(".html")) {
-				newFileName = newFileName.Substring(0, newFileName.Length - 5);
-			}
 
 			if (newFileName.EndsWith(@"/")) {
 				newFileName = newFileName.Trim().Substring(0, newFileName.Length - 1);
@@ -780,6 +786,26 @@ namespace Carrotware.CMS.Core {
 			navData.EditDate = DateTime.Now.Date.AddDays(-1);
 			navData.CreateDate = DateTime.Now.Date.AddDays(-10);
 			navData.GoLiveDate = DateTime.Now.Date.AddDays(1);
+			navData.RetireDate = DateTime.Now.Date.AddDays(90);
+			navData.ContentType = ContentPageType.PageType.ContentEntry;
+			return navData;
+		}
+
+		public static ContentPage GetEmptySearch() {
+			ContentPage navData = new ContentPage();
+			navData.ContentID = Guid.Empty;
+			navData.Root_ContentID = Guid.NewGuid();
+			navData.SiteID = SiteData.CurrentSiteID;
+			navData.TemplateFile = SiteData.DefaultTemplateFilename;
+			navData.FileName = SiteData.CurrentSite.SiteSearchPath;
+			navData.NavMenuText = "Search";
+			navData.PageHead = "Search";
+			navData.TitleBar = "Search";
+			navData.PageActive = true;
+			navData.PageText = "<p>Search Results</p>";
+			navData.EditDate = DateTime.Now.Date.AddDays(-30);
+			navData.CreateDate = DateTime.Now.Date.AddDays(-30);
+			navData.GoLiveDate = DateTime.Now.Date.AddDays(-30);
 			navData.RetireDate = DateTime.Now.Date.AddDays(90);
 			navData.ContentType = ContentPageType.PageType.ContentEntry;
 			return navData;

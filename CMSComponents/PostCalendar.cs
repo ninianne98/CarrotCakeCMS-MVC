@@ -79,7 +79,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public string ToHtmlString() {
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			List<ContentDateLinks> lstCalendar = GetDates();
 
@@ -200,13 +200,13 @@ namespace Carrotware.CMS.UI.Components {
 			sb.AppendLine("		<tfoot id=\"" + this.ElementId + "-foot\" " + sCssClassTableFoot + ">");
 			sb.AppendLine("		<tr>");
 			sb.AppendLine("			<td colspan=\"3\" id=\"prev\" class=\"cal-prev\">");
-			if (lastMonth.TallyDate >= SiteData.CurrentSite.Now.AddYears(-3)) {
+			if (lastMonth.TallyDate >= SiteData.CurrentSite.Now.AddYears(-5)) {
 				sb.AppendLine("				<a href=\"" + lastMonth.DateURL + "\">&laquo; " + lastMonth.TallyDate.ToString("MMM") + "</a>");
 			}
 			sb.AppendLine("			</td>");
 			sb.AppendLine("			<td class=\"pad\"> &nbsp; </td>");
 			sb.AppendLine("			<td colspan=\"3\" id=\"next\" class=\"cal-prev\">");
-			if (nextMonth.TallyDate <= SiteData.CurrentSite.Now.AddYears(3)) {
+			if (nextMonth.TallyDate <= SiteData.CurrentSite.Now.AddYears(5)) {
 				sb.AppendLine("				<a href=\"" + nextMonth.DateURL + "\">" + nextMonth.TallyDate.ToString("MMM") + " &raquo;</a>");
 			}
 			sb.AppendLine("			</td>");

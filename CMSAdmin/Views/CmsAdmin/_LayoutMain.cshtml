@@ -6,7 +6,7 @@
 
 	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
 }
-<html lang="en">
+<html>
 <head>
 	<meta charset="utf-8" />
 	<link href="~/Assets/Admin/includes/normalize.css" rel="stylesheet" type="text/css" />
@@ -14,16 +14,12 @@
 		@String.Format("{0} - {1}", SiteData.CarrotCakeCMSVersionMM, ViewBag.Title)
 	</title>
 
-	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.LightGreen, UseJqueryMigrate = true })
-
 	<link href="~/Assets/iCheck/iCheck.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/Includes/fauxstrap.css?@versionKey" rel="stylesheet" type="text/css" />
 	<link href="~/Assets/Admin/Includes/chosen.min.css" rel="stylesheet" type="text/css" />
 	<link href="~/Assets/Admin/includes/jquery.ui.timepicker.css" rel="stylesheet" type="text/css" />
 	<link href="~/Assets/Admin/includes/modal.css?@versionKey" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/main.css?@versionKey" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/common.css?@versionKey" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/TableStyles.css" rel="stylesheet" type="text/css" />
+
+	@(new CmsSkin() { SelectedColor = Helper.SiteSkin, WindowMode = CmsSkin.SkinMode.Main })
 
 	<script src="~/Assets/iCheck/icheck.min.js?@versionKey" type="text/javascript"></script>
 	<script src="~/Assets/Admin/Includes/icheck.init.js?@versionKey" type="text/javascript"></script>

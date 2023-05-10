@@ -1,5 +1,6 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface;
+using Carrotware.CMS.UI.Components;
 using Carrotware.Web.UI.Components;
 using Microsoft.AspNet.Identity;
 using System;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using static Carrotware.CMS.UI.Components.CmsSkin;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -37,6 +39,31 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 				return VirtualPathUtility.ToAbsolute("~/Assets/Admin/CMS.asmx");
 			}
 		}
+
+		public static SkinOption _theme = SkinOption.None;
+
+		public static SkinOption SiteSkin {
+			get {
+				if (_theme == SkinOption.None) {
+					CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+					string skin = config.MainConfig.SiteSkin;
+					var actualSkin = SkinOption.Classic;
+					try { actualSkin = (SkinOption)Enum.Parse(typeof(SkinOption), skin, true); } catch { }
+
+					_theme = actualSkin;
+				}
+
+				return _theme;
+			}
+		}
+
+		public static string MainColorCode {
+
+			get {
+				return CmsSkin.GetPrimaryColorCode(SiteSkin);
+			}
+		}
+
 
 		public static string InsertSpecialView(ViewLocation CtrlKey) {
 			string sViewPath = string.Empty;

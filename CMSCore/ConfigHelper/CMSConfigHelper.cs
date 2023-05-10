@@ -599,6 +599,9 @@ namespace Carrotware.CMS.Core {
 					_p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Plain Text", FilePath = "CLASS:Carrotware.CMS.UI.Components.ContentPlainText, Carrotware.CMS.UI.Components" });
 					_p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Content Snippet", FilePath = "CLASS:Carrotware.CMS.UI.Components.ContentSnippetText, Carrotware.CMS.UI.Components" });
 
+					_p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Top Level Navigation", FilePath = "CLASS:Carrotware.CMS.UI.Components.TopLevelNavigation, Carrotware.CMS.UI.Components" });
+					_p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Two Level Navigation", FilePath = "CLASS:Carrotware.CMS.UI.Components.TwoLevelNavigation, Carrotware.CMS.UI.Components" });
+
 					_p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Child Navigation", FilePath = "CLASS:Carrotware.CMS.UI.Components.ChildNavigation, Carrotware.CMS.UI.Components" });
 					_p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Second Level/ Sibling Navigation", FilePath = "CLASS:Carrotware.CMS.UI.Components.SecondLevelNavigation, Carrotware.CMS.UI.Components" });
 					_p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Most Recent Updated", FilePath = "CLASS:Carrotware.CMS.UI.Components.MostRecentUpdated, Carrotware.CMS.UI.Components" });
@@ -667,8 +670,6 @@ namespace Carrotware.CMS.Core {
 		public List<CMSTemplate> Templates {
 			get {
 				List<CMSTemplate> _plugins = null;
-				string sDefTemplate = SiteData.DefaultTemplateFilename.ToLowerInvariant();
-
 				bool bCached = false;
 
 				try {
@@ -681,20 +682,28 @@ namespace Carrotware.CMS.Core {
 				}
 
 				if (!bCached) {
+					var site = SiteData.CurrentSite;
 					_plugins = new List<CMSTemplate>();
-					CMSTemplate t = new CMSTemplate();
-					t.TemplatePath = sDefTemplate;
-					t.EncodedPath = EncodeBase64(sDefTemplate);
-					t.Caption = "   Black 'n White - Plain L-R-C Content [*]   ";
-					_plugins.Add(t);
+
+					var t1 = new CMSTemplate();
+					t1.TemplatePath = site.TemplateFilename;
+					t1.EncodedPath = EncodeBase64(site.TemplateFilename);
+					t1.Caption = string.Format("    {0} [*]  ", CarrotWeb.DisplayNameFor<SiteData>(x => x.TemplateFilename));
+					_plugins.Add(t1);
+
+					var t2 = new CMSTemplate();
+					t2.TemplatePath = site.TemplateBWFilename;
+					t2.EncodedPath = EncodeBase64(site.TemplateBWFilename);
+					t2.Caption = string.Format("   {0} [*]  ", CarrotWeb.DisplayNameFor<SiteData>(x => x.TemplateBWFilename));
+					_plugins.Add(t2);
 				}
 
 				if (!bCached) {
 					var _p2 = GetTemplatesByDirectory();
 
-					_plugins = _plugins.Union(_p2.Where(t => t.TemplatePath.ToLowerInvariant() != sDefTemplate)).ToList();
+					_plugins = _plugins.Union(_p2.Where(t => !SiteData.DefaultTemplates.Contains(t.TemplatePath.ToLowerInvariant()))).ToList();
 
-					HttpContext.Current.Cache.Insert(keyTemplates, _plugins, null, DateTime.Now.AddMinutes(5), Cache.NoSlidingExpiration);
+					HttpContext.Current.Cache.Insert(keyTemplates, _plugins, null, DateTime.Now.AddMinutes(3), Cache.NoSlidingExpiration);
 				}
 
 				return _plugins.OrderBy(t => t.Caption).ToList();

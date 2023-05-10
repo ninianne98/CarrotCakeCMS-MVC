@@ -31,7 +31,7 @@ namespace Carrotware.CMS.Core {
 			cpe.ThePage.EditDate = DateTime.UtcNow;
 
 			cpe.ThePage.FileName = ContentPageHelper.ScrubFilename(cpe.NewRootContentID, cpe.ThePage.FileName);
-			if (!String.IsNullOrEmpty(cpe.ParentFileName)) {
+			if (!string.IsNullOrEmpty(cpe.ParentFileName)) {
 				cpe.ParentFileName = ContentPageHelper.ScrubFilename(cpe.OriginalParentContentID, cpe.ParentFileName);
 			}
 
@@ -49,12 +49,12 @@ namespace Carrotware.CMS.Core {
 
 				cpe.ThePage.ContentCategories = (from l in lstCategories
 												 join o in cpe.ThePage.ContentCategories on l.CategorySlug.ToLowerInvariant() equals o.CategorySlug.ToLowerInvariant()
-												 where !String.IsNullOrEmpty(o.CategorySlug)
+												 where !string.IsNullOrEmpty(o.CategorySlug)
 												 select l).Distinct().ToList();
 
 				cpe.ThePage.ContentTags = (from l in lstTags
 										   join o in cpe.ThePage.ContentTags on l.TagSlug.ToLowerInvariant() equals o.TagSlug.ToLowerInvariant()
-										   where !String.IsNullOrEmpty(o.TagSlug)
+										   where !string.IsNullOrEmpty(o.TagSlug)
 										   select l).Distinct().ToList();
 			} else {
 				cpe.ThePage.ContentCategories = new List<ContentCategory>();
@@ -80,16 +80,16 @@ namespace Carrotware.CMS.Core {
 				.ForEach(r => r.ThePage.PageSlug = ContentPageHelper.ScrubFilename(r.ThePage.Root_ContentID, r.ThePage.PageSlug));
 
 			se.ThePages.Where(p => p.ThePage.ContentType == ContentPageType.PageType.BlogEntry).ToList()
-				.ForEach(q => q.ThePage.FileName = ContentPageHelper.ScrubFilename(q.ThePage.Root_ContentID, String.Format("/{0}/{1}", q.ThePage.GoLiveDate.ToString(se.TheSite.Blog_DatePattern), q.ThePage.PageSlug)));
+				.ForEach(q => q.ThePage.FileName = ContentPageHelper.ScrubFilename(q.ThePage.Root_ContentID, ContentPageHelper.CreateFileNameFromSlug(se.TheSite, q.ThePage.GoLiveDate, q.ThePage.PageSlug)));
 
 			se.ThePages.ToList().ForEach(r => r.ThePage.FileName = ContentPageHelper.ScrubFilename(r.ThePage.Root_ContentID, r.ThePage.FileName));
 		}
 
-		public static void AssignWPExportNewIDs(SiteData sd, WordPressSite wps) {
+		public static void AssignWPExportNewIDs(SiteData site, WordPressSite wps) {
 			wps.NewSiteID = Guid.NewGuid();
 
 			wps.Content.Where(p => p.PostType == WordPressPost.WPPostType.BlogPost).ToList()
-				.ForEach(q => q.ImportFileName = ContentPageHelper.ScrubFilename(q.ImportRootID, String.Format("/{0}/{1}", sd.ConvertUTCToSiteTime(q.PostDateUTC).ToString(sd.Blog_DatePattern), q.ImportFileSlug)));
+				.ForEach(q => q.ImportFileName = ContentPageHelper.ScrubFilename(q.ImportRootID, ContentPageHelper.CreateFileNameFromSlug(site, site.ConvertUTCToSiteTime(q.PostDateUTC), q.ImportFileSlug)));
 
 			wps.Content.ToList().ForEach(r => r.ImportFileName = ContentPageHelper.ScrubFilename(r.ImportRootID, r.ImportFileName));
 		}
@@ -115,7 +115,7 @@ namespace Carrotware.CMS.Core {
 				cont.CreateUserId = SecurityData.CurrentUserGuid;
 				cont.EditUserId = SecurityData.CurrentUserGuid;
 
-				if (!String.IsNullOrEmpty(c.PostAuthor)) {
+				if (!string.IsNullOrEmpty(c.PostAuthor)) {
 					WordPressUser wpu = wps.Authors.Where(x => x.Login.ToLowerInvariant() == c.PostAuthor.ToLowerInvariant()).FirstOrDefault();
 
 					if (wpu != null && wpu.ImportUserID != Guid.Empty) {

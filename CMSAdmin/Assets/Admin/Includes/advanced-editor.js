@@ -380,19 +380,19 @@ function cmsPreviewTemplate() {
 		templateList += "<option value='" + this.value + "'>" + this.text + "</option>";
 	});
 
-	var btnWide1 = '<a id="btnDeskTemplateCMS" name="btnWidthTemplateCMS" onclick="cmsWideDesk();"> Desktop Size </a>';
-	var btnWide2 = '<a id="btnTabletTemplateCMS" name="btnWidthTemplateCMS" onclick="cmWideTablet();"> Tablet Size </a>';
-	var btnWide3 = '<a id="btnMobileTemplateCMS" name="btnWidthTemplateCMS" onclick="cmsWideMobile();"> Mobile Size </a>';
+	var btnWide1 = '<a id="btnDeskTemplateCMS" class="cms-seagreen" name="btnWidthTemplateCMS" onclick="cmsWideDesk();"> Desktop Size </a>';
+	var btnWide2 = '<a id="btnTabletTemplateCMS" class="cms-seagreen" name="btnWidthTemplateCMS" onclick="cmWideTablet();"> Tablet Size </a>';
+	var btnWide3 = '<a id="btnMobileTemplateCMS" class="cms-seagreen" name="btnWidthTemplateCMS" onclick="cmsWideMobile();"> Mobile Size </a>';
 
-	var ddlPreview = '<span> <select id="cmsTemplateList">' + templateList + '</select>  <input type="button" value="Preview" id="btnPreviewCMS" onclick="cmsPreviewTemplate2();" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>';
+	var ddlPreview = '<span> <select class="cms-seagreen" id="cmsTemplateList">' + templateList + '</select>  <input type="button" value="Preview" id="btnPreviewCMS" onclick="cmsPreviewTemplate2();" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>';
 
-	var btnClose = ' <input type="button" id="btnCloseTemplateCMS" value="Close" onclick="cmsCloseModalWin();" /> &nbsp;&nbsp;&nbsp; ';
-	var btnApply = ' <input type="button" id="btnApplyTemplateCMS" value="Apply Template" onclick="cmsUpdateTemplate();" /> &nbsp;&nbsp;&nbsp; ';
+	var btnClose = ' <input type="button" class="cms-seagreen" id="btnCloseTemplateCMS" value="Close" onclick="cmsCloseModalWin();" /> &nbsp;&nbsp;&nbsp; ';
+	var btnApply = ' <input type="button" class="cms-seagreen" id="btnApplyTemplateCMS" value="Apply Template" onclick="cmsUpdateTemplate();" /> &nbsp;&nbsp;&nbsp; ';
 
-	$(editFrame).append('<div id="cms-seagreen-id"><div id="cmsPreviewControls" class="cms-seagreen cmsPreviewButtons"> '
-					+ '<div id="cmsPreviewTab" class="cmsTabs cmsPreview-Left"><ul> <li>' + btnWide1 + '</li> <li>' + btnWide2 + '</li> <li>' + btnWide3 + '</li>  </ul> '
+	$(editFrame).append('<div id="cms-seagreen-id" class="cms-seagreen"><div id="cmsPreviewControls" class="cms-seagreen cmsPreviewButtons"> '
+					+ '<div id="cmsPreviewTab" class="cmsTabs cmsPreview-Left cms-seagreen"><ul class="cms-seagreen"> <li>' + btnWide1 + '</li> <li>' + btnWide2 + '</li> <li>' + btnWide3 + '</li>  </ul> '
 					+ ' \r\n <div id="cmsPreviewTabPanel" style="display: none;" >    </div>\r\n   </div> '
-					+ ' <div class="cmsPreview-Right">' + ddlPreview + btnClose + btnApply + '</div> </div>'
+					+ ' <div class="cmsPreview-Right cms-seagreen">' + ddlPreview + btnClose + btnApply + '</div> </div>'
 					+ ' </div>');
 
 	window.setTimeout("cmsPreviewStyling();", 250);
@@ -612,12 +612,6 @@ function cmsSaveContentCallback(data, status) {
 }
 
 function cmsAjaxGeneralCallback(data, status) {
-	//if (data.d == "OK") {
-	//	cmsSpinnerShort();
-	//} else {
-	//	cmsAlertModal(data.d);
-	//}
-
 	if (data.d != "OK") {
 		cmsAlertModal(data.d);
 	}
@@ -639,7 +633,7 @@ function cmsSavePageCallback(data, status) {
 		cmsSpinnerShort();
 		cmsMakeOKToLeave();
 		cmsNotifySaved();
-		//window.setTimeout("location.href = \'" + thisPageNav + "\'", 10000);
+
 		iCount = 10;
 		cmsCountdownWindow();
 	} else {
@@ -661,14 +655,15 @@ function cmsCountdownWindow() {
 
 function cmsNotifySaved() {
 	$("#CMSsavedconfirm").dialog({
-		open: function () {
-			$(this).parents('.ui-dialog-buttonpane button:eq(0)').focus();
-		},
-
+		dialogClass: "no-close",
+		closeOnEscape: false,
 		resizable: false,
 		height: 250,
 		width: 400,
 		modal: true,
+		open: function () {
+			$(this).parents('.ui-dialog-buttonpane button:eq(0)').focus();
+		},
 		buttons: {
 			"OK": function () {
 				cmsMakeOKToLeave();
@@ -679,6 +674,7 @@ function cmsNotifySaved() {
 	});
 
 	cmsFixDialog('CMSsavedconfirmmsg');
+	return false;
 }
 
 function cmsRecordCancellation() {
@@ -697,14 +693,14 @@ function cmsRecordCancellation() {
 
 function cmsCancelEdit() {
 	$("#CMScancelconfirm").dialog({
-		open: function () {
-			$(this).parents('.ui-dialog-buttonpane button:eq(0)').focus();
-		},
-
+		closeOnEscape: true,
 		resizable: false,
 		height: 250,
 		width: 400,
 		modal: true,
+		open: function () {
+			$(this).parents('.ui-dialog-buttonpane button:eq(0)').focus();
+		},
 		buttons: {
 			"No": function () {
 				$(this).dialog("close");
@@ -719,6 +715,7 @@ function cmsCancelEdit() {
 	});
 
 	cmsFixDialog('CMScancelconfirmmsg');
+	return false;
 }
 
 //function cmsSendTrackbackBatch() {
@@ -958,7 +955,7 @@ function cmsRemoveWidgetLink(v) {
 		open: function () {
 			$(this).parents('.ui-dialog-buttonpane button:eq(0)').focus();
 		},
-
+		closeOnEscape: true,
 		resizable: false,
 		height: 250,
 		width: 400,
@@ -1141,7 +1138,7 @@ function cmsClickAddWidget() {
 			open: function () {
 				$(this).parents('.ui-dialog-buttonpane button:eq(0)').focus();
 			},
-
+			closeOnEscape: true,
 			resizable: false,
 			height: 250,
 			width: 400,

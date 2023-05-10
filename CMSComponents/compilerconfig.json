@@ -1,0 +1,222 @@
+﻿[
+  {
+    "outputFile": "skins/popup.frenchblue.css",
+    "inputFile": "skins/popup.frenchblue.less"
+  },
+  {
+    "outputFile": "skins/popup.classic.css",
+    "inputFile": "skins/popup.classic.less"
+  },
+  {
+    "outputFile": "skins/popup.amethystorchid.css",
+    "inputFile": "skins/popup.amethystorchid.less"
+  },
+  {
+    "outputFile": "skins/main.frenchblue.css",
+    "inputFile": "skins/main.frenchblue.less"
+  },
+  {
+    "outputFile": "skins/main.classic.css",
+    "inputFile": "skins/main.classic.less"
+  },
+  {
+    "outputFile": "skins/main.amethystorchid.css",
+    "inputFile": "skins/main.amethystorchid.less"
+  },
+  {
+    "outputFile": "skins/logon.frenchblue.css",
+    "inputFile": "skins/logon.frenchblue.less"
+  },
+  {
+    "outputFile": "skins/logon.classic.css",
+    "inputFile": "skins/logon.classic.less"
+  },
+  {
+    "outputFile": "skins/logon.amethystorchid.css",
+    "inputFile": "skins/logon.amethystorchid.less"
+  },
+  {
+    "outputFile": "editor/notify.frenchblue.css",
+    "inputFile": "editor/notify.frenchblue.less"
+  },
+  {
+    "outputFile": "editor/notify.amethystorchid.css",
+    "inputFile": "editor/notify.amethystorchid.less"
+  },
+  {
+    "outputFile": "editor/notify.classic.css",
+    "inputFile": "editor/notify.classic.less"
+  },
+  {
+    "outputFile": "skins/logon.plum.css",
+    "inputFile": "skins/logon.plum.less"
+  },
+  {
+    "outputFile": "skins/popup.rust.css",
+    "inputFile": "skins/popup.rust.less"
+  },
+  {
+    "outputFile": "skins/popup.plum.css",
+    "inputFile": "skins/popup.plum.less"
+  },
+  {
+    "outputFile": "editor/notify.rust.css",
+    "inputFile": "editor/notify.rust.less"
+  },
+  {
+    "outputFile": "editor/notify.plum.css",
+    "inputFile": "editor/notify.plum.less"
+  },
+  {
+    "outputFile": "skins/logon.rust.css",
+    "inputFile": "skins/logon.rust.less"
+  },
+  {
+    "outputFile": "skins/main.rust.css",
+    "inputFile": "skins/main.rust.less"
+  },
+  {
+    "outputFile": "skins/main.plum.css",
+    "inputFile": "skins/main.plum.less"
+  },
+  {
+    "outputFile": "skins/logon.blueizis.css",
+    "inputFile": "skins/logon.blueizis.less"
+  },
+  {
+    "outputFile": "skins/logon.mosaicblue.css",
+    "inputFile": "skins/logon.mosaicblue.less"
+  },
+  {
+    "outputFile": "skins/popup.quetzalgreen.css",
+    "inputFile": "skins/popup.quetzalgreen.less"
+  },
+  {
+    "outputFile": "skins/popup.mosaicblue.css",
+    "inputFile": "skins/popup.mosaicblue.less"
+  },
+  {
+    "outputFile": "skins/popup.blueizis.css",
+    "inputFile": "skins/popup.blueizis.less"
+  },
+  {
+    "outputFile": "editor/notify.quetzalgreen.css",
+    "inputFile": "editor/notify.quetzalgreen.less"
+  },
+  {
+    "outputFile": "editor/notify.mosaicblue.css",
+    "inputFile": "editor/notify.mosaicblue.less"
+  },
+  {
+    "outputFile": "editor/notify.blueizis.css",
+    "inputFile": "editor/notify.blueizis.less"
+  },
+  {
+    "outputFile": "skins/main.quetzalgreen.css",
+    "inputFile": "skins/main.quetzalgreen.less"
+  },
+  {
+    "outputFile": "skins/main.blueizis.css",
+    "inputFile": "skins/main.blueizis.less"
+  },
+  {
+    "outputFile": "skins/main.mosaicblue.css",
+    "inputFile": "skins/main.mosaicblue.less"
+  },
+  {
+    "outputFile": "skins/logon.quetzalgreen.css",
+    "inputFile": "skins/logon.quetzalgreen.less"
+  },
+  {
+    "outputFile": "editor/advedit.rust.css",
+    "inputFile": "editor/advedit.rust.less"
+  },
+  {
+    "outputFile": "editor/advedit.quetzalgreen.css",
+    "inputFile": "editor/advedit.quetzalgreen.less"
+  },
+  {
+    "outputFile": "editor/advedit.plum.css",
+    "inputFile": "editor/advedit.plum.less"
+  },
+  {
+    "outputFile": "editor/advedit.mosaicblue.css",
+    "inputFile": "editor/advedit.mosaicblue.less"
+  },
+  {
+    "outputFile": "editor/advedit.frenchblue.css",
+    "inputFile": "editor/advedit.frenchblue.less"
+  },
+  {
+    "outputFile": "editor/advedit.classic.css",
+    "inputFile": "editor/advedit.classic.less"
+  },
+  {
+    "outputFile": "editor/advedit.blueizis.css",
+    "inputFile": "editor/advedit.blueizis.less"
+  },
+  {
+    "outputFile": "editor/advedit.amethystorchid.css",
+    "inputFile": "editor/advedit.amethystorchid.less"
+  },
+  {
+    "outputFile": "editor/advedit.mauve.css",
+    "inputFile": "editor/advedit.mauve.less"
+  },
+  {
+    "outputFile": "editor/notify.sugaralmond.css",
+    "inputFile": "editor/notify.sugaralmond.less"
+  },
+  {
+    "outputFile": "editor/notify.sandstone.css",
+    "inputFile": "editor/notify.sandstone.less"
+  },
+  {
+    "outputFile": "editor/notify.mauve.css",
+    "inputFile": "editor/notify.mauve.less"
+  },
+  {
+    "outputFile": "editor/advedit.sugaralmond.css",
+    "inputFile": "editor/advedit.sugaralmond.less"
+  },
+  {
+    "outputFile": "editor/advedit.sandstone.css",
+    "inputFile": "editor/advedit.sandstone.less"
+  },
+  {
+    "outputFile": "skins/popup.sugaralmond.css",
+    "inputFile": "skins/popup.sugaralmond.less"
+  },
+  {
+    "outputFile": "skins/popup.sandstone.css",
+    "inputFile": "skins/popup.sandstone.less"
+  },
+  {
+    "outputFile": "skins/popup.mauve.css",
+    "inputFile": "skins/popup.mauve.less"
+  },
+  {
+    "outputFile": "skins/main.sugaralmond.css",
+    "inputFile": "skins/main.sugaralmond.less"
+  },
+  {
+    "outputFile": "skins/main.sandstone.css",
+    "inputFile": "skins/main.sandstone.less"
+  },
+  {
+    "outputFile": "skins/main.mauve.css",
+    "inputFile": "skins/main.mauve.less"
+  },
+  {
+    "outputFile": "skins/logon.sugaralmond.css",
+    "inputFile": "skins/logon.sugaralmond.less"
+  },
+  {
+    "outputFile": "skins/logon.sandstone.css",
+    "inputFile": "skins/logon.sandstone.less"
+  },
+  {
+    "outputFile": "skins/logon.mauve.css",
+    "inputFile": "skins/logon.mauve.less"
+  }
+]

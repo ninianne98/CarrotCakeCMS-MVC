@@ -345,7 +345,7 @@ namespace Carrotware.CMS.Core {
 
 						keyVal = securityHelper.UserManager.IsInRole(_user.Id, groupName);
 					}
-					HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(15), Cache.NoSlidingExpiration);
+					HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(30), Cache.NoSlidingExpiration);
 				}
 			}
 

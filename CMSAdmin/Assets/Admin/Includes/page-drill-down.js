@@ -72,13 +72,14 @@ function ajaxReturnCrumb(data, status) {
 
 	if (lstData.length > 0) {
 		$.each(lstData, function (i, v) {
-			var del = "<a href='javascript:void(0);' title='Remove' data-rootcontent='" + val + "' onclick='selectDrillItem(this);'><div class='ui-icon ui-icon-closethick' style='float:left'></div></a>";
-			if (i != (lstData.length - 1)) {
-				del = '';
+			var act = '<div class="drill-placeholder">&nbsp;</div>';
+			if (i == (lstData.length - 1)) {
+				act = "<a href='javascript:void(0);' title='Remove' data-rootcontent='" + val + "' onclick='selectDrillItem(this);'><div class='ui-icon ui-icon-closethick'></div></a>";
 			}
+			// parent/child use last val for remove link above
 			val = v.Root_ContentID;
-			var bc = "<div class='pageNodeDrillDown2' data-rootcontent='" + v.Root_ContentID + "' id='node' >" + v.NavMenuText + " </div>";
-			$(mnuName).append("<div class='ui-widget-header ui-corner-all pageNodeDrillDown3' >" + bc + del + "<div  style='clear: both;'></div></div>");
+			var bc = "<div class='pageNodeDrillDown2 ui-widget' data-rootcontent='" + val + "' id='dril-node-" + i + "' >&nbsp;" + v.NavMenuText + " </div>";
+			$(mnuName).append("<div class='pageNodeDrillDown3 ui-button ui-corner-all ui-widget' >" + bc + " " + act + "<div style='clear: both;'></div></div>");
 		});
 	}
 

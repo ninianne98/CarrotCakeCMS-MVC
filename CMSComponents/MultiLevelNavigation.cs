@@ -89,7 +89,9 @@ namespace Carrotware.CMS.UI.Components {
 					_output.Append(item.OpenTag());
 					_output.Append(link.RenderTag());
 
-					LoadChildLevels(n.Root_ContentID);
+					if (this.LevelDepth > 1) {
+						LoadChildLevels(n.Root_ContentID);
+					}
 
 					_output.AppendLine(item.CloseTag());
 				}
