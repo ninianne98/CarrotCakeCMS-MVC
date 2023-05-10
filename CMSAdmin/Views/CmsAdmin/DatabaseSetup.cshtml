@@ -6,7 +6,7 @@
 	Layout = CarrotLayout.Public;
 }
 
-<div style="border: solid 0  transparent; width: 375px; height: 140px; overflow: auto;" class="okMsg">
+<div style="border: solid 0  transparent; width: 375px; height: 160px; overflow: auto;" class="okMsg">
 
 	@foreach (var itm in Model.Messages) {
 		<div>
@@ -41,6 +41,7 @@
 	}
 </div>
 <div>
+	<br />
 	@if (Model.CreateUser) {
 		<input type="button" name="btnNext" value="Create First User" id="btnNext" onclick="location.href = '@SiteFilename.CreateFirstAdminURL';" />
 	} else {

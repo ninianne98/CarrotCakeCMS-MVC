@@ -20,15 +20,12 @@
 	ViewBag.Title = CmsPage.Titlebar;
 	ViewBag.SiteName = CmsPage.TheSite.SiteName;
 
-	var nav = new TwoLevelNavigation() {
-		FontSize = new SizeUnit("14px"),
-		ForeColor = CarrotWeb.DecodeColor("#424242"),
-		SelFGColor = CarrotWeb.DecodeColor("#ffffff"),
-		SubBGColor = CarrotWeb.DecodeColor("#787878"),
-		SubFGColor = CarrotWeb.DecodeColor("#ffffff"),
-		UnSelBGColor = CarrotWeb.DecodeColor("#808080"),
-		UnSelFGColor = CarrotWeb.DecodeColor("#eeeeee"),
-	};
+	var main = Helper.MainColorCode;
+	var mainXDk = CmsSkin.DarkenColor(main, 0.35);
+	var mainDk = CmsSkin.DarkenColor(main, 0.15);
+	var mainLt = CmsSkin.LightenColor(main, 0.15);
+
+	var nav = new TwoLevelNavigation("15px", main) { ElementId = "sitenav" };
 
 	var cssUri = Helper.GetWebResourceUrl("Views.CmsContent.PlainPage.plain.css");
 
@@ -42,9 +39,29 @@
 	@CarrotCakeHtml.MetaTags()
 	@CarrotCakeHtml.Rss()
 
-	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.GlossyBlack, JQVersion = "1.11", UseJqueryMigrate = true })
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.GlossyBlack, JQVersion = "1.11" })
 
 	@(cssTag.EmitHtmlSelfClosingTag())
+
+	<style type="text/css">
+		a {
+			color: @String.Format("{0}", mainDk);
+		}
+		a:hover {
+			color: @String.Format("{0}", mainLt);
+		}
+
+		#logo a {
+			color: @String.Format("{0}", mainXDk);
+		}
+		#logo a:hover {
+			color: @String.Format("{0}", mainDk);
+		}
+
+		h1, h2, h3, h4 {
+			color: @String.Format("{0}", mainXDk);
+		}
+	</style>
 
 	<title>@CmsPage.Titlebar</title>
 
@@ -127,7 +144,7 @@
 							@if (CmsPage.IsPageContent == true) {
 								<li>
 									@if (CmsPage.ChildNav.Any()) {
-										<h1>Child Pages</h1>
+										<h2>Child Pages</h2>
 										<ul class="sidemenu">
 											@foreach (var itm in CmsPage.ChildNav) {
 												<li class="child-nav"><a href="@itm.FileName">@itm.NavigationText</a></li>
@@ -137,7 +154,7 @@
 								</li>
 								<li>
 									@if (CmsPage.SiblingNav.Any()) {
-										<h1>Sibling Pages</h1>
+										<h2>Sibling Pages</h2>
 										<ul class="sidemenu">
 											@foreach (var itm in CmsPage.SiblingNav) {
 												<li class="child-nav"><a href="@itm.FileName">@itm.NavigationText</a></li>
@@ -149,7 +166,7 @@
 									@{
 										var updates = CmsPage.GetSiteUpdates(10);
 										if (updates.Any()) {
-											<h1>Recent Updates</h1>
+											<h2>Recent Updates</h2>
 											<ul class="sidemenu">
 												@foreach (var itm in updates) {
 													<li class="child-nav">
@@ -171,7 +188,6 @@
 								</li>
 							}
 						</ul>
-
 					</div>
 					<!-- end #sidebar -->
 					<div id="content">

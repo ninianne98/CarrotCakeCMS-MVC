@@ -19,7 +19,6 @@
 <script src="~/Assets/Admin/Includes/advanced-editor.js?@versionKey" type="text/javascript"></script>
 
 <link href="~/Assets/Admin/Includes/advanced-editor-reset.css?@versionKey" rel="stylesheet" type="text/css" />
-<link href="~/Assets/Admin/glossyseagreen/jquery-ui-glossyseagreen-scoped2.css?@versionKey" rel="stylesheet" type="text/css" />
-<link href="~/Assets/Admin/glossyseagreen/jquery-ui-glossyseagreen-scoped.css?@versionKey" rel="stylesheet" type="text/css" />
 <link href="~/Assets/Admin/Includes/modal.css?@versionKey" rel="stylesheet" type="text/css" />
-<link href="~/Assets/Admin/Includes/advanced-editor.css?@versionKey" rel="stylesheet" type="text/css" />
+
+@(new CmsSkin() { SelectedColor = Helper.SiteSkin, WindowMode = CmsSkin.SkinMode.AdvEdit })

@@ -2,7 +2,7 @@
 @{
 	Layout = null;
 }
-<html lang="en">
+<html>
 <head>
 	<meta charset="utf-8" />
 	<link href="~/Assets/Admin/includes/normalize.css" rel="stylesheet" type="text/css" />
@@ -10,14 +10,12 @@
 		@String.Format("{0} - {1}", SiteData.CarrotCakeCMSVersionMM, ViewBag.Title)
 	</title>
 
-	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.LightGreen, UseJqueryMigrate = true })
-
 	<link href="~/Assets/iCheck/iCheck.css" rel="stylesheet" />
+	@(new CmsSkin() { SelectedColor = Helper.SiteSkin, WindowMode = CmsSkin.SkinMode.Logon })
+
 	<script src="~/Assets/iCheck/icheck.min.js"></script>
 	<script src="~/Assets/Admin/Includes/icheck.init.js"></script>
 
-	<link href="~/Assets/Admin/includes/logon.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/common.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript">
 
 		$(document).ready(function () {

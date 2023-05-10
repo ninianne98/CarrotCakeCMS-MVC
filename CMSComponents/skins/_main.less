@@ -1,0 +1,19 @@
+﻿@import "_colors.less";
+@import "_fauxstrap.less";
+@import "_main-window.less";
+@import "_common.less";
+@import "_TableStyles.less";
+
+.mainWindow(@themeColor) {
+	/*
+CarrotCake CMS Theme Stylesheet - Main
+*/
+	.cms-theme-color-code {
+		color: @themeColor;
+	}
+
+	.fauxStrap(@themeColor);
+	.mainUI(@themeColor);
+	.commonTheme(@themeColor);
+	.tableStyles(@themeColor);
+}

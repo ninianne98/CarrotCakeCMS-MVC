@@ -1,0 +1,78 @@
+﻿@import "_colors.less";
+
+.popupUI(@themeColor) {
+	@themeDark85: darken(@themeColor, 85%);
+	@themeDark15: darken(@themeColor, 15%);
+	@themeLight15: lighten(@themeColor, 15%);
+	@themeLight20: lighten(@themeColor, 20%);
+	@themeLight25: lighten(@themeColor, 25%);
+
+	/*
+Main Popup CarrotCake CMS stylesheet
+*/
+	body {
+		background-color: #fff;
+		font-size: 12px;
+		font-family: Verdana, Helvetica, Sans-Serif;
+	}
+
+	H1, H2, H3 {
+		font-weight: bold;
+		font-family: Georgia, Times New Roman, Serif;
+		color: @themeDark85;
+	}
+
+	H1 {
+		font-size: 24px;
+	}
+
+	H2 {
+		font-size: 20px;
+	}
+
+	H3 {
+		font-size: 16px;
+	}
+
+	#cms-simplemodal-container, .cms-simplemodal-container {
+		min-height: 440px;
+		height: 70%;
+		min-width: 700px;
+		width: 80%;
+		z-index: 51000;
+	}
+
+	#cms-basic-modal-content, #cmsModalFrame, #cmsAjaxMainDiv2 {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+		width: 100%;
+	}
+
+	#cmsFrameEditor {
+		margin: 0;
+		padding: 0;
+		height: 98%;
+		width: 100%;
+	}
+
+	.info-saved {
+		position: fixed;
+		z-index: 1500;
+		margin: 0.5em auto;
+		top: 1em;
+		margin-left: auto;
+		margin-right: auto;
+		left: 0;
+		right: 0;
+		padding: 0.25em;
+		width: 30em;
+		border: 2px solid @themeDark15;
+		background-color: @themeLight25;
+		text-align: center;
+		font-weight: bold;
+		border-radius: 5px;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+	}
+}

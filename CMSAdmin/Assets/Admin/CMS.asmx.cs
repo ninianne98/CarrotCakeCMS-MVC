@@ -26,6 +26,25 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 	[CmsAuthorize]
 	public class CMS : System.Web.Services.WebService {
 
+		public static class ServiceResponse {
+			public static string OK { get { return "OK"; } }
+			public static string Fail { get { return "FAIL"; } }
+
+			public static bool IsFail(string result) {
+				return string.IsNullOrEmpty(result)
+					|| result.ToUpperInvariant().Trim() == Fail
+					|| result.ToUpperInvariant() != OK;
+			}
+
+			public static bool IsOK(string result) {
+				if (string.IsNullOrEmpty(result)) {
+					return false;
+				}
+
+				return result.ToUpperInvariant().Trim() == OK;
+			}
+		}
+
 		public CMS() {
 			if (!this.User.Identity.IsAuthenticated) {
 				throw new Exception("Not Authenticated!");
@@ -102,7 +121,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				List<Widget> c = null;
 				string sXML = GetSerialized(CMSConfigHelper.keyAdminWidget);
 				//since a page may not have any widgets, initialize it and skip deserializing
-				if (!String.IsNullOrEmpty(sXML)) {
+				if (!string.IsNullOrEmpty(sXML)) {
 					XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Widget>));
 					Object genpref = null;
 					using (StringReader stringReader = new StringReader(sXML)) {
@@ -152,7 +171,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 		private void LoadGuids() {
 			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
-				if (!String.IsNullOrEmpty(CurrentEditPage)) {
+				if (!string.IsNullOrEmpty(CurrentEditPage)) {
 					filePage = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, CurrentEditPage);
 					if (filePage != null) {
 						CurrentPageGuid = filePage.Root_ContentID;
@@ -208,7 +227,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				GetSetUserEditStateAsEmpty();
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -225,7 +244,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 					ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, CurrentPageGuid);
 					cp.SaveTrackbackTop();
 				}
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -240,7 +259,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				if (SiteData.CurretSiteExists) {
 					SiteData.CurrentSite.SendTrackbackQueue();
 				}
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -254,7 +273,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			try {
 				GetSetUserEditState(ToolbarState, ToolbarMargin, ToolbarScroll, WidgetScroll, SelTabID);
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -274,13 +293,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				editor.Init();
 			}
 
-			editor.EditorMargin = String.IsNullOrEmpty(ToolbarMargin) ? "L" : ToolbarMargin.ToUpperInvariant();
-			editor.EditorOpen = String.IsNullOrEmpty(ToolbarState) ? "true" : ToolbarState.ToLowerInvariant();
-			editor.EditorWidgetScrollPosition = String.IsNullOrEmpty(WidgetScroll) ? "0" : WidgetScroll.ToLowerInvariant();
-			editor.EditorScrollPosition = String.IsNullOrEmpty(ToolbarScroll) ? "0" : ToolbarScroll.ToLowerInvariant();
-			editor.EditorSelectedTabIdx = String.IsNullOrEmpty(SelTabID) ? "0" : SelTabID.ToLowerInvariant();
+			editor.EditorMargin = string.IsNullOrEmpty(ToolbarMargin) ? "L" : ToolbarMargin.ToUpperInvariant();
+			editor.EditorOpen = string.IsNullOrEmpty(ToolbarState) ? "true" : ToolbarState.ToLowerInvariant();
+			editor.EditorWidgetScrollPosition = string.IsNullOrEmpty(WidgetScroll) ? "0" : WidgetScroll.ToLowerInvariant();
+			editor.EditorScrollPosition = string.IsNullOrEmpty(ToolbarScroll) ? "0" : ToolbarScroll.ToLowerInvariant();
+			editor.EditorSelectedTabIdx = string.IsNullOrEmpty(SelTabID) ? "0" : SelTabID.ToLowerInvariant();
 
-			if (String.IsNullOrEmpty(ToolbarMargin) && String.IsNullOrEmpty(ToolbarState)) {
+			if (string.IsNullOrEmpty(ToolbarMargin) && string.IsNullOrEmpty(ToolbarState)) {
 				UserEditState.cmsUserEditState = null;
 			} else {
 				UserEditState.cmsUserEditState = editor;
@@ -291,14 +310,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
 		public List<SiteMapOrder> GetChildPages(string PageID, string CurrPageID) {
 			Guid? ParentID = Guid.Empty;
-			if (!String.IsNullOrEmpty(PageID)) {
+			if (!string.IsNullOrEmpty(PageID)) {
 				if (PageID.Length > 20) {
 					ParentID = new Guid(PageID);
 				}
 			}
 
 			Guid ContPageID = Guid.Empty;
-			if (!String.IsNullOrEmpty(CurrPageID)) {
+			if (!string.IsNullOrEmpty(CurrPageID)) {
 				if (CurrPageID.Length > 20) {
 					ContPageID = new Guid(CurrPageID);
 				}
@@ -328,14 +347,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
 		public List<SiteMapOrder> GetPageCrumbs(string PageID, string CurrPageID) {
 			Guid? ContentPageID = Guid.Empty;
-			if (!String.IsNullOrEmpty(PageID)) {
+			if (!string.IsNullOrEmpty(PageID)) {
 				if (PageID.Length > 20) {
 					ContentPageID = new Guid(PageID);
 				}
 			}
 
 			Guid ContPageID = Guid.Empty;
-			if (!String.IsNullOrEmpty(CurrPageID)) {
+			if (!string.IsNullOrEmpty(CurrPageID)) {
 				if (CurrPageID.Length > 20) {
 					ContPageID = new Guid(CurrPageID);
 				}
@@ -387,7 +406,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				GetSetUserEditStateAsEmpty();
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -405,13 +424,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				string sDatePath = ContentPageHelper.ScrubSlug(CMSConfigHelper.DecodeBase64(DatePath));
 				string sEditorPath = ContentPageHelper.ScrubSlug(CMSConfigHelper.DecodeBase64(EditorPath));
 
-				if (String.IsNullOrEmpty(sFolderPath) || String.IsNullOrEmpty(sCategoryPath)
-					|| String.IsNullOrEmpty(sTagPath) || String.IsNullOrEmpty(sDatePath)
-					|| String.IsNullOrEmpty(sEditorPath)) {
-					return "FAIL";
+				if (string.IsNullOrEmpty(sFolderPath) || string.IsNullOrEmpty(sCategoryPath)
+					|| string.IsNullOrEmpty(sTagPath) || string.IsNullOrEmpty(sDatePath)
+					|| string.IsNullOrEmpty(sEditorPath)) {
+					return ServiceResponse.Fail;
 				}
 				if (sFolderPath.Length < 1 || sCategoryPath.Length < 1 || sTagPath.Length < 1 || sDatePath.Length < 1 || sEditorPath.Length < 1) {
-					return "FAIL";
+					return ServiceResponse.Fail;
 				}
 
 				List<string> lstParms = new List<string>();
@@ -430,15 +449,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 					var exists = pageHelper.ExistingPagesBeginWith(SiteData.CurrentSite.SiteID, sFolderPath);
 
 					if (!exists) {
-						return "OK";
+						return ServiceResponse.OK;
 					}
 				}
 
 				if (!SiteData.CurretSiteExists) {
-					return "OK";
+					return ServiceResponse.OK;
 				}
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -477,10 +496,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				int iCount = ContentCategory.GetSimilar(SiteData.CurrentSite.SiteID, CurrentItemGuid, TheSlug);
 
 				if (iCount < 1) {
-					return "OK";
+					return ServiceResponse.OK;
 				}
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -499,10 +518,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				int iCount = ContentTag.GetSimilar(SiteData.CurrentSite.SiteID, CurrentItemGuid, TheSlug);
 
 				if (iCount < 1) {
-					return "OK";
+					return ServiceResponse.OK;
 				}
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -546,7 +565,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 					item.ResetHeartbeatLock();
 				}
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -581,10 +600,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				int iCount = ContentSnippet.GetSimilar(SiteData.CurrentSite.SiteID, CurrentItemGuid, TheSlug);
 
 				if (iCount < 1) {
-					return "OK";
+					return ServiceResponse.OK;
 				}
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -601,7 +620,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				ContentSnippet cs = ContentSnippet.GetVersion(guidSnippet);
 
 				if (cs != null) {
-					if (String.IsNullOrEmpty(cs.ContentBody)) {
+					if (string.IsNullOrEmpty(cs.ContentBody)) {
 						return "No Data";
 					} else {
 						if (cs.ContentBody.Length < 768) {
@@ -612,11 +631,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 					}
 				}
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			}
 		}
 
@@ -628,19 +647,19 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				DateTime goLiveDate = Convert.ToDateTime(GoLiveDate);
 				string sThePageTitle = CMSConfigHelper.DecodeBase64(ThePageTitle);
-				if (String.IsNullOrEmpty(sThePageTitle)) {
+				if (string.IsNullOrEmpty(sThePageTitle)) {
 					sThePageTitle = CurrentPageGuid.ToString();
 				}
 				sThePageTitle = sThePageTitle.Replace("/", "-");
 				string sTheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, sThePageTitle);
 
 				if (Mode.ToLowerInvariant() == "page") {
-					string sTestRes = ValidateUniqueFilename(CMSConfigHelper.EncodeBase64(sTheFileName), PageID);
-					if (sTestRes != "OK") {
+					string sTestRes = IsUniqueFilename(sTheFileName, CurrentPageGuid);
+					if (ServiceResponse.IsOK(sTestRes) == false) {
 						for (int i = 1; i < 1000; i++) {
 							string sTestFile = sThePageTitle + "-" + i.ToString();
-							sTestRes = ValidateUniqueFilename(CMSConfigHelper.EncodeBase64(sTestFile), PageID);
-							if (sTestRes == "OK") {
+							sTestRes = IsUniqueFilename(sTestFile, CurrentPageGuid);
+							if (ServiceResponse.IsOK(sTestRes)) {
 								sTheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, sTestFile);
 								break;
 							} else {
@@ -649,12 +668,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 						}
 					}
 				} else {
-					string sTestRes = ValidateUniqueBlogFilename(CMSConfigHelper.EncodeBase64(sTheFileName), GoLiveDate, PageID);
-					if (sTestRes != "OK") {
+					string sTestRes = IsUniqueBlogFilename(sTheFileName, goLiveDate, CurrentPageGuid);
+					if (ServiceResponse.IsOK(sTestRes) == false) {
 						for (int i = 1; i < 1000; i++) {
 							string sTestFile = sThePageTitle + "-" + i.ToString();
-							sTestRes = ValidateUniqueBlogFilename(CMSConfigHelper.EncodeBase64(sTestFile), GoLiveDate, PageID);
-							if (sTestRes == "OK") {
+							sTestRes = IsUniqueBlogFilename(sTestFile, goLiveDate, CurrentPageGuid);
+							if (ServiceResponse.IsOK(sTestRes)) {
 								sTheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, sTestFile);
 								break;
 							} else {
@@ -667,7 +686,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				return ContentPageHelper.ScrubFilename(CurrentPageGuid, sTheFileName).ToLowerInvariant();
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
-				return "FAIL";
+				return ServiceResponse.Fail;
 			}
 		}
 
@@ -678,31 +697,41 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				CurrentPageGuid = new Guid(PageID);
 				TheFileName = CMSConfigHelper.DecodeBase64(TheFileName);
 
-				TheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, TheFileName);
+				return IsUniqueFilename(TheFileName, CurrentPageGuid);
+			} catch (Exception ex) {
+				SiteData.WriteDebugException("webservice", ex);
 
-				TheFileName = TheFileName.ToLowerInvariant();
+				return ex.ToString();
+			}
+		}
 
-				if (SiteData.IsPageSpecial(TheFileName) || SiteData.IsLikelyHomePage(TheFileName)) {
-					return "FAIL";
+		protected string IsUniqueFilename(string theFileName, Guid pageId) {
+			try {
+				theFileName = ContentPageHelper.ScrubFilename(pageId, theFileName);
+
+				theFileName = theFileName.ToLowerInvariant();
+
+				if (SiteData.IsPageSpecial(theFileName) || SiteData.IsLikelyHomePage(theFileName)) {
+					return ServiceResponse.Fail;
 				}
 
-				if (SiteData.CurrentSite.GetSpecialFilePathPrefixes().Where(x => TheFileName.StartsWith(x.ToLowerInvariant())).Any()
-							|| TheFileName.StartsWith(SiteData.CurrentSite.BlogFolderPath.ToLowerInvariant())) {
-					return "FAIL";
+				if (SiteData.CurrentSite.GetSpecialFilePathPrefixes().Where(x => theFileName.StartsWith(x.ToLowerInvariant())).Any()
+							|| theFileName.StartsWith(SiteData.CurrentSite.BlogFolderPath.ToLowerInvariant())) {
+					return ServiceResponse.Fail;
 				}
 
-				ContentPage fn = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, TheFileName);
+				ContentPage fn = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, theFileName);
 
-				ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, CurrentPageGuid);
+				ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, pageId);
 
-				if (cp == null && CurrentPageGuid != Guid.Empty) {
-					cp = pageHelper.GetVersion(SiteData.CurrentSite.SiteID, CurrentPageGuid);
+				if (cp == null && pageId != Guid.Empty) {
+					cp = pageHelper.GetVersion(SiteData.CurrentSite.SiteID, pageId);
 				}
 
 				if (fn == null || (fn != null && cp != null && fn.Root_ContentID == cp.Root_ContentID)) {
-					return "OK";
+					return ServiceResponse.OK;
 				} else {
-					return "FAIL";
+					return ServiceResponse.Fail;
 				}
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
@@ -718,11 +747,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				DateTime goLiveDate = Convert.ToDateTime(GoLiveDate);
 				ThePageSlug = CMSConfigHelper.DecodeBase64(ThePageSlug);
 
-				return ContentPageHelper.CreateFileNameFromSlug(SiteData.CurrentSite.SiteID, goLiveDate, ThePageSlug);
+				return ContentPageHelper.CreateFileNameFromSlug(SiteData.CurrentSite, goLiveDate, ThePageSlug);
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			}
 		}
 
@@ -732,43 +761,57 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			try {
 				CurrentPageGuid = new Guid(PageID);
 				DateTime dateGoLive = Convert.ToDateTime(GoLiveDate);
-				DateTime dateOrigGoLive = DateTime.MinValue;
-
 				ThePageSlug = CMSConfigHelper.DecodeBase64(ThePageSlug);
 
-				ThePageSlug = ContentPageHelper.ScrubFilename(CurrentPageGuid, ThePageSlug);
-				ThePageSlug = ThePageSlug.ToLowerInvariant();
+				return IsUniqueBlogFilename(ThePageSlug, dateGoLive, CurrentPageGuid);
+			} catch (Exception ex) {
+				SiteData.WriteDebugException("webservice", ex);
 
-				string TheFileName = ThePageSlug;
+				return ServiceResponse.Fail;
+			}
+		}
 
-				ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, CurrentPageGuid);
+		protected string IsUniqueBlogFilename(string pageSlug, DateTime dateGoLive, Guid pageId) {
+			try {
+				//if (pageSlug.Length < 1) {
+				//	return ServiceResponse.Fail;
+				//}
+
+				DateTime dateOrigGoLive = DateTime.MinValue;
+
+				pageSlug = ContentPageHelper.ScrubFilename(pageId, pageSlug);
+				pageSlug = pageSlug.ToLowerInvariant();
+
+				string TheFileName = pageSlug;
+
+				ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, pageId);
 
 				if (cp != null) {
 					dateOrigGoLive = cp.GoLiveDate;
 				}
-				if (cp == null && CurrentPageGuid != Guid.Empty) {
-					ContentPageExport cpe = ContentImportExportUtils.GetSerializedContentPageExport(CurrentPageGuid);
+				if (cp == null && pageId != Guid.Empty) {
+					ContentPageExport cpe = ContentImportExportUtils.GetSerializedContentPageExport(pageId);
 					if (cpe != null) {
 						dateOrigGoLive = cpe.ThePage.GoLiveDate;
 					}
 				}
 
-				TheFileName = ContentPageHelper.CreateFileNameFromSlug(SiteData.CurrentSite.SiteID, dateGoLive, ThePageSlug);
+				TheFileName = ContentPageHelper.CreateFileNameFromSlug(SiteData.CurrentSite, dateGoLive, pageSlug);
 
 				if (SiteData.IsPageSpecial(TheFileName) || SiteData.IsLikelyHomePage(TheFileName)) {
-					return "FAIL";
+					return ServiceResponse.Fail;
 				}
 
 				ContentPage fn1 = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, TheFileName);
 
-				if (cp == null && CurrentPageGuid != Guid.Empty) {
-					cp = pageHelper.GetVersion(SiteData.CurrentSite.SiteID, CurrentPageGuid);
+				if (cp == null && pageId != Guid.Empty) {
+					cp = pageHelper.GetVersion(SiteData.CurrentSite.SiteID, pageId);
 				}
 
 				if (fn1 == null || (fn1 != null && cp != null && fn1.Root_ContentID == cp.Root_ContentID)) {
-					return "OK";
+					return ServiceResponse.OK;
 				} else {
-					return "FAIL";
+					return ServiceResponse.Fail;
 				}
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
@@ -787,7 +830,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			}
 		}
 
@@ -801,7 +844,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			}
 		}
 
@@ -809,7 +852,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
 		public string MoveWidgetToNewZone(string WidgetTarget, string WidgetDropped, string ThisPage) {
 			try {
-				//WidgetAddition = CMSConfigHelper.DecodeBase64(WidgetAddition);
 				CurrentPageGuid = new Guid(ThisPage);
 				LoadGuids();
 				string[] w = WidgetDropped.Split('\t');
@@ -848,7 +890,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				}
 
 				cmsAdminWidget = cacheWidget;
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -875,7 +917,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				string[] arrWidgRows = WidgetAddition.Split('\n');
 
 				foreach (string arrWidgCell in arrWidgRows) {
-					if (!String.IsNullOrEmpty(arrWidgCell)) {
+					if (!string.IsNullOrEmpty(arrWidgCell)) {
 						bool bGoodWidget = false;
 						string[] w = arrWidgCell.Split('\t');
 
@@ -936,7 +978,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				}
 
 				cmsAdminWidget = cacheWidget;
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -965,7 +1007,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				}
 
 				if (ww != null) {
-					if (String.IsNullOrEmpty(ww.ControlProperties)) {
+					if (string.IsNullOrEmpty(ww.ControlProperties)) {
 						return "No Data";
 					} else {
 						if (ww.ControlProperties.Length < 768) {
@@ -976,11 +1018,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 					}
 				}
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			}
 		}
 
@@ -1005,7 +1047,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				}
 
 				if (ww != null) {
-					if (String.IsNullOrEmpty(ww.ControlProperties)) {
+					if (string.IsNullOrEmpty(ww.ControlProperties)) {
 						return "No Data";
 					} else {
 						if (ww.ControlProperties.Length < 768) {
@@ -1016,11 +1058,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 					}
 				}
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			}
 		}
 
@@ -1044,7 +1086,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				}
 
 				if (ww != null) {
-					if (String.IsNullOrEmpty(ww.ControlProperties)) {
+					if (string.IsNullOrEmpty(ww.ControlProperties)) {
 						return "No Data";
 					} else {
 						if (ww.ControlProperties.Length < 768) {
@@ -1055,11 +1097,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 					}
 				}
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
-				return "FAIL";
+				return ServiceResponse.Fail;
 			}
 		}
 
@@ -1087,7 +1129,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				cmsAdminWidget = cacheWidget;
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -1138,7 +1180,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				cmsAdminWidget = cacheWidget;
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -1169,7 +1211,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				cmsAdminWidget = cacheWidget;
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -1200,7 +1242,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				cmsAdminWidget = cacheWidget;
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -1228,7 +1270,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				cmsAdminWidget = cacheWidget;
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -1262,7 +1304,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				cmsAdminContent = c;
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -1314,7 +1356,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				GetSetUserEditStateAsEmpty();
 
-				return "OK";
+				return ServiceResponse.OK;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 

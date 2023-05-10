@@ -5,6 +5,52 @@
 	Layout = CarrotLayout.Popup;
 }
 
+<link href="~/Assets/MiniColors/jquery.minicolors.css" rel="stylesheet" />
+<script src="~/Assets/MiniColors/jquery.minicolors.min.js"></script>
+
+<script type="text/javascript">
+	function setColorSwatch() {
+		$('.color-field').minicolors({
+			format: 'hex',
+			letterCase: 'lowercase',
+			theme: 'default'
+		});
+	}
+
+	$(document).ajaxComplete(function (event, xhr, settings) {
+		setColorSwatch();
+	});
+
+	$(document).ready(function () {
+		setColorSwatch();
+	});
+</script>
+
+<style type="text/css">
+	.minicolors-swatch-color, .minicolors-theme-default .minicolors-swatch {
+		height: 28px;
+		width: 28px;
+		margin-left: 12px;
+		border-radius: 50%;
+		display: inline-block;
+		left: auto;
+	}
+
+	.minicolors-swatch::after {
+		box-shadow: none;
+	}
+
+	.minicolors-swatch {
+		border: 1px solid #555555;
+		cursor: pointer;
+	}
+
+	.minicolors-theme-default .minicolors-input {
+		padding-left: 8px;
+		padding-right: 8px;
+	}
+</style>
+
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 
@@ -56,6 +102,9 @@
 				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.TextBox) {
 					@Html.TextBoxFor(modelItem => Model.Properties[i].TextValue, new { maxlength = "1024", size = 75 })
 				}
+				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.ColorBox) {
+					@Html.TextBoxFor(modelItem => Model.Properties[i].TextValue, new { maxlength = "8", size = 12, @class = "color-field" })
+				}
 				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.RichHTMLTextBox) {
 					@Html.TextAreaFor(modelItem => Model.Properties[i].TextValue, new { @class = "mceEditor", cols = "60", rows = "8" })
 				}
@@ -72,7 +121,7 @@
 			</div>
 		</div>
 
-	}
+				}
 
 	<div style="display: none;">
 		<input type="submit" name="btnSave" value="Apply" id="btnSave" />
@@ -97,3 +146,9 @@
 		cmsInputEnterBlock();
 	});
 </script>
+
+<p>
+	<br />
+	&nbsp;<br />
+</p>
+<div style="width: 350px; height: 250px; clear: both;"></div>

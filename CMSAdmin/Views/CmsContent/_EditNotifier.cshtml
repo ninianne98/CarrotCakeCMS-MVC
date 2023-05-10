@@ -15,8 +15,7 @@
 }
 
 <!-- Edit Notify Body -->
-
-<link href="~/Assets/Admin/includes/edit-notifier.css?@versionKey" rel="stylesheet" type="text/css" />
+@(new CmsSkin() { SelectedColor = Helper.SiteSkin, WindowMode = CmsSkin.SkinMode.Notify })
 
 <div style="clear: both;">
 	&nbsp;
