@@ -24,7 +24,7 @@
 	grid
 		.AddColumn(new CarrotGridTemplateColumn<UserRole> {
 			HasHeadingText = false,
-			FormatTemplate = @<text> @CarrotWeb.ActionImage("RoleAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.RoleId }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
+			FormatTemplate = @<text> @CarrotWeb.ActionImage(SiteActions.RoleAddEdit, CmsRouteConstants.Controller.Admin, new { @id = @item.RoleId }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
 		})
 		.AddColumn(x => x.RoleName, new CarrotGridColumn { Sortable = true });
 

@@ -62,9 +62,9 @@
 			HasHeadingText = false,
 			FormatTemplate = @<text>
 				@if (Model.Root_ContentID.HasValue) {
-					@CarrotWeb.ActionImage("CommentAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.ContentCommentID, @pageComment = true }, "~/Assets/Admin/Images/pencil.png", "Edit", null, null)
+					@CarrotWeb.ActionImage(SiteActions.CommentAddEdit, CmsRouteConstants.Controller.Admin, new { @id = @item.ContentCommentID, @pageComment = true }, "~/Assets/Admin/Images/pencil.png", "Edit", null, null)
 				} else {
-					@CarrotWeb.ActionImage("CommentAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.ContentCommentID }, "~/Assets/Admin/Images/pencil.png", "Edit", null, null)
+					@CarrotWeb.ActionImage(SiteActions.CommentAddEdit, CmsRouteConstants.Controller.Admin, new { @id = @item.ContentCommentID }, "~/Assets/Admin/Images/pencil.png", "Edit", null, null)
 				}
 			</text>
 		})
