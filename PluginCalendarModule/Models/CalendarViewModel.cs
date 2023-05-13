@@ -1,30 +1,24 @@
 ﻿using CarrotCake.CMS.Plugins.CalendarModule.Code;
-using Carrotware.Web.UI.Components;
+using Carrotware.CMS.Interface;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Xml.Serialization;
 
 namespace CarrotCake.CMS.Plugins.CalendarModule.Models {
 
-	public class CalendarViewModel {
+	public class CalendarViewModel : BaseWidgetModelSettings {
 
-		public CalendarViewModel() {
-			this.SerialSettings = string.Empty;
+		public CalendarViewModel() : base() {
+			this.EncodedSettings = string.Empty;
 			this.GenerateCss = true;
-			this.AlternateViewFile = string.Empty;
 			this.MonthSelected = DateTime.Now.Date;
 			this.MonthNext = this.MonthSelected.AddMonths(1);
 			this.MonthPrior = this.MonthSelected.AddMonths(-1);
 			this.MonthDates = new List<tblCalendar>();
 		}
 
-		public Guid SiteID { get; set; }
-		public string AlternateViewFile { get; set; }
 		public string StyleSheetPath { get; set; }
 		public bool GenerateCss { get; set; }
-
 		public DateTime MonthNext { get; set; }
 		public DateTime MonthPrior { get; set; }
 		public DateTime MonthSelected { get; set; }
@@ -32,8 +26,6 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Models {
 		public List<DateTime> SelectedDates { get; set; }
 
 		public void LoadData(Guid siteid, bool activeOnly) {
-			this.SiteID = siteid;
-
 			DateTime dtStart = this.MonthSelected.AddDays(1 - this.MonthSelected.Day);
 			DateTime dtEnd = dtStart.AddMonths(1);
 
@@ -59,40 +51,34 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Models {
 			}
 		}
 
-		public string SerialSettings { get; set; }
-
 		public void SetSettings(CalendarDisplaySettings obj) {
-			string sXML = string.Empty;
-
 			if (obj != null) {
 				CalendarViewSettings settings = ConvertSettings(obj);
-
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(CalendarViewSettings));
-
-				using (StringWriter stringWriter = new StringWriter()) {
-					xmlSerializer.Serialize(stringWriter, settings);
-					sXML = stringWriter.ToString();
-					sXML = Utils.EncodeBase64(sXML);
-				}
+				base.Persist(settings);
 			}
+		}
 
-			this.SerialSettings = sXML;
+		public void SetSettings(CalendarSimpleSettings obj) {
+			if (obj != null) {
+				CalendarViewSettings settings = ConvertSettings(obj);
+				base.Persist(settings);
+			}
 		}
 
 		public void AssignSettings(CalendarViewSettings settings) {
 			if (settings != null) {
-				this.SiteID = settings.SiteID;
-				this.AlternateViewFile = settings.AlternateViewFile;
 				this.GenerateCss = settings.GenerateCss;
 				this.StyleSheetPath = settings.SpecifiedCssFile;
 			}
 		}
 
 		public CalendarViewSettings ConvertSettings(CalendarDisplaySettings obj) {
-			CalendarViewSettings settings = new CalendarViewSettings();
+			var settings = new CalendarViewSettings();
 
 			if (obj != null) {
 				settings.SiteID = obj.SiteID;
+				settings.IsBeingEdited = obj.IsBeingEdited;
+				settings.IsDynamicInserted = obj.IsDynamicInserted;
 				settings.AlternateViewFile = obj.AlternateViewFile;
 				settings.GenerateCss = obj.GenerateCss;
 				settings.SpecifiedCssFile = obj.SpecifiedCssFile;
@@ -101,16 +87,31 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Models {
 			return settings;
 		}
 
-		public CalendarViewSettings GetSettings() {
-			CalendarViewSettings settings = new CalendarViewSettings();
+		public CalendarViewSettings ConvertSettings(CalendarSimpleSettings obj) {
+			var settings = new CalendarViewSettings();
 
-			if (!String.IsNullOrEmpty(this.SerialSettings)) {
-				string sXML = Utils.DecodeBase64(this.SerialSettings);
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(CalendarViewSettings));
-				using (StringReader stringReader = new StringReader(sXML)) {
-					settings = (CalendarViewSettings)xmlSerializer.Deserialize(stringReader);
-				}
+			if (obj != null) {
+				settings.SiteID = obj.SiteID;
+				settings.IsBeingEdited = obj.IsBeingEdited;
+				settings.IsDynamicInserted = obj.IsDynamicInserted;
+				settings.AlternateViewFile = obj.AlternateViewFile;
 			}
+
+			settings.GenerateCss = false;
+			settings.SpecifiedCssFile = string.Empty;
+
+			return settings;
+		}
+
+		public CalendarViewSettings GetSettings() {
+			var settings = new CalendarViewSettings();
+			var tmp = base.Restore<CalendarViewSettings>();
+
+			if (tmp is CalendarViewSettings) {
+				settings = (CalendarViewSettings)tmp;
+			}
+
+			this.AssignSettings(settings);
 
 			return settings;
 		}

@@ -23,8 +23,8 @@
 			HasHeadingText = false,
 			BodyAttributes = new { @class = "leftAlignCell" },
 			FormatTemplate = @<text>
-				<b> @item.EventTitle  </b> <br />
-				@Html.Raw(item.EventDetail) <br /><br />
+		<b> @item.EventTitle  </b> <br />
+		@Html.Raw(item.EventDetail) <br /><br />
 			</text>
 		});
 	}
@@ -103,13 +103,13 @@
 	</script>
 
 	@using (Ajax.BeginForm("CalendarDisplaySimple", "Home",
-	new { area = WebHelper.AssemblyName },
-	new AjaxOptions {
-		HttpMethod = "POST",
-		InsertionMode = InsertionMode.Replace,
-		UpdateTargetId = "divCalendarSimpleResults",
-		OnFailure = "__OnAjaxRequestFailure"
-	})) {
+					new { area = WebHelper.AssemblyName },
+					new AjaxOptions {
+						HttpMethod = "POST",
+						InsertionMode = InsertionMode.Replace,
+						UpdateTargetId = "divCalendarSimpleResults",
+						OnFailure = "__OnAjaxRequestFailure"
+					})) {
 
 		@Html.AntiForgeryToken()
 
@@ -128,8 +128,7 @@
 			@Html.TextBoxFor(m => m.MonthPrior, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
 			@Html.TextBoxFor(m => m.MonthNext, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
 
-			@Html.HiddenFor(m => m.SiteID)
-			@Html.HiddenFor(m => m.AlternateViewFile)
+			@Html.HiddenFor(m => m.EncodedSettings)
 
 			<input type="submit" id="btnSubmitCal" />
 		</div>

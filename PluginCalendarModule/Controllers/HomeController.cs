@@ -34,31 +34,27 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		[ValidateAntiForgeryToken]
 		[WidgetActionSettingModel(typeof(CalendarDisplaySettings))]
 		public ActionResult CalendarDisplay(CalendarViewModel model) {
-			CalendarViewSettings settings = new CalendarViewSettings();
+			var settings = model.GetSettings();
 
-			if (!String.IsNullOrEmpty(model.SerialSettings)) {
-				settings = model.GetSettings();
-
-				model.AssignSettings(settings);
-			} else {
-				CalendarDisplaySettings payload = new CalendarDisplaySettings();
+			if (string.IsNullOrEmpty(model.EncodedSettings)) {
+				var payload = new CalendarDisplaySettings();
 
 				if (this.WidgetPayload is CalendarDisplaySettings) {
 					payload = (CalendarDisplaySettings)this.WidgetPayload;
 					payload.LoadData();
-
-					settings = model.ConvertSettings(payload);
-					model.AssignSettings(settings);
-
-					model.SetSettings(payload);
 				}
+
+				settings = model.ConvertSettings(payload);
+				model.AssignSettings(settings);
+
+				model.SetSettings(payload);
 			}
 
 			ModelState.Clear();
 
 			model.LoadData(settings.SiteID, true);
 
-			if (String.IsNullOrEmpty(settings.AlternateViewFile)) {
+			if (string.IsNullOrEmpty(settings.AlternateViewFile)) {
 				return PartialView(model);
 			} else {
 				return PartialView(settings.AlternateViewFile, model);
@@ -76,30 +72,36 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		[ValidateAntiForgeryToken]
 		[WidgetActionSettingModel(typeof(CalendarSimpleSettings))]
 		public ActionResult CalendarDisplaySimple(CalendarViewModel model) {
-			CalendarSimpleSettings settings = new CalendarSimpleSettings();
+			var settings = model.GetSettings();
 
-			if (this.WidgetPayload is CalendarSimpleSettings) {
-				settings = (CalendarSimpleSettings)this.WidgetPayload;
-				settings.LoadData();
+			if (string.IsNullOrEmpty(model.EncodedSettings)) {
+				var payload = new CalendarSimpleSettings();
 
-				model.SiteID = settings.SiteID;
-				model.AlternateViewFile = settings.AlternateViewFile;
+				if (this.WidgetPayload is CalendarSimpleSettings) {
+					payload = (CalendarSimpleSettings)this.WidgetPayload;
+					payload.LoadData();
+				}
+
+				settings = model.ConvertSettings(payload);
+				model.AssignSettings(settings);
+
+				model.SetSettings(payload);
 			}
 
 			ModelState.Clear();
 
-			model.LoadData(model.SiteID, true);
+			model.LoadData(settings.SiteID, true);
 
-			if (String.IsNullOrEmpty(model.AlternateViewFile)) {
+			if (string.IsNullOrEmpty(settings.AlternateViewFile)) {
 				return PartialView(model);
 			} else {
-				return PartialView(model.AlternateViewFile, model);
+				return PartialView(settings.AlternateViewFile, model);
 			}
 		}
 
 		[WidgetActionSettingModel(typeof(CalendarUpcomingSettings))]
 		public ActionResult CalendarUpcoming() {
-			CalendarUpcomingSettings payload = new CalendarUpcomingSettings();
+			var payload = new CalendarUpcomingSettings();
 
 			if (this.WidgetPayload is CalendarUpcomingSettings) {
 				payload = (CalendarUpcomingSettings)this.WidgetPayload;
@@ -119,7 +121,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 									   orderby c.EventDate ascending
 									   select c).ToList();
 
-			if (String.IsNullOrEmpty(payload.AlternateViewFile)) {
+			if (string.IsNullOrEmpty(payload.AlternateViewFile)) {
 				return PartialView(model);
 			} else {
 				return PartialView(payload.AlternateViewFile, model);
@@ -130,7 +132,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		public ActionResult CalendarDateInfo(DateTime? calendardate) {
 			DateTime theEventDate = calendardate ?? DateTime.Now.Date;
 
-			CalendarSimpleSettings payload = new CalendarSimpleSettings();
+			var payload = new CalendarSimpleSettings();
 
 			if (this.WidgetPayload is CalendarSimpleSettings) {
 				payload = (CalendarSimpleSettings)this.WidgetPayload;
@@ -139,7 +141,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 
 			DateModel model = new DateModel(theEventDate, payload.SiteID);
 
-			if (String.IsNullOrEmpty(payload.AlternateViewFile)) {
+			if (string.IsNullOrEmpty(payload.AlternateViewFile)) {
 				return PartialView(model);
 			} else {
 				return PartialView(payload.AlternateViewFile, model);

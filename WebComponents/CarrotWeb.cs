@@ -409,6 +409,45 @@ namespace Carrotware.Web.UI.Components {
 			return string.Empty;
 		}
 
+		public static string GetActionName<T>(this T instance, Expression<Action<T>> expression) {
+			var expressionBody = expression.Body;
+
+			if (expressionBody == null) {
+				throw new ArgumentException("Cannot be null.");
+			}
+
+			if ((expressionBody is MethodCallExpression) != true) {
+				throw new ArgumentException("Methods only!");
+			}
+
+			if (expressionBody is MethodCallExpression) {
+				var methodCallExpression = (MethodCallExpression)expressionBody;
+				return methodCallExpression.Method.Name;
+			}
+
+			return string.Empty;
+		}
+
+		public static string GetPropertyName<T, P>(this T instance, Expression<Func<T, P>> expression) {
+			var expressionBody = expression.Body;
+
+			if (expressionBody == null) {
+				throw new ArgumentException("Cannot be null.");
+			}
+
+			if ((expressionBody is MemberExpression) != true) {
+				throw new ArgumentException("Properties only!");
+			}
+
+			if (expressionBody is MemberExpression) {
+				// Reference type property or field
+				var memberExpression = (MemberExpression)expressionBody;
+				return memberExpression.Member.Name;
+			}
+
+			return string.Empty;
+		}
+
 		public static HtmlString ValidationMultiMessageFor<T>(this HtmlHelper<T> htmlHelper,
 			Expression<Func<T, object>> property, object listAttributes = null, bool messageAsSpan = false) {
 			MemberExpression memberExpression = property.Body as MemberExpression ??

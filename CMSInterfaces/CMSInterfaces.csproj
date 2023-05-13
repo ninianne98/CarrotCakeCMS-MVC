@@ -119,7 +119,9 @@
     <Compile Include="AdminModuleData.cs" />
     <Compile Include="BaseWidgetAreaReg.cs" />
     <Compile Include="BaseWidgetAreaAttrRouteReg.cs" />
+    <Compile Include="WidgetSettings.cs" />
     <Compile Include="RenderWidgetHelper.cs" />
+    <Compile Include="B64Helper.cs" />
     <Compile Include="ViewEngines\CarrotViewEngineWidgetAdmin.cs" />
     <Compile Include="ViewEngines\CarrotViewEngineWidget.cs" />
     <Compile Include="ViewEngines\CarrotViewEngineBase.cs" />
@@ -145,6 +147,9 @@
     <Compile Include="WidgetActionSettingModel.cs" />
     <Compile Include="WidgetActionSettingModelAttribute.cs" />
     <Compile Include="WidgetAttribute.cs" />
+    <Compile Include="IWidgetSettings.cs" />
+    <Compile Include="IWidgetModelSettings.cs" />
+    <Compile Include="BaseWidgetModelSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

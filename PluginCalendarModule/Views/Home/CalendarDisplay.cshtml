@@ -135,7 +135,7 @@
 			@Html.TextBoxFor(m => m.MonthPrior, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
 			@Html.TextBoxFor(m => m.MonthNext, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
 
-			@Html.HiddenFor(m => m.SerialSettings)
+			@Html.HiddenFor(m => m.EncodedSettings)
 
 			<input type="submit" id="btnSubmitCal" />
 		</div>

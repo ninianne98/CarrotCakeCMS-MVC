@@ -1,4 +1,5 @@
 ﻿using Carrotware.CMS.Data;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,6 +85,10 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static SiteNav GetEmptySearch() {
+			var link = new HtmlTag(HtmlTag.EasyTag.AnchorTag);
+			link.Uri = SiteFilename.SiteInfoURL;
+			link.InnerHtml = "Site Info";
+
 			SiteNav navData = new SiteNav();
 			navData.ContentID = Guid.Empty;
 			navData.Root_ContentID = Guid.NewGuid();
@@ -94,11 +99,14 @@ namespace Carrotware.CMS.Core {
 			navData.PageHead = "Search";
 			navData.TitleBar = "Search";
 			navData.PageActive = true;
-			navData.PageText = "<p>Search Results</p>";
+			navData.PageText = SecurityData.IsAuthenticated == false ? "<p>Search Results</p>" :
+							"<h2>This is a temporary search result page.  To assign an index page, please visit the"
+							+ " " + link.RenderTag() + " page and select the page"
+							+ " you want to be the search result page.</h2>";
 			navData.EditDate = DateTime.Now.Date.AddDays(-30);
 			navData.CreateDate = DateTime.Now.Date.AddDays(-30);
 			navData.GoLiveDate = DateTime.Now.Date.AddDays(-30);
-			navData.RetireDate = DateTime.Now.Date.AddDays(90);
+			navData.RetireDate = DateTime.Now.Date.AddDays(180);
 			navData.ContentType = ContentPageType.PageType.ContentEntry;
 			return navData;
 		}

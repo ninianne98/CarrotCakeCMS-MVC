@@ -12,14 +12,14 @@ namespace Carrotware.CMS.Interface {
 
 	public interface ITextBodyUpdate {
 
-		string UpdateContent(string TextContent);
+		string UpdateContent(string textContent);
 
-		string UpdateContentPlainText(string TextContent);
+		string UpdateContentPlainText(string textContent);
 
-		string UpdateContentRichText(string TextContent);
+		string UpdateContentRichText(string textContent);
 
-		string UpdateContentComment(string TextContent);
+		string UpdateContentComment(string textContent);
 
-		string UpdateContentSnippet(string TextContent);
+		string UpdateContentSnippet(string textContent);
 	}
 }

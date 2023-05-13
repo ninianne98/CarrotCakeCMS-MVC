@@ -136,18 +136,21 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static bool IsLikelyHomePage(string filePath) {
-			if (!IsWebView) {
+			if (!IsWebView || filePath == null) {
 				return false;
 			}
 
-			return string.Format("{0}", filePath).Length < 2;
+			return string.Format("{0}", filePath).Length <= 1
+				|| filePath.ToLowerInvariant() == SiteData.DefaultDirectoryFilename;
 		}
 
 		public static bool IsLikelyFakeSearch() {
 			if (!IsWebView) {
 				return false;
 			}
-
+			if (CurrentSite == null) {
+				return false;
+			}
 			// no blog index is set, but the URL looks like a search is happening
 			return !CurrentSite.Blog_Root_ContentID.HasValue
 						&& (CurrentSite.IsBlogDateFolderPath
@@ -249,19 +252,13 @@ namespace Carrotware.CMS.Core {
 		public static ContentPage GetPage(string sCurrentPage) {
 			ContentPage pageContents = null;
 
-			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
-				if (SecurityData.IsAdmin || SecurityData.IsSiteEditor) {
-					if (sCurrentPage.Length <= 1 || sCurrentPage == SiteData.DefaultDirectoryFilename) {
-						pageContents = pageHelper.FindHome(SiteData.CurrentSiteID);
-					} else {
-						pageContents = pageHelper.FindByFilename(SiteData.CurrentSiteID, sCurrentPage);
-					}
+			using (var pageHelper = new ContentPageHelper()) {
+				var requireActivePage = !(SecurityData.IsAdmin || SecurityData.IsSiteEditor);
+
+				if (SiteData.IsLikelyHomePage(sCurrentPage)) {
+					pageContents = pageHelper.FindHome(SiteData.CurrentSiteID, requireActivePage);
 				} else {
-					if (sCurrentPage.Length <= 1 || sCurrentPage == SiteData.DefaultDirectoryFilename) {
-						pageContents = pageHelper.FindHome(SiteData.CurrentSiteID, true);
-					} else {
-						pageContents = pageHelper.GetLatestContentByURL(SiteData.CurrentSiteID, true, sCurrentPage);
-					}
+					pageContents = pageHelper.GetLatestContentByURL(SiteData.CurrentSiteID, requireActivePage, sCurrentPage);
 				}
 			}
 
@@ -307,7 +304,7 @@ namespace Carrotware.CMS.Core {
 		public static ContentPage GetCurrentLivePage() {
 			ContentPage pageContents = null;
 
-			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+			using (var pageHelper = new ContentPageHelper()) {
 				bool IsPageTemplate = false;
 				string sCurrentPage = SiteData.CurrentScriptName;
 				string sScrubbedURL = SiteData.AlternateCurrentScriptName;
@@ -316,18 +313,12 @@ namespace Carrotware.CMS.Core {
 					sCurrentPage = sScrubbedURL;
 				}
 
-				if (SecurityData.IsAdmin || SecurityData.IsSiteEditor) {
-					if (sCurrentPage.Length <= 1 || sCurrentPage == SiteData.DefaultDirectoryFilename) {
-						pageContents = pageHelper.FindHome(SiteData.CurrentSiteID, false);
-					} else {
-						pageContents = pageHelper.FindByFilename(SiteData.CurrentSiteID, sCurrentPage);
-					}
+				var requireActivePage = !(SecurityData.IsAdmin || SecurityData.IsSiteEditor);
+
+				if (SiteData.IsLikelyHomePage(sCurrentPage)) {
+					pageContents = pageHelper.FindHome(SiteData.CurrentSiteID, requireActivePage);
 				} else {
-					if (sCurrentPage.Length <= 1 || sCurrentPage == SiteData.DefaultDirectoryFilename) {
-						pageContents = pageHelper.FindHome(SiteData.CurrentSiteID, true);
-					} else {
-						pageContents = pageHelper.GetLatestContentByURL(SiteData.CurrentSiteID, true, sCurrentPage);
-					}
+					pageContents = pageHelper.GetLatestContentByURL(SiteData.CurrentSiteID, requireActivePage, sCurrentPage);
 				}
 
 				if (pageContents == null && SiteData.IsPageReal) {
@@ -654,6 +645,9 @@ namespace Carrotware.CMS.Core {
 
 		public static SiteNav SiteBlogPage {
 			get {
+				if (CurrentSite == null) {
+					return null;
+				}
 				if (CurrentSite.Blog_Root_ContentID.HasValue) {
 					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						return navHelper.GetLatestVersion(CurrentSite.SiteID, CurrentSite.Blog_Root_ContentID.Value);
@@ -914,7 +908,7 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public static string RssDocType { get { return "application/rss+xml"; } }
+		public static string RssDocType { get { return "text/xml"; } }
 
 		public static string RawMode { get { return "raw"; } }
 		public static string HtmlMode { get { return "html"; } }

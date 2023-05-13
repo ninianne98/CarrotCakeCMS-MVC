@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Carrotware.CMS.Interface;
+using System;
 
 namespace CarrotCake.CMS.Plugins.CalendarModule {
 
-	public class CalendarViewSettings {
+	public class CalendarViewSettings : WidgetSettings {
 
 		public CalendarViewSettings() {
 			this.GenerateCss = true;
+			this.SpecifiedCssFile = string.Empty;
 		}
 
-		public Guid SiteID { get; set; }
-		public string AlternateViewFile { get; set; }
-		public string SpecifiedCssFile { get; set; }
 		public bool GenerateCss { get; set; }
+		public string SpecifiedCssFile { get; set; }
 	}
 }

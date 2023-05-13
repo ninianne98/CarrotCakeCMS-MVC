@@ -19,7 +19,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 			string controller = vals["controller"].ToString().ToLowerInvariant();
 
 			// since there are different models, set them up as needed to match the test
-			if (action.ToLowerInvariant() == "testview1" || action.ToLowerInvariant() == "testview3") {
+			if (action.ToLowerInvariant() == "testview1") {
 				var settings = new CalendarDisplaySettings();
 				settings.SiteID = new Guid(this.TestSiteID);
 
@@ -31,6 +31,13 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 				settings.SiteID = new Guid(this.TestSiteID);
 				settings.DaysInPast = -21;
 				settings.DaysInFuture = 14;
+
+				this.WidgetPayload = settings;
+			}
+
+			if (action.ToLowerInvariant() == "testview3") {
+				var settings = new CalendarSimpleSettings();
+				settings.SiteID = new Guid(this.TestSiteID);
 
 				this.WidgetPayload = settings;
 			}
