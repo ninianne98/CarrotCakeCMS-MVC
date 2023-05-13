@@ -17,7 +17,7 @@
 	grid
 		.AddColumn(new CarrotGridTemplateColumn<CMSTemplate> {
 			HasHeadingText = false,
-			FormatTemplate = @<text> @CarrotWeb.ActionImage("SiteSkinEdit", RouteConfig.AdminCtrlr, new { @path = @item.EncodedPath }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
+			FormatTemplate = @<text> @CarrotWeb.ActionImage(SiteActions.SiteSkinEdit, CmsRouteConstants.Controller.Admin, new { @path = @item.EncodedPath }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
 		})
 		.AddColumn(x => x.Caption, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.TemplatePath, new CarrotGridColumn { Sortable = true });

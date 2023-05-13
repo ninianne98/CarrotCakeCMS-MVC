@@ -149,6 +149,14 @@ namespace Carrotware.CMS.UI.Components {
 	}
 
 	//==================================
+	internal class SortableList : SimpleListSortable {
+
+		public override void LoadData() {
+			base.ToggleSort();
+		}
+	}
+
+	//==================================
 	public abstract class SimpleListSortable : SimpleList {
 
 		public SimpleListSortable()

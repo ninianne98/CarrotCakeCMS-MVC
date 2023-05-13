@@ -211,7 +211,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public ActionResult RSSFeed(string type) {
 			return new ContentResult {
-				ContentType = "text/xml",
+				ContentType = SiteData.RssDocType,
 				Content = SiteData.CurrentSite.GetRSSFeed(type).ToHtmlString(),
 				ContentEncoding = Encoding.UTF8
 			};
@@ -220,7 +220,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public ActionResult SiteMap() {
 			return new ContentResult {
-				ContentType = "text/xml",
+				ContentType = SiteData.RssDocType,
 				Content = SiteMapHelper.GetSiteMap().ToHtmlString(),
 				ContentEncoding = Encoding.UTF8
 			};

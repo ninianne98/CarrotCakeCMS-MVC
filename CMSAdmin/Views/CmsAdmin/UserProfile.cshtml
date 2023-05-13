@@ -5,7 +5,7 @@
 	ViewBag.Title = "User Preferences";
 }
 
-@using (Html.BeginForm("UserProfile", RouteConfig.AdminCtrlr)) {
+@using (Html.BeginForm("UserProfile", CmsRouteConstants.Controller.Admin)) {
 	@Html.AntiForgeryToken()
 
 	<div style="display: none">

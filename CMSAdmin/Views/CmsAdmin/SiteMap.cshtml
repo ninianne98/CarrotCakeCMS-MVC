@@ -30,13 +30,13 @@
 
 <div style="display: none;">
 	<p>
-		@using (Html.BeginForm("FixOrphan", RouteConfig.AdminCtrlr, FormMethod.Post)) {
+		@using (Html.BeginForm("FixOrphan", CmsRouteConstants.Controller.Admin, FormMethod.Post)) {
 			@Html.AntiForgeryToken()
 			<input type="submit" name="btnFixOrphan" value="Fix Orphaned Pages" id="btnFixOrphan" />
 		}
 	</p>
 	<p>
-		@using (Html.BeginForm("FixBlog", RouteConfig.AdminCtrlr, FormMethod.Post)) {
+		@using (Html.BeginForm("FixBlog", CmsRouteConstants.Controller.Admin, FormMethod.Post)) {
 			@Html.AntiForgeryToken()
 			<input type="submit" name="btnFixBlog" value="Fix Blog Navs" id="btnFixBlog" />
 		}

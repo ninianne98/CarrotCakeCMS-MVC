@@ -257,9 +257,9 @@
 			</td>
 			<td>
 				@{
-	SplitDateTime gld = new SplitDateTime();
-	gld.CombinedDateTime = Model.GoLiveDate;
-	gld.FieldName = Html.NameFor(model => model.GoLiveDate).ToString();
+					SplitDateTime gld = new SplitDateTime();
+					gld.CombinedDateTime = Model.GoLiveDate;
+					gld.FieldName = Html.NameFor(model => model.GoLiveDate).ToString();
 				}
 
 				@Html.Partial("_datetime", gld)
@@ -271,9 +271,9 @@
 			</td>
 			<td>
 				@{
-	SplitDateTime rdt = new SplitDateTime();
-	rdt.CombinedDateTime = Model.RetireDate;
-	rdt.FieldName = Html.NameFor(model => model.RetireDate).ToString();
+					SplitDateTime rdt = new SplitDateTime();
+					rdt.CombinedDateTime = Model.RetireDate;
+					rdt.FieldName = Html.NameFor(model => model.RetireDate).ToString();
 				}
 
 				@Html.Partial("_datetime", rdt)
@@ -342,11 +342,11 @@
 		</div>
 	</div>
 
-}
+					}
 
 @if (!bLocked) {
 	<div style="display: none">
-		@using (Html.BeginForm("DeleteContentSnippet", RouteConfig.AdminCtrlr)) {
+		@using (Html.BeginForm("DeleteContentSnippet", CmsRouteConstants.Controller.Admin)) {
 			@Html.AntiForgeryToken()
 
 			@Html.HiddenFor(m => m.Root_ContentSnippetID)

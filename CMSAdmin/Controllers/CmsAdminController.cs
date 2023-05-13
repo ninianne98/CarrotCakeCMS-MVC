@@ -41,26 +41,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			if (this.User.Identity.IsAuthenticated) {
 				//carveouts for setup
-				List<string> lstOKNoSiteActions = new List<string>();
-				lstOKNoSiteActions.Add("login");
-				lstOKNoSiteActions.Add("logoff");
-				lstOKNoSiteActions.Add("about");
-				lstOKNoSiteActions.Add("siteinfo");
-				lstOKNoSiteActions.Add("filebrowser");
-				lstOKNoSiteActions.Add("userindex");
-				lstOKNoSiteActions.Add("roleindex");
-				lstOKNoSiteActions.Add("userprofile");
-				lstOKNoSiteActions.Add("changepassword");
+				List<string> lstOKNoSiteActions = (new string[] { "login", "logoff", "about", "siteinfo", "siteindex", "filebrowser", "userindex", "roleindex", "userprofile", "changepassword" }).ToList();
 
 				//carvouts for anon pages
-				List<string> lstInitSiteActions = new List<string>();
-				lstInitSiteActions.Add("login");
-				lstInitSiteActions.Add("logoff");
-				lstInitSiteActions.Add("about");
-				lstInitSiteActions.Add("forgotpassword");
-				lstInitSiteActions.Add("createfirstadmin");
-				lstInitSiteActions.Add("databasesetup");
-				lstInitSiteActions.Add("notauthorized");
+				List<string> lstInitSiteActions = (new string[] { "login", "logoff", "about", "forgotpassword", "createfirstadmin", "databasesetup", "notauthorized" }).ToList();
 
 				try {
 					if (!lstInitSiteActions.Contains(action)) {
@@ -113,10 +97,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			SignOut();
 			//after signout, take to login
 			if (!SecurityData.IsAuthenticated) {
-				return RedirectToAction(SiteFilename.LoginAction);
+				return RedirectToAction(this.GetActionName(x => x.Login("")));
 			}
 
-			return RedirectToAction(SiteFilename.IndexAction);
+			return RedirectToAction(this.GetActionName(x => x.Index()));
 		}
 
 		[HttpGet]
@@ -146,7 +130,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				if (result.Succeeded) {
 					SetSaved();
-					return RedirectToAction("UserProfile");
+					return RedirectToAction(SiteActions.UserProfile);
 				}
 			}
 
@@ -177,10 +161,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				result = securityHelper.UserManager.SetPhoneNumber(userExt.UserKey, userExt.PhoneNumber);
 
 				if (userExt.LockoutEndDateUtc.HasValue) {
-					//DateTime utcDateTime = DateTime.SpecifyKind(userExt.LockoutEndDateUtc.Value, DateTimeKind.Utc);
-					//DateTimeOffset utcOffset = utcDateTime;
-					//result = manage.UserManager.SetLockoutEnabled(userExt.UserKey, true);
-					//result = manage.UserManager.SetLockoutEndDate(userExt.UserKey, utcOffset);
 					if (!user.LockoutEndDateUtc.HasValue) {
 						// set lockout
 						user.LockoutEndDateUtc = userExt.LockoutEndDateUtc.Value;
@@ -207,7 +187,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				model.SaveOptions();
 
-				return RedirectToAction("UserEdit", new { @id = userExt.UserId });
+				return RedirectToAction(SiteActions.UserEdit, new { @id = userExt.UserId });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -235,7 +215,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				if (result == IdentityResult.Success && exUser != null) {
 					result = securityHelper.UserManager.SetLockoutEnabled(exUser.Id, true);
 
-					return RedirectToAction("UserEdit", new { @id = exUser.UserId });
+					return RedirectToAction(SiteActions.UserEdit, new { @id = exUser.UserId });
 				}
 
 				AddErrors(result);
@@ -255,17 +235,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					string res = model.UploadFile(file);
 
 					return Json(res);
-
-					//byte[] data = null;
-					//using (Stream inputStream = file.InputStream) {
-					//	MemoryStream memoryStream = inputStream as MemoryStream;
-					//	if (memoryStream == null) {
-					//		memoryStream = new MemoryStream();
-					//		inputStream.CopyTo(memoryStream);
-					//	}
-					//	data = memoryStream.ToArray();
-					//}
-					//return Json(data);
 				}
 			}
 
@@ -308,7 +277,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			ModelState.Clear();
 
-			return RedirectToAction("FileBrowser", new { @fldrpath = model.QueryPath, @useTiny = model.UseTinyMCE, @returnvalue = model.ReturnMode, @viewmode = model.ViewMode });
+			return RedirectToAction(SiteActions.FileBrowser, new { @fldrpath = model.QueryPath, @useTiny = model.UseTinyMCE, @returnvalue = model.ReturnMode, @viewmode = model.ViewMode });
 		}
 
 		[HttpGet]
@@ -360,7 +329,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			bool loaded = true;
 
 			if (model.DownloadImages && string.IsNullOrEmpty(model.SelectedFolder)) {
-				ModelState.AddModelError("SelectedFolder", "If download images is selected, you must select a target folder.");
+				ModelState.AddModelError(model.GetPropertyName(x => x.SelectedFolder), "If download images is selected, you must select a target folder.");
 			}
 
 			loaded = ModelState.IsValid;
@@ -429,10 +398,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 						if (cph.ThePage.ContentType == ContentPageType.PageType.ContentEntry) {
 							//Response.Redirect(SiteFilename.PageAddEditURL + "?importid=" + cph.NewRootContentID.ToString());
-							return RedirectToAction("PageAddEdit", new { importid = cph.NewRootContentID });
+							return RedirectToAction(this.GetActionName(x => x.PageAddEdit(null)), new { importid = cph.NewRootContentID });
 						} else {
 							//Response.Redirect(SiteFilename.BlogPostAddEditURL + "?importid=" + cph.NewRootContentID.ToString());
-							return RedirectToAction("BlogPostAddEdit", new { importid = cph.NewRootContentID });
+							return RedirectToAction(this.GetActionName(x => x.BlogPostAddEdit(null)), new { importid = cph.NewRootContentID });
 						}
 					}
 
@@ -443,7 +412,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						ContentImportExportUtils.SaveSerializedDataExport<SiteExport>(site.NewSiteID, site);
 
 						//Response.Redirect(SiteFilename.SiteImportURL + "?importid=" + site.NewSiteID.ToString());
-						return RedirectToAction("SiteImport", new { importid = site.NewSiteID });
+						return RedirectToAction(SiteActions.SiteImport, new { importid = site.NewSiteID });
 					}
 
 					if (sXML.Contains("<channel>") && sXML.Contains("<rss")) {
@@ -458,16 +427,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						ContentImportExportUtils.AssignWPExportNewIDs(SiteData.CurrentSite, wps);
 						ContentImportExportUtils.SaveSerializedDataExport<WordPressSite>(wps.NewSiteID, wps);
 
-						//Response.Redirect(SiteFilename.SiteImportWP_URL + "?importid=" + wps.NewSiteID.ToString());
-						return RedirectToAction("SiteImportWP", new { importid = wps.NewSiteID });
+						return RedirectToAction(SiteActions.SiteImportWP, new { importid = wps.NewSiteID });
 					}
 
-					ModelState.AddModelError("PostedFile", "File did not appear to match an expected format.");
+					ModelState.AddModelError(model.GetPropertyName(x => x.PostedFile), "File did not appear to match an expected format.");
 				} catch (Exception ex) {
-					ModelState.AddModelError("PostedFile", ex.ToString());
+					ModelState.AddModelError(model.GetPropertyName(x => x.PostedFile), ex.ToString());
 				}
 			} else {
-				ModelState.AddModelError("PostedFile", "No file appeared in the upload queue.");
+				ModelState.AddModelError(model.GetPropertyName(x => x.PostedFile), "No file appeared in the upload queue.");
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -561,7 +529,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				SetSaved();
 			}
 
-			return RedirectToAction("ContentSnippetHistory", new { @id = model.Item.Root_ContentSnippetID });
+			return RedirectToAction(SiteActions.ContentSnippetHistory, new { @id = model.Item.Root_ContentSnippetID });
 		}
 
 		public ActionResult ChangePassword() {
@@ -593,7 +561,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				this.TempData["cmsChangePasswordSuccess"] = "Password change success!";
 
-				return RedirectToAction("ChangePassword", new { Message = ManageMessageId.ChangePasswordSuccess });
+				return RedirectToAction(SiteActions.ChangePassword, new { Message = ManageMessageId.ChangePasswordSuccess });
 			}
 
 			AddErrors(result);
@@ -668,7 +636,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (SecurityData.IsAuthenticated) {
 				SignOut();
 
-				return RedirectToAction("CreateFirstAdmin", new { @signout = true });
+				return RedirectToAction(SiteActions.CreateFirstAdmin, new { @signout = true });
 			}
 
 			RegisterViewModel model = new RegisterViewModel();
@@ -695,7 +663,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					SecurityData.AddUserToRole(model.UserName, SecurityData.CMSGroup_Admins);
 					SecurityData.AddUserToRole(model.UserName, SecurityData.CMSGroup_Users);
 
-					return RedirectToAction(SiteFilename.IndexAction);
+					return RedirectToAction(this.GetActionName(x => x.Index()));
 				}
 
 				AddErrors(result);
@@ -710,8 +678,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				DatabaseUpdate.ResetFailedSQL();
 				DatabaseUpdate.ResetSQLState();
 
-				// Response.Redirect(SiteFilename.DatabaseSetupURL);
-				return RedirectToAction("DatabaseSetup");
+				return RedirectToAction(this.GetActionName(x => x.DatabaseSetup(null)));
 			}
 
 			return null;
@@ -744,11 +711,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			string returnUrl = HttpUtility.UrlDecode(model.ReturnUrl);
 
-			//TODO: make configurable
-			//manage.UserManager.UserLockoutEnabledByDefault = true;
-			//manage.UserManager.MaxFailedAccessAttemptsBeforeLockout = 5;
-			//manage.UserManager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(15);
-
 			// This doesn't count login failures towards account lockout
 			// To enable password failures to trigger account lockout, change to shouldLockout: true
 			var user = await securityHelper.UserManager.FindByNameAsync(model.UserName);
@@ -765,7 +727,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					return View("Lockout");
 
 				case SignInStatus.RequiresVerification:
-					return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+					return RedirectToAction(SiteActions.SendCode, new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
 
 				case SignInStatus.Failure:
 				default:
@@ -801,13 +763,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			var user = await securityHelper.UserManager.FindByEmailAsync(model.Email);
 			if (user == null) {
 				// Don't reveal that the user does not exist
-				return RedirectToAction("ResetPasswordConfirmation");
+				return RedirectToAction(SiteActions.ResetPasswordConfirmation);
 			}
 			//var result = await manage.UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
 			SecurityData sd = new SecurityData();
 			var result = sd.ResetPassword(user, model.Code, model.Password);
 			if (result.Succeeded) {
-				return RedirectToAction("ResetPasswordConfirmation");
+				return RedirectToAction(SiteActions.ResetPasswordConfirmation);
 			}
 			AddErrors(result);
 
@@ -851,7 +813,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				} else {
 					SecurityData sd = new SecurityData();
 					sd.ResetPassword(model.Email);
-					return RedirectToAction("ForgotPasswordConfirmation");
+					return RedirectToAction(SiteActions.ForgotPasswordConfirmation);
 				}
 			}
 
@@ -957,7 +919,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				item.Save();
 
-				return RedirectToAction("CategoryAddEdit", new { @id = item.ContentCategoryID });
+				return RedirectToAction(SiteActions.CategoryAddEdit, new { @id = item.ContentCategoryID });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -971,7 +933,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			ContentCategory item = ContentCategory.Get(model.ContentCategoryID);
 			item.Delete();
 
-			return RedirectToAction("CategoryIndex");
+			return RedirectToAction(SiteActions.CategoryIndex);
 		}
 
 		[HttpGet]
@@ -1008,7 +970,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				item.Save();
 
-				return RedirectToAction("TagAddEdit", new { @id = item.ContentTagID });
+				return RedirectToAction(SiteActions.TagAddEdit, new { @id = item.ContentTagID });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -1022,7 +984,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			ContentTag item = ContentTag.Get(model.ContentTagID);
 			item.Delete();
 
-			return RedirectToAction("TagIndex");
+			return RedirectToAction(SiteActions.TagIndex);
 		}
 
 		[HttpGet]
@@ -1047,7 +1009,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			ModelState.Clear();
 
 			if (string.IsNullOrEmpty(model.NewUserId)) {
-				ModelState.AddModelError("NewUserId", "The New User field is required.");
+				ModelState.AddModelError(model.GetPropertyName(x => x.NewUserId), "The New User field is required.");
 			}
 
 			SiteData site = model.Site;
@@ -1063,7 +1025,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					}
 				}
 
-				return RedirectToAction("SiteDetail", new { @id = site.SiteID });
+				return RedirectToAction(SiteActions.SiteDetail, new { @id = site.SiteID });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -1089,7 +1051,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					exUsr.RemoveFromSite(site.SiteID);
 				}
 
-				return RedirectToAction("SiteDetail", new { @id = site.SiteID });
+				return RedirectToAction(SiteActions.SiteDetail, new { @id = site.SiteID });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -1162,9 +1124,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 
 				if (bNewSite) {
-					return RedirectToAction(SiteFilename.IndexAction);
+					return RedirectToAction(this.GetActionName(x => x.Index()));
 				} else {
-					return RedirectToAction(SiteFilename.SiteInfoAction);
+					return RedirectToAction(this.GetActionName(x => x.SiteInfo()));
 				}
 			}
 
@@ -1183,7 +1145,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				cmsHelper.ResetConfigs();
 			}
 
-			return RedirectToAction(SiteFilename.SiteInfoAction);
+			return RedirectToAction(this.GetActionName(x => x.SiteInfo()));
 		}
 
 		[HttpGet]
@@ -1242,7 +1204,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (ModelState.IsValid) {
 				cmsHelper.cmsAdminContent = pageContents;
 				SetSaved();
-				return RedirectToAction("PageEdit", new { @id = model.ContentPage.Root_ContentID });
+				return RedirectToAction(this.GetActionName(x => x.PageEdit(null)), new { @id = model.ContentPage.Root_ContentID });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -1254,10 +1216,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult PageAddEdit(Guid? id, Guid? versionid, Guid? importid, string mode) {
 			ContentPageModel model = new ContentPageModel();
 			ContentPage pageContents = model.GetPage(id, versionid, importid, mode);
-			ViewBag.ContentEditMode = model.Mode;
+			ViewBag.ContentEditMode = SiteData.EditMode(model.Mode);
 
 			if (pageContents.ContentType != ContentPageType.PageType.ContentEntry) {
-				return RedirectToAction("BlogPostAddEdit", new { @id = pageContents.Root_ContentID, @mode = model.Mode });
+				return RedirectToAction(this.GetActionName(x => x.BlogPostAddEdit(null)), new { @id = pageContents.Root_ContentID, @mode = model.Mode });
 			}
 
 			return View(model);
@@ -1326,7 +1288,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (ModelState.IsValid) {
 				cmsHelper.cmsAdminContent = pageContents;
 				SetSaved();
-				return RedirectToAction("BlogPostEdit", new { @id = model.ContentPage.Root_ContentID });
+				return RedirectToAction(this.GetActionName(x => x.BlogPostEdit(null)), new { @id = model.ContentPage.Root_ContentID });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -1348,7 +1310,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				if (model.VisitPage) {
 					Response.Redirect(pageContents.FileName);
 				} else {
-					return RedirectToAction("PageAddEdit", new { @id = pageContents.Root_ContentID, @mode = model.Mode });
+					return RedirectToAction(this.GetActionName(x => x.PageAddEdit(null)), new { @id = pageContents.Root_ContentID, @mode = model.Mode });
 				}
 			}
 
@@ -1362,10 +1324,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult BlogPostAddEdit(Guid? id, Guid? versionid, Guid? importid, string mode) {
 			ContentPageModel model = new ContentPageModel();
 			ContentPage pageContents = model.GetPost(id, versionid, importid, mode);
-			ViewBag.ContentEditMode = model.Mode;
+			ViewBag.ContentEditMode = SiteData.EditMode(model.Mode);
 
 			if (pageContents.ContentType != ContentPageType.PageType.BlogEntry) {
-				return RedirectToAction("PageAddEdit", new { @id = pageContents.Root_ContentID, @mode = model.Mode });
+				return RedirectToAction(this.GetActionName(x => x.PageAddEdit(null)), new { @id = pageContents.Root_ContentID, @mode = model.Mode });
 			}
 
 			return View(model);
@@ -1422,7 +1384,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				item.Save();
 
-				return RedirectToAction("ContentSnippetAddEdit", new { @id = item.Root_ContentSnippetID, @mode = mode });
+				return RedirectToAction(SiteActions.ContentSnippetAddEdit, new { @id = item.Root_ContentSnippetID, @mode = mode });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -1437,7 +1399,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			ContentSnippet item = ContentSnippet.Get(model.Root_ContentSnippetID);
 			item.Delete();
 
-			return RedirectToAction("ContentSnippetIndex");
+			return RedirectToAction(SiteActions.ContentSnippetIndex);
 		}
 
 		[HttpPost]
@@ -1454,7 +1416,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				if (model.VisitPage) {
 					Response.Redirect(pageContents.FileName);
 				} else {
-					return RedirectToAction("BlogPostAddEdit", new { @id = pageContents.Root_ContentID, @mode = model.Mode });
+					return RedirectToAction(this.GetActionName(x => x.BlogPostAddEdit(null)), new { @id = pageContents.Root_ContentID, @mode = model.Mode });
 				}
 			}
 
@@ -1473,10 +1435,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 
 			if (model.ContentPage.ContentType == ContentPageType.PageType.BlogEntry) {
-				return RedirectToAction("BlogPostIndex");
+				return RedirectToAction(this.GetActionName(x => x.BlogPostIndex(null)));
 			}
 
-			return RedirectToAction("PageIndex");
+			return RedirectToAction(this.GetActionName(x => x.PageIndex(null)));
 		}
 
 		[HttpGet]
@@ -1561,11 +1523,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			SetSaved();
 
-			return RedirectToAction("ControlPropertiesEdit", new { @id = w.Root_WidgetID, @pageid = w.Root_ContentID });
+			return RedirectToAction(SiteActions.ControlPropertiesEdit, new { @id = w.Root_WidgetID, @pageid = w.Root_ContentID });
 		}
 
+		protected string _savedKey = "cmsShowSaved";
+
 		protected bool? GetSaved() {
-			bool? saved = TempData["cmsShowSaved"] != null ? (bool?)TempData["cmsShowSaved"] : null;
+			bool? saved = TempData[_savedKey] != null ? (bool?)TempData[_savedKey] : null;
 
 			return saved;
 		}
@@ -1575,7 +1539,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		protected void SetSaved(bool? v) {
-			TempData["cmsShowSaved"] = v;
+			TempData[_savedKey] = v;
 		}
 
 		protected void ShowSaved() {
@@ -1645,14 +1609,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			return View(viewName, model);
 		}
 
-		protected ActionResult SiteMapResult(string viewName, bool? saved, List<SiteMapOrder> model) {
+		protected ActionResult SiteMapResult(string actionName, bool? saved, List<SiteMapOrder> model) {
 			using (SiteMapOrderHelper orderHelper = new SiteMapOrderHelper()) {
 				orderHelper.UpdateSiteMap(this.CurrentSiteID, model);
 			}
 
 			SetSaved(saved);
 
-			return RedirectToAction(viewName);
+			return RedirectToAction(actionName);
 		}
 
 		[HttpPost]
@@ -1662,7 +1626,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				orderHelper.FixOrphanPages(this.CurrentSiteID);
 			}
 
-			return RedirectToAction("SiteMap");
+			return RedirectToAction(this.GetActionName(x => x.SiteMap(null)));
 		}
 
 		[HttpPost]
@@ -1670,15 +1634,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult FixBlog() {
 			pageHelper.FixBlogNavOrder(this.CurrentSiteID);
 
-			return RedirectToAction("SiteMap");
+			return RedirectToAction(this.GetActionName(x => x.SiteMap(null)));
 		}
 
 		[HttpGet]
 		public ActionResult PageAddChild(Guid id, bool? saved) {
-			//if (saved.HasValue && saved.Value) {
-			//	ShowSave();
-			//}
-
 			ContentPageModel model = new ContentPageModel();
 
 			var pageContentsParent = pageHelper.FindContentByID(this.CurrentSiteID, id);
@@ -1742,7 +1702,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 
 				SetSaved();
-				return RedirectToAction("PageChildSort", new { @id = model.Root_ContentID });
+				return RedirectToAction(SiteActions.PageChildSort, new { @id = model.Root_ContentID });
 			}
 		}
 
@@ -1831,7 +1791,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				SetSaved();
 
-				return RedirectToAction("ContentEdit", new { @id = model.PageId, @widgetid = model.WidgetId, @field = model.Field, @mode = model.Mode });
+				return RedirectToAction(this.GetActionName(x => x.ContentEdit(null)), new { @id = model.PageId, @widgetid = model.WidgetId, @field = model.Field, @mode = model.Mode });
 			}
 
 			return View(model);
@@ -1866,7 +1826,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				SetSaved(false);
 			}
 
-			return RedirectToAction("PageHistory", new { @id = model.Root_ContentID });
+			return RedirectToAction(SiteActions.PageHistory, new { @id = model.Root_ContentID });
 		}
 
 		[HttpGet]
@@ -1923,7 +1883,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					}
 
 					ModelState.Clear();
-					//return RedirectToAction("SiteContentStatusChange");
 				}
 			}
 
@@ -2066,8 +2025,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				if (lstUpd.Any()) {
 					pageHelper.BulkUpdateTemplate(this.CurrentSiteID, lstUpd, model.SelectedTemplate);
-
-					//return RedirectToAction("PageTemplateUpdate");
 				}
 
 				model.SelectedTemplate = string.Empty;
@@ -2180,10 +2137,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				SetSaved();
 
 				if (model.CachedWidget) {
-					return RedirectToAction("WidgetTime", new { @id = model.Root_ContentID, @widgetid = model.Root_WidgetID });
+					return RedirectToAction(SiteActions.WidgetTime, new { @id = model.Root_ContentID, @widgetid = model.Root_WidgetID });
 				}
 
-				return RedirectToAction("WidgetTime", new { @widgetid = model.Root_WidgetID });
+				return RedirectToAction(SiteActions.WidgetTime, new { @widgetid = model.Root_WidgetID });
 			}
 
 			return View(model);
@@ -2205,7 +2162,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			SetSaved(model.Remove());
 
-			return RedirectToAction("WidgetHistory", new { @id = model.Root_WidgetID });
+			return RedirectToAction(SiteActions.WidgetHistory, new { @id = model.Root_WidgetID });
 		}
 
 		[HttpGet]
@@ -2294,7 +2251,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			SetSaved();
 
-			return RedirectToAction("WidgetList", new { @id = model.Root_ContentID, @zone = model.PlaceholderName });
+			return RedirectToAction(SiteActions.WidgetList, new { @id = model.Root_ContentID, @zone = model.PlaceholderName });
 		}
 
 		[HttpGet]
@@ -2405,9 +2362,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				model.SaveFile();
 
 				if (!string.IsNullOrEmpty(model.AltPath)) {
-					return RedirectToAction("SiteSkinEdit", new { @path = model.EncodedPath, @alt = model.EncodePath(model.AltPath) });
+					return RedirectToAction(SiteActions.SiteSkinEdit, new { @path = model.EncodedPath, @alt = model.EncodePath(model.AltPath) });
 				}
-				return RedirectToAction("SiteSkinEdit", new { @path = model.EncodedPath });
+				return RedirectToAction(SiteActions.SiteSkinEdit, new { @path = model.EncodedPath });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -2490,10 +2447,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				model2.Save();
 
 				if (model.ViewMode == PostCommentModel.ViewType.PageView) {
-					return RedirectToAction("CommentAddEdit", new { @id = comment.ContentCommentID, @pageComment = true });
+					return RedirectToAction(SiteActions.CommentAddEdit, new { @id = comment.ContentCommentID, @pageComment = true });
 				}
 
-				return RedirectToAction("CommentAddEdit", new { @id = comment.ContentCommentID });
+				return RedirectToAction(SiteActions.CommentAddEdit, new { @id = comment.ContentCommentID });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -2512,16 +2469,16 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			if (model.ViewMode == PostCommentModel.ViewType.PageView) {
 				if (model.Comment.ContentType == ContentPageType.PageType.BlogEntry) {
-					return RedirectToAction("BlogPostCommentIndex", new { @id = model.Root_ContentID });
+					return RedirectToAction(SiteActions.BlogPostCommentIndex, new { @id = model.Root_ContentID });
 				} else {
-					return RedirectToAction("PageCommentIndex", new { @id = model.Root_ContentID });
+					return RedirectToAction(SiteActions.PageCommentIndex, new { @id = model.Root_ContentID });
 				}
 			}
 
 			if (model.Comment.ContentType == ContentPageType.PageType.BlogEntry) {
-				return RedirectToAction("BlogPostCommentIndex");
+				return RedirectToAction(SiteActions.BlogPostCommentIndex);
 			} else {
-				return RedirectToAction("PageCommentIndex");
+				return RedirectToAction(SiteActions.PageCommentIndex);
 			}
 		}
 
@@ -2611,8 +2568,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				if (lstUpd.Any()) {
 					pageHelper.BulkUpdateTemplate(this.CurrentSiteID, lstUpd, model.SelectedTemplate);
-
-					//return RedirectToAction("BlogPostTemplateUpdate");
 				}
 
 				model.SelectedTemplate = string.Empty;
@@ -2740,7 +2695,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				item.Save();
 
-				return RedirectToAction("RoleAddEdit", new { @id = item.RoleId });
+				return RedirectToAction(this.GetActionName(x => x.RoleAddEdit("")), new { @id = item.RoleId });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -2761,7 +2716,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					SecurityData.RemoveUserFromRole(u.User.UserName, role.RoleName);
 				}
 
-				return RedirectToAction("RoleAddEdit", new { @id = role.RoleId });
+				return RedirectToAction(this.GetActionName(x => x.RoleAddEdit("")), new { @id = role.RoleId });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -2774,7 +2729,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[CmsAdminAuthorize]
 		public ActionResult RoleAddUser(RoleModel model) {
 			if (string.IsNullOrEmpty(model.NewUserId)) {
-				ModelState.AddModelError("NewUserId", "The New User field is required.");
+				ModelState.AddModelError(model.GetPropertyName(x => x.NewUserId), "The New User field is required.");
 			}
 
 			Helper.ForceValidation(ModelState, model);
@@ -2785,7 +2740,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					SecurityData.AddUserToRole(new Guid(model.NewUserId), role.RoleName);
 				}
 
-				return RedirectToAction("RoleAddEdit", new { @id = role.RoleId });
+				return RedirectToAction(this.GetActionName(x => x.RoleAddEdit("")), new { @id = role.RoleId });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -2856,7 +2811,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				pageHelper.UpdateAllContentTemplates(this.CurrentSiteID, model.AllContent);
 			}
 
-			return RedirectToAction("SiteTemplateUpdate");
+			return RedirectToAction(this.GetActionName(x => x.SiteTemplateUpdate(null)));
 		}
 
 		private ContentPage CreateShellPage() {
@@ -2943,7 +2898,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				return Redirect(returnUrl);
 			}
 
-			return RedirectToAction(SiteFilename.IndexAction);
+			return RedirectToAction(this.GetActionName(x => x.Index()));
 		}
 
 		public ActionResult TextWidgetIndex() {
@@ -2981,7 +2936,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				SiteData.CurrentSite.LoadTextWidgets();
 			}
 
-			return RedirectToAction("TextWidgetIndex");
+			return RedirectToAction(SiteActions.TextWidgetIndex);
 		}
 
 		public ActionResult ModuleIndex() {

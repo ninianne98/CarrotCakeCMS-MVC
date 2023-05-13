@@ -1,7 +1,7 @@
 ﻿using Carrotware.CMS.DBUpdater;
-using System.Web.Mvc;
-using System.Web;
 using System;
+using System.Web;
+using System.Web.Mvc;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -15,8 +15,24 @@ using System;
 
 namespace Carrotware.CMS.Core {
 
+	public static class CmsRouteConstants {
+		public static class Controller {
+			public static string Admin { get { return "CmsAdmin"; } }
+			public static string Home { get { return "Home"; } }
+			public static string Content { get { return "CmsContent"; } }
+			public static string AjaxForms { get { return "CmsAjaxForms"; } }
+		}
+
+		public static string IndexAction { get { return "Index"; } }
+		public static string DefaultAction { get { return "Default"; } }
+		public static string NotFoundAction { get { return "PageNotFound"; } }
+		public static string RssAction { get { return "RSSFeed"; } }
+		public static string SiteMapAction { get { return "SiteMap"; } }
+	}
+
+	//=====================
+
 	public class CmsRouteHandler : MvcRouteHandler {
-		public const string ContentCtrlr = "CmsContent";
 
 		protected override IHttpHandler GetHttpHandler(System.Web.Routing.RequestContext requestCtx) {
 			string requestedUri = (string)requestCtx.RouteData.Values["RequestedUri"];
@@ -32,24 +48,18 @@ namespace Carrotware.CMS.Core {
 
 			if (requestedUri.EndsWith(".ashx")) {
 				if (requestedUri == SiteFilename.RssFeedUri) {
-					requestCtx.RouteData.Values["controller"] = ContentCtrlr;
-					requestCtx.RouteData.Values["action"] = "RSSFeed";
+					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+					requestCtx.RouteData.Values["action"] = CmsRouteConstants.RssAction;
 					return base.GetHttpHandler(requestCtx);
 				}
 				if (requestedUri == SiteFilename.SiteMapUri) {
-					requestCtx.RouteData.Values["controller"] = ContentCtrlr;
-					requestCtx.RouteData.Values["action"] = "SiteMap";
+					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+					requestCtx.RouteData.Values["action"] = CmsRouteConstants.SiteMapAction;
 					return base.GetHttpHandler(requestCtx);
 				}
 
-				//if (requestedUri == "/trackback.ashx") {	// will be dead link
-				//	requestCtx.RouteData.Values["controller"] = ContentCtrlr;
-				//	requestCtx.RouteData.Values["action"] = "Trackback";
-				//	return base.GetHttpHandler(requestCtx);
-				//}
-
-				requestCtx.RouteData.Values["controller"] = ContentCtrlr;
-				requestCtx.RouteData.Values["action"] = "PageNotFound";
+				requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+				requestCtx.RouteData.Values["action"] = CmsRouteConstants.NotFoundAction;
 				requestCtx.RouteData.Values["id"] = null;
 
 				SiteData.WriteDebugException("cmsroutehandler ashx not matched", new Exception(string.Format("RequestedUri: {0}", requestedUri)));
@@ -57,8 +67,8 @@ namespace Carrotware.CMS.Core {
 				return base.GetHttpHandler(requestCtx);
 			} else if (requestedUri.EndsWith(".aspx")) {
 				//since .aspx is not supported
-				requestCtx.RouteData.Values["controller"] = ContentCtrlr;
-				requestCtx.RouteData.Values["action"] = "PageNotFound";
+				requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+				requestCtx.RouteData.Values["action"] = CmsRouteConstants.NotFoundAction;
 				requestCtx.RouteData.Values["id"] = null;
 			} else {
 				string sCurrentPage = SiteData.CurrentScriptName;
@@ -97,13 +107,13 @@ namespace Carrotware.CMS.Core {
 							navData = SiteNavHelper.GetEmptySearch();
 						}
 
-						requestCtx.RouteData.Values["controller"] = ContentCtrlr;
+						requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
 						if (navData != null) {
 							SiteData.WriteDebugException("cmsroutehandler != null", new Exception(string.Format("Default: {0}", navData.FileName)));
-							requestCtx.RouteData.Values["action"] = "Default";
+							requestCtx.RouteData.Values["action"] = CmsRouteConstants.DefaultAction;
 						} else {
 							SiteData.WriteDebugException("cmsroutehandler == null", new Exception(string.Format("_PageNotFound: {0}", sCurrentPage)));
-							requestCtx.RouteData.Values["action"] = "PageNotFound";
+							requestCtx.RouteData.Values["action"] = CmsRouteConstants.NotFoundAction;
 						}
 						requestCtx.RouteData.Values["id"] = null;
 					}
@@ -111,8 +121,8 @@ namespace Carrotware.CMS.Core {
 					SiteData.WriteDebugException("cmsroutehandler_exception_uri", new Exception(string.Format("Exception: {0}", sCurrentPage)));
 
 					if (DatabaseUpdate.SystemNeedsChecking(ex) || DatabaseUpdate.AreCMSTablesIncomplete()) {
-						requestCtx.RouteData.Values["controller"] = ContentCtrlr;
-						requestCtx.RouteData.Values["action"] = "Default";
+						requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+						requestCtx.RouteData.Values["action"] = CmsRouteConstants.DefaultAction;
 						requestCtx.RouteData.Values["id"] = null;
 						SiteData.WriteDebugException("cmsroutehandler_exception_systemneedschecking", ex);
 					} else {

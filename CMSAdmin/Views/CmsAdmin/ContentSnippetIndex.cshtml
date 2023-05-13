@@ -42,11 +42,11 @@
 	grid
 		.AddColumn(new CarrotGridTemplateColumn<ContentSnippet> {
 			HasHeadingText = false,
-			FormatTemplate = @<text> @CarrotWeb.ActionImage("ContentSnippetAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentSnippetID }, "~/Assets/Admin/Images/pencil.png", "Edit with WYSIWYG", null, null) </text>
+			FormatTemplate = @<text> @CarrotWeb.ActionImage(SiteActions.ContentSnippetAddEdit, CmsRouteConstants.Controller.Admin, new { @id = @item.Root_ContentSnippetID }, "~/Assets/Admin/Images/pencil.png", "Edit with WYSIWYG", null, null) </text>
 		})
 		.AddColumn(new CarrotGridTemplateColumn<ContentSnippet> {
 			HasHeadingText = false,
-			FormatTemplate = @<text> @CarrotWeb.ActionImage("ContentSnippetAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentSnippetID, @mode = SiteData.RawMode }, "~/Assets/Admin/Images/script.png", "Edit with Plain Text", null, null) </text>
+			FormatTemplate = @<text> @CarrotWeb.ActionImage(SiteActions.ContentSnippetAddEdit, CmsRouteConstants.Controller.Admin, new { @id = @item.Root_ContentSnippetID, @mode = SiteData.RawMode }, "~/Assets/Admin/Images/script.png", "Edit with Plain Text", null, null) </text>
 		})
 		.AddColumn(new CarrotGridTemplateColumn<ContentSnippet> {
 			HasHeadingText = false,

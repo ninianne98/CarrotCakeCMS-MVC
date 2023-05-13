@@ -197,6 +197,7 @@
     <Compile Include="SearchParameterObject.cs" />
     <Compile Include="Security\UserRole.cs" />
     <Compile Include="Security\UserProfile.cs" />
+    <Compile Include="SiteActions.cs" />
     <Compile Include="SiteContent\BlogDatePathParser.cs" />
     <Compile Include="SiteContent\IMetaDataLinks.cs" />
     <Compile Include="SiteContent\SiteDataStatic.cs" />

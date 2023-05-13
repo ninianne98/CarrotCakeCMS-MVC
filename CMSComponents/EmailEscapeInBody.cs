@@ -22,7 +22,7 @@ namespace Carrotware.CMS.UI.Components {
 		#region ITextBodyUpdate Members
 
 		public string UpdateContent(string TextContent) {
-			if (!String.IsNullOrEmpty(TextContent)) {
+			if (!string.IsNullOrEmpty(TextContent)) {
 				List<EmailReplace> _mail = FindEmails(TextContent);
 
 				if (_mail.Any()) {
@@ -56,7 +56,7 @@ namespace Carrotware.CMS.UI.Components {
 		protected string MungeEmail(string s) {
 			string retVal = "";
 
-			if (!String.IsNullOrEmpty(s)) {
+			if (!string.IsNullOrEmpty(s)) {
 				StringBuilder sb = new StringBuilder();
 				for (int i = 0; i < s.Length; i++) {
 					sb.Append("&#" + Convert.ToByte(s[i]).ToString() + ";");

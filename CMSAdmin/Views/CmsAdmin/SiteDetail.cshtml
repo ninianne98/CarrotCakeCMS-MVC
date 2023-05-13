@@ -58,7 +58,7 @@
 	<table>
 		<tr>
 			<td>
-				@using (Html.BeginForm("SiteRemoveUsers", RouteConfig.AdminCtrlr)) {
+				@using (Html.BeginForm("SiteRemoveUsers", CmsRouteConstants.Controller.Admin)) {
 					@Html.AntiForgeryToken()
 					@Html.HiddenFor(model => model.Site.SiteID)
 					@Html.HiddenFor(model => model.Site.SiteName)
@@ -126,7 +126,7 @@
 				&nbsp;&nbsp;&nbsp;
 			</td>
 			<td>
-				@using (Html.BeginForm("SiteAddUser", RouteConfig.AdminCtrlr)) {
+				@using (Html.BeginForm("SiteAddUser", CmsRouteConstants.Controller.Admin)) {
 					@Html.AntiForgeryToken()
 					@Html.HiddenFor(model => model.Site.SiteID)
 					@Html.HiddenFor(model => model.Site.SiteName)

@@ -157,7 +157,7 @@
 }
 
 <div style="display: none;">
-	@using (Html.BeginForm("DeleteCommentAddEdit", RouteConfig.AdminCtrlr)) {
+	@using (Html.BeginForm("DeleteCommentAddEdit", CmsRouteConstants.Controller.Admin)) {
 		@Html.AntiForgeryToken()
 
 		@Html.HiddenFor(m => m.Comment.ContentCommentID)

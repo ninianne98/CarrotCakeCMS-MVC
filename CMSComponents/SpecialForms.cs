@@ -167,7 +167,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			//try #3
 			//RouteValueDictionary dic = new RouteValueDictionary();
-			//dic.Add("controller", "CmsAjaxForms");
+			//dic.Add("controller", CmsRouteConstants.Controller.AjaxForms);
 			//dic.Add("action", formAction);
 			//if (SecurityData.AdvancedEditMode) {
 			//	dic.Add(SiteData.AdvancedEditParameter, true);
@@ -176,18 +176,18 @@ namespace Carrotware.CMS.UI.Components {
 
 			//try #2
 			if (SecurityData.AdvancedEditMode) {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
 			} else {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction }, ajaxOptions, formAttributes);
 			}
 
 			/*
 			//try #1
 			string formAction = "Contact.ashx";
-			FormRouteValue frv = new FormRouteValue("CmsAjaxForms", formAction);
+			FormRouteValue frv = new FormRouteValue(CmsRouteConstants.Controller.AjaxForms, formAction);
 
 			if (SecurityData.AdvancedEditMode) {
-				frv = new FormRouteValue("CmsAjaxForms", formAction, true);
+				frv = new FormRouteValue(CmsRouteConstants.Controller.AjaxForms, formAction, true);
 			}
 
 			frm = ajaxHelper.BeginRouteForm("Default", frv, ajaxOptions, formAttributes);
@@ -343,9 +343,9 @@ namespace Carrotware.CMS.UI.Components {
 			string formAction = "Login.ashx";
 
 			if (SecurityData.AdvancedEditMode) {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
 			} else {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction }, ajaxOptions, formAttributes);
 			}
 		}
 
@@ -495,9 +495,9 @@ namespace Carrotware.CMS.UI.Components {
 			string formAction = "Logout.ashx";
 
 			if (SecurityData.AdvancedEditMode) {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
 			} else {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction }, ajaxOptions, formAttributes);
 			}
 		}
 
@@ -619,9 +619,9 @@ namespace Carrotware.CMS.UI.Components {
 			string formAction = "ForgotPassword.ashx";
 
 			if (SecurityData.AdvancedEditMode) {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction, carrotedit = true }, ajaxOptions, formAttributes);
 			} else {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction }, ajaxOptions, formAttributes);
 			}
 		}
 
@@ -762,9 +762,9 @@ namespace Carrotware.CMS.UI.Components {
 			string formAction = "ResetPassword.ashx";
 
 			if (SecurityData.AdvancedEditMode) {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, @code = code, @carrotedit = true }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction, @code = code, @carrotedit = true }, ajaxOptions, formAttributes);
 			} else {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, @code = code }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction, @code = code }, ajaxOptions, formAttributes);
 			}
 		}
 
@@ -913,9 +913,9 @@ namespace Carrotware.CMS.UI.Components {
 			string formAction = "ChangePassword.ashx";
 
 			if (SecurityData.AdvancedEditMode) {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, @carrotedit = true }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction, @carrotedit = true }, ajaxOptions, formAttributes);
 			} else {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction }, ajaxOptions, formAttributes);
 			}
 		}
 
@@ -1059,9 +1059,9 @@ namespace Carrotware.CMS.UI.Components {
 			string formAction = "ChangeProfile.ashx";
 
 			if (SecurityData.AdvancedEditMode) {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction, @carrotedit = true }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction, @carrotedit = true }, ajaxOptions, formAttributes);
 			} else {
-				frm = ajaxHelper.BeginRouteForm("Default", new { controller = "CmsAjaxForms", action = formAction }, ajaxOptions, formAttributes);
+				frm = ajaxHelper.BeginRouteForm("Default", new { controller = CmsRouteConstants.Controller.AjaxForms, action = formAction }, ajaxOptions, formAttributes);
 			}
 		}
 

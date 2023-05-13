@@ -81,11 +81,11 @@
 	grid
 		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
 			HasHeadingText = false,
-			FormatTemplate = @<text> @CarrotWeb.ActionImage("BlogPostAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentID }, "~/Assets/Admin/Images/pencil.png", "Edit with WYSIWYG", null, null) </text>
+			FormatTemplate = @<text> @CarrotWeb.ActionImage(SiteActions.BlogPostAddEdit, CmsRouteConstants.Controller.Admin, new { @id = @item.Root_ContentID }, "~/Assets/Admin/Images/pencil.png", "Edit with WYSIWYG", null, null) </text>
 		})
 		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
 			HasHeadingText = false,
-			FormatTemplate = @<text> @CarrotWeb.ActionImage("BlogPostAddEdit", RouteConfig.AdminCtrlr, new { @id = @item.Root_ContentID, @mode = SiteData.RawMode }, "~/Assets/Admin/Images/script.png", "Edit with Plain Text", null, null) </text>
+			FormatTemplate = @<text> @CarrotWeb.ActionImage(SiteActions.BlogPostAddEdit, CmsRouteConstants.Controller.Admin, new { @id = @item.Root_ContentID, @mode = SiteData.RawMode }, "~/Assets/Admin/Images/script.png", "Edit with Plain Text", null, null) </text>
 		})
 		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
 			HasHeadingText = false,
@@ -165,7 +165,7 @@
 			Sortable = true
 		});
 
-		<div class="tablezone">
-			@grid.Write()
-		</div>
+	<div class="tablezone">
+		@grid.Write()
+	</div>
 }

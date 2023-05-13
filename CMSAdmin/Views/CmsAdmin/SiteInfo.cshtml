@@ -13,7 +13,7 @@
 }
 
 @if (SiteData.CurretSiteExists) {
-	using (Html.BeginForm("ResetVars", RouteConfig.AdminCtrlr)) {
+	using (Html.BeginForm("ResetVars", CmsRouteConstants.Controller.Admin)) {
 		@Html.AntiForgeryToken()
 		<p>
 			<input type="submit" name="btnResetVars" value="Refresh Configs" id="btnResetVars" />

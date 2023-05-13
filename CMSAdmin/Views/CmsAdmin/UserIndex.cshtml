@@ -24,7 +24,7 @@
 	grid
 		.AddColumn(new CarrotGridTemplateColumn<ExtendedUserData> {
 			HasHeadingText = false,
-			FormatTemplate = @<text> @CarrotWeb.ActionImage("UserEdit", RouteConfig.AdminCtrlr, new { @id = @item.UserId }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
+			FormatTemplate = @<text> @CarrotWeb.ActionImage(SiteActions.UserEdit, CmsRouteConstants.Controller.Admin, new { @id = @item.UserId }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
 		})
 		.AddColumn(x => x.UserName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.FirstName, new CarrotGridColumn { Sortable = true })
