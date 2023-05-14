@@ -88,12 +88,13 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult EditGalleryPhotos(EditPhotoGalleryModel model) {
 			model.SetSrcFiles();
-			model.LoadGallery();
 
 			if (!model.SaveGallery) {
+				model.LoadGallery();
 				return View(model);
 			} else {
 				model.Save();
+				model.LoadGallery();
 				return RedirectToAction("EditGalleryPhotos", new { @id = model.GalleryID });
 			}
 		}
@@ -126,9 +127,9 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		[HttpGet]
 		public ActionResult EditImageMetaData(string path) {
 			GalleryHelper gh = new GalleryHelper(this.SiteID);
-			string imageFile = String.Empty;
+			string imageFile = string.Empty;
 
-			if (!String.IsNullOrEmpty(path)) {
+			if (!string.IsNullOrEmpty(path)) {
 				imageFile = Utils.DecodeBase64(path);
 			}
 

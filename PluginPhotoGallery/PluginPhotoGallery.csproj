@@ -102,7 +102,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Admin\images\cog.png" />
     <Content Include="Assets\prettyPhoto\PhotoIcon.png" />
     <Content Include="Assets\prettyPhoto\dark_rounded\btnNext.png" />
     <Content Include="Assets\prettyPhoto\dark_rounded\btnPrevious.png" />

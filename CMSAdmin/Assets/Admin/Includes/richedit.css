@@ -1,8 +1,8 @@
 body {
-	font-size: 12pt;
+	font-size: 13px;
 	font-family: Arial, Helvetica, sans-serif;
-	color: #000000;
-	background-color: #ffffff;
+	color: #111111;
+	background-color: #fefefe;
 }
 
 pre {
@@ -13,8 +13,11 @@ pre {
 	word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
-.mceItemMedia, .mceItemIframe, .mceItemVideo, .mceItemRealMedia, .mceItemWindowsMedia, .mceItemQuickTime, .mceItemFlash, .mceItemShockWave {
-	background-color: #ffffcc;
+video, object, .mceItemMedia, .mceItemIframe, .mceItemVideo, .mceItemRealMedia,
+.mceItemWindowsMedia, .mceItemQuickTime, .mceItemFlash, .mceItemShockWave {
+	padding: 2px;
+	margin: 2px;
+	background-color: #ffffdd;
 	border: thin dashed #cc0000;
 }
 
@@ -31,7 +34,7 @@ a {
 	color: #000099;
 }
 
-	a:active {
+	a:active, a:hover {
 		color: #009900;
 	}
 
@@ -40,17 +43,17 @@ a {
 	}
 
 blockquote {
-	background-color: #eeeeee;
-	border-left: 5px solid #999999;
+	background-color: #f3f3f3;
 	color: #000000;
 	margin: 0.75em 1.5em;
 	overflow: auto;
 	padding: 0.5em 1em;
+	border-left: 6px solid #666666;
 	border-left-color: #666666;
 }
 
 tt, pre, code, kbd, samp {
-	font-size: 11pt;
+	font-size: 12px;
 	font-family: "Lucida Console", "Courier New", Courier, Monaco, monospace;
 }
 

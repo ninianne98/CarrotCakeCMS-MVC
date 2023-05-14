@@ -186,6 +186,7 @@
     <Content Include="Assets\Admin\Images\information.png" />
     <Content Include="Assets\Admin\Images\hextile.png" />
     <Content Include="Assets\Admin\Includes\jquery.tooltipster.min.js" />
+    <Content Include="Assets\Admin\Includes\tinymceoverride.css" />
     <Content Include="Assets\Admin\Includes\tooltipster.css" />
     <Content Include="Assets\Admin\skins\logon.amethystorchid.min.css" />
     <Content Include="Assets\Admin\skins\logon.blueizis.min.css" />

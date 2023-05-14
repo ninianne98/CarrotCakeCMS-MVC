@@ -31,7 +31,7 @@
 		HasHeadingText = false,
 		FormatTemplate = @<text> @CarrotWeb.ActionImage("EditGalleryPhotos", "Admin", new { @id = @item.GalleryID }, "~/assets/admin/images/image.png", @item.GalleryTitle, null, null) </text>
 	})
-		.AddColumn(x => x.GalleryTitle, new CarrotGridColumn { Sortable = true });
+	.AddColumn(x => x.GalleryTitle, new CarrotGridColumn { Sortable = true });
 
 	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix ui-widget-content ui-corner-all" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
 

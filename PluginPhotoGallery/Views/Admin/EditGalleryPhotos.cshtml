@@ -51,11 +51,13 @@
 				margin: 5px;
 				padding: 5px;
 				width: 350px;
-				height: 64px;
+				height: 72px;
 			}
 
 				#galleryTarget li img, #gallerySource li img {
-					margin: 3px;
+					margin: 4px;
+					max-height: 68px;
+					max-width: 68px;
 				}
 
 		.fileInfo {
@@ -83,11 +85,13 @@
 
 		#imgThumb {
 			margin: 0;
-			padding: 2px 0;
+			padding: 2px;
+			max-height: 64px;
+			max-width: 64px;
 		}
 
 		div.galleryScroll {
-			height: 300px;
+			height: 400px;
 			width: 420px;
 			overflow: auto;
 			border: 1px solid #666;
@@ -140,10 +144,6 @@
 			display: none;
 		}
 
-		.inputFields {
-			display: none;
-		}
-
 		#imgWrapperMain {
 			display: block;
 			min-height: 2px;
@@ -170,14 +170,13 @@
 			min-width: 2px;
 			padding: 8px;
 			color: #000000;
-			background-color: #B7D7C4;
+			background-color: #bbbbbb;
 			margin: 10px auto;
 			text-align: center;
 		}
 	</style>
 
 	<script type="text/javascript">
-
 		$(document).ready(function () {
 			updateGallery();
 		});
@@ -220,7 +219,6 @@
 		}
 
 		function galleryOrder() {
-
 			$('#srcGalleryCount').text($("#gallerySource").find('li').length);
 			$('#tgtGalleryCount').text($("#galleryTarget").find('li').length);
 
@@ -246,7 +244,6 @@
 		}
 
 		function updateGallery() {
-
 			$(document).ready(function () {
 				setTimeout("galleryOrder();", 800);
 
@@ -303,12 +300,10 @@
 			var tgt = $(a);
 			if (tgt.is("a")) {
 				var p = $($(tgt).parent().parent().parent());
-				//alert(p.attr('id'));
 				var txt = p.find('#imgName');
 				p.remove();
 			}
 
-			//alert("clicked");
 			setTimeout("galleryOrder();", 500);
 			return false;
 		}
@@ -354,8 +349,8 @@
 		<div class="galleryScroll">
 			<ul id="gallerySource" class='ui-state-default photoSource'>
 				@foreach (var srcImage in Model.SiteImages) {
-					<li class="ui-widget ui-widget-content" id="ID_0000000000">
-						<img id="imgThumb" height="50" width="50" onmouseout="hideImg(this)" onmouseover="showImg(this)" style="float: left"
+					<li class="ui-widget ui-widget-content galleryimagecard">
+						<img id="imgThumb" height="64" width="64" onmouseout="hideImg(this)" onmouseover="showImg(this)" style="float: left"
 							 src="~/Assets/prettyPhoto/PhotoIcon.png" title="@srcImage.FileName" alt="@HttpUtility.UrlEncode(srcImage.FileName)" />
 
 						<div class="fileInfo">
@@ -370,7 +365,7 @@
 									</span>
 								</a>
 							</span>
-							<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink(Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(srcImage.FullFileName) }))">>
+							<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink(Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(srcImage.FullFileName) }))">
 								<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
 							</a>
 						</div>
@@ -383,8 +378,8 @@
 		<div class="galleryScroll">
 			<ul id="galleryTarget" class='ui-state-default photoTarget'>
 				@foreach (var galImage in Model.ImageFiles) {
-					<li class="ui-widget ui-widget-content" id="ID_0000000000">
-						@CarrotWeb.ImageSizer(galImage.FullFileName, galImage.FileName, 50, true, new { @style = "float: left", @id = "imgThumb", @onmouseout = "hideImg(this)", @onmouseover = "showImg(this)" })
+					<li class="ui-widget ui-widget-content galleryimagecard">
+						@CarrotWeb.ImageSizer(galImage.FullFileName, galImage.FileName, 72, true, new { @id = "imgThumb", @style = "float: left", height = 64, width = 64, @onmouseout = "hideImg(this)", @onmouseover = "showImg(this)" })
 
 						<div class="fileInfo">
 							<div id="imgName">@galImage.FullFileName</div>
@@ -411,9 +406,10 @@
 		</div>
 	</div>
 
-	@Html.TextAreaFor(m => m.GalleryOrder, new { @class = "inputFields", rows = "8", cols = "60" })
-
 	<input type="button" name="btnSaveClick" value="Save" id="btnSaveClick" onclick="saveGallery()" class="btn btn-primary" />
 
-	<input type="submit" name="btnSave" value="Save" id="btnSave" style="display:none;" class="btn btn-primary" />
+	<div style="display:none;">
+		@Html.TextAreaFor(m => m.GalleryOrder, new { rows = "8", cols = "60" })
+		<input type="submit" name="btnSave" value="Save" id="btnSave" class="btn" />
+	</div>
 }

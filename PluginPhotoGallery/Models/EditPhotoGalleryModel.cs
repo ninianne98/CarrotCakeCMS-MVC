@@ -201,30 +201,32 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 		}
 
 		public void Save() {
-			GalleryHelper gh = new GalleryHelper(this.SiteID);
+			var gh = new GalleryHelper(this.SiteID);
 
-			Dictionary<int, string> lstImages = ParseGalleryImages();
-			int iPos = 0;
+			Dictionary<int, string> images = ParseGalleryImages();
 
-			foreach (var img in lstImages) {
-				if (!string.IsNullOrEmpty(img.Value)) {
-					var theImg = gh.GalleryImageEntryGetByFilename(this.GalleryID, img.Value);
+			if (images != null) {
+				int pos = 0;
+				foreach (var img in images) {
+					if (!string.IsNullOrEmpty(img.Value)) {
+						var theImg = gh.GalleryImageEntryGetByFilename(this.GalleryID, img.Value);
 
-					if (theImg == null) {
-						theImg = new GalleryImageEntry();
-						theImg.GalleryImage = img.Value;
-						theImg.GalleryImageID = Guid.NewGuid();
-						theImg.GalleryID = this.GalleryID;
+						if (theImg == null) {
+							theImg = new GalleryImageEntry();
+							theImg.GalleryImage = img.Value;
+							theImg.GalleryImageID = Guid.NewGuid();
+							theImg.GalleryID = this.GalleryID;
+						}
+
+						theImg.ImageOrder = pos;
+
+						theImg.Save();
 					}
 
-					theImg.ImageOrder = iPos;
-
-					theImg.Save();
+					pos++;
 				}
 
-				iPos++;
-
-				List<string> lst = (from l in lstImages
+				List<string> lst = (from l in images
 									select l.Value.ToLower()).ToList();
 
 				gh.GalleryImageCleanup(this.GalleryID, lst);

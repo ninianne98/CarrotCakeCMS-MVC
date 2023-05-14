@@ -9,11 +9,11 @@ var tinyBrowseResize = false;
 function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 	tinyBrowseHeight = parseInt(winHeight);
 	tinyBrowseWidth = parseInt(winWidth);
-	if (tinyBrowseWidth < 300) {
-		tinyBrowseWidth = 300;
+	if (tinyBrowseWidth < 640) {
+		tinyBrowseWidth = 640;
 	}
-	if (tinyBrowseHeight < 150) {
-		tinyBrowseHeight = 150;
+	if (tinyBrowseHeight < 175) {
+		tinyBrowseHeight = 175;
 	}
 
 	tinyBrowseResize = allowResize;
@@ -36,8 +36,8 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 		file_picker_types: 'file image media',
 		file_picker_callback: cmsTinyFileBrowserCallback,
 		plugins: 'image imagetools link lists media charmap searchreplace visualblocks paste print table preview code codesample help',
-		toolbar1: 'formatselect | bold italic underline strikethrough sub sup | forecolor backcolor | alignleft aligncenter alignright alignjustify outdent indent | help | ',
-		toolbar2: 'undo redo searchreplace | blockquote bullist numlist | removeformat pastetext | link unlink anchor image media customfilebrowser | charmap codesample code preview visualblocks',
+		toolbar1: 'bold italic underline strikethrough sub sup | formatselect forecolor backcolor | blockquote alignleft aligncenter alignright alignjustify outdent indent | help | ',
+		toolbar2: 'undo redo searchreplace | bullist numlist | removeformat pastetext | link unlink anchor image media customfilebrowser | charmap codesample code preview visualblocks',
 		removed_menuitems: 'newdocument help',
 		codesample_languages: [
 		   { text: 'HTML', value: 'markup' },
@@ -59,6 +59,8 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 		height: tinyBrowseHeight,
 		relative_urls: false,
 		remove_script_host: true,
+		extended_valid_elements: "style,link[href|rel]",
+		custom_elements: "style,link,~link",
 		setup: function (editor) {
 			editor.ui.registry.addButton('customfilebrowser', {
 				icon: 'document-properties',
@@ -68,14 +70,16 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 				}
 			});
 		},
-		content_css: "/Assets/Admin/includes/richedit.css"
+		content_css: "/assets/admin/includes/richedit.css"
 	});
 }
 
 var lastMetaRequest = null;
+var lastCallback = null;
 
 function cmsTinyFileBrowserCallback(callback, value, meta) {
 	lastMetaRequest = meta;
+	lastCallback = callback;
 
 	cmsTinyFileBrowser('1');
 }
@@ -101,46 +105,11 @@ function cmsFileBrowseClose() {
 }
 
 function cmsFileBrowseSetUri(uri, h, w) {
-	var isImage = true;
-	var sl = $("label:contains('Source')");
-	var hl = $("label:contains('Height')")
-	var wl = $("label:contains('Width')");
+	if (lastCallback != null) {
+		lastCallback(uri);
 
-	if (sl.length < 1) {
-		isImage = false;
-		sl = $("label:contains('URL')");
-	}
-
-	if (lastMetaRequest != null) {
-		if (lastMetaRequest.fieldname == "src" && lastMetaRequest.filetype == "image") {
-			isImage = true;
-			sl = $("label:contains('Source')");
-		}
-		if (lastMetaRequest.fieldname == "source" && lastMetaRequest.filetype == "media") {
-			sl = $("label:contains('Source')");
-		}
-		if (lastMetaRequest.fieldname == "altsource" && lastMetaRequest.filetype == "media") {
-			sl = $("label:contains('Alternative source URL')");
-		}
-		if (lastMetaRequest.fieldname == "poster" && lastMetaRequest.filetype == "image") {
-			sl = $("label:contains('Media poster (Image URL)')");
-		}
+		lastCallback = null;
 		lastMetaRequest = null;
-	}
-
-	var src = $(sl).attr('for');
-	$('#' + src).val(uri);
-	$('#' + src).blur();
-
-	if (isImage) {
-		var hh = $(hl).attr('for');
-		var ww = $(wl).attr('for');
-		if (hh.length > 0 && h > 0) {
-			$('#' + hh).val(h);
-		}
-		if (ww.length > 0 && w > 0) {
-			$('#' + ww).val(w);
-		}
 	}
 
 	cmsFileBrowseClose();

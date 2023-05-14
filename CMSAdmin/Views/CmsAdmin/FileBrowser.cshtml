@@ -152,7 +152,7 @@
 						}
 
 						window.parent.cmsFileBrowseSetUri(uri, h, w);
-					}, 600);
+					}, 500);
 				}
 			</script>
 		</text>
@@ -218,150 +218,150 @@
 		}
 
 		@using (Html.BeginForm("FileBrowserRemove", CmsRouteConstants.Controller.Admin)) {
-		@Html.AntiForgeryToken()
+			@Html.AntiForgeryToken()
 
-		@Html.HiddenFor(m => m.QueryPath)
-		@Html.HiddenFor(m => m.ReturnMode)
-		@Html.HiddenFor(m => m.UseTinyMCE)
-		@Html.HiddenFor(m => m.ViewMode)
+			@Html.HiddenFor(m => m.QueryPath)
+			@Html.HiddenFor(m => m.ReturnMode)
+			@Html.HiddenFor(m => m.UseTinyMCE)
+			@Html.HiddenFor(m => m.ViewMode)
 
-		<div class="scroll" id="fileZone">
-			@if (Model.Thumbnails) {
-				<div id="rpThumbs">
-					@foreach (var f in Model.Files) {
-						<div class="ui-widget-header ui-corner-all thumbCell" id="imgContainerGroup">
-							<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'thumb')">
-								<div id="imgWrapper" style="display: none;">
-									<img id="imgThmbnail" filetype="@Model.FileImageLink(f.MimeType)" alt="" src="@Model.CreateFileSrc(f.FolderPath, f.FileName, f.MimeType)" />
-								</div>
-								<div style="margin: 3px;" id="imgSubContainer">
-									<a id="lnkContent" href='@Model.CreateFileLink(string.Format("{0}{1}", f.FolderPath, f.FileName))'>
-										@CarrotWeb.ImageSizer(string.Format("{0}{1}", f.FolderPath, f.FileName), f.FileName, 50, true, null)
-									</a>
-								</div>
-								<div style="margin: 3px; text-align: center;">
-									@String.Format("{0}", f.FileName)  <br />
-									@String.Format("{0:d}", f.FileDate)
+			<div class="scroll" id="fileZone">
+				@if (Model.Thumbnails) {
+					<div id="rpThumbs">
+						@foreach (var f in Model.Files) {
+							<div class="ui-widget-header ui-corner-all thumbCell" id="imgContainerGroup">
+								<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'thumb')">
+									<div id="imgWrapper" style="display: none;">
+										<img id="imgThmbnail" filetype="@Model.FileImageLink(f.MimeType)" alt="" src="@Model.CreateFileSrc(f.FolderPath, f.FileName, f.MimeType)" />
+									</div>
+									<div style="margin: 3px;" id="imgSubContainer">
+										<a id="lnkContent" href='@Model.CreateFileLink(string.Format("{0}{1}", f.FolderPath, f.FileName))'>
+											@CarrotWeb.ImageSizer(string.Format("{0}{1}", f.FolderPath, f.FileName), f.FileName, 50, true, null)
+										</a>
+									</div>
+									<div style="margin: 3px; text-align: center;">
+										@String.Format("{0}", f.FileName)  <br />
+										@String.Format("{0:d}", f.FileDate)
+									</div>
 								</div>
 							</div>
-						</div>
 					}
-				</div>
-			} else {
-				<div id="rpFiles">
-					<table style="width: 98%;">
-						<tr class="headerRow">
-							<th style="width: 20px;">
-							</th>
-							<th style="width: 20px;">
-							</th>
-							<th class="headerRowText">
-								Filename
-							</th>
-							<th style="width: 150px;" class="headerRowText">
-								Date
-							</th>
-							<th>
-							</th>
-							<th style="width: 80px;" class="headerRowText">
-								Size
-							</th>
-						</tr>
+					</div>
+				} else {
+					<div id="rpFiles">
+						<table style="width: 98%;">
+							<tr class="headerRow">
+								<th style="width: 20px;">
+								</th>
+								<th style="width: 20px;">
+								</th>
+								<th class="headerRowText">
+									Filename
+								</th>
+								<th style="width: 150px;" class="headerRowText">
+									Date
+								</th>
+								<th>
+								</th>
+								<th style="width: 80px;" class="headerRowText">
+									Size
+								</th>
+							</tr>
 
-						@{
-							int j = 0;
-							foreach (var f in Model.Files) {
-								<tr>
-									<td>
-										@Html.CheckBoxFor(m => Model.Files[j].SelectedItem)
-										@Html.HiddenFor(m => Model.Files[j].FileName)
-									</td>
-									<td>
-										<img src="@String.Format("/Assets/Admin/images/{0}.png", Model.FileImageLink(f.MimeType))" alt="filetype" />
-									</td>
-									<td>
-										<div class="ImgGroup" id="imgContainerGroup">
-											<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'file')">
-												<a id="lnkContent" href='@Model.CreateFileLink(String.Format("{0}{1}", f.FolderPath, f.FileName))'>
-													@f.FileName
-												</a>
+							@{
+								int j = 0;
+								foreach (var f in Model.Files) {
+									<tr>
+										<td>
+											@Html.CheckBoxFor(m => Model.Files[j].SelectedItem)
+											@Html.HiddenFor(m => Model.Files[j].FileName)
+										</td>
+										<td>
+											<img src="@String.Format("/Assets/Admin/images/{0}.png", Model.FileImageLink(f.MimeType))" alt="filetype" />
+										</td>
+										<td>
+											<div class="ImgGroup" id="imgContainerGroup">
+												<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'file')">
+													<a id="lnkContent" href='@Model.CreateFileLink(String.Format("{0}{1}", f.FolderPath, f.FileName))'>
+														@f.FileName
+													</a>
+												</div>
+												<div id="imgWrapper" style="display: none;">
+													<img id="imgThmbnail" filetype="@Model.FileImageLink(f.MimeType)" alt="" src="@Model.CreateFileSrc(f.FolderPath, f.FileName, f.MimeType)" />
+												</div>
 											</div>
-											<div id="imgWrapper" style="display: none;">
-												<img id="imgThmbnail" filetype="@Model.FileImageLink(f.MimeType)" alt="" src="@Model.CreateFileSrc(f.FolderPath, f.FileName, f.MimeType)" />
-											</div>
-										</div>
-									</td>
-									<td>
-										@String.Format("{0}", f.FileDate)
-									</td>
-									<td>
-										&nbsp;
-									</td>
-									<td>
-										@String.Format("{0}", f.FileSizeFriendly)
-									</td>
-								</tr>
-								j++;
+										</td>
+										<td>
+											@String.Format("{0}", f.FileDate)
+										</td>
+										<td>
+											&nbsp;
+										</td>
+										<td>
+											@String.Format("{0}", f.FileSizeFriendly)
+										</td>
+									</tr>
+									j++;
+								}
 							}
-						}
-					</table>
-				</div>
-							}
-		</div>
+						</table>
+					</div>
+								}
+			</div>
 
-		<div>
-			@if (!Model.Thumbnails) {
-				<a href="@Model.ThumbViewLink" id="lnkThumbView">View Image Thumbnails</a>
-			} else {
-				<a href="@Model.FileViewLink" id="lnkFileview">View All Files</a>
-			}
-		</div>
-		<div>
-			<div style="float: left;">
+			<div>
+				@if (!Model.Thumbnails) {
+					<a href="@Model.ThumbViewLink" id="lnkThumbView">View Image Thumbnails</a>
+				} else {
+					<a href="@Model.FileViewLink" id="lnkFileview">View All Files</a>
+				}
+			</div>
+			<div>
 				<div style="float: left;">
-					@if (!Model.Thumbnails) {
+					<div style="float: left;">
+						@if (!Model.Thumbnails) {
+							<p>
+								<br />
+								<input type="submit" name="btnRemove" value="Delete Checked" id="btnRemove" />
+							</p>
+						}
 						<p>
 							<br />
-							<input type="submit" name="btnRemove" value="Delete Checked" id="btnRemove" />
+							Selected File:
+							<input name="filePickerFileName" type="text" size="55" id="filePickerFileName" onchange="cmsUpdateFileName();return false;" onblur="cmsUpdateFileName();return false;" />
+
+							@if (Model.ReturnMode & !Model.UseTinyMCE) {
+								<input type="button" name="btnReturnFile" value="Select File" onclick="return cmsSetFileNameReturn();" id="btnReturnFile" />
+							}
 						</p>
-					}
-					<p>
-						<br />
-						Selected File:
-						<input name="filePickerFileName" type="text" size="55" id="filePickerFileName" onchange="cmsUpdateFileName();return false;" onblur="cmsUpdateFileName();return false;" />
-
-						@if (Model.ReturnMode & !Model.UseTinyMCE) {
-							<input type="button" name="btnReturnFile" value="Select File" onclick="return cmsSetFileNameReturn();" id="btnReturnFile" />
-						}
-					</p>
-				</div>
-
-				@if (!Model.UseTinyMCE) {
-					<div style="display: none;float:left;">
-						<input type="button" id="Submit1" name="insert" value="Select" onclick="cmsSetFileName();return false;" />
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<input type="button" id="Button1" name="cancel" value="Cancel" onclick="window.close();" />
 					</div>
+
+					@if (!Model.UseTinyMCE) {
+						<div style="display: none;float:left;">
+							<input type="button" id="Submit1" name="insert" value="Select" onclick="cmsSetFileName();return false;" />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<input type="button" id="Button1" name="cancel" value="Cancel" onclick="window.close();" />
+						</div>
 				}
 
-				<div style="clear: both; height:110px">
-					@if (Model.UseTinyMCE) {
-						<br class="clear" />
-						<div class="mceActionPanel fileBrowserButtons">
-							@if (Model.ReturnMode) {
-								<input type="button" id="insert" name="insert" value="Select" onclick="tinySubmit();return false;" />
-							}
-							<input type="button" id="cancel" name="cancel" value="Cancel" onclick="window.parent.cmsFileBrowseClose();" />
-						</div>
-					}
+					<div style="clear: both; height:110px">
+						@if (Model.UseTinyMCE) {
+							<br class="clear" />
+							<div class="mceActionPanel fileBrowserButtons">
+								@if (Model.ReturnMode) {
+									<input type="button" id="insert" name="insert" value="Select" onclick="tinySubmit();return false;" />
+								}
+								<input type="button" id="cancel" name="cancel" value="Cancel" onclick="window.parent.cmsFileBrowseClose();" />
+							</div>
+						}
+					</div>
+				</div>
+
+				<div class="ui-widget-header ui-corner-all" style="margin: auto; margin: 5px 0 0 25px; height:160px; width:325px; float:left; display:block; border: 1px solid #666;">
+					<img style="max-height: 99%; max-width: 99%; display: block; margin:2px;  margin-left: auto; margin-right: auto;" id="imgThmbnailSelected" src="~/Assets/Admin/images/LargeDoc.png" />
 				</div>
 			</div>
-
-			<div class="ui-widget-header ui-corner-all" style="margin: auto; margin: 5px 0 0 25px; height:160px; width:325px; float:left; display:block; border: 1px solid #666;">
-				<img style="max-height: 99%; max-width: 99%; display: block; margin:2px;  margin-left: auto; margin-right: auto;" id="imgThmbnailSelected" src="~/Assets/Admin/images/LargeDoc.png" />
-			</div>
-		</div>
-		}
+								}
 	</div>
 
 	<div id="imgWrapperMain" style="display: none;">
