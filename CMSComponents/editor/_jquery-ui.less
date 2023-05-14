@@ -7,10 +7,11 @@
 * Copyright jQuery Foundation and other contributors; Licensed MIT */
 
 .createAdvJQ(@zone, @themeColor) {
-	@themeToolbar: lighten(@themeColor, 9%);
 	@themeDark25: darken(@themeColor, 25%);
 	@themeLight25: lighten(@themeColor, 25%);
 	@themeLight35: lighten(@themeColor, 35%);
+
+	@themeToolbar: lighten(@themeColor, 9%);
 	@themeHover: mix(@themeLight25, #dddddd, 45%);
 	@themeDefault: mix(@themeLight25, #bbbbbb, 40%);
 
@@ -1044,12 +1045,12 @@
 	@{zone} .ui-widget-header {
 		border: 1px solid #444444;
 		background: @themeToolbar;
-		color: #222222;
+		color: contrast(@themeToolbar, #222222, #ffffff);
 		font-weight: bold;
 	}
 
 	@{zone} .ui-widget-header a {
-		color: #222222;
+		color: contrast(@themeToolbar, #222222, #ffffff);
 	}
 	/* Interaction states
 ----------------------------------*/
@@ -1121,8 +1122,8 @@ works properly when clicked or hovered */
 	@{zone} .ui-button:active,
 	@{zone} .ui-button.ui-state-active:hover {
 		border: 1px solid #333333;
-		background: @themeColor;
 		font-weight: bold;
+		background: @themeColor;
 		color: #efefef;
 	}
 

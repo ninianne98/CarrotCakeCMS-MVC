@@ -886,11 +886,11 @@ body .cms-seagreen .ui-tooltip {
 .cms-seagreen .ui-widget-header {
   border: 1px solid #444444;
   background: #d1a48a;
-  color: #222222;
+  color: #ffffff;
   font-weight: bold;
 }
 .cms-seagreen .ui-widget-header a {
-  color: #222222;
+  color: #ffffff;
 }
 /* Interaction states
 ----------------------------------*/
@@ -953,8 +953,8 @@ a.cms-seagreen .ui-button:active,
 .cms-seagreen .ui-button:active,
 .cms-seagreen .ui-button.ui-state-active:hover {
   border: 1px solid #333333;
-  background: #c48a69;
   font-weight: bold;
+  background: #c48a69;
   color: #efefef;
 }
 .cms-seagreen .ui-icon-background,
@@ -2512,11 +2512,11 @@ body #cms-seagreen-id .ui-tooltip {
 #cms-seagreen-id .ui-widget-header {
   border: 1px solid #444444;
   background: #d1a48a;
-  color: #222222;
+  color: #ffffff;
   font-weight: bold;
 }
 #cms-seagreen-id .ui-widget-header a {
-  color: #222222;
+  color: #ffffff;
 }
 /* Interaction states
 ----------------------------------*/
@@ -2579,8 +2579,8 @@ a#cms-seagreen-id .ui-button:active,
 #cms-seagreen-id .ui-button:active,
 #cms-seagreen-id .ui-button.ui-state-active:hover {
   border: 1px solid #333333;
-  background: #c48a69;
   font-weight: bold;
+  background: #c48a69;
   color: #efefef;
 }
 #cms-seagreen-id .ui-icon-background,
@@ -3276,7 +3276,7 @@ a#cms-seagreen-id .ui-button:active,
   width: 100%;
 }
 #cmsModalFrame {
-  height: 99%;
+  height: 98%;
   width: 99%;
   display: block;
   clear: both;
@@ -3292,7 +3292,7 @@ a#cms-seagreen-id .ui-button:active,
   margin: 0;
   padding: 0;
   width: 99%;
-  height: 99%;
+  height: 98%;
 }
 #cmsFrameEditorPreview {
   display: block;
@@ -3324,8 +3324,6 @@ a#cms-seagreen-id .ui-button:active,
   background-color: #cdc4bf;
   color: #000000;
   border-radius: 6px;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
 }
 .cms-seagreen input[type="submit"],
 .cms-seagreen input[type="reset"],
@@ -3338,19 +3336,17 @@ a#cms-seagreen-id .ui-button:active,
   padding: 3px 8px 3px 8px !important;
   height: 2em !important;
   line-height: 20px !important;
-  border: 1px solid #898989;
+  border: 1px solid #000000;
   background-color: #cdc4bf;
   color: #000000;
   border-radius: 6px;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
 }
 #cmsToolBoxWrap .btn,
 .cms-seagreen button,
 .cms-seagreen .btn,
 #cms-seagreen-id .btn,
 #cmsModalFrame .btn {
-  border: 1px solid #898989;
+  border: 1px solid #000000;
   color: #000000;
 }
 .cms-seagreen button:hover,
@@ -3360,7 +3356,7 @@ a#cms-seagreen-id .ui-button:active,
 .cms-seagreen .btn:hover,
 #cms-seagreen-id .btn:hover {
   background-color: #e2d8d2 !important;
-  color: #462b1b !important;
+  color: #3e2619 !important;
 }
 #cmsToolBoxWrap .btn-primary,
 .cms-seagreen .btn-primary,
@@ -3369,9 +3365,9 @@ a#cms-seagreen-id .ui-button:active,
 #cms-seagreen-id input.btn-primary {
   font-weight: bold;
   background-color: #e2d8d2;
-  color: #462b1b;
+  color: #3e2619;
 }
-.cms-seagreen .ui-widget P {
+.cms-seagreen .ui-widget p {
   line-height: normal;
   font-weight: normal;
 }
@@ -3397,8 +3393,6 @@ a#cms-seagreen-id .ui-button:active,
 #cms-seagreen-id *:before,
 #cms-seagreen-id *:after {
   box-sizing: unset;
-  -moz-box-sizing: unset;
-  -webkit-box-sizing: unset;
 }
 #cmsWidgetHead p,
 #cmsWidgetHead ul,
@@ -3475,12 +3469,12 @@ a#cms-seagreen-id .ui-button:active,
   z-index: 990000 !important;
   padding: 5px !important;
   margin: 5px !important;
-  border: solid 2px #000000 !important;
   min-width: 275px !important;
   min-height: 50px !important;
   font-size: 12px !important;
   line-height: normal !important;
   font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+  border: solid 2px #000000 !important;
   color: #000000 !important;
   background-color: #FFFFFF !important;
 }
@@ -3525,17 +3519,17 @@ a#cms-seagreen-id .ui-button:active,
 }
 #cmsPreviewControls {
   line-height: normal !important;
-  margin-left: 50px !important;
-  margin-right: 50px !important;
-  min-width: 600px !important;
-  min-height: 50px !important;
+  margin-left: 25px !important;
+  margin-right: 25px !important;
+  min-width: 550px !important;
+  min-height: 45px !important;
 }
 #cmsPreviewTab a {
-  padding: 6px 9px !important;
+  padding: 5px 8px !important;
 }
 .cmsPreview-Right,
 .cmsPreview-Left {
-  margin: 5px 0px 5px 0px !important;
+  margin: 4px 0px 4px 0px !important;
   padding: 0 !important;
   font-size: 12px !important;
   line-height: normal !important;
@@ -3543,26 +3537,26 @@ a#cms-seagreen-id .ui-button:active,
 .cmsPreview-Left {
   margin-left: 50px !important;
   float: left !important;
-  min-width: 200px !important;
+  min-width: 175px !important;
 }
 .cmsPreview-Right {
   margin-right: 50px !important;
   float: right !important;
-  min-width: 250px !important;
+  min-width: 225px !important;
 }
 p.cmsToolItem {
   min-width: 200px;
   margin: 0;
   cursor: move;
-  clear: both;
-  padding: 2px;
-  margin: 2px;
-  font-size: 12px;
-  line-height: normal;
-  font-weight: bold;
-  border: 1px dashed #c0c0c0;
-  color: #462b1b !important;
-  background-color: #f5ebe5 !important;
+  clear: both !important;
+  padding: 3px !important;
+  margin: 2px !important;
+  font-size: 12px !important;
+  line-height: normal !important;
+  font-weight: bold !important;
+  border: 1px dashed #444 !important;
+  background-color: #e9e6e4 !important;
+  color: #3e2619 !important;
 }
 .cmsTargetArea .ui-draggable,
 .cmsTargetArea .cmsToolItem {
@@ -3582,8 +3576,9 @@ p.cmsToolItem {
   color: #000000 !important;
   background-color: #FFFFFF !important;
   line-height: normal !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   font-weight: normal !important;
+  max-width: 220px !important;
 }
 #cmsToolBoxWrap {
   width: 350px !important;
@@ -3685,6 +3680,7 @@ p.cmsToolItem {
 #cmsWidgetHead,
 #cmsControlPath,
 #cmsWidgetContainerName {
+  font-size: 12px !important;
   color: #000000 !important;
 }
 #cmsControlPath,
@@ -3820,11 +3816,11 @@ p.cmsToolItem {
   z-index: 99010 !important;
 }
 #cmsEditMenuList ul.cmsWidgetMenu {
-  background-color: #f5ebe5 !important;
-  color: #462b1b !important;
+  background-color: #e9e6e4 !important;
+  color: #3e2619 !important;
 }
 #cmsEditMenuList ul.cmsWidgetContainerMenu {
-  background-color: #e5cbbc !important;
+  background-color: #e1c3b2 !important;
   color: #000000 !important;
 }
 #cmsEditMenuList ul.cmsContentContainerMenu {
@@ -3891,7 +3887,7 @@ p.cmsToolItem {
   border: 2px solid #cb987b !important;
 }
 .cmsSnippetInner {
-  border: 2px dashed #f5ebe5 !important;
+  border: 2px dashed #e9e6e4 !important;
 }
 .cmsContentContainerTitle,
 .cmsWidgetControlTitle,
@@ -3900,15 +3896,15 @@ p.cmsToolItem {
   margin: 0;
   padding: 0;
   text-shadow: 0 0 0 transparent !important;
-  font-size: 12px !important;
   line-height: normal !important;
+  font-size: 12px !important;
   font-weight: bold !important;
   font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif !important;
-  color: #C0C0C0 !important;
-  background-color: #c48a69 !important;
   min-height: 24px !important;
   margin: 0px !important;
   padding: 1px !important;
+  color: #C0C0C0 !important;
+  background-color: #c48a69 !important;
   border: 1px solid #c0c0c0 !important;
 }
 .cmsContentContainerTitle,
@@ -3916,8 +3912,8 @@ p.cmsToolItem {
 .cmsContentContainerTitleText {
   text-shadow: 0 0 0 transparent !important;
   text-align: left !important;
-  color: #ffffff !important;
   background-color: #cb987b !important;
+  color: #ffffff !important;
   text-decoration: none !important;
 }
 .cmsContentContainerTitleText {
@@ -3927,13 +3923,13 @@ p.cmsToolItem {
 .cmsWidgetControlTitle a {
   text-shadow: 0 0 0 transparent !important;
   text-align: left !important;
-  background-color: #e5cbbc !important;
+  background-color: #e1c3b2 !important;
   color: #000000 !important;
   text-decoration: none !important;
 }
 .cmsWidgetControlTitle #cmsEditMenuList-inner li:hover .cmsMnuChildren,
 .cmsWidgetControlTitle #cmsEditMenuList-inner li:hover .cmsMnuChildren a {
-  background-color: #e5cbbc !important;
+  background-color: #e1c3b2 !important;
   color: #000000 !important;
 }
 .cmsWidgetTitleBar,
@@ -3941,8 +3937,8 @@ p.cmsToolItem {
 .cmsWidgetTargetOuterControl #cmsControl.cmsWidgetToolboxItem p.cmsToolItem {
   text-shadow: 0 0 0 transparent !important;
   text-align: left !important;
-  background-color: #f5ebe5 !important;
-  color: #462b1b !important;
+  background-color: #e9e6e4 !important;
+  color: #3e2619 !important;
   text-decoration: none !important;
 }
 .cmsWidgetTargetOuterControl {
@@ -4021,18 +4017,6 @@ p.cmsToolItem {
   font-size: 12px;
   font-weight: normal;
   text-shadow: 0 0 0 transparent;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
   border-radius: 6px 6px 6px 6px;
   box-shadow: 0 0 16px #000000;
-  -webkit-border-top-left-radius: 6px;
-  -webkit-border-top-right-radius: 6px;
-  -moz-border-radius-topleft: 6px;
-  -moz-border-radius-topright: 6px;
-  -webkit-border-bottom-right-radius: 6px;
-  -webkit-border-bottom-left-radius: 6px;
-  -moz-border-radius-bottomright: 6px;
-  -moz-border-radius-bottomleft: 6px;
 }

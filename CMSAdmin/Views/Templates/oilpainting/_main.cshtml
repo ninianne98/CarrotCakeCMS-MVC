@@ -91,6 +91,9 @@
 							<h2 class="title">@CmsPage.Heading</h2>
 							@RenderSection("BlogAuthor", required: false)
 							<div>
+								@CarrotCakeHtml.RenderWidget("phCenterTop")
+							</div>
+							<div>
 								@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
 								@RenderBody()
 							</div>
@@ -130,6 +133,9 @@
 								<div style="clear: both;">&nbsp;</div>
 							</li>
 							<li>
+								<div>
+									@CarrotCakeHtml.RenderWidget("phLeftTop")
+								</div>
 								<div>
 									@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextLeft)
 								</div>

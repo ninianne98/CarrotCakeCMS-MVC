@@ -163,10 +163,9 @@
 											<div id="cmsToolBox" class="ui-widget-content ui-corner-all">
 
 												@foreach (var widget in CmsPage.Plugins) {
-
 													<div id="cmsToolItemDiv" class="cmsToolItem cmsToolItemWrapper cms-seagreen">
 														<div class="cmsWidgetControlItem cmsWidgetToolboxItem cmsWidgetCtrlPath cms-seagreen" id="cmsControl">
-															<p class="cmsToolItem ui-widget-header cms-seagreen">
+															<p class="cmsToolItem cms-seagreen">
 																@Html.Raw(widget.Caption)
 																@if (widget.SystemPlugin) {
 																	<span style="float:right;" class="ui-icon ui-icon-star"></span>		} else {

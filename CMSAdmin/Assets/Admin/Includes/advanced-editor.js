@@ -342,7 +342,7 @@ function cmsPreviewTemplate2() {
 	$(editIFrame).attr('src', srcURL);
 	$(editIFrame).attr('realsrc', srcURL);
 
-	setTimeout("cmsSetIframeRealSrc('cmsFrameEditorPreview');", 500);
+	setTimeout("cmsSetIframeRealSrc('cmsFrameEditorPreview');", 250);
 
 	$('#cmsFrameEditorPreview')[0].contentWindow.location.reload(true);
 }
@@ -423,9 +423,9 @@ function cmsPreviewStyling() {
 	$('#cmsPreviewTab').addClass('ui-corner-all');
 	$('#cmsPreviewTab li').addClass('ui-widget ui-state-default ui-corner-all');
 
-	window.setTimeout("cmsSetPreviewSize()", 500);
-	window.setTimeout("cmsSetPreviewSize()", 750);
-	window.setTimeout("cmsSetPreviewSize()", 1500);
+	window.setTimeout("cmsSetPreviewSize()", 600);
+	window.setTimeout("cmsSetPreviewSize()", 950);
+	window.setTimeout("cmsSetPreviewSize()", 2200);
 
 	window.setTimeout("$('#cmsPreviewTab').tabs('option', 'active', 0);", 250);
 }
@@ -434,14 +434,30 @@ function cmsSetPreviewSize() {
 	var modSel = '#cms-simplemodal-container';
 	var frameSel = '#cmsModalFrame';
 
-	var modH = $(modSel).css('height');
-	var modW = $(modSel).css('width');
+	var modH = parseFloat($(modSel).css('height'));
+	var modW = parseFloat($(modSel).css('width'));
 
-	var frmH = parseFloat(modH) - 85;
-	var frmW = parseFloat(modW) - 30;
+	var frmW = modW - 28;
+
+	var frmH = modH - 55;
+	var frameAdjust = 25;
+
+	if (modW < 1300) {
+		// since the buttons stack & wrap on narrower resolutions, provide more height
+		frameAdjust = 55;
+	}
+
+	if (frameAdjust > frmH) {
+		frameAdjust = frmH - 100;
+	}
 
 	$(frameSel).css('height', frmH);
 	$(frameSel).attr('height', frmH);
+
+	$('#cmsAjaxMainDiv3').attr('height', (frmH - frameAdjust));
+	$('#cmsAjaxMainDiv3').css('height', (frmH - frameAdjust));
+	$('#cmsFrameEditorPreview').attr('height', (frmH - frameAdjust - 15));
+	$('#cmsFrameEditorPreview').css('height', (frmH - frameAdjust - 15));
 
 	$(frameSel).css('width', frmW);
 	$(frameSel).attr('width', frmW);
@@ -1114,7 +1130,7 @@ function cmsDblClickWidgetTarget(item) {
 function cmsCreateNewWidget() {
 	var widget = '<div id="cmsToolItemDiv" class="cmsToolItem cmsToolItemWrapper cms-seagreen"> \r\n ' +
 					'<div class="cmsWidgetControlItem cmsWidgetToolboxItem cmsWidgetCtrlPath cms-seagreen" id="cmsControl"> \r\n ' +
-					'<p class="cmsToolItem ui-widget-header cms-seagreen"> ' + cmsLastWidgetName + ' </p> \r\n ' +
+					'<p class="cmsToolItem cms-seagreen"> ' + cmsLastWidgetName + ' </p> \r\n ' +
 					'<input type="hidden" id="cmsCtrlID" value="' + cmsLastWidget + '" /> \r\n ' +
 					'<input type="hidden" id="cmsCtrlOrder" value="-1" /> \r\n ' +
 					'</div> \r\n ' +
@@ -1310,8 +1326,8 @@ function cmsResetIframe() {
 
 	$(frameSel).css('width', '98%');
 	$(frameSel).attr('width', '98%');
-	$(frameSel).css('height', '99%');
-	$(frameSel).attr('height', '99%');
+	$(frameSel).css('height', '98%');
+	$(frameSel).attr('height', '98%');
 	$(frameSel).html('<div id="cmsAjaxMainDiv"></div>');
 }
 

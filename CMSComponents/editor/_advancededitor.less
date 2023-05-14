@@ -11,19 +11,20 @@
 }
 
 .createAdvStylesUI(@themeColor) {
-	@themeToolbar: lighten(@themeColor, 9%);
 	@themeLight20: lighten(@themeColor, 20%);
 	@themeLight25: lighten(@themeColor, 25%);
 	@themeLight35: lighten(@themeColor, 35%);
+
+	@themeToolbar: lighten(@themeColor, 9%);
 	@themeHover: mix(@themeLight25, #dddddd, 45%);
 	@themeDefault: mix(@themeLight25, #bbbbbb, 40%);
 
 	@themeHead: darken(@themeColor, 65%);
-	@themeHeadHover: darken(@themeColor, 40%);
+	@themeHeadHover: darken(@themeColor, 42%);
 
 	@themeContentHead: lighten(@themeColor, 5%);
-	@themeWidgetHead: screen(@themeLight20, #222222);
-	@themeWidgetTool: screen(@themeLight20, #aaaaaa);
+	@themeWidgetHead: lighten(@themeColor, 20%);
+	@themeWidgetTool: mix(lighten(@themeColor, 36%), #dddddd, 45%);
 
 	.cms-theme-color-code {
 		color: @themeColor;
@@ -45,7 +46,7 @@
 	}
 
 	#cmsModalFrame {
-		height: 99%;
+		height: 98%;
 		width: 99%;
 		display: block;
 		clear: both;
@@ -62,7 +63,7 @@
 		margin: 0;
 		padding: 0;
 		width: 99%;
-		height: 99%;
+		height: 98%;
 	}
 
 	#cmsFrameEditorPreview {
@@ -90,8 +91,6 @@
 		background-color: @themeDefault;
 		color: @themeHead;
 		border-radius: 6px;
-		-moz-border-radius: 6px;
-		-webkit-border-radius: 6px;
 	}
 
 	.cms-seagreen input[type="submit"], .cms-seagreen input[type="reset"], .cms-seagreen input[type="button"], .cms-seagreen select,
@@ -101,16 +100,14 @@
 		padding: 3px 8px 3px 8px !important;
 		height: 2em !important;
 		line-height: 20px !important;
-		border: 1px solid #898989;
+		border: 1px solid @themeHead;
 		background-color: @themeDefault;
 		color: @themeHead;
 		border-radius: 6px;
-		-moz-border-radius: 6px;
-		-webkit-border-radius: 6px;
 	}
 
 	#cmsToolBoxWrap .btn, .cms-seagreen button, .cms-seagreen .btn, #cms-seagreen-id .btn, #cmsModalFrame .btn {
-		border: 1px solid #898989;
+		border: 1px solid @themeHead;
 		color: @themeHead;
 	}
 
@@ -128,7 +125,7 @@
 		color: @themeHeadHover;
 	}
 
-	.cms-seagreen .ui-widget P {
+	.cms-seagreen .ui-widget p {
 		line-height: normal;
 		font-weight: normal;
 	}
@@ -137,7 +134,7 @@
 	.cms-seagreen .ui-dialog-titlebar, .cms-seagreen .ui-dialog-titlebar a,
 	#cms-seagreen-id .ui-dialog-titlebar, #cms-seagreen-id .ui-dialog-titlebar a,
 	.cms-seagreen .ui-widget-header, #cms-seagreen-id .ui-widget-header {
-		color: contrast(@themeContentHead, @themeHead, #ffffff);
+		color: contrast(@themeToolbar, @themeHead, #ffffff);
 	}
 
 	.cms-seagreen .ui-front, #cms-seagreen-id .ui-front {
@@ -151,8 +148,6 @@
 
 	#cms-seagreen-id *, #cms-seagreen-id *:before, #cms-seagreen-id *:after {
 		box-sizing: unset;
-		-moz-box-sizing: unset;
-		-webkit-box-sizing: unset;
 	}
 
 	#cmsWidgetHead p, #cmsWidgetHead ul, #cmsWidgetHead ol, #cmsWidgetHead h1, #cmsWidgetHead h2, #cmsWidgetHead h3, #cmsWidgetHead div, #cmsWidgetHead span, #cmsWidgetHead input, #cmsWidgetHead select, #cmsWidgetHead button, #cmsWidgetHead textarea {
@@ -229,12 +224,12 @@
 		z-index: 990000 !important;
 		padding: 5px !important;
 		margin: 5px !important;
-		border: solid 2px #000000 !important;
 		min-width: 275px !important;
 		min-height: 50px !important;
 		font-size: 12px !important;
 		line-height: normal !important;
 		font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
+		border: solid 2px #000000 !important;
 		color: #000000 !important;
 		background-color: #FFFFFF !important;
 	}
@@ -285,18 +280,18 @@
 
 	#cmsPreviewControls {
 		line-height: normal !important;
-		margin-left: 50px !important;
-		margin-right: 50px !important;
-		min-width: 600px !important;
-		min-height: 50px !important;
+		margin-left: 25px !important;
+		margin-right: 25px !important;
+		min-width: 550px !important;
+		min-height: 45px !important;
 	}
 
 	#cmsPreviewTab a {
-		padding: 6px 9px !important;
+		padding: 5px 8px !important;
 	}
 
 	.cmsPreview-Right, .cmsPreview-Left {
-		margin: 5px 0px 5px 0px !important;
+		margin: 4px 0px 4px 0px !important;
 		padding: 0 !important;
 		font-size: 12px !important;
 		line-height: normal !important;
@@ -305,29 +300,28 @@
 	.cmsPreview-Left {
 		margin-left: 50px !important;
 		float: left !important;
-		min-width: 200px !important;
+		min-width: 175px !important;
 	}
 
 	.cmsPreview-Right {
 		margin-right: 50px !important;
 		float: right !important;
-		min-width: 250px !important;
+		min-width: 225px !important;
 	}
 
 	p.cmsToolItem {
 		min-width: 200px;
 		margin: 0;
-		padding: 2px;
 		cursor: move;
-		clear: both;
-		padding: 2px;
-		margin: 2px;
-		font-size: 12px;
-		line-height: normal;
-		font-weight: bold;
-		border: 1px dashed #c0c0c0;
-		color: @themeHeadHover !important;
+		clear: both !important;
+		padding: 3px !important;
+		margin: 2px !important;
+		font-size: 12px !important;
+		line-height: normal !important;
+		font-weight: bold !important;
+		border: 1px dashed #444 !important;
 		background-color: @themeWidgetTool !important;
+		color: @themeHeadHover !important;
 	}
 
 	.cmsTargetArea .ui-draggable, .cmsTargetArea .cmsToolItem {
@@ -346,8 +340,9 @@
 		color: #000000 !important;
 		background-color: #FFFFFF !important;
 		line-height: normal !important;
-		font-size: 11px !important;
+		font-size: 12px !important;
 		font-weight: normal !important;
+		max-width: 220px !important;
 	}
 
 	#cmsToolBoxWrap {
@@ -447,6 +442,7 @@
 	}
 
 	#cmsWidgetHead, #cmsControlPath, #cmsWidgetContainerName {
+		font-size: 12px !important;
 		color: @themeHead !important;
 	}
 
@@ -664,27 +660,28 @@
 		border: 2px dashed @themeWidgetTool !important;
 	}
 
-	.cmsContentContainerTitle, .cmsWidgetControlTitle, .cmsWidgetTitleBar, .cmsWidgetTargetOuterControl #cmsControl.cmsWidgetToolboxItem p.cmsToolItem {
+	.cmsContentContainerTitle, .cmsWidgetControlTitle, .cmsWidgetTitleBar,
+	.cmsWidgetTargetOuterControl #cmsControl.cmsWidgetToolboxItem p.cmsToolItem {
 		margin: 0;
 		padding: 0;
 		text-shadow: 0 0 0 transparent !important;
-		font-size: 12px !important;
 		line-height: normal !important;
+		font-size: 12px !important;
 		font-weight: bold !important;
 		font-family: Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif !important;
-		color: #C0C0C0 !important;
-		background-color: @themeColor !important;
 		min-height: 24px !important;
 		margin: 0px !important;
 		padding: 1px !important;
+		color: #C0C0C0 !important;
+		background-color: @themeColor !important;
 		border: 1px solid #c0c0c0 !important;
 	}
 
 	.cmsContentContainerTitle, .cmsContentContainerTitle a, .cmsContentContainerTitleText {
 		text-shadow: 0 0 0 transparent !important;
 		text-align: left !important;
-		color: contrast(@themeContentHead, @themeHead, #ffffff) !important;
 		background-color: @themeContentHead !important;
+		color: contrast(@themeContentHead, @themeHead, #ffffff) !important;
 		text-decoration: none !important;
 	}
 
@@ -797,19 +794,7 @@
 		font-size: 12px;
 		font-weight: normal;
 		text-shadow: 0 0 0 transparent;
-		border-top-left-radius: 6px;
-		border-top-right-radius: 6px;
-		border-bottom-left-radius: 6px;
-		border-bottom-right-radius: 6px;
 		border-radius: 6px 6px 6px 6px;
 		box-shadow: 0 0 16px #000000;
-		-webkit-border-top-left-radius: 6px;
-		-webkit-border-top-right-radius: 6px;
-		-moz-border-radius-topleft: 6px;
-		-moz-border-radius-topright: 6px;
-		-webkit-border-bottom-right-radius: 6px;
-		-webkit-border-bottom-left-radius: 6px;
-		-moz-border-radius-bottomright: 6px;
-		-moz-border-radius-bottomleft: 6px;
 	}
 }
