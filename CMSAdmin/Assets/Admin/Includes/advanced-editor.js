@@ -1256,10 +1256,22 @@ function cmsLaunchWindow(theURL) {
 	setTimeout("cmsLoadWindow();", 800);
 }
 
+var cmsWindoWidth = 640;
+var cmsWindowHeight = 480;
+cmsGetHeightWidth();
+
+function cmsGetHeightWidth() {
+	cmsWindoWidth = parseFloat($(window).width()) - 200; // * 0.85;
+	cmsWindowHeight = parseFloat($(window).height()) - 200; // * 0.75;
+}
+
 function cmsLoadWindow() {
 	cmsSaveToolbarPosition();
+	cmsGetHeightWidth();
 
 	$("#cms-basic-modal-content").simplemodal({
+		minHeight: cmsWindowHeight,
+		minWidth: cmsWindoWidth,
 		onClose: function (dialog) {
 			//$.simplemodal.close(); // must call this!
 			setTimeout("$.simplemodal.close();", 800);
@@ -1307,8 +1319,11 @@ function cmsLaunchWindowOnly(theURL) {
 
 function cmsLoadWindowOnly() {
 	cmsSaveToolbarPosition();
+	cmsGetHeightWidth();
 
 	$("#cms-basic-modal-content").simplemodal({
+		minHeight: cmsWindowHeight,
+		minWidth: cmsWindoWidth,
 		onClose: function (dialog) {
 			//$.simplemodal.close(); // must call this!
 			setTimeout("$.simplemodal.close();", 800);

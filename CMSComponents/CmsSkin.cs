@@ -44,6 +44,8 @@ namespace Carrotware.CMS.UI.Components {
 			Notify,
 		}
 
+		private bool _useEditor = false;
+
 		public CmsSkin() {
 			this.SelectedColor = SkinOption.Classic;
 			this.WindowMode = SkinMode.Main;
@@ -57,6 +59,11 @@ namespace Carrotware.CMS.UI.Components {
 		public CmsSkin(SkinOption color, SkinMode mode) {
 			this.SelectedColor = color;
 			this.WindowMode = mode;
+		}
+
+		protected void GetEditState() {
+			var editModes = new SkinMode[] { SkinMode.Notify, SkinMode.AdvEdit };
+			_useEditor = editModes.Contains(this.WindowMode);
 		}
 
 		public SkinOption SelectedColor { get; set; }
@@ -176,6 +183,8 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public override string GetHtml() {
+			GetEditState();
+
 			var sb = new StringBuilder();
 			_jqb.SelectedSkin = jquerybasic.jQueryTheme.Silver;
 
@@ -211,8 +220,7 @@ namespace Carrotware.CMS.UI.Components {
 					break;
 			}
 
-			var editModes = new SkinMode[] { SkinMode.Notify, SkinMode.AdvEdit };
-			var rootPath = editModes.Contains(this.WindowMode) ? _rootThemePathEdit : _rootThemePathSkin;
+			var rootPath = _useEditor ? _rootThemePathEdit : _rootThemePathSkin;
 
 			var versionKey = string.Format("?cms={0}&ts={1}", SiteData.CurrentDLLVersion, CarrotWeb.DateKey());
 
@@ -224,7 +232,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			sb.AppendLine(string.Format("<!-- BEGIN {0} Theme   -->", this.SelectedColor));
 
-			if (this.WindowMode != SkinMode.Notify && this.WindowMode != SkinMode.AdvEdit) {
+			if (!_useEditor) {
 				sb.AppendLine(_jqb.GetHtml().Trim());
 			}
 

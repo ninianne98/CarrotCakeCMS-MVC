@@ -31,6 +31,11 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 	}
 	 */
 
+	if (tinymce) {
+		// because ajax...
+		tinymce.remove();
+	}
+
 	tinymce.init({
 		selector: "textarea.mceEditor",
 		file_picker_types: 'file image media',
@@ -117,6 +122,7 @@ function cmsFileBrowseSetUri(uri, h, w) {
 
 function cmsPreSaveTrigger() {
 	var tgr = tinymce.triggerSave();
+
 	return true;
 }
 

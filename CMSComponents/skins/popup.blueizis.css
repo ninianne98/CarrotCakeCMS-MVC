@@ -779,21 +779,6 @@ div.menuitems {
   padding: 5px;
   margin: 5px;
 }
-.datatable thead,
-.datatable .tablehead {
-  font-weight: bolder;
-  background-color: #515496;
-  color: #fff;
-  border: 1px solid #000;
-}
-.datatable thead th {
-  text-align: center;
-}
-.datatable thead a {
-  color: #fff;
-  cursor: pointer;
-  font-weight: bolder;
-}
 .datatable tbody tr:nth-child(odd) {
   background-color: #efefef;
   border: 1px solid #000;
@@ -805,6 +790,24 @@ div.menuitems {
   border: 1px solid #000;
   font-size: 12px;
   font-weight: normal;
+}
+.datatable thead,
+.datatable .tablehead,
+.datatable tbody tr.tablehead {
+  font-weight: bolder;
+  background-color: #515496;
+  color: #fff;
+  border: 1px solid #000;
+}
+.datatable thead th,
+.datatable tbody tr.tablehead {
+  text-align: center;
+}
+.datatable thead a,
+.datatable tbody tr.tablehead a {
+  color: #fff;
+  cursor: pointer;
+  font-weight: bolder;
 }
 .datatable input.inputFld,
 .datatable td .dateRegion {
