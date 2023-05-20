@@ -15,6 +15,9 @@
 				<article id="content">
 					<header>
 						<h2>@CmsPage.Heading</h2>
+						<span class="byline">
+							@String.Format(" By {0} on {1:d} ", CmsPage.ThePage.BylineUser.FullName_FirstLast, CmsPage.ThePage.GoLiveDate)
+						</span>
 					</header>
 					<a href="#" class="image featured"><img src="~/Assets/telephasic/images/pic01.jpg" alt="" /></a>
 					<div>
@@ -23,6 +26,23 @@
 					<div>
 						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
 					</div>
+					@if (CmsPage.ThePage.ContentType == ContentPageType.PageType.BlogEntry) {
+						var pagecat = CmsPage.GetPageCategories(25);
+						var pagetag = CmsPage.GetPageTags(25);
+						<div>
+							<ul class="actions small">
+								@foreach (var itm in pagecat) {
+									<li class="meta-item @String.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a class="button small" href="@itm.Uri">@itm.Text</a></li>
+								}
+							</ul>
+
+							<ul class="actions small">
+								@foreach (var itm in pagetag) {
+									<li class="meta-item @String.Format("meta-count{0}", CmsPage.GetRoundedMetaPercentage(itm))"><a class="button small" href="@itm.Uri">@itm.Text</a></li>
+								}
+							</ul>
+						</div>
+					}
 					<div>
 						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterBottom)
 					</div>
@@ -30,10 +50,10 @@
 			</div>
 			<div class="col-4 col-12-narrower">
 
+				@Html.Partial("_blogNav")
+
 				<!-- Sidebar -->
 				<section id="sidebar">
-					@Html.Partial("_searchBox")
-					@Html.Partial("_subPageNav")
 					<div>
 						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightTop)
 					</div>

@@ -1,23 +1,18 @@
 ﻿@inherits CmsWebViewPage
+@*
+	Telephasic by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+
+	Conversion to CarrotCake CMS MVC Template: Carrotware
+*@
 @{
-	var template = CmsPage.ThePage.TemplateFile.ToLowerInvariant();
+	Layout = null;
 	ViewBag.TelephasicSpecialCss = true;
 
-	Layout = null;
+	var template = CmsPage.ThePage.TemplateFile.ToLowerInvariant();
 
-	var templateLayout = "index.cshtml";
-
-	if (template.Contains("right-")) {
-		templateLayout = "right-sidebar.cshtml";
-	}
-	if (template.Contains("left-")) {
-		templateLayout = "left-sidebar.cshtml";
-	}
-	if (template.Contains("no-")) {
-		templateLayout = "no-sidebar.cshtml";
-	}
-
-	templateLayout = Path.GetDirectoryName(template) + @"\" + templateLayout;
+	var templateLayout = template.Replace("-themed.cshtml", ".cshtml");
 }
 
 @Html.Partial(templateLayout);

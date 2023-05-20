@@ -240,6 +240,93 @@ header {
 	width: 1200px;
 }
 
+/* Calendar */
+
+#calendar {
+}
+
+#calendar_wrap {
+	padding: 10px 5px 10px 5px;
+}
+
+#calendar caption {
+	color: #555555;
+	font-size: 1.75em;
+	font-weight: 600;
+	padding: 5px;
+}
+
+#calendar thead {
+	color: #333333;
+	font-size: 1.25em;
+	font-weight: 500;
+}
+
+#calendar table {
+	width: 100%;
+}
+
+#calendar tbody td {
+	text-align: center;
+}
+
+#calendar #prev {
+	text-align: left;
+}
+
+#calendar #next {
+	text-align: right;
+}
+
+#calendar #prev, #calendar #next {
+	font-size: 1.4em;
+}
+
+/* pager stylings */
+
+.pagerfooterlinks {
+	line-height: normal;
+	margin-top: 1em;
+	margin-bottom: 2em;
+}
+
+	.pagerfooterlinks .pagerlink {
+		margin: 0.25em 0.25em 0.25em 0.25em;
+		padding: 0.4em 0.4em 0.4em 0.4em;
+		text-decoration: none;
+		background-color: #ffffff;
+		color: #c2c7cc;
+		border: solid 1px #c2c7cc;
+		border-radius: 0.35em;
+		float: left;
+	}
+
+		.pagerfooterlinks .pagerlink a {
+			margin: 0.25em 0.25em 0.25em 0.25em;
+			padding: 0.25em 0.25em 0.25em 0.25em;
+			font-weight: normal;
+			text-decoration: none;
+			border: 0px solid transparent;
+			background-color: #ffffff;
+			color: #222222;
+		}
+
+			.pagerfooterlinks .pagerlink a.selected {
+				text-decoration: none;
+				border: 0px solid transparent;
+				font-weight: bolder;
+				background-color: #999999;
+				color: #ffffff;
+				font-weight: bolder;
+			}
+
+	.pagerfooterlinks .selectedwrap {
+		text-decoration: none;
+		background-color: #999999;
+		color: #ffffff;
+		font-weight: bolder;
+	}
+
 @media screen and (max-width: 1280px) {
 	.container {
 		width: 960px;
@@ -1817,6 +1904,14 @@ ul.actions {
 			margin-left: 0;
 		}
 
+	ul.actions.small li {
+		padding: 0.5em 0 0 0;
+	}
+
+		ul.actions.small li:first-child {
+			padding-top: 0;
+		}
+
 /* Divided */
 
 ul.divided {
@@ -2005,6 +2100,31 @@ button,
 	.button:hover {
 		color: #f35858;
 		border-color: rgba(243, 88, 88, 0.5);
+	}
+
+	input[type="submit"].fit,
+	input[type="reset"].fit,
+	input[type="button"].fit,
+	.button.fit {
+		width: 100%;
+	}
+
+	input[type="submit"].small,
+	input[type="reset"].small,
+	input[type="button"].small,
+	.button.small {
+		font-size: 0.8em;
+		height: 2.7em;
+		line-height: 0.8em;
+	}
+
+	input[type="submit"].large,
+	input[type="reset"].large,
+	input[type="button"].large,
+	.button.large {
+		font-size: 1.25em;
+		height: 2.7em;
+		line-height: 1.25em;
 	}
 
 /* Icons */

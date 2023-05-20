@@ -1,0 +1,103 @@
+﻿@inherits CmsWebViewPage
+@{
+	Layout = "_main.cshtml";
+
+	ViewBag.TelephasicBodyStyle = "right-sidebar is-preload";
+
+	CmsPage.TypeLabelPrefixes = CmsPage.GetDefaultTypeHeadingOptions();
+
+	var pager = new PagedDataSummary();
+	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
+	pager.PageSize = 10;
+	pager.IgnoreSitePath = false;
+	pager.FetchData();
+}
+
+<!-- Main -->
+<div class="wrapper">
+	<div class="container" id="main">
+		<div class="row gtr-150">
+			<div class="col-8 col-12-narrower">
+
+				<!-- Content -->
+				<article id="content">
+					<header>
+						<h2>@CmsPage.Heading</h2>
+					</header>
+					<a href="#" class="image featured"><img src="~/Assets/telephasic/images/pic01.jpg" alt="" /></a>
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterTop)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterBottom)
+					</div>
+				</article>
+
+				<section>
+					@if (pager != null) {
+
+						foreach (var item in pager.DataSource) {
+							<div>
+								<p>
+									<b class="green" style="font-size: 110%;">
+										<a class="green" href="@item.FileName">@item.NavigationText</a>
+										&nbsp;|&nbsp;
+										@String.Format("{0:d}", item.GoLiveDate)
+									</b>
+									<br />
+									by @{
+										var usr = item.BylineUser;
+									}
+									@usr.FullName_FirstLast
+									<br />
+									@item.PageTextPlainSummary
+								</p>
+
+								<p class="post-footer align-right">
+									<a class="button small" href="@item.FileName">
+										Read more
+									</a>
+								</p>
+							</div>
+						}
+
+						<div class="pagerfooterlinks">
+							@foreach (var i in pager.PageNumbers) {
+								using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+									using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+										@String.Format(" {0} ", i)
+									}
+								}
+							}
+						</div>
+						<br />
+					}
+				</section>
+			</div>
+			<div class="col-4 col-12-narrower">
+
+				@Html.Partial("_blogNav")
+
+				<!-- Sidebar -->
+				<section id="sidebar">
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightTop)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextRight)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightBottom)
+					</div>
+					<section>
+						<a href="#" class="image featured"><img src="~/Assets/telephasic/images/pic07.jpg" alt="" /></a>
+					</section>
+				</section>
+			</div>
+		</div>
+		@Html.Partial("_features")
+	</div>
+</div>

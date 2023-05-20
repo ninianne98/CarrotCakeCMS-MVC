@@ -13,17 +13,17 @@
 
 				<!-- Sidebar -->
 				<section id="sidebar">
-					<section>
-						<div>
-							@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftTop)
-						</div>
-						<div>
-							@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextLeft)
-						</div>
-						<div>
-							@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftBottom)
-						</div>
-					</section>
+					@Html.Partial("_searchBox")
+					@Html.Partial("_subPageNav")
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftTop)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextLeft)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftBottom)
+					</div>
 					<section>
 						<a href="#" class="image featured"><img src="~/Assets/telephasic/images/pic07.jpg" alt="" /></a>
 					</section>
@@ -34,7 +34,7 @@
 				<!-- Content -->
 				<article id="content">
 					<header>
-						<h2>@CmsPage.ThePage.HeadingText</h2>
+						<h2>@CmsPage.Heading</h2>
 					</header>
 					<a href="#" class="image featured"><img src="~/Assets/telephasic/images/pic02.jpg" alt="" /></a>
 					<div>

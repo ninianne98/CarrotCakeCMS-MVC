@@ -1,0 +1,10 @@
+﻿@inherits CmsWebViewPage
+
+<section>
+	@using (var srchFrm = CarrotCakeHtml.BeginSearchForm(new { @class = "search" })) {
+		var srch = srchFrm.GetModelHelper(true);
+		<p class="actions">
+			@srch.TextBoxFor(x => x.query, new { @class = "search-text", placeholder = "Search" })
+		</p>
+	}
+</section>

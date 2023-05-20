@@ -3,6 +3,8 @@
 @{
 	Layout = "_main.cshtml";
 
+	CmsPage.TypeLabelPrefixes = CmsPage.GetDefaultTypeHeadingOptions();
+
 	var pager = new PagedDataSummary();
 	pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
 	pager.PageSize = 10;

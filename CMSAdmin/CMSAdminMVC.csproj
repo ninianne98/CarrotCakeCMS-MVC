@@ -1065,6 +1065,13 @@
     <Content Include="Views\Templates\Telephasic\left-sidebar-themed.cshtml" />
     <Content Include="Views\Templates\Telephasic\no-sidebar-themed.cshtml" />
     <Content Include="Views\Templates\Telephasic\right-sidebar-themed.cshtml" />
+    <Content Include="Views\Templates\Telephasic\blog-themed.cshtml" />
+    <Content Include="Views\Templates\Telephasic\blog.cshtml" />
+    <Content Include="Views\Templates\Telephasic\_blogNav.cshtml" />
+    <Content Include="Views\Templates\Telephasic\blog-index-themed.cshtml" />
+    <Content Include="Views\Templates\Telephasic\blog-index.cshtml" />
+    <Content Include="Views\Templates\Telephasic\_searchBox.cshtml" />
+    <Content Include="Views\Templates\Telephasic\_subPageNav.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

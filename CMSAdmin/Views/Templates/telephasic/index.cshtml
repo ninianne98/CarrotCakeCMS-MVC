@@ -9,7 +9,7 @@
 	<!-- Hero -->
 	<section id="hero" class="container">
 		<header>
-			<h2>@CmsPage.ThePage.HeadingText </h2>
+			<h2>@CmsPage.Heading</h2>
 		</header>
 		<div>
 			@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterTop)
@@ -60,7 +60,7 @@
 </div>
 
 @if (SecurityData.AdvancedEditMode == true || SiteData.IsPageSampler
-						|| CmsPage.TheWidgets.Where(x => x.IsWidgetActive && x.PlaceholderName == "phWidgetZone02").Any()) {
+			|| CmsPage.TheWidgets.Where(x => x.IsWidgetActive && x.PlaceholderName == "phWidgetZone02").Any()) {
 	<!-- Promo -->
 	<div id="promo-wrapper">
 		<section id="promo">
