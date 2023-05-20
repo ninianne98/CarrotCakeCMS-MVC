@@ -1,0 +1,25 @@
+﻿@inherits CmsWebViewPage
+@{
+	var template = CmsPage.ThePage.TemplateFile.ToLowerInvariant();
+	ViewBag.TelephasicSpecialCss = true;
+
+	Layout = null;
+
+	var templateLayout = "index.cshtml";
+
+	if (template.Contains("right-")) {
+		templateLayout = "right-sidebar.cshtml";
+	}
+	if (template.Contains("left-")) {
+		templateLayout = "left-sidebar.cshtml";
+	}
+	if (template.Contains("no-")) {
+		templateLayout = "no-sidebar.cshtml";
+	}
+
+	templateLayout = Path.GetDirectoryName(template) + @"\" + templateLayout;
+}
+
+@Html.Partial(templateLayout);
+
+@RenderBody();

@@ -14,7 +14,7 @@ var thisPage = ""; // used in escaped fashion
 var thisPageNav = "";  // used non-escaped (redirects)
 var thisPageNavSaved = "";  // used non-escaped (redirects)
 var thisPageID = "";
-var timeTick = 9999;
+var cmsTimeTick = 9999;
 
 function cmsGetAdminPath() {
 	var webMthd = webSvc + "/GetSiteAdminFolder";
@@ -46,7 +46,7 @@ function cmsSetServiceParms(serviceURL, pagePath, pageID) {
 	thisPageID = pageID;
 
 	var d = new Date();
-	timeTick = d.getTime();
+	cmsTimeTick = d.getTime();
 }
 
 function cmsOverridePageName(pagePath) {
@@ -437,14 +437,14 @@ function cmsSetPreviewSize() {
 	var modH = parseFloat($(modSel).css('height'));
 	var modW = parseFloat($(modSel).css('width'));
 
-	var frmW = modW - 28;
+	var frmW = modW - 32;
 
 	var frmH = modH - 55;
-	var frameAdjust = 25;
+	var frameAdjust = 40;
 
 	if (modW < 1300) {
 		// since the buttons stack & wrap on narrower resolutions, provide more height
-		frameAdjust = 55;
+		frameAdjust = 80;
 	}
 
 	if (frameAdjust > frmH) {
@@ -1357,5 +1357,5 @@ function cmsDirtyPageRefresh() {
 	cmsMakeOKToLeave();
 	window.setTimeout('cmsMakeOKToLeave();', 500);
 	window.setTimeout('cmsMakeOKToLeave();', 700);
-	window.setTimeout("location.href = \'" + thisPageNav + "?carrotedit=true&carrottick=" + timeTick + "\'", 800);
+	window.setTimeout("location.href = \'" + thisPageNav + "?carrotedit=true&carrottick=" + cmsTimeTick + "\'", 800);
 }

@@ -1,74 +1,54 @@
 ﻿@inherits CmsWebViewPage
-@*
-	Telephasic by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-
-	Conversion to CarrotCake CMS MVC Template: Carrotware
-*@
-
 @{
 	Layout = "_main.cshtml";
-	ViewBag.TelephasicBodyStyle = "left-sidebar";
+
+	ViewBag.TelephasicBodyStyle = "left-sidebar is-preload";
 }
 
-@section MainSection {
-	<!-- Main -->
-	<div class="wrapper">
-		<div class="container" id="main">
-			<div class="row 150%">
-				<div class="4u 12u(narrower)">
+<!-- Main -->
+<div class="wrapper">
+	<div class="container" id="main">
+		<div class="row gtr-150">
+			<div class="col-4 col-12-narrower">
 
-					<!-- Sidebar -->
-					<section id="sidebar">
-						<section>
-							@if (CmsPage.ChildNav.Any()) {
-								<h1>Child Pages</h1>
-								<ul class="sidemenu">
-									@foreach (var itm in CmsPage.ChildNav) {
-										<li><a href="@itm.FileName">@itm.NavigationText</a></li>
-									}
-								</ul>
-							}
-
-							@if (CmsPage.SiblingNav.Any()) {
-								<h1>Sibling Pages</h1>
-								<ul class="sidemenu">
-									@foreach (var itm in CmsPage.SiblingNav) {
-										<li><a href="@itm.FileName">@itm.NavigationText</a></li>
-									}
-								</ul>
-							}
-						</section>
-						<section>
+				<!-- Sidebar -->
+				<section id="sidebar">
+					<section>
+						<div>
+							@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftTop)
+						</div>
+						<div>
 							@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextLeft)
-						</section>
-						<section>
-							@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextRight)
-						</section>
+						</div>
+						<div>
+							@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftBottom)
+						</div>
 					</section>
-				</div>
-
-				<div class="8u 12u(narrower) important(narrower)">
-					<!-- Content -->
-					<article id="content">
-						<header>
-							<h2>@CmsPage.Heading</h2>
-						</header>
-						<div>
-							@CarrotCakeHtml.RenderWidget("phCenterTop")
-						</div>
-						<div>
-							@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
-						</div>
-						<div>
-							@CarrotCakeHtml.RenderWidget("phCenterBottom")
-						</div>
-					</article>
-				</div>
+					<section>
+						<a href="#" class="image featured"><img src="~/Assets/telephasic/images/pic07.jpg" alt="" /></a>
+					</section>
+				</section>
 			</div>
+			<div class="col-8 col-12-narrower imp-narrower">
 
-			@Html.Partial("_features")
+				<!-- Content -->
+				<article id="content">
+					<header>
+						<h2>@CmsPage.ThePage.HeadingText</h2>
+					</header>
+					<a href="#" class="image featured"><img src="~/Assets/telephasic/images/pic02.jpg" alt="" /></a>
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterTop)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+					</div>
+					<div>
+						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterBottom)
+					</div>
+				</article>
+			</div>
 		</div>
+		@Html.Partial("_features")
 	</div>
-}
+</div>

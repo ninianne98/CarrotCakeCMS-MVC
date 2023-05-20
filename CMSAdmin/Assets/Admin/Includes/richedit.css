@@ -1,16 +1,36 @@
 body {
-	font-size: 13px;
-	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
 	color: #111111;
 	background-color: #fefefe;
 }
 
-pre {
+pre, code {
 	white-space: pre-wrap; /* css-3 */
-	white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
 	white-space: -pre-wrap; /* Opera 4-6 */
 	white-space: -o-pre-wrap; /* Opera 7 */
 	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+h1, h2, h3, h4 {
+	font-weight: bolder;
+}
+
+h1 {
+	font-size: 1.5em;
+}
+
+h2 {
+	font-size: 1.3em;
+}
+
+h3 {
+	font-size: 1.1em;
+}
+
+h4 {
+	font-size: 0.9em;
 }
 
 video, object, .mceItemMedia, .mceItemIframe, .mceItemVideo, .mceItemRealMedia,
@@ -21,9 +41,9 @@ video, object, .mceItemMedia, .mceItemIframe, .mceItemVideo, .mceItemRealMedia,
 	border: thin dashed #cc0000;
 }
 
-td, tr, th, p, div {
-	font-size: 12pt;
-	font-family: Arial, Helvetica, sans-serif;
+td, tr, th, p, div, dl, dd, dt, ul, ol, li, span, blockquote {
+	font-size: 14px;
+	font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
 }
 
 th {
@@ -52,9 +72,11 @@ blockquote {
 	border-left-color: #666666;
 }
 
-tt, pre, code, kbd, samp {
-	font-size: 12px;
-	font-family: "Lucida Console", "Courier New", Courier, Monaco, monospace;
+tt, pre, code, kbd, samp,
+code[class*="language-"], pre[class*="language-"],
+code[class*="language-"] span, pre[class*="language-"] span {
+	font-size: 13px;
+	font-family: "Lucida Console", "Courier New", Courier, Consolas, Monaco, monospace;
 }
 
 /* other */
@@ -71,4 +93,22 @@ tt, pre, code, kbd, samp {
 
 .alignright {
 	float: right;
+}
+
+ul.two-col, ol.two-col {
+	columns: 2;
+	-webkit-columns: 2;
+	-moz-columns: 2;
+}
+
+ul.three-col, ol.three-col {
+	columns: 3;
+	-webkit-columns: 3;
+	-moz-columns: 3;
+}
+
+ul.four-col, ol.four-col {
+	columns: 4;
+	-webkit-columns: 4;
+	-moz-columns: 4;
 }

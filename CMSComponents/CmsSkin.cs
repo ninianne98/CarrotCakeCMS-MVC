@@ -1,6 +1,7 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 
@@ -119,6 +120,60 @@ namespace Carrotware.CMS.UI.Components {
 			}
 
 			return colorCode;
+		}
+
+		public static string RotateColor(string color, double degrees) {
+			var main = CarrotWeb.DecodeColor(color);
+
+			return ColorTranslator.ToHtml(RotateColor(main, degrees));
+		}
+
+		public static Color RotateColor(Color color, double degrees) {
+			var shiftColor = Color.Transparent;
+
+			int height = 25;
+			int width = 25;
+
+			using (var image = new Bitmap(height, width)) {
+				using (var gfx = Graphics.FromImage(image))
+				using (var bitmap = new Bitmap(height, width)) {
+					using (var brush = new SolidBrush(color)) {
+						gfx.FillRectangle(brush, 0, 0, height, width);
+					}
+
+					float deg = (float)degrees;
+					double r = deg * System.Math.PI / 180; // degrees to radians
+
+					float[][] colorMatrixElements = {
+						new float[] {(float)System.Math.Cos(r),  (float)System.Math.Sin(r),  0,  0, 0},
+						new float[] {(float)-System.Math.Sin(r),  (float)-System.Math.Cos(r),  0,  0, 0},
+						new float[] {0,  0,  2,  0, 0},
+						new float[] {0,  0,  0,  1, 0},
+						new float[] {0, 0, 0, 0, 1}};
+
+					using (var attrib = new ImageAttributes()) {
+						var colorMatrix = new ColorMatrix(colorMatrixElements);
+
+						attrib.SetColorMatrix(
+						   colorMatrix,
+						   ColorMatrixFlag.Default,
+						   ColorAdjustType.Bitmap);
+
+						gfx.DrawImage(
+								image,
+								new Rectangle(1, 1, width, height),  // destination rectangle
+								0, 0,        // upper-left corner of source rectangle
+								width,       // width of source rectangle
+								height,      // height of source rectangle
+								GraphicsUnit.Pixel,
+								attrib);
+
+						shiftColor = image.GetPixel(5, 5);
+					}
+				}
+			}
+
+			return shiftColor;
 		}
 
 		public static string DarkenColor(string color, double adjustment) {

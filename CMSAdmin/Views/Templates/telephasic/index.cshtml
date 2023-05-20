@@ -1,103 +1,77 @@
 ﻿@inherits CmsWebViewPage
-
-@*
-	Telephasic by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-
-	Conversion to CarrotCake CMS MVC Template: Carrotware
-*@
-
 @{
 	Layout = "_main.cshtml";
-	ViewBag.TelephasicBodyStyle = "homepage";
 
-	var pager = new PagedDataSummary();
-	pager.ContentType = PagedDataSummary.SummaryContentType.SpecifiedCategories;
-	pager.SelectedCategorySlugs = (new string[] { "maps" }).ToList(); // customize as needed for specific site
-	pager.PageSize = 2;
-	pager.PageNumbParm = "nopage#";
-	pager.IgnoreSitePath = true;
-	pager.FetchData();
-
-	string cssImage = "image-wrapper first";
-	string imgPath = String.Empty;
-
+	ViewBag.TelephasicBodyStyle = "homepage is-preload";
 }
 
 @section HeroSection {
 	<!-- Hero -->
 	<section id="hero" class="container">
 		<header>
-			<h2>
-				@CmsPage.Heading
-			</h2>
+			<h2>@CmsPage.ThePage.HeadingText </h2>
 		</header>
+		<div>
+			@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterTop)
+		</div>
 		<div>
 			@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
 		</div>
 		<div>
-			@CarrotCakeHtml.RenderWidget("phCenterBottom")
+			@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterBottom)
 		</div>
 	</section>
 }
 
-@section MainSection {
-	<!-- Features 1 -->
-	<div class="wrapper">
-		<div class="container">
-			<div class="row">
-
-				@foreach (var p in pager.DataSource) {
-					imgPath = p.Thumbnail;
-
-					if (String.IsNullOrEmpty(imgPath)) {
-						imgPath = @"/Assets/telephasic/images/pic01.jpg";
-					}
-
-					<section class="6u 12u(narrower) feature">
-						<div class="@cssImage">
-							<a href="@p.FileName" class="image featured"><img src="@imgPath" alt="" /></a>
-						</div>
-						<header>
-							<h2>@p.NavigationText</h2>
-						</header>
-						<p>
-							@p.PageTextPlainSummary
-						</p>
-						<ul class="actions">
-							<li><a href="@p.FileName" class="button">Read more</a></li>
-						</ul>
-					</section>
-
-					cssImage = "image-wrapper";
-				}
-			</div>
+<!-- Features 1 -->
+<div class="wrapper">
+	<div class="container">
+		<div class="row">
+			<section class="col-6 col-12-narrower feature">
+				<div class="image-wrapper first">
+					<a href="#" class="image featured first"><img src="~/Assets/telephasic/images/pic01.jpg" alt="" /></a>
+				</div>
+				<div>
+					@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftTop)
+				</div>
+				<div>
+					@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextLeft)
+				</div>
+				<div>
+					@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftBottom)
+				</div>
+			</section>
+			<section class="col-6 col-12-narrower feature">
+				<div class="image-wrapper">
+					<a href="#" class="image featured"><img src="~/Assets/telephasic/images/pic02.jpg" alt="" /></a>
+				</div>
+				<div>
+					@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightTop)
+				</div>
+				<div>
+					@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextRight)
+				</div>
+				<div>
+					@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightBottom)
+				</div>
+			</section>
 		</div>
 	</div>
+</div>
 
+@if (SecurityData.AdvancedEditMode == true || SiteData.IsPageSampler
+						|| CmsPage.TheWidgets.Where(x => x.IsWidgetActive && x.PlaceholderName == "phWidgetZone02").Any()) {
 	<!-- Promo -->
 	<div id="promo-wrapper">
 		<section id="promo">
-			<h2>Neque semper magna et lorem ipsum adipiscing</h2>
-			<a href="#" class="button">Breach the thresholds</a>
+			@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phWidgetZone02)
 		</section>
 	</div>
-
-	<!-- Features 2 -->
-	<div class="wrapper">
-		<section class="container">
-			<header class="major">
-				<h2>Sed magna consequat lorem curabitur tempus</h2>
-				<p>Elit aliquam vulputate egestas euismod nunc semper vehicula lorem blandit</p>
-			</header>
-
-			@Html.Partial("_features")
-
-			<ul class="actions major">
-				<li><a href="#" class="button">Elevate my awareness</a></li>
-			</ul>
-		</section>
-	</div>
-
 }
+
+<!-- Features 2 -->
+<div class="wrapper">
+	<section class="container">
+		@Html.Partial("_features")
+	</section>
+</div>

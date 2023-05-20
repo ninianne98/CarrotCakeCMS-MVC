@@ -102,7 +102,7 @@
 		})
 		.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
 			HasHeadingText = false,
-			FormatTemplate = @<a target="_blank" href="@String.Format("{0}?carrotedit=true", item.FileName)">
+			FormatTemplate = @<a target="_blank" href="@String.Format("{0}?{1}=true", item.FileName, SiteData.AdvancedEditParameter)">
 				<img src="~/Assets/Admin/Images/overlays.png" alt="Advanced Editor" title="Advanced Editor" />
 			</a>
 		})

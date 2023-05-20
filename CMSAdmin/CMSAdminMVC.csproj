@@ -628,16 +628,13 @@
     <Content Include="Assets\oilpainting\images\pics01.jpg" />
     <Content Include="Assets\oilpainting\menu.css" />
     <Content Include="Assets\oilpainting\style.css" />
-    <Content Include="Assets\telephasic\css\font-awesome.min.css" />
-    <Content Include="Assets\telephasic\css\ie8.css" />
-    <Content Include="Assets\telephasic\css\ie9.css" />
-    <Content Include="Assets\telephasic\css\images\footer.svg" />
-    <Content Include="Assets\telephasic\css\images\header.svg" />
-    <Content Include="Assets\telephasic\css\images\image-wrapper.svg" />
-    <Content Include="Assets\telephasic\css\images\navPanel.svg" />
-    <Content Include="Assets\telephasic\css\images\overlay.png" />
+    <Content Include="Assets\telephasic\css\fontawesome-all.min.css" />
     <Content Include="Assets\telephasic\css\main.css" />
-    <Content Include="Assets\telephasic\fonts\fontawesome-webfont.svg" />
+    <Content Include="Assets\telephasic\images\footer.svg" />
+    <Content Include="Assets\telephasic\images\header.svg" />
+    <Content Include="Assets\telephasic\images\image-wrapper.svg" />
+    <Content Include="Assets\telephasic\images\navPanel.svg" />
+    <Content Include="Assets\telephasic\images\overlay.png" />
     <Content Include="Assets\telephasic\images\pic01.jpg" />
     <Content Include="Assets\telephasic\images\pic02.jpg" />
     <Content Include="Assets\telephasic\images\pic03.jpg" />
@@ -646,14 +643,14 @@
     <Content Include="Assets\telephasic\images\pic06.jpg" />
     <Content Include="Assets\telephasic\images\pic07.jpg" />
     <Content Include="Assets\telephasic\images\promo.jpg" />
-    <Content Include="Assets\telephasic\js\ie\backgroundsize.min.htc" />
-    <Content Include="Assets\telephasic\js\ie\html5shiv.js" />
-    <Content Include="Assets\telephasic\js\ie\PIE.htc" />
-    <Content Include="Assets\telephasic\js\ie\respond.min.js" />
+    <Content Include="Assets\telephasic\js\breakpoints.min.js" />
+    <Content Include="Assets\telephasic\js\browser.min.js" />
     <Content Include="Assets\telephasic\js\jquery.dropotron.min.js" />
     <Content Include="Assets\telephasic\js\main.js" />
-    <Content Include="Assets\telephasic\js\skel.min.js" />
     <Content Include="Assets\telephasic\js\util.js" />
+    <Content Include="Assets\telephasic\webfonts\fa-brands-400.svg" />
+    <Content Include="Assets\telephasic\webfonts\fa-regular-400.svg" />
+    <Content Include="Assets\telephasic\webfonts\fa-solid-900.svg" />
     <Content Include="Assets\tinymce\icons\default\icons.min.js" />
     <Content Include="Assets\tinymce\jquery.tinymce.min.js" />
     <Content Include="Assets\tinymce\license.txt" />
@@ -727,11 +724,6 @@
     <Content Include="env.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Assets\telephasic\fonts\fontawesome-webfont.eot" />
-    <Content Include="Assets\telephasic\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Assets\telephasic\fonts\fontawesome-webfont.woff" />
-    <Content Include="Assets\telephasic\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Assets\telephasic\fonts\FontAwesome.otf" />
     <None Include="Assets\Admin\Includes\C3SiteConfigSchema.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -917,6 +909,25 @@
     <Content Include="Assets\tinymce\skins\ui\oxide\fonts\tinymce-mobile.woff" />
     <Content Include="Assets\tinymce\README.md" />
     <Content Include="Views\CmsContent\PlainPage\PlainPageBWView.cshtml" />
+    <Content Include="Assets\telephasic\sass\libs\_breakpoints.scss" />
+    <Content Include="Assets\telephasic\sass\libs\_functions.scss" />
+    <Content Include="Assets\telephasic\sass\libs\_html-grid.scss" />
+    <Content Include="Assets\telephasic\sass\libs\_mixins.scss" />
+    <Content Include="Assets\telephasic\sass\libs\_vars.scss" />
+    <Content Include="Assets\telephasic\sass\libs\_vendor.scss" />
+    <Content Include="Assets\telephasic\sass\main.scss" />
+    <Content Include="Assets\telephasic\webfonts\fa-brands-400.eot" />
+    <Content Include="Assets\telephasic\webfonts\fa-brands-400.ttf" />
+    <Content Include="Assets\telephasic\webfonts\fa-brands-400.woff" />
+    <Content Include="Assets\telephasic\webfonts\fa-brands-400.woff2" />
+    <Content Include="Assets\telephasic\webfonts\fa-regular-400.eot" />
+    <Content Include="Assets\telephasic\webfonts\fa-regular-400.ttf" />
+    <Content Include="Assets\telephasic\webfonts\fa-regular-400.woff" />
+    <Content Include="Assets\telephasic\webfonts\fa-regular-400.woff2" />
+    <Content Include="Assets\telephasic\webfonts\fa-solid-900.eot" />
+    <Content Include="Assets\telephasic\webfonts\fa-solid-900.ttf" />
+    <Content Include="Assets\telephasic\webfonts\fa-solid-900.woff" />
+    <Content Include="Assets\telephasic\webfonts\fa-solid-900.woff2" />
     <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Assets\Waterdrops\images\img01.jpg" />
     <Content Include="Assets\Waterdrops\images\img02.jpg" />
@@ -931,6 +942,14 @@
     <Content Include="Assets\Waterdrops\index.html" />
     <Content Include="Assets\Waterdrops\license.txt" />
     <Content Include="Assets\Waterdrops\style.css" />
+    <Content Include="Views\Templates\Telephasic\index.cshtml" />
+    <Content Include="Views\Templates\Telephasic\left-sidebar.cshtml" />
+    <Content Include="Views\Templates\Telephasic\LICENSE.txt" />
+    <Content Include="Views\Templates\Telephasic\no-sidebar.cshtml" />
+    <Content Include="Views\Templates\Telephasic\README.txt" />
+    <Content Include="Views\Templates\Telephasic\right-sidebar.cshtml" />
+    <Content Include="Views\Templates\Telephasic\Skin.config" />
+    <Content Include="Views\Templates\Telephasic\_contactus.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1011,12 +1030,6 @@
     <Content Include="Views\CmsAdmin\_ViewStart.cshtml" />
     <Content Include="Views\Templates\citrus-island\list.cshtml" />
     <Content Include="Views\Templates\citrus-island\_main.cshtml" />
-    <Content Include="Views\Templates\Telephasic\index.cshtml" />
-    <Content Include="Views\Templates\Telephasic\left-sidebar.cshtml" />
-    <Content Include="Views\Templates\Telephasic\no-sidebar.cshtml" />
-    <Content Include="Views\Templates\Telephasic\right-sidebar.cshtml" />
-    <Content Include="Views\Templates\Telephasic\_main.cshtml" />
-    <Content Include="Views\Templates\Telephasic\_features.cshtml" />
     <Content Include="Views\CmsAdmin\Login.cshtml" />
     <Content Include="Views\CmsAdmin\ForgotPassword.cshtml" />
     <Content Include="Views\CmsAdmin\Index.cshtml" />
@@ -1032,12 +1045,10 @@
     <Content Include="Views\CmsContent\PlainPage\PlainPageView.cshtml" />
     <Content Include="Views\CmsAdmin\SiteTemplateUpdate.cshtml" />
     <Content Include="Views\Templates\citrus-island\Skin.config" />
-    <Content Include="Views\Templates\Telephasic\Skin.config" />
     <Content Include="Views\CmsAdmin\ContentEdit.cshtml" />
     <Content Include="Views\CmsAdmin\PageIndex.cshtml" />
     <Content Include="Views\CmsAdmin\BlogPostIndex.cshtml" />
     <Content Include="Views\CmsAdmin\ControlPropertiesEdit.cshtml" />
-    <Content Include="Views\Templates\Telephasic\_contactus.cshtml" />
     <Content Include="Views\Templates\oilpainting\Skin.config" />
     <Content Include="Views\Templates\Waterdrops\Skin.config" />
     <Content Include="Views\Templates\Waterdrops\_contactform.cshtml" />
@@ -1047,6 +1058,13 @@
     <Content Include="Views\Templates\Waterdrops\page.cshtml" />
     <Content Include="Views\Templates\Waterdrops\_main.cshtml" />
     <Content Include="Views\Templates\Waterdrops\_catmeta.cshtml" />
+    <Content Include="Views\Templates\Telephasic\_main.cshtml" />
+    <Content Include="Views\Templates\Telephasic\_features.cshtml" />
+    <Content Include="Views\Templates\Telephasic\index-themed.cshtml" />
+    <Content Include="Views\Templates\Telephasic\_main-themed.cshtml" />
+    <Content Include="Views\Templates\Telephasic\left-sidebar-themed.cshtml" />
+    <Content Include="Views\Templates\Telephasic\no-sidebar-themed.cshtml" />
+    <Content Include="Views\Templates\Telephasic\right-sidebar-themed.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

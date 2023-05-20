@@ -1,13 +1,5 @@
 ﻿@inherits CmsWebViewPage
 
-@*
-	Telephasic by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-
-	Conversion to CarrotCake CMS MVC Template: Carrotware
-*@
-
 @{
 
 	var pager = new PagedDataSummary();
@@ -18,19 +10,22 @@
 	pager.FetchData();
 
 	string cssImage = "image-wrapper first";
-	string imgPath = String.Empty;
+	string imgPath = string.Empty;
+
+	int imgIdx = 1;
 }
 
 <div class="row features">
-
 	@foreach (var p in pager.DataSource) {
+		imgIdx++;
+		var idx = (imgIdx % 3) + 3;
 		imgPath = p.Thumbnail;
 
-		if (String.IsNullOrEmpty(imgPath)) {
-			imgPath = @"/Assets/telephasic/images/pic03.jpg";
+		if (string.IsNullOrEmpty(imgPath)) {
+			imgPath = string.Format("/Assets/telephasic/images/pic0{0}.jpg", idx);
 		}
 
-		<section class="4u 12u(narrower) feature">
+		<section class="col-4 col-12-narrower feature">
 			<div class="@cssImage">
 				<a href="@p.FileName" class="image featured"><img src="@imgPath" alt="" /></a>
 			</div>

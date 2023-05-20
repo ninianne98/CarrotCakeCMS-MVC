@@ -33,7 +33,7 @@ namespace Carrotware.CMS.Interface {
 
 		protected string[] GetPaths(ViewPathType vpt) {
 			string[] viewPaths = null;
-			string prefix = String.Empty;
+			string prefix = string.Empty;
 
 			switch (vpt) {
 				case ViewPathType.Area:
@@ -47,11 +47,11 @@ namespace Carrotware.CMS.Interface {
 
 			viewPaths = new[] {
 					prefix + "{0}.cshtml",
-                    prefix + "{0}.vbhtml",
-                    prefix + "{1}/{0}.cshtml",
-                    prefix + "{1}/{0}.vbhtml",
-                    prefix + "Shared/{0}.cshtml",
-                    prefix + "Shared/{0}.vbhtml"};
+					prefix + "{0}.vbhtml",
+					prefix + "{1}/{0}.cshtml",
+					prefix + "{1}/{0}.vbhtml",
+					prefix + "Shared/{0}.cshtml",
+					prefix + "Shared/{0}.vbhtml"};
 
 			return viewPaths;
 		}
@@ -64,7 +64,7 @@ namespace Carrotware.CMS.Interface {
 			string newPath = ReplacePath(controllerContext, partialPath);
 
 #if DEBUG
-			Debug.WriteLine(String.Format("CarrotViewEngineBase.CreatePartialView: n:{0}   c:{1}   pp:{2}   np:{3} ", controllerContext.Controller.GetType().Namespace, controllerContext.Controller.GetType().Name, partialPath, newPath));
+			Debug.WriteLine(string.Format("CarrotViewEngineBase.CreatePartialView: n:{0}   c:{1}   pp:{2}   np:{3} ", controllerContext.Controller.GetType().Namespace, controllerContext.Controller.GetType().Name, partialPath, newPath));
 #endif
 
 			return base.CreatePartialView(controllerContext, newPath);
@@ -73,13 +73,13 @@ namespace Carrotware.CMS.Interface {
 		protected override IView CreateView(ControllerContext controllerContext, string viewPath, string masterPath) {
 			string newPath = ReplacePath(controllerContext, viewPath);
 
-			string newMaster = String.Empty;
-			if (!String.IsNullOrEmpty(masterPath)) {
+			string newMaster = string.Empty;
+			if (!string.IsNullOrEmpty(masterPath)) {
 				newMaster = ReplacePath(controllerContext, masterPath);
 			}
 
 #if DEBUG
-			Debug.WriteLine(String.Format("CarrotViewEngineBase.CreateView: n:{0}   c:{1}   pp:{2}   np:{3}   mp:{3}", controllerContext.Controller.GetType().Namespace, controllerContext.Controller.GetType().Name, viewPath, newPath, masterPath));
+			Debug.WriteLine(string.Format("CarrotViewEngineBase.CreateView: n:{0}   c:{1}   pp:{2}   np:{3}   mp:{3}", controllerContext.Controller.GetType().Namespace, controllerContext.Controller.GetType().Name, viewPath, newPath, masterPath));
 #endif
 
 			return base.CreateView(controllerContext, newPath, newMaster);
@@ -89,7 +89,7 @@ namespace Carrotware.CMS.Interface {
 			string newPath = ReplacePath(controllerContext, virtualPath);
 
 #if DEBUG
-			Debug.WriteLine(String.Format("CarrotViewEngineBase.FileExists: n:{0}   c:{1}   vp:{2}   np:{3} ", controllerContext.Controller.GetType().Namespace, controllerContext.Controller.GetType().Name, virtualPath, newPath));
+			Debug.WriteLine(string.Format("CarrotViewEngineBase.FileExists: n:{0}   c:{1}   vp:{2}   np:{3} ", controllerContext.Controller.GetType().Namespace, controllerContext.Controller.GetType().Name, virtualPath, newPath));
 #endif
 			return base.FileExists(controllerContext, newPath);
 		}

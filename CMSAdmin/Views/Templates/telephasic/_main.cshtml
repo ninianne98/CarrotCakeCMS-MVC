@@ -1,58 +1,39 @@
 ﻿@inherits CmsWebViewPage
-
+<!DOCTYPE HTML>
 @*
 	Telephasic by HTML5 UP
-	html5up.net | @n33co
+	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-	http://html5up.net/telephasic
 
 	Conversion to CarrotCake CMS MVC Template: Carrotware
 *@
-
 @{
 	Layout = null;
+
+	string bodyCssClass = ViewBag.TelephasicBodyStyle ?? "no-style";
 
 	ViewBag.Title = CmsPage.Titlebar;
 	ViewBag.SiteName = CmsPage.TheSite.SiteName;
 
-	TwoLevelNavigation nav = new TwoLevelNavigation() {
+	var nav = new TwoLevelNavigation() {
 		AutoStylingDisabled = true,
+		CssSelected = "selected",
 		ElementId = "nav"
 	};
 
+	bool specialCss = ViewBag.TelephasicSpecialCss ?? false;
 }
-
-<!DOCTYPE html>
-
 <html>
 <head>
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
-	@CarrotCakeHtml.MetaTags()
-	@CarrotCakeHtml.Rss()
-
-	<title>@CmsPage.Titlebar</title>
-
-	<!-- Styles -->
-	<!--[if lte IE 8]><script src="/Assets/telephasic/js/ie/html5shiv.js"></script><![endif]-->
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver })
 	<link rel="stylesheet" href="~/Assets/telephasic/css/main.css" />
-	<!--[if lte IE 8]><link rel="stylesheet" href="/Assets/telephasic/css/ie8.css" /><![endif]-->
-	<!--[if lte IE 9]><link rel="stylesheet" href="/Assets/telephasic/css/ie9.css" /><![endif]-->
-	@CarrotWeb.RenderControlToHtml((new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver }))
-
-	<!-- Scripts -->
-	<script src="~/Assets/telephasic/js/jquery.dropotron.min.js"></script>
-	<script src="~/Assets/telephasic/js/skel.min.js"></script>
-	<script src="~/Assets/telephasic/js/util.js"></script>
-	<!--[if lte IE 8]><script src="/Assets/telephasic/js/ie/respond.min.js"></script><![endif]-->
-	<script src="~/Assets/telephasic/js/main.js"></script>
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-
-			setTimeout("moveCMSZone();", 1500);
-
+			// split the nav so it doesn't get covered by site button
 			var navSize = $('#@nav.ElementId .level1').length;
 
 			if (navSize > 0) {
@@ -64,21 +45,42 @@
 				}
 			}
 		});
-
-		var cmsHasMoved = false;
-
-		function moveCMSZone() {
-			if (!cmsHasMoved) {
-				$(document.body).append($('.cmsNavigationBlock').detach());
-				$(document.body).append($('.cmsMainAdvControls').detach());
-				cmsHasMoved = true;
-			}
-		}
 	</script>
+
+	@if (specialCss) {
+		var img = new HtmlString("'/Assets/telephasic/images/overlay.png'");
+		var svg = new HtmlString("'/Assets/telephasic/images/header.svg'");
+
+		var main = Helper.MainColorCode;
+		var mainLt = CmsSkin.LightenColor(main, 0.15);
+		var mainDk = CmsSkin.DarkenColor(main, 0.30);
+		//var mainRot = CmsSkin.RotateColor(mainDk, 90);
+
+		<style type="text/css">
+		#header-wrapper {
+			position: relative;
+			padding: 4em 0 2em 0;
+			background-image: url(@svg);
+			background-image: url(@img), url(@svg), -moz-linear-gradient(75deg, @mainDk 15%, @mainLt 55%);
+			background-image: url(@img), url(@svg), -webkit-linear-gradient(75deg, @mainDk 15%, @mainLt 55%);
+			background-image: url(@img), url(@svg), -ms-linear-gradient(75deg, @mainDk 15%, @mainLt 55%);
+			background-image: url(@img), url(@svg), linear-gradient(75deg, @mainDk 15%, @mainLt 55%);
+			background-color: @main;
+			background-size: 100% 620%;
+			background-size: 128px 128px, 100% 620%, auto;
+			background-repeat: repeat, no-repeat, no-repeat;
+		}
+		</style>
+	}
+
+	@CarrotCakeHtml.MetaTags()
+	@CarrotCakeHtml.Rss()
+
+	<title>@CmsPage.Titlebar</title>
 
 	@CarrotCakeHtml.IncludeHead()
 </head>
-<body class="@ViewBag.TelephasicBodyStyle">
+<body class="@bodyCssClass">
 	<div id="page-wrapper">
 
 		<!-- Header -->
@@ -97,50 +99,71 @@
 			@RenderSection("HeroSection", required: false)
 		</div>
 
-		@RenderSection("MainSection", required: false)
-
 		@RenderBody()
 
 		<!-- Footer -->
 		<div id="footer-wrapper">
 			<div id="footer" class="container">
 				<header class="major">
-					@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextRight)
+					@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phWidgetZone01)
 				</header>
 				<div class="row">
-					<section class="6u 12u(narrower)">
+					<section class="col-6 col-12-narrower">
 						@Html.Partial("_contactus")
+						@*<form method="post" action="#">
+								<div class="row gtr-50">
+									<div class="col-6 col-12-mobile">
+										<input name="name" placeholder="Name" type="text" />
+									</div>
+									<div class="col-6 col-12-mobile">
+										<input name="email" placeholder="Email" type="text" />
+									</div>
+									<div class="col-12">
+										<textarea name="message" placeholder="Message"></textarea>
+									</div>
+									<div class="col-12">
+										<ul class="actions">
+											<li><input type="submit" value="Send Message" /></li>
+											<li><input type="reset" value="Clear form" /></li>
+										</ul>
+									</div>
+								</div>
+							</form>*@
 					</section>
-
-					<section class="6u 12u(narrower)">
-						<div class="row 0%">
-							<ul class="divided icons 6u 12u(mobile)">
-								<li class="icon fa-twitter"><a href="#"><span class="extra">twitter.com/</span>untitled</a></li>
-								<li class="icon fa-facebook"><a href="#"><span class="extra">facebook.com/</span>untitled</a></li>
-								<li class="icon fa-dribbble"><a href="#"><span class="extra">dribbble.com/</span>untitled</a></li>
+					<section class="col-6 col-12-narrower">
+						<div class="row gtr-0">
+							<ul class="divided icons col-6 col-12-mobile">
+								<li class="icon brands fa-twitter"><a href="#"><span class="extra">twitter.com/</span>untitled</a></li>
+								<li class="icon brands fa-facebook-f"><a href="#"><span class="extra">facebook.com/</span>untitled</a></li>
+								<li class="icon brands fa-dribbble"><a href="#"><span class="extra">dribbble.com/</span>untitled</a></li>
 							</ul>
-							<ul class="divided icons 6u 12u(mobile)">
-								<li class="icon fa-instagram"><a href="#"><span class="extra">instagram.com/</span>untitled</a></li>
-								<li class="icon fa-youtube"><a href="#"><span class="extra">youtube.com/</span>untitled</a></li>
-								<li class="icon fa-pinterest"><a href="#"><span class="extra">pinterest.com/</span>untitled</a></li>
+							<ul class="divided icons col-6 col-12-mobile">
+								<li class="icon brands fa-instagram"><a href="#"><span class="extra">instagram.com/</span>untitled</a></li>
+								<li class="icon brands fa-youtube"><a href="#"><span class="extra">youtube.com/</span>untitled</a></li>
+								<li class="icon brands fa-pinterest"><a href="#"><span class="extra">pinterest.com/</span>untitled</a></li>
 							</ul>
 						</div>
 					</section>
 				</div>
 			</div>
-
 			<div id="copyright" class="container">
 				<ul class="menu">
 					<li>
-						@Html.Raw(String.Format("&copy; {0}, {1} ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
+						@Html.Raw(string.Format("&copy; {0}, {1} ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
 					</li>
-					<li>Site built with <a target="_blank" href="http://www.carrotcakecms.com/">carrotcake cms</a></li>
-					<li>All rights reserved.</li>
 					<li>Design: <a target="_blank" href="http://html5up.net">HTML5 UP</a></li>
+					<li>Site built with <a target="_blank" href="http://www.carrotware.com/">carrotcake cms</a></li>
 				</ul>
 			</div>
 		</div>
 	</div>
+
+	<!-- Scripts -->
+	<script src="~/Assets/telephasic/js/jquery.dropotron.min.js"></script>
+	<script src="~/Assets/telephasic/js/browser.min.js"></script>
+	<script src="~/Assets/telephasic/js/breakpoints.min.js"></script>
+	<script src="~/Assets/telephasic/js/util.js"></script>
+	<script src="~/Assets/telephasic/js/main.js"></script>
 
 	@CarrotCakeHtml.IncludeFooter()
 </body>

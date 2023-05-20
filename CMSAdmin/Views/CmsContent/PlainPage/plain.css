@@ -208,6 +208,48 @@ a {
 			color: #8A8A8A;
 		}
 
+/* Calendar */
+
+#calendar {
+}
+
+#calendar_wrap {
+	padding: 15px 5px 15px 5px;
+}
+
+#calendar caption {
+	color: #555555;
+	font-size: 1.75em;
+	font-weight: 600;
+	padding: 5px;
+}
+
+#calendar thead {
+	color: #333333;
+	font-size: 1.25em;
+	font-weight: 500;
+}
+
+#calendar table {
+	width: 100%;
+}
+
+#calendar tbody td {
+	text-align: center;
+}
+
+#calendar #prev {
+	text-align: left;
+}
+
+#calendar #next {
+	text-align: right;
+}
+
+#calendar #prev, #calendar #next {
+	font-size: 1.4em;
+}
+
 /* Footer */
 
 #footer {
