@@ -38,20 +38,16 @@
 
 				<section>
 					@if (pager != null) {
-
 						foreach (var item in pager.DataSource) {
+							var usr = item.BylineUser;
 							<div>
 								<p>
-									<b class="green" style="font-size: 110%;">
-										<a class="green" href="@item.FileName">@item.NavigationText</a>
-										&nbsp;|&nbsp;
-										@String.Format("{0:d}", item.GoLiveDate)
+									<b class="index-head">
+										<a href="@item.FileName">@item.NavigationText</a>
+										&nbsp;|&nbsp; @String.Format(" {0:d} ", item.GoLiveDate)
 									</b>
 									<br />
-									by @{
-										var usr = item.BylineUser;
-									}
-									@usr.FullName_FirstLast
+									by @usr.FullName_FirstLast
 									<br />
 									@item.PageTextPlainSummary
 								</p>
@@ -64,15 +60,17 @@
 							</div>
 						}
 
-						<div class="pagerfooterlinks">
-							@foreach (var i in pager.PageNumbers) {
-								using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
-									using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
-										@String.Format(" {0} ", i)
+						if (pager.PageNumbers != null && pager.PageNumbers.Any()) {
+							<div class="pagerfooterlinks">
+								@foreach (var i in pager.PageNumbers) {
+									using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+										using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+											@String.Format(" {0} ", i)
+										}
 									}
 								}
-							}
-						</div>
+							</div>
+						}
 						<br />
 					}
 				</section>

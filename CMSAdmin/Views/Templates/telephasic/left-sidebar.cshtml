@@ -12,9 +12,9 @@
 			<div class="col-4 col-12-narrower">
 
 				<!-- Sidebar -->
+				@Html.Partial("_searchBox")
+				@Html.Partial("_subPageNav")
 				<section id="sidebar">
-					@Html.Partial("_searchBox")
-					@Html.Partial("_subPageNav")
 					<div>
 						@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftTop)
 					</div>

@@ -284,10 +284,31 @@ header {
 
 /* pager stylings */
 
+.index-head {
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.post-footer {
+	margin: 0.2em 4em 0.4em 4em;
+	clear: both;
+}
+
+.align-left {
+	text-align: left;
+	clear: both;
+}
+
+.align-right {
+	text-align: right;
+	clear: both;
+}
+
 .pagerfooterlinks {
 	line-height: normal;
-	margin-top: 1em;
-	margin-bottom: 2em;
+	margin-top: 1.5em;
+	margin-bottom: 40px;
+	padding-bottom: 2em;
 }
 
 	.pagerfooterlinks .pagerlink {
@@ -301,21 +322,25 @@ header {
 		float: left;
 	}
 
+		.pagerfooterlinks .pagerlink:hover {
+			color: #777777;
+			background-color: #efefef;
+		}
+
 		.pagerfooterlinks .pagerlink a {
-			margin: 0.25em 0.25em 0.25em 0.25em;
-			padding: 0.25em 0.25em 0.25em 0.25em;
+			margin: 0.1em 0.1em 0.1em 0.1em;
+			padding: 0.4em 0.4em 0.4em 0.4em;
 			font-weight: normal;
 			text-decoration: none;
 			border: 0px solid transparent;
-			background-color: #ffffff;
+			background-color: transparent;
 			color: #222222;
 		}
 
 			.pagerfooterlinks .pagerlink a.selected {
 				text-decoration: none;
 				border: 0px solid transparent;
-				font-weight: bolder;
-				background-color: #999999;
+				background-color: transparent;
 				color: #ffffff;
 				font-weight: bolder;
 			}
@@ -326,6 +351,11 @@ header {
 		color: #ffffff;
 		font-weight: bolder;
 	}
+
+		.pagerfooterlinks .selectedwrap:hover {
+			background-color: #777777;
+			color: #ffffff;
+		}
 
 @media screen and (max-width: 1280px) {
 	.container {
@@ -2169,7 +2199,7 @@ button,
 	position: relative;
 	background: #fff;
 	overflow-x: hidden;
-	padding: 6em 0 6em 0;
+	padding: 4em 0 4em 0;
 }
 
 .image-wrapper {
@@ -2227,7 +2257,7 @@ button,
 	-webkit-transform: translate3d(0, 0, 0);
 	position: relative;
 	border-top: solid 1px #c2c7cc;
-	padding: 6em 0 6em 0;
+	padding: 4em 0 4em 0;
 	background-image: url("../images/overlay.png"), url("../images/footer.svg");
 	background-size: 128px 128px, 100% 100%;
 }
@@ -2525,7 +2555,7 @@ button,
 	/* Wrappers */
 
 	.wrapper {
-		padding: 5em 0 5em 0;
+		padding: 4em 0 4em 0;
 	}
 
 	#header-wrapper {
@@ -2537,11 +2567,11 @@ button,
 	}
 
 	#promo-wrapper {
-		padding: 5em 0 5em 0;
+		padding: 4em 0 4em 0;
 	}
 
 	#footer-wrapper {
-		padding: 5em 0 5em 0;
+		padding: 4em 0 4em 0;
 	}
 }
 

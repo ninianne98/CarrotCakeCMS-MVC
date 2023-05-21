@@ -45,21 +45,21 @@
 
 	<style type="text/css">
 		a {
-			color: @String.Format("{0}", mainDk);
+			color: @string.Format("{0}", mainDk);
 		}
 		a:hover {
-			color: @String.Format("{0}", mainLt);
+			color: @string.Format("{0}", mainLt);
 		}
 
 		#logo a {
-			color: @String.Format("{0}", mainXDk);
+			color: @string.Format("{0}", mainXDk);
 		}
 		#logo a:hover {
-			color: @String.Format("{0}", mainDk);
+			color: @string.Format("{0}", mainDk);
 		}
 
 		h1, h2, h3, h4 {
-			color: @String.Format("{0}", mainXDk);
+			color: @string.Format("{0}", mainXDk);
 		}
 	</style>
 
@@ -84,15 +84,11 @@
 	@CarrotCakeHtml.IncludeHead()
 </head>
 <body>
-
 	<div id="wrapper">
 		<h1 id="logo">
-			<a href="~/">
-				@ViewBag.SiteName
-			</a>
+			<a href="~/"> @ViewBag.SiteName </a>
 		</h1>
-		<p>
-		</p>
+		<p> </p>
 		<div id="menu">
 			@CarrotWeb.RenderTwoPartControlBody(nav)
 		</div>
@@ -144,47 +140,46 @@
 									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftBottom)
 								</div>
 							</li>
+
 							@if (CmsPage.IsPageContent == true) {
-								<li>
-									@if (CmsPage.ChildNav.Any()) {
+								var updates = CmsPage.GetSiteUpdates(10);
+
+								if (CmsPage.ChildNav.Any()) {
+									<li>
 										<h2>Child Pages</h2>
 										<ul class="sidemenu">
 											@foreach (var itm in CmsPage.ChildNav) {
 												<li class="child-nav"><a href="@itm.FileName">@itm.NavigationText</a></li>
 											}
 										</ul>
-									}
-								</li>
-								<li>
-									@if (CmsPage.SiblingNav.Any()) {
+									</li>
+								}
+								if (CmsPage.SiblingNav.Any()) {
+									<li>
 										<h2>Sibling Pages</h2>
 										<ul class="sidemenu">
 											@foreach (var itm in CmsPage.SiblingNav) {
 												<li class="child-nav"><a href="@itm.FileName">@itm.NavigationText</a></li>
 											}
 										</ul>
-									}
-								</li>
-								<li>
-									@{
-										var updates = CmsPage.GetSiteUpdates(10);
-										if (updates.Any()) {
-											<h2>Recent Updates</h2>
-											<ul class="sidemenu">
-												@foreach (var itm in updates) {
-													<li class="child-nav">
-														<a href="@itm.FileName">
-															@itm.NavigationText
-															@string.Format(" ({0:d})", itm.GoLiveDate)
-														</a>
-													</li>
-												}
-											</ul>
-										}
-									}
-								</li>
-										}
-
+									</li>
+								}
+								if (updates.Any()) {
+									<li>
+										<h2>Recent Updates</h2>
+										<ul class="sidemenu">
+											@foreach (var itm in updates) {
+												<li class="child-nav">
+													<a href="@itm.FileName">
+														@itm.NavigationText
+														@string.Format(" ({0:d})", itm.GoLiveDate)
+													</a>
+												</li>
+											}
+										</ul>
+									</li>
+								}
+							}
 							@if (CmsPage.IsBlogPost || CmsPage.IsSiteIndex) {
 								<li>
 									@Html.Partial("_planblogdata")
@@ -195,9 +190,12 @@
 					<!-- end #sidebar -->
 					<div id="content">
 						<div class="post">
-							<h2>
-								@CmsPage.Heading
-							</h2>
+							<h2> @CmsPage.Heading </h2>
+							@if (CmsPage.IsBlogPost) {
+								<p>
+									by @CmsPage.BylineUser.FullName_FirstLast
+								</p>
+							}
 							<div class="entry">
 								<div>
 									@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterTop)
@@ -248,47 +246,45 @@
 							</div>
 
 							foreach (var item in pager.DataSource) {
+								var usr = item.BylineUser;
 								<div>
 									<p>
-										<b class="green" style="font-size: 110%;">
-											<a href="@item.FileName">@item.NavigationText</a> &nbsp;|&nbsp; @string.Format("{0:d}", item.GoLiveDate)
+										<b class="index-head">
+											<a href="@item.FileName">@item.NavigationText</a>
+											&nbsp;|&nbsp; @string.Format(" {0:d} ", item.GoLiveDate)
 										</b>
 										<br />
-										by @{
-											var usr = item.BylineUser;
-										}
-										@usr.FullName_FirstLast
+										by @usr.FullName_FirstLast
 										<br />
 										@item.PageTextPlainSummary
 									</p>
 
 									<p class="post-footer align-right">
-										<a class="readmore" href="@item.FileName">
-											Read more
-										</a>
+										<a class="readmore" href="@item.FileName">Read more</a>
 										<span class="comments">
-											@string.Format(" Comments ({0}) ", item.CommentCount)
-										</span><span class="date">
-											@string.Format("{0:MMMM d, yyyy}", item.GoLiveDate)
+											@string.Format("  Comments ({0})  ", item.CommentCount)
 										</span>
+										@*<span class="date">
+												@string.Format("{0:MMMM d, yyyy}", item.GoLiveDate)
+											</span>*@
 									</p>
 								</div>
-											}
+							}
 
-											<div class="pagerfooterlinks">
-												@foreach (var i in pager.PageNumbers) {
-													using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
-														using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
-															@String.Format(" {0} ", i)
-														}
-													}
-												}
-											</div>
+							<div class="pagerfooterlinks">
+								@foreach (var i in pager.PageNumbers) {
+									using (CarrotWeb.BeginWrappedItem("div", i, pager.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+										using (CarrotWeb.BeginWrappedItem("a", i, pager.PageNumber, new { @class = "selected", @href = pager.GetUrl(i) }, new { @href = pager.GetUrl(i) })) {
+											@String.Format(" {0} ", i)
+										}
+									}
+								}
+							</div>
 
-											<div style="clear: both;">
-											</div>
-											<br />
-											}
+							<div style="clear: both;">
+							</div>
+							<br />
+						}
 
 						<div style="clear: both;">
 							&nbsp;
@@ -308,8 +304,8 @@
 
 	<div id="footer">
 		<p>
-			@Html.Raw(string.Format("&copy;  {0}, {1} ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))
-			All rights reserved.
+			@Html.Raw(string.Format(" &copy;  {0}, {1} All rights reserved. ", DateTime.Now.Year, CmsPage.TheSite.SiteName.Trim()))<br />
+			Site built with <a target="_blank" href="http://www.carrotcakecms.com/">carrotcake cms</a>
 		</p>
 	</div>
 

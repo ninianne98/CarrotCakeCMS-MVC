@@ -16,10 +16,8 @@
 
 @if (dates.Any()) {
 	<section class="sidebar">
-		<header>
-			<h2>Dates</h2>
-		</header>
-		<ul class="default">
+		<h3>Dates</h3>
+		<ul class="sidemenu">
 			@foreach (var itm in dates) {
 				<li><a href="@itm.Uri">@itm.Text</a></li>
 			}
@@ -29,10 +27,8 @@
 
 @if (cats.Any()) {
 	<section class="sidebar">
-		<header>
-			<h2>Categories</h2>
-		</header>
-		<ul class="default">
+		<h3>Categories</h3>
+		<ul class="sidemenu">
 			@foreach (var itm in cats) {
 				<li><a href="@itm.Uri">@itm.Text</a></li>
 			}
@@ -42,10 +38,8 @@
 
 @if (tags.Any()) {
 	<section class="sidebar">
-		<header>
-			<h2>Tags</h2>
-		</header>
-		<ul class="default">
+		<h3>Tags</h3>
+		<ul class="sidemenu">
 			@foreach (var itm in tags) {
 				<li><a href="@itm.Uri">@itm.Text</a></li>
 			}

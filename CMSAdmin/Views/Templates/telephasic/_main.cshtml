@@ -21,14 +21,14 @@
 		ElementId = "nav"
 	};
 
-	bool specialCss = ViewBag.TelephasicSpecialCss ?? false;
+	bool specialThemed = ViewBag.TelephasicThemed ?? false;
 }
 <html>
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
-	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver })
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver, JQVersion = "2" })
 	<link rel="stylesheet" href="~/Assets/telephasic/css/main.css" />
 
 	<script type="text/javascript">
@@ -47,7 +47,7 @@
 		});
 	</script>
 
-	@if (specialCss) {
+	@if (specialThemed) {
 		var img = new HtmlString("'/Assets/telephasic/images/overlay.png'");
 		var svg = new HtmlString("'/Assets/telephasic/images/header.svg'");
 
@@ -58,17 +58,12 @@
 
 		<style type="text/css">
 		#header-wrapper {
-			position: relative;
-			padding: 4em 0 2em 0;
 			background-image: url(@svg);
 			background-image: url(@img), url(@svg), -moz-linear-gradient(75deg, @mainDk 15%, @mainLt 55%);
 			background-image: url(@img), url(@svg), -webkit-linear-gradient(75deg, @mainDk 15%, @mainLt 55%);
 			background-image: url(@img), url(@svg), -ms-linear-gradient(75deg, @mainDk 15%, @mainLt 55%);
 			background-image: url(@img), url(@svg), linear-gradient(75deg, @mainDk 15%, @mainLt 55%);
 			background-color: @main;
-			background-size: 100% 620%;
-			background-size: 128px 128px, 100% 620%, auto;
-			background-repeat: repeat, no-repeat, no-repeat;
 		}
 		</style>
 	}
@@ -110,25 +105,6 @@
 				<div class="row">
 					<section class="col-6 col-12-narrower">
 						@Html.Partial("_contactus")
-						@*<form method="post" action="#">
-								<div class="row gtr-50">
-									<div class="col-6 col-12-mobile">
-										<input name="name" placeholder="Name" type="text" />
-									</div>
-									<div class="col-6 col-12-mobile">
-										<input name="email" placeholder="Email" type="text" />
-									</div>
-									<div class="col-12">
-										<textarea name="message" placeholder="Message"></textarea>
-									</div>
-									<div class="col-12">
-										<ul class="actions">
-											<li><input type="submit" value="Send Message" /></li>
-											<li><input type="reset" value="Clear form" /></li>
-										</ul>
-									</div>
-								</div>
-							</form>*@
 					</section>
 					<section class="col-6 col-12-narrower">
 						<div class="row gtr-0">
