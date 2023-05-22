@@ -28,9 +28,6 @@
 	<div class="container">
 		<div class="row">
 			<section class="col-6 col-12-narrower feature">
-				<div class="image-wrapper first">
-					<a href="#" class="image featured first"><img src="~/Assets/telephasic/images/pic01.jpg" alt="" /></a>
-				</div>
 				<div>
 					@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phLeftTop)
 				</div>
@@ -42,9 +39,6 @@
 				</div>
 			</section>
 			<section class="col-6 col-12-narrower feature">
-				<div class="image-wrapper">
-					<a href="#" class="image featured"><img src="~/Assets/telephasic/images/pic02.jpg" alt="" /></a>
-				</div>
 				<div>
 					@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phRightTop)
 				</div>
@@ -60,7 +54,7 @@
 </div>
 
 @if (SecurityData.AdvancedEditMode == true || SiteData.IsPageSampler
-			|| CmsPage.TheWidgets.Where(x => x.IsWidgetActive && x.PlaceholderName == "phWidgetZone02").Any()) {
+									|| CmsPage.TheWidgets.Where(x => x.IsWidgetActive && x.PlaceholderName == "phWidgetZone02").Any()) {
 	<!-- Promo -->
 	<div id="promo-wrapper">
 		<section id="promo">
