@@ -482,3 +482,28 @@
 .minicolors-theme-semanticui input {
 	text-indent: 30px;
 }
+
+/*==========================*/
+
+.minicolors-swatch-color, .minicolors-theme-default .minicolors-swatch {
+	height: 28px;
+	width: 28px;
+	margin-left: 12px;
+	border-radius: 50%;
+	display: inline-block;
+	left: auto;
+}
+
+.minicolors-swatch::after {
+	box-shadow: none;
+}
+
+.minicolors-swatch {
+	border: 1px solid #555555;
+	cursor: pointer;
+}
+
+.minicolors-theme-default .minicolors-input {
+	padding-left: 8px;
+	padding-right: 8px;
+}

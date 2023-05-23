@@ -1,5 +1,5 @@
 body {
-	font-size: 14px;
+	font-size: 16px;
 	font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
 	color: #111111;
 	background-color: #fefefe;
@@ -18,15 +18,15 @@ h1, h2, h3, h4 {
 }
 
 h1 {
-	font-size: 1.5em;
+	font-size: 1.75em;
 }
 
 h2 {
-	font-size: 1.3em;
+	font-size: 1.5em;
 }
 
 h3 {
-	font-size: 1.1em;
+	font-size: 1.25em;
 }
 
 h4 {
@@ -42,7 +42,7 @@ video, object, .mceItemMedia, .mceItemIframe, .mceItemVideo, .mceItemRealMedia,
 }
 
 td, tr, th, p, div, dl, dd, dt, ul, ol, li, span, blockquote {
-	font-size: 14px;
+	font-size: 16px;
 	font-family: "Segoe UI", Roboto, Arial, Helvetica, sans-serif;
 }
 
@@ -75,7 +75,7 @@ blockquote {
 tt, pre, code, kbd, samp,
 code[class*="language-"], pre[class*="language-"],
 code[class*="language-"] span, pre[class*="language-"] span {
-	font-size: 13px;
+	font-size: 15px;
 	font-family: "Lucida Console", "Courier New", Courier, Consolas, Monaco, monospace;
 }
 
@@ -111,4 +111,40 @@ ul.four-col, ol.four-col {
 	columns: 4;
 	-webkit-columns: 4;
 	-moz-columns: 4;
+}
+
+@media screen and (max-width: 650px) {
+	body, td, tr, th, p, div, dl, dd, dt, ul, ol, li, span, blockquote {
+		font-size: 14px;
+	}
+
+	tt, pre, code, kbd, samp,
+	code[class*="language-"], pre[class*="language-"],
+	code[class*="language-"] span, pre[class*="language-"] span {
+		font-size: 13px;
+	}
+}
+
+@media screen and (min-width: 900px) {
+	body, td, tr, th, p, div, dl, dd, dt, ul, ol, li, span, blockquote {
+		font-size: 18px;
+	}
+
+	tt, pre, code, kbd, samp,
+	code[class*="language-"], pre[class*="language-"],
+	code[class*="language-"] span, pre[class*="language-"] span {
+		font-size: 17px;
+	}
+}
+
+@media screen and (min-width: 1400px) {
+	body, td, tr, th, p, div, dl, dd, dt, ul, ol, li, span, blockquote {
+		font-size: 20px;
+	}
+
+	tt, pre, code, kbd, samp,
+	code[class*="language-"], pre[class*="language-"],
+	code[class*="language-"] span, pre[class*="language-"] span {
+		font-size: 19px;
+	}
 }

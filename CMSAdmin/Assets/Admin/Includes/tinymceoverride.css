@@ -60,5 +60,14 @@
 .tox .tox-textarea,
 .tox .tox-textfield,
 .tox .tox-toolbar-textfield {
-	font-size: 15px !important;
+	font-size: 14px !important;
+}
+
+@media screen and (min-width: 1350px) {
+	.tox .tox-listboxfield .tox-listbox--select,
+	.tox .tox-textarea,
+	.tox .tox-textfield,
+	.tox .tox-toolbar-textfield {
+		font-size: 16px !important;
+	}
 }

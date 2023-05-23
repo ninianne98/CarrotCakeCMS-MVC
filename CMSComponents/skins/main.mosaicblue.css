@@ -703,6 +703,28 @@ input[type="radio"]:focus {
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(195, 195, 195, 0.6);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(215, 215, 215, 0.6);
 }
+textarea.rawEditor,
+textarea.tox-textarea {
+  font-family: "Lucida Console", "Courier New", Courier, Consolas, Monaco, monospace !important;
+}
+@media screen and (min-width: 850px) {
+  textarea.rawEditor,
+  textarea.tox-textarea {
+    font-size: 14px;
+  }
+}
+@media screen and (min-width: 1150px) {
+  textarea.rawEditor,
+  textarea.tox-textarea {
+    font-size: 16px;
+  }
+}
+@media screen and (min-width: 1350px) {
+  textarea.rawEditor,
+  textarea.tox-textarea {
+    font-size: 18px;
+  }
+}
 .form-control-sm {
   width: 100px;
 }

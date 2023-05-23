@@ -533,41 +533,29 @@
 			</tr>
 		</table>
 		<br />
-		<div id="jqtabs" style="height: 600px; width: 900px; margin-bottom: 10px;">
+		<div id="jqtabs" style="height: 600px; width: 1024px; margin-bottom: 10px;">
 			<ul>
 				<li><a href="#pagecontent-tabs-0">Left</a></li>
 				<li><a href="#pagecontent-tabs-1">Center</a></li>
 				<li><a href="#pagecontent-tabs-3">Right</a></li>
 				<li><a href="#pagecontent-tabs-5">Text Controls</a></li>
 			</ul>
-			<div style="margin-bottom: 25px; height: 580px; width: 890px;">
+			<div style="margin-bottom: 25px; height: 580px; width: 990px;">
 				<div id="pagecontent-tabs-0">
 					<div style="margin-bottom: 25px;">
-						<div id="divLeft">
-							body (left)<br />
-							@*<a href="javascript:cmsToggleTinyMCE('@Html.IdFor(m=> m.LeftPageText)');">Show/Hide Editor</a>*@
-						</div>
-						@Html.TextAreaFor(m => m.ContentPage.LeftPageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 300px; width: 850px;" })
+						@Html.TextAreaFor(m => m.ContentPage.LeftPageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 475px; width: 950px;" })
 						<br />
 					</div>
 				</div>
 				<div id="pagecontent-tabs-1">
 					<div style="margin-bottom: 25px;">
-						<div id="divCenter">
-							body (main/center)<br />
-							@*<a href="javascript:cmsToggleTinyMCE('@Html.IdFor(m => m.ContentPage.PageText)');">Show/Hide Editor</a>*@
-						</div>
-						@Html.TextAreaFor(m => m.ContentPage.PageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 300px; width: 850px;" })
+						@Html.TextAreaFor(m => m.ContentPage.PageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 475px; width: 950px;" })
 						<br />
 					</div>
 				</div>
 				<div id="pagecontent-tabs-3">
 					<div style="margin-bottom: 25px;">
-						<div id="divRight">
-							body (right)<br />
-							@*<a href="javascript:cmsToggleTinyMCE('@Html.IdFor(m => m.ContentPage.RightPageText)');">Show/Hide Editor</a>*@
-						</div>
-						@Html.TextAreaFor(m => m.ContentPage.RightPageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 300px; width: 850px;" })
+						@Html.TextAreaFor(m => m.ContentPage.RightPageText, new { rows = "15", cols = "80", @class = @editCSS, style = "height: 475px; width: 950px;" })
 						<br />
 					</div>
 				</div>
@@ -600,22 +588,22 @@
 						<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing();" />
 						&nbsp;&nbsp;
 						@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
-							<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
+						<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
 						}
 					</td>
 					@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
-						<td>
-							&nbsp;&nbsp;
-						</td>
-						<td align="right">
-							@Html.DropDownList("ddlVersions", new SelectList(Model.VersionHistory, "Key", "Value"), "[Select Version]")
-						</td>
-						<td>
-							&nbsp;&nbsp;
-						</td>
-						<td align="left">
-							<input type="button" onclick="javascript:cmsPageVersionNav();" name="btnReview" value="Review / Revert" />
-						</td>
+					<td>
+						&nbsp;&nbsp;
+					</td>
+					<td align="right">
+						@Html.DropDownList("ddlVersions", new SelectList(Model.VersionHistory, "Key", "Value"), "[Select Version]")
+					</td>
+					<td>
+						&nbsp;&nbsp;
+					</td>
+					<td align="left">
+						<input type="button" onclick="javascript:cmsPageVersionNav();" name="btnReview" value="Review / Revert" />
+					</td>
 					}
 				</tr>
 			</table>
@@ -640,7 +628,7 @@
 		</div>
 	</div>
 
-						}
+}
 
 <div style="display: none">
 	@using (Html.BeginForm("DeleteContentPage", CmsRouteConstants.Controller.Admin)) {
