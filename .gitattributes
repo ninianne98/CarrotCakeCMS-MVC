@@ -1,0 +1,4 @@
+*.cshtml linguist-language=C#
+*/bootstrap/*.css linguist-vendored
+*/editor/*.css linguist-vendored
+*/skins/*.css linguist-vendored
