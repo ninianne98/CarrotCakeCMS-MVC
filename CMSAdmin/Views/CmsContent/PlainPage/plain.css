@@ -251,6 +251,10 @@ a {
 	text-align: center;
 }
 
+#calendar-body a {
+	font-weight: bolder;
+}
+
 #calendar #prev {
 	text-align: left;
 }
