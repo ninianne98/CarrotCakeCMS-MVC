@@ -16,6 +16,40 @@
 	/*
 Common CarrotCake CMS stylesheet
 */
+	body {
+		font-size: 12px;
+	}
+
+	H1 {
+		font-size: 24px;
+	}
+
+	H2 {
+		font-size: 20px;
+	}
+
+	H3 {
+		font-size: 16px;
+	}
+
+	@media screen and (min-width: 1380px) {
+		body {
+			font-size: 16px;
+		}
+
+		H1 {
+			font-size: 28px;
+		}
+
+		H2 {
+			font-size: 24px;
+		}
+
+		H3 {
+			font-size: 18px;
+		}
+	}
+
 	a {
 		color: #333333;
 		text-decoration: none;
@@ -64,13 +98,20 @@ Common CarrotCake CMS stylesheet
 		margin-right: 5px;
 	}
 
-	#jqaccordion .moduleLink {
+	#module-accordion .moduleLink {
 		margin: 0;
 		padding: 0;
-		margin-top: 2px;
-		margin-bottom: 2px;
-		padding-bottom: 2px;
+		margin-top: 3px;
+		margin-bottom: 3px;
+		padding-top: 0.2em;
+		padding-bottom: 0.2em;
 		display: block;
+		font-size: 1.1em;
+	}
+
+	#module-accordion h3 {
+		margin: 0;
+		padding: 0.35em 0.25em;
 	}
 
 	.jqradioset label {
@@ -192,10 +233,41 @@ Common CarrotCake CMS stylesheet
 		clear: both;
 	}
 	/* fieldset */
+	.fieldset-xsm {
+		min-width: 300px;
+		width: 32em;
+	}
+
+	.fieldset-sm {
+		min-width: 450px;
+		width: 40em;
+	}
+
+	.fieldset-med {
+		min-width: 650px;
+		width: 46em;
+	}
+
+	.fieldset-lg {
+		min-width: 725px;
+		width: 55em;
+	}
+
+	.fieldset-xlg {
+		min-width: 825px;
+		width: 62em;
+	}
+
+	.fieldset-xxlg {
+		min-width: 900px;
+		width: 90%;
+	}
+
 	fieldset {
 		clear: both;
+		display: inline;
 		margin: 1.2em 0;
-		padding: 1.2em;
+		padding: 1.3em;
 		border: 1px solid #ccc;
 		margin-bottom: 30px;
 		padding-bottom: 10px;
@@ -206,7 +278,7 @@ Common CarrotCake CMS stylesheet
 
 	fieldset legend label {
 		display: block;
-		font-size: 16px;
+		font-size: 1.35em;
 		margin: 0;
 		padding: 0;
 		font-weight: bold;
@@ -234,7 +306,7 @@ Common CarrotCake CMS stylesheet
 		color: #000;
 	}
 
-	select, textarea, input[type="text"], input[type="password"], input[type="checkbox"], input[type="radio"] {
+	select, textarea, input[type="text"], input[type="number"], input[type="password"], input[type="checkbox"], input[type="radio"] {
 		padding: 3px;
 		margin: 3px;
 		margin-top: 5px;
@@ -249,7 +321,7 @@ Common CarrotCake CMS stylesheet
 		font-family: Lucida Grande, Lucida Sans Arial, Arial, sans-serif;
 	}
 
-	select:focus, textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="checkbox"]:focus, input[type="radio"]:focus {
+	select:focus, textarea:focus, input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus, input[type="checkbox"]:focus, input[type="radio"]:focus {
 		border-color: @themeColor;
 		outline: 0;
 		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(195, 195, 195, .6);
@@ -279,11 +351,13 @@ Common CarrotCake CMS stylesheet
 	}
 
 	.form-control-sm {
-		width: 100px;
+		min-width: 100px;
+		width: 8em;
 	}
 
 	.form-control-md {
-		width: 175px;
+		min-width: 175px;
+		width: 12em;
 	}
 
 	.form-control-lg {
@@ -300,6 +374,7 @@ Common CarrotCake CMS stylesheet
 
 	button, input[type="button"], input[type="submit"], input[type="reset"], input[type="clear"] {
 		margin: 4px;
+		font-size: 1.1em;
 	}
 
 	#cmsDashboardIcons {
@@ -322,6 +397,7 @@ Common CarrotCake CMS stylesheet
 		padding: 10px;
 		margin: 10px;
 		float: left;
+		font-size: 0.95em;
 		text-align: center;
 		background: @themePale;
 		background-image: radial-gradient(ellipse at top, @themePale, transparent), radial-gradient(ellipse at bottom, @themeLight15, transparent);
@@ -332,6 +408,18 @@ Common CarrotCake CMS stylesheet
 	#cmsDashboardIcons .dashboardCell a:hover,
 	#cmsDashboardIcons .dashboardCell a:visited {
 		color: contrast(@themePale, darken(@themeColor, 75%), lighten(@themeColor, 75%));
+	}
+
+	@media screen and (min-width: 1380px) {
+		#cmsDashboardIcons {
+			width: 838px;
+		}
+
+		#cmsDashboardIcons .dashboardCell {
+			line-height: 1em;
+			height: 125px;
+			width: 125px;
+		}
 	}
 
 	.clear {
@@ -359,6 +447,36 @@ Common CarrotCake CMS stylesheet
 	/* align (center) */
 	table.centered {
 		margin: 0 auto;
+	}
+
+	.table-xsm {
+		min-width: 300px;
+		width: 32em;
+	}
+
+	.table-sm {
+		min-width: 450px;
+		width: 40em;
+	}
+
+	.table-med {
+		min-width: 650px;
+		width: 46em;
+	}
+
+	.table-lg {
+		min-width: 725px;
+		width: 55em;
+	}
+
+	.table-xlg {
+		min-width: 825px;
+		width: 62em;
+	}
+
+	.table-xxlg {
+		min-width: 900px;
+		width: 90%;
 	}
 
 	.centerItem {

@@ -115,6 +115,7 @@ namespace Carrotware.CMS.UI.Components {
 				sCssClassTableFoot = " class=\"" + this.CssClassTableFoot + "\" ";
 			}
 
+			ContentDateTally thisMonth = new ContentDateTally { TallyDate = this.ThisMonth, TheSite = SiteData.CurrentSite };
 			ContentDateTally lastMonth = new ContentDateTally { TallyDate = this.ThisMonth.AddMonths(-1), TheSite = SiteData.CurrentSite };
 			ContentDateTally nextMonth = new ContentDateTally { TallyDate = this.ThisMonth.AddMonths(1), TheSite = SiteData.CurrentSite };
 
@@ -138,7 +139,8 @@ namespace Carrotware.CMS.UI.Components {
 			dayOfMonth -= firstDay;
 
 			sb.AppendLine("	<table " + sCssClassTable + "> ");
-			sb.AppendLine("		<caption id=\"" + this.ElementId + "-caption\"  " + sCssClassCaption + "> " + this.ThisMonth.Date.ToString("MMMM yyyy") + " </caption>");
+			sb.AppendLine("		<caption id=\"" + this.ElementId + "-caption\"  " + sCssClassCaption + "> "
+					+ "<a href=\"" + thisMonth.DateURL + "\">" + this.ThisMonth.Date.ToString("MMMM yyyy") + "</a> </caption>");
 
 			sb.AppendLine("	<thead id=\"" + this.ElementId + "-head\" " + sCssClassDayHead + ">");
 			sb.AppendLine("		<tr>");

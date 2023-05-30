@@ -14,7 +14,7 @@
 	@Html.AntiForgeryToken()
 	@Html.HiddenFor(model => model.Role.RoleId)
 
-	<fieldset style="width: 400px;">
+	<fieldset class="fieldset-sm">
 		<legend>
 			<label>
 				Role @Html.Partial("_displayErrorPopupButton")
@@ -50,7 +50,7 @@
 						@Html.AntiForgeryToken()
 						@Html.HiddenFor(model => model.Role.RoleId)
 						@Html.HiddenFor(model => model.Role.RoleName)
-						<fieldset style="width: 450px;">
+						<fieldset class="fieldset-sm">
 							<legend>
 								<label>
 									Users @Html.Partial("_displayErrorPopupButton")
@@ -106,7 +106,7 @@
 						@Html.HiddenFor(model => model.Role.RoleId)
 						@Html.HiddenFor(model => model.Role.RoleName)
 
-						<fieldset style="width: 400px;">
+						<fieldset class="fieldset-sm">
 							<legend>
 								<label>
 									Add Users @Html.Partial("_displayErrorPopupButton")

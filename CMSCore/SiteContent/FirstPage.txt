@@ -16,7 +16,7 @@
 	assignment/customization of category and tag URL patterns, simple content feedback collection and review, blog post pagination/indexes 
 	(with templating support), designation of default blog page (required to make search, category links, or tag links function), URL date 
 	formatting patterns, RSS feed support for posts and pages, import and export of site content, and import of content from WordPress XML 
-	export files (tested against versions 2.9, 3.0, 3.4, and 3.5).</p>
+	export files (tested against versions 2.9, 3.0, 3.4, 3.5, 5.4, and 6.2).</p>
 
 <p>To learn more about CarrotCake CMS, visit <a target="_blank" href="http://www.carrotcakecms.com/">carrotcake cms</a>.</p>
 

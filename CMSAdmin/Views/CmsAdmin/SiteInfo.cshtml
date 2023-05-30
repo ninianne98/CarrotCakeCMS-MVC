@@ -25,7 +25,7 @@
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 
-	<fieldset style="width: 675px;">
+	<fieldset class="fieldset-med">
 		<legend>
 			<label>
 				Site Information
@@ -35,11 +35,11 @@
 		</legend>
 		<table style="width: 99%;">
 			<tr>
-				<td class="tablecaption" style="width: 160px;">
+				<td class="tablecaption" style="min-width: 165px; width: 18em;">
 					Site ID
 				</td>
 				<td>
-					<div style="padding: 5px; padding-left: 10px; width: 275px;" class=" ui-widget-content ui-corner-all ">
+					<div style="padding: 5px; padding-left: 10px; min-width: 275px; width: 24em;" class="ui-widget-content ui-corner-all">
 						@Model.Site.SiteID
 					</div>
 					@Html.HiddenFor(m => m.Site.SiteID)
@@ -97,11 +97,11 @@
 					</td>
 					<td>
 						@{
-				var drill = new SitePageDrillDownModel {
-					FieldName = Html.NameFor(m => m.Site.Blog_Root_ContentID).ToString(),
-					CurrentPageID = Guid.Empty,
-					SelectedPageID = Model.Site.Blog_Root_ContentID
-				};
+							var drill = new SitePageDrillDownModel {
+								FieldName = Html.NameFor(m => m.Site.Blog_Root_ContentID).ToString(),
+								CurrentPageID = Guid.Empty,
+								SelectedPageID = Model.Site.Blog_Root_ContentID
+							};
 						}
 
 						@Html.Partial("_SitePageDrillDown", drill)
@@ -123,8 +123,8 @@
 			</tr>
 		</table>
 	</fieldset>
-
-	<fieldset style="width: 675px;">
+	<br />
+	<fieldset class="fieldset-med">
 		<legend>
 			<label>
 				Blog Settings
@@ -134,7 +134,7 @@
 		</legend>
 		<table style="width: 99%;">
 			<tr>
-				<td class="tablecaption" style="width: 160px;">
+				<td class="tablecaption" style="min-width: 165px; width: 18em;">
 					Blog Feature Base Folder
 				</td>
 				<td>

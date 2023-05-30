@@ -12,7 +12,7 @@
 		</div>
 	</div>
 
-	<fieldset style="width: 625px;">
+	<fieldset class="fieldset-med">
 		<legend>
 			<label>
 				User Profile
@@ -89,20 +89,19 @@
 			</tr>
 		</table>
 	</fieldset>
-	<div>
-		<fieldset style="width: 625px;">
-			<legend>
-				@Html.LabelFor(m => m.User.UserBio, htmlAttributes: new { @class = "control-label" })
-			</legend>
-			@Html.TextAreaFor(m => m.User.UserBio, new { rows = "20", cols = "55", @class = "mceEditor", style = "height: 250px; width: 525px;" })
-			<br />
-		</fieldset>
-	</div>
+	<br />
+	<fieldset>
+		<legend>
+			@Html.LabelFor(m => m.User.UserBio, htmlAttributes: new { @class = "control-label" })
+		</legend>
+		@Html.TextAreaFor(m => m.User.UserBio, new { rows = "20", cols = "55", @class = "mceEditor", style = "height: 250px; width: 525px;" })
+		<br />
+	</fieldset>
 
 	<table>
 		<tr>
 			<td>
-				<fieldset style="width: 300px;">
+				<fieldset class="fieldset-xsm">
 					<legend>
 						<label>
 							Roles
@@ -118,15 +117,15 @@
 						</thead>
 						<tbody>
 							@for (int j = 0; j < Model.RoleOptions.Count; j++) {
-							<tr>
-								<td>
-									@Html.CheckBoxFor(x => Model.RoleOptions[j].Selected)
-									@Html.HiddenFor(x => Model.RoleOptions[j].Value)
-									@Html.HiddenFor(x => Model.RoleOptions[j].Text)
-								</td>
-								<td>@Model.RoleOptions[j].Text</td>
-							</tr>
-							}
+								<tr>
+									<td>
+										@Html.CheckBoxFor(x => Model.RoleOptions[j].Selected)
+										@Html.HiddenFor(x => Model.RoleOptions[j].Value)
+										@Html.HiddenFor(x => Model.RoleOptions[j].Text)
+									</td>
+									<td>@Model.RoleOptions[j].Text</td>
+								</tr>
+				}
 						</tbody>
 					</table>
 				</fieldset>
@@ -135,7 +134,7 @@
 				&nbsp;
 			</td>
 			<td>
-				<fieldset style="width: 400px;">
+				<fieldset class="fieldset-sm">
 					<legend>
 						<label>
 							Sites
@@ -152,18 +151,18 @@
 						</thead>
 						<tbody>
 							@for (int j = 0; j < Model.SiteOptions.Count; j++) {
-								var site = Model.AllSites.Where(m => m.SiteID.ToString().ToLowerInvariant() == Model.SiteOptions[j].Value).FirstOrDefault();
+					var site = Model.AllSites.Where(m => m.SiteID.ToString().ToLowerInvariant() == Model.SiteOptions[j].Value).FirstOrDefault();
 
-							<tr>
-								<td>
-									@Html.CheckBoxFor(x => Model.SiteOptions[j].Selected)
-									@Html.HiddenFor(x => Model.SiteOptions[j].Value)
-									@Html.HiddenFor(x => Model.SiteOptions[j].Text)
-								</td>
-								<td>@site.SiteName</td>
-								<td>@site.MainURL</td>
-							</tr>
-							}
+								<tr>
+									<td>
+										@Html.CheckBoxFor(x => Model.SiteOptions[j].Selected)
+										@Html.HiddenFor(x => Model.SiteOptions[j].Value)
+										@Html.HiddenFor(x => Model.SiteOptions[j].Text)
+									</td>
+									<td>@site.SiteName</td>
+									<td>@site.MainURL</td>
+								</tr>
+				}
 						</tbody>
 					</table>
 				</fieldset>
@@ -179,7 +178,7 @@
 	<div style="display: none">
 		<input type="submit" name="btnSave" value="btnSave" id="btnSave" />
 	</div>
-}
+						}
 
 <script type="text/javascript">
 

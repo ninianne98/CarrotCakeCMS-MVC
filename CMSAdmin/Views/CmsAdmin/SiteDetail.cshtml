@@ -10,7 +10,7 @@
 	</div>
 </div>
 
-<fieldset style="width: 550px;">
+<fieldset class="fieldset-med">
 	<legend>
 		<label>
 			Site Information
@@ -18,11 +18,11 @@
 	</legend>
 	<table style="width: 99%;">
 		<tr>
-			<td class="tablecaption" style="width: 160px;">
+			<td class="tablecaption" style="min-width: 125px; width: 12em;">
 				Site ID
 			</td>
 			<td>
-				<div style="padding: 5px; padding-left: 10px; width: 275px;" class=" ui-widget-content ui-corner-all ">
+				<div style="padding: 5px; padding-left: 10px; min-width: 275px; width: 24em;" class="ui-widget-content ui-corner-all">
 					@Model.Site.SiteID
 				</div>
 			</td>
@@ -65,7 +65,7 @@
 					@Html.HiddenFor(model => model.Site.SiteTagline)
 					@Html.HiddenFor(model => model.Site.MainURL)
 
-					<fieldset style="width: 450px;">
+					<fieldset class="fieldset-sm">
 						<legend>
 							<label>
 								Users @Html.Partial("_displayErrorPopupButton")
@@ -133,7 +133,7 @@
 					@Html.HiddenFor(model => model.Site.SiteTagline)
 					@Html.HiddenFor(model => model.Site.MainURL)
 
-					<fieldset style="width: 400px;">
+					<fieldset class="fieldset-sm">
 						<legend>
 							<label>
 								Add Users @Html.Partial("_displayErrorPopupButton")

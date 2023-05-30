@@ -154,7 +154,7 @@
 				<li><a href="javascript:void(0)" class="lnkPopup" onclick="cmsFileBrowserOpen('not-a-real-file')">Browse Files</a> </li>
 
 				@if (SecurityData.IsAdmin) {
-					using (CarrotWeb.BeginWrappedItem("li", "UserIndex;RoleIndex;RoleAddEdit;UserAdd;UserEdit", CmsRouteConstants.Controller.Admin, new { @id = "tabUserSecurity", @class = "current sub" }, new { @id = "tabUserSecurity", @class = "sub" })) {
+					using (CarrotWeb.BeginWrappedItem("li", "UserIndex;RoleIndex;RoleAddEdit;UserAdd;UserEdit;SiteIndex;SiteDetail", CmsRouteConstants.Controller.Admin, new { @id = "tabUserSecurity", @class = "current sub" }, new { @id = "tabUserSecurity", @class = "sub" })) {
 						<a href="javascript:void(0)" class="lnkPopup">Security </a>
 						<ul class="children">
 							<li id="tabUserAdmin"><a href="@SiteFilename.UserIndexURL">Users</a> </li>

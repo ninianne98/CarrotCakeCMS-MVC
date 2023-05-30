@@ -644,46 +644,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		public string GenerateNewFilename(string ThePageTitle, string GoLiveDate, string PageID, string Mode) {
 			try {
 				CurrentPageGuid = new Guid(PageID);
-
 				DateTime goLiveDate = Convert.ToDateTime(GoLiveDate);
 				string sThePageTitle = CMSConfigHelper.DecodeBase64(ThePageTitle);
-				if (string.IsNullOrEmpty(sThePageTitle)) {
-					sThePageTitle = CurrentPageGuid.ToString();
-				}
-				sThePageTitle = sThePageTitle.Replace("/", "-");
-				string sTheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, sThePageTitle);
+				var pageType = Mode.ToLowerInvariant() == "page" ? ContentPageType.PageType.ContentEntry : ContentPageType.PageType.BlogEntry;
 
-				if (Mode.ToLowerInvariant() == "page") {
-					string sTestRes = IsUniqueFilename(sTheFileName, CurrentPageGuid);
-					if (ServiceResponse.IsOK(sTestRes) == false) {
-						for (int i = 1; i < 1000; i++) {
-							string sTestFile = sThePageTitle + "-" + i.ToString();
-							sTestRes = IsUniqueFilename(sTestFile, CurrentPageGuid);
-							if (ServiceResponse.IsOK(sTestRes)) {
-								sTheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, sTestFile);
-								break;
-							} else {
-								sTheFileName = string.Empty;
-							}
-						}
-					}
-				} else {
-					string sTestRes = IsUniqueBlogFilename(sTheFileName, goLiveDate, CurrentPageGuid);
-					if (ServiceResponse.IsOK(sTestRes) == false) {
-						for (int i = 1; i < 1000; i++) {
-							string sTestFile = sThePageTitle + "-" + i.ToString();
-							sTestRes = IsUniqueBlogFilename(sTestFile, goLiveDate, CurrentPageGuid);
-							if (ServiceResponse.IsOK(sTestRes)) {
-								sTheFileName = ContentPageHelper.ScrubFilename(CurrentPageGuid, sTestFile);
-								break;
-							} else {
-								sTheFileName = string.Empty;
-							}
-						}
-					}
-				}
-
-				return ContentPageHelper.ScrubFilename(CurrentPageGuid, sTheFileName).ToLowerInvariant();
+				return SiteData.GenerateNewFilename(CurrentPageGuid, sThePageTitle, goLiveDate, pageType);
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 				return ServiceResponse.Fail;
@@ -707,32 +672,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 		protected string IsUniqueFilename(string theFileName, Guid pageId) {
 			try {
-				theFileName = ContentPageHelper.ScrubFilename(pageId, theFileName);
+				var ret = SiteData.IsUniqueFilename(theFileName, pageId);
 
-				theFileName = theFileName.ToLowerInvariant();
-
-				if (SiteData.IsPageSpecial(theFileName) || SiteData.IsLikelyHomePage(theFileName)) {
-					return ServiceResponse.Fail;
-				}
-
-				if (SiteData.CurrentSite.GetSpecialFilePathPrefixes().Where(x => theFileName.StartsWith(x.ToLowerInvariant())).Any()
-							|| theFileName.StartsWith(SiteData.CurrentSite.BlogFolderPath.ToLowerInvariant())) {
-					return ServiceResponse.Fail;
-				}
-
-				ContentPage fn = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, theFileName);
-
-				ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, pageId);
-
-				if (cp == null && pageId != Guid.Empty) {
-					cp = pageHelper.GetVersion(SiteData.CurrentSite.SiteID, pageId);
-				}
-
-				if (fn == null || (fn != null && cp != null && fn.Root_ContentID == cp.Root_ContentID)) {
-					return ServiceResponse.OK;
-				} else {
-					return ServiceResponse.Fail;
-				}
+				return ret ? ServiceResponse.OK : ServiceResponse.Fail;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -773,46 +715,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 		protected string IsUniqueBlogFilename(string pageSlug, DateTime dateGoLive, Guid pageId) {
 			try {
-				//if (pageSlug.Length < 1) {
-				//	return ServiceResponse.Fail;
-				//}
+				var ret = SiteData.IsUniqueBlogFilename(pageSlug, dateGoLive, pageId);
 
-				DateTime dateOrigGoLive = DateTime.MinValue;
-
-				pageSlug = ContentPageHelper.ScrubFilename(pageId, pageSlug);
-				pageSlug = pageSlug.ToLowerInvariant();
-
-				string TheFileName = pageSlug;
-
-				ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, pageId);
-
-				if (cp != null) {
-					dateOrigGoLive = cp.GoLiveDate;
-				}
-				if (cp == null && pageId != Guid.Empty) {
-					ContentPageExport cpe = ContentImportExportUtils.GetSerializedContentPageExport(pageId);
-					if (cpe != null) {
-						dateOrigGoLive = cpe.ThePage.GoLiveDate;
-					}
-				}
-
-				TheFileName = ContentPageHelper.CreateFileNameFromSlug(SiteData.CurrentSite, dateGoLive, pageSlug);
-
-				if (SiteData.IsPageSpecial(TheFileName) || SiteData.IsLikelyHomePage(TheFileName)) {
-					return ServiceResponse.Fail;
-				}
-
-				ContentPage fn1 = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, TheFileName);
-
-				if (cp == null && pageId != Guid.Empty) {
-					cp = pageHelper.GetVersion(SiteData.CurrentSite.SiteID, pageId);
-				}
-
-				if (fn1 == null || (fn1 != null && cp != null && fn1.Root_ContentID == cp.Root_ContentID)) {
-					return ServiceResponse.OK;
-				} else {
-					return ServiceResponse.Fail;
-				}
+				return ret ? ServiceResponse.OK : ServiceResponse.Fail;
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 

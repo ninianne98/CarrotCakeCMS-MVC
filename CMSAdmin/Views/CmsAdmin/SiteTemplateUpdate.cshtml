@@ -9,7 +9,7 @@
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 
-	<fieldset style="width: 500px;">
+	<fieldset class="fieldset-med">
 		<legend>
 			<label>
 				Content
@@ -41,7 +41,8 @@
 			<br />
 		</p>
 	</fieldset>
-	<fieldset style="width: 500px;">
+	<br />
+	<fieldset class="fieldset-med">
 		<legend>
 			<label>
 				Blog
@@ -75,7 +76,8 @@
 			<br />
 		</p>
 	</fieldset>
-	<fieldset style="width: 500px;">
+	<br />
+	<fieldset class="fieldset-med">
 		<legend>
 			<label>
 				Everything (including home and blog index)
@@ -94,87 +96,4 @@
 	<p>
 		<input type="submit" name="btnSave" value="Save" id="btnSave" />
 	</p>
-
 }
-
-@*@using (Html.BeginForm())
-	{
-		@Html.AntiForgeryToken()
-
-		<div class="form-horizontal">
-			@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-			<div class="form-group">
-				@Html.LabelFor(model => model.HomePage, htmlAttributes: new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					@Html.EditorFor(model => model.HomePage, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.HomePage, "", new { @class = "text-danger" })
-				</div>
-			</div>
-
-			<div class="form-group">
-				@Html.LabelFor(model => model.AllContent, htmlAttributes: new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					@Html.EditorFor(model => model.AllContent, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.AllContent, "", new { @class = "text-danger" })
-				</div>
-			</div>
-
-			<div class="form-group">
-				@Html.LabelFor(model => model.TopPages, htmlAttributes: new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					@Html.EditorFor(model => model.TopPages, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.TopPages, "", new { @class = "text-danger" })
-				</div>
-			</div>
-
-			<div class="form-group">
-				@Html.LabelFor(model => model.SubPages, htmlAttributes: new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					@Html.EditorFor(model => model.SubPages, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.SubPages, "", new { @class = "text-danger" })
-				</div>
-			</div>
-
-			<div class="form-group">
-				@Html.LabelFor(model => model.IndexPageID, htmlAttributes: new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					@Html.EditorFor(model => model.IndexPageID, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.IndexPageID, "", new { @class = "text-danger" })
-				</div>
-			</div>
-
-			<div class="form-group">
-				@Html.LabelFor(model => model.IndexPage, htmlAttributes: new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					@Html.EditorFor(model => model.IndexPage, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.IndexPage, "", new { @class = "text-danger" })
-				</div>
-			</div>
-
-			<div class="form-group">
-				@Html.LabelFor(model => model.BlogPages, htmlAttributes: new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					@Html.EditorFor(model => model.BlogPages, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.BlogPages, "", new { @class = "text-danger" })
-				</div>
-			</div>
-
-			<div class="form-group">
-				@Html.LabelFor(model => model.AllPages, htmlAttributes: new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					@Html.EditorFor(model => model.AllPages, new { htmlAttributes = new { @class = "form-control" } })
-					@Html.ValidationMessageFor(model => model.AllPages, "", new { @class = "text-danger" })
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-md-offset-2 col-md-10">
-					<input type="submit" value="Save" class="btn btn-default" />
-				</div>
-			</div>
-		</div>
-	}
-
-	<div>
-		@Html.ActionLink("Back to List", "Index")
-	</div>*@

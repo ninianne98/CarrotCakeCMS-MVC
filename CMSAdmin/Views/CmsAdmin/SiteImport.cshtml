@@ -6,7 +6,7 @@
 
 
 @if (!String.IsNullOrEmpty(Model.Message)) {
-	<fieldset style="width: 90%;">
+	<fieldset class="fieldset-xxlg">
 		<legend>
 			<label>
 				Import Summary
@@ -50,7 +50,7 @@
 	</p>
 	<div style="display: none" id="importMessage">
 	</div>
-	<fieldset style="width: 90%;">
+	<fieldset class="fieldset-xxlg">
 		<legend>
 			<label>
 				Site Information
@@ -122,7 +122,7 @@
 			</tr>
 		</table>
 	</fieldset>
-	<fieldset style="width: 90%;">
+	<fieldset class="fieldset-xxlg">
 		<legend>
 			<label>
 				Comments
@@ -134,7 +134,7 @@
 			@String.Format(" {0} records", Model.Site.TheComments.Count)
 		</p>
 	</fieldset>
-	<fieldset style="width: 90%;">
+	<fieldset class="fieldset-xxlg">
 		<legend>
 			<label>
 				Pages
@@ -176,7 +176,7 @@
 		}
 
 	</fieldset>
-	<fieldset style="width: 90%;">
+	<fieldset class="fieldset-xxlg">
 		<legend>
 			<label>
 				Blog Posts
@@ -216,7 +216,7 @@
 		}
 
 	</fieldset>
-	<fieldset style="width: 90%;">
+	<fieldset class="fieldset-xxlg">
 		<legend>
 			<label>
 				Content Snippets

@@ -220,6 +220,117 @@ textarea.form-control {
   border-bottom-right-radius: 6px;
   border-top-right-radius: 6px;
 }
+/* table stylings */
+.datatable {
+  border-collapse: collapse;
+  border: 1px solid #000;
+  font-size: 12px;
+  margin: 1em 1em 1em 0;
+  padding: 0;
+  display: inline-block;
+  clear: both;
+}
+.datatable tr,
+.datatable td,
+.datatable th {
+  border: 1px solid #000;
+  font-size: 12px;
+  padding: 0.5em;
+  margin: 0.5em;
+}
+.datatable tbody tr:nth-child(odd) {
+  background-color: #efefef;
+  border: 1px solid #000;
+  font-size: 12px;
+  font-weight: normal;
+}
+.datatable tbody tr:nth-child(even) {
+  background-color: #fff;
+  border: 1px solid #000;
+  font-size: 12px;
+  font-weight: normal;
+}
+.datatable thead,
+.datatable .tablehead,
+.datatable tbody tr.tablehead {
+  font-weight: bolder;
+  background-color: #7f4923;
+  color: #fff;
+  border: 1px solid #000;
+}
+.datatable thead th,
+.datatable tbody tr.tablehead {
+  text-align: center;
+}
+.datatable thead a,
+.datatable tbody tr.tablehead a {
+  color: #fff;
+  cursor: pointer;
+  font-weight: bolder;
+}
+.datatable input.inputFld,
+.datatable td .dateRegion {
+  background: #fff;
+}
+.datatable input.inputBlocked {
+  background: #a0a0a0;
+  cursor: crosshair;
+}
+.datatable img {
+  vertical-align: middle;
+  text-align: center;
+  display: block;
+  margin: 2px auto;
+  border-width: 0;
+  margin: auto;
+  padding: 2px;
+  border: none;
+  outline: none;
+}
+.tablezone {
+  clear: both;
+  display: inline-block;
+}
+.tablepager {
+  display: block;
+  margin: 1em 1em 1em 0;
+  padding: 0.25em;
+}
+.tablepager li {
+  font-size: 12px;
+  cursor: pointer;
+  float: left;
+  list-style: outside none none;
+  margin: 2px;
+  padding: 4px 0;
+  position: relative;
+}
+.tablepager a {
+  margin: 5px;
+  padding: 5px 8px;
+}
+.dataentrytable {
+  border-collapse: collapse;
+  border: 0 solid #000;
+  padding: 5px;
+}
+.dataentrytable tr,
+.dataentrytable td,
+.dataentrytable th {
+  border: 0 solid #000;
+  padding: 4px;
+  margin: 2px;
+}
+@media screen and (min-width: 1380px) {
+  .datatable,
+  .datatable tr,
+  .datatable td,
+  .datatable th,
+  .datatable tbody tr,
+  .tablepager li {
+    font-size: 16px;
+  }
+}
 /*
 Main CarrotCake CMS stylesheet
 */
@@ -463,6 +574,32 @@ jqmodal styles
 /*
 Common CarrotCake CMS stylesheet
 */
+body {
+  font-size: 12px;
+}
+H1 {
+  font-size: 24px;
+}
+H2 {
+  font-size: 20px;
+}
+H3 {
+  font-size: 16px;
+}
+@media screen and (min-width: 1380px) {
+  body {
+    font-size: 16px;
+  }
+  H1 {
+    font-size: 28px;
+  }
+  H2 {
+    font-size: 24px;
+  }
+  H3 {
+    font-size: 18px;
+  }
+}
 a {
   color: #333333;
   text-decoration: none;
@@ -508,13 +645,19 @@ samp {
 .ui-datepicker-trigger {
   margin-right: 5px;
 }
-#jqaccordion .moduleLink {
+#module-accordion .moduleLink {
   margin: 0;
   padding: 0;
-  margin-top: 2px;
-  margin-bottom: 2px;
-  padding-bottom: 2px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
   display: block;
+  font-size: 1.1em;
+}
+#module-accordion h3 {
+  margin: 0;
+  padding: 0.35em 0.25em;
 }
 .jqradioset label {
   margin-left: 0.5em;
@@ -634,10 +777,35 @@ samp {
   clear: both;
 }
 /* fieldset */
+.fieldset-xsm {
+  min-width: 300px;
+  width: 32em;
+}
+.fieldset-sm {
+  min-width: 450px;
+  width: 40em;
+}
+.fieldset-med {
+  min-width: 650px;
+  width: 46em;
+}
+.fieldset-lg {
+  min-width: 725px;
+  width: 55em;
+}
+.fieldset-xlg {
+  min-width: 825px;
+  width: 62em;
+}
+.fieldset-xxlg {
+  min-width: 900px;
+  width: 90%;
+}
 fieldset {
   clear: both;
+  display: inline;
   margin: 1.2em 0;
-  padding: 1.2em;
+  padding: 1.3em;
   border: 1px solid #ccc;
   margin-bottom: 30px;
   padding-bottom: 10px;
@@ -647,7 +815,7 @@ fieldset {
 }
 fieldset legend label {
   display: block;
-  font-size: 16px;
+  font-size: 1.35em;
   margin: 0;
   padding: 0;
   font-weight: bold;
@@ -676,6 +844,7 @@ textarea {
 select,
 textarea,
 input[type="text"],
+input[type="number"],
 input[type="password"],
 input[type="checkbox"],
 input[type="radio"] {
@@ -695,6 +864,7 @@ input[type="radio"] {
 select:focus,
 textarea:focus,
 input[type="text"]:focus,
+input[type="number"]:focus,
 input[type="password"]:focus,
 input[type="checkbox"]:focus,
 input[type="radio"]:focus {
@@ -726,10 +896,12 @@ textarea.tox-textarea {
   }
 }
 .form-control-sm {
-  width: 100px;
+  min-width: 100px;
+  width: 8em;
 }
 .form-control-md {
-  width: 175px;
+  min-width: 175px;
+  width: 12em;
 }
 .form-control-lg {
   width: 300px;
@@ -746,6 +918,7 @@ input[type="submit"],
 input[type="reset"],
 input[type="clear"] {
   margin: 4px;
+  font-size: 1.1em;
 }
 #cmsDashboardIcons {
   border-radius: 8px;
@@ -766,6 +939,7 @@ input[type="clear"] {
   padding: 10px;
   margin: 10px;
   float: left;
+  font-size: 0.95em;
   text-align: center;
   background: #f4e3d6;
   background-image: radial-gradient(ellipse at top, #f4e3d6, transparent), radial-gradient(ellipse at bottom, #c9783f, transparent);
@@ -775,6 +949,16 @@ input[type="clear"] {
 #cmsDashboardIcons .dashboardCell a:hover,
 #cmsDashboardIcons .dashboardCell a:visited {
   color: #000000;
+}
+@media screen and (min-width: 1380px) {
+  #cmsDashboardIcons {
+    width: 838px;
+  }
+  #cmsDashboardIcons .dashboardCell {
+    line-height: 1em;
+    height: 125px;
+    width: 125px;
+  }
 }
 .clear {
   clear: both;
@@ -803,6 +987,30 @@ td {
 /* align (center) */
 table.centered {
   margin: 0 auto;
+}
+.table-xsm {
+  min-width: 300px;
+  width: 32em;
+}
+.table-sm {
+  min-width: 450px;
+  width: 40em;
+}
+.table-med {
+  min-width: 650px;
+  width: 46em;
+}
+.table-lg {
+  min-width: 725px;
+  width: 55em;
+}
+.table-xlg {
+  min-width: 825px;
+  width: 62em;
+}
+.table-xxlg {
+  min-width: 900px;
+  width: 90%;
 }
 .centerItem {
   text-align: center;
@@ -957,104 +1165,4 @@ div.menuitems {
   float: right;
   margin: 2px;
   padding: 1px;
-}
-/* table stylings */
-.datatable {
-  border-collapse: collapse;
-  border: 1px solid #000;
-  font-size: 12px;
-  margin: 1em 1em 1em 0;
-  padding: 0;
-  display: inline-block;
-  clear: both;
-}
-.datatable tr,
-.datatable td,
-.datatable th {
-  border: 1px solid #000;
-  font-size: 12px;
-  padding: 5px;
-  margin: 5px;
-}
-.datatable tbody tr:nth-child(odd) {
-  background-color: #efefef;
-  border: 1px solid #000;
-  font-size: 12px;
-  font-weight: normal;
-}
-.datatable tbody tr:nth-child(even) {
-  background-color: #fff;
-  border: 1px solid #000;
-  font-size: 12px;
-  font-weight: normal;
-}
-.datatable thead,
-.datatable .tablehead,
-.datatable tbody tr.tablehead {
-  font-weight: bolder;
-  background-color: #7f4923;
-  color: #fff;
-  border: 1px solid #000;
-}
-.datatable thead th,
-.datatable tbody tr.tablehead {
-  text-align: center;
-}
-.datatable thead a,
-.datatable tbody tr.tablehead a {
-  color: #fff;
-  cursor: pointer;
-  font-weight: bolder;
-}
-.datatable input.inputFld,
-.datatable td .dateRegion {
-  background: #fff;
-}
-.datatable input.inputBlocked {
-  background: #a0a0a0;
-  cursor: crosshair;
-}
-.datatable img {
-  vertical-align: middle;
-  text-align: center;
-  display: block;
-  margin: 2px auto;
-  border-width: 0;
-  margin: auto;
-  padding: 2px;
-  border: none;
-  outline: none;
-}
-.tablezone {
-  clear: both;
-  display: inline-block;
-}
-.tablepager {
-  display: block;
-  margin: 1em 1em 1em 0;
-  padding: 0.25em;
-}
-.tablepager li {
-  cursor: pointer;
-  float: left;
-  list-style: outside none none;
-  margin: 2px;
-  padding: 4px 0;
-  position: relative;
-}
-.tablepager a {
-  margin: 5px;
-  padding: 5px 8px;
-}
-.dataentrytable {
-  border-collapse: collapse;
-  border: 0 solid #000;
-  padding: 5px;
-}
-.dataentrytable tr,
-.dataentrytable td,
-.dataentrytable th {
-  border: 0 solid #000;
-  padding: 4px;
-  margin: 2px;
 }

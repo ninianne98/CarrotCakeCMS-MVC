@@ -4,6 +4,7 @@
 	Layout = null;
 
 	var pager = new PagedDataSummary();
+	var comments = new PagedComments();
 
 	if (CmsPage.IsSiteIndex) {
 		pager.ContentType = PagedDataSummary.SummaryContentType.Blog;
@@ -13,6 +14,13 @@
 	} else {
 		pager.PageSize = 1;
 		pager.ContentType = PagedDataSummary.SummaryContentType.Unknown;
+	}
+
+	if (CmsPage.IsBlogPost) {
+		comments.PageSize = 10;
+		comments.FetchData();
+	} else {
+		comments.PageSize = 1;
 	}
 
 	CmsPage.TypeLabelPrefixes = CmsPage.GetDefaultTypeHeadingOptions();
@@ -36,6 +44,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	@CarrotCakeHtml.MetaTags()
 	@CarrotCakeHtml.Rss()
 
@@ -224,6 +233,39 @@
 								</div>
 								<div>
 									@Html.Partial("_plaincontact")
+								</div>
+
+								<div>
+									<br />
+									@if (comments.HasData) {
+										<div>
+											<br />
+											@foreach (var item in comments.DataSource) {
+												<div>
+													<p>
+														<b>
+															@Html.Raw(string.Format("{0} on {1:d} @  {1:t}", item.CommenterName, item.CreateDate))
+														</b>
+													</p>
+													<div class="comment-border top">
+														<p>
+															@item.PostCommentEscaped
+														</p>
+													</div>
+												</div>
+											}
+
+											<div class="pagerfooterlinks">
+												@foreach (var i in comments.PageNumbers) {
+													using (CarrotWeb.BeginWrappedItem("div", i, comments.PageNumber, new { @class = "pagerlink selectedwrap" }, new { @class = "pagerlink" })) {
+														using (CarrotWeb.BeginWrappedItem("a", i, comments.PageNumber, new { @class = "selected", @href = comments.GetUrl(i) }, new { @href = comments.GetUrl(i) })) {
+															@String.Format(" {0} ", i)
+														}
+													}
+												}
+											</div>
+										</div>
+									}
 								</div>
 							</div>
 							<div style="clear: both;">
