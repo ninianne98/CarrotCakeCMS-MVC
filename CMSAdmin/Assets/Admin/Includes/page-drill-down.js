@@ -78,8 +78,8 @@ function ajaxReturnCrumb(data, status) {
 			}
 			// parent/child use last val for remove link above
 			val = v.Root_ContentID;
-			var bc = "<div class='pageNodeDrillDown2 ui-widget' data-rootcontent='" + val + "' id='dril-node-" + i + "' >&nbsp;" + v.NavMenuText + " </div>";
-			$(mnuName).append("<div class='pageNodeDrillDown3 ui-button ui-corner-all ui-widget' >" + bc + " " + act + "<div style='clear: both;'></div></div>");
+			var bc = "<div class='pageNodeDrillDown2 ui-widget' data-rootcontent='" + val + "' id='drill-node-" + i + "' >&nbsp;" + v.NavMenuText + " " + act + " </div>";
+			$(mnuName).append("<div class='pageNodeDrillDown3 ui-button ui-corner-all ui-widget' >" + bc + "<div style='clear: both;'></div></div>");
 		});
 	}
 

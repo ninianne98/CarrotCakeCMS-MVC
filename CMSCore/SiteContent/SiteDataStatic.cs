@@ -221,8 +221,11 @@ namespace Carrotware.CMS.Core {
 
 		public static bool IsUniqueFilename(string theFileName, Guid pageId) {
 			try {
-				theFileName = ContentPageHelper.ScrubFilename(pageId, theFileName);
+				if (theFileName.Length < 2) {
+					return false;
+				}
 
+				theFileName = ContentPageHelper.ScrubFilename(pageId, theFileName);
 				theFileName = theFileName.ToLowerInvariant();
 
 				if (SiteData.IsPageSpecial(theFileName) || SiteData.IsLikelyHomePage(theFileName)) {
@@ -236,7 +239,6 @@ namespace Carrotware.CMS.Core {
 
 				using (var pageHelper = new ContentPageHelper()) {
 					ContentPage fn = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, theFileName);
-
 					ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, pageId);
 
 					if (cp == null && pageId != Guid.Empty) {
@@ -258,16 +260,17 @@ namespace Carrotware.CMS.Core {
 
 		public static bool IsUniqueBlogFilename(string pageSlug, DateTime dateGoLive, Guid pageId) {
 			try {
-				//if (pageSlug.Length < 1) {
-				//	return false;
-				//}
+				if (pageSlug.Length < 2) {
+					return false;
+				}
 
 				DateTime dateOrigGoLive = DateTime.MinValue;
 
 				pageSlug = ContentPageHelper.ScrubFilename(pageId, pageSlug);
 				pageSlug = pageSlug.ToLowerInvariant();
 
-				string TheFileName = pageSlug;
+				string theFileName = pageSlug;
+
 				using (var pageHelper = new ContentPageHelper()) {
 					ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, pageId);
 
@@ -281,13 +284,13 @@ namespace Carrotware.CMS.Core {
 						}
 					}
 
-					TheFileName = ContentPageHelper.CreateFileNameFromSlug(SiteData.CurrentSite, dateGoLive, pageSlug);
+					theFileName = ContentPageHelper.CreateFileNameFromSlug(SiteData.CurrentSite, dateGoLive, pageSlug);
 
-					if (SiteData.IsPageSpecial(TheFileName) || SiteData.IsLikelyHomePage(TheFileName)) {
+					if (SiteData.IsPageSpecial(theFileName) || SiteData.IsLikelyHomePage(theFileName)) {
 						return false;
 					}
 
-					ContentPage fn1 = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, TheFileName);
+					ContentPage fn1 = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, theFileName);
 
 					if (cp == null && pageId != Guid.Empty) {
 						cp = pageHelper.GetVersion(SiteData.CurrentSite.SiteID, pageId);
@@ -313,39 +316,40 @@ namespace Carrotware.CMS.Core {
 					pageTitle = pageId.ToString();
 				}
 				pageTitle = pageTitle.Replace("/", "-");
-				string sTheFileName = ContentPageHelper.ScrubFilename(pageId, pageTitle);
+				string theFileName = ContentPageHelper.ScrubFilename(pageId, pageTitle);
+				string testFile = string.Empty;
 
 				if (pageType == ContentPageType.PageType.ContentEntry) {
-					var resp = IsUniqueFilename(sTheFileName, pageId);
+					var resp = IsUniqueFilename(theFileName, pageId);
 					if (resp == false) {
-						for (int i = 1; i < 1000; i++) {
-							string sTestFile = pageTitle + "-" + i.ToString();
-							resp = IsUniqueFilename(sTestFile, pageId);
+						for (int i = 1; i < 2500; i++) {
+							testFile = string.Format("{0}-{1}", pageTitle, i);
+							resp = IsUniqueFilename(testFile, pageId);
 							if (resp) {
-								sTheFileName = ContentPageHelper.ScrubFilename(pageId, sTestFile);
+								theFileName = testFile;
 								break;
 							} else {
-								sTheFileName = string.Empty;
+								theFileName = string.Empty;
 							}
 						}
 					}
 				} else {
-					var resp = IsUniqueBlogFilename(sTheFileName, goLiveDate, pageId);
+					var resp = IsUniqueBlogFilename(theFileName, goLiveDate, pageId);
 					if (resp == false) {
-						for (int i = 1; i < 1000; i++) {
-							string sTestFile = pageTitle + "-" + i.ToString();
-							resp = IsUniqueBlogFilename(sTestFile, goLiveDate, pageId);
+						for (int i = 1; i < 2500; i++) {
+							testFile = string.Format("{0}-{1}", pageTitle, i);
+							resp = IsUniqueBlogFilename(testFile, goLiveDate, pageId);
 							if (resp) {
-								sTheFileName = ContentPageHelper.ScrubFilename(pageId, sTestFile);
+								theFileName = testFile;
 								break;
 							} else {
-								sTheFileName = string.Empty;
+								theFileName = string.Empty;
 							}
 						}
 					}
 				}
 
-				return ContentPageHelper.ScrubFilename(pageId, sTheFileName).ToLowerInvariant();
+				return ContentPageHelper.ScrubFilename(pageId, theFileName).ToLowerInvariant();
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("generatenewfilename", ex);
 				throw;

@@ -10,7 +10,6 @@
 
 	body {
 		background-color: @themeColor;
-		font-size: 12px;
 		font-family: Verdana, Helvetica, Sans-Serif;
 	}
 
@@ -34,18 +33,6 @@
 		text-decoration: underline;
 	}
 
-	H1 {
-		font-size: 26px;
-	}
-
-	H2 {
-		font-size: 22px;
-	}
-
-	H3 {
-		font-size: 18px;
-	}
-
 	#banner {
 		text-align: center;
 	}
@@ -60,7 +47,7 @@
 	}
 
 	#banner a:link, #banner a:active, #banner a:visited {
-		color: @themeLight40;
+		color: @themeLight50;
 	}
 
 	.wrappedcontent {
@@ -76,7 +63,7 @@
 	}
 
 	.wrappedcontent-inner {
-		font-size: 12px;
+		font-size: 1em;
 		font-family: Verdana, Helvetica, Sans-Serif;
 		background-color: #ffffff;
 		margin: 0px;
@@ -88,6 +75,7 @@
 	}
 
 	.box-buildversion {
+		font-size: 0.85em;
 		margin: 0px;
 		padding: 0px;
 		float: left;
@@ -109,83 +97,10 @@
 	}
 
 	.box-all {
-		padding: 2em 1.25em 2em 1.25em;
+		padding: 1.75em 1.3em 1.75em 1.3em;
 		background: #ffffff;
 		border-radius: 25px;
 		border: 15px solid #111111;
-	}
-
-	.box-top-left, .box-top-right, .box-top-center, .box-bottom-left, .box-bottom-right, .box-bottom-center {
-		margin: 0px;
-		padding: 0px;
-		height: 30px;
-	}
-
-	.box-top-left, .box-top-right, .box-bottom-left, .box-bottom-right {
-		width: 30px;
-	}
-
-	.box-top-left {
-		background-color: @themeColor;
-		background-image: url('../images/logonbox-topleft.png');
-		background-repeat: no-repeat;
-		background-position: left bottom;
-		float: left;
-	}
-
-	.box-top-right {
-		background-color: @themeColor;
-		background-image: url('../images/logonbox-topright.png');
-		background-position: right bottom;
-		background-repeat: no-repeat;
-		float: right;
-	}
-
-	.box-top-center {
-		background-image: url('../images/logonbox-topcenter.png');
-		background-repeat: repeat-x;
-		background-position: bottom;
-		clear: both;
-	}
-
-	.box-bottom-left {
-		background-color: @themeColor;
-		background-image: url('../images/logonbox-bottomleft.png');
-		background-position: left top;
-		background-repeat: no-repeat;
-		float: left;
-	}
-
-	.box-bottom-right {
-		background-color: @themeColor;
-		background-image: url('../images/logonbox-bottomright.png');
-		background-position: right top;
-		background-repeat: no-repeat;
-		float: right;
-	}
-
-	.box-bottom-center {
-		background-image: url('../images/logonbox-bottomcenter.png');
-		background-repeat: repeat-x;
-		background-position: top;
-		clear: both;
-	}
-
-	.box-left {
-		width: 100%;
-		min-height: 150px;
-		background-position: left top;
-		background-image: url('../images/logonbox-left.png');
-		background-repeat: repeat-y;
-		overflow: hidden;
-	}
-
-	.box-right {
-		width: 100%;
-		background-position: right top;
-		background-image: url('../images/logonbox-right.png');
-		background-repeat: repeat-y;
-		overflow: hidden;
 	}
 
 	.box-inner {
@@ -193,5 +108,23 @@
 		margin: 0px;
 		padding: 0px;
 		clear: both;
+	}
+
+	.status-scroll {
+		border: solid 0 transparent;
+		width: 375px !important;
+		height: 160px !important;
+		overflow: auto;
+	}
+
+	@media screen and (min-width: 1610px) {
+		.wrappedcontent {
+			min-width: 575px;
+		}
+
+		.status-scroll {
+			width: 450px !important;
+			height: 175px !important;
+		}
 	}
 }

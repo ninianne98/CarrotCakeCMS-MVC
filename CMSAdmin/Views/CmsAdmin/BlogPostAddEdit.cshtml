@@ -65,11 +65,40 @@
 			var theNav = $(tNav).val();
 
 			if (theTitle.length > 0 && theFile.length < 1 && theNav.length < 1) {
-				GeneratePageFilename();
+				GeneratePageFilename2();
 			}
 		}
 
 		function GeneratePageFilename() {
+			var theTitle = $(tTitle).val();
+			var theFile = $(tValidSlug).val();
+			var theNav = $(tNav).val();
+
+			var opts = {
+				"No": function () { cmsAlertModalClose(); },
+				"Yes": function () { OverwriteFileData(); }
+			};
+
+			if (theTitle.length > 0 ) {
+				if (theFile.length > 0 || theNav.length > 0) {
+					cmsAlertModalSmallBtns('There is already content title and/or filename, overwrite?', opts);
+				} else {
+					GeneratePageFilename2();
+				}
+			}
+		}
+
+		function OverwriteFileData() {
+			cmsAlertModalClose();
+
+			$(tValidSlug).val('');
+			$(tNav).val('');
+			$(tHead).val('');
+
+			GeneratePageFilename2();
+		}
+
+		function GeneratePageFilename2() {
 			var theTitle = $(tTitle).val();
 			var sGoLiveDate = $(tGoLive).val();
 
@@ -425,8 +454,8 @@
 					<br>
 				</td>
 				<td>
-					<div class="ui-widget-content ui-corner-all " style="padding: 3px;">
-						<span id="lblPrefix">@Html.Raw(Model.ContentPage.FileName)</span>
+					<div class="ui-widget-content ui-corner-all" style="padding: 3px;">
+						<span id="lblPrefix" style="padding: 2px;height:1.3em;"> @Html.Raw(Model.ContentPage.FileName) &nbsp;</span>
 						@Html.HiddenFor(m => m.ContentPage.FileName)
 					</div>
 				</td>
@@ -677,7 +706,7 @@
 		</div>
 	</div>
 
-}
+						}
 
 <div style="display: none">
 	@using (Html.BeginForm("DeleteContentPage", CmsRouteConstants.Controller.Admin)) {

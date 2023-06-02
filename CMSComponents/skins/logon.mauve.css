@@ -6,7 +6,6 @@ CarrotCake CMS Theme Stylesheet - Logon
 }
 body {
   background-color: #76608a;
-  font-size: 12px;
   font-family: Verdana, Helvetica, Sans-Serif;
 }
 a {
@@ -24,15 +23,6 @@ a:visited {
 a:hover {
   text-decoration: underline;
 }
-H1 {
-  font-size: 26px;
-}
-H2 {
-  font-size: 22px;
-}
-H3 {
-  font-size: 18px;
-}
 #banner {
   text-align: center;
 }
@@ -49,7 +39,7 @@ H3 {
 #banner a:link,
 #banner a:active,
 #banner a:visited {
-  color: #dbd5e1;
+  color: #f5f3f6;
 }
 .wrappedcontent {
   width: 0px;
@@ -63,7 +53,7 @@ H3 {
   border-color: #362c3f;
 }
 .wrappedcontent-inner {
-  font-size: 12px;
+  font-size: 1em;
   font-family: Verdana, Helvetica, Sans-Serif;
   background-color: #ffffff;
   margin: 0px;
@@ -74,6 +64,7 @@ H3 {
   clear: both;
 }
 .box-buildversion {
+  font-size: 0.85em;
   margin: 0px;
   padding: 0px;
   float: left;
@@ -93,87 +84,31 @@ H3 {
   margin-bottom: 10px;
 }
 .box-all {
-  padding: 2em 1.25em 2em 1.25em;
+  padding: 1.75em 1.3em 1.75em 1.3em;
   background: #ffffff;
   border-radius: 25px;
   border: 15px solid #111111;
-}
-.box-top-left,
-.box-top-right,
-.box-top-center,
-.box-bottom-left,
-.box-bottom-right,
-.box-bottom-center {
-  margin: 0px;
-  padding: 0px;
-  height: 30px;
-}
-.box-top-left,
-.box-top-right,
-.box-bottom-left,
-.box-bottom-right {
-  width: 30px;
-}
-.box-top-left {
-  background-color: #76608a;
-  background-image: url('../images/logonbox-topleft.png');
-  background-repeat: no-repeat;
-  background-position: left bottom;
-  float: left;
-}
-.box-top-right {
-  background-color: #76608a;
-  background-image: url('../images/logonbox-topright.png');
-  background-position: right bottom;
-  background-repeat: no-repeat;
-  float: right;
-}
-.box-top-center {
-  background-image: url('../images/logonbox-topcenter.png');
-  background-repeat: repeat-x;
-  background-position: bottom;
-  clear: both;
-}
-.box-bottom-left {
-  background-color: #76608a;
-  background-image: url('../images/logonbox-bottomleft.png');
-  background-position: left top;
-  background-repeat: no-repeat;
-  float: left;
-}
-.box-bottom-right {
-  background-color: #76608a;
-  background-image: url('../images/logonbox-bottomright.png');
-  background-position: right top;
-  background-repeat: no-repeat;
-  float: right;
-}
-.box-bottom-center {
-  background-image: url('../images/logonbox-bottomcenter.png');
-  background-repeat: repeat-x;
-  background-position: top;
-  clear: both;
-}
-.box-left {
-  width: 100%;
-  min-height: 150px;
-  background-position: left top;
-  background-image: url('../images/logonbox-left.png');
-  background-repeat: repeat-y;
-  overflow: hidden;
-}
-.box-right {
-  width: 100%;
-  background-position: right top;
-  background-image: url('../images/logonbox-right.png');
-  background-repeat: repeat-y;
-  overflow: hidden;
 }
 .box-inner {
   background-color: #ffffff;
   margin: 0px;
   padding: 0px;
   clear: both;
+}
+.status-scroll {
+  border: solid 0 transparent;
+  width: 375px !important;
+  height: 160px !important;
+  overflow: auto;
+}
+@media screen and (min-width: 1610px) {
+  .wrappedcontent {
+    min-width: 575px;
+  }
+  .status-scroll {
+    width: 450px !important;
+    height: 175px !important;
+  }
 }
 /*
 Common CarrotCake CMS stylesheet
@@ -190,7 +125,7 @@ H2 {
 H3 {
   font-size: 16px;
 }
-@media screen and (min-width: 1380px) {
+@media screen and (min-width: 1610px) {
   body {
     font-size: 16px;
   }
@@ -249,19 +184,27 @@ samp {
 .ui-datepicker-trigger {
   margin-right: 5px;
 }
+#module-accordion {
+  font-size: 1em;
+}
+#module-accordion h3 {
+  font-size: 1.05em;
+  padding: 6px 4px;
+}
+#module-accordion h3 a {
+  font-size: 1em;
+  margin: 8px 4px;
+  padding: 0.2em;
+}
 #module-accordion .moduleLink {
   margin: 0;
   padding: 0;
-  margin-top: 3px;
+  margin-top: 2px;
   margin-bottom: 3px;
-  padding-top: 0.2em;
+  padding-top: 0.1em;
   padding-bottom: 0.2em;
   display: block;
   font-size: 1.1em;
-}
-#module-accordion h3 {
-  margin: 0;
-  padding: 0.35em 0.25em;
 }
 .jqradioset label {
   margin-left: 0.5em;
@@ -269,7 +212,7 @@ samp {
 }
 /*  OTHER */
 .tableback {
-  font-size: 12px;
+  font-size: 1em;
   font-family: Verdana, Helvetica, Sans-Serif;
   background-color: #fff;
 }
@@ -390,16 +333,16 @@ samp {
   width: 40em;
 }
 .fieldset-med {
-  min-width: 650px;
-  width: 46em;
+  min-width: 675px;
+  width: 50em;
 }
 .fieldset-lg {
-  min-width: 725px;
-  width: 55em;
+  min-width: 750px;
+  width: 57em;
 }
 .fieldset-xlg {
   min-width: 825px;
-  width: 62em;
+  width: 64em;
 }
 .fieldset-xxlg {
   min-width: 900px;
@@ -487,13 +430,13 @@ textarea.tox-textarea {
     font-size: 14px;
   }
 }
-@media screen and (min-width: 1150px) {
+@media screen and (min-width: 1250px) {
   textarea.rawEditor,
   textarea.tox-textarea {
     font-size: 16px;
   }
 }
-@media screen and (min-width: 1350px) {
+@media screen and (min-width: 1610px) {
   textarea.rawEditor,
   textarea.tox-textarea {
     font-size: 18px;
@@ -504,14 +447,16 @@ textarea.tox-textarea {
   width: 8em;
 }
 .form-control-md {
-  min-width: 175px;
-  width: 12em;
+  min-width: 160px;
+  width: 10em;
 }
 .form-control-lg {
   width: 300px;
+  width: 16em;
 }
 .form-control-xlg {
-  width: 425px;
+  width: 435px;
+  width: 24em;
 }
 .form-control-xxlg {
   width: 550px;
@@ -554,7 +499,7 @@ input[type="clear"] {
 #cmsDashboardIcons .dashboardCell a:visited {
   color: #000000;
 }
-@media screen and (min-width: 1380px) {
+@media screen and (min-width: 1610px) {
   #cmsDashboardIcons {
     width: 838px;
   }
@@ -631,6 +576,14 @@ table.centered {
   padding: 1px;
   margin: 2px;
 }
+.validationError:empty,
+.validationExclaim:empty,
+.validationDelete:empty,
+.validationCross:empty {
+  height: 1px;
+  width: 1px;
+  float: right;
+}
 .validationExclaim {
   color: #CC9900;
 }
@@ -697,16 +650,28 @@ table.centered {
 /*
 drilldown stuff
 */
+#nodedrilldown {
+  padding: 2px;
+  margin: 2px;
+  float: left;
+}
 div.scroll {
-  height: 100px;
+  height: 115px;
   width: 340px;
   overflow: auto;
   padding: 2px;
   position: absolute;
   z-index: 999;
 }
+div.scroll a {
+  font-size: 1.1em;
+  line-height: 1.6em;
+  padding: 0.25em;
+  margin: 0.25em;
+}
 div.scrollcontainer {
-  height: 110px;
+  margin-top: 2.35em;
+  height: 130px;
   width: 350px;
   padding: 4px;
   position: absolute;
@@ -719,54 +684,69 @@ div.scrollcontainerheight {
   height: 5px;
   width: 75px;
 }
-div.menuitems {
-  margin-top: 2px;
-  margin-left: 2px;
-  padding: 4px;
-}
-.pageNodeDrillDown1 {
-  padding: 1px 0 0 0;
-  margin: 1px 0 0 0;
+.pageNodeDrillDown1,
+.pageNodeDrillDown2,
+.pageNodeDrillDown3,
+.pageNodeDrillDown4,
+.pageNodeDrillDown5,
+.pageNodeDrillDown6 {
+  padding: 0;
+  margin: 0;
   float: left;
-  min-height: 45px;
+  line-height: 0.8em;
 }
-.pageNodeDrillDown2 {
-  padding: 4px;
-  margin: 2px 2px 5px 3px;
-  float: left;
+.pageNodeDrillDown1,
+.pageNodeDrillDown3,
+.pageNodeDrillDown4 {
+  line-height: 1.2em;
 }
 .pageNodeDrillDown3 {
-  padding: 2px 0 0 0;
-  margin: 0 4px 0 4px;
+  margin-right: 0.75em;
+  margin-bottom: 0.75em;
+}
+.pageNodeDrillDown2,
+.pageNodeDrillDown6 {
+  height: 1.1em;
+  line-height: 1em;
+  padding: 4px;
+  margin: 2px;
   float: left;
-  margin-right: 5px;
 }
 .pageNodeDrillDown4 {
-  padding: 0;
-  margin: 0 4px 0 4px;
-  position: relative;
-  width: 100px;
-}
-.pageNodeDrillDown5 {
-  padding: 0;
-  margin: 0 2px 0 4px;
-  float: left;
-  margin-top: 0;
+  min-width: 38px;
+  width: 6.5em;
 }
 .pageNodeDrillDown6 {
-  padding: 2px 0 0 0;
-  margin: 0 4px 0 4px;
+  min-width: 35px;
+  width: 6em;
+}
+.pageNodeDrillDown3,
+.pageNodeDrillDown4 {
+  height: 1.4em;
+  padding: 0.2em 4px 0.7em 4px;
 }
 .drill-placeholder {
   height: 1.2em;
-  width: 0.5em;
-  margin: 2px;
-  padding: 2px;
-}
-.pageNodeDrillDown3 .ui-icon,
-.pageNodeDrillDown6 .ui-icon,
-.drill-placeholder {
-  float: right;
+  width: 2px;
   margin: 2px;
   padding: 1px;
+  float: right;
+}
+.pageNodeDrillDown2 a,
+.pageNodeDrillDown3 a,
+.pageNodeDrillDown6 a {
+  padding: 1px;
+  margin: 1px;
+}
+.pageNodeDrillDown2 .ui-icon,
+.pageNodeDrillDown3 .ui-icon,
+.pageNodeDrillDown6 .ui-icon {
+  height: 16px;
+  width: 16px;
+  float: right;
+  margin: auto 0.3em auto 4px;
+  padding: 1px 1px 0 0;
+}
+.pageNodeDrillDown2 .ui-icon {
+  margin: auto 0 auto 4px;
 }

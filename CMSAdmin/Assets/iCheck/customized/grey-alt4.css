@@ -7,8 +7,8 @@
 	vertical-align: middle;
 	margin: 0;
 	padding: 0;
-	width: 24px;
-	height: 24px;
+	width: 23px;
+	height: 23px;
 	background: url(grey-alt4.png) no-repeat;
 	border: none;
 	cursor: pointer;
@@ -69,7 +69,7 @@
 	.icheckbox_grey-alt4,
 	.iradio_grey-alt4 {
 		background-image: url(grey-alt4@2x.png);
-		-webkit-background-size: 288px 24px;
 		background-size: 288px 24px;
+		-webkit-background-size: 288px 24px;
 	}
 }
