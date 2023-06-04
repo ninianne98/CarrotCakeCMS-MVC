@@ -81,7 +81,26 @@ namespace Carrotware.CMS.Core {
 			return lstContent;
 		}
 
+		public void FixBlogIndex(Guid siteID) {
+			SiteData site = SiteData.GetSiteFromCache(siteID);
+
+			if (site.Blog_Root_ContentID.HasValue) {
+				// because sometimes the db is manually manipulated, provides way of re-setting blog/index page by validating page is part of the site
+				var blogIndexPage = CannedQueries.GetContentByRoot(db, site.Blog_Root_ContentID.Value).FirstOrDefault();
+				Guid contentTypeID = ContentPageType.GetIDByType(ContentPageType.PageType.ContentEntry);
+				if (blogIndexPage != null) {
+					// found blog, but not in this site or is not a page
+					if (blogIndexPage.SiteID != site.SiteID || blogIndexPage.ContentTypeID != contentTypeID) {
+						site.Blog_Root_ContentID = null;
+						site.Save();
+					}
+				}
+			}
+		}
+
 		public void FixOrphanPages(Guid siteID) {
+			FixBlogIndex(siteID);
+
 			List<SiteMapOrder> lstContent = CannedQueries.GetAllContentList(db, siteID).Select(ct => new SiteMapOrder(ct)).ToList();
 			List<Guid> lstIDs = lstContent.Select(x => x.Root_ContentID).ToList();
 

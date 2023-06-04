@@ -3460,7 +3460,7 @@ a#cms-seagreen-id .ui-button:active,
   padding: 5px !important;
   background-color: #FFFFAA !important;
   border: 2px dotted #676767 !important;
-  background-image: url('/Assets/Admin/images/dragbg.png') !important;
+  background-image: url('../images/dragbg.png') !important;
 }
 .cmsToolbox2 {
   position: absolute;

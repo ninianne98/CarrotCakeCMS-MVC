@@ -140,10 +140,12 @@ namespace Carrotware.CMS.Core {
 			}
 
 			SiteNav home = FindHome(siteID, false);
-			home.NavOrder = 0;
+			if (home != null) {
+				home.NavOrder = 0;
 
-			if (!lstContent.Where(x => x.Root_ContentID == home.Root_ContentID).Any()) {
-				lstContent.Add(home);
+				if (!lstContent.Where(x => x.Root_ContentID == home.Root_ContentID).Any()) {
+					lstContent.Add(home);
+				}
 			}
 
 			return lstContent.OrderBy(x => x.NavOrder).Where(x => x.PageActive == true && x.IsRetired == false && x.IsUnReleased == false || bActiveOnly == false).ToList();

@@ -316,7 +316,47 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public DateTime ConvertSiteTimeToUTC(DateTime dateSite) {
-			DateTime dateSiteSrc = DateTime.SpecifyKind(dateSite, DateTimeKind.Unspecified);
+			DateTime dateSiteSrc = new DateTime(dateSite.Year, dateSite.Month, dateSite.Day, 12, 1, 0);
+			var dstCorrected = false;
+			var springForwardTime = DateTime.MinValue;
+
+			// check daylight savings time state in case it flipped from one day to the next
+			var testDate = TimeZoneInfo.ConvertTime(DateTime.SpecifyKind(new DateTime(dateSite.Year, dateSite.Month, dateSite.Day, 12, 10, 30), DateTimeKind.Unspecified), SiteTimeZoneInfo);
+			var testDateBefore = testDate.AddDays(-1);
+			var testDateAfter = testDate.AddDays(1);
+
+			// check the days flanking the date/time in question
+			if (testDateBefore.IsDaylightSavingTime() != testDateAfter.IsDaylightSavingTime()) {
+				// when moving forward, we skip an hour, which can't be converted
+				if (testDateAfter.IsDaylightSavingTime()) {
+					var rules = SiteTimeZoneInfo.GetAdjustmentRules();
+					//find the rule in effect for the date
+					var rule = rules.Where(x => x.DateStart <= dateSiteSrc.Date && x.DateEnd > dateSiteSrc.Date).FirstOrDefault();
+					// check the rule for applicability
+					if (rule != null) {
+						var m = rule.DaylightTransitionStart.Month;
+						var dow = rule.DaylightTransitionStart.DayOfWeek;
+						var h = rule.DaylightTransitionStart.TimeOfDay.Hour;
+						var w = rule.DaylightTransitionStart.Week;
+						var delta = rule.DaylightDelta.TotalHours;
+
+						// if it meets the rule, shift forward the interval
+						if (dateSite.DayOfWeek == dow && dateSite.Month == m
+							&& dateSite.Day >= ((w - 1) * 7) && dateSite.Day <= ((w + 1) * 7)
+							&& dateSite.Hour >= h && dateSite.Hour < (h + delta)) {
+							dstCorrected = true;
+							// we just skipped an hour, time currently set can't be converted
+							dateSiteSrc = DateTime.SpecifyKind(dateSite.AddHours(delta), DateTimeKind.Unspecified);
+						}
+					}
+				}
+			}
+
+			if (!dstCorrected) {
+				// no DST change
+				dateSiteSrc = DateTime.SpecifyKind(dateSite, DateTimeKind.Unspecified);
+			}
+
 			return TimeZoneInfo.ConvertTimeToUtc(dateSiteSrc, SiteTimeZoneInfo);
 		}
 

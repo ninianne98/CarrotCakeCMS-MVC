@@ -1629,7 +1629,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult FixOrphan() {
-			using (SiteMapOrderHelper orderHelper = new SiteMapOrderHelper()) {
+			using (var orderHelper = new SiteMapOrderHelper()) {
 				orderHelper.FixOrphanPages(this.CurrentSiteID);
 			}
 
@@ -1640,6 +1640,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public ActionResult FixBlog() {
 			pageHelper.FixBlogNavOrder(this.CurrentSiteID);
+
+			using (var orderHelper = new SiteMapOrderHelper()) {
+				orderHelper.FixBlogIndex(this.CurrentSiteID);
+			}
 
 			return RedirectToAction(this.GetActionName(x => x.SiteMap(null)));
 		}
