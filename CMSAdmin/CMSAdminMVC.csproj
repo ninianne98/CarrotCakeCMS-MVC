@@ -1012,7 +1012,6 @@
     </Content>
     <Content Include="Views\Templates\citrus-island\page.cshtml" />
     <Content Include="Views\CmsAdmin\About.cshtml" />
-    <Content Include="Views\CmsAdmin\Contact.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Templates\citrus-island\_contactform.cshtml" />
     <Content Include="Views\CmsAdmin\ForgotPasswordConfirmation.cshtml" />

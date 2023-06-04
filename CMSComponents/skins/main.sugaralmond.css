@@ -344,23 +344,14 @@ body {
   min-width: 1080px;
   width: 100%;
 }
-h1,
-h2,
-h3 {
+H1,
+H2,
+H3 {
   margin: 0 0 0.5em 0;
   padding: 0;
   font-weight: bold;
   font-family: Georgia, Times New Roman, Serif;
   color: #000000;
-}
-H1 {
-  font-size: 24px;
-}
-H2 {
-  font-size: 20px;
-}
-H3 {
-  font-size: 16px;
 }
 .headingColor {
   color: #777777;
@@ -371,7 +362,8 @@ H3 {
 #headercontainer {
   margin: 0;
   padding: 0;
-  height: 115px;
+  min-height: 115px;
+  height: 11em;
   background: #935529;
   background: linear-gradient(to right, #c9783f 0%, #935529 25%, #935529 75%, #573218 96%);
   min-width: 1080px;
@@ -381,9 +373,10 @@ H3 {
   font-family: Georgia, Times New Roman, Serif;
   margin: 0;
   padding: 0;
-  height: 110px;
+  min-height: 110px;
+  height: 10em;
   width: 1080px;
-  margin-left: 50px;
+  margin-left: 5em;
 }
 #header h1,
 #header h2,
@@ -396,17 +389,17 @@ H3 {
   margin: 2px;
 }
 #header h1 {
-  font-size: 36px;
-  padding: 20px 0 0 20px;
+  font-size: 2.4em;
+  padding: 1.3em 0 0 1.3em;
 }
 #header h2 {
-  font-size: 28px;
-  padding: 20px 0 0 0;
+  font-size: 2em;
+  padding: 1.3em 0 0 0;
 }
 #header h3 {
   color: #fff;
-  font-size: 20px;
-  padding: 10px 0 0 0;
+  font-size: 1.6em;
+  padding: 0.6em 0 0 0;
 }
 /* Menu */
 #nav-menu-container {
@@ -424,7 +417,7 @@ H3 {
   height: 3em;
   list-style: none;
   z-index: 990;
-  margin-left: 50px;
+  margin-left: 4em;
 }
 #nav-menu > li {
   float: left;
@@ -510,16 +503,16 @@ H3 {
 }
 /* Content */
 #content {
-  min-width: 720px;
-  margin: 0 auto 20px auto;
-  padding: 20px;
+  min-width: 800px;
+  margin: 0 auto 2.5em auto;
+  padding: 2.5em;
   background: #fff;
 }
 #content H1 {
-  font-size: 24px;
+  font-size: 2.2em;
 }
 #content H2 {
-  font-size: 18px;
+  font-size: 1.8em;
 }
 /* Footer */
 #footer {
@@ -577,28 +570,19 @@ Common CarrotCake CMS stylesheet
 body {
   font-size: 12px;
 }
-H1 {
-  font-size: 24px;
-}
-H2 {
-  font-size: 20px;
-}
-H3 {
-  font-size: 16px;
-}
 @media screen and (min-width: 1610px) {
   body {
     font-size: 16px;
   }
-  H1 {
-    font-size: 28px;
-  }
-  H2 {
-    font-size: 24px;
-  }
-  H3 {
-    font-size: 18px;
-  }
+}
+H1 {
+  font-size: 2.5em;
+}
+H2 {
+  font-size: 2em;
+}
+H3 {
+  font-size: 1.6em;
 }
 a {
   color: #333333;

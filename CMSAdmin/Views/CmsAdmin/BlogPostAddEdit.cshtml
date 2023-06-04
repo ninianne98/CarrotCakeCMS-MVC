@@ -713,6 +713,9 @@
 		@Html.AntiForgeryToken()
 
 		@Html.HiddenFor(m => m.ContentPage.Root_ContentID)
+		@Html.HiddenFor(m => m.ContentPage.ContentType)
+		@Html.HiddenFor(m => m.ContentPage.FileName)
+		@Html.HiddenFor(m => m.ContentPage.PageSlug)
 
 		<input type="submit" name="btnDelete" value="Delete" id="btnDelete" />
 	}
