@@ -1,5 +1,5 @@
 # CarrotCakeCMS-MVC
-Source code for CarrotCakeCMS (MVC)
+Source code for CarrotCakeCMS (MVC), ASP.Net 4.5
 
 [SITE_CT]: http://www.carrotware.com/contact?from=github-mvc
 [REPO_SF]: http://sourceforge.net/projects/carrotcakecmsmvc/
@@ -11,6 +11,7 @@ Source code for CarrotCakeCMS (MVC)
 [IDE]: https://visualstudio.microsoft.com/
 [VWDISO2013]: https://go.microsoft.com/fwlink/?LinkId=532501&type=ISO&clcid=0x409
 [CEISO2013]: https://go.microsoft.com/fwlink/?LinkId=532496&type=ISO&clcid=0x409
+[CEISO2015]: http://download.microsoft.com/download/b/e/d/bedddfc4-55f4-4748-90a8-ffe38a40e89f/vs2015.3.com_enu.iso
 [SQL]: https://www.microsoft.com/en-us/sql-server/sql-server-downloads
 [SSMS]: https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms
 
@@ -26,22 +27,22 @@ Other features also include date based release and retirement of content - allow
 
 ---
 
-## CarrotCakeCMS Developer Quick Start Guide
+## CarrotCakeCMS (MVC) Developer Quick Start Guide
 
 Copyright (c) 2011, 2015, 2023 Samantha Copeland
 Licensed under the MIT or GPL v3 License
 
-CarrotCakeCMS is maintained by Samantha Copeland
+CarrotCakeCMS (MVC) is maintained by Samantha Copeland
 
 ### Install Development Tools
 
-1. **[Visual Studio Community/Express/Pro/Enterprise][IDE]** ([ISO VWD 2013][VWDISO2013] and [ISO CE 2013][CEISO2013]) Professional (or higher) editions OK.  Typically being developed on VS 2015 Enterprise or VS 2019 Express.  Even VS 2012 is OK, the database project won't load, but that's OK because it's just there to maintain a schema history, it is a required of part of the build
+1. **[Visual Studio Community/Express/Pro/Enterprise][IDE]** ([ISO VWD 2013][VWDISO2013], [ISO CE 2013][CEISO2013], or [ISO CE 2015][CEISO2015]) Professional (or higher) editions OK.  Typically being developed on VS 2015 Enterprise or VS 2019 Express.  Even VS 2012 is OK, the database project won't load, but that's OK because it's just there to maintain a schema history, it is not a required of part of the build
 1. **[SQL Server Express 2008 (or higher/later)][SQL]** - currently vetted on 2008, 2012R2, and 2016 Express.
 1. **[SQL Server Management Studio (SSMS)][SSMS]** - required for managing the database
 
 ### Get the Source Code
 
-1. Go to the [repository][REPO_GH] in a browser
+1. Go to the repository ([GitHub][REPO_GH] or [SourceForge][REPO_SF]) in a browser
 
 1. Download either a GIT or ZIP archive or connect using either a GIT or SVN client
 
@@ -66,19 +67,19 @@ CarrotCakeCMS is maintained by Samantha Copeland
 
 	There may be some warnings, you can ignore them
 
-1. The SQL Server database should be running and an empty database matching the one specified in the connection string. If you are running the code a second or later time, it will auto update if there are schema changes (see dbo note above).
+1. The SQL Server database should be running and an empty database matching the one specified in the connection string. If you are running the code a second or later time, it will auto update if there are schema changes (see dbo note above).  Do not share a database between the MVC and WebForms editions.
 
 1. if the database is empty or has pending database changes, you will be greeted with a maintenance screen, follow the link provided.
 
 1. The first time you start up the website, it will create the required artifacts in the database (tables/views/sprocs etc.)
 
-1. Click the **Play** button in the main toolbar to launch CarrotCakeCMS
+1. Click the **Play** button (or hit F5) in the main toolbar to launch CarrotCakeCMS
 
 1. When you run the website with an empty user database, you will be prompted to create the first user
 
 1. Once you have created a user, you can go to the login screen, enter the credentials
 
-1. After successfully logging in, you can create and manage your new website.
+1. After successfully logging in, you can create and manage your new website
 
 ### Using CarrotCakeCMS
 

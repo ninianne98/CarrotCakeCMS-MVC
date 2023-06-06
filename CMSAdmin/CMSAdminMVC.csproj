@@ -813,11 +813,8 @@
     <Content Include="Views\CmsAdmin\BlogPostTemplateUpdate.cshtml" />
     <Content Include="Views\CmsAdmin\_blogIndexLinks.cshtml" />
     <Content Include="Views\CmsAdmin\_pageIndexLinks.cshtml" />
-    <Content Include="Assets\iCheck\customized\grey-alt2%402x.pdn" />
-    <Content Include="Assets\iCheck\customized\grey-alt3%402x.pdn" />
     <Content Include="Views\CmsContent\_SpecialHead.cshtml" />
     <Content Include="Views\CmsContent\_SpecialFoot.cshtml" />
-    <Content Include="Assets\iCheck\customized\grey-alt4%402x.pdn" />
     <Content Include="Views\CmsAdmin\SiteContentStatusChange.cshtml" />
     <Content Include="Views\CmsAdmin\PageWidgets.cshtml" />
     <Content Include="Views\CmsAdmin\PageEdit.cshtml" />
