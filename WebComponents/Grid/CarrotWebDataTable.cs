@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.WebPages;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -88,110 +86,8 @@ namespace Carrotware.Web.UI.Components {
 			return this;
 		}
 
-		/*
-		protected string DataFieldName(string columnName) {
-			string fldName = string.Format("{0}DataSource.Rows[{1}][\"{2}\"]", this.FieldNamePrefix, this.RowNumber, columnName);
-			if (!this.UseDataPage) {
-				if (string.IsNullOrEmpty(this.FieldNamePrefix)) {
-					fldName = string.Format("Rows[{0}][\"{1}\"]", this.RowNumber, columnName);
-				} else {
-					fldName = string.Format("{0}.Rows[{1}][\"{2}\"]", this.FieldNamePrefix, this.RowNumber, columnName).Replace(".[", "[");
-				}
-			}
-			return fldName;
-		}
-
-		public MvcHtmlString FormFieldFor(string columnName, GridFormFieldType fldType, object htmlAttribs = null) {
-			DataRow row = this.DataPage.DataSource.Rows[this.RowNumber];
-
-			Object val = row[columnName];
-
-			string fldName = DataFieldName(columnName);
-
-			MvcHtmlString formFld = new MvcHtmlString(string.Empty);
-
-			switch (fldType) {
-				case GridFormFieldType.Checkbox:
-					if (val == null) {
-						formFld = _htmlHelper.CheckBox(fldName, false, htmlAttribs);
-					} else {
-						formFld = _htmlHelper.CheckBox(fldName, (bool)val, htmlAttribs);
-					}
-					break;
-
-				case GridFormFieldType.RadioButton:
-					formFld = _htmlHelper.RadioButton(fldName, val.ToString(), htmlAttribs);
-					break;
-
-				case GridFormFieldType.TextArea:
-					formFld = _htmlHelper.TextArea(fldName, val.ToString(), htmlAttribs);
-					break;
-
-				case GridFormFieldType.Hidden:
-					formFld = _htmlHelper.Hidden(fldName, val.ToString(), htmlAttribs);
-					break;
-
-				case GridFormFieldType.TextBox:
-				default:
-					formFld = _htmlHelper.TextBox(fldName, val.ToString(), htmlAttribs);
-					break;
-			}
-
-			return formFld;
-		}
-
-		public MvcHtmlString DropDownFor(string columnName, SelectList selectList, string optionLabel, object htmlAttributes = null) {
-			DataRow row = this.DataPage.DataSource.Rows[this.RowNumber];
-
-			Object val = row[columnName];
-
-			string fldName = DataFieldName(columnName);
-
-			MvcHtmlString formFld = new MvcHtmlString(string.Empty);
-
-			if (val != null && selectList.SelectedValue == null) {
-				selectList = new SelectList(selectList.Items, selectList.DataValueField, selectList.DataTextField, val);
-			}
-
-			if (!string.IsNullOrEmpty(optionLabel)) {
-				formFld = _htmlHelper.DropDownList(fldName, selectList, optionLabel, htmlAttributes);
-			} else {
-				formFld = _htmlHelper.DropDownList(fldName, selectList, htmlAttributes);
-			}
-
-			return formFld;
-		}
-
-		public MvcHtmlString CheckBoxListFor(string columnName, MultiSelectList selectList, string selectedFieldName, object chkboxAttributes = null, object listAttributes = null) {
-			DataRow row = this.DataPage.DataSource.Rows[this.RowNumber];
-
-			selectedFieldName = string.IsNullOrEmpty(selectedFieldName) ? "Selected" : selectedFieldName;
-
-			string fldName = DataFieldName(columnName);
-
-			MvcHtmlString formFld = new MvcHtmlString(string.Empty);
-
-			StringBuilder sbChk = new StringBuilder();
-			int i = 0;
-			using (new WrappedItem(sbChk, "dl", listAttributes)) {
-				foreach (var opt in selectList) {
-					sbChk.AppendLine("<dt>"
-						+ _htmlHelper.Hidden(string.Format("{0}[{1}].{2}", fldName, i, selectList.DataValueField), opt.Value)
-						+ _htmlHelper.CheckBox(string.Format("{0}[{1}].{2}", fldName, i, selectedFieldName), opt.Selected, chkboxAttributes)
-						+ string.Format("  {0}</dt> ", opt.Text));
-
-					i++;
-				}
-			}
-
-			formFld = new MvcHtmlString(sbChk.ToString());
-
-			return formFld;
-		}
-	 */
-
 		protected override IHtmlString CreateBody() {
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			this.RowNumber = 0;
 
 			if (this.AutoGenerateColumns) {
@@ -228,7 +124,7 @@ namespace Carrotware.Web.UI.Components {
 
 									if (col is ICarrotGridColumnExt) {
 										var colExt = (ICarrotGridColumnExt)col;
-										Object val = row[colExt.ColumnName];
+										object val = row[colExt.ColumnName];
 
 										string imgPath = string.Empty;
 										switch (col.Mode) {
@@ -240,7 +136,7 @@ namespace Carrotware.Web.UI.Components {
 											case CarrotGridColumnType.ImageEnum:
 												CarrotImageColumnData imgData = null;
 
-												CarrotGridImageColumn ic = (CarrotGridImageColumn)col;
+												var ic = (CarrotGridImageColumn)col;
 												imgPath = ic.DefaultImagePath;
 												string key = val.ToString();
 
@@ -267,7 +163,7 @@ namespace Carrotware.Web.UI.Components {
 
 											case CarrotGridColumnType.BooleanImage:
 
-												CarrotGridBooleanImageColumn bic = (CarrotGridBooleanImageColumn)col;
+												var bic = (CarrotGridBooleanImageColumn)col;
 												if (bic is CarrotGridBooleanImageColumn) {
 													bool imageState = false;
 													imgPath = bic.ImagePathFalse;
@@ -298,9 +194,7 @@ namespace Carrotware.Web.UI.Components {
 									if (col is ICarrotGridColumnTemplate<DataRow> && col.Mode == CarrotGridColumnType.Template) {
 										var colTmpl = (ICarrotGridColumnTemplate<DataRow>)col;
 										if (colTmpl.FormatTemplate != null) {
-											cellContents = (new HelperResult(writer => {
-												colTmpl.FormatTemplate(row).WriteTo(writer);
-											})).ToHtmlString();
+											cellContents = colTmpl.FormatTemplate(row).ToHtmlString();
 										}
 									}
 

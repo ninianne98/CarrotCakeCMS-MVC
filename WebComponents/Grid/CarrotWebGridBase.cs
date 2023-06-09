@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
@@ -8,7 +7,6 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
-using System.Web.WebPages;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -52,7 +50,7 @@ namespace Carrotware.Web.UI.Components {
 
 		public List<ICarrotGridColumn> Columns { get; protected set; }
 
-		public Func<Object, HelperResult> EmptyDataTemplate { get; set; }
+		public Func<Object, IHtmlString> EmptyDataTemplate { get; set; }
 
 		public string HtmlClientId { get; set; }
 		public string HtmlFormId { get; set; }
@@ -103,7 +101,7 @@ namespace Carrotware.Web.UI.Components {
 			PropertyInfo propInfo = this.PagedDataBase.PropInfoFromExpression<PagedDataBase>(property);
 			string columnName = ReflectionUtilities.BuildProp(property);
 
-			Object val = propInfo.GetValue(this.PagedDataBase, null);
+			object val = propInfo.GetValue(this.PagedDataBase, null);
 
 			string fldName = string.Format("{0}{1}", this.FieldNamePrefix, columnName);
 			string str = val == null ? string.Empty : val.ToString();
@@ -201,7 +199,7 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public virtual IHtmlString OutputFooter() {
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (this.PagedDataBase.TotalPages > 1) {
 				using (new WrappedItem(sb, this.FooterOuterTag, this.htmlFootAttrib)) {
@@ -226,7 +224,7 @@ namespace Carrotware.Web.UI.Components {
 
 			string cellContents = string.Empty;
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			FormHelper(x => x.OrderBy, sb);
 			FormHelper(x => x.SortByNew, sb);
@@ -238,9 +236,7 @@ namespace Carrotware.Web.UI.Components {
 			FormHelper(x => x.PageNumber, sb);
 
 			if ((!this.PagedDataBase.HasData) && this.EmptyDataTemplate != null) {
-				cellContents = (new HelperResult(writer => {
-					this.EmptyDataTemplate(new Object()).WriteTo(writer);
-				})).ToHtmlString();
+				cellContents = this.EmptyDataTemplate(new object()).ToHtmlString();
 			}
 
 			sb.AppendLine(cellContents);
@@ -257,11 +253,9 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public string ToHtmlString() {
-			StringBuilder sb = new StringBuilder();
-			//sb.AppendLine("<div>");
+			var sb = new StringBuilder();
 			sb.AppendLine(this.OutputHtmlBody().ToString());
 			sb.AppendLine(this.OutputFooter().ToString());
-			//sb.AppendLine("</div>");
 			return sb.ToString();
 		}
 

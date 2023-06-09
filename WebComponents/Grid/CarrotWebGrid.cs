@@ -6,7 +6,6 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
-using System.Web.WebPages;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -104,9 +103,9 @@ namespace Carrotware.Web.UI.Components {
 			T row = this.DataPage.DataSource[this.RowNumber];
 
 			//PropertyInfo propInfo = row.PropInfoFromExpression<T>(property);
-			//Object val = propInfo.GetValue(row, null);
+			//object val = propInfo.GetValue(row, null);
 			string columnName = ReflectionUtilities.BuildProp(property);
-			Object val = row.GetPropValueFromExpression(property);
+			object val = row.GetPropValueFromExpression(property);
 
 			string fldName = DataFieldName(columnName);
 
@@ -148,7 +147,7 @@ namespace Carrotware.Web.UI.Components {
 			//PropertyInfo propInfo = row.PropInfoFromExpression<T>(property);
 			//Object val = propInfo.GetValue(row, null);
 			string columnName = ReflectionUtilities.BuildProp(property);
-			Object val = row.GetPropValueFromExpression(property);
+			object val = row.GetPropValueFromExpression(property);
 
 			string fldName = DataFieldName(columnName);
 
@@ -210,7 +209,7 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		protected override IHtmlString CreateBody() {
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			this.RowNumber = 0;
 
 			_sortDir = this.DataPage.ParseSort();
@@ -235,7 +234,7 @@ namespace Carrotware.Web.UI.Components {
 
 									if (col is ICarrotGridColumnExt) {
 										var colExt = (ICarrotGridColumnExt)col;
-										Object val = row.GetPropValueFromColumnName(colExt.ColumnName);
+										object val = row.GetPropValueFromColumnName(colExt.ColumnName);
 
 										string imgPath = string.Empty;
 										switch (col.Mode) {
@@ -247,7 +246,7 @@ namespace Carrotware.Web.UI.Components {
 											case CarrotGridColumnType.ImageEnum:
 												CarrotImageColumnData imgData = null;
 
-												CarrotGridImageColumn ic = (CarrotGridImageColumn)col;
+												var ic = (CarrotGridImageColumn)col;
 												imgPath = ic.DefaultImagePath;
 												string key = val.ToString();
 
@@ -274,7 +273,7 @@ namespace Carrotware.Web.UI.Components {
 
 											case CarrotGridColumnType.BooleanImage:
 
-												CarrotGridBooleanImageColumn bic = (CarrotGridBooleanImageColumn)col;
+												var bic = (CarrotGridBooleanImageColumn)col;
 												if (bic is CarrotGridBooleanImageColumn) {
 													bool imageState = false;
 													imgPath = bic.ImagePathFalse;
@@ -305,9 +304,7 @@ namespace Carrotware.Web.UI.Components {
 									if (col is ICarrotGridColumnTemplate<T> && col.Mode == CarrotGridColumnType.Template) {
 										var colTmpl = (ICarrotGridColumnTemplate<T>)col;
 										if (colTmpl.FormatTemplate != null) {
-											cellContents = (new HelperResult(writer => {
-												colTmpl.FormatTemplate(row).WriteTo(writer);
-											})).ToHtmlString();
+											cellContents = colTmpl.FormatTemplate(row).ToHtmlString();
 										}
 									}
 

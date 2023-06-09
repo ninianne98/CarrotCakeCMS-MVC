@@ -174,24 +174,24 @@ namespace Carrotware.CMS.Core {
 			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
 				List<EditHistory> _history = null;
 
-				IQueryable<vw_carrot_EditHistory> QueryInput = (from h in _db.vw_carrot_EditHistories
-																where h.SiteID == siteID
-																	&& (!showLatestOnly || h.IsLatestVersion == true)
-																	&& (!editDate.HasValue
-																		  || (h.EditDate.Date >= dateStart.Date && h.EditDate.Date <= dateEnd.Date))
-																	&& (!editUserID.HasValue || h.EditUserId == userID)
-																select h);
+				IQueryable<vw_carrot_EditHistory> queryable = (from h in _db.vw_carrot_EditHistories
+															   where h.SiteID == siteID
+																   && (!showLatestOnly || h.IsLatestVersion == true)
+																   && (!editDate.HasValue
+																		 || (h.EditDate.Date >= dateStart.Date && h.EditDate.Date <= dateEnd.Date))
+																   && (!editUserID.HasValue || h.EditUserId == userID)
+															   select h);
 
 				if (IsContentProp) {
-					QueryInput = ReflectionUtilities.SortByParm<vw_carrot_EditHistory>(QueryInput, srt.SortField, srt.SortDirection);
+					queryable = queryable.SortByParm(srt.SortField, srt.SortDirection);
 				} else {
-					QueryInput = (from c in QueryInput
-								  orderby c.EditDate descending
-								  where c.SiteID == siteID
-								  select c).AsQueryable();
+					queryable = (from c in queryable
+								 orderby c.EditDate descending
+								 where c.SiteID == siteID
+								 select c).AsQueryable();
 				}
 
-				_history = (from h in QueryInput.Skip(startRec).Take(pageSize) select new EditHistory(h)).ToList();
+				_history = (from h in queryable.PaginateList(pageNumber, pageSize) select new EditHistory(h)).ToList();
 
 				return _history;
 			}

@@ -140,6 +140,13 @@ namespace Carrotware.Web.UI.Components {
 		public string InnerHtml { get; set; }
 
 		protected StringBuilder CreateOutput() {
+			string[] uris = new string[] { "src", "href" };
+
+			var uri = _attrs.Where(x => uris.Contains(x.Key.ToLowerInvariant())).FirstOrDefault();
+			if (uri.Key != null && string.IsNullOrWhiteSpace(this.Uri)) {
+				this.Uri = uri.Value;
+			}
+
 			var sb = new StringBuilder();
 			string[] hrefs = new string[] { "a", "link" };
 			string[] srcs = new string[] { "audio", "embed", "iframe", "img", "input", "script", "source", "track", "video" };

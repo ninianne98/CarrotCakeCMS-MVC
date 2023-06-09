@@ -282,6 +282,14 @@ namespace Carrotware.Web.UI.Components {
 			return null;
 		}
 
+		public static IEnumerable<T> PaginateList<T>(this IQueryable<T> list, int page, int pageSize) {
+			page = page < 1 ? 1 : page;
+			pageSize = pageSize < 1 ? 10 : pageSize;
+			var skip = (page - 1) * pageSize;
+
+			return list.Skip(skip).Take(pageSize).ToList();
+		}
+
 		public static IQueryable<T> SortByParm<T>(this IList<T> source, string sortByFieldName, string sortDirection) {
 			return SortByParm<T>(source.AsQueryable(), sortByFieldName, sortDirection);
 		}

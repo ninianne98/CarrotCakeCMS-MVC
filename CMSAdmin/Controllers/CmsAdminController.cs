@@ -457,7 +457,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.InitOrderBy(x => x.SiteName);
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<SiteData>(SiteData.GetSiteList(), srt.SortField, srt.SortDirection);
+			var query = SiteData.GetSiteList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -471,7 +471,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.ToggleSort();
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<SiteData>(SiteData.GetSiteList(), srt.SortField, srt.SortDirection);
+			var query = SiteData.GetSiteList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -488,7 +488,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.InitOrderBy(x => x.ContentSnippetName);
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<ContentSnippet>(SiteData.CurrentSite.GetContentSnippetList(), srt.SortField, srt.SortDirection);
+			var query = SiteData.CurrentSite.GetContentSnippetList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -502,7 +502,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.ToggleSort();
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<ContentSnippet>(SiteData.CurrentSite.GetContentSnippetList(), srt.SortField, srt.SortDirection);
+			var query = SiteData.CurrentSite.GetContentSnippetList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -2000,7 +2000,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					query = pageHelper.GetParentWithChildNavigation(this.CurrentSiteID, model.ParentPageID.Value, false).AsQueryable();
 				}
 
-				query = query.SortByParm<ContentPage>(srt.SortField, srt.SortDirection);
+				query = query.SortByParm(srt.SortField, srt.SortDirection);
 				pagedData.DataSource = query.ToList();
 
 				pagedData.TotalRecords = pagedData.DataSource.Count();
@@ -2075,7 +2075,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.InitOrderBy(x => x.CategoryText);
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<ContentCategory>(SiteData.CurrentSite.GetCategoryList(), srt.SortField, srt.SortDirection);
+			var query = SiteData.CurrentSite.GetCategoryList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -2089,7 +2089,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.ToggleSort();
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<ContentCategory>(SiteData.CurrentSite.GetCategoryList(), srt.SortField, srt.SortDirection);
+			var query = SiteData.CurrentSite.GetCategoryList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -2106,7 +2106,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.InitOrderBy(x => x.TagText);
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<ContentTag>(SiteData.CurrentSite.GetTagList(), srt.SortField, srt.SortDirection);
+			var query = SiteData.CurrentSite.GetTagList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -2120,7 +2120,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.ToggleSort();
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<ContentTag>(SiteData.CurrentSite.GetTagList(), srt.SortField, srt.SortDirection);
+			var query = SiteData.CurrentSite.GetTagList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -2340,7 +2340,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			var templates = cmsHelper.Templates.Where(t => !SiteData.DefaultTemplates.Contains(t.TemplatePath.ToLowerInvariant())).ToList();
 			var srt = model.ParseSort();
 
-			var query = ReflectionUtilities.SortByParm<CMSTemplate>(templates, srt.SortField, srt.SortDirection);
+			var query = templates.SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -2614,7 +2614,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.InitOrderBy(x => x.UserName);
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<ExtendedUserData>(ExtendedUserData.GetUserList(), srt.SortField, srt.SortDirection);
+			var query = ExtendedUserData.GetUserList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -2628,7 +2628,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.ToggleSort();
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<ExtendedUserData>(ExtendedUserData.GetUserList(), srt.SortField, srt.SortDirection);
+			var query = ExtendedUserData.GetUserList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -2645,7 +2645,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.InitOrderBy(x => x.RoleName);
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<UserRole>(SecurityData.GetRoleList(), srt.SortField, srt.SortDirection);
+			var query = SecurityData.GetRoleList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();
@@ -2659,7 +2659,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			model.ToggleSort();
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<UserRole>(SecurityData.GetRoleList(), srt.SortField, srt.SortDirection);
+			var query = SecurityData.GetRoleList().SortByParm(srt.SortField, srt.SortDirection);
 
 			model.TotalRecords = -1;
 			model.DataSource = query.ToList();

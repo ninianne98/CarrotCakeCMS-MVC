@@ -224,7 +224,7 @@ namespace Carrotware.CMS.Core {
 				srt.SortDirection = "DESC";
 			}
 
-			lstComments = ReflectionUtilities.SortByParm<vw_carrot_Comment>(lstComments, srt.SortField, srt.SortDirection);
+			lstComments = lstComments.SortByParm(srt.SortField, srt.SortDirection);
 
 			return lstComments.Skip(startRec).Take(iPageSize).ToList().Select(v => new PostComment(v)).ToList();
 		}

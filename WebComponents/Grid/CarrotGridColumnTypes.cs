@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Web;
-using System.Web.WebPages;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -31,7 +30,7 @@ namespace Carrotware.Web.UI.Components {
 		public string HeaderText { get; set; }
 		public object HeadAttributes { get; set; }
 		public object BodyAttributes { get; set; }
-		public Func<T, HelperResult> FormatTemplate { get; set; }
+		public Func<T, IHtmlString> FormatTemplate { get; set; }
 	}
 
 	public class CarrotGridTableTemplateColumn : CarrotGridTemplateColumn<DataRow> {
@@ -125,8 +124,8 @@ namespace Carrotware.Web.UI.Components {
 			: base() {
 			this.ImageAttributes = null;
 
-			this.ImagePathTrue = HttpUtility.HtmlEncode(CarrotWeb.GetWebResourceUrl(IconResourceAffirm));
-			this.ImagePathFalse = HttpUtility.HtmlEncode(CarrotWeb.GetWebResourceUrl(IconResourceNegative));
+			this.ImagePathTrue = CarrotWeb.GetWebResourceUrl(IconResourceAffirm);
+			this.ImagePathFalse = CarrotWeb.GetWebResourceUrl(IconResourceNegative);
 			this.AlternateTextTrue = "True";
 			this.AlternateTextFalse = "False";
 

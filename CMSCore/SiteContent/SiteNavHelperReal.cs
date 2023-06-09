@@ -662,7 +662,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public List<SiteNav> PerformDataPagingQueryableContent(Guid siteID, bool bActiveOnly,
-				int pageSize, int pageNumber, string sortField, string sortDir, IQueryable<vw_carrot_Content> QueryInput) {
+				int pageSize, int pageNumber, string sortField, string sortDir, IQueryable<vw_carrot_Content> queryable) {
 			IEnumerable<SiteNav> lstContent = new List<SiteNav>();
 
 			int startRec = pageNumber * pageSize;
@@ -696,18 +696,17 @@ namespace Carrotware.CMS.Core {
 			}
 
 			if (IsContentProp) {
-				QueryInput = ReflectionUtilities.SortByParm<vw_carrot_Content>(QueryInput, sortField, sortDir);
+				queryable = queryable.SortByParm(sortField, sortDir);
 			} else {
-				QueryInput = (from c in QueryInput
-							  orderby c.CreateDate descending
-							  where c.SiteID == siteID
-								 && c.IsLatestVersion == true
-								 && (c.PageActive == bActiveOnly || bActiveOnly == false)
-							  select c).AsQueryable();
+				queryable = (from c in queryable
+							 orderby c.CreateDate descending
+							 where c.SiteID == siteID
+								&& c.IsLatestVersion == true
+								&& (c.PageActive == bActiveOnly || bActiveOnly == false)
+							 select c).AsQueryable();
 			}
 
-			lstContent = (from q in QueryInput
-						  select new SiteNav(q)).Skip(startRec).Take(pageSize);
+			lstContent = (from q in queryable select new SiteNav(q)).PaginateList(pageNumber, pageSize);
 
 			return lstContent.ToList();
 		}

@@ -20,9 +20,9 @@ namespace Northwind.Controllers {
 			model.PageSize = 20;
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<Product>(db.Products, srt.SortField, srt.SortDirection);
+			var query = db.Products.SortByParm(srt.SortField, srt.SortDirection);
 
-			model.DataSource = query.Take(model.PageSize).ToList();
+			model.DataSource = query.PaginateList(model.PageNumber, model.PageSize).ToList();
 			model.TotalRecords = db.Products.Count();
 			ViewBag.SupplierList = db.Suppliers.ToList();
 
@@ -33,9 +33,9 @@ namespace Northwind.Controllers {
 		public ActionResult Products(PagedData<Product> model) {
 			model.ToggleSort();
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<Product>(db.Products, srt.SortField, srt.SortDirection);
+			var query = db.Products.SortByParm(srt.SortField, srt.SortDirection);
 
-			model.DataSource = query.Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
+			model.DataSource = query.PaginateList(model.PageNumber, model.PageSize).ToList();
 			model.TotalRecords = db.Products.Count();
 			ViewBag.SupplierList = db.Suppliers.ToList();
 
@@ -50,9 +50,9 @@ namespace Northwind.Controllers {
 			model.PageSize = 10;
 
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<Supplier>(db.Suppliers, srt.SortField, srt.SortDirection);
+			var query = db.Suppliers.SortByParm(srt.SortField, srt.SortDirection);
 
-			model.DataSource = query.Take(model.PageSize).ToList();
+			model.DataSource = query.PaginateList(model.PageNumber, model.PageSize).ToList();
 			model.TotalRecords = db.Suppliers.Count();
 
 			return View(model);
@@ -62,9 +62,9 @@ namespace Northwind.Controllers {
 		public ActionResult Suppliers(PagedData<Supplier> model) {
 			model.ToggleSort();
 			var srt = model.ParseSort();
-			var query = ReflectionUtilities.SortByParm<Supplier>(db.Suppliers, srt.SortField, srt.SortDirection);
+			var query = db.Suppliers.SortByParm(srt.SortField, srt.SortDirection);
 
-			model.DataSource = query.Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
+			model.DataSource = query.PaginateList(model.PageNumber, model.PageSize).ToList();
 			model.TotalRecords = db.Suppliers.Count();
 
 			ModelState.Clear();
@@ -165,7 +165,7 @@ namespace Northwind.Controllers {
 
 			query = query.SortByParm<Employee>(srt.SortField, srt.SortDirection);
 
-			model.DataSource = query.Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
+			model.DataSource = query.PaginateList(model.PageNumber, model.PageSize).ToList();
 
 			model.TotalRecords = (from c in db.Employees select c).Count();
 

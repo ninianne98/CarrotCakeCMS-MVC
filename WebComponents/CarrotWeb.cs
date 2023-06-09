@@ -40,6 +40,15 @@ namespace Carrotware.Web.UI.Components {
 			get { return ((WebViewPage)WebPageContext.Current.Page).Url; }
 		}
 
+		public static HttpContext Current {
+			get {
+				return HttpContext.Current;
+			}
+		}
+
+		public static HttpRequest Request { get { return Current.Request; } }
+		public static HttpResponse Response { get { return Current.Response; } }
+
 		public static string ShortDateFormatPattern {
 			get {
 				return "{0:" + ShortDatePattern + "}";

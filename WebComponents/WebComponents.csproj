@@ -129,7 +129,6 @@
     <Compile Include="CarrotWebAreaReg.cs" />
     <Compile Include="Calendar.cs" />
     <Compile Include="Captcha.cs" />
-    <Compile Include="CarrotHttpHandler.cs" />
     <Compile Include="CarrotWeb.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -146,13 +145,13 @@
     <Compile Include="Grid\ICarrotGridColumn.cs" />
     <Compile Include="Grid\PagedDataTable.cs" />
     <Compile Include="HtmlTag.cs" />
+    <Compile Include="ImageSizer.cs" />
     <Compile Include="ITwoPartWebComponent.cs" />
     <Compile Include="IValidateHuman.cs" />
     <Compile Include="IWebComponent.cs" />
     <Compile Include="Bootstrap.cs" />
     <Compile Include="ReflectionUtilities.cs" />
     <Compile Include="SimpleStyle.cs" />
-    <Compile Include="ImageSizer.cs" />
     <Compile Include="jquery.cs" />
     <Compile Include="jquerybasic.cs" />
     <Compile Include="jqueryui.cs" />

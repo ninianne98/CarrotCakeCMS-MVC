@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Web.WebPages;
+using System.Web;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -23,7 +23,7 @@ namespace Carrotware.Web.UI.Components {
 	}
 
 	public interface ICarrotGridColumnTemplate<T> where T : class {
-		Func<T, HelperResult> FormatTemplate { get; set; }
+		Func<T, IHtmlString> FormatTemplate { get; set; }
 	}
 
 	public interface ICarrotGridColumnExt {
