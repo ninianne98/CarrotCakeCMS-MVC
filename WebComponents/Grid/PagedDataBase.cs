@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
@@ -23,7 +22,7 @@ namespace Carrotware.Web.UI.Components {
 			this.TotalRecords = -1;
 			this.PageNumber = 1;
 			this.PageNumbParm = "PageNbr";
-			this.OrderBy = "ID  DESC";
+			this.OrderBy = "ID   DESC";
 		}
 
 		public virtual void ReadPageNbr() {
@@ -34,7 +33,7 @@ namespace Carrotware.Web.UI.Components {
 				sPageNbr = context.Request[this.PageNumbParm].ToString();
 			}
 
-			if (!String.IsNullOrEmpty(sPageNbr)) {
+			if (!string.IsNullOrEmpty(sPageNbr)) {
 				int pg = int.Parse(sPageNbr);
 				this.PageNumber = pg;
 			}
@@ -105,20 +104,20 @@ namespace Carrotware.Web.UI.Components {
 		public void ToggleSort() {
 			SortParm srt = this.ParseSort();
 
-			if (!String.IsNullOrEmpty(this.SortByNew)) {
+			if (!string.IsNullOrEmpty(this.SortByNew)) {
 				if (srt.SortField.ToLowerInvariant() == this.SortByNew.ToLowerInvariant()) {
 					if (srt.SortDirection.EndsWith("ASC")) {
-						this.OrderBy = String.Format("{0}  DESC", this.SortByNew);
+						this.OrderBy = string.Format("{0}   DESC", this.SortByNew);
 					} else {
-						this.OrderBy = String.Format("{0}  ASC", this.SortByNew);
+						this.OrderBy = string.Format("{0}   ASC", this.SortByNew);
 					}
 				} else {
-					this.OrderBy = String.Format("{0}  ASC", this.SortByNew);
+					this.OrderBy = string.Format("{0}   ASC", this.SortByNew);
 					this.PageNumber = 1;
 				}
 			}
 
-			this.SortByNew = String.Empty;
+			this.SortByNew = string.Empty;
 		}
 
 		public virtual bool HasData {
@@ -139,10 +138,10 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public void Parse() {
-			string sortFld = String.Empty;
-			string sortDir = String.Empty;
+			string sortFld = string.Empty;
+			string sortDir = string.Empty;
 
-			if (!String.IsNullOrEmpty(this.OrderBy)) {
+			if (!string.IsNullOrEmpty(this.OrderBy)) {
 				int pos = this.OrderBy.LastIndexOf(" ");
 				sortFld = this.OrderBy.Substring(0, pos).Trim();
 				sortDir = this.OrderBy.Substring(pos).Trim();

@@ -570,6 +570,11 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		//================================
+
+		public static string ToKebabCase(this string input) {
+			return string.Concat(input.Select((c, i) => (char.IsUpper(c) && i > 0 ? "-" : string.Empty) + char.ToLower(c)));
+		}
+
 		public static HtmlString RenderControlToHtml(IWebComponent ctrl) {
 			return new HtmlString(ctrl.GetHtml());
 		}

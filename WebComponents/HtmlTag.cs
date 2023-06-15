@@ -140,27 +140,32 @@ namespace Carrotware.Web.UI.Components {
 		public string InnerHtml { get; set; }
 
 		protected StringBuilder CreateOutput() {
+			var sb = new StringBuilder();
 			string[] uris = new string[] { "src", "href" };
+			string[] hrefs = new string[] { "a", "link" };
+			string[] js = new string[] { "onblur", "onchange", "onclick", "onfocus", "onselect", "onsubmit" };
+			string[] srcs = new string[] { "audio", "embed", "iframe", "img", "input", "script", "source", "track", "video" };
 
 			var uri = _attrs.Where(x => uris.Contains(x.Key.ToLowerInvariant())).FirstOrDefault();
 			if (uri.Key != null && string.IsNullOrWhiteSpace(this.Uri)) {
 				this.Uri = uri.Value;
 			}
 
-			var sb = new StringBuilder();
-			string[] hrefs = new string[] { "a", "link" };
-			string[] srcs = new string[] { "audio", "embed", "iframe", "img", "input", "script", "source", "track", "video" };
-
-			if (hrefs.Contains(this.Tag)) {
-				sb.Append(string.Format(" href=\"{0}\" ", this.Uri));
+			if (!string.IsNullOrWhiteSpace(this.Uri)) {
+				if (hrefs.Contains(this.Tag)) {
+					sb.Append(string.Format(" href=\"{0}\" ", this.Uri));
+				}
+				if (srcs.Contains(this.Tag)) {
+					sb.Append(string.Format(" src=\"{0}\" ", this.Uri));
+				}
 			}
 
-			if (srcs.Contains(this.Tag)) {
-				sb.Append(string.Format(" src=\"{0}\" ", this.Uri));
-			}
-
-			foreach (var kvp in _attrs.Where(x => x.Value.Trim().Length > 0)) {
-				sb.Append(string.Format(" {0}=\"{1}\" ", HttpUtility.HtmlEncode(kvp.Key), HttpUtility.HtmlEncode((kvp.Value))));
+			foreach (var kvp in _attrs.Where(x => !uris.Contains(x.Key.ToLowerInvariant()) && x.Value.Trim().Length > 0)) {
+				if (js.Contains(kvp.Key.ToLowerInvariant())) {
+					sb.Append(string.Format(" {0}=\"{1}\" ", kvp.Key.ToLowerInvariant(), kvp.Value));
+				} else {
+					sb.Append(string.Format(" {0}=\"{1}\" ", HttpUtility.HtmlEncode(kvp.Key.ToKebabCase()), HttpUtility.HtmlEncode(kvp.Value)));
+				}
 			}
 
 			sb.Replace("  ", " ").Replace("  ", " ");

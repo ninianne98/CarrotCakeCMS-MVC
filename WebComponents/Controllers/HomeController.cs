@@ -134,21 +134,29 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			return bmpNew;
 		}
 
-		public ActionResult GetWebResource(string r, string t) {
+		public ActionResult GetWebResource(string r, string ts) {
 			var context = System.Web.HttpContext.Current;
 			context.Response.Cache.VaryByParams["r"] = true;
 			context.Response.Cache.VaryByParams["ts"] = true;
 
 			DoCacheMagic(context, 5);
 
-			var mime = "text/plain";
+			var mime = "text/x-plain";
 			string resource = Utils.DecodeBase64(r);
 
 			var res = resource.Split(':');
-			var ext = Path.GetExtension(res[0]);
+			var ext = Path.GetExtension(res[0]).ToLowerInvariant();
 
 			if (FileDataHelper.MimeTypes.ContainsKey(ext)) {
 				mime = FileDataHelper.MimeTypes[ext];
+			}
+
+			if (mime == "text/x-plain") {
+				// sometimes the lookup fails, fix these common types so they render binary/byte[]
+				var exts = new string[] { ".exe", ".zip", ".png", ".gif", ".jpg", ".jpeg", ".webp", ".mp3", ".mp4" };
+				if (exts.Contains(ext.ToLowerInvariant())) {
+					mime = "application/octet-stream";
+				}
 			}
 
 			if (mime.ToLowerInvariant().StartsWith("text")) {

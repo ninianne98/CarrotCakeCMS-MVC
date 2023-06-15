@@ -87,9 +87,9 @@ namespace Carrotware.Web.UI.Components {
 				string actionName, string controllerName,
 				object activeAttributes = null, object inactiveAttributes = null) {
 			_stringbldr = sb;
-			_tag = String.IsNullOrEmpty(tag) ? "li" : tag;
+			_tag = string.IsNullOrEmpty(tag) ? "li" : tag;
 
-			actionName = String.IsNullOrEmpty(actionName) ? DefaultActionName : actionName.Replace(" ", "");
+			actionName = string.IsNullOrEmpty(actionName) ? DefaultActionName : actionName.Replace(" ", "");
 
 			string[] actionNames = actionName.Contains(";") ? actionName.Split(';') : new string[] { actionName };
 
@@ -98,8 +98,15 @@ namespace Carrotware.Web.UI.Components {
 				actionNames = new string[] { DefaultActionName };
 			}
 
-			string currentAction = htmlHelper.ViewContext.RouteData.GetRequiredString("action");
-			string currentController = htmlHelper.ViewContext.RouteData.GetRequiredString("controller");
+			string currentAction = string.Empty;
+			string currentController = string.Empty;
+
+			if (htmlHelper.ViewContext.RouteData.GetRequiredString("action") != null) {
+				currentAction = htmlHelper.ViewContext.RouteData.GetRequiredString("action");
+			}
+			if (htmlHelper.ViewContext.RouteData.GetRequiredString("controller") != null) {
+				currentController = htmlHelper.ViewContext.RouteData.GetRequiredString("controller");
+			}
 
 			string theAction = actionNames.Where(x => x.Trim().Equals(currentAction, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
 
@@ -107,7 +114,7 @@ namespace Carrotware.Web.UI.Components {
 				theAction = currentAction;
 			}
 
-			if (!String.IsNullOrEmpty(theAction)) {
+			if (!string.IsNullOrEmpty(theAction)) {
 				actionName = theAction.Trim();
 			}
 
@@ -117,11 +124,11 @@ namespace Carrotware.Web.UI.Components {
 			if ((actionName.Equals(currentAction, StringComparison.InvariantCultureIgnoreCase))
 				&& controllerName.Equals(currentController, StringComparison.InvariantCultureIgnoreCase)) {
 				if (activeAttributes != null) {
-					tagAttrib = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(activeAttributes);
+					tagAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(activeAttributes);
 				}
 			} else {
 				if (inactiveAttributes != null) {
-					tagAttrib = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(inactiveAttributes);
+					tagAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(inactiveAttributes);
 				}
 			}
 
@@ -137,18 +144,18 @@ namespace Carrotware.Web.UI.Components {
 							int currentPage, int selectedPage,
 							object activeAttributes = null, object inactiveAttributes = null) {
 			_stringbldr = sb;
-			_tag = String.IsNullOrEmpty(tag) ? "li" : tag;
+			_tag = string.IsNullOrEmpty(tag) ? "li" : tag;
 
 			var tagBuilder = new TagBuilder(_tag);
 			IDictionary<string, object> tagAttrib = null;
 
 			if (currentPage == selectedPage) {
 				if (activeAttributes != null) {
-					tagAttrib = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(activeAttributes);
+					tagAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(activeAttributes);
 				}
 			} else {
 				if (inactiveAttributes != null) {
-					tagAttrib = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(inactiveAttributes);
+					tagAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(inactiveAttributes);
 				}
 			}
 
@@ -162,7 +169,7 @@ namespace Carrotware.Web.UI.Components {
 
 		private string OpenTag(StringBuilder sb, string tag, object htmlAttributes = null) {
 			_stringbldr = sb;
-			_tag = String.IsNullOrEmpty(tag) ? "li" : tag;
+			_tag = string.IsNullOrEmpty(tag) ? "li" : tag;
 
 			var tagBuilder = new TagBuilder(_tag);
 			IDictionary<string, object> tagAttrib = null;
@@ -172,7 +179,7 @@ namespace Carrotware.Web.UI.Components {
 							|| (htmlAttributes is Dictionary<string, object>)) {
 					tagAttrib = (IDictionary<string, object>)htmlAttributes;
 				} else {
-					tagAttrib = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+					tagAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
 				}
 			}
 
@@ -188,9 +195,9 @@ namespace Carrotware.Web.UI.Components {
 		//=====================
 		public void Dispose() {
 			if (_stringbldr != null && _stringbldr.Length > 1) {
-				_stringbldr.Append(Environment.NewLine + String.Format("</{0}>", _tag));
+				_stringbldr.Append(Environment.NewLine + string.Format("</{0}>", _tag));
 			} else {
-				_helper.ViewContext.Writer.Write(Environment.NewLine + String.Format("</{0}>", _tag));
+				_helper.ViewContext.Writer.Write(Environment.NewLine + string.Format("</{0}>", _tag));
 			}
 		}
 	}

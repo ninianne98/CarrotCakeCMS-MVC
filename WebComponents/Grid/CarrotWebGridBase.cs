@@ -87,11 +87,17 @@ namespace Carrotware.Web.UI.Components {
 		public object THeadAttributes { get; set; }
 		public object TBodyAttributes { get; set; }
 
+		public void SetTableAttributes(object tableAttrib, object headAttrib, object bodyAttrib) {
+			this.TableAttributes = InitAttrib(tableAttrib);
+			this.THeadAttributes = InitAttrib(headAttrib);
+			this.TBodyAttributes = InitAttrib(bodyAttrib);
+		}
+
 		protected IDictionary<string, object> InitAttrib(object htmlAttribs) {
-			IDictionary<string, object> tblAttrib = (IDictionary<string, object>)new RouteValueDictionary();
+			IDictionary<string, object> tblAttrib = new RouteValueDictionary();
 
 			if (htmlAttribs != null) {
-				tblAttrib = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttribs);
+				tblAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttribs);
 			}
 
 			return tblAttrib;
@@ -111,25 +117,41 @@ namespace Carrotware.Web.UI.Components {
 
 		protected StringBuilder BuildHeadScript(StringBuilder sb) {
 			string frm = "form:first";
+			if (string.IsNullOrEmpty(this.HtmlFormId)) {
+				this.HtmlFormId = this.HtmlClientId + "_form";
+			}
 			if (!string.IsNullOrEmpty(this.HtmlFormId)) {
 				frm = string.Format("#{0}", this.HtmlFormId);
 			}
+
+			var btnId = string.Format("submit_{0}", this.HtmlFormId);
 
 			if (this.UseDataPage) {
 				sb.AppendLine(string.Empty);
 				sb.AppendLine("	<script type=\"text/javascript\">");
 				sb.AppendLine("	function __clickHead(fld) {");
 				sb.AppendLine(string.Format("		$('#{0}SortByNew').val(fld);", this.FieldIdPrefix));
-				sb.AppendLine(string.Format("		$('{0}')[0].submit();", frm));
+				sb.AppendLine(string.Format("		$('#{0}').click();", btnId));
+				//sb.AppendLine(string.Format("		$('{0}')[0].submit();", frm));
 				sb.AppendLine("	}");
 				sb.AppendLine(string.Empty);
 				sb.AppendLine("	function __clickPage(nbr, fld) {");
 				sb.AppendLine("		$('#' + fld).val(nbr);");
 				sb.AppendLine("		$('#' + fld).focus();");
-				sb.AppendLine(string.Format("		$('{0}')[0].submit();", frm));
+				sb.AppendLine(string.Format("		$('#{0}').click();", btnId));
+				//sb.AppendLine(string.Format("		$('{0}')[0].submit();", frm));
 				sb.AppendLine("	}");
 				sb.AppendLine("	</script>");
 				sb.AppendLine(string.Empty);
+
+				var div = new HtmlTag("div");
+				div.MergeAttributes(new { @style = "display: none;" });
+				sb.AppendLine(div.OpenTag());
+
+				var btn = new HtmlTag("button");
+				btn.InnerHtml = "Save";
+				btn.MergeAttributes(new { @id = btnId, @type = "submit", @value = "save" });
+				sb.AppendLine(btn.RenderTag());
 
 				FormHelper(x => x.OrderBy, sb);
 				FormHelper(x => x.SortByNew, sb);
@@ -139,6 +161,8 @@ namespace Carrotware.Web.UI.Components {
 				FormHelper(x => x.TotalRecords, sb);
 				FormHelper(x => x.MaxPage, sb);
 				FormHelper(x => x.PageNumber, sb);
+
+				sb.AppendLine(div.CloseTag());
 			}
 
 			return sb;
