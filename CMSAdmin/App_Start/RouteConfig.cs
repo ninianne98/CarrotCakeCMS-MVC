@@ -41,7 +41,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			routes.MapRoute(
 				name: "C3_Admin_Default",
 				url: adminFolder + "/{action}/{id}",
-				defaults: new { controller = CmsRouteConstants.Controller.Admin, action = SiteActions.Index, id = UrlParameter.Optional },
+				defaults: new { controller = CmsRouteConstants.CmsController.Admin, action = SiteActions.Index, id = UrlParameter.Optional },
 				namespaces: _namespaces.ToArray()
 			);
 
@@ -55,7 +55,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 				routes.MapRoute(
 					name: "C3_Admin_Login",
 					url: loginPath + "/{id}",
-					defaults: new { controller = CmsRouteConstants.Controller.Admin, action = SiteActions.Login, id = UrlParameter.Optional },
+					defaults: new { controller = CmsRouteConstants.CmsController.Admin, action = SiteActions.Login, id = UrlParameter.Optional },
 					namespaces: _namespaces.ToArray()
 				);
 			}
@@ -63,7 +63,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			routes.MapRoute(
 				name: "CmsContent_AjaxForms",
 				url: "CmsAjaxForms/{action}.ashx",
-				defaults: new { controller = CmsRouteConstants.Controller.Content, action = CmsRouteConstants.IndexAction, id = UrlParameter.Optional },
+				defaults: new { controller = CmsRouteConstants.CmsController.Content, action = CmsRouteConstants.IndexAction, id = UrlParameter.Optional },
 				namespaces: _namespaces.ToArray()
 			);
 
@@ -74,7 +74,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			routes.MapRoute(
 				name: "Default",
 				url: "{controller}/{action}/{id}",
-				defaults: new { controller = CmsRouteConstants.Controller.Home, action = CmsRouteConstants.IndexAction, id = UrlParameter.Optional },
+				defaults: new { controller = CmsRouteConstants.CmsController.Home, action = CmsRouteConstants.IndexAction, id = UrlParameter.Optional },
 				namespaces: _namespaces.ToArray()
 			);
 		}

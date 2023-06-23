@@ -48,9 +48,6 @@ namespace Carrotware.CMS.UI.Components {
 				if (Page.ViewData[PagePayload.ViewDataKey] != null) {
 					return (PagePayload)Page.ViewData[PagePayload.ViewDataKey];
 				}
-				//if (Page.Model is PagePayload) {
-				//	return (PagePayload)Page.Model;
-				//}
 				if (Page is CmsWebViewPage) {
 					return ((CmsWebViewPage)Page).CmsPage;
 				}
@@ -138,10 +135,6 @@ namespace Carrotware.CMS.UI.Components {
 						}
 					}
 				}
-
-				string currentAction = routeData.GetRequiredString("action");
-				string currentController = routeData.GetRequiredString("controller");
-				var collect = controller.ViewEngineCollection;
 
 				if (methodInfo != null) {
 					object result = null;
@@ -266,18 +259,19 @@ namespace Carrotware.CMS.UI.Components {
 
 		public static HtmlString MetaTags() {
 			var sb = new StringBuilder();
+			var page = CmsPage;
 
-			if (CmsPage.TheSite.BlockIndex || CmsPage.ThePage.BlockIndex) {
+			if (page.TheSite.BlockIndex || page.ThePage.BlockIndex) {
 				sb.AppendLine(CarrotWeb.MetaTag("robots", "noindex,nofollow,noarchive").ToString());
 				sb.AppendLine(string.Empty);
 			}
 
-			if (!string.IsNullOrEmpty(CmsPage.ThePage.MetaKeyword)) {
-				sb.AppendLine(CarrotWeb.MetaTag("keywords", CmsPage.ThePage.MetaKeyword).ToString());
+			if (!string.IsNullOrEmpty(page.ThePage.MetaKeyword)) {
+				sb.AppendLine(CarrotWeb.MetaTag("keywords", page.ThePage.MetaKeyword).ToString());
 				sb.AppendLine(string.Empty);
 			}
-			if (!string.IsNullOrEmpty(CmsPage.ThePage.MetaDescription)) {
-				sb.AppendLine(CarrotWeb.MetaTag("description", CmsPage.ThePage.MetaDescription).ToString());
+			if (!string.IsNullOrEmpty(page.ThePage.MetaDescription)) {
+				sb.AppendLine(CarrotWeb.MetaTag("description", page.ThePage.MetaDescription).ToString());
 				sb.AppendLine(string.Empty);
 			}
 
@@ -625,12 +619,11 @@ namespace Carrotware.CMS.UI.Components {
 							  select w).ToList();
 
 			foreach (Widget widget in widgetList) {
-				bool IsWidgetClass = false;
+				bool isWidgetClass = false;
 
 				string widgetKey = string.Format("WidgetId_{0}_{1}", placeHolderName, iWidgetCount);
 				if (Html.ViewContext.Controller is IContentController) {
 					IContentController cc = (Html.ViewContext.Controller as IContentController);
-
 					widgetKey = string.Format("WidgetId_{0}", cc.WidgetCount);
 				}
 
@@ -655,7 +648,7 @@ namespace Carrotware.CMS.UI.Components {
 						obj = Activator.CreateInstance(objType);
 
 						if (objectPrefix.ToUpperInvariant() != "CLASS") {
-							IsWidgetClass = false;
+							isWidgetClass = false;
 							// assumed to be a controller action/method
 							object attrib = ReflectionUtilities.GetAttribute<WidgetActionSettingModelAttribute>(objType, objectPrefix);
 
@@ -665,7 +658,7 @@ namespace Carrotware.CMS.UI.Components {
 								settings = Activator.CreateInstance(s);
 							}
 						} else {
-							IsWidgetClass = true;
+							isWidgetClass = true;
 							// a class widget is its own setting object
 							settings = obj;
 						}
@@ -705,7 +698,7 @@ namespace Carrotware.CMS.UI.Components {
 							(obj as IWidgetDataObject).WidgetPayload = settings;
 						}
 
-						if (IsWidgetClass && obj is IHtmlString) {
+						if (isWidgetClass && obj is IHtmlString) {
 							widgetText = (obj as IHtmlString).ToHtmlString();
 						} else {
 							widgetText = GetResultViewStringFromController(objectPrefix, objType, obj);
@@ -713,7 +706,7 @@ namespace Carrotware.CMS.UI.Components {
 					} catch (Exception ex) {
 						SiteData.WriteDebugException("renderwidget-class", ex);
 
-						LiteralMessage msg = new LiteralMessage(ex, widgetKey, widget.ControlPath);
+						var msg = new LiteralMessage(ex, widgetKey, widget.ControlPath);
 						obj = msg;
 						widgetText = msg.ToHtmlString();
 					}
@@ -767,13 +760,13 @@ namespace Carrotware.CMS.UI.Components {
 					} catch (Exception ex) {
 						SiteData.WriteDebugException("renderwidget-view", ex);
 
-						LiteralMessage msg = new LiteralMessage(ex, widgetKey, widget.ControlPath);
+						var msg = new LiteralMessage(ex, widgetKey, widget.ControlPath);
 						widgetText = msg.ToHtmlString();
 					}
 				}
 
 				if (widgetText == null || widget.ControlPath.ToLowerInvariant().EndsWith(".ascx")) {
-					LiteralMessage msg = new LiteralMessage("The widget is not supported.", widgetKey, widget.ControlPath);
+					var msg = new LiteralMessage("The widget is not supported.", widgetKey, widget.ControlPath);
 					widgetText = msg.ToHtmlString();
 				}
 

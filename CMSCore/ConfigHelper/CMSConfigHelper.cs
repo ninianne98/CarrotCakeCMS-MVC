@@ -50,6 +50,8 @@ namespace Carrotware.CMS.Core {
 
 		private static string keyAdminToolboxModules = "cms_AdminToolboxModules";
 
+		private static string keyPrimarySite = "cms_PrimarySite";
+
 		private static string keyDynamicSite = "cms_DynamicSite";
 
 		private static string keyTemplateFiles = "cms_TemplateFiles";
@@ -69,6 +71,8 @@ namespace Carrotware.CMS.Core {
 
 			HttpContext.Current.Cache.Remove(keyAdminToolboxModules);
 
+			HttpContext.Current.Cache.Remove(keyPrimarySite);
+
 			HttpContext.Current.Cache.Remove(keyDynamicSite);
 
 			HttpContext.Current.Cache.Remove(keyTemplates);
@@ -83,7 +87,7 @@ namespace Carrotware.CMS.Core {
 			try {
 				//VirtualDirectory.RegisterRoutes(true);
 
-				if (SiteData.CurretSiteExists) {
+				if (SiteData.CurrentSiteExists) {
 					SiteData.CurrentSite.LoadTextWidgets();
 				}
 			} catch (Exception ex) { }
@@ -771,6 +775,29 @@ namespace Carrotware.CMS.Core {
 					HttpContext.Current.Cache.Insert(keyDynamicSite, _sites, null, DateTime.Now.AddMinutes(5), Cache.NoSlidingExpiration);
 				}
 				return _sites;
+			}
+		}
+
+		public static Guid PrimarySiteID {
+			get {
+				Guid _site = Guid.Empty;
+				bool bCached = false;
+
+				try {
+					var val = HttpContext.Current.Cache[keyPrimarySite].ToString();
+					_site = new Guid(val);
+					bCached = val.Length > 10;
+				} catch {
+					bCached = false;
+				}
+
+				if (!bCached) {
+					_site = CarrotCakeConfig.GetConfig().MainConfig.SiteID.Value;
+
+					HttpContext.Current.Cache.Insert(keyPrimarySite, _site, null, DateTime.Now.AddMinutes(3), Cache.NoSlidingExpiration);
+				}
+
+				return _site;
 			}
 		}
 

@@ -120,7 +120,7 @@
 			.AddColumn(new CarrotGridTemplateColumn<ContentPage> {
 				HasHeadingText = false,
 				FormatTemplate = @<text>
-					@CarrotWeb.ActionImage(SiteActions.PageHistory, CmsRouteConstants.Controller.Admin, new { @versionid = @item.ContentID }, "~/Assets/Admin/Images/layout_content.png", "Inspect Version", null, null)
+					@CarrotWeb.ActionImage(SiteActions.PageHistory, CmsRouteConstants.CmsController.Admin, new { @versionid = @item.ContentID }, "~/Assets/Admin/Images/layout_content.png", "Inspect Version", null, null)
 				</text>
 			})
 			.AddColumn(new CarrotGridTemplateColumn<ContentPage> {

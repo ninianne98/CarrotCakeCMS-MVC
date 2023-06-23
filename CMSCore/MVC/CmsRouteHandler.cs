@@ -16,7 +16,7 @@ using System.Web.Mvc;
 namespace Carrotware.CMS.Core {
 
 	public static class CmsRouteConstants {
-		public static class Controller {
+		public static class CmsController {
 			public static string Admin { get { return "CmsAdmin"; } }
 			public static string Home { get { return "Home"; } }
 			public static string Content { get { return "CmsContent"; } }
@@ -48,17 +48,17 @@ namespace Carrotware.CMS.Core {
 
 			if (requestedUri.EndsWith(".ashx")) {
 				if (requestedUri == SiteFilename.RssFeedUri) {
-					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 					requestCtx.RouteData.Values["action"] = CmsRouteConstants.RssAction;
 					return base.GetHttpHandler(requestCtx);
 				}
 				if (requestedUri == SiteFilename.SiteMapUri) {
-					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 					requestCtx.RouteData.Values["action"] = CmsRouteConstants.SiteMapAction;
 					return base.GetHttpHandler(requestCtx);
 				}
 
-				requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+				requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 				requestCtx.RouteData.Values["action"] = CmsRouteConstants.NotFoundAction;
 				requestCtx.RouteData.Values["id"] = null;
 
@@ -67,7 +67,7 @@ namespace Carrotware.CMS.Core {
 				return base.GetHttpHandler(requestCtx);
 			} else if (requestedUri.EndsWith(".aspx")) {
 				//since .aspx is not supported
-				requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+				requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 				requestCtx.RouteData.Values["action"] = CmsRouteConstants.NotFoundAction;
 				requestCtx.RouteData.Values["id"] = null;
 			} else {
@@ -107,7 +107,7 @@ namespace Carrotware.CMS.Core {
 							navData = SiteNavHelper.GetEmptySearch();
 						}
 
-						requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+						requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 						if (navData != null) {
 							SiteData.WriteDebugException("cmsroutehandler != null", new Exception(string.Format("Default: {0}", navData.FileName)));
 							requestCtx.RouteData.Values["action"] = CmsRouteConstants.DefaultAction;
@@ -121,7 +121,7 @@ namespace Carrotware.CMS.Core {
 					SiteData.WriteDebugException("cmsroutehandler_exception_uri", new Exception(string.Format("Exception: {0}", sCurrentPage)));
 
 					if (DatabaseUpdate.SystemNeedsChecking(ex) || DatabaseUpdate.AreCMSTablesIncomplete()) {
-						requestCtx.RouteData.Values["controller"] = CmsRouteConstants.Controller.Content;
+						requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 						requestCtx.RouteData.Values["action"] = CmsRouteConstants.DefaultAction;
 						requestCtx.RouteData.Values["id"] = null;
 						SiteData.WriteDebugException("cmsroutehandler_exception_systemneedschecking", ex);

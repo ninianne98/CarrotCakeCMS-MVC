@@ -138,7 +138,7 @@
 }
 
 <div style="display: none">
-	@using (Html.BeginForm("CategoryDelete", CmsRouteConstants.Controller.Admin)) {
+	@using (Html.BeginForm("CategoryDelete", CmsRouteConstants.CmsController.Admin)) {
 		@Html.AntiForgeryToken()
 
 		@Html.HiddenFor(m => m.ContentCategoryID)

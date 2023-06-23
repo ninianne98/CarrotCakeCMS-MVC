@@ -2,7 +2,7 @@
 @{
 	Layout = null;
 
-	bool siteExists = SiteData.CurretSiteExists;
+	bool siteExists = SiteData.CurrentSiteExists;
 
 	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
 }
@@ -102,7 +102,7 @@
 					</a>
 				</li>
 
-				@using (CarrotWeb.BeginWrappedItem("li", "Index;SiteInfo;ContentEditHistory;SiteSkinIndex;SiteSkinEdit;SiteTemplateUpdate;SiteDataExport;ContentImport;SiteContentStatusChange;SiteSkinIndex", CmsRouteConstants.Controller.Admin, new { @id = "tabMainTop", @class = "current sub" }, new { @id = "tabMainTop", @class = "sub" })) {
+				@using (CarrotWeb.BeginWrappedItem("li", "Index;SiteInfo;ContentEditHistory;SiteSkinIndex;SiteSkinEdit;SiteTemplateUpdate;SiteDataExport;ContentImport;SiteContentStatusChange;SiteSkinIndex", CmsRouteConstants.CmsController.Admin, new { @id = "tabMainTop", @class = "current sub" }, new { @id = "tabMainTop", @class = "sub" })) {
 					<a href="javascript:void(0)" class="lnkPopup">Site </a>
 					<ul class="children">
 						<li id="tabMain"><a href="@SiteFilename.SiteInfoURL">Site Info</a> </li>
@@ -118,7 +118,7 @@
 				}
 
 				@if (siteExists) {
-					using (CarrotWeb.BeginWrappedItem("li", "PageIndex;PageAddEdit;PageTemplateUpdate;SiteMap;PageCommentIndex", CmsRouteConstants.Controller.Admin, new { @id = "tabContentTop", @class = "current sub" }, new { @id = "tabContentTop", @class = "sub" })) {
+					using (CarrotWeb.BeginWrappedItem("li", "PageIndex;PageAddEdit;PageTemplateUpdate;SiteMap;PageCommentIndex", CmsRouteConstants.CmsController.Admin, new { @id = "tabContentTop", @class = "current sub" }, new { @id = "tabContentTop", @class = "sub" })) {
 						<a href="javascript:void(0)" class="lnkPopup">Pages </a>
 						<ul class="children">
 							<li id="tabContent"><a href="@SiteFilename.PageIndexURL">Page Index</a> </li>
@@ -129,7 +129,7 @@
 						</ul>
 					}
 
-					using (CarrotWeb.BeginWrappedItem("li", "BlogPostIndex;BlogPostAddEdit;BlogPostTemplateUpdate;CategoryIndex;CategoryAddEdit;TagIndex;TagAddEdit;BlogPostCommentIndex", CmsRouteConstants.Controller.Admin, new { @id = "tabBlogTop", @class = "current sub" }, new { @id = "tabBlogTop", @class = "sub" })) {
+					using (CarrotWeb.BeginWrappedItem("li", "BlogPostIndex;BlogPostAddEdit;BlogPostTemplateUpdate;CategoryIndex;CategoryAddEdit;TagIndex;TagAddEdit;BlogPostCommentIndex", CmsRouteConstants.CmsController.Admin, new { @id = "tabBlogTop", @class = "current sub" }, new { @id = "tabBlogTop", @class = "sub" })) {
 						<a href="javascript:void(0)" class="lnkPopup">Posts </a>
 						<ul class="children">
 							<li id="tabBlogContent"><a href="@SiteFilename.BlogPostIndexURL">Blog Post Index</a> </li>
@@ -141,7 +141,7 @@
 						</ul>
 					}
 
-					using (CarrotWeb.BeginWrappedItem("li", "ModuleIndex;TextWidgetIndex;ContentSnippetIndex", CmsRouteConstants.Controller.Admin, new { @id = "tabExtensions", @class = "current sub" }, new { @id = "tabExtensions", @class = "sub" })) {
+					using (CarrotWeb.BeginWrappedItem("li", "ModuleIndex;TextWidgetIndex;ContentSnippetIndex", CmsRouteConstants.CmsController.Admin, new { @id = "tabExtensions", @class = "current sub" }, new { @id = "tabExtensions", @class = "sub" })) {
 						<a href="javascript:void(0)" class="lnkPopup">Extensions </a>
 						<ul class="children">
 							<li id="tabModules"><a href="@SiteFilename.ModuleIndexURL">Modules</a> </li>
@@ -154,7 +154,7 @@
 				<li><a href="javascript:void(0)" class="lnkPopup" onclick="cmsFileBrowserOpen('not-a-real-file')">Browse Files</a> </li>
 
 				@if (SecurityData.IsAdmin) {
-					using (CarrotWeb.BeginWrappedItem("li", "UserIndex;RoleIndex;RoleAddEdit;UserAdd;UserEdit;SiteIndex;SiteDetail", CmsRouteConstants.Controller.Admin, new { @id = "tabUserSecurity", @class = "current sub" }, new { @id = "tabUserSecurity", @class = "sub" })) {
+					using (CarrotWeb.BeginWrappedItem("li", "UserIndex;RoleIndex;RoleAddEdit;UserAdd;UserEdit;SiteIndex;SiteDetail", CmsRouteConstants.CmsController.Admin, new { @id = "tabUserSecurity", @class = "current sub" }, new { @id = "tabUserSecurity", @class = "sub" })) {
 						<a href="javascript:void(0)" class="lnkPopup">Security </a>
 						<ul class="children">
 							<li id="tabUserAdmin"><a href="@SiteFilename.UserIndexURL">Users</a> </li>
@@ -252,7 +252,7 @@
 			</form>
 
 			@if (Request.IsAuthenticated) {
-				using (Html.BeginForm(SiteActions.LogOff, CmsRouteConstants.Controller.Admin, new { area = "" }, FormMethod.Post, new { id = "logoutForm" })) {
+				using (Html.BeginForm(SiteActions.LogOff, CmsRouteConstants.CmsController.Admin, new { area = "" }, FormMethod.Post, new { id = "logoutForm" })) {
 					@Html.AntiForgeryToken()
 
 					<input type="submit" name="btnLogout" value="Logout" id="btnLogout" />

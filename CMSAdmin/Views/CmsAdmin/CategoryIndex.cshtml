@@ -24,7 +24,7 @@
 	grid
 		.AddColumn(new CarrotGridTemplateColumn<ContentCategory> {
 			HasHeadingText = false,
-			FormatTemplate = @<text> @CarrotWeb.ActionImage(SiteActions.CategoryAddEdit, CmsRouteConstants.Controller.Admin, new { @id = @item.ContentCategoryID }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
+			FormatTemplate = @<text> @CarrotWeb.ActionImage(SiteActions.CategoryAddEdit, CmsRouteConstants.CmsController.Admin, new { @id = @item.ContentCategoryID }, "~/assets/admin/images/pencil.png", "Edit", null, null) </text>
 		})
 		.AddColumn(x => x.CategoryText, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.IsPublic, new CarrotGridBooleanImageColumn {

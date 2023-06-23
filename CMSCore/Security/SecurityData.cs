@@ -618,7 +618,7 @@ namespace Carrotware.CMS.Core {
 
 				sbBody.Replace("{%%ResetURL%%}", resetTokenUrl);
 
-				if (SiteData.CurretSiteExists) {
+				if (SiteData.CurrentSiteExists) {
 					sbBody.Replace("{%%Time%%}", SiteData.CurrentSite.Now.ToString());
 				} else {
 					sbBody.Replace("{%%Time%%}", DateTime.Now.ToString());

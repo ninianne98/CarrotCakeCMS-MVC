@@ -346,7 +346,7 @@
 
 @if (!bLocked) {
 	<div style="display: none">
-		@using (Html.BeginForm("DeleteContentSnippet", CmsRouteConstants.Controller.Admin)) {
+		@using (Html.BeginForm("DeleteContentSnippet", CmsRouteConstants.CmsController.Admin)) {
 			@Html.AntiForgeryToken()
 
 			@Html.HiddenFor(m => m.Root_ContentSnippetID)

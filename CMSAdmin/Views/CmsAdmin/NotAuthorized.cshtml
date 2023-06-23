@@ -19,7 +19,7 @@
 }
 <div>
 	@if (Request.IsAuthenticated) {
-		using (Html.BeginForm(SiteActions.LogOff, CmsRouteConstants.Controller.Admin, FormMethod.Post, new { id = "logoutForm" })) {
+		using (Html.BeginForm(SiteActions.LogOff, CmsRouteConstants.CmsController.Admin, FormMethod.Post, new { id = "logoutForm" })) {
 			@Html.AntiForgeryToken()
 
 			<input type="submit" name="btnLogout" value="Logout" id="btnLogout" />

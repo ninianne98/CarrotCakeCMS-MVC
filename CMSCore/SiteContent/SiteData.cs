@@ -746,7 +746,7 @@ namespace Carrotware.CMS.Core {
 		protected bool FoldersAreValid() {
 			string sFolderPath = this.Blog_FolderPath ?? string.Empty;
 
-			if (SiteData.CurretSiteExists) {
+			if (SiteData.CurrentSiteExists) {
 				using (ContentPageHelper pageHelper = new ContentPageHelper()) {
 					var exists = pageHelper.ExistingPagesBeginWith(this);
 

@@ -256,7 +256,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
 		public string SendTrackbackBatch() {
 			try {
-				if (SiteData.CurretSiteExists) {
+				if (SiteData.CurrentSiteExists) {
 					SiteData.CurrentSite.SendTrackbackQueue();
 				}
 				return ServiceResponse.OK;
@@ -326,7 +326,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			List<SiteMapOrder> lstSiteMap = new List<SiteMapOrder>();
 
 			try {
-				if (SiteData.CurretSiteExists) {
+				if (SiteData.CurrentSiteExists) {
 					List<SiteMapOrder> lst = sitemapHelper.GetChildPages(SiteData.CurrentSite.SiteID, ParentID, ContPageID);
 
 					lstSiteMap = (from l in lst
@@ -368,7 +368,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			int iLenA = 1;
 
 			try {
-				while (iLenB < iLenA && SiteData.CurretSiteExists) {
+				while (iLenB < iLenA && SiteData.CurrentSiteExists) {
 					iLenB = lstSiteMap.Count;
 
 					SiteMapOrder cont = sitemapHelper.GetPageWithLevel(SiteData.CurrentSite.SiteID, ContentPageID, iLevel);
@@ -445,7 +445,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 				bool bDuplicate = ct.Where(x => x.Value > 1).Any();
 
-				if (SiteData.CurretSiteExists && !bDuplicate) {
+				if (SiteData.CurrentSiteExists && !bDuplicate) {
 					var exists = pageHelper.ExistingPagesBeginWith(SiteData.CurrentSite.SiteID, sFolderPath);
 
 					if (!exists) {
@@ -453,7 +453,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 					}
 				}
 
-				if (!SiteData.CurretSiteExists) {
+				if (!SiteData.CurrentSiteExists) {
 					return ServiceResponse.OK;
 				}
 

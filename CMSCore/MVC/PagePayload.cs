@@ -24,7 +24,7 @@ namespace Carrotware.CMS.Core {
 			this.TypeLabelPrefixes = new List<TypeHeadingOption>();
 			this.TheWidgets = new List<Widget>();
 
-			if (SiteData.CurretSiteExists) {
+			if (SiteData.CurrentSiteExists) {
 				this.TheSite = SiteData.CurrentSite;
 			}
 		}
@@ -385,7 +385,7 @@ namespace Carrotware.CMS.Core {
 					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 						SiteNav pageNav = this.ThePage.GetSiteNav();
 
-						if (SiteData.CurretSiteExists && SiteData.CurrentSite.Blog_Root_ContentID.HasValue &&
+						if (SiteData.CurrentSiteExists && SiteData.CurrentSite.Blog_Root_ContentID.HasValue &&
 							pageNav.ContentType == ContentPageType.PageType.BlogEntry) {
 							_breadcrumbs = navHelper.GetPageCrumbNavigation(this.TheSite.SiteID, SiteData.CurrentSite.Blog_Root_ContentID.Value, !SecurityData.IsAuthEditor);
 

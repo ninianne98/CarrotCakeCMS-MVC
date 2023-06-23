@@ -48,7 +48,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				try {
 					if (!lstInitSiteActions.Contains(action)) {
-						if (!lstOKNoSiteActions.Contains(action) && !SiteData.CurretSiteExists) {
+						if (!lstOKNoSiteActions.Contains(action) && !SiteData.CurrentSiteExists) {
 							filterContext.Result = new RedirectResult(SiteFilename.SiteInfoURL);
 							return;
 						}
@@ -1078,7 +1078,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			CMSConfigHelper.CleanUpSerialData();
 			SiteData site = null;
-			bool bNewSite = !SiteData.CurretSiteExists;
+			bool bNewSite = !SiteData.CurrentSiteExists;
 
 			if (!bNewSite) {
 				site = siteHelper.GetCurrentSite();
@@ -2943,7 +2943,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				}
 			}
 
-			if (SiteData.CurretSiteExists) {
+			if (SiteData.CurrentSiteExists) {
 				SiteData.CurrentSite.LoadTextWidgets();
 			}
 

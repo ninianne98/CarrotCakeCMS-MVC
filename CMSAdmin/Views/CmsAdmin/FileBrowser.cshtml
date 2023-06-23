@@ -98,7 +98,7 @@
 			});
 
 			$("#fileuploader").uploadFile({
-				url: "@Url.Action(SiteActions.AjaxFileUpload, CmsRouteConstants.Controller.Admin)",
+				url: "@Url.Action(SiteActions.AjaxFileUpload, CmsRouteConstants.CmsController.Admin)",
 				fileName: "@Html.IdFor(m => m.PostedFiles)",
 				dragDrop: true,
 				multiple: true,
@@ -201,7 +201,7 @@
 			</table>
 		</div>
 
-		@using (Html.BeginForm(SiteActions.AjaxFileUpload, CmsRouteConstants.Controller.Admin, FormMethod.Post, new { enctype = "multipart/form-data" })) {
+		@using (Html.BeginForm(SiteActions.AjaxFileUpload, CmsRouteConstants.CmsController.Admin, FormMethod.Post, new { enctype = "multipart/form-data" })) {
 			@Html.AntiForgeryToken()
 			<p>
 				@Html.CheckBoxFor(m => m.EscapeSpaces)
@@ -217,7 +217,7 @@
 			</p>
 		}
 
-		@using (Html.BeginForm("FileBrowserRemove", CmsRouteConstants.Controller.Admin)) {
+		@using (Html.BeginForm("FileBrowserRemove", CmsRouteConstants.CmsController.Admin)) {
 			@Html.AntiForgeryToken()
 
 			@Html.HiddenFor(m => m.QueryPath)

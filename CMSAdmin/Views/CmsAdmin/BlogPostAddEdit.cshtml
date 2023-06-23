@@ -709,7 +709,7 @@
 						}
 
 <div style="display: none">
-	@using (Html.BeginForm("DeleteContentPage", CmsRouteConstants.Controller.Admin)) {
+	@using (Html.BeginForm("DeleteContentPage", CmsRouteConstants.CmsController.Admin)) {
 		@Html.AntiForgeryToken()
 
 		@Html.HiddenFor(m => m.ContentPage.Root_ContentID)

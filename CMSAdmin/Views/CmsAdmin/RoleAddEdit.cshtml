@@ -46,7 +46,7 @@
 		<table>
 			<tr>
 				<td>
-					@using (Html.BeginForm("RoleRemoveUsers", CmsRouteConstants.Controller.Admin)) {
+					@using (Html.BeginForm("RoleRemoveUsers", CmsRouteConstants.CmsController.Admin)) {
 						@Html.AntiForgeryToken()
 						@Html.HiddenFor(model => model.Role.RoleId)
 						@Html.HiddenFor(model => model.Role.RoleName)
@@ -101,7 +101,7 @@
 					&nbsp;&nbsp;&nbsp;
 				</td>
 				<td>
-					@using (Html.BeginForm("RoleAddUser", CmsRouteConstants.Controller.Admin)) {
+					@using (Html.BeginForm("RoleAddUser", CmsRouteConstants.CmsController.Admin)) {
 						@Html.AntiForgeryToken()
 						@Html.HiddenFor(model => model.Role.RoleId)
 						@Html.HiddenFor(model => model.Role.RoleName)

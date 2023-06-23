@@ -213,7 +213,7 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public static bool CurretSiteExists {
+		public static bool CurrentSiteExists {
 			get {
 				return CurrentSite != null ? true : false;
 			}
@@ -371,7 +371,7 @@ namespace Carrotware.CMS.Core {
 						}
 					} else {
 						pageContents = GetCurrentLivePage();
-						if (pageContents == null && (!SiteData.CurretSiteExists || DatabaseUpdate.AreCMSTablesIncomplete())) {
+						if (pageContents == null && (!SiteData.CurrentSiteExists || DatabaseUpdate.AreCMSTablesIncomplete())) {
 							pageContents = ContentPageHelper.GetEmptyHome();
 						}
 						if (SecurityData.CurrentUserGuid != Guid.Empty) {
@@ -492,11 +492,7 @@ namespace Carrotware.CMS.Core {
 			get {
 				Guid _site = Guid.Empty;
 				if (IsWebView) {
-					CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
-					if (config.MainConfig != null
-						&& config.MainConfig.SiteID != null) {
-						_site = config.MainConfig.SiteID.Value;
-					}
+					_site = CMSConfigHelper.PrimarySiteID;
 
 					if (_site == Guid.Empty) {
 						try {
@@ -565,7 +561,7 @@ namespace Carrotware.CMS.Core {
 			sbBody.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Default.htm"));
 
 			try {
-				if (CurretSiteExists) {
+				if (CurrentSiteExists) {
 					sbBody.Replace("{TIME_STAMP}", CurrentSite.Now.ToString());
 				}
 			} catch { }
@@ -633,7 +629,7 @@ namespace Carrotware.CMS.Core {
 				sbBody.Replace("{CONTENT_DETAIL}", FormatToHTML(objErr.InnerException.Message));
 			}
 
-			if (CurretSiteExists) {
+			if (CurrentSiteExists) {
 				sbBody.Replace("{TIME_STAMP}", CurrentSite.Now.ToString());
 			}
 			sbBody.Replace("{TIME_STAMP}", DateTime.Now.ToString());
