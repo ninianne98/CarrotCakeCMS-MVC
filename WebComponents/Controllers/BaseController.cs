@@ -16,7 +16,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 
 	public class BaseController : Controller {
 
-		protected void DoCacheMagic(HttpContext context, int interval) {
+		protected void DoCacheMagic(HttpContext context, double minutes) {
 			DateTime now = DateTime.Now;
 
 			DateTime dtModified = GetFauxModDate(10);
@@ -27,8 +27,8 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			context.Response.AppendHeader("Date", strModifed);
 			context.Response.Cache.SetLastModified(dtModified);
 
-			DateTime dtExpire = now.ToUniversalTime().AddMinutes(interval);
-			context.Response.Cache.SetExpires(dtExpire);
+			DateTime dtExpire = now.ToUniversalTime().AddMinutes(minutes);
+			context.Response.Cache.SetExpires(dtExpire.AddSeconds(-10));
 			context.Response.Cache.SetValidUntilExpires(true);
 			context.Response.Cache.SetCacheability(HttpCacheability.Private);
 
@@ -41,11 +41,11 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			}
 		}
 
-		protected DateTime GetFauxModDate(int interval) {
+		protected DateTime GetFauxModDate(double minutes) {
 			DateTime now = DateTime.Now;
 
 			DateTime dtMod = now.AddMinutes(-90);
-			TimeSpan ts = TimeSpan.FromMinutes(interval);
+			TimeSpan ts = TimeSpan.FromMinutes(minutes);
 			DateTime dtModified = new DateTime(((dtMod.Ticks + ts.Ticks - 1) / ts.Ticks) * ts.Ticks);
 
 			return dtModified;

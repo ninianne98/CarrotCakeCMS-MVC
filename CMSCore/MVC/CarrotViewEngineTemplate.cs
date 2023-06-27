@@ -1,6 +1,5 @@
 ﻿using Carrotware.CMS.Interface;
-using System;
-using System.Collections.Generic;
+using Carrotware.Web.UI.Components;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -63,13 +62,7 @@ namespace Carrotware.CMS.Core {
 				string folderName = folderPath.Substring(folderPath.LastIndexOf("/") + 1);
 
 				CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
-				string templatePath = config.ConfigFileLocation.TemplatePath;
-				if (templatePath.StartsWith("/")) {
-					templatePath = templatePath.Substring(1);
-				}
-				if (!templatePath.EndsWith("/")) {
-					templatePath = templatePath + "/";
-				}
+				string templatePath = config.ConfigFileLocation.TemplatePath.TrimPathSlashes();
 
 				string themePath = string.Format("{0}{1}", templatePath, folderName).ToLowerInvariant();
 

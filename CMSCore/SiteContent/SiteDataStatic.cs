@@ -160,6 +160,22 @@ namespace Carrotware.CMS.Core {
 								|| CurrentSite.IsSiteSearchPath);
 		}
 
+		public static bool IsLikelySearch() {
+			if (!IsWebView) {
+				return false;
+			}
+			if (CurrentSite == null) {
+				return false;
+			}
+
+			return CurrentSite.Blog_Root_ContentID.HasValue
+						&& (CurrentSite.IsBlogDateFolderPath
+								|| CurrentSite.IsBlogCategoryPath
+								|| CurrentSite.IsBlogTagPath
+								|| CurrentSite.IsBlogEditorFolderPath
+								|| CurrentSite.IsSiteSearchPath);
+		}
+
 		private static string SiteKeyPrefix = "cms_SiteData_";
 
 		public static void RemoveSiteFromCache(Guid siteID) {

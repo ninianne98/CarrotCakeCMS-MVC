@@ -244,7 +244,9 @@
     <Content Include="Views\Admin.config" />
     <Content Include="Views\Home\Products.cshtml" />
     <Content Include="Views\Home\ProductSearch.cshtml" />
-    <Content Include="Views\Public.config" />
+    <Content Include="Views\Public.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Admin\Employees.cshtml" />
     <Content Include="Views\Admin\ViewEmployee.cshtml" />
     <Content Include="Views\Admin\Suppliers.cshtml" />

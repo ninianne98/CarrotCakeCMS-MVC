@@ -1,5 +1,6 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Security;
+using Carrotware.Web.UI.Components;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -30,13 +31,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 					.Where(x => !string.IsNullOrEmpty(x))
 					.Distinct().ToList();
 
-			string adminFolder = SiteData.AdminFolderPath;
-			if (adminFolder.StartsWith("/")) {
-				adminFolder = adminFolder.Substring(1);
-			}
-			if (adminFolder.EndsWith("/")) {
-				adminFolder = adminFolder.Substring(0, adminFolder.Length - 1);
-			}
+			string adminFolder = SiteData.AdminFolderPath.TrimPathSlashes();
 
 			routes.MapRoute(
 				name: "C3_Admin_Default",
@@ -48,9 +43,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			CarrotSecurityConfig config = CarrotSecurityConfig.GetConfig();
 			string loginPath = config.AdditionalSettings.LoginPath;
 			if (loginPath.ToLowerInvariant() != SiteFilename.LoginURL.ToLowerInvariant()) {
-				if (loginPath.StartsWith("/")) {
-					loginPath = loginPath.Substring(1);
-				}
+				loginPath = loginPath.TrimPathSlashes();
 
 				routes.MapRoute(
 					name: "C3_Admin_Login",

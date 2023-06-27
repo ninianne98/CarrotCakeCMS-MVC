@@ -562,15 +562,9 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public bool ResetPassword(string email) {
-			string adminFolder = SiteData.AdminFolderPath;
-			if (adminFolder.StartsWith("/")) {
-				adminFolder = adminFolder.Substring(1);
-			}
-			if (adminFolder.EndsWith("/")) {
-				adminFolder = adminFolder.Substring(0, adminFolder.Length - 1);
-			}
+			string adminFolder = SiteData.AdminFolderPath.TrimPathSlashes();
 
-			string adminEmailPath = string.Format("{0}/ResetPassword", adminFolder);
+			string adminEmailPath = string.Format("{0}/{1}", adminFolder, SiteActions.ResetPassword);
 
 			return ResetPassword(adminEmailPath, email);
 		}
@@ -580,9 +574,7 @@ namespace Carrotware.CMS.Core {
 			ApplicationUser user = null;
 			string code = string.Empty;
 
-			if (resetUri.StartsWith("/")) {
-				resetUri = resetUri.Substring(1);
-			}
+			resetUri = resetUri.TrimPathSlashes();
 
 			if (!string.IsNullOrEmpty(email)) {
 				using (var securityHelper = new SecurityHelper()) {

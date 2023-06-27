@@ -32,9 +32,8 @@ namespace Carrotware.Web.UI.Components.Controllers {
 
 		public ActionResult GetImageThumb(string thumb, bool? scale, int? square) {
 			var context = System.Web.HttpContext.Current;
-			context.Response.Cache.VaryByParams["thumb"] = true;
-			context.Response.Cache.VaryByParams["scale"] = true;
-			context.Response.Cache.VaryByParams["square"] = true;
+
+			CarrotWeb.VaryCacheByQuery(new string[] { "thumb", "scale", "square", "ts" }, 3);
 
 			DoCacheMagic(context, 3);
 
@@ -136,10 +135,10 @@ namespace Carrotware.Web.UI.Components.Controllers {
 
 		public ActionResult GetWebResource(string r, string ts) {
 			var context = System.Web.HttpContext.Current;
-			context.Response.Cache.VaryByParams["r"] = true;
-			context.Response.Cache.VaryByParams["ts"] = true;
 
-			DoCacheMagic(context, 5);
+			CarrotWeb.VaryCacheByQuery(new string[] { "r", "ts" }, 7);
+
+			DoCacheMagic(context, 7);
 
 			var mime = "text/x-plain";
 			string resource = Utils.DecodeBase64(r);
@@ -185,7 +184,6 @@ namespace Carrotware.Web.UI.Components.Controllers {
 													.Select(n => n.Namespace)
 													.FirstOrDefault();
 
-							//var altResourceName1 = string.Format("{0}.{1}", CarrotWeb.TrimAssemblyName(assembly), resourceName);
 							var altResourceName2 = string.Format("{0}.{1}", shortestNamespace, resourceName);
 
 							//validate that the resource is even there, and match the case that it is stored with
@@ -223,10 +221,8 @@ namespace Carrotware.Web.UI.Components.Controllers {
 
 		public ActionResult GetCaptchaImage(string fgcolor, string bgcolor, string ncolor) {
 			var context = System.Web.HttpContext.Current;
-			context.Response.Cache.VaryByParams["ts"] = true;
-			context.Response.Cache.VaryByParams["fgcolor"] = true;
-			context.Response.Cache.VaryByParams["bgcolor"] = true;
-			context.Response.Cache.VaryByParams["ncolor"] = true;
+
+			CarrotWeb.VaryCacheByQuery(new string[] { "fgcolor", "bgcolor", "ncolor", "ts" }, 3);
 
 			DoCacheMagic(context, 3);
 
@@ -254,8 +250,9 @@ namespace Carrotware.Web.UI.Components.Controllers {
 												string tc, string tb, string tsb, string tl,
 												string nc, string nb, string nsb, string nl) {
 			var context = System.Web.HttpContext.Current;
-			context.Response.Cache.VaryByParams["el"] = true;
-			context.Response.Cache.VaryByParams["ts"] = true;
+
+			CarrotWeb.VaryCacheByQuery(new string[] { "el", "wc", "wb", "cc", "tc", "tb" }, 3);
+
 			DoCacheMagic(context, 7);
 
 			var cal = new Calendar(wc, wb, cc, cb, tc, tb, tsb,
@@ -274,7 +271,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 
 		public ActionResult GetCarrotHelp(string id) {
 			var context = System.Web.HttpContext.Current;
-			context.Response.Cache.VaryByParams["ts"] = true;
+			CarrotWeb.VaryCacheByQuery(new string[] { "id", "ts" }, 8);
 
 			DoCacheMagic(context, 10);
 

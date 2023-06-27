@@ -30,8 +30,9 @@ namespace Carrotware.CMS.UI.Components.Controllers {
 				string sbg, string sfg, string bc2, string fc2) {
 
 			var context = System.Web.HttpContext.Current;
-			context.Response.Cache.VaryByParams["el"] = true;
-			context.Response.Cache.VaryByParams["ts"] = true;
+
+			CarrotWeb.VaryCacheByQuery(new string[] { "el", "ts", "f", "bg", "fc", "bc" }, 5);
+
 			DoCacheMagic(context, 7);
 
 			var nav = new TwoLevelNavigation(f, bg, ubg, fc, bc,

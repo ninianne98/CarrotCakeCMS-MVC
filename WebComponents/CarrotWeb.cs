@@ -49,6 +49,58 @@ namespace Carrotware.Web.UI.Components {
 		public static HttpRequest Request { get { return Current.Request; } }
 		public static HttpResponse Response { get { return Current.Response; } }
 
+		public static string NormalizeFilename(this string path) {
+			if (path != null) {
+				var p = path.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+				path = string.Join(Path.AltDirectorySeparatorChar.ToString(), p.Split(Path.AltDirectorySeparatorChar).Where(x => x.Length > 0).ToArray());
+				return path;
+			}
+			return string.Empty;
+		}
+
+		public static string TrimPathSlashes(this string path) {
+			path = path.NormalizeFilename();
+			if (path.StartsWith("/")) {
+				path = path.Substring(1);
+			}
+			if (path.EndsWith("/")) {
+				path = path.Substring(0, path.Length - 1);
+			}
+			return path;
+		}
+
+		public static string FixPathSlashes(this string path) {
+			path = path.NormalizeFilename();
+			if (!path.StartsWith("/")) {
+				path = string.Format("/{0}", path);
+			}
+			if (path.EndsWith("/")) {
+				path = path.Substring(0, path.Length - 1);
+			}
+			return path;
+		}
+
+		public static void VaryCacheByQuery(string[] keys) {
+			VaryCacheByQuery(keys, 1.5);
+		}
+
+		public static void VaryCacheByQuery(string[] keys, double minutes) {
+			if (minutes < 0) { minutes = 0; }
+			if (minutes > 30) { minutes = 30; }
+
+			var context = HttpContext.Current;
+
+			foreach (var key in keys) {
+				context.Response.Cache.VaryByParams[key] = true;
+			}
+
+			DateTime now = DateTime.Now;
+			DateTime dtExpire = now.ToUniversalTime().AddMinutes(minutes);
+			context.Response.Cache.SetExpires(dtExpire);
+			context.Response.Cache.SetValidUntilExpires(true);
+			context.Response.Cache.SetCacheability(HttpCacheability.Private);
+		}
+
 		public static string ShortDateFormatPattern {
 			get {
 				return "{0:" + ShortDatePattern + "}";

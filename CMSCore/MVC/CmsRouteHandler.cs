@@ -1,4 +1,5 @@
 ﻿using Carrotware.CMS.DBUpdater;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Web;
 using System.Web.Mvc;
@@ -37,14 +38,8 @@ namespace Carrotware.CMS.Core {
 		protected override IHttpHandler GetHttpHandler(System.Web.Routing.RequestContext requestCtx) {
 			string requestedUri = (string)requestCtx.RouteData.Values["RequestedUri"];
 
-			requestedUri = string.IsNullOrEmpty(requestedUri) ? string.Empty : requestedUri.ToLowerInvariant();
-
-			if (!requestedUri.StartsWith("/")) {
-				requestedUri = string.Format("/{0}", requestedUri);
-			}
-			if (requestedUri.EndsWith("/")) {
-				requestedUri = requestedUri.Substring(0, requestedUri.Length - 1);
-			}
+			requestedUri = string.IsNullOrEmpty(requestedUri) ? @"/" : requestedUri.ToLowerInvariant();
+			requestedUri = requestedUri.FixPathSlashes();
 
 			if (requestedUri.EndsWith(".ashx")) {
 				if (requestedUri == SiteFilename.RssFeedUri) {

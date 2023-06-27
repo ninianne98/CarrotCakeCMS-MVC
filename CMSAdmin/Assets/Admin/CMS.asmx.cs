@@ -24,7 +24,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 	// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line.
 	[System.Web.Script.Services.ScriptService]
 	[CmsAuthorize]
-	public class CMS : System.Web.Services.WebService {
+	public class CMS : WebService {
 
 		public static class ServiceResponse {
 			public static string OK { get { return "OK"; } }
@@ -55,9 +55,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			}
 		}
 
-		private ContentPageHelper pageHelper = new ContentPageHelper();
-		private WidgetHelper widgetHelper = new WidgetHelper();
-		private SiteMapOrderHelper sitemapHelper = new SiteMapOrderHelper();
+		protected ContentPageHelper pageHelper = new ContentPageHelper();
+		protected WidgetHelper widgetHelper = new WidgetHelper();
+		protected SiteMapOrderHelper sitemapHelper = new SiteMapOrderHelper();
 
 		protected override void Dispose(bool disposing) {
 			base.Dispose(disposing);
@@ -73,19 +73,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			}
 		}
 
-		private Guid CurrentPageGuid = Guid.Empty;
-		private ContentPage filePage = null;
-
-		private List<ContentPage> _pages = null;
-
-		protected List<ContentPage> lstActivePages {
-			get {
-				if (_pages == null) {
-					_pages = pageHelper.GetLatestContentList(SiteData.CurrentSite.SiteID, true);
-				}
-				return _pages;
-			}
-		}
+		protected Guid CurrentPageGuid = Guid.Empty;
+		protected ContentPage filePage = null;
 
 		public ContentPage cmsAdminContent {
 			get {
@@ -148,13 +137,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			}
 		}
 
-		private void SaveSerialized(string sKey, string sData) {
+		protected void SaveSerialized(string sKey, string sData) {
 			LoadGuids();
 
 			CMSConfigHelper.SaveSerialized(CurrentPageGuid, sKey, sData);
 		}
 
-		private string GetSerialized(string sKey) {
+		protected string GetSerialized(string sKey) {
 			string sData = string.Empty;
 			LoadGuids();
 
@@ -163,13 +152,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			return sData;
 		}
 
-		private bool ClearSerialized(string sKey) {
+		protected bool ClearSerialized(string sKey) {
 			LoadGuids();
 
 			return CMSConfigHelper.ClearSerialized(CurrentPageGuid, sKey);
 		}
 
-		private void LoadGuids() {
+		protected void LoadGuids() {
 			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
 				if (!string.IsNullOrEmpty(CurrentEditPage)) {
 					filePage = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, CurrentEditPage);
@@ -195,7 +184,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			return SiteData.AdminFolderPath;
 		}
 
-		private string CurrentEditPage = string.Empty;
+		protected string CurrentEditPage = string.Empty;
 
 		[WebMethod]
 		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
@@ -281,11 +270,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			}
 		}
 
-		private void GetSetUserEditStateAsEmpty() {
+		protected void GetSetUserEditStateAsEmpty() {
 			GetSetUserEditState(string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 		}
 
-		private void GetSetUserEditState(string ToolbarState, string ToolbarMargin, string ToolbarScroll, string WidgetScroll, string SelTabID) {
+		protected void GetSetUserEditState(string ToolbarState, string ToolbarMargin, string ToolbarScroll, string WidgetScroll, string SelTabID) {
 			UserEditState editor = UserEditState.cmsUserEditState;
 
 			if (editor == null) {
@@ -573,7 +562,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			}
 		}
 
-		private ContentSnippet GetSnippet(Guid snippetID) {
+		protected ContentSnippet GetSnippet(Guid snippetID) {
 			ContentSnippet item = ContentSnippet.Get(snippetID);
 
 			if (item == null) {
@@ -727,9 +716,35 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 
 		[WebMethod]
 		[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-		public string GenerateCategoryTagSlug(string TheSlug, string Mode) {
+		public string GenerateCategoryTagSlug(string TheSlug, string ItemID, string Mode) {
 			try {
-				TheSlug = CMSConfigHelper.DecodeBase64(TheSlug).ToLowerInvariant().Trim();
+				Guid CurrentItemGuid = new Guid(ItemID);
+				TheSlug = CMSConfigHelper.DecodeBase64(TheSlug);
+				TheSlug = ContentPageHelper.ScrubSlug(TheSlug).ToLowerInvariant();
+				var matches = 0;
+				var count = 0;
+				var siteid = SiteData.CurrentSite.SiteID;
+
+				if (Mode.ToLowerInvariant() == "category") {
+					matches = ContentCategory.GetSimilar(siteid, CurrentItemGuid, TheSlug);
+					if (matches > 0) {
+						count = 1;
+						while (count < 2000 && matches > 0) {
+							TheSlug = string.Format("{0}-{1}", TheSlug, count);
+							matches = ContentCategory.GetSimilar(siteid, CurrentItemGuid, TheSlug);
+						}
+					}
+				}
+				if (Mode.ToLowerInvariant() == "tag") {
+					matches = ContentTag.GetSimilar(siteid, CurrentItemGuid, TheSlug);
+					if (matches > 0) {
+						count = 1;
+						while (count < 2000 && matches > 0) {
+							TheSlug = string.Format("{0}-{1}", TheSlug, count);
+							matches = ContentTag.GetSimilar(siteid, CurrentItemGuid, TheSlug);
+						}
+					}
+				}
 
 				return ContentPageHelper.ScrubSlug(TheSlug);
 			} catch (Exception ex) {
