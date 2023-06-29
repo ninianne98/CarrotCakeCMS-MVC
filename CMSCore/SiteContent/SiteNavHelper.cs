@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Web;
+using System.Threading;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -28,14 +28,10 @@ namespace Carrotware.CMS.Core {
 	public static class SiteNavFactory {
 
 		public static ISiteNavHelper GetSiteNavHelper() {
-			if (SiteData.IsWebView) {
-				if ((SiteData.IsPageSampler || SiteData.IsPageReal) && !SiteData.IsCurrentPageSpecial) {
-					return new SiteNavHelperMock();
-				} else {
-					return new SiteNavHelperReal();
-				}
-			} else {
+			if ((SiteData.IsPageSampler || SiteData.IsPageReal) && !SiteData.IsCurrentPageSpecial) {
 				return new SiteNavHelperMock();
+			} else {
+				return new SiteNavHelperReal();
 			}
 		}
 
@@ -75,7 +71,7 @@ namespace Carrotware.CMS.Core {
 			navData.PageHead = "NONE";
 			navData.TitleBar = "NONE";
 			navData.PageActive = false;
-			navData.PageText = "<p>NO PAGE CONTENT</p>" + SiteNavHelperMock.SampleBody;
+			navData.PageText = "<p>NO PAGE CONTENT</p>" + SampleBody;
 			navData.EditDate = DateTime.Now.Date.AddDays(-3);
 			navData.CreateDate = DateTime.Now.Date.AddDays(-10);
 			navData.GoLiveDate = DateTime.Now.Date.AddDays(2);
@@ -111,19 +107,194 @@ namespace Carrotware.CMS.Core {
 			return navData;
 		}
 
-		internal static List<SiteNav> GetSamplerFakeNav() {
-			return GetSamplerFakeNav(4, null);
+		internal static List<SiteNav> _pages = new List<SiteNav>();
+		internal static List<SiteNav> _posts = new List<SiteNav>();
+		internal static List<ContentCategory> _cats = new List<ContentCategory>();
+		internal static List<ContentTag> _tags = new List<ContentTag>();
+		internal static List<PostComment> _comments = new List<PostComment>();
+		internal static ContentPage _home = new ContentPage();
+
+		internal static object _lockBuild = new object();
+
+		internal static void BuildFakeData() {
+			lock (_lockBuild) {
+				var siteId = SiteData.CurrentSiteID;
+				if (_pages == null || !_pages.Any()) {
+					ResetCaption();
+					_comments = new List<PostComment>();
+					_pages = BuildFakeLevelDepthNavigation(siteId, 4, false);
+
+					_posts = BuildSamplerFakeNav(25, null);
+
+					_cats = BuildFakeCategoryList(siteId, 12);
+					_tags = BuildFakeTagList(siteId, 12);
+					_home = _pages[0].GetContentPage();
+				}
+				_home.TemplateFile = SiteData.PreviewTemplateFile;
+			}
 		}
 
-		internal static List<SiteNav> GetSamplerFakeNav(int iCount) {
-			return GetSamplerFakeNav(iCount, null);
+		internal static string SampleBody {
+			get {
+				return "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mi arcu, lacinia scelerisque blandit nec, mattis non nibh.</p> \r\n <p> Curabitur quis urna at massa placerat auctor. Quisque et mauris sapien, a consectetur nulla.</p>\r\n" +
+							"<p>Etiam a quam lacus. Etiam urna sapien, porttitor at rhoncus sed, tristique sed sapien. Nam felis nulla, sodales a tincidunt ac, fermentum eu nisi.</p>\r\n";
+			}
 		}
 
-		internal static List<SiteNav> GetSamplerFakeNav(Guid? rootParentID) {
-			return GetSamplerFakeNav(4, rootParentID);
+		internal static string[] _captions = new string[] { "Felis eget velit", "Dui accumsan", "Sed tempus urna",
+							"Consectetur", "Adipiscing", "Leo urna molestie", "Nulla facilisi", "Lorem sed risus",
+							"Vitae nunc sed", "Convallis convallis", "Morbi leo urna", "Nunc consequat" };
+
+		private static int _captionPos = -1;
+		private static List<string> _captionsUsed = new List<string>();
+
+		internal static void ResetCaption() {
+			_captionsUsed = new List<string>();
+			_captionPos = -1;
 		}
 
-		internal static List<SiteNav> GetSamplerFakeNav(int iCount, Guid? rootParentID) {
+		internal static string GetCaption(int idx) {
+			if (idx >= _captions.Length || idx < 0) {
+				idx = 0;
+			}
+
+			var caption = _captions[idx];
+
+			_captionPos = idx + 1;
+
+			return string.Format("{0} {1}", caption, idx);
+		}
+
+		internal static string GetRandomCaption() {
+			var caption = _captions.OrderBy(x => Guid.NewGuid())
+							.Where(x => !_captionsUsed.Contains(x))
+							.FirstOrDefault();
+
+			if (_captionsUsed.Count >= 7) {
+				_captionsUsed.RemoveAt(0);
+				_captionsUsed.RemoveAt(0);
+				_captionsUsed.RemoveAt(0);
+				_captionsUsed.RemoveAt(0);
+			}
+
+			_captionsUsed.Add(caption);
+
+			return string.Format("{0}", caption);
+		}
+
+		internal static string GetNextCaption() {
+			Interlocked.Increment(ref _captionPos);
+			if (_captionPos >= _captions.Length || _captionPos < 0) {
+				_captionPos = 0;
+			}
+
+			var caption = _captions[_captionPos];
+			_captionsUsed.Add(caption);
+
+			return string.Format("{0} {1}", caption, _captionPos);
+		}
+
+		internal static List<ContentCategory> GetFakeCategoryList(Guid siteID, int iUpdates) {
+			return _cats.Take(iUpdates).ToList();
+		}
+
+		internal static List<ContentTag> GetFakeTagList(Guid siteID, int iUpdates) {
+			return _tags.Take(iUpdates).ToList();
+		}
+
+		internal static List<SiteNav> GetFakeLevelDepthNavigation(Guid siteID, int iDepth, bool bActiveOnly) {
+			List<SiteNav> lstContent = null;
+			List<Guid> lstSub = new List<Guid>();
+
+			if (iDepth < 1) {
+				iDepth = 1;
+			}
+
+			if (iDepth > 10) {
+				iDepth = 10;
+			}
+
+			List<Guid> lstTop = _pages.Where(x => x.Parent_ContentID == null).Select(x => x.Root_ContentID).ToList();
+
+			while (iDepth > 1) {
+				lstSub = _pages.Where(x => x.Parent_ContentID != null)
+							.Where(x => lstTop.Contains(x.Parent_ContentID.Value))
+							.Select(x => x.Root_ContentID).ToList();
+
+				lstTop = lstTop.Union(lstSub).ToList();
+
+				iDepth--;
+			}
+
+			return _pages.Where(x => lstTop.Contains(x.Root_ContentID)).OrderBy(x => x.NavOrder).ToList();
+		}
+
+		internal static List<ContentCategory> BuildFakeCategoryList(Guid siteID, int iUpdates) {
+			List<int> pagelist = Enumerable.Range(1, iUpdates).ToList();
+
+			List<ContentCategory> lstContent = (from ct in pagelist
+												orderby ct descending
+												select new ContentCategory {
+													SiteID = Guid.NewGuid(),
+													CategoryURL = string.Format("javascript:void(0);", ct),
+													CategoryText = string.Format("Meta Info Cat {0}", ct),
+													UseCount = ct + 2,
+													PublicUseCount = ct + 3
+												}).ToList();
+
+			return lstContent;
+		}
+
+		internal static List<ContentTag> BuildFakeTagList(Guid siteID, int iUpdates) {
+			List<int> pagelist = Enumerable.Range(1, iUpdates).ToList();
+
+			List<ContentTag> lstContent = (from ct in pagelist
+										   orderby ct descending
+										   select new ContentTag {
+											   SiteID = Guid.NewGuid(),
+											   TagURL = string.Format("javascript:void(0);", ct),
+											   TagText = string.Format("Meta Info Tag {0}", ct),
+											   UseCount = ct + 2,
+											   PublicUseCount = ct + 3
+										   }).ToList();
+
+			return lstContent;
+		}
+
+		internal static List<SiteNav> BuildFakeLevelDepthNavigation(Guid siteID, int iDepth, bool bActiveOnly) {
+			List<SiteNav> lstNav = BuildSamplerFakeNav(4, null);
+			var lstNav2 = new List<SiteNav>();
+
+			if (iDepth >= 2) {
+				foreach (SiteNav l1 in lstNav) {
+					List<SiteNav> lst = BuildSamplerFakeNav(4, l1.Root_ContentID);
+					lstNav2 = lstNav2.Union(lst).ToList();
+					if (iDepth >= 3) {
+						foreach (SiteNav l2 in lst) {
+							List<SiteNav> lst2 = BuildSamplerFakeNav(3, l2.Root_ContentID);
+							lstNav2 = lstNav2.Union(lst2).ToList();
+							if (iDepth >= 4) {
+								foreach (SiteNav l3 in lst2) {
+									List<SiteNav> lst3 = BuildSamplerFakeNav(3, l2.Root_ContentID);
+									lstNav2 = lstNav2.Union(lst3).ToList();
+									if (iDepth >= 5) {
+										foreach (SiteNav l4 in lst3) {
+											List<SiteNav> lst4 = BuildSamplerFakeNav(3, l2.Root_ContentID);
+											lstNav2 = lstNav2.Union(lst4).ToList();
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			lstNav = lstNav.Union(lstNav2).ToList();
+			return lstNav;
+		}
+
+		internal static List<SiteNav> BuildSamplerFakeNav(int iCount, Guid? rootParentID) {
 			var navList = new List<SiteNav>();
 			int n = 0;
 
@@ -148,10 +319,10 @@ namespace Carrotware.CMS.Core {
 
 				var caption = string.Empty;
 				if (rootParentID.HasValue) {
-					caption = SiteNavHelperMock.GetRandomCaption();
+					caption = GetRandomCaption();
 					caption = string.Format("{0} {1}", caption, rootParentID.ToString().Substring(0, 3));
 				} else {
-					caption = SiteNavHelperMock.GetCaption(n);
+					caption = GetCaption(n);
 				}
 
 				nav.TitleBar = string.Format("{0} T", caption);
@@ -163,6 +334,37 @@ namespace Carrotware.CMS.Core {
 			}
 
 			return navList;
+		}
+
+		internal static List<SiteNav> GetSamplerFakeBlog(int iCount) {
+			return _posts.OrderByDescending(x => x.GoLiveDate).Take(iCount).ToList();
+		}
+
+		internal static List<SiteNav> GetSamplerFakeNav() {
+			return GetSamplerFakeNav(4, null);
+		}
+
+		internal static List<SiteNav> GetSamplerFakeNav(int iCount) {
+			return GetSamplerFakeNav(iCount, null);
+		}
+
+		internal static List<SiteNav> GetSamplerFakeNav(Guid? rootParentID) {
+			return GetSamplerFakeNav(5, rootParentID);
+		}
+
+		internal static List<SiteNav> GetSamplerFakeNav(int iCount, Guid? rootParentID) {
+			if (rootParentID.HasValue) {
+				return _pages.Where(x => x.Parent_ContentID == rootParentID.Value)
+						.Take(iCount).OrderBy(x => x.NavOrder).ToList();
+			}
+
+			return _pages.Where(x => x.Parent_ContentID == null)
+					.Take(iCount).OrderBy(x => x.NavOrder).ToList();
+		}
+
+		internal static List<SiteNav> GetSamplerFakeSearch(int iCount) {
+			return _pages.Where(x => x.Parent_ContentID == null)
+					.Take(iCount).OrderByDescending(x => x.GoLiveDate).ToList();
 		}
 
 		internal static SiteNav GetSamplerView(Guid rootParentID) {
@@ -183,7 +385,7 @@ namespace Carrotware.CMS.Core {
 			}
 
 			var sbFile = new StringBuilder();
-			sbFile.Append(SiteNavHelperMock.SampleBody);
+			sbFile.Append(SampleBody);
 
 			try {
 				var sFile = CoreHelper.ReadEmbededScript(string.Format("Carrotware.CMS.Core.SiteContent.Mock.{0}.txt", sContentSampleNumber));
@@ -210,9 +412,13 @@ namespace Carrotware.CMS.Core {
 			return sbFile.ToString();
 		}
 
+		internal static SiteNav GetSamplerHome() {
+			return _home.GetSiteNav();
+		}
+
 		internal static SiteNav GetSamplerView() {
 			string sFile2 = GetSampleBody();
-			var caption = SiteNavHelperMock.GetRandomCaption();
+			var caption = GetRandomCaption();
 
 			SiteNav navNew = new SiteNav();
 			navNew.Root_ContentID = Guid.NewGuid();
@@ -231,15 +437,10 @@ namespace Carrotware.CMS.Core {
 			navNew.CreateDate = DateTime.Now.Date.AddHours(-38);
 			navNew.GoLiveDate = navNew.EditDate.AddHours(-5);
 			navNew.RetireDate = navNew.CreateDate.AddYears(5);
-			navNew.PageText = "<h2>Content CENTER</h2>\r\n" + SiteNavHelperMock.SampleBody;
+			navNew.PageText = "<h2>Content CENTER</h2>\r\n" + SampleBody;
 
 			navNew.TemplateFile = SiteData.PreviewTemplateFile;
-
-			if (SiteData.IsWebView) {
-				navNew.FileName = SiteData.PreviewTemplateFilePage + "?" + HttpContext.Current.Request.QueryString.ToString();
-			} else {
-				navNew.FileName = SiteData.PreviewTemplateFilePage + "?sampler=true";
-			}
+			navNew.FileName = SiteData.PreviewTemplateFilePage;
 
 			navNew.PageText = "<h2>Content CENTER</h2>\r\n" + sFile2;
 

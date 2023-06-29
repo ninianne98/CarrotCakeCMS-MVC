@@ -2891,7 +2891,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult TemplatePreview() {
 			var page = PagePayload.GetSamplerPayload(this);
 
-			return View(page.ThePage.TemplateFile);
+			return View(SiteData.PreviewTemplateFile);
 		}
 
 		protected void AddErrors(IdentityResult result) {

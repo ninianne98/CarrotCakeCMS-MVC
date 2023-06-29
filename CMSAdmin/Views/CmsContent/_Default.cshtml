@@ -1,15 +1,35 @@
 ﻿@inherits CmsWebViewPage
 
+<!DOCTYPE html>
+<html>
 @{
-
+	Layout = null;
 	ViewBag.Title = CmsPage.Titlebar;
 	ViewBag.SiteName = CmsPage.TheSite.SiteName;
+	var nav = new TwoLevelNavigation();
 }
+<head>
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.LightGreen })
+	<title>@ViewBag.Title</title>
 
-<title>@CmsPage.Titlebar</title>
-
-<h2>@CmsPage.Heading</h2>
-
-<div>
-	@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
-</div>
+	@CarrotCakeHtml.IncludeHead()
+</head>
+<body>
+	<div>
+		@nav
+	</div>
+	<h2>@CmsPage.Heading</h2>
+	<div>
+		@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterTop)
+	</div>
+	<div>
+		@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+	</div>
+	<div>
+		@CarrotCakeHtml.RenderWidget(CarrotCakeHtml.CommonWidgetZone.phCenterBottom)
+	</div>
+	<div>
+		@CarrotCakeHtml.IncludeFooter()
+	</div>
+</body>
+</html>

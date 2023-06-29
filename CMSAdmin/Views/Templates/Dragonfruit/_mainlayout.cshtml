@@ -17,8 +17,11 @@
 @{
 	Layout = null;
 
+	string viewKey = "Dragonfruit_NavPills";
 	ViewBag.Title = CmsPage.Titlebar;
 	ViewBag.SiteName = CmsPage.TheSite.SiteName;
+
+	var topNav = CmsPage.TopNav.ToList();
 
 	SiteNav navHome = CmsPage.HomeNav;
 	if (navHome == null) {
@@ -28,18 +31,26 @@
 	string homePageUri = navHome.FileName;
 
 	if (navHome.Root_ContentID == CmsPage.ThePage.Root_ContentID) {
-		homePageUri = String.Empty;
+		homePageUri = string.Empty;
 	}
 
-	Dictionary<Guid, string> navPills = new Dictionary<Guid, string>();
-	if (this.ViewData["Dragonfruit_NavPills"] != null) {
-		navPills = (Dictionary<Guid, string>)this.ViewData["Dragonfruit_NavPills"];
-	} else {
-		navPills = (from p in CmsPage.TopNav
+	Dictionary<Guid, string> navPills = null;
+	if (this.ViewData[viewKey] != null) {
+		navPills = (Dictionary<Guid, string>)this.ViewData[viewKey];
+
+		if (!topNav.Where(x => navPills.Select(y => y.Key).Contains(x.Root_ContentID)).Any()) {
+			// probably a sampler view
+			navPills = null;
+		}
+	}
+
+	if (navPills == null) {
+		navPills = (from p in topNav
 					orderby p.NavOrder
 					select p).ToDictionary(kvp => kvp.Root_ContentID, kvp => String.Format("navigate{0}", kvp.FileName.Replace("/", "_").Replace("-", "_")).ToLowerInvariant());
 	}
-	this.ViewData["Dragonfruit_NavPills"] = navPills;
+
+	this.ViewData[viewKey] = navPills;
 }
 
 <!DOCTYPE html>
@@ -102,7 +113,7 @@
 	<div id="dragonfruit_mobile_menu">
 		<ul class="nav nav-pills nav-stacked">
 			@foreach (var nd in navPills) {
-				var n = CmsPage.TopNav.Where(x => x.Root_ContentID == nd.Key).FirstOrDefault();
+				var n = topNav.Where(x => x.Root_ContentID == nd.Key).FirstOrDefault();
 
 				<li>
 					<a href="@String.Format("{0}#{1}", homePageUri, nd.Value)">
@@ -127,7 +138,7 @@
 					@if (CmsPage.ThePage.Root_ContentID == navHome.Root_ContentID) {
 						<ul id="navigate_links" class="nav nav-justified">
 							@foreach (var nd in navPills) {
-								var n = CmsPage.TopNav.Where(x => x.Root_ContentID == nd.Key).FirstOrDefault();
+								var n = topNav.Where(x => x.Root_ContentID == nd.Key).FirstOrDefault();
 
 								<li>
 									<a href="@String.Format("{0}#{1}", homePageUri, nd.Value)">
@@ -138,7 +149,7 @@
 						</ul>
 					} else {
 						<ul class="nav nav-justified">
-							@foreach (var n in CmsPage.TopNav.OrderBy(x => x.NavOrder)) {
+							@foreach (var n in topNav.OrderBy(x => x.NavOrder)) {
 								string cssClassState = CmsPage.NavIsInCurrentTree(n) ? "current" : "not-current";
 								<li>
 									<a class="@cssClassState" href="@String.Format("{0}", n.FileName)">
