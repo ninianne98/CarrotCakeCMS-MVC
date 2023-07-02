@@ -52,6 +52,10 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		public SiteNav ShallowCopy() {
+			return (SiteNav)this.MemberwiseClone();
+		}
+
 		public ContentPage GetContentPage() {
 			ContentPage cp = null;
 			if (SiteData.IsPageSampler) {

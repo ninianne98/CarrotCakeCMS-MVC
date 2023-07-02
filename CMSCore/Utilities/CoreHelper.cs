@@ -1,4 +1,6 @@
 ﻿using Carrotware.Web.UI.Components;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -30,6 +32,19 @@ namespace Carrotware.CMS.Core {
 			} catch { }
 
 			return sPath;
+		}
+
+		public static T Clone<T>(this T source) {
+			if (object.ReferenceEquals(source, null)) {
+				return default(T);
+			}
+
+			var bf = new BinaryFormatter();
+			using (var ms = new MemoryStream()) {
+				bf.Serialize(ms, source);
+				ms.Seek(0, SeekOrigin.Begin);
+				return (T)bf.Deserialize(ms);
+			}
 		}
 	}
 }

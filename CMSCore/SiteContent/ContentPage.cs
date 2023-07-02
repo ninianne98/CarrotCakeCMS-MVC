@@ -149,23 +149,26 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public void ResetHeartbeatLock() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				carrot_RootContent rc = CompiledQueries.cqGetRootContentTbl(_db, this.SiteID, this.Root_ContentID);
+			using (CarrotCMSDataContext db = CarrotCMSDataContext.Create()) {
+				carrot_RootContent rc = CompiledQueries.cqGetRootContentTbl(db, this.SiteID, this.Root_ContentID);
 
-				rc.EditHeartbeat = DateTime.UtcNow.AddHours(-2);
-				rc.Heartbeat_UserId = null;
-				_db.SubmitChanges();
+				if (rc != null) {
+					rc.EditHeartbeat = DateTime.UtcNow.AddHours(-2);
+					rc.Heartbeat_UserId = null;
+					db.SubmitChanges();
+				}
 			}
 		}
 
 		public void RecordHeartbeatLock(Guid currentUserID) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				carrot_RootContent rc = CompiledQueries.cqGetRootContentTbl(_db, this.SiteID, this.Root_ContentID);
+			using (CarrotCMSDataContext db = CarrotCMSDataContext.Create()) {
+				carrot_RootContent rc = CompiledQueries.cqGetRootContentTbl(db, this.SiteID, this.Root_ContentID);
 
-				rc.Heartbeat_UserId = currentUserID;
-				rc.EditHeartbeat = DateTime.UtcNow;
-
-				_db.SubmitChanges();
+				if (rc != null) {
+					rc.Heartbeat_UserId = currentUserID;
+					rc.EditHeartbeat = DateTime.UtcNow == rc.EditHeartbeat ? DateTime.UtcNow.AddSeconds(-3) : DateTime.UtcNow;
+					db.SubmitChanges();
+				}
 			}
 		}
 

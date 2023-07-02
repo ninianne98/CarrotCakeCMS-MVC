@@ -264,18 +264,20 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public List<SiteNav> GetSiblingNavigation(Guid siteID, Guid PageID, bool bActiveOnly) {
-			List<SiteNav> lstContent = (from ct in CompiledQueries.GetLatestContentBySibling(db, siteID, PageID, bActiveOnly)
-										select new SiteNav(ct)).ToList();
+		public List<SiteNav> GetSiblingNavigation(Guid siteID, Guid rootContentID, bool bActiveOnly) {
+			vw_carrot_Content cont = CompiledQueries.GetLatestContentByID(db, siteID, false, rootContentID);
 
-			return lstContent;
+			return (from ct in CannedQueries.GetContentByParent(db, siteID, cont.Parent_ContentID, bActiveOnly)
+					orderby ct.NavOrder ascending
+					select new SiteNav(ct)).ToList();
 		}
 
 		public List<SiteNav> GetSiblingNavigation(Guid siteID, string sPage, bool bActiveOnly) {
-			List<SiteNav> lstContent = (from ct in CompiledQueries.GetLatestContentBySibling(db, siteID, sPage, bActiveOnly)
-										select new SiteNav(ct)).ToList();
+			vw_carrot_Content cont = CompiledQueries.GetLatestContentByURL(db, siteID, false, sPage);
 
-			return lstContent;
+			return (from ct in CannedQueries.GetContentByParent(db, siteID, cont.Parent_ContentID, bActiveOnly)
+					orderby ct.NavOrder ascending
+					select new SiteNav(ct)).ToList();
 		}
 
 		public List<SiteNav> GetLatest(Guid siteID, int iUpdates, bool bActiveOnly) {

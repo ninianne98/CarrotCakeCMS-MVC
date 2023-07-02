@@ -115,6 +115,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 		[HttpGet]
 		public ActionResult GalleryList() {
+			var siteid = new Guid(this.TestSiteID);
 			var model = new PagedData<tblGallery>();
 			//model.PageSize = 10;
 			//model.PageNumber = 1;
@@ -122,6 +123,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 			using (PhotoGalleryDataContext db = PhotoGalleryDataContext.GetDataContext()) {
 				model.DataSource = (from c in db.tblGalleries
+									where c.SiteID == siteid
 									orderby c.GalleryTitle ascending
 									select c).Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
 
@@ -133,17 +135,25 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 		[HttpPost]
 		public ActionResult GalleryList(PagedData<tblGallery> model) {
+			var siteid = new Guid(this.TestSiteID);
+
 			model.ToggleSort();
 			var srt = model.ParseSort();
 
 			using (PhotoGalleryDataContext db = PhotoGalleryDataContext.GetDataContext()) {
-				IQueryable<tblGallery> query = (from c in db.tblGalleries select c);
+				IQueryable<tblGallery> query = (from c in db.tblGalleries
+												where c.SiteID == siteid
+												orderby c.GalleryTitle ascending
+												select c);
 
 				query = query.SortByParm(srt.SortField, srt.SortDirection);
 
 				model.DataSource = query.Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
 
-				model.TotalRecords = (from c in db.tblGalleries select c).Count();
+				model.TotalRecords = (from c in db.tblGalleries
+									  where c.SiteID == siteid
+									  orderby c.GalleryTitle ascending
+									  select c).Count();
 			}
 
 			ModelState.Clear();

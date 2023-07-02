@@ -2889,6 +2889,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		public ActionResult TemplatePreview() {
+			SiteNavHelper.ResetFakeData();
 			var page = PagePayload.GetSamplerPayload(this);
 
 			return View(SiteData.PreviewTemplateFile);

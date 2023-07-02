@@ -107,6 +107,7 @@ namespace Carrotware.CMS.Core {
 			return navData;
 		}
 
+		internal static List<SiteNav> _content = null;
 		internal static List<SiteNav> _pages = new List<SiteNav>();
 		internal static List<SiteNav> _posts = new List<SiteNav>();
 		internal static List<ContentCategory> _cats = new List<ContentCategory>();
@@ -114,23 +115,56 @@ namespace Carrotware.CMS.Core {
 		internal static List<PostComment> _comments = new List<PostComment>();
 		internal static ContentPage _home = new ContentPage();
 
+		internal static object _lockReset = new object();
+
+		public static void ResetFakeData() {
+			lock (_lockReset) {
+				_content = null;
+				_pages = new List<SiteNav>();
+				_posts = new List<SiteNav>();
+				//BuildFakeData();
+			}
+		}
+
 		internal static object _lockBuild = new object();
 
 		internal static void BuildFakeData() {
 			lock (_lockBuild) {
 				var siteId = SiteData.CurrentSiteID;
-				if (_pages == null || !_pages.Any()) {
+				if (_pages == null || _content == null) {
 					ResetCaption();
 					_comments = new List<PostComment>();
-					_pages = BuildFakeLevelDepthNavigation(siteId, 4, false);
 
+					_pages = BuildFakeLevelDepthNavigation(siteId, 3, false);
 					_posts = BuildSamplerFakeNav(25, null);
+
+					_pages.ForEach(c => c.ContentType = ContentPageType.PageType.ContentEntry);
+					_posts.ForEach(c => c.ContentType = ContentPageType.PageType.BlogEntry);
 
 					_cats = BuildFakeCategoryList(siteId, 12);
 					_tags = BuildFakeTagList(siteId, 12);
-					_home = _pages[0].GetContentPage();
+
+					_content = _pages.Union(_posts).ToList();
 				}
-				_home.TemplateFile = SiteData.PreviewTemplateFile;
+
+				_pages = _content.OrderBy(x => x.NavOrder)
+							.Where(x => x.ContentType == ContentPageType.PageType.ContentEntry)
+							.Select(x => x.ShallowCopy()).ToList();
+				_posts = _content.OrderByDescending(x => x.GoLiveDate)
+							.Where(x => x.ContentType == ContentPageType.PageType.BlogEntry)
+							.Select(x => x.ShallowCopy()).ToList();
+
+				var homeNav = _pages.Where(x => x.NavOrder == 0).First();
+				var oldId = homeNav.Root_ContentID;
+				var newId = siteId;
+
+				if (oldId != newId) {
+					_pages.Where(x => x.Parent_ContentID == oldId).ToList().ForEach(c => c.Parent_ContentID = newId);
+					homeNav.Root_ContentID = newId;
+
+					_home = homeNav.GetContentPage();
+					_home.TemplateFile = SiteData.PreviewTemplateFile;
+				}
 			}
 		}
 
@@ -342,6 +376,11 @@ namespace Carrotware.CMS.Core {
 
 		internal static List<SiteNav> GetSamplerFakeNav() {
 			return GetSamplerFakeNav(4, null);
+		}
+
+		internal static List<SiteNav> GetSamplerFakeNav(string page) {
+			return _pages.Where(x => x.Parent_ContentID != null)
+						.Take(4).OrderBy(x => x.NavOrder).ToList();
 		}
 
 		internal static List<SiteNav> GetSamplerFakeNav(int iCount) {

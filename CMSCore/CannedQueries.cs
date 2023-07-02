@@ -249,6 +249,18 @@ namespace Carrotware.CMS.Core {
 					select ct);
 		}
 
+		internal static IQueryable<vw_carrot_Content> GetContentByParent(CarrotCMSDataContext ctx, Guid siteID, Guid? parentContentID, bool bActiveOnly) {
+			return (from ct in ctx.vw_carrot_Contents
+					orderby ct.NavOrder, ct.NavMenuText
+					where ct.SiteID == siteID
+						   && ct.Parent_ContentID == parentContentID
+						   && ct.IsLatestVersion == true
+						   && (ct.PageActive == true || bActiveOnly == false)
+						   && (ct.GoLiveDate < DateTime.UtcNow || bActiveOnly == false)
+						   && (ct.RetireDate > DateTime.UtcNow || bActiveOnly == false)
+					select ct);
+		}
+
 		internal static IQueryable<vw_carrot_Content> GetLatestContentByParent(CarrotCMSDataContext ctx, Guid siteID, Guid? parentContentID, bool bActiveOnly) {
 			return (from ct in ctx.vw_carrot_Contents
 					orderby ct.NavOrder, ct.NavMenuText
