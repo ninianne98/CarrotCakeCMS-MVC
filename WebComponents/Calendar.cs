@@ -247,7 +247,7 @@ namespace Carrotware.Web.UI.Components {
 			if (string.IsNullOrEmpty(this.OverrideCssFile)) {
 				var sb = new StringBuilder();
 
-				sb.Append(string.Format("{0}?el={1}", UrlPaths.CalendarStylePath, HttpUtility.HtmlEncode(Utils.EncodeBase64(ElementId))));
+				sb.Append(string.Format("{0}?el={1}", UrlPaths.CalendarStylePath, HttpUtility.HtmlEncode(ElementId.EncodeBase64())));
 				sb.Append(string.Format("&wc={0}&wb={1}&cc={2}&cb={3}", CarrotWeb.EncodeColor(this.WeekdayColor), CarrotWeb.EncodeColor(this.WeekdayBackground), CarrotWeb.EncodeColor(this.CellColor), CarrotWeb.EncodeColor(this.CellBackground)));
 				sb.Append(string.Format("&tc={0}&tb={1}&tsb={2}&tl={3}", CarrotWeb.EncodeColor(this.TodayColor), CarrotWeb.EncodeColor(this.TodayBackground), CarrotWeb.EncodeColor(this.TodaySelectBorder), CarrotWeb.EncodeColor(this.TodayLink)));
 				sb.Append(string.Format("&nc={0}&nb={1}&nsb={2}&nl={3}", CarrotWeb.EncodeColor(this.NormalColor), CarrotWeb.EncodeColor(this.NormalBackground), CarrotWeb.EncodeColor(this.NormalSelectBorder), CarrotWeb.EncodeColor(this.NormalLink)));

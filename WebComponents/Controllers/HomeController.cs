@@ -141,7 +141,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			DoCacheMagic(context, 7);
 
 			var mime = "text/x-plain";
-			string resource = Utils.DecodeBase64(r);
+			string resource = r.DecodeBase64();
 
 			var res = resource.Split(':');
 			var ext = Path.GetExtension(res[0]).ToLowerInvariant();
@@ -258,8 +258,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			var cal = new Calendar(wc, wb, cc, cb, tc, tb, tsb,
 									tl, nc, nb, nsb, nl);
 
-			cal.ElementId = Utils.DecodeBase64(el).Replace("{", "").Replace(">", "").Replace("<", "").Replace(">", "")
-									.Replace("'", "").Replace("\\", "").Replace("//", "").Replace(":", "");
+			cal.ElementId = el.DecodeBase64().ScrubQueryElement();
 
 			var txt = cal.GenerateCSS();
 			var byteArray = Encoding.UTF8.GetBytes(txt);

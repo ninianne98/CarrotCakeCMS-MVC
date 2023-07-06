@@ -112,8 +112,7 @@ namespace Carrotware.CMS.UI.Components {
 				//controller.ControllerContext = Html.ViewContext.Controller.ControllerContext;
 
 				RouteData routeData = controller.ControllerContext.RouteData;
-				string areaName = type.Assembly.ManifestModule.Name;
-				areaName = areaName.Substring(0, areaName.Length - 4);
+				string areaName = type.Assembly.GetAssemblyName();
 
 				AddUpdateRouting(routeData, "Controller", type.Name.ToLowerInvariant().Replace("controller", string.Empty));
 				AddUpdateRouting(routeData, "Action", actionName);

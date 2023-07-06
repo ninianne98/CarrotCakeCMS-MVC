@@ -29,8 +29,7 @@ namespace Carrotware.CMS.Interface.Controllers {
 			: base() {
 			Assembly asmbly = this.GetType().Assembly;
 
-			string assemblyName = asmbly.ManifestModule.Name;
-			assemblyName = assemblyName.Substring(0, assemblyName.Length - 4);
+			string assemblyName = asmbly.GetAssemblyName();
 
 			this.ViewData[CarrotViewEngineWidget.Key] = assemblyName;
 			this.AssemblyName = assemblyName;

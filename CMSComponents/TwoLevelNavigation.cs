@@ -229,7 +229,7 @@ namespace Carrotware.CMS.UI.Components {
 			if (!this.AutoStylingDisabled) {
 				var sb = new StringBuilder();
 
-				sb.Append(string.Format("{0}?el={1}&sel={2}&f={3}", NavigationStylePath, HttpUtility.HtmlEncode(Utils.EncodeBase64(ElementId)), HttpUtility.HtmlEncode(Utils.EncodeBase64(CssSelected)), this.FontSize));
+				sb.Append(string.Format("{0}?el={1}&sel={2}&f={3}", NavigationStylePath, HttpUtility.HtmlEncode(this.ElementId.EncodeBase64()), HttpUtility.HtmlEncode(this.CssSelected.EncodeBase64()), this.FontSize));
 
 				sb.Append(string.Format("&bg={0}&ubg={1}&fc={2}&bc={3}", CarrotWeb.EncodeColor(this.BGColor), CarrotWeb.EncodeColor(this.UnSelBGColor), CarrotWeb.EncodeColor(this.ForeColor), CarrotWeb.EncodeColor(this.BackColor)));
 				sb.Append(string.Format("&hbc={0}&hfc={1}", CarrotWeb.EncodeColor(this.HoverBGColor), CarrotWeb.EncodeColor(this.HoverFGColor)));

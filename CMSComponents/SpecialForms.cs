@@ -246,7 +246,7 @@ namespace Carrotware.CMS.UI.Components {
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
-				sXML = CMSConfigHelper.EncodeBase64(sXML);
+				sXML = sXML.EncodeBase64();
 			}
 
 			_model.Settings = _settings;
@@ -401,7 +401,7 @@ namespace Carrotware.CMS.UI.Components {
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
-				sXML = CMSConfigHelper.EncodeBase64(sXML);
+				sXML = sXML.EncodeBase64();
 			}
 
 			_model.Settings = _settings;
@@ -538,7 +538,7 @@ namespace Carrotware.CMS.UI.Components {
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
-				sXML = CMSConfigHelper.EncodeBase64(sXML);
+				sXML = sXML.EncodeBase64();
 			}
 
 			_model.Settings = _settings;
@@ -673,7 +673,7 @@ namespace Carrotware.CMS.UI.Components {
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
-				sXML = CMSConfigHelper.EncodeBase64(sXML);
+				sXML = sXML.EncodeBase64();
 			}
 
 			_model.Settings = _settings;
@@ -817,7 +817,7 @@ namespace Carrotware.CMS.UI.Components {
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
-				sXML = CMSConfigHelper.EncodeBase64(sXML);
+				sXML = sXML.EncodeBase64();
 			}
 
 			_model.Settings = _settings;
@@ -967,7 +967,7 @@ namespace Carrotware.CMS.UI.Components {
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
-				sXML = CMSConfigHelper.EncodeBase64(sXML);
+				sXML = sXML.EncodeBase64();
 			}
 
 			_model.Settings = _settings;
@@ -1122,7 +1122,7 @@ namespace Carrotware.CMS.UI.Components {
 			using (StringWriter stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, _settings);
 				sXML = stringWriter.ToString();
-				sXML = CMSConfigHelper.EncodeBase64(sXML);
+				sXML = sXML.EncodeBase64();
 			}
 
 			_model.Settings = _settings;

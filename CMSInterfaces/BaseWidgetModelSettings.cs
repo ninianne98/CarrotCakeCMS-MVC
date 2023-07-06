@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Carrotware.Web.UI.Components;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -31,14 +31,14 @@ namespace Carrotware.CMS.Interface {
 				xml = sw.ToString();
 			}
 
-			this.EncodedSettings = B64Helper.EncodeBase64(xml);
+			this.EncodedSettings = xml.EncodeBase64();
 		}
 
 		public virtual object Restore<P>() {
 			var settings = new object();
 
 			if (!string.IsNullOrEmpty(this.EncodedSettings)) {
-				string xml = B64Helper.DecodeBase64(this.EncodedSettings);
+				string xml = this.EncodedSettings.DecodeBase64();
 
 				var xmlSerializer = new XmlSerializer(typeof(P));
 				using (var sr = new StringReader(xml)) {

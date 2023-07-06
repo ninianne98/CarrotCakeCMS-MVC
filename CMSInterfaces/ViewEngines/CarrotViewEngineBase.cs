@@ -31,17 +31,19 @@ namespace Carrotware.CMS.Interface {
 			View,
 		}
 
+		public static string AreaRouteKey { get { return "::key::"; } }
+
 		protected string[] GetPaths(ViewPathType vpt) {
 			string[] viewPaths = null;
 			string prefix = string.Empty;
 
 			switch (vpt) {
 				case ViewPathType.Area:
-					prefix = "~/Areas/::KEY::/Views/";
+					prefix = "~/Areas/" + AreaRouteKey + "/Views/";
 					break;
 
 				case ViewPathType.View:
-					prefix = "~/Views/::KEY::/";
+					prefix = "~/Views/" + AreaRouteKey + "/";
 					break;
 			}
 

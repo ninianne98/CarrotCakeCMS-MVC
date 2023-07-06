@@ -28,8 +28,7 @@ namespace Carrotware.Web.UI.Components {
 								.Where(x => !string.IsNullOrEmpty(x))
 								.Distinct().ToList();
 
-			string assemblyName = asmbly.ManifestModule.Name;
-			_areaName = assemblyName.Substring(0, assemblyName.Length - 4);
+			_areaName = asmbly.GetAssemblyName();
 		}
 
 		public CarrotWebAreaReg(string areaName)

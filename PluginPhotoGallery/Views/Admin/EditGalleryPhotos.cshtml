@@ -365,7 +365,7 @@
 									</span>
 								</a>
 							</span>
-							<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink(Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(srcImage.FullFileName) }))">
+							<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink(Url.Action("EditImageMetaData", null, new { path = srcImage.FullFileName.EncodeBase64() }))">
 								<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
 							</a>
 						</div>
@@ -393,7 +393,7 @@
 									</span>
 								</a>
 							</span>
-							<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink(Url.Action("EditImageMetaData", null, new { path = Utils.EncodeBase64(galImage.FullFileName) }))">
+							<a class="editMetaData" href='javascript:void(0);' onclick="@CarrotLayout.WritePopupLink(Url.Action("EditImageMetaData", null, new { path = galImage.FullFileName.EncodeBase64() }))">
 								<img class="imgNoBorder" src="~/Assets/Admin/Images/pencil.png" alt="Edit" title="Edit" />
 							</a>
 						</div>

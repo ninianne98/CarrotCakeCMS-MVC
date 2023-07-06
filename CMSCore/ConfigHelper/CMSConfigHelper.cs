@@ -1024,12 +1024,12 @@ namespace Carrotware.CMS.Core {
 
 		//=====================
 
-		public static string DecodeBase64(string ValIn) {
-			return Utils.DecodeBase64(ValIn);
+		public static string DecodeBase64(string text) {
+			return text.DecodeBase64();
 		}
 
-		public static string EncodeBase64(string ValIn) {
-			return Utils.EncodeBase64(ValIn);
+		public static string EncodeBase64(string text) {
+			return text.EncodeBase64();
 		}
 
 		public void OverrideKey(Guid guidContentID) {

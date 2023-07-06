@@ -130,7 +130,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			string imageFile = string.Empty;
 
 			if (!string.IsNullOrEmpty(path)) {
-				imageFile = Utils.DecodeBase64(path);
+				imageFile = path.DecodeBase64();
 			}
 
 			if (imageFile.Contains("../") || imageFile.Contains(@"..\")) {
@@ -173,7 +173,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			meta.ImageTitle = model.ImageTitle;
 			meta.Save();
 
-			return RedirectToAction("EditImageMetaData", new { @path = Utils.EncodeBase64(meta.GalleryImage) });
+			return RedirectToAction("EditImageMetaData", new { @path = meta.GalleryImage.EncodeBase64() });
 		}
 	}
 }

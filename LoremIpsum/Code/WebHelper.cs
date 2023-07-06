@@ -1,12 +1,13 @@
-﻿using Carrotware.CMS.Interface;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Web;
 
-namespace CarrotCake.CMS.Plugins.CalendarModule {
-
+namespace CarrotCake.CMS.Plugins.LoremIpsum.Code {
 	public class WebHelper {
-
 		public static string ReadEmbededScript(string sResouceName) {
 			string sReturn = null;
 
@@ -16,20 +17,6 @@ namespace CarrotCake.CMS.Plugins.CalendarModule {
 			}
 
 			return sReturn;
-		}
-
-		private static string _areaName = null;
-
-		public static string AssemblyName {
-			get {
-				if (_areaName == null) {
-					Assembly asmbly = Assembly.GetExecutingAssembly();
-
-					_areaName = asmbly.GetAssemblyName();
-				}
-
-				return _areaName;
-			}
 		}
 
 		private static string _shortDatePattern = null;
@@ -72,5 +59,6 @@ namespace CarrotCake.CMS.Plugins.CalendarModule {
 				return _shortTimePattern;
 			}
 		}
+
 	}
 }

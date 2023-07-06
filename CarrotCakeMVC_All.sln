@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginPhotoGallery", "Plugi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginFAQ2Module", "PluginFAQ2Module\PluginFAQ2Module.csproj", "{C3B9BC80-F3F7-43F2-8C9C-BE8FE2ACE726}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoremIpsum", "LoremIpsum\LoremIpsum.csproj", "{DE3A83DD-0CAF-4844-A526-16634512C66E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{C3B9BC80-F3F7-43F2-8C9C-BE8FE2ACE726}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3B9BC80-F3F7-43F2-8C9C-BE8FE2ACE726}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3B9BC80-F3F7-43F2-8C9C-BE8FE2ACE726}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE3A83DD-0CAF-4844-A526-16634512C66E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE3A83DD-0CAF-4844-A526-16634512C66E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE3A83DD-0CAF-4844-A526-16634512C66E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE3A83DD-0CAF-4844-A526-16634512C66E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

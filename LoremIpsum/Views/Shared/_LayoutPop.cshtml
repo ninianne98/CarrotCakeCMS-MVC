@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title - @ViewBag.WidgetAssemblyName</title>
+	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver })
+
+	@(new Bootstrap() { SelectedSkin = Bootstrap.BootstrapColorScheme.ClassicViolet })
+	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			doStyles();
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			doStyles();
+		});
+
+		function doStyles() {
+			$("input:button, input:submit, input:reset, button").button();
+			$("input:button, input:submit, input:reset, button").addClass('btn');
+		}
+
+		function cmsPreSaveTrigger() {
+			return true;
+		}
+	</script>
+</head>
+<body>
+	<div class="container body-content">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>&copy; @DateTime.Now.Year - @ViewBag.WidgetAssemblyName</p>
+		</footer>
+	</div>
+</body>
+</html>

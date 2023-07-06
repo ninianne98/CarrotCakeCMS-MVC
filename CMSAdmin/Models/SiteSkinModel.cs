@@ -33,7 +33,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public SiteSkinModel(string encodedPath, string altPath)
 			: this(encodedPath) {
-			this.AltPath = CMSConfigHelper.DecodeBase64(altPath);
+			this.AltPath = altPath.DecodeBase64();
 
 			this.EditFile = this.AltPath;
 		}
@@ -41,7 +41,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public SiteSkinModel(string encodedPath)
 			: this() {
 			this.EncodedPath = encodedPath;
-			this.TemplateFile = CMSConfigHelper.DecodeBase64(encodedPath);
+			this.TemplateFile = encodedPath.DecodeBase64();
 			this.FullFilePath = HttpContext.Current.Server.MapPath(this.TemplateFile);
 
 			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
@@ -180,7 +180,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			if (!(sIn.StartsWith(@"\") || sIn.StartsWith(@"/"))) {
 				sIn = @"/" + sIn;
 			}
-			return CMSConfigHelper.EncodeBase64(sIn.ToLowerInvariant());
+			return sIn.ToLowerInvariant().EncodeBase64();
 		}
 
 		public CMSTemplate Template { get; set; }

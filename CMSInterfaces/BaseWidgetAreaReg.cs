@@ -25,11 +25,10 @@ namespace Carrotware.CMS.Interface {
 			Assembly asmbly = this.GetType().Assembly;
 
 			_namespaces = asmbly.GetTypes().Select(t => t.Namespace)
-								.Where(x => !String.IsNullOrEmpty(x))
+								.Where(x => !string.IsNullOrEmpty(x))
 								.Distinct().ToList();
 
-			string assemblyName = asmbly.ManifestModule.Name;
-			_areaName = assemblyName.Substring(0, assemblyName.Length - 4);
+			_areaName = asmbly.GetAssemblyName();
 		}
 
 		public BaseWidgetAreaReg(string areaName)

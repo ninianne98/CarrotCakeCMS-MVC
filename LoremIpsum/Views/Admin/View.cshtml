@@ -1,0 +1,106 @@
+﻿@model ContentCreator
+
+@{
+	Layout = CarrotLayout.Main;
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="ui-widget">
+	<div class="ui-state-highlight ui-corner-all" style="padding: 0.2em; width: 680px; height: auto;">
+		<div style="font-size: 1.3em; margin: 0.25em;">
+			<div class="ui-icon ui-icon-info" style="float: left; margin: 5px; height: 16px;width: 16px"></div>
+			<div style="float: left; margin: 0.2em; width: 600px; min-height: 2em;">
+				This will create however many entries specified by "How Many" of the specified content type.
+				Use with caution in a production site, this is intended for a dev or demo site where
+				content needs to be created to experience the site design properly.
+			</div>
+			<div style="clear: both"></div>
+		</div>
+	</div>
+</div>
+<br />
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div class="form-horizontal">
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		<div class="form-group">
+			@Html.LabelFor(model => model.HowMany, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(model => model.HowMany, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+				@Html.ValidationMessageFor(model => model.HowMany, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
+		@if (Model.ContentType == Carrotware.CMS.Core.ContentPageType.PageType.ContentEntry) {
+			<div class="form-group">
+				@Html.LabelFor(model => model.TopLevel, htmlAttributes: new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.TopLevel)
+					@Html.ValidationMessageFor(model => model.TopLevel, "", new { @class = "text-danger" })
+				</div>
+			</div>
+		}
+
+		@if (Model.ContentType == Carrotware.CMS.Core.ContentPageType.PageType.BlogEntry) {
+			<div class="form-group">
+				@Html.LabelFor(model => model.Tags, htmlAttributes: new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.Tags, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+					@Html.ValidationMessageFor(model => model.Tags, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.Categories, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+					@Html.ValidationMessageFor(model => model.Categories, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.BlogComments, htmlAttributes: new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.EditorFor(model => model.BlogComments, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+					@Html.ValidationMessageFor(model => model.BlogComments, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.DateFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.TextBoxFor(m => m.DateFrom, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
+					@*@Html.EditorFor(model => model.DateFrom, new { htmlAttributes = new { @class = "form-control form-control-sm" } }) *@
+					@Html.ValidationMessageFor(model => model.DateFrom, "", new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				@Html.LabelFor(model => model.DateTo, htmlAttributes: new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.TextBoxFor(m => m.DateTo, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
+					@*@Html.EditorFor(model => model.DateTo, new { htmlAttributes = new { @class = "form-control form-control-sm" } })*@
+					@Html.ValidationMessageFor(model => model.DateTo, "", new { @class = "text-danger" })
+				</div>
+			</div>
+		}
+
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="Save" class="btn btn-default" />
+			</div>
+		</div>
+	</div>
+}
+
+@if (Model.PageLinks.Any()) {
+	<b>@string.Format("{0} entries created", Model.PageLinks.Count) </b>
+	<ul>
+		@foreach (var p in Model.PageLinks) {
+			<li>
+				<a target="_blank" href="@p">@p</a>
+			</li>
+		}
+	</ul>
+}

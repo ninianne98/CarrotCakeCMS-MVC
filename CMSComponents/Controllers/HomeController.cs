@@ -38,12 +38,9 @@ namespace Carrotware.CMS.UI.Components.Controllers {
 			var nav = new TwoLevelNavigation(f, bg, ubg, fc, bc,
 									hbc, hfc, uf, sbg, sfg, bc2, fc2);
 
-			nav.ElementId = Utils.DecodeBase64(el).Replace("{", "").Replace(">", "").Replace("<", "").Replace(">", "")
-									.Replace("'", "").Replace("\\", "").Replace("//", "").Replace(":", "");
-			nav.CssSelected = Utils.DecodeBase64(sel).Replace("{", "").Replace(">", "").Replace("<", "").Replace(">", "")
-									.Replace("'", "").Replace("\\", "").Replace("//", "").Replace(":", "");
-			nav.CssTopBackground = Utils.DecodeBase64(tbg).Replace("{", "").Replace(">", "").Replace("<", "").Replace(">", "")
-									.Replace("'", "").Replace("\\", "").Replace("//", "").Replace(":", "");
+			nav.ElementId = el.DecodeBase64().ScrubQueryElement();
+			nav.CssSelected = sel.DecodeBase64().ScrubQueryElement();
+			nav.CssTopBackground = tbg.DecodeBase64().ScrubQueryElement();
 
 			var txt = nav.GenerateCSS();
 			var byteArray = Encoding.UTF8.GetBytes(txt);

@@ -21,10 +21,7 @@ namespace Carrotware.CMS.Interface {
 			get {
 				Assembly asmbly = this.GetType().Assembly;
 
-				string assemblyName = asmbly.ManifestModule.Name;
-				assemblyName = assemblyName.Substring(0, assemblyName.Length - 4);
-
-				return assemblyName;
+				return asmbly.GetAssemblyName();
 			}
 		}
 
@@ -41,11 +38,11 @@ namespace Carrotware.CMS.Interface {
 			string newViewPath = "~/Views/Shared/__";
 
 #if DEBUG
-			Debug.WriteLine(String.Format("CarrotViewEngineDyn: n:{0}   c:{1}   v:{2}   a:{3}", ctrlCtx.Controller.GetType().Namespace, ctrlCtx.Controller.GetType().Name, viewPath, this.AssemblyKey));
+			Debug.WriteLine(string.Format("CarrotViewEngineDyn: n:{0}   c:{1}   v:{2}   a:{3}", ctrlCtx.Controller.GetType().Namespace, ctrlCtx.Controller.GetType().Name, viewPath, this.AssemblyKey));
 #endif
 
-			if (!String.IsNullOrEmpty(viewPath)) {
-				newViewPath = viewPath.ToLowerInvariant().Replace("::key::", this.AssemblyKey);
+			if (!string.IsNullOrEmpty(viewPath)) {
+				newViewPath = viewPath.ToLowerInvariant().Replace(AreaRouteKey, this.AssemblyKey);
 			}
 
 			return newViewPath;

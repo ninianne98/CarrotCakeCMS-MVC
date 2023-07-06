@@ -121,7 +121,7 @@
     <Compile Include="BaseWidgetAreaAttrRouteReg.cs" />
     <Compile Include="WidgetSettings.cs" />
     <Compile Include="RenderWidgetHelper.cs" />
-    <Compile Include="B64Helper.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="ViewEngines\CarrotViewEngineWidgetAdmin.cs" />
     <Compile Include="ViewEngines\CarrotViewEngineWidget.cs" />
     <Compile Include="ViewEngines\CarrotViewEngineBase.cs" />
@@ -171,6 +171,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebComponents\WebComponents.csproj">
+      <Project>{5AD0FFF2-6700-41AC-85BD-4F7452FDB7B7}</Project>
+      <Name>WebComponents</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

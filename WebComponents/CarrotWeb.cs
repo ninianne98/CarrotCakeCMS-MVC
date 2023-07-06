@@ -310,7 +310,7 @@ namespace Carrotware.Web.UI.Components {
 			string sUri = string.Empty;
 
 			var asmb = assembly.ManifestModule.Name;
-			var resName = HttpUtility.HtmlEncode(Utils.EncodeBase64(string.Format("{0}:{1}", resource, asmb)));
+			var resName = HttpUtility.HtmlEncode(string.Format("{0}:{1}", resource, asmb).EncodeBase64());
 
 			try {
 				var ver = assembly.GetName().Version.ToString().Replace(".", string.Empty);
@@ -351,14 +351,9 @@ namespace Carrotware.Web.UI.Components {
 			return GetManifestResourceBytes(typeof(CarrotWeb), GetInternalResourceName(resource));
 		}
 
-		internal static string TrimAssemblyName(Assembly assembly) {
-			var asmb = assembly.ManifestModule.Name;
-			return asmb.Substring(0, asmb.Length - 4);
-		}
-
 		internal static string[] FixResourceName(Assembly assembly, string[] res) {
 			if (res.Length > 1) {
-				var asmbName = TrimAssemblyName(assembly);
+				var asmbName = assembly.GetAssemblyName();
 
 				if (!res[0].StartsWith(asmbName)) {
 					res[0] = string.Format("{0}.{1}", asmbName, res[0]);

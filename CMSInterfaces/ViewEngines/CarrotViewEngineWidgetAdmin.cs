@@ -26,7 +26,7 @@ namespace Carrotware.CMS.Interface {
 		}
 
 		public string GetAssemblyKey(ControllerContext ctrlCtx) {
-			string assemblyName = String.Empty;
+			string assemblyName = string.Empty;
 			var controller = ctrlCtx.Controller;
 
 			if (controller is IAdminModule && controller is IWidgetController) {
@@ -41,11 +41,11 @@ namespace Carrotware.CMS.Interface {
 			string assemblyName = GetAssemblyKey(ctrlCtx);
 
 #if DEBUG
-			Debug.WriteLine(String.Format("CarrotViewEngineWidgetAdmin: n:{0}   c:{1}   v:{2}   a:{3}", ctrlCtx.Controller.GetType().Namespace, ctrlCtx.Controller.GetType().Name, viewPath, assemblyName));
+			Debug.WriteLine(string.Format("CarrotViewEngineWidgetAdmin: n:{0}   c:{1}   v:{2}   a:{3}", ctrlCtx.Controller.GetType().Namespace, ctrlCtx.Controller.GetType().Name, viewPath, assemblyName));
 #endif
 
-			if (!String.IsNullOrEmpty(viewPath) && !String.IsNullOrEmpty(assemblyName)) {
-				newViewPath = viewPath.ToLowerInvariant().Replace("::key::", assemblyName);
+			if (!string.IsNullOrEmpty(viewPath) && !string.IsNullOrEmpty(assemblyName)) {
+				newViewPath = viewPath.ToLowerInvariant().Replace(AreaRouteKey, assemblyName);
 			}
 
 			return newViewPath;

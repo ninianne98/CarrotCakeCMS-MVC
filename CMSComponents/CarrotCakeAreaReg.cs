@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Carrotware.CMS.Interface;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
@@ -27,8 +28,7 @@ namespace Carrotware.CMS.UI.Components {
 								.Where(x => !string.IsNullOrEmpty(x))
 								.Distinct().ToList();
 
-			string assemblyName = asmbly.ManifestModule.Name;
-			_areaName = assemblyName.Substring(0, assemblyName.Length - 4);
+			_areaName = asmbly.GetAssemblyName();
 		}
 
 		public CarrotCakeAreaReg(string areaName)
