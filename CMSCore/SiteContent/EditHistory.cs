@@ -191,7 +191,7 @@ namespace Carrotware.CMS.Core {
 								 select c).AsQueryable();
 				}
 
-				_history = (from h in queryable.PaginateList(pageNumber, pageSize) select new EditHistory(h)).ToList();
+				_history = (from h in queryable.PaginateListFromZero(pageNumber, pageSize) select new EditHistory(h)).ToList();
 
 				return _history;
 			}

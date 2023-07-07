@@ -235,8 +235,8 @@
 										<img id="imgThmbnail" filetype="@Model.FileImageLink(f.MimeType)" alt="" src="@Model.CreateFileSrc(f.FolderPath, f.FileName, f.MimeType)" />
 									</div>
 									<div style="margin: 3px;" id="imgSubContainer">
-										<a id="lnkContent" href='@Model.CreateFileLink(string.Format("{0}{1}", f.FolderPath, f.FileName))'>
-											@CarrotWeb.ImageSizer(string.Format("{0}{1}", f.FolderPath, f.FileName), f.FileName, 50, true, null)
+										<a id="lnkContent" href='@Model.CreateFileLink(f.FullFileName)'>
+											@CarrotWeb.ImageSizer(f.FullFileName, f.FileName, 50, true, null)
 										</a>
 									</div>
 									<div style="margin: 3px; text-align: center;">
@@ -282,7 +282,7 @@
 										<td>
 											<div class="ImgGroup" id="imgContainerGroup">
 												<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'file')">
-													<a id="lnkContent" href='@Model.CreateFileLink(String.Format("{0}{1}", f.FolderPath, f.FileName))'>
+													<a id="lnkContent" href='@Model.CreateFileLink(f.FullFileName)'>
 														@f.FileName
 													</a>
 												</div>

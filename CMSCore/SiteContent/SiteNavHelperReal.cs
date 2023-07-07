@@ -708,7 +708,7 @@ namespace Carrotware.CMS.Core {
 							 select c).AsQueryable();
 			}
 
-			lstContent = (from q in queryable select new SiteNav(q)).PaginateList(pageNumber, pageSize);
+			lstContent = (from q in queryable select new SiteNav(q)).PaginateListFromZero(pageNumber, pageSize);
 
 			return lstContent.ToList();
 		}
