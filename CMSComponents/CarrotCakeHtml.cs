@@ -382,18 +382,18 @@ namespace Carrotware.CMS.UI.Components {
 		public static HtmlString IncludeFooter() {
 			var sb = new StringBuilder();
 			sb.AppendLine(string.Empty);
-			bool IsPageTemplate = false;
+			bool isPageTemplate = false;
 
 			if (SecurityData.IsAdmin || SecurityData.IsSiteEditor) {
 				if (SecurityData.AdvancedEditMode) {
 					sb.AppendLine(RenderPartialToString(SiteFilename.AdvancedEditViewPath));
 				} else {
 					if (CmsPage.ThePage.Root_ContentID == SiteData.CurrentSiteID && SiteData.IsPageReal) {
-						IsPageTemplate = true;
+						isPageTemplate = true;
 					}
 
 					if (!SiteData.IsLikelyFakeSearch()) {
-						if (!SiteData.IsPageSampler && !IsPageTemplate) {
+						if (!SiteData.IsPageSampler && !isPageTemplate) {
 							sb.AppendLine(RenderPartialToString(SiteFilename.EditNotifierViewPath));
 						}
 					}
