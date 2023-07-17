@@ -2956,7 +2956,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		protected void SignOut() {
-			securityHelper.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			securityHelper.LogoutSession();
 			Session.Clear();
 		}
 

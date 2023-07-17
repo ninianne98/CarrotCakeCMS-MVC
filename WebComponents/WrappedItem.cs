@@ -21,14 +21,13 @@ namespace Carrotware.Web.UI.Components {
 		protected StringBuilder _stringbldr = null;
 
 		protected string _tag = "li";
-		private string DefaultActionName = "Index";
+		protected string _defaultActionName = "Index";
 
 		public WrappedItem(HtmlHelper htmlHelper, string tag,
 							string actionName, string controllerName,
 							object activeAttributes = null, object inactiveAttributes = null) {
 			_helper = htmlHelper;
-
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			_helper.ViewContext.Writer.Write(OpenTag(htmlHelper, sb, tag,
 						actionName, controllerName, activeAttributes, inactiveAttributes));
@@ -40,7 +39,7 @@ namespace Carrotware.Web.UI.Components {
 							int currentPage, int selectedPage,
 							object activeAttributes = null, object inactiveAttributes = null) {
 			_helper = htmlHelper;
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			_helper.ViewContext.Writer.Write(OpenTag(htmlHelper, sb, tag, currentPage, selectedPage,
 						activeAttributes, inactiveAttributes));
@@ -50,7 +49,7 @@ namespace Carrotware.Web.UI.Components {
 
 		public WrappedItem(HtmlHelper htmlHelper, string tag, object htmlAttributes = null) {
 			_helper = htmlHelper;
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			_helper.ViewContext.Writer.Write(OpenTag(sb, tag, htmlAttributes));
 
@@ -89,13 +88,13 @@ namespace Carrotware.Web.UI.Components {
 			_stringbldr = sb;
 			_tag = string.IsNullOrEmpty(tag) ? "li" : tag;
 
-			actionName = string.IsNullOrEmpty(actionName) ? DefaultActionName : actionName.Replace(" ", "");
+			actionName = string.IsNullOrEmpty(actionName) ? _defaultActionName : actionName.Replace(" ", "");
 
 			string[] actionNames = actionName.Contains(";") ? actionName.Split(';') : new string[] { actionName };
 
 			// shortcut for when using the default action rather than having to hardcode to a string
 			if (actionNames == null || !actionNames.Any()) {
-				actionNames = new string[] { DefaultActionName };
+				actionNames = new string[] { _defaultActionName };
 			}
 
 			string currentAction = string.Empty;
@@ -123,13 +122,9 @@ namespace Carrotware.Web.UI.Components {
 
 			if ((actionName.Equals(currentAction, StringComparison.InvariantCultureIgnoreCase))
 				&& controllerName.Equals(currentController, StringComparison.InvariantCultureIgnoreCase)) {
-				if (activeAttributes != null) {
-					tagAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(activeAttributes);
-				}
+				tagAttrib = activeAttributes.ToAttributeDictionary();
 			} else {
-				if (inactiveAttributes != null) {
-					tagAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(inactiveAttributes);
-				}
+				tagAttrib = inactiveAttributes.ToAttributeDictionary();
 			}
 
 			if (tagAttrib != null) {
@@ -150,13 +145,9 @@ namespace Carrotware.Web.UI.Components {
 			IDictionary<string, object> tagAttrib = null;
 
 			if (currentPage == selectedPage) {
-				if (activeAttributes != null) {
-					tagAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(activeAttributes);
-				}
+				tagAttrib = activeAttributes.ToAttributeDictionary();
 			} else {
-				if (inactiveAttributes != null) {
-					tagAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(inactiveAttributes);
-				}
+				tagAttrib = inactiveAttributes.ToAttributeDictionary();
 			}
 
 			if (tagAttrib != null) {
@@ -172,16 +163,7 @@ namespace Carrotware.Web.UI.Components {
 			_tag = string.IsNullOrEmpty(tag) ? "li" : tag;
 
 			var tagBuilder = new TagBuilder(_tag);
-			IDictionary<string, object> tagAttrib = null;
-
-			if (htmlAttributes != null) {
-				if ((htmlAttributes is IDictionary<string, object>)
-							|| (htmlAttributes is Dictionary<string, object>)) {
-					tagAttrib = (IDictionary<string, object>)htmlAttributes;
-				} else {
-					tagAttrib = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
-				}
-			}
+			var tagAttrib = htmlAttributes.ToAttributeDictionary();
 
 			if (tagAttrib != null) {
 				tagBuilder.MergeAttributes(tagAttrib);

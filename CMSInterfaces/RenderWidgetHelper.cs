@@ -33,17 +33,20 @@ namespace Carrotware.CMS.Interface {
 			var type = controller.GetType();
 			var routeData = new RouteData();
 
-			var wrapper = new HttpContextWrapper(System.Web.HttpContext.Current);
+			var wrapper = new HttpContextWrapper(HttpContext.Current);
 			string controlerName = controller.GetType().Name.ToLowerInvariant().Replace("controller", string.Empty);
 
+			routeData.Values["area"] = string.Empty;
 			if (!string.IsNullOrWhiteSpace(areaName)) {
-				routeData.Values.Add("area", areaName);
+				routeData.Values["area"] = areaName;
 			}
-			routeData.Values.Add("action", actionName);
-			routeData.Values.Add("controller", controlerName);
 
-			foreach (var r in source.RouteData.Values.Where(x => x.Key.ToLowerInvariant() != "controller" && x.Key.ToLowerInvariant() != "action")) {
-				routeData.Values.Add(r.Key, r.Value);
+			routeData.Values["action"] = actionName;
+			routeData.Values["controller"] = controlerName;
+
+			foreach (var r in source.RouteData.Values.Where(x => x.Key.ToLowerInvariant() != "controller"
+					&& x.Key.ToLowerInvariant() != "action" && x.Key.ToLowerInvariant() != "area")) {
+				routeData.Values[r.Key] = r.Value;
 			}
 
 			var context = new ControllerContext(wrapper, routeData, controller);

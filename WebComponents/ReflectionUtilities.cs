@@ -28,7 +28,7 @@ namespace Carrotware.Web.UI.Components {
 
 		public static Type GetTypeFromString(string classString) {
 			Type typ = null;
-			if (!String.IsNullOrEmpty(classString)) {
+			if (!string.IsNullOrEmpty(classString)) {
 				typ = Type.GetType(classString);
 
 				if (typ == null && classString.IndexOf(",") < 1) {
@@ -39,12 +39,12 @@ namespace Carrotware.Web.UI.Components {
 			return typ;
 		}
 
-		public static Object GetPropertyValue(Object obj, string property) {
+		public static object GetPropertyValue(object obj, string property) {
 			PropertyInfo propertyInfo = obj.GetType().GetProperty(property, PublicInstanceStatic);
 			return propertyInfo.GetValue(obj, null);
 		}
 
-		public static Object GetPropertyValueFlat(Object obj, string property) {
+		public static object GetPropertyValueFlat(object obj, string property) {
 			PropertyInfo[] propertyInfos = obj.GetType().GetProperties(PublicInstanceStatic);
 			PropertyInfo propertyInfo = null;
 			foreach (PropertyInfo info in propertyInfos) {
@@ -60,7 +60,7 @@ namespace Carrotware.Web.UI.Components {
 			}
 		}
 
-		public static bool DoesPropertyExist(Object obj, string property) {
+		public static bool DoesPropertyExist(object obj, string property) {
 			PropertyInfo propertyInfo = obj.GetType().GetProperty(property);
 			return propertyInfo == null ? false : true;
 		}
@@ -70,14 +70,14 @@ namespace Carrotware.Web.UI.Components {
 			return propertyInfo == null ? false : true;
 		}
 
-		public static List<string> GetPropertyStrings(Object obj) {
+		public static List<string> GetPropertyStrings(object obj) {
 			List<string> props = (from i in GetProperties(obj)
 								  orderby i.Name
 								  select i.Name).ToList();
 			return props;
 		}
 
-		public static List<PropertyInfo> GetProperties(Object obj) {
+		public static List<PropertyInfo> GetProperties(object obj) {
 			PropertyInfo[] info = obj.GetType().GetProperties(PublicInstanceStatic);
 
 			List<PropertyInfo> props = (from i in info.AsEnumerable()
@@ -129,11 +129,11 @@ namespace Carrotware.Web.UI.Components {
 				}
 			}
 
-			return String.Empty;
+			return string.Empty;
 		}
 
 		public static PropertyInfo PropInfoFromExpression<T>(this T source, Expression<Func<T, Object>> expression) {
-			string propertyName = String.Empty;
+			string propertyName = string.Empty;
 			PropertyInfo propInfo = null;
 
 			MemberExpression memberExpression = expression.Body as MemberExpression ??
@@ -156,11 +156,11 @@ namespace Carrotware.Web.UI.Components {
 			return propInfo;
 		}
 
-		public static Object GetPropValueFromExpression<T>(this T item, Expression<Func<T, Object>> property) {
+		public static object GetPropValueFromExpression<T>(this T item, Expression<Func<T, Object>> property) {
 			string columnName = ReflectionUtilities.BuildProp(property);
 			PropertyInfo propInfo = item.PropInfoFromExpression<T>(property);
-			Object val = propInfo.GetValue(item, null);
-			Object obj = null;
+			object val = propInfo.GetValue(item, null);
+			object obj = null;
 
 			if (columnName.Contains(".")) {
 				columnName = columnName.Substring(columnName.IndexOf(".") + 1);
@@ -176,10 +176,10 @@ namespace Carrotware.Web.UI.Components {
 			return obj;
 		}
 
-		public static Object GetPropValueFromColumnName<T>(this T item, string columnName) {
+		public static object GetPropValueFromColumnName<T>(this T item, string columnName) {
 			PropertyInfo propInfo = null;
-			Object obj = null;
-			Object val = null;
+			object obj = null;
+			object val = null;
 
 			if (columnName.Contains(".")) {
 				foreach (string colName in columnName.Split('.')) {
@@ -204,7 +204,7 @@ namespace Carrotware.Web.UI.Components {
 											((UnaryExpression)property.Body).Operand as MemberExpression;
 
 			Expression expression = property.Body;
-			string propertyName = String.Empty;
+			string propertyName = string.Empty;
 
 			if (memberExpression.NodeType == ExpressionType.MemberAccess) {
 				expression = memberExpression;
@@ -214,15 +214,15 @@ namespace Carrotware.Web.UI.Components {
 				memberExpression = ((MemberExpression)expression);
 				expression = memberExpression.Expression;
 
-				if (String.IsNullOrEmpty(propertyName)) {
+				if (string.IsNullOrEmpty(propertyName)) {
 					propertyName = memberExpression.Member.Name;
 				} else {
-					propertyName = String.Format("{0}.{1}", memberExpression.Member.Name, propertyName);
+					propertyName = string.Format("{0}.{1}", memberExpression.Member.Name, propertyName);
 				}
 			}
 
 			if (expression.NodeType != ExpressionType.MemberAccess) {
-				if (String.IsNullOrEmpty(propertyName)) {
+				if (string.IsNullOrEmpty(propertyName)) {
 					propertyName = memberExpression.Member.Name;
 				}
 			}
@@ -238,7 +238,7 @@ namespace Carrotware.Web.UI.Components {
 				expression = memberExpression;
 			}
 
-			string propertyName = String.Empty;
+			string propertyName = string.Empty;
 
 			while (expression.NodeType == ExpressionType.MemberAccess) {
 				memberExpression = ((MemberExpression)expression);
@@ -246,7 +246,7 @@ namespace Carrotware.Web.UI.Components {
 			}
 
 			if (expression.NodeType != ExpressionType.MemberAccess) {
-				if (String.IsNullOrEmpty(propertyName)) {
+				if (string.IsNullOrEmpty(propertyName)) {
 					propertyName = memberExpression.Member.Name;
 				}
 			}
@@ -266,7 +266,7 @@ namespace Carrotware.Web.UI.Components {
 			return null;
 		}
 
-		public static Object GetAttribute<T>(Type type, string memberName) {
+		public static object GetAttribute<T>(Type type, string memberName) {
 			MemberInfo[] memInfo = type.GetMember(memberName);
 
 			if (memInfo != null && memInfo.Length > 0) {
@@ -303,7 +303,7 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public static IQueryable<T> SortByParm<T>(this IQueryable<T> source, string sortByFieldName, string sortDirection) {
-			sortDirection = String.IsNullOrEmpty(sortDirection) ? "ASC" : sortDirection.Trim().ToUpperInvariant();
+			sortDirection = string.IsNullOrEmpty(sortDirection) ? "ASC" : sortDirection.Trim().ToUpperInvariant();
 
 			string SortDir = sortDirection.Contains("DESC") ? "OrderByDescending" : "OrderBy";
 

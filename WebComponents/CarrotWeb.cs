@@ -147,8 +147,23 @@ namespace Carrotware.Web.UI.Components {
 			}
 		}
 
+		public static IDictionary<string, object> ToAttributeDictionary(this object attributes) {
+			IDictionary<string, object> attribDict = null;
+
+			if (attributes != null) {
+				if ((attributes is IDictionary<string, object>)
+							|| (attributes is Dictionary<string, object>)) {
+					attribDict = (IDictionary<string, object>)attributes;
+				} else {
+					attribDict = HtmlHelper.AnonymousObjectToHtmlAttributes(attributes);
+				}
+			}
+
+			return attribDict;
+		}
+
 		//================================
-		public static string EncodeColor(Color color) {
+		public static string EncodeColor(this Color color) {
 			var colorCode = ColorTranslator.ToHtml(color);
 
 			string sColor = string.Empty;
@@ -161,7 +176,7 @@ namespace Carrotware.Web.UI.Components {
 			return sColor;
 		}
 
-		public static string DecodeColorString(string colorCode) {
+		public static string DecodeColorString(this string colorCode) {
 			string sColor = string.Empty;
 			if (!string.IsNullOrEmpty(colorCode)) {
 				sColor = colorCode;
@@ -175,7 +190,7 @@ namespace Carrotware.Web.UI.Components {
 			return sColor;
 		}
 
-		public static Color DecodeColor(string colorCode) {
+		public static Color DecodeColor(this string colorCode) {
 			string sColor = DecodeColorString(colorCode);
 
 			if (sColor.ToLowerInvariant().EndsWith("transparent")) {

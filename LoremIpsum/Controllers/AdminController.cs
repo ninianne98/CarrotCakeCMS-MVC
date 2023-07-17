@@ -1,6 +1,10 @@
 ﻿using CarrotCake.CMS.Plugins.LoremIpsum.Models;
 using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface.Controllers;
+using Carrotware.CMS.Security;
+using Carrotware.CMS.Security.Models;
+using Carrotware.Web.UI.Components;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 /*
@@ -16,9 +20,49 @@ using System.Web.Mvc;
 namespace CarrotCake.CMS.Plugins.LoremIpsum.Controllers {
 
 	public class AdminController : BaseAdminWidgetController {
+		protected SecurityHelper securityHelper = new SecurityHelper();
 
 		public ActionResult Index() {
 			return View();
+		}
+
+		protected override void Dispose(bool disposing) {
+			base.Dispose(disposing);
+
+			if (securityHelper != null) {
+				securityHelper.Dispose();
+			}
+		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		public ActionResult LogOut() {
+			securityHelper.LogoutSession();
+			Session.Clear();
+
+			return RedirectToAction(this.GetActionName(x => x.Index()));
+		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		public ActionResult Login() {
+			var model = new LoginViewModel();
+			return View(model);
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		public async Task<ActionResult> Login(LoginViewModel model) {
+			if (ModelState.IsValid) {
+				var result = await securityHelper.SimpleLogInAsync(model.UserName, model.Password, true);
+
+				if (result) {
+					return RedirectToAction(this.GetActionName(x => x.Index()));
+				}
+			}
+
+			ModelState.AddModelError("message", "Invalid login attempt");
+			return View(model);
 		}
 
 		[HttpGet]

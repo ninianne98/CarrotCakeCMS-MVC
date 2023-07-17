@@ -1,7 +1,9 @@
 ﻿using Carrotware.CMS.Security.Models;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using System;
+using System.Threading.Tasks;
 using System.Web;
 
 /*
@@ -86,7 +88,26 @@ namespace Carrotware.CMS.Security {
 			}
 		}
 
-		//public DataProtectorTokenProvider<ApplicationUser> UserToken { get; set; }
+		public void LogoutSession() {
+			this.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			HttpContext.Current.Session.Clear();
+		}
+
+		public async Task<ApplicationUser> FindByNameAsync(string userName) {
+			return await this.UserManager.FindByNameAsync(userName);
+		}
+
+		public async Task<bool> SimpleLogInAsync(string userName, string password, bool rememberMe) {
+			var user = await this.UserManager.FindByNameAsync(userName);
+
+			if (user == null) {
+				return false;
+			}
+
+			var result = await this.SignInManager.PasswordSignInAsync(userName, password, rememberMe, shouldLockout: true);
+
+			return result == Microsoft.AspNet.Identity.Owin.SignInStatus.Success;
+		}
 
 		public void Dispose() {
 			if (_userManager != null) {

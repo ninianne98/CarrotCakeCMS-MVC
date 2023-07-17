@@ -1,0 +1,33 @@
+﻿@using Carrotware.CMS.Security.Models;
+@model LoginViewModel
+
+@{
+	ViewBag.Title = "Login";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+	<div class="col-md-4">
+		<div>
+			@Html.ValidationSummary(true, "")
+		</div>
+		@using (Html.BeginForm(null, null, FormMethod.Post)) {
+			@Html.AntiForgeryToken()
+
+			<div class="form-outline mb-4">
+				@Html.TextBoxFor(m => m.UserName, new { placeholder = "Username", @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.UserName)
+				<label class="form-label" asp-for="@Model.UserName"></label>
+			</div>
+
+			<div class="form-outline mb-4">
+				@Html.PasswordFor(m => m.Password, new { placeholder = "Password", @class = "form-control" })
+				@Html.ValidationMessageFor(m => m.Password)
+				<label class="form-label" asp-for="@Model.Password"></label>
+			</div>
+
+			<button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+		}
+	</div>
+</div>
