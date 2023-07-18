@@ -37,7 +37,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.QueryPath = queryPath ?? @"/";
 
 			this.ViewMode = viewMode ?? defaultBrowseMode;
-			this.QueryPath = this.QueryPath.FixPathSlashes();
+			this.QueryPath = this.QueryPath.FixFolderSlashes();
 
 			if (string.IsNullOrEmpty(this.QueryPath) || this.QueryPath == @"/") {
 				this.QueryPath = @"/";

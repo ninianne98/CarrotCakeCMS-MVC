@@ -67,7 +67,7 @@ CarrotCakeCMS (MVC) is maintained by Samantha Copeland
 
 	There may be some warnings, you can ignore them
 
-1. The SQL Server database should be running and an empty database matching the one specified in the connection string. If you are running the code a second or later time, it will auto update if there are schema changes (see dbo note above).  Do not share a database between the MVC and WebForms editions.
+1. SQL Server should be running with an empty database matching the one specified in the connection string. If you are running the code a second or later time, it will auto update if there are schema changes (see dbo note above).  Do not share a database between the Core, MVC 5, and WebForms editions.
 
 1. if the database is empty or has pending database changes, you will be greeted with a maintenance screen, follow the link provided.
 

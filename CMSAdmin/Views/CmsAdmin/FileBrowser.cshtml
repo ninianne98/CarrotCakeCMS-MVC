@@ -136,7 +136,6 @@
 					var fld = $(selFile);
 					var uri = fld.val();
 
-					var imgReal = $(imgRealId);
 					$(imgReal).attr('src', '');
 					var h = -1;
 					var w = -1;
@@ -389,6 +388,8 @@
 			$(divImgLayer).attr('style', 'display:none;');
 			$(divImgLayer).attr('class', '');
 
+			imgReal = $(imgRealId);
+
 			$(imgThumb).attr('src', defaultImage);
 			$(imgThumb).attr('width', 64);
 			$(imgThumb).attr('height', 64);
@@ -421,6 +422,8 @@
 
 				$(divImgLayer).attr('class', 'thumbpreview ui-corner-all');
 
+				imgReal = $(imgRealId);
+
 				$(imgThumb).attr('alt', val);
 				$(imgThumb).attr('title', val);
 				$(imgThumb).attr('src', val);
@@ -436,7 +439,6 @@
 		}
 
 		function resizeImg() {
-
 			$(imgDim).html($(imgReal).width() + ' x ' + $(imgReal).height());
 
 			if ($(imgThumb).height() > 175) {

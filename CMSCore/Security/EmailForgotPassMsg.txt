@@ -1,6 +1,6 @@
 ﻿Dear {%%UserName%%},
 
-An request to reset your password has been submitted.  Please click the link below to reset your password.
+A request to reset your password has been submitted.  Please click the link below to reset your password.
 
 		{%%ResetURL%%}
 

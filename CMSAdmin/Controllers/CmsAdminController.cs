@@ -44,10 +44,17 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				List<string> lstOKNoSiteActions = (new string[] { "login", "logoff", "about", "siteinfo", "siteindex", "filebrowser", "userindex", "roleindex", "userprofile", "changepassword" }).ToList();
 
 				//carvouts for anon pages
-				List<string> lstInitSiteActions = (new string[] { "login", "logoff", "about", "forgotpassword", "createfirstadmin", "databasesetup", "notauthorized" }).ToList();
+				List<string> anonMethods = (new string[] { "login", "logoff", "about" }).ToList();
+
+				// use reflection to see if the method/action has an anon permission and honor it
+				anonMethods = (this).GetType().GetMethods()
+							  .Where(m => m.GetCustomAttributes(typeof(AllowAnonymousAttribute), false).Length > 0)
+							  .Select(x => x.Name.ToLowerInvariant())
+							  .Where(x => x == action)
+							  .Distinct().ToList();
 
 				try {
-					if (!lstInitSiteActions.Contains(action)) {
+					if (!anonMethods.Contains(action)) {
 						if (!lstOKNoSiteActions.Contains(action) && !SiteData.CurrentSiteExists) {
 							filterContext.Result = new RedirectResult(SiteFilename.SiteInfoURL);
 							return;

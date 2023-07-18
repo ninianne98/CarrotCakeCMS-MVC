@@ -71,11 +71,20 @@ namespace Carrotware.Web.UI.Components {
 
 		public static string FixPathSlashes(this string path) {
 			path = path.NormalizeFilename();
-			if (!path.StartsWith("/")) {
+			if (path != @"/" && path != "") {
 				path = string.Format("/{0}", path);
+			} else {
+				path = @"/";
 			}
-			if (path.EndsWith("/")) {
-				path = path.Substring(0, path.Length - 1);
+			return path;
+		}
+
+		public static string FixFolderSlashes(this string path) {
+			path = path.NormalizeFilename();
+			if (path != @"/" && path != "") {
+				path = string.Format("/{0}/", path);
+			} else {
+				path = @"/";
 			}
 			return path;
 		}
