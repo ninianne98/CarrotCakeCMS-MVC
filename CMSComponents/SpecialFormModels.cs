@@ -178,6 +178,7 @@ namespace Carrotware.CMS.UI.Components {
 		public string EncodedSettings { get; set; }
 		public LogoutInfoSettings Settings { get; set; }
 		public bool IsLoggedIn { get; set; }
+		public string RedirectUri { get; set; }
 	}
 
 	//==================================================
@@ -217,6 +218,8 @@ namespace Carrotware.CMS.UI.Components {
 		[DataType(DataType.Password)]
 		[Display(Name = "Password")]
 		public string Password { get; set; }
+
+		public string RedirectUri { get; set; }
 
 		public LoginInfoSettings Settings { get; set; }
 		public SignInStatus LogInStatus { get; set; }

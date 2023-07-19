@@ -359,6 +359,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public HtmlHelper<LoginInfo> GetModelHelper(LoginInfoConfig config) {
 			_model = InitLoginInfo(config.PostPartialName);
+			_model.RedirectUri = config.RedirectUri;
 
 			_settings.GetSettingFromConfig(config);
 
@@ -372,8 +373,9 @@ namespace Carrotware.CMS.UI.Components {
 			return InitHelp();
 		}
 
-		public HtmlHelper<LoginInfo> GetModelHelper(string partialName) {
+		public HtmlHelper<LoginInfo> GetModelHelper(string partialName, string redirectUri) {
 			_model = InitLoginInfo(partialName);
+			_model.RedirectUri = redirectUri;
 
 			return InitHelp();
 		}
@@ -503,14 +505,16 @@ namespace Carrotware.CMS.UI.Components {
 
 		public HtmlHelper<LogoutInfo> GetModelHelper(LogoutInfoConfig config) {
 			_model = InitLogoutInfo(config.PostPartialName);
+			_model.RedirectUri = config.RedirectUri;
 
 			_settings.RedirectUri = config.RedirectUri;
 
 			return InitHelp();
 		}
 
-		public HtmlHelper<LogoutInfo> GetModelHelper(string partialName) {
+		public HtmlHelper<LogoutInfo> GetModelHelper(string partialName, string redirectUri) {
 			_model = InitLogoutInfo(partialName);
+			_model.RedirectUri = redirectUri;
 
 			return InitHelp();
 		}

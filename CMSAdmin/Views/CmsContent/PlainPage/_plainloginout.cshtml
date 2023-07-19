@@ -2,20 +2,16 @@
 
 <div id="logonForm">
 	<br />
-
 	<script type="text/javascript">
 		function logInOutComplete2() {
 			var d = new Date();
 			var timeTick = d.getTime();
-
-			//document.location = '@String.Format("{0}?auth={1}", CmsPage.ThePage.FileName, DateTime.Now.Ticks)';
 			document.location = $("#logonForm #RedirectUri").val() + '?auth=' + timeTick;
 		}
 
 		function logInOutComplete() {
 			if ($("#logonForm #LogInStatus").val() == 'Success' || $("#logonForm #LogInStatus").length < 1) {
 				setTimeout(function () { logInOutComplete2(); }, 250);
-				//logInOutComplete2();
 			}
 		}
 	</script>
@@ -31,31 +27,29 @@
 
 		if (SecurityData.IsAuthenticated) {
 
-			LogoutInfoConfig config = new LogoutInfoConfig(partialName);
+			var config = new LogoutInfoConfig(partialName);
 			config.RedirectUri = String.Format("{0}", CmsPage.ThePage.FileName);
 
 			using (var logoutFrm = CarrotCakeHtml.BeginLogoutForm(new AjaxOptions { UpdateTargetId = formTargetId, OnSuccess = "logInOutComplete" })) {
 				var frmhelp = logoutFrm.GetModelHelper(config);
 
-				@frmhelp.Hidden("RedirectUri", config.RedirectUri)
+				@frmhelp.HiddenFor(m => m.RedirectUri)
 
 				<input class="button" type="submit" value="@String.Format("Logout '{0}'", SecurityData.GetUserName()) " />
 			}
 
 		} else {
 
-			LoginInfoConfig config = new LoginInfoConfig(partialName);
-			//LoginInfoConfig config = new LoginInfoConfig(partialName, cap);
-
+			//var config = new LoginInfoConfig(partialName, cap);
+			var config = new LoginInfoConfig(partialName);
 			config.RedirectUri = String.Format("{0}", CmsPage.ThePage.FileName);
 
 			using (var loginFrm = CarrotCakeHtml.BeginLoginForm(new AjaxOptions { UpdateTargetId = formTargetId, OnSuccess = "logInOutComplete" })) {
 				var frmhelp = loginFrm.GetModelHelper(config);
 
 				<div>
-					@*@frmhelp.DisplayFor(m => m.LogInStatus)*@
 					@frmhelp.HiddenFor(m => m.LogInStatus)
-					@frmhelp.Hidden("RedirectUri", config.RedirectUri)
+					@frmhelp.HiddenFor(m => m.RedirectUri)
 					@frmhelp.ValidationSummary(true, "", new { @class = "text-danger" })
 				</div>
 
@@ -84,7 +78,6 @@
 					<input class="button" type="reset" value="Clear form" />
 				</div>
 			}
-
 		}
 	}
 	<br />
