@@ -92,22 +92,20 @@ namespace Carrotware.CMS.Core {
 			int iPost = this.PostID;
 
 			List<WordPressPost> lstA = (from a in wpSite.Content
-										where a.PostType == WordPressPost.WPPostType.Attachment
+										where a.PostType == WPPostType.Attachment
 										&& a.ParentPostID == iPost
 										select a).Distinct().ToList();
 
-			lstA.ToList().ForEach(q => q.ImportFileSlug = (folderName + "/" + q.ImportFileSlug).NormalizeFilename());
 			lstA.ToList().ForEach(q => q.ImportFileSlug = q.ImportFileSlug.NormalizeFilename());
 
 			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
 				foreach (var img in lstA) {
-					img.ImportFileSlug = img.ImportFileSlug.NormalizeFilename();
+					img.ImportFileSlug = ("~" + folderName + "/" + img.ImportFileSlug).CleanDuplicateSlashes();
 
 					cmsHelper.GetFile(img.AttachmentURL, img.ImportFileSlug);
-					string sURL1 = img.AttachmentURL.Substring(img.AttachmentURL.IndexOf("://") + 3);
-					string sURLLess = sURL1.Substring(sURL1.IndexOf("/"));
+					var imgPath = img.ImportFileSlug.Replace("~", "");
 
-					this.PostContent = this.PostContent.Replace(img.AttachmentURL, img.ImportFileSlug);
+					this.PostContent = this.PostContent.Replace(img.AttachmentURL, imgPath);
 				}
 			}
 		}

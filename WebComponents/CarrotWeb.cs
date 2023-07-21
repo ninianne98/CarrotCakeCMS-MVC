@@ -49,6 +49,15 @@ namespace Carrotware.Web.UI.Components {
 		public static HttpRequest Request { get { return Current.Request; } }
 		public static HttpResponse Response { get { return Current.Response; } }
 
+		public static string CleanDuplicateSlashes(this string path) {
+			if (path != null) {
+				path = path.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+				path = path.Replace(@"//", @"/").Replace(@"//", @"/").Replace(@"//", @"/");
+				return path;
+			}
+			return string.Empty;
+		}
+
 		public static string NormalizeFilename(this string path) {
 			if (path != null) {
 				var p = path.Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
