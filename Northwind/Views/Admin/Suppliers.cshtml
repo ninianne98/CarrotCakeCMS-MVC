@@ -7,8 +7,8 @@
 @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "sortTable" })) {
 	@Html.AntiForgeryToken()
 
-	var grid = CarrotWeb.CarrotWebGrid<Supplier>(Model);
-
+	var grid = CarrotWeb.CarrotWebGrid(Model);
+	grid.PrettifyHeadings = true;
 	grid.TableAttributes = new { @class = "datatable" };
 	grid.THeadAttributes = new { @class = "tablehead" };
 	grid.ConfigName(Html.NameFor(x => x));
@@ -16,8 +16,9 @@
 	grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
 
 	grid
+		.AddColumn(x => x.SupplierID, new CarrotGridColumn { HeaderText = "ID", Sortable = true })
 		.AddColumn(new CarrotGridTemplateColumn<Supplier> {
-			HeaderText = "ID",
+			HeaderText = "Edit",
 			FormatTemplate = @<text> @CarrotWeb.ActionImage("ViewSupplier", "Admin", new { @id = @item.SupplierID }, "~/assets/admin/images/pencil.png", @item.SupplierID.ToString(), null, null) </text>
 		})
 		.AddColumn(new CarrotGridTemplateColumn<Supplier> {
@@ -29,8 +30,8 @@
 			FormatTemplate = @<text> @grid.FormFieldFor(m => m.ContactName, GridFormFieldType.TextBox, new { maxlength = "64", @class = "form-control" }) </text>
 		})
 
-		.AddColumn(x => x.CompanyName, new CarrotGridColumn { HeaderText = "Company Name", Sortable = true })
-		.AddColumn(x => x.ContactName, new CarrotGridColumn { HeaderText = "Contact Name", Sortable = true })
+		.AddColumn(x => x.CompanyName, new CarrotGridColumn { Sortable = true })
+		.AddColumn(x => x.ContactName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.Address, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.City, new CarrotGridColumn { Sortable = true })
 		.AddColumn(x => x.Country, new CarrotGridColumn { Sortable = true })

@@ -1,0 +1,119 @@
+﻿@model carrot_CalendarEventCategory
+
+@{
+	Layout = Carrotware.CMS.Interface.CarrotLayout.Main;
+	ViewBag.Title = "Category Admin Edit";
+
+	bool entryExists = true;
+	string buttonCaption = "Save";
+
+	if (Model.CalendarEventCategoryID == Guid.Empty) {
+		ViewBag.Title = "Category Admin Add";
+		buttonCaption = "Add";
+		entryExists = false;
+	}
+}
+
+<h3>@ViewBag.Title</h3>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.CalendarEventCategoryID)
+	@Html.HiddenFor(m => m.SiteID)
+
+	<table style="width: 700px;">
+		<tr>
+			<td class="tablecaption">
+				name:<br />
+				<div style="border: 2px dotted #aaaaaa; background-color: #ffffff; margin: 2px; padding: 2px; min-width: 64px;">
+					<div id="ColorTextSample" style="margin: 2px; padding: 4px; font-size: 14px;">
+						Sample Text
+					</div>
+				</div>
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.CategoryName, new { size = "60", maxlength = "100" })
+				@Html.ValidationMessageFor(m => m.CategoryName, "", new { @class = "validationError text-danger" })
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				foreground color:<br />
+				<div style="border: 2px dotted #aaaaaa; background-color: #ffffff; margin: 2px; padding: 2px; width: 48px;">
+					<div id="ColorSampleFG" style="margin: 2px; padding: 2px; font-size: 14px;">
+						&nbsp;
+					</div>
+				</div>
+				<br />
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.CategoryFGColor, new { size = "7", maxlength = "20", @class = "color-field" })
+				@Html.ValidationMessageFor(m => m.CategoryFGColor, "", new { @class = "validationError text-danger" })
+				<br />
+			</td>
+		</tr>
+		<tr>
+			<td class="tablecaption">
+				background color:<br />
+				<div style="border: 2px dotted #aaaaaa; background-color: #ffffff; margin: 2px; padding: 2px; width: 48px;">
+					<div id="ColorSampleBG" style="margin: 2px; padding: 2px; font-size: 14px;">
+						&nbsp;
+					</div>
+				</div>
+				<br />
+			</td>
+			<td>
+				@Html.TextBoxFor(m => m.CategoryBGColor, new { size = "7", maxlength = "20", @class = "color-field" })
+				@Html.ValidationMessageFor(m => m.CategoryBGColor, "", new { @class = "validationError text-danger" })
+				<br />
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+		var catFgFldId = '#' + '@Html.IdFor(m=>m.CategoryFGColor)';
+		var catBgFldId = '#' + '@Html.IdFor(m=>m.CategoryBGColor)';
+
+		function initColors() {
+			var val1 = $(catFgFldId).val();
+			setColor(val1, '#ColorSampleFG');
+			var val2 = $(catBgFldId).val();
+			setColor(val2, '#ColorSampleBG');
+		}
+
+		function setColor(color, cell) {
+			$(cell).css('background-color', color);
+
+			var fg = $('#ColorSampleFG').css('background-color');
+			var bg = $('#ColorSampleBG').css('background-color');
+
+			$('#ColorTextSample').css('color', fg);
+			$('#ColorTextSample').css('background-color', bg);
+		}
+
+		$(document).ready(function () {
+			$(catFgFldId).bind("change keyup input blur", function () {
+				var val = $(this).val();
+				setColor(val, '#ColorSampleFG');
+			});
+
+			$(catBgFldId).bind("change keyup input blur", function () {
+				var val = $(this).val();
+				setColor(val, '#ColorSampleBG');
+			});
+
+			initColors();
+		});
+
+		function cancelEditing() {
+			window.setTimeout("location.href = '@Url.Action("CategoryList", "Admin")';", 250);
+		}
+	</script>
+	<div>
+		<br />
+		<input type="submit" name="btnSaveButton" value="Save" id="btnSaveButton" />
+		&nbsp;&nbsp;&nbsp;
+		<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing()" />
+	</div>
+}

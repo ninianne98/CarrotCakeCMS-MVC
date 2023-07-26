@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginFAQ2Module", "PluginF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoremIpsum", "LoremIpsum\LoremIpsum.csproj", "{DE3A83DD-0CAF-4844-A526-16634512C66E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginEventCalendarModule", "PluginEventCalendarModule\PluginEventCalendarModule.csproj", "{C9FE1F2D-9CB1-4298-8090-FDFE3F698D11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{DE3A83DD-0CAF-4844-A526-16634512C66E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE3A83DD-0CAF-4844-A526-16634512C66E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE3A83DD-0CAF-4844-A526-16634512C66E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9FE1F2D-9CB1-4298-8090-FDFE3F698D11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9FE1F2D-9CB1-4298-8090-FDFE3F698D11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9FE1F2D-9CB1-4298-8090-FDFE3F698D11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9FE1F2D-9CB1-4298-8090-FDFE3F698D11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

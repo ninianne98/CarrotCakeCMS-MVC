@@ -3,9 +3,19 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 
+/*
+* CarrotCake CMS (MVC5)
+* http://www.carrotware.com/
+*
+* Copyright 2015, Samantha Copeland
+* Dual licensed under the MIT or GPL Version 3 licenses.
+*
+* Date: August 2015
+*/
+
 namespace CarrotCake.CMS.Plugins.CalendarModule {
 
-	public class WebHelper {
+	public static class WebHelper {
 
 		public static string ReadEmbededScript(string sResouceName) {
 			string sReturn = null;
@@ -52,7 +62,6 @@ namespace CarrotCake.CMS.Plugins.CalendarModule {
 
 		public static string ShortDateFormatPattern {
 			get {
-
 				return "{0:" + ShortDatePattern + "}";
 			}
 		}

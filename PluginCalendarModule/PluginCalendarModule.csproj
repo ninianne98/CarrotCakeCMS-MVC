@@ -108,6 +108,7 @@
     <Content Include="Content\calendar3.css" />
     <Content Include="Content\Site.css" />
     <EmbeddedResource Include="tblCalendar.sql" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Code\dbCalendar.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>

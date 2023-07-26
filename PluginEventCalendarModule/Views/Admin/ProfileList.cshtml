@@ -1,0 +1,67 @@
+﻿@model ProfileDisplayModel
+
+@{
+	Layout = Carrotware.CMS.Interface.CarrotLayout.Main;
+	ViewBag.Title = "Profile List";
+
+	var grid = CarrotWeb.CarrotWebGrid(Model.Profiles);
+	grid.PrettifyHeadings = true;
+	grid.TableAttributes = new { @class = "datatable table" };
+	grid.THeadAttributes = new { @class = "tablehead header" };
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.ConfigName(Html.NameFor(x => x.Profiles));
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEventProfile> {
+			HasHeadingText = false,
+			FormatTemplate = @<text> @CarrotWeb.ActionImage("EventDetail", "Admin", new { @id = @item.CalendarEventProfileID }, "~/assets/admin/images/pencil.png") </text>
+		})
+	.AddColumn(x => x.EventTitle, new CarrotGridColumn { Sortable = true })
+	.AddColumn(x => x.FrequencyName, new CarrotGridColumn { Sortable = true })
+	.AddColumn(x => x.CategoryName, new CarrotGridColumn { Sortable = true })
+	.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEventProfile> {
+		HasHeadingText = false,
+		FormatTemplate = @<text>
+			 <div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
+				<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
+					<b> @item.CategoryName </b>
+				</div>
+			</div>
+			</text>
+	})
+	.AddColumn(x => x.EventStartDate, new CarrotGridColumn { Sortable = true, CellFormatString = WebHelper.ShortDateFormatPattern })
+	.AddColumn(x => x.EventEndDate, new CarrotGridColumn { Sortable = true, CellFormatString = WebHelper.ShortDateFormatPattern })
+
+	.AddColumn(x => x.IsCancelled, new CarrotGridBooleanImageColumn {
+		Sortable = true,
+		AlternateTextTrue = "Event Cancelled",
+		AlternateTextFalse = "Event Active",
+		ImagePathTrue = "~/Assets/Admin/Images/lightbulb_off.png",
+		ImagePathFalse = "~/Assets/Admin/Images/lightbulb.png", })
+	.AddColumn(x => x.IsPublic, new CarrotGridBooleanImageColumn { Sortable = true, HasHeadingText = true });
+}
+
+<h3>@ViewBag.Title</h3>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#' + '@Html.IdFor(m => m.SelectedValue)').change(function () {
+				this.form.submit();
+			});
+		});
+	</script>
+
+	<p>
+		@CarrotWeb.ActionImage("EventDetail", "Admin", null, "~/assets/admin/images/add.png", "Add Event", null, null)
+		@Html.ActionLink("Add Event", "EventDetail")
+	</p>
+
+	<p>
+		@Html.DropDownListFor(m => m.SelectedValue, new SelectList(Model.Years, "Key", "Value"))
+	</p>
+
+	@grid.OutputHtmlBody()
+}

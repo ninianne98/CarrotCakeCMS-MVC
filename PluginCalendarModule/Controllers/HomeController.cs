@@ -6,6 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
+/*
+* CarrotCake CMS (MVC5)
+* http://www.carrotware.com/
+*
+* Copyright 2015, Samantha Copeland
+* Dual licensed under the MIT or GPL Version 3 licenses.
+*
+* Date: August 2015
+*/
+
 namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 
 	public class HomeController : BaseController {
@@ -24,6 +34,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		}
 
 		[HttpGet]
+		[WidgetActionSettingModel(typeof(CalendarDisplaySettings))]
 		public ActionResult CalendarDisplay() {
 			CalendarViewModel model = new CalendarViewModel();
 
@@ -62,6 +73,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		}
 
 		[HttpGet]
+		[WidgetActionSettingModel(typeof(CalendarSimpleSettings))]
 		public ActionResult CalendarDisplaySimple() {
 			CalendarViewModel model = new CalendarViewModel();
 

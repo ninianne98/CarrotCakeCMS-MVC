@@ -1,0 +1,287 @@
+﻿@model EventDetailModel
+
+@{
+	Layout = Carrotware.CMS.Interface.CarrotLayout.Main;
+	ViewBag.Title = "Calendar Admin Edit";
+
+	bool entryExists = true;
+	string buttonCaption = "Save";
+
+	if (Model.ItemID == Guid.Empty) {
+		ViewBag.Title = "Calendar Admin Add";
+		buttonCaption = "Add";
+		entryExists = false;
+	}
+}
+
+<h3>@ViewBag.Title</h3>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.SiteID)
+	@Html.HiddenFor(m => m.ItemID)
+	@Html.HiddenFor(m => m.ItemData.CalendarEventProfileID)
+	@Html.HiddenFor(m => m.Operation)
+
+	<fieldset style="width: 750px;">
+		<legend>
+			<label>
+				Event
+			</label>
+		</legend>
+		<div>
+			<b class="tablecaption">title: </b>
+			@Html.TextBoxFor(m => m.ItemData.EventTitle, new { size = "70", maxlength = "100" })
+			@Html.ValidationMessageFor(m => m.ItemData.EventTitle, "", new { @class = "validationError text-danger" })
+		</div>
+		<table style="width: 98%">
+			<tbody>
+				<tr>
+					<td style="width: 25%"></td>
+					<td style="width: 25%"></td>
+					<td style="width: 25%"></td>
+					<td style="width: 25%"></td>
+				</tr>
+				<tr>
+					<td class="tablecaption">
+						recurrence frequency:
+					</td>
+					<td>
+						@Html.DropDownListFor(m => m.ItemData.CalendarFrequencyID, new SelectList(Model.Frequencies, "CalendarFrequencyID", "FrequencyName"))
+						@Html.ValidationMessageFor(m => m.ItemData.CalendarFrequencyID, "", new { @class = "validationError text-danger" })
+					</td>
+					<td class="tablecaption">
+						<div style="float: left; display: block; clear: left;">
+							category:
+						</div>
+						<div style="float: right; clear: right; border: 2px dotted #aaaaaa; background-color: #ffffff; margin: 2px; padding: 2px; width: 48px;">
+							<div id="ColorTextSample" style="margin: 2px; padding: 4px; font-size: 14px; font-weight: bolder; text-align: center; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);">
+								X
+							</div>
+						</div>
+						<div style="clear: both">
+						</div>
+					</td>
+					<td>
+						@Html.DropDownListFor(m => m.ItemData.CalendarEventCategoryID, new SelectList(Model.Categories, "CalendarEventCategoryID", "CategoryName"))
+					</td>
+				</tr>
+				<tr id="trDaysOfWeek" style="">
+					<td colspan="4">
+						<table style="width: 100%">
+							<tbody>
+								<tr>
+									@for (int d = 0; d < Model.DaysOfTheWeek.Count; d++) {
+									<td>
+										@Html.CheckBoxFor(m => Model.DaysOfTheWeek[d].Selected)
+										@Html.HiddenFor(m => Model.DaysOfTheWeek[d].Value)
+										@Model.DaysOfTheWeek[d].Text
+									</td>
+									}
+								</tr>
+							</tbody>
+						</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table style="width: 725px">
+			<tbody>
+				<tr>
+					<td class="tablecaption" style="text-align: right;">
+						start date:
+					</td>
+					<td>
+						@Html.TextBoxFor(m => m.ItemData.EventStartDate, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion" })
+						@Html.ValidationMessageFor(m => m.ItemData.EventStartDate, "", new { @class = "validationError text-danger" })
+					</td>
+					<td class="tablecaption" style="text-align: right;">
+						end by date:
+					</td>
+					<td>
+						@Html.TextBoxFor(m => m.ItemData.EventEndDate, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion" })
+						@Html.ValidationMessageFor(m => m.ItemData.EventEndDate, "", new { @class = "validationError text-danger" })
+					</td>
+					<td id="tdRecursEvery1" rowspan="2" class="tablecaption" style="text-align: right;">
+						recurs every:
+					</td>
+					<td id="tdRecursEvery2" rowspan="2">
+						@Html.TextBoxFor(m => m.ItemData.RecursEvery, new { maxlength = "5", size = "10" })
+						@Html.ValidationMessageFor(m => m.ItemData.RecursEvery, "", new { @class = "validationError text-danger" })
+					</td>
+				</tr>
+				<tr>
+					<td class="tablecaption" style="text-align: right;">
+						time from:
+					</td>
+					<td>
+						@Html.TextBoxFor(m => m.EventStartTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "14", size = "16", @class = "timeRegion" })
+					</td>
+					<td class="tablecaption" style="text-align: right;">
+						time to:
+					</td>
+					<td>
+						@Html.TextBoxFor(m => m.EventEndTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "14", size = "16", @class = "timeRegion" })
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table style="width: 100%">
+			<tbody>
+				<tr>
+					<td>
+						@Html.CheckBoxFor(m => m.ItemData.IsAllDayEvent)
+						@Html.LabelFor(m => m.ItemData.IsAllDayEvent, "All Day Event")
+					</td>
+					<td>
+						@Html.CheckBoxFor(m => m.ItemData.IsPublic)
+						@Html.LabelFor(m => m.ItemData.IsPublic, "Show publicly")
+					</td>
+					<td>
+						@Html.CheckBoxFor(m => m.ItemData.IsCancelled)
+						@Html.LabelFor(m => m.ItemData.IsCancelled, "Cancelled")
+					</td>
+					<td>
+						@Html.CheckBoxFor(m => m.ItemData.IsCancelledPublic)
+						@Html.LabelFor(m => m.ItemData.IsCancelledPublic, "Show even if cancelled")
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</fieldset>
+	<fieldset style="width: 700px;">
+		<legend>
+			<label>
+				Details
+			</label>
+		</legend>
+		<div>
+			@Html.TextAreaFor(m => m.ItemData.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 200px; width: 600px;" })
+		</div>
+	</fieldset>
+	<div>
+		<br />
+		<input type="button" name="btnSaveButton" value="@buttonCaption" onclick="SubmitPage('s');" id="btnSaveButton" />
+		@if (entryExists) {
+			<text>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </text>
+			<input type="button" name="btnCopyButton" value="Save as Copy" onclick="SubmitPage('c');" id="btnCopyButton" />
+			<text>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </text>
+			<input type="button" name="btnDeleteButton" value="Delete" onclick="DeleteItem();" id="btnDeleteButton" />
+		}
+		&nbsp;&nbsp;&nbsp;
+		<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing()" />
+		<br>
+	</div>
+	<div style="display: none;">
+		<input type="submit" name="btnSaveClick" id="btnSaveClick" value="Save btn" />
+		@Html.DropDownList("ddlColors", Model.Colors.Select(c => new SelectListItem() { Value = c.Key.ToString(), Text = c.Value }).ToList())
+	</div>
+}
+
+<script type="text/javascript">
+	var opFldId = '#' + '@Html.IdFor(m => m.Operation)';
+
+	function SubmitPage(parm) {
+		var ret = cmsPreSaveTrigger();
+		setTimeout("ClickSaveBtn('" + parm + "');", 500);
+
+		return false;
+	}
+
+	function ClickSaveBtn(p) {
+		if (p == 's') {
+			$(opFldId).val('save');
+			$('#btnSaveClick').click();
+		}
+		if (p == 'c') {
+			$(opFldId).val('copy');
+			$('#btnSaveClick').click();
+		}
+
+		return true;
+	}
+
+	function DeleteItem() {
+		var opts = {
+			"No": function () { __carrotAlertModalClose(); },
+			"Yes": function () { ClickDeleteItem(); }
+		};
+
+		__carrotAlertModalSmallBtns('Are you sure you want to delete this item? This will remove all events for this series.', 'Event Calendar', opts);
+
+		return false;
+	}
+
+	function ClickDeleteItem() {
+		$(opFldId).val('delete');
+		$('#btnSaveClick').click();
+	}
+
+	function cancelEditing() {
+		window.setTimeout("location.href = '@Url.Action("ProfileList", "Admin")';", 250);
+	}
+
+	var recurrFldId = '#' + '@Html.IdFor(m=>m.ItemData.RecursEvery)';
+
+	function setDayPickerVis(pat) {
+		if (pat == 2) {
+			$('#trDaysOfWeek').css('display', '');
+		} else {
+			$('#trDaysOfWeek').css('display', 'none');
+		}
+
+		if (pat == 2 || pat == 3 || pat == 4) {
+			$('#tdRecursEvery1').css('display', '');
+			$('#tdRecursEvery2').css('display', '');
+		} else {
+			$('#tdRecursEvery1').css('display', 'none');
+			$('#tdRecursEvery2').css('display', 'none');
+
+			$(recurrFldId).val('1');
+		}
+	}
+
+	var freqFldId = '#' + '@Html.IdFor(m=>m.ItemData.CalendarFrequencyID)';
+
+	function initDays() {
+		var val = $(freqFldId + ' option:selected').index();
+		setDayPickerVis(val);
+	}
+
+	$(document).ready(function () {
+		$(freqFldId).bind("change keyup input", function () {
+			var val = $('option:selected', $(this)).index();
+			setDayPickerVis(val);
+		});
+
+		initDays();
+	});
+
+	function setCatColor(pat) {
+		$('#ddlColors').val(pat);
+		var txt = $("#ddlColors option:selected").text();
+
+		var catColor = txt.split("|");
+
+		$('#ColorTextSample').css('color', catColor[1]);
+		$('#ColorTextSample').css('background-color', catColor[0]);
+	}
+
+	var catFldId = '#' + '@Html.IdFor(m=>m.ItemData.CalendarEventCategoryID)';
+
+	function initCatColor() {
+		var val = $(catFldId).val();
+		setCatColor(val);
+	}
+
+	$(document).ready(function () {
+		$(catFldId).bind("change keyup input", function () {
+			var val = $(this).val();
+			setCatColor(val);
+		});
+
+		initCatColor();
+	});
+</script>

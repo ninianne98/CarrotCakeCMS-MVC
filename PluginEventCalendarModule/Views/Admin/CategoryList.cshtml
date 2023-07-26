@@ -1,0 +1,42 @@
+﻿@model PagedData<carrot_CalendarEventCategory>
+
+@{
+	Layout = Carrotware.CMS.Interface.CarrotLayout.Main;
+	ViewBag.Title = "Category List";
+
+	var grid = CarrotWeb.CarrotWebGrid<carrot_CalendarEventCategory>(Model);
+	grid.PrettifyHeadings = true;
+	grid.TableAttributes = new { @class = "datatable table" };
+	grid.THeadAttributes = new { @class = "tablehead header" };
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+
+	grid
+		.AddColumn(new CarrotGridTemplateColumn<carrot_CalendarEventCategory> {
+			HasHeadingText = false,
+			FormatTemplate = @<text> @CarrotWeb.ActionImage("CategoryDetail", "Admin", new { @id = @item.CalendarEventCategoryID }, "~/assets/admin/images/pencil.png") </text>
+		})
+		.AddColumn(x => x.CategoryName, new CarrotGridColumn { Sortable = true })
+		.AddColumn(new CarrotGridTemplateColumn<carrot_CalendarEventCategory> {
+			HasHeadingText = false,
+			FormatTemplate = @<text>
+				<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
+					<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
+						@item.CategoryFGColor, @item.CategoryBGColor
+					</div>
+				</div>
+			</text>
+		});
+}
+
+<h3>@ViewBag.Title</h3>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<p>
+		@CarrotWeb.ActionImage("CategoryDetail", "Admin", null, "~/assets/admin/images/add.png", "Add Event", null, null)
+		@Html.ActionLink("Add Category", "CategoryDetail")
+	</p>
+
+	@grid.OutputHtmlBody()
+}

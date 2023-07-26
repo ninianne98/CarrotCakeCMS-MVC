@@ -1,0 +1,104 @@
+﻿@model EventSingleModel
+
+@{
+	Layout = Carrotware.CMS.Interface.CarrotLayout.Main;
+	ViewBag.Title = "Individual Event";
+}
+
+<h3>@ViewBag.Title</h3>
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.ItemID)
+	@Html.HiddenFor(m => m.SiteID)
+	@Html.HiddenFor(m => m.ItemData.CalendarEventID)
+	@Html.HiddenFor(m => m.ItemData.CalendarEventProfileID)
+	@Html.HiddenFor(m => m.ItemData.EventStartTime)
+
+	<fieldset style="width: 725px;">
+		<legend>
+			<label>
+				Individual Event
+			</label>
+		</legend>
+		<div>
+			<b class="tablecaption">title: </b>
+			@Model.ItemProfile.EventTitle
+		</div>
+		<table style="width: 98%">
+			<tr>
+				<td style="width: 20%"></td>
+				<td style="width: 30%"></td>
+				<td style="width: 20%"></td>
+				<td style="width: 30%"></td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					date:
+				</td>
+				<td>
+					@Model.ItemData.EventDate.ToString(WebHelper.ShortDatePattern)
+					@if (!Model.ItemProfile.IsAllDayEvent) {
+						@String.Format(" {0} ", Model.ProfileEventStartTime)
+					}
+				</td>
+				<td colspan="2">
+					@Html.CheckBoxFor(m => m.ItemData.IsCancelled)
+					@Html.LabelFor(m => m.ItemData.IsCancelled, "Cancelled")
+				</td>
+			</tr>
+			<tr>
+				<td class="tablecaption">
+					time from (override):
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.EventStartTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "14", size = "16", @class = "timeRegion" })
+				</td>
+				<td class="tablecaption">
+					time to (override):
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.EventEndTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "14", size = "16", @class = "timeRegion" })
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+	<fieldset style="width: 650px;">
+		<legend>
+			<label>
+				Details
+			</label>
+		</legend>
+		<div>
+			@Html.TextAreaFor(m => m.ItemData.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 200px; width: 600px;" })
+		</div>
+	</fieldset>
+	<div>
+		<br />
+		<input type="button" name="btnSaveButton" value="Save" onclick="SubmitPage();" id="btnSaveButton" />
+		&nbsp;&nbsp;&nbsp;
+		<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing()" />
+		<br />
+	</div>
+	<div style="display: none;">
+		<input type="submit" name="btnSaveClick" id="btnSaveClick" value="Save btn" />
+	</div>
+
+}
+
+<script type="text/javascript">
+	function SubmitPage() {
+		var ret = cmsPreSaveTrigger();
+		setTimeout("ClickSaveBtn();", 500);
+	}
+	function ClickSaveBtn() {
+		$('#btnSaveClick').click();
+		return true;
+	}
+
+	function cancelEditing() {
+		window.setTimeout("location.href = '@Url.Action("EventList", "Admin")';", 250);
+	}
+</script>

@@ -18,6 +18,7 @@ namespace Carrotware.Web.UI.Components {
 		object HeadAttributes { get; set; }
 		object BodyAttributes { get; set; }
 		bool HasHeadingText { get; set; }
+		bool PrettifyHeading { get; set; }
 		int Order { get; set; }
 		CarrotGridColumnType Mode { get; set; }
 	}

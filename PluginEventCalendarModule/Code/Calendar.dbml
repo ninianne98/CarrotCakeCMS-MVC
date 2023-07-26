@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="CarrotwareCMS" Class="CalendarDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\SQL2008EXPRESS;Initial Catalog=CarrotCakeMVC;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="CarrotwareCMSConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.carrot_CalendarEventCategory" Member="carrot_CalendarEventCategories">
+    <Type Name="carrot_CalendarEventCategory">
+      <Column Name="CalendarEventCategoryID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CategoryFGColor" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryBGColor" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryName" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="SiteID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Association Name="carrot_CalendarEventCategory_carrot_CalendarEventProfile" Member="carrot_CalendarEventProfiles" ThisKey="CalendarEventCategoryID" OtherKey="CalendarEventCategoryID" Type="carrot_CalendarEventProfile" />
+    </Type>
+  </Table>
+  <Table Name="dbo.carrot_CalendarFrequency" Member="carrot_CalendarFrequencies">
+    <Type Name="carrot_CalendarFrequency">
+      <Column Name="CalendarFrequencyID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FrequencySortOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="FrequencyValue" Type="System.String" DbType="VarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="FrequencyName" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+      <Association Name="carrot_CalendarFrequency_carrot_CalendarEventProfile" Member="carrot_CalendarEventProfiles" ThisKey="CalendarFrequencyID" OtherKey="CalendarFrequencyID" Type="carrot_CalendarEventProfile" />
+    </Type>
+  </Table>
+  <Table Name="dbo.carrot_CalendarEvent" Member="carrot_CalendarEvents">
+    <Type Name="carrot_CalendarEvent">
+      <Column Name="CalendarEventID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CalendarEventProfileID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="EventDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EventDetail" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="IsCancelled" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="EventStartTime" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="EventEndTime" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Association Name="carrot_CalendarEventProfile_carrot_CalendarEvent" Member="carrot_CalendarEventProfile" ThisKey="CalendarEventProfileID" OtherKey="CalendarEventProfileID" Type="carrot_CalendarEventProfile" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.carrot_CalendarEventProfile" Member="carrot_CalendarEventProfiles">
+    <Type Name="carrot_CalendarEventProfile">
+      <Column Name="CalendarEventProfileID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CalendarFrequencyID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="CalendarEventCategoryID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="EventStartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EventStartTime" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="EventEndDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EventEndTime" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="EventTitle" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
+      <Column Name="EventDetail" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="EventRepeatPattern" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="IsAllDayEvent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsPublic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsCancelled" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsCancelledPublic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="SiteID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="IsHoliday" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsAnnualHoliday" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="RecursEvery" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="carrot_CalendarEventProfile_carrot_CalendarEvent" Member="carrot_CalendarEvents" ThisKey="CalendarEventProfileID" OtherKey="CalendarEventProfileID" Type="carrot_CalendarEvent" />
+      <Association Name="carrot_CalendarEventCategory_carrot_CalendarEventProfile" Member="carrot_CalendarEventCategory" ThisKey="CalendarEventCategoryID" OtherKey="CalendarEventCategoryID" Type="carrot_CalendarEventCategory" IsForeignKey="true" />
+      <Association Name="carrot_CalendarFrequency_carrot_CalendarEventProfile" Member="carrot_CalendarFrequency" ThisKey="CalendarFrequencyID" OtherKey="CalendarFrequencyID" Type="carrot_CalendarFrequency" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.vw_carrot_CalendarEvent" Member="vw_carrot_CalendarEvents">
+    <Type Name="vw_carrot_CalendarEvent">
+      <Column Name="SiteID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="CalendarEventProfileID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="CalendarFrequencyID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="CalendarEventCategoryID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="EventStartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EventEndDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EventStartTime" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="EventEndTime" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="EventTitle" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
+      <Column Name="EventRepeatPattern" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EventSeriesDetail" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="IsCancelledPublic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsAllDayEvent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsPublic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsCancelledSeries" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsCancelledEvent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsHoliday" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsAnnualHoliday" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="RecursEvery" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CalendarEventID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="EventDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EventDetail" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="FrequencyValue" Type="System.String" DbType="VarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="FrequencyName" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="FrequencySortOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="EventStartTimeOverride" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="EventEndTimeOverride" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="CategoryFGColor" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryBGColor" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryName" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.vw_carrot_CalendarEventProfile" Member="vw_carrot_CalendarEventProfiles">
+    <Type Name="vw_carrot_CalendarEventProfile">
+      <Column Name="SiteID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="CalendarEventProfileID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="CalendarFrequencyID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="CalendarEventCategoryID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="EventStartDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EventStartTime" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="EventEndDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="EventEndTime" Type="System.TimeSpan" DbType="Time" CanBeNull="true" />
+      <Column Name="EventTitle" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
+      <Column Name="EventRepeatPattern" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="EventDetail" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="IsCancelled" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsCancelledPublic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsHoliday" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsAnnualHoliday" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsAllDayEvent" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="RecursEvery" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsPublic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="FrequencyValue" Type="System.String" DbType="VarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="FrequencyName" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="FrequencySortOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryFGColor" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryBGColor" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="CategoryName" Type="System.String" DbType="VarChar(128) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>

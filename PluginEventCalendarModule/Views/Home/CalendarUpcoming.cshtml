@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CarrotCake.CMS.Plugins.EventCalendarModule.Code.vw_carrot_CalendarEvent>
+
+@{
+	DateTime lastDate = DateTime.MinValue;
+	string calendarUri = ViewBag.CalendarPageUri ?? string.Empty;
+}
+
+<div>
+	@foreach (var item in Model.OrderBy(x=> x.EventDate)) {
+		if (lastDate.Date != item.EventDate.Date) {
+			lastDate = item.EventDate;
+			<h3>
+				@String.Format("{0:MMMM d, yyyy}", lastDate)
+			</h3>
+		}
+		<div>
+			<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
+				<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
+					<b>
+						@item.EventTitle
+						@if (!item.IsAllDayEvent) {
+							if (item.EventStartTime.HasValue && item.EventEndTime.HasValue) {
+								<span> at </span>
+								@item.EventDate.ToString(WebHelper.ShortTimePattern)
+								<span> - </span>
+								@item.EventEndDate.ToString(WebHelper.ShortTimePattern)
+							} else if (item.EventStartTime.HasValue) {
+								<span> at </span>
+								@item.EventDate.ToString(WebHelper.ShortTimePattern)
+							}
+						}
+						@if (item.IsCancelledSeries || item.IsCancelledEvent) {
+							<span> (CANCELLED) </span>
+						}
+					</b>
+				</div>
+			</div>
+		</div>
+	}
+
+	@if (!string.IsNullOrEmpty(calendarUri)) {
+		<div>
+			<br />
+			<a href="@calendarUri">
+				Calendar
+			</a>
+			<br />
+		</div>
+	}
+	<br />
+</div>

@@ -1,0 +1,174 @@
+﻿@model  CalendarViewModel
+
+@{
+	Layout = Carrotware.CMS.Interface.CarrotLayout.Main;
+	ViewBag.Title = "List Events";
+
+	Calendar cal = new Calendar();
+	cal.HilightDateList = Model.SelectedDates;
+	cal.CalendarDate = Model.MonthSelected;
+
+	var grid = CarrotWeb.CarrotWebGrid(Model.MonthDates);
+
+	grid.TableAttributes = new { @class = "calendarGrid" };
+	grid.THeadAttributes = new { @class = " " };
+	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+	grid.ConfigName(Html.NameFor(x => x.MonthDates));
+
+	grid
+	.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEvent> {
+		HasHeadingText = false,
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("EventDetail", "Admin", new { @id = @item.CalendarEventProfileID }, "~/assets/admin/images/layout_edit.png", String.Format("Series {0:yyyy-MM-dd}", item.EventDate), null, null) </text>
+	})
+	.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEvent> {
+		HasHeadingText = false,
+		FormatTemplate = @<text> @CarrotWeb.ActionImage("EventDetailSingle", "Admin", new { @id = @item.CalendarEventID }, "~/assets/admin/images/pencil.png", String.Format("This occurrence {0:yyyy-MM-dd}", item.EventDate), null, null) </text>
+	})
+	.AddColumn(x => x.EventDate, new CarrotGridColumn { HasHeadingText = false, CellFormatString = WebHelper.ShortDateFormatPattern })
+	.AddColumn(x => x.IsCancelledEvent, new CarrotGridBooleanImageColumn {
+		HasHeadingText = false,
+		AlternateTextTrue = "Event Cancelled",
+		AlternateTextFalse = "Event Active",
+		ImagePathTrue = "~/Assets/Admin/Images/lightbulb_off.png",
+		ImagePathFalse = "~/Assets/Admin/Images/lightbulb.png", })
+	.AddColumn(x => x.IsCancelledSeries, new CarrotGridBooleanImageColumn {
+		HasHeadingText = false,
+		AlternateTextTrue = "Series Cancelled",
+		AlternateTextFalse = "Series Active",
+		ImagePathTrue = "~/Assets/Admin/Images/lightbulb_off.png",
+		ImagePathFalse = "~/Assets/Admin/Images/lightbulb.png", })
+	.AddColumn(x => x.IsPublic, new CarrotGridBooleanImageColumn {
+		HasHeadingText = false,
+		AlternateTextTrue = "Public Event",
+		AlternateTextFalse = "Private Event"
+	})
+	.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEvent> {
+		HasHeadingText = false,
+		BodyAttributes = new { @class = "leftAlignCell" },
+		FormatTemplate = @<text>
+			<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
+				<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
+					<b> @item.EventTitle </b> @item.FrequencyName
+				</div>
+			</div>
+			@string.Format(WebHelper.ShortDateFormatPattern, item.EventStartDate) to @string.Format(WebHelper.ShortDateFormatPattern, item.EventEndDate) <br />
+			@Html.Raw(item.EventSeriesDetail)
+			@Html.Raw(item.EventDetail)
+		</text>
+	});
+}
+
+@section scripts {
+
+	<style type="text/css">
+		.calendarCenter1 {
+			width: 100%;
+			margin: 0 auto;
+			border: 1px solid transparent;
+			text-align: center;
+			padding-bottom: 10px;
+		}
+
+		.calendarCenter2 {
+			width: 75%;
+			margin: 0 auto;
+			border: 1px solid transparent;
+			text-align: center;
+			padding-bottom: 10px;
+		}
+
+		.calendarEventDetailList {
+			width: 600px;
+			padding: 25px;
+		}
+
+		.leftAlignCell {
+			text-align: left;
+		}
+
+		table.calendarGrid {
+			margin: 0 auto !important;
+			vertical-align: top;
+		}
+
+		.calendarEventDetailList td {
+			vertical-align: top;
+			margin-left: 4px;
+			margin-right: 4px;
+			padding-left: 4px;
+			padding-right: 4px;
+		}
+
+		.calendarEventDetailList img {
+			margin-left: 4px;
+			margin-right: 4px;
+			padding-left: 2px;
+			padding-right: 2px;
+		}
+
+		.calendarEventDetailList table {
+			border: 0;
+		}
+	</style>
+
+	@cal.RenderHead()
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#CalendarInputDate').change(function () {
+				PostSelected();
+			});
+		});
+
+		function PostSelected() {
+			$('#@Html.IdFor(m => m.MonthSelected)').val($('#CalendarInputDate').val());
+
+			$('#btnSubmitCal').click();
+		}
+
+		function PostNext() {
+			$('#@Html.IdFor(m => m.MonthSelected)').val($('#@Html.IdFor(m => m.MonthNext)').val());
+
+			$('#btnSubmitCal').click();
+		}
+
+		function PostPrior() {
+			$('#@Html.IdFor(m => m.MonthSelected)').val($('#@Html.IdFor(m => m.MonthPrior)').val());
+
+			$('#btnSubmitCal').click();
+		}
+	</script>
+}
+
+<h3>@ViewBag.Title</h3>
+
+@using (Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+
+	<div id="divDatePicker" class="calendarCenter1">
+		@Html.TextBox("CalendarInputDate", String.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
+	</div>
+
+	<div class="calendarCenter2">
+		<div class="calendarCenter2">
+			@cal.RenderBody()
+		</div>
+
+		<input type="button" class="calendarbutton" id="btnLast " value="«««««" onclick="PostPrior();" />
+		&nbsp;&nbsp;&nbsp;
+		<input type="button" class="calendarbutton" id="btnNext " value="»»»»»" onclick="PostNext();" />
+	</div>
+
+	<div style="display:none;">
+		@Html.TextBoxFor(m => m.MonthSelected, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
+		@Html.TextBoxFor(m => m.MonthPrior, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
+		@Html.TextBoxFor(m => m.MonthNext, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
+		<input type="submit" id="btnSubmitCal" />
+	</div>
+}
+
+<div class="calendarCenter2">
+	<div class="calendarEventDetailList">
+		@grid.OutputHtmlBody()
+	</div>
+</div>

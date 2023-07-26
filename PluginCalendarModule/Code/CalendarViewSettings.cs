@@ -1,5 +1,4 @@
 ﻿using Carrotware.CMS.Interface;
-using System;
 
 namespace CarrotCake.CMS.Plugins.CalendarModule {
 

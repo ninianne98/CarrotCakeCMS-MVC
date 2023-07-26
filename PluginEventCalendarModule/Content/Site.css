@@ -1,0 +1,36 @@
+﻿body {
+	padding-top: 50px;
+	padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+	max-width: 280px;
+}
+
+.ui-timepicker-hour-cell a, .ui-timepicker-minute-cell a {
+	min-width: 2.2em;
+}
+
+.form-control2 {
+	height: 34px;
+	padding: 6px 12px;
+	margin: 0.25em;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}

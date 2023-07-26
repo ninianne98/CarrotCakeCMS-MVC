@@ -28,7 +28,8 @@
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "frmNorthwindProducts" })) {
 	@Html.AntiForgeryToken()
 
-	var grid = CarrotWeb.CarrotWebGrid<Product>(Model);
+	var grid = CarrotWeb.CarrotWebGrid(Model);
+	grid.PrettifyHeadings = true;
 	grid.HtmlFormId = "frmNorthwindProducts";
 	grid.TableAttributes = new { @class = "datatable table" };
 	grid.THeadAttributes = new { @class = "tablehead header" };

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
@@ -653,6 +654,31 @@ namespace Carrotware.Web.UI.Components {
 
 		public static string ToKebabCase(this string input) {
 			return string.Concat(input.Select((c, i) => (char.IsUpper(c) && i > 0 ? "-" : string.Empty) + char.ToLower(c)));
+		}
+		public static string ToSpacedPascal(this string input) {
+			if (string.IsNullOrWhiteSpace(input)) {
+				return input;
+			}
+
+			//var words = Regex.Split(input, @"(?<!^)(?=[A-Z])");
+			//return string.Join(" ", words);
+
+			var chars = input.ToCharArray();
+			string output = string.Empty;
+
+			for (int c = 0; c < input.Length; c++) {
+				var isUpper = char.IsUpper(input[c]);
+				var isPriorUpper = ((c - 1) > 0) ? char.IsUpper(input[c - 1]) : false;
+
+				// because we don't want "ParentID" / "ID" to become "I D" / "Parent I D"
+				if (isUpper && !isPriorUpper) {
+					output = output + " " + input[c];
+				} else {
+					output = output + input[c];
+				}
+			}
+
+			return output;
 		}
 
 		public static HtmlString RenderControlToHtml(IWebComponent ctrl) {

@@ -23,7 +23,7 @@ namespace Carrotware.CMS.Interface {
 			get {
 				return ConfigurationManager.AppSettings["TestSiteID"] != null
 					? ConfigurationManager.AppSettings["TestSiteID"].ToString()
-					: Guid.NewGuid().ToString();
+					: Guid.Empty.ToString();
 			}
 		}
 

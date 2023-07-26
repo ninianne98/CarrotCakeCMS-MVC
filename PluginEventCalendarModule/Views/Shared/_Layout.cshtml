@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+@{
+	Layout = null;
+
+	string areaName = ViewBag.WidgetAssemblyName;
+	string areaAlias = string.Format("{0}_Default", areaName);
+}
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title - @ViewBag.WidgetAssemblyName</title>
+	@CarrotWeb.RenderControlToHtml((new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver }))
+	@(new Bootstrap() { SelectedSkin = Bootstrap.BootstrapColorScheme.FrenchBlue })
+
+	<link href="~/Content/jquery.ui.timepicker.css" rel="stylesheet" />
+	<link href="~/Content/MiniColors/jquery.minicolors.css" rel="stylesheet" />
+	<script src="~/Content/jquery.ui.timepicker.js"></script>
+	<script src="~/Content/MiniColors/jquery.minicolors.min.js"></script>
+
+	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			fixButtons();
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			fixButtons();
+			setTimeout("fixButtons();", 500);
+		});
+
+		function fixButtons() {
+			$("button").addClass('btn btn-lg');
+			$("input[type=button]").addClass('btn btn-lg btn-default');
+			$("input[type=submit]").addClass('btn btn-lg btn-default');
+			$("input[type=text]").addClass('form-control2');
+			$("input[type=password]").addClass('form-control2');
+			$("select").addClass('form-control2');
+		}
+
+		$(document).ready(function () {
+			doStyles();
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			doStyles();
+		});
+
+		function doStyles() {
+			$("input:button, input:submit, input:reset, button").button();
+			$("input:button, input:submit, input:reset, button").addClass('btn');
+
+			$(".dateRegion").each(function () {
+				$(this).datepicker({
+					changeMonth: true,
+					changeYear: true,
+					showOn: "both",
+					buttonImage: '/Content/calendar.png',
+					buttonImageOnly: true,
+					constrainInput: true
+				});
+			});
+
+			$(".timeRegion").each(function () {
+				if (!$(this).hasClass("hasTimePicker")) {
+					$(this).addClass("hasTimePicker");
+					var id = $(this).attr('id');
+					$('<img class="ui-timepicker-trigger" src="/Content/clock.png" for="' + id + '" id="' + id + '_triggerbtn" alt="hh:mm" title="hh:mm">').insertAfter(this);
+
+					$(this).timepicker({
+						showOn: "both",
+						button: '#' + id + '_triggerbtn',
+						showPeriodLabels: true,
+						showPeriod: true,
+						amPmText: ["am", "pm"],
+						showLeadingZero: true
+					});
+				};
+			});
+		}
+	</script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.10.7/tinymce.min.js" integrity="sha512-Ckge7OuE2kEtJHLhA8wnsn3aEImoJpk3k4MAhbGnGVlxYAgx/5uv/MYdPTzuX6/dCwbPriGxylCRhTKcRd0MZQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+	<script type="text/javascript">
+		function cmsTinyMceInit(w, h, r) {
+			tinymce.init({
+				selector: "textarea.mceEditor",
+				height: h,
+				width: w,
+				resize: r,
+				menubar: false,
+				plugins: 'image imagetools link lists media charmap searchreplace visualblocks paste print table preview code codesample help',
+				toolbar: [
+					'undo redo | formatselect forecolor backcolor | bold italic backcolor | bullist numlist outdent indent | help',
+					'bold italic underline strikethrough sub sup | alignleft aligncenter alignright alignjustify | removeformat pastetext charmap | codesample code preview visualblocks'
+				],
+				content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+			});
+		}
+
+		function cmsPreSaveTrigger() {
+			var tgr = tinymce.triggerSave();
+
+			return true;
+		}
+	</script>
+
+	<script type="text/javascript">
+		var bTinyLoaded = false;
+
+		function cmsAjaxFailed() {
+		}
+
+		function AjaxTinyLoad() {
+			if (!bTinyLoaded) {
+				cmsTinyMceInit(875, 500, false);
+			}
+			bTinyLoaded = true;
+		}
+
+		$(document).ready(function () {
+			AjaxTinyLoad();
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			AjaxTinyLoad();
+		});
+	</script>
+
+	@RenderSection("scripts", required: false)
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				@Html.ActionLink("Widget: Event Calendar", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					@using (CarrotWeb.BeginWrappedItem("li", "TestView1;", "Test", new { @class = "active" }, null)) {
+						@Html.RouteLink("Display 1", areaAlias, new { action = "TestView1", controller = "Test" })
+					}
+					@using (CarrotWeb.BeginWrappedItem("li", "TestView2", "Test", new { @class = "active" }, null)) {
+						@Html.RouteLink("Display 2", areaAlias, new { action = "TestView2", controller = "Test" })
+					}
+					@using (CarrotWeb.BeginWrappedItem("li", "TestView3", "Test", new { @class = "active" }, null)) {
+						@Html.RouteLink("Display 3", areaAlias, new { action = "TestView3", controller = "Test" })
+					}
+
+					@using (CarrotWeb.BeginWrappedItem("li", "*", "Admin", new { @id = "tabAdmin", @class = "active dropdown" }, new { @id = "tabAdmin", @class = "dropdown" })) {
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Test <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li>@Html.ActionLink("Database", "Database", "Admin")</li>
+							<li>@Html.ActionLink("Profile List", "ProfileList", "Admin")</li>
+							<li>@Html.ActionLink("Add Event Profile", "EventDetail", "Admin", new { @id = Guid.Empty }, null)</li>
+							<li>@Html.ActionLink("Event List", "EventList", "Admin")</li>
+							<li>@Html.ActionLink("Category List", "CategoryList", "Admin")</li>
+							<li>@Html.ActionLink("Add Category", "CategoryDetail", "Admin", new { @id = Guid.Empty }, null)</li>
+						</ul>
+					}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container body-content">
+		<div>
+			@RenderBody()
+		</div>
+		<hr />
+		<footer>
+			<p>&copy; @DateTime.Now.Year - @areaName</p>
+		</footer>
+	</div>
+</body>
+</html>

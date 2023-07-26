@@ -63,6 +63,9 @@ namespace Carrotware.Web.UI.Components {
 						if (!string.IsNullOrEmpty(displayName)) {
 							column.HeaderText = displayName;
 						}
+						if (column.PrettifyHeading || this.PrettifyHeadings) {
+							column.HeaderText = column.HeaderText.ToSpacedPascal();
+						}
 					}
 					if (!column.HasHeadingText && !col.Sortable) {
 						column.HeaderText = "  ";
