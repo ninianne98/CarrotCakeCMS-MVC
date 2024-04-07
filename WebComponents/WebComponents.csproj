@@ -81,11 +81,11 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.Helpers.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.9.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.9\lib\net45\System.Web.Mvc.dll</HintPath>
+    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -93,19 +93,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.9\lib\net45\System.Web.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq">
@@ -229,7 +229,6 @@
     <EmbeddedResource Include="jquerybasic\silver\ui-icons_2e83ff_256x240.png" />
     <EmbeddedResource Include="jquerybasic\silver\ui-icons_cd0a0a_256x240.png" />
     <EmbeddedResource Include="jquerybasic\silver\ui-icons_ffffff_256x240.png" />
-    <EmbeddedResource Include="jquery\jquery-1-6-4.js" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -249,9 +248,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="jquery\jquery-1-7-2.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="jquerybasic\jquery-ui-purple.css" />
   </ItemGroup>
   <ItemGroup>
@@ -268,7 +264,6 @@
     <EmbeddedResource Include="jquery\jqueryui-1-9-2.js" />
     <EmbeddedResource Include="jquery\jqueryui-1-7-3.js" />
     <EmbeddedResource Include="jquery\jqueryui-1-8-24.js" />
-    <EmbeddedResource Include="jquery\jquery-1-8-3.js" />
     <EmbeddedResource Include="jquery\jquery-1-9-1.js" />
     <EmbeddedResource Include="jquery\jqueryui-1-10-2.js" />
     <EmbeddedResource Include="jquery\jquery-mig-1-2-1.js" />
@@ -293,6 +288,8 @@
     <Content Include="bootstrap\amethystorchid.css">
       <DependentUpon>amethystorchid.less</DependentUpon>
     </Content>
+    <EmbeddedResource Include="jquery\jquery-3-7-1.js" />
+    <EmbeddedResource Include="jquery\jquery-mig-3-4-0.js" />
     <EmbeddedResource Include="jquerybasic\purple\ui-bg_glass_100_B296CC_1x400.png" />
     <EmbeddedResource Include="jquerybasic\purple\ui-bg_glass_100_CAB3E0_1x400.png" />
     <EmbeddedResource Include="jquerybasic\purple\ui-bg_glass_50_50425E_1x400.png" />
@@ -314,7 +311,6 @@
     <EmbeddedResource Include="jquery\jqueryui-1-13-2.js" />
     <EmbeddedResource Include="jquery\jquery-mig-1-4-1.js" />
     <EmbeddedResource Include="jquery\jquery-2-2-4.js" />
-    <EmbeddedResource Include="jquery\jquery-3-6-4.js" />
     <EmbeddedResource Include="jquery\jquery-1-12-4.js" />
     <EmbeddedResource Include="jquery\jquery-unobtrusive-ajax.min.js" />
     <EmbeddedResource Include="jquery\jquery-validate.unobtrusive.min.js" />
