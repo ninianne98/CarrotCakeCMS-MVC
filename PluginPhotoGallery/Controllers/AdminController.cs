@@ -7,6 +7,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
+/*
+* CarrotCake CMS (MVC5)
+* http://www.carrotware.com/
+*
+* Copyright 2015, Samantha Copeland
+* Dual licensed under the MIT or GPL Version 3 licenses.
+*
+* Date: August 2015
+*/
+
 namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 	public class AdminController : BaseAdminWidgetController {
@@ -133,15 +143,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 				imageFile = path.DecodeBase64();
 			}
 
-			if (imageFile.Contains("../") || imageFile.Contains(@"..\")) {
-				throw new Exception("Cannot use relative paths.");
-			}
-			if (imageFile.Contains(":")) {
-				throw new Exception("Cannot specify drive letters.");
-			}
-			if (imageFile.Contains("//") || imageFile.Contains(@"\\")) {
-				throw new Exception("Cannot use UNC paths.");
-			}
+			ValidateGalleryImage(imageFile);
 
 			GalleryMetaData model = gh.GalleryMetaDataGetByFilename(imageFile);
 			if (model == null) {
@@ -169,11 +171,28 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 				meta.GalleryImage = model.GalleryImage.ToLower();
 			}
 
+			meta.ValidateGalleryImage();
+
 			meta.ImageMetaData = model.ImageMetaData;
 			meta.ImageTitle = model.ImageTitle;
 			meta.Save();
 
 			return RedirectToAction("EditImageMetaData", new { @path = meta.GalleryImage.EncodeBase64() });
+		}
+
+		protected void ValidateGalleryImage(string imageFile) {
+			if (imageFile.Contains("../") || imageFile.Contains(@"..\")) {
+				throw new Exception("Cannot use relative paths.");
+			}
+			if (imageFile.Contains(":")) {
+				throw new Exception("Cannot specify drive letters.");
+			}
+			if (imageFile.Contains("//") || imageFile.Contains(@"\\")) {
+				throw new Exception("Cannot use UNC paths.");
+			}
+			if (imageFile.Contains("<") || imageFile.Contains(">")) {
+				throw new Exception("Cannot include html tags.");
+			}
 		}
 	}
 }

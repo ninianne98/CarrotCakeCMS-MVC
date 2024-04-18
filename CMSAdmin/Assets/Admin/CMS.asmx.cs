@@ -18,14 +18,12 @@ using System.Xml.Serialization;
 */
 
 namespace Carrotware.CMS.Mvc.UI.Admin.Service {
-
 	[WebService(Namespace = "http://carrotware.com/cms/")]
 	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 	// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line.
 	[System.Web.Script.Services.ScriptService]
 	[CmsAuthorize]
 	public class CMS : WebService {
-
 		public static class ServiceResponse {
 			public static string OK { get { return "OK"; } }
 			public static string Fail { get { return "FAIL"; } }
@@ -70,6 +68,18 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			}
 			if (sitemapHelper != null) {
 				sitemapHelper.Dispose();
+			}
+		}
+
+		protected string ReturnLongString(string responseText) {
+			if (string.IsNullOrEmpty(responseText)) {
+				return "No Data";
+			} else {
+				if (responseText.Length < 768) {
+					return responseText;
+				} else {
+					return responseText.Substring(0, 700) + "[.....]";
+				}
 			}
 		}
 
@@ -609,15 +619,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				ContentSnippet cs = ContentSnippet.GetVersion(guidSnippet);
 
 				if (cs != null) {
-					if (string.IsNullOrEmpty(cs.ContentBody)) {
-						return "No Data";
-					} else {
-						if (cs.ContentBody.Length < 768) {
-							return cs.ContentBody;
-						} else {
-							return cs.ContentBody.Substring(0, 700) + "[.....]";
-						}
-					}
+					return ReturnLongString(cs.ContentBody);
 				}
 
 				return ServiceResponse.OK;
@@ -927,15 +929,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				}
 
 				if (ww != null) {
-					if (string.IsNullOrEmpty(ww.ControlProperties)) {
-						return "No Data";
-					} else {
-						if (ww.ControlProperties.Length < 768) {
-							return ww.ControlProperties;
-						} else {
-							return ww.ControlProperties.Substring(0, 700) + "[.....]";
-						}
-					}
+					return ReturnLongString(ww.ControlProperties);
 				}
 
 				return ServiceResponse.OK;
@@ -967,15 +961,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				}
 
 				if (ww != null) {
-					if (string.IsNullOrEmpty(ww.ControlProperties)) {
-						return "No Data";
-					} else {
-						if (ww.ControlProperties.Length < 768) {
-							return ww.ControlProperties;
-						} else {
-							return ww.ControlProperties.Substring(0, 700) + "[.....]";
-						}
-					}
+					return ReturnLongString(ww.ControlProperties);
 				}
 
 				return ServiceResponse.OK;
@@ -1006,15 +992,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				}
 
 				if (ww != null) {
-					if (string.IsNullOrEmpty(ww.ControlProperties)) {
-						return "No Data";
-					} else {
-						if (ww.ControlProperties.Length < 768) {
-							return ww.ControlProperties;
-						} else {
-							return ww.ControlProperties.Substring(0, 700) + "[.....]";
-						}
-					}
+					return ReturnLongString(ww.ControlProperties);
 				}
 
 				return ServiceResponse.OK;

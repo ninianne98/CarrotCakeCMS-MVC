@@ -1,7 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
+/*
+* CarrotCake CMS (MVC5)
+* http://www.carrotware.com/
+*
+* Copyright 2015, Samantha Copeland
+* Dual licensed under the MIT or GPL Version 3 licenses.
+*
+* Date: August 2015
+*/
 
 namespace CarrotCake.CMS.Plugins.PhotoGallery {
 
@@ -17,6 +25,8 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 				this.GalleryImage = gal.GalleryImage;
 				this.ImageTitle = gal.ImageTitle;
 				this.ImageMetaData = gal.ImageMetaData;
+
+				this.ValidateGalleryImage();
 			}
 		}
 
@@ -27,8 +37,27 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 		public string ImageTitle { get; set; }
 		public string ImageMetaData { get; set; }
 
+		public void ValidateGalleryImage() {
+			if (!string.IsNullOrEmpty(this.GalleryImage)) {
+				if (this.GalleryImage.Contains("../") || this.GalleryImage.Contains(@"..\")) {
+					throw new Exception("Cannot use relative paths.");
+				}
+				if (this.GalleryImage.Contains(":")) {
+					throw new Exception("Cannot specify drive letters.");
+				}
+				if (this.GalleryImage.Contains("//") || this.GalleryImage.Contains(@"\\")) {
+					throw new Exception("Cannot use UNC paths.");
+				}
+				if (this.GalleryImage.Contains("<") || this.GalleryImage.Contains(">")) {
+					throw new Exception("Cannot include html tags.");
+				}
+			}
+		}
+
 		public void Save() {
 			if (!String.IsNullOrEmpty(this.GalleryImage)) {
+				this.ValidateGalleryImage();
+
 				using (PhotoGalleryDataContext db = PhotoGalleryDataContext.GetDataContext()) {
 					tblGalleryImageMeta gal = (from c in db.tblGalleryImageMetas
 											   where c.GalleryImage.ToLower() == this.GalleryImage.ToLower()

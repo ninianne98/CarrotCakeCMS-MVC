@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-using System.Linq;
-
 namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 
 	public class GalleryModel {

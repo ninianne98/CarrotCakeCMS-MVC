@@ -151,8 +151,18 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public FileData GetFileInfo(string sQuery, string myFile) {
+			string sPath = MakeFileFolderPath(sQuery).NormalizeFilename();
+
+			if (!string.IsNullOrEmpty(sQuery) && !string.IsNullOrEmpty(myFile)
+						&& sQuery.ToLowerInvariant() == myFile.ToLowerInvariant()) {
+				var fileInfo = new FileInfo((_wwwpath + "/" + myFile).NormalizeFilename());
+
+				sQuery = (fileInfo.DirectoryName ?? string.Empty).NormalizeFilename();
+				myFile = fileInfo.Name;
+				sPath = sQuery;
+			}
+
 			sQuery = sQuery.NormalizeFilename();
-			string sPath = MakeFileFolderPath(sQuery);
 
 			string myFileName = Path.GetFileName(myFile).Trim();
 			DateTime myFileDate = Convert.ToDateTime("1899-01-01");
@@ -181,7 +191,7 @@ namespace Carrotware.Web.UI.Components {
 				string myPath = sQuery.FixPathSlashes();
 
 				f.FileName = Path.GetFileName(myFileName);
-				f.FolderPath = myPath;
+				f.FolderPath = MakeWebFolderPath(myPath);
 				f.FileDate = myFileDate;
 				f.FileSize = myFileSize;
 				f.FileSizeFriendly = myFileSizeF;
