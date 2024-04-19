@@ -95,6 +95,11 @@ namespace Carrotware.CMS.Core {
 
 		List<SiteNav> GetLatestContentSearchList(Guid siteID, string searchTerm, bool bActiveOnly, int pageSize, int pageNumber, string sortField, string sortDir);
 
+		List<SiteNav> GetContentSearchList(Guid siteID, string searchTerm, bool bActiveOnly, int pageSize, int pageNumber, ContentPageType.PageType pageType,
+				   SearchContentPortion portion, string sortField, string sortDir);
+
+		int GetContentSearchListCount(Guid siteID, string searchTerm, bool bActiveOnly, ContentPageType.PageType pageType, SearchContentPortion portion);
+
 		SiteNav GetLatestVersion(Guid siteID, bool bActiveOnly, string sPage);
 
 		SiteNav GetLatestVersion(Guid siteID, Guid rootContentID);

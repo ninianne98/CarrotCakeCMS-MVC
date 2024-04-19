@@ -220,6 +220,15 @@ namespace Carrotware.CMS.Core {
 			return SiteNavHelper.GetSamplerFakeNav(pageSize);
 		}
 
+		public List<SiteNav> GetContentSearchList(Guid siteID, string searchTerm, bool bActiveOnly, int pageSize, int pageNumber, ContentPageType.PageType pageType,
+			SearchContentPortion portion, string sortField, string sortDir) {
+			return SiteNavHelper.GetSamplerFakeNav(pageSize);
+		}
+
+		public int GetContentSearchListCount(Guid siteID, string searchTerm, bool bActiveOnly, ContentPageType.PageType pageType, SearchContentPortion portion) {
+			return 50;
+		}
+
 		public string GetBlogHeadingFromURL(SiteData currentSite, string sFilterPath) {
 			string sTitle = string.Empty;
 

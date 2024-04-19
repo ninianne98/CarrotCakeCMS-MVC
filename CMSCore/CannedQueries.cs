@@ -134,6 +134,22 @@ namespace Carrotware.CMS.Core {
 					select ct);
 		}
 
+		internal static IQueryable<vw_carrot_Content> GetContentByStatusAndType(CarrotCMSDataContext ctx, Guid siteID,
+				ContentPageType.PageType pageType, bool bActiveOnly) {
+
+			Guid contentTypeID = ContentPageType.GetIDByType(pageType);
+
+			return (from ct in ctx.vw_carrot_Contents
+					orderby ct.ContentTypeValue, ct.NavMenuText
+					where ct.SiteID == siteID
+						&& ct.IsLatestVersion == true
+						&& (ct.ContentTypeID == contentTypeID || pageType == ContentPageType.PageType.Unknown)
+						&& (ct.PageActive == true || bActiveOnly == false)
+						&& (ct.GoLiveDate < DateTime.UtcNow || bActiveOnly == false)
+						&& (ct.RetireDate > DateTime.UtcNow || bActiveOnly == false)
+					select ct);
+		}
+
 		internal static IQueryable<vw_carrot_Content> GetLatestBlogList(CarrotCMSDataContext ctx, Guid siteID, bool bActiveOnly) {
 			return (from ct in ctx.vw_carrot_Contents
 					orderby ct.NavOrder, ct.NavMenuText

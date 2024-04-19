@@ -79,7 +79,6 @@
 		<legend>
 			<label>
 				Search
-
 				@Html.Partial("_displayErrorPopupButton")
 			</label>
 		</legend>
@@ -95,15 +94,27 @@
 			<b class="caption">hide inactive results: </b>
 			@Html.CheckBoxFor(m => m.HideInactive)
 		</div>
+		<div>
+			<b class="caption">show content: <br /> </b>
+			<div class="jqradioset">
+				@Html.RadioButtonFor(i => i.ContentType, ContentPageType.PageType.Unknown, new { GroupName = "rdoSelectedSearch", id = "rdoSelectedSearch1" })
+				<label for="rdoSelectedSearch1">Show All</label>
+
+				@Html.RadioButtonFor(i => i.ContentType, ContentPageType.PageType.BlogEntry, new { GroupName = "rdoSelectedSearch", id = "rdoSelectedSearch2" })
+				<label for="rdoSelectedSearch2">Blog</label>
+
+				@Html.RadioButtonFor(i => i.ContentType, ContentPageType.PageType.ContentEntry, new { GroupName = "rdoSelectedSearch", id = "rdoSelectedSearch3" })
+				<label for="rdoSelectedSearch3">Content Page</label>
+			</div>
+		</div>
 		<br />
 
-		@if (!String.IsNullOrEmpty(Model.SearchFor) && Model.StepNumber >= 1) {
+		@if (!string.IsNullOrEmpty(Model.SearchFor) && Model.StepNumber >= 1) {
 
 			if (Model.SelectedItem == Guid.Empty && Model.StepNumber == 1) {
 				// step 1 results
 
-				var gridOne = CarrotWeb.CarrotWebGrid<SiteNav>
-					(Model.Pages);
+				var gridOne = CarrotWeb.CarrotWebGrid<SiteNav>(Model.Pages);
 
 				gridOne.TableAttributes = new { @class = "datatable" };
 				gridOne.THeadAttributes = new { @class = "tablehead" };
@@ -133,32 +144,32 @@
 					</text>
 				})
 
-					.AddColumn(x => x.NavMenuText, new CarrotGridColumn())
-					.AddColumn(x => x.FileName, new CarrotGridColumn())
+				.AddColumn(x => x.NavMenuText, new CarrotGridColumn())
+				.AddColumn(x => x.FileName, new CarrotGridColumn())
 
-					.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
-					.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
-					.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+				.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+				.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+				.AddColumn(x => x.GoLiveDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
 
-					.AddColumn(x => x.ContentType, new CarrotGridImageColumn {
-						ImagePairs = typeImgs
-					})
-					.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn {
-						AlternateTextTrue = "Active",
-						AlternateTextFalse = "Inactive",
-						Sortable = true
-					});
+				.AddColumn(x => x.ContentType, new CarrotGridImageColumn {
+					ImagePairs = typeImgs
+				})
+				.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn {
+					AlternateTextTrue = "Active",
+					AlternateTextFalse = "Inactive",
+					Sortable = true
+				});
 
-					<div>
-						@if (Model.TotalPages > Model.Pages.Count) {
-							@String.Format("Showing {0} of {1} total results", Model.Pages.Count, Model.TotalPages);
-						} else {
-							@String.Format("Showing {0} results", Model.Pages.Count);
-						}
-					</div>
-					<div>
-						@gridOne.OutputHtmlBody()
-					</div>
+				<div>
+					@if (Model.TotalPages > Model.Pages.Count) {
+						@String.Format("Showing {0} of {1} total results", Model.Pages.Count, Model.TotalPages);
+					} else {
+						@String.Format("Showing {0} results", Model.Pages.Count);
+					}
+				</div>
+				<div>
+					@gridOne.OutputHtmlBody()
+				</div>
 			}
 
 			if (Model.SelectedItem != Guid.Empty && Model.StepNumber == 2) {
@@ -177,8 +188,7 @@
 					<input type="button" name="btnSave" value="Duplicate" id="btnSave" onclick="DuplicateItems()" /> <br />
 				}
 
-				var gridTwo = CarrotWeb.CarrotWebGrid<Widget>
-						(Model.Widgets);
+				var gridTwo = CarrotWeb.CarrotWebGrid<Widget>(Model.Widgets);
 
 				gridTwo.TableAttributes = new { @class = "datatable" };
 				gridTwo.THeadAttributes = new { @class = "tablehead" };
@@ -197,28 +207,27 @@
 					</text>
 				})
 
-							.AddColumn(new CarrotGridTemplateColumn<Widget> {
-								HasHeadingText = false,
-								BodyAttributes = new { @class = "centerItem" },
-								FormatTemplate = @<text>
-									<a class="dataPopupTrigger" rel="@item.Root_WidgetID" href="javascript:void(0)">
-										<img src="~/Assets/Admin/images/doc.png" alt="text" style="margin:0;" />
-									</a>
-								</text>
-							})
+				.AddColumn(new CarrotGridTemplateColumn<Widget> {
+					HasHeadingText = false,
+					BodyAttributes = new { @class = "centerItem" },
+					FormatTemplate = @<text>
+						<a class="dataPopupTrigger" rel="@item.Root_WidgetID" href="javascript:void(0)">
+							<img src="~/Assets/Admin/images/doc.png" alt="text" style="margin:0;" />
+						</a>
+					</text>
+				})
+				.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+				.AddColumn(x => x.PlaceholderName, new CarrotGridColumn())
+				.AddColumn(x => x.ControlPath, new CarrotGridColumn())
+				.AddColumn(x => x.IsWidgetActive, new CarrotGridBooleanImageColumn {
+					AlternateTextTrue = "Active",
+					AlternateTextFalse = "Inactive",
+					Sortable = true
+				});
 
-								.AddColumn(x => x.EditDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
-								.AddColumn(x => x.PlaceholderName, new CarrotGridColumn())
-								.AddColumn(x => x.ControlPath, new CarrotGridColumn())
-								.AddColumn(x => x.IsWidgetActive, new CarrotGridBooleanImageColumn {
-									AlternateTextTrue = "Active",
-									AlternateTextFalse = "Inactive",
-									Sortable = true
-								});
-
-								<div>
-									@gridTwo.OutputHtmlBody()
-								</div>
+				<div>
+					@gridTwo.OutputHtmlBody()
+				</div>
 			}
 
 			if (Model.StepNumber >= 3) {
@@ -228,7 +237,6 @@
 			}
 		}
 	</fieldset>
-
 }
 
 <script type="text/javascript">

@@ -41,6 +41,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		[Display(Name = "Hide Inactive Results")]
 		public bool HideInactive { get; set; }
 
+
+		[Display(Name = "Content Type")]
+		public ContentPageType.PageType ContentType { get; set; } = ContentPageType.PageType.Unknown;
+
 		public string PlaceholderName { get; set; }
 		public Guid Root_ContentID { get; set; }
 
@@ -56,16 +60,17 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public int CopyCount { get; set; }
 
 		public void SearchOne() {
-			int iTake = 25;
-			this.SelectedPage = null;
-			this.Widgets = null;
+			int iTake = 50;
+			this.SelectedPage = new ContentPage();
+			this.Widgets = new List<Widget>();
+			this.Pages = new List<SiteNav>();
 			this.SelectedItem = Guid.Empty;
 			this.TotalPages = 0;
 
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-				if (!String.IsNullOrEmpty(this.SearchFor)) {
-					this.TotalPages = navHelper.GetSiteSearchCount(SiteData.CurrentSiteID, this.SearchFor, this.HideInactive);
-					this.Pages = navHelper.GetLatestContentSearchList(SiteData.CurrentSiteID, this.SearchFor, this.HideInactive, iTake, 0, "NavMenuText", "ASC");
+				if (!string.IsNullOrEmpty(this.SearchFor)) {
+					this.TotalPages = navHelper.GetContentSearchListCount(SiteData.CurrentSiteID, this.SearchFor, this.HideInactive, this.ContentType, SearchContentPortion.All);
+					this.Pages = navHelper.GetContentSearchList(SiteData.CurrentSiteID, this.SearchFor, this.HideInactive, iTake, 0, this.ContentType, SearchContentPortion.All, "EditDate", "DESC");
 				}
 			}
 		}
@@ -74,7 +79,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.Widgets = null;
 			this.Pages = null;
 
-			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+			using (var pageHelper = new ContentPageHelper()) {
 				this.SelectedPage = pageHelper.FindContentByID(SiteData.CurrentSiteID, this.SelectedItem);
 				this.Widgets = this.SelectedPage.GetWidgetList();
 			}
@@ -85,7 +90,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			if (this.Widgets != null) {
 				List<Guid> lstSel = this.Widgets.Where(x => x.Selected).Select(x => x.Root_WidgetID).ToList();
 
-				using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+				using (var pageHelper = new ContentPageHelper()) {
 					this.SelectedPage = pageHelper.FindContentByID(SiteData.CurrentSiteID, this.SelectedItem);
 					this.Widgets = this.SelectedPage.GetWidgetList();
 				}

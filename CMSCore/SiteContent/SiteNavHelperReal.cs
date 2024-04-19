@@ -564,6 +564,45 @@ namespace Carrotware.CMS.Core {
 			return PerformDataPagingQueryableContent(siteID, bActiveOnly, pageSize, pageNumber, sortField, sortDir, query1);
 		}
 
+		public List<SiteNav> GetContentSearchList(Guid siteID, string searchTerm, bool bActiveOnly, int pageSize, int pageNumber, ContentPageType.PageType pageType,
+					SearchContentPortion portion, string sortField, string sortDir) {
+			IQueryable<vw_carrot_Content> query1 = GetFilteredContentQuery(siteID, searchTerm, bActiveOnly, pageType, portion);
+
+			return PerformDataPagingQueryableContent(siteID, bActiveOnly, pageSize, pageNumber, sortField, sortDir, query1);
+		}
+
+		public int GetContentSearchListCount(Guid siteID, string searchTerm, bool bActiveOnly, ContentPageType.PageType pageType, SearchContentPortion portion) {
+			IQueryable<vw_carrot_Content> query1 = GetFilteredContentQuery(siteID, searchTerm, bActiveOnly, pageType, portion);
+
+			return query1.Count();
+		}
+
+		private IQueryable<vw_carrot_Content> GetFilteredContentQuery(Guid siteID, string searchTerm, bool bActiveOnly, ContentPageType.PageType pageType, SearchContentPortion portion) {
+			IQueryable<vw_carrot_Content> query1 = CannedQueries.GetContentByStatusAndType(db, siteID, pageType, bActiveOnly);
+
+			switch (portion) {
+				case SearchContentPortion.Title:
+					query1 = query1.Where(x => x.TitleBar.Contains(searchTerm) || x.PageHead.Contains(searchTerm) || x.NavMenuText.Contains(searchTerm));
+					break;
+
+				case SearchContentPortion.FileName:
+					query1 = query1.Where(x => x.FileName.Contains(searchTerm));
+					break;
+
+				case SearchContentPortion.ContentBody:
+					query1 = query1.Where(x => x.LeftPageText.Contains(searchTerm) || x.PageText.Contains(searchTerm) || x.RightPageText.Contains(searchTerm));
+					break;
+
+				default:
+					query1 = query1.Where(x => x.FileName.Contains(searchTerm)
+						|| x.TitleBar.Contains(searchTerm) || x.PageHead.Contains(searchTerm) || x.NavMenuText.Contains(searchTerm)
+						|| x.LeftPageText.Contains(searchTerm) || x.PageText.Contains(searchTerm) || x.RightPageText.Contains(searchTerm));
+					break;
+			}
+
+			return query1;
+		}
+
 		public int GetFilteredContentPagedCount(SiteData currentSite, string sFilterPath, bool bActiveOnly) {
 			IQueryable<vw_carrot_Content> query1 = null;
 			Guid siteID = currentSite.SiteID;
