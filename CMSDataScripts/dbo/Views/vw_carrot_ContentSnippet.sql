@@ -1,5 +1,4 @@
-﻿
-CREATE VIEW [dbo].[vw_carrot_ContentSnippet]
+﻿CREATE VIEW [dbo].[vw_carrot_ContentSnippet]
 AS 
 
 SELECT csr.Root_ContentSnippetID, csr.SiteID, csr.ContentSnippetName, csr.ContentSnippetSlug, csr.CreateUserId, csr.CreateDate, 

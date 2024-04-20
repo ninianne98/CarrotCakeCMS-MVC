@@ -52,7 +52,6 @@ SET NOCOUNT ON
 			set PostPrefix = cast(DATEPART(YEAR, GoLiveDateLocal) as varchar(32)) + '/' + cast(DATEPART(MONTH, GoLiveDateLocal) as varchar(32)) + '/' + cast(DATEPART(DAY, GoLiveDateLocal) as varchar(32)) + '/'
 		where PostPrefix is null or len(PostPrefix) < 3
 
-
 		UPDATE rc
 			SET GoLiveDateLocal = c.GoLiveDateLocal
 		FROM [dbo].[carrot_RootContent] rc
@@ -65,7 +64,6 @@ SET NOCOUNT ON
 			JOIN @tblBlogs b on rc.GoLiveDate = b.GoLiveDate
 		WHERE rc.SiteID = @SiteID 
 				and rc.ContentTypeID = @blogType
-
 
 	IF ( @@ERROR <> 0 ) BEGIN
         SET @ErrorCode = -1

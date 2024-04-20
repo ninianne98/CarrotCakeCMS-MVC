@@ -1,4 +1,13 @@
-﻿USE [Northwind]
+﻿/*
+Below is included for educational and demonstration purposes only 
+For widget proof of concepts
+Adapted from Microsoft's Nortwind database SQL scripts
+
+https://github.com/microsoft/sql-server-samples/tree/master/samples/databases
+https://github.com/microsoft/sql-server-samples/tree/master/samples/databases/northwind-pubs
+*/
+
+USE [Northwind]
 GO
 /****** Object:  Table [dbo].[CustomerDemographics]    Script Date: 08/12/2011 11:46:03 ******/
 SET ANSI_NULLS ON

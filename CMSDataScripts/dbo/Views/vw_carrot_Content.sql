@@ -1,6 +1,4 @@
-﻿
-
-CREATE VIEW [dbo].[vw_carrot_Content]
+﻿CREATE VIEW [dbo].[vw_carrot_Content]
 AS 
 
 SELECT rc.Root_ContentID, rc.SiteID, rc.Heartbeat_UserId, rc.EditHeartbeat, rc.[FileName], rc.PageActive, rc.ShowInSiteNav, rc.ShowInSiteMap, rc.BlockIndex,

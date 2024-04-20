@@ -24,11 +24,11 @@
 
 
 GO
-CREATE NONCLUSTERED INDEX [IDX_carrot_Content_EditUserId]
-    ON [dbo].[carrot_Content]([EditUserId] ASC);
+CREATE NONCLUSTERED INDEX [IDX_carrot_Content_Root_ContentID]
+    ON [dbo].[carrot_Content]([Root_ContentID] ASC);
 
 
 GO
-CREATE NONCLUSTERED INDEX [IDX_carrot_Content_Root_ContentID]
-    ON [dbo].[carrot_Content]([Root_ContentID] ASC);
+CREATE NONCLUSTERED INDEX [IDX_carrot_Content_EditUserId]
+    ON [dbo].[carrot_Content]([EditUserId] ASC);
 

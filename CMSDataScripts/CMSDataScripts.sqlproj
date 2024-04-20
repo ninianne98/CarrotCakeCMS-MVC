@@ -63,6 +63,9 @@
     <Folder Include="dbo\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CarrotSqlSchemaCompare.scmp" />
+  </ItemGroup>
+  <ItemGroup>
     <Build Include="dbo\Tables\membership_UserRole.sql" />
     <Build Include="dbo\Tables\membership_UserLogin.sql" />
     <Build Include="dbo\Tables\membership_UserClaim.sql" />
@@ -101,11 +104,7 @@
     <Build Include="dbo\Views\vw_carrot_CategoryURL.sql" />
     <Build Include="dbo\Views\vw_carrot_CategoryCounted.sql" />
     <Build Include="dbo\Stored Procedures\carrot_UpdateGoLiveLocal.sql" />
-    <Build Include="dbo\Stored Procedures\carrot_BlogMonthlyTallies.sql">
-      <QuotedIdentifier>Off</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Stored Procedures\carrot_BlogDateFilenameUpdate.sql">
-      <QuotedIdentifier>Off</QuotedIdentifier>
-    </Build>
+    <Build Include="dbo\Stored Procedures\carrot_BlogMonthlyTallies.sql" />
+    <Build Include="dbo\Stored Procedures\carrot_BlogDateFilenameUpdate.sql" />
   </ItemGroup>
 </Project>

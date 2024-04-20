@@ -24,6 +24,11 @@
 
 
 GO
+CREATE NONCLUSTERED INDEX [IDX_carrot_RootContent_SiteID]
+    ON [dbo].[carrot_RootContent]([SiteID] ASC);
+
+
+GO
 CREATE NONCLUSTERED INDEX [IDX_carrot_RootContent_CreateUserId]
     ON [dbo].[carrot_RootContent]([CreateUserId] ASC);
 
@@ -31,9 +36,4 @@ CREATE NONCLUSTERED INDEX [IDX_carrot_RootContent_CreateUserId]
 GO
 CREATE NONCLUSTERED INDEX [IDX_carrot_RootContent_ContentTypeID]
     ON [dbo].[carrot_RootContent]([ContentTypeID] ASC);
-
-
-GO
-CREATE NONCLUSTERED INDEX [IDX_carrot_RootContent_SiteID]
-    ON [dbo].[carrot_RootContent]([SiteID] ASC);
 

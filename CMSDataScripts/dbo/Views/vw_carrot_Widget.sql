@@ -1,6 +1,4 @@
-﻿
-
-CREATE VIEW [dbo].[vw_carrot_Widget]
+﻿CREATE VIEW [dbo].[vw_carrot_Widget]
 AS 
 
 

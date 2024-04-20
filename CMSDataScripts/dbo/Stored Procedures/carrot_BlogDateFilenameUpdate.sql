@@ -74,7 +74,6 @@ SET NOCOUNT ON
 		where rc.SiteID = @SiteID
 			AND rc.ContentTypeID = @blogType
 
-
     IF ( @@ERROR <> 0 ) BEGIN
         SET @ErrorCode = -1
         GOTO Cleanup
