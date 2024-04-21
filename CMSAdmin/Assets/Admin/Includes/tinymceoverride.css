@@ -63,6 +63,14 @@
 	font-size: 14px !important;
 }
 
+.tox-toolbar__group {
+	border-right: 1px solid #ccc !important;
+}
+
+.tox-toolbar-overlord {
+	border-top: 1px solid #ccc !important;
+}
+
 @media screen and (min-width: 1350px) {
 	.tox .tox-listboxfield .tox-listbox--select,
 	.tox .tox-textarea,

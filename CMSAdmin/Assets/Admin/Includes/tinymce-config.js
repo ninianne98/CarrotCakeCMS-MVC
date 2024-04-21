@@ -18,19 +18,6 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 
 	tinyBrowseResize = allowResize;
 
-	/*
-	menu: {
-		file: { title: 'File', items: 'newdocument restoredraft | preview | print ' },
-		edit: { title: 'Edit', items: 'undo redo | cut copy paste | selectall | searchreplace' },
-		view: { title: 'View', items: 'code | visualaid visualchars visualblocks | spellchecker | preview fullscreen' },
-		insert: { title: 'Insert', items: 'image link media template codesample inserttable | charmap emoticons hr | pagebreak nonbreaking anchor toc | insertdatetime' },
-		format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | formats blockformats fontformats fontsizes align lineheight | forecolor backcolor | removeformat' },
-		tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | code wordcount' },
-		table: { title: 'Table', items: 'inserttable | cell row column | tableprops deletetable' },
-		help: { title: 'Help', items: 'help' }
-	}
-	 */
-
 	if (tinymce) {
 		// because ajax...
 		tinymce.remove();
@@ -44,8 +31,9 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 		selector: "textarea.mceEditor",
 		file_picker_types: 'file image media',
 		file_picker_callback: cmsTinyFileBrowserCallback,
-		plugins: 'image imagetools link lists media charmap searchreplace visualblocks paste print table preview code codesample help',
-		toolbar1: 'bold italic underline strikethrough sub sup | formatselect forecolor backcolor | blockquote alignleft aligncenter alignright alignjustify outdent indent | help | ',
+		promotion: false,
+		plugins: 'image link lists media charmap searchreplace visualblocks table preview code codesample help',
+		toolbar1: 'bold italic underline strikethrough sub sup | blocks forecolor backcolor | blockquote alignleft aligncenter alignright alignjustify outdent indent | help | ',
 		toolbar2: 'undo redo searchreplace | bullist numlist | removeformat pastetext | link unlink anchor image media customfilebrowser | charmap codesample code preview visualblocks',
 		removed_menuitems: 'newdocument help',
 		codesample_languages: [
