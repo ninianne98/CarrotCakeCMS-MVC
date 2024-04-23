@@ -21,6 +21,7 @@
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -121,6 +122,7 @@
     <Compile Include="Code\MultiOptions.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\MathModel.cs" />
     <Compile Include="Models\ProductSearch.cs" />
     <Compile Include="Models\SelectSkin.cs" />
     <Compile Include="Models\SkinItem.cs" />
@@ -274,6 +276,8 @@
     <Content Include="Views\Home\MultiProdList.cshtml" />
     <Content Include="Views\Home\TestProductSearch.cshtml" />
     <Content Include="Views\Home\TestProductSearchMulti.cshtml" />
+    <Content Include="Views\Home\Math.cshtml" />
+    <Content Include="Views\Admin\Math.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -333,10 +337,11 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)\bin\$(TargetName).*" "$(SolutionDir)\CMSAdmin\bin\" /F /R /Y /I /S
 xcopy "$(ProjectDir)\Views\*.config" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\" /F /R /Y /I
+
 xcopy "$(ProjectDir)\Views\Admin\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\Admin\" /F /R /Y /I /S
 xcopy "$(ProjectDir)\Views\Home\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\Home\" /F /R /Y /I /S
-REM xcopy "$(ProjectDir)\Views\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\" /F /R /Y /I /S
-REM xcopy "$(ProjectDir)\Views\Home\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\" /F /R /Y /I /S</PostBuildEvent>
+
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -49,7 +49,7 @@ namespace Northwind.Controllers {
 			ProductSearch model = null;
 			model = InitProductSearch(model);
 
-			if (String.IsNullOrEmpty(settings.AlternateViewFile)) {
+			if (string.IsNullOrEmpty(settings.AlternateViewFile)) {
 				return PartialView(model);
 			} else {
 				model.AltViewName = settings.AlternateViewFile;
@@ -69,11 +69,35 @@ namespace Northwind.Controllers {
 
 			model = InitProductSearch(model);
 
-			if (String.IsNullOrEmpty(model.AltViewName)) {
+			if (string.IsNullOrEmpty(model.AltViewName)) {
 				return PartialView(model);
 			} else {
 				return PartialView(model.AltViewName, model);
 			}
+		}
+
+		public ActionResult TestMath() {
+			var model = new MathModel();
+
+			model.GetResult();
+
+			return View(model);
+		}
+
+		[HttpGet]
+		public ActionResult Math() {
+			var model = new MathModel();
+
+			model.GetResult();
+
+			return PartialView(model);
+		}
+
+		[HttpPost]
+		public ActionResult Math(MathModel model) {
+			model.GetResult();
+			ModelState.Clear();
+			return PartialView(model);
 		}
 
 		[HttpGet]
@@ -103,7 +127,7 @@ namespace Northwind.Controllers {
 
 			ProductSearch model = settings.GetData();
 
-			if (String.IsNullOrEmpty(settings.AlternateViewFile)) {
+			if (string.IsNullOrEmpty(settings.AlternateViewFile)) {
 				return PartialView(model);
 			} else {
 				model.AltViewName = settings.AlternateViewFile;

@@ -1,0 +1,94 @@
+﻿@model Northwind.Models.MathModel
+
+@{
+	string theTime = DateTime.Now.ToString("o");
+}
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('#mathForm1 input[type="submit"]').click(function () {
+			var is_valid = true;
+			var form_data = $("#mathForm1").serializeArray();
+			$("#mathForm1").attr('data-ajax-valid', false);
+
+			for (var input in form_data) {
+				var fldName = form_data[input]['name'];
+				var element = $('#' + fldName);
+				var msg = $(element).attr('data-val-required') || '';
+
+				if (msg.length > 0) {
+					var valid = $(element).val().length > 0;
+					var err_span = $("span[data-valmsg-for='" + fldName + "']");
+
+					if (!valid) {
+						err_span.addClass("field-validation-error");
+						err_span.text(msg);
+						is_valid = false;
+					} else {
+						err_span.removeClass("field-validation-error");
+						err_span.text('');
+					}
+				}
+			}
+
+			$("#mathForm1").attr('data-ajax-valid', is_valid);
+
+			if (!is_valid) {
+				event.preventDefault();
+				console.log('Form is NOT valid.');
+
+			} else {
+				console.log('Form is valid.');
+			}
+		});
+	});
+</script>
+
+<div id="divMathForm">
+	<h2>Do Some Math</h2>
+	@using (Ajax.BeginForm("Math", "Home",
+				new { area = "Northwind" },
+		new AjaxOptions() {
+			UpdateTargetId = "divMathForm",
+			OnBegin = "__carrotOnAjaxRequestBegin",
+			OnComplete = "__carrotOnAjaxRequestComplete",
+			OnFailure = "__carrotOnAjaxRequestFailureAlert",
+			OnSuccess = "__carrotOnAjaxRequestSuccess"
+		})) {
+		<p>
+			<br />
+			@theTime
+		</p>
+		<table style="width:550px">
+			<tr>
+				<td>
+					@Html.TextBoxFor(m => m.Number1)
+				</td>
+				<td>
+					&nbsp;/&nbsp;
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Number2)
+				</td>
+				<td>
+					&nbsp;=&nbsp;
+				</td>
+				<td>
+					@Html.TextBoxFor(m => m.Number3)
+				</td>
+			</tr>
+		</table>
+		<div>
+			@Html.ValidationMessageFor(m => m.Number1, "", new { @class = "field-validation-error" })<br />
+			@Html.ValidationMessageFor(m => m.Number2, "", new { @class = "field-validation-error" })<br />
+			@Html.ValidationMessageFor(m => m.Number3, "", new { @class = "field-validation-error" })
+		</div>
+
+		<p>
+			<input type="submit" class="btn btn-info" value="Submit" />
+		</p>
+		<p>
+			<br />
+		</p>
+	}
+</div>

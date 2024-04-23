@@ -1,5 +1,6 @@
 ﻿using Carrotware.CMS.Interface.Controllers;
 using Carrotware.Web.UI.Components;
+using Northwind.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -39,6 +40,23 @@ namespace Northwind.Controllers {
 			model.TotalRecords = db.Products.Count();
 			ViewBag.SupplierList = db.Suppliers.ToList();
 
+			ModelState.Clear();
+
+			return View(model);
+		}
+
+		[HttpGet]
+		public ActionResult Math() {
+			var model = new MathModel();
+
+			model.GetResult();
+
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult Math(MathModel model) {
+			model.GetResult();
 			ModelState.Clear();
 
 			return View(model);
