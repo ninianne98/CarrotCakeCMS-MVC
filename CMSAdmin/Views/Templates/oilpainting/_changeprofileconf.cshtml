@@ -1,0 +1,15 @@
+﻿@inherits CmsWebViewPage
+
+<h1 id="change-profile-confirm">
+	Your profile has been changed.
+</h1>
+
+@Html.Partial("_changeprofile")
+
+<script type="text/javascript">
+	function changeProfileDone() {
+		$("#change-profile-confirm").hide();
+	}
+
+	setTimeout(function () { changeProfileDone(); }, 8000);
+</script>

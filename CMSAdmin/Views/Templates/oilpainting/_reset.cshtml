@@ -1,0 +1,55 @@
+﻿@inherits CmsWebViewPage
+
+<div id="resetForm">
+	<br />
+	<h3>
+		password reset
+	</h3>
+	@{
+		var cap = new Captcha();
+		cap.SetBackColor("#ffffff");
+		cap.SetForeColor("#333333");
+		cap.SetNoiseColor("#999999");
+
+		ResetPasswordInfoConfig config = new ResetPasswordInfoConfig("_reset"); // new ResetPasswordInfoConfig("_forgot", cap);
+		config.PostPartialConfirmation = "_resetconf";
+
+		using (var cmtFrm = CarrotCakeHtml.BeginResetPasswordForm(new AjaxOptions { UpdateTargetId = "resetForm" })) {
+			var cmt = cmtFrm.GetModelHelper(config);
+
+			<div>
+				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
+			</div>
+
+			<div>
+				@cmt.LabelFor(m => m.Email, new { @class = "caption" })
+				@cmt.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" }) <br />
+				@cmt.TextBoxFor(m => m.Email)
+			</div>
+
+			<div>
+				@cmt.LabelFor(m => m.Password, new { @class = "caption" })
+				@cmt.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" }) <br />
+				@cmt.PasswordFor(m => m.Password)
+			</div>
+
+			<div>
+				@cmt.LabelFor(m => m.ConfirmPassword, new { @class = "caption" })
+				@cmt.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" }) <br />
+				@cmt.PasswordFor(m => m.ConfirmPassword)
+			</div>
+
+			@*<div>
+					@cap<br />
+					@cap.Instructions <br />
+					@cmt.TextBoxFor(m => m.ValidationValue)
+					@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
+				</div>*@
+
+			<br />
+			<input class="button" type="submit" value="Request" />
+			<input class="button" type="reset" value="Clear form" />
+		}
+	}
+	<br />
+</div>

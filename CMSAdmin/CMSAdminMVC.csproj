@@ -819,13 +819,8 @@
     <Content Include="Views\Templates\Aqueous\_navPage.cshtml">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Views\Templates\oilpainting\page.cshtml" />
-    <Content Include="Views\Templates\oilpainting\list.cshtml" />
-    <Content Include="Views\Templates\oilpainting\_contactform.cshtml" />
     <Content Include="Views\CmsAdmin\PageAddEdit.cshtml" />
     <Content Include="Views\CmsAdmin\_datetime.cshtml" />
-    <Content Include="Views\Templates\oilpainting\blog.cshtml" />
-    <Content Include="Views\Templates\oilpainting\home.cshtml" />
     <Content Include="Views\CmsAdmin\CategoryIndex.cshtml" />
     <Content Include="Views\CmsAdmin\TagIndex.cshtml" />
     <Content Include="Views\CmsAdmin\NotAuthorized.cshtml" />
@@ -976,7 +971,6 @@
     <Content Include="Assets\telephasic\webfonts\fa-solid-900.ttf" />
     <Content Include="Assets\telephasic\webfonts\fa-solid-900.woff" />
     <Content Include="Assets\telephasic\webfonts\fa-solid-900.woff2" />
-    <None Include="Views\Templates\oilpainting\_main.cshtml" />
     <Content Include="Assets\Waterdrops\images\img01.jpg" />
     <Content Include="Assets\Waterdrops\images\img02.jpg" />
     <Content Include="Assets\Waterdrops\images\img02b.jpg" />
@@ -990,6 +984,12 @@
     <Content Include="Assets\Waterdrops\index.html" />
     <Content Include="Assets\Waterdrops\license.txt" />
     <Content Include="Assets\Waterdrops\style.css" />
+    <Content Include="Views\Templates\oilpainting\blog.cshtml" />
+    <Content Include="Views\Templates\oilpainting\home.cshtml" />
+    <Content Include="Views\Templates\oilpainting\list.cshtml" />
+    <Content Include="Views\Templates\oilpainting\page.cshtml" />
+    <Content Include="Views\Templates\oilpainting\Skin.config" />
+    <Content Include="Views\Templates\oilpainting\_contactform.cshtml" />
     <Content Include="Views\Templates\Telephasic\index.cshtml" />
     <Content Include="Views\Templates\Telephasic\left-sidebar.cshtml" />
     <Content Include="Views\Templates\Telephasic\LICENSE.txt" />
@@ -1096,7 +1096,6 @@
     <Content Include="Views\CmsAdmin\PageIndex.cshtml" />
     <Content Include="Views\CmsAdmin\BlogPostIndex.cshtml" />
     <Content Include="Views\CmsAdmin\ControlPropertiesEdit.cshtml" />
-    <Content Include="Views\Templates\oilpainting\Skin.config" />
     <Content Include="Views\Templates\Waterdrops\Skin.config" />
     <Content Include="Views\Templates\Waterdrops\_contactform.cshtml" />
     <Content Include="Views\Templates\Waterdrops\blog.cshtml" />
@@ -1119,6 +1118,17 @@
     <Content Include="Views\Templates\Telephasic\blog-index.cshtml" />
     <Content Include="Views\Templates\Telephasic\_searchBox.cshtml" />
     <Content Include="Views\Templates\Telephasic\_subPageNav.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_changepass.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_changepassconf.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_changeprofile.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_changeprofileconf.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_forgot.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_forgotconf.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_loginout.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_main.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_reset.cshtml" />
+    <Content Include="Views\Templates\oilpainting\_resetconf.cshtml" />
+    <Content Include="Views\Templates\oilpainting\page-forms.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
