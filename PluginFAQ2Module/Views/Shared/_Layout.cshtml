@@ -32,20 +32,23 @@
 
 	</script>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.10.7/tinymce.min.js" integrity="sha512-Ckge7OuE2kEtJHLhA8wnsn3aEImoJpk3k4MAhbGnGVlxYAgx/5uv/MYdPTzuX6/dCwbPriGxylCRhTKcRd0MZQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	@* https://cdnjs.com/libraries/tinymce/6.8.3 *@
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" integrity="sha512-VCEWnpOl7PIhbYMcb64pqGZYez41C2uws/M/mDdGPy+vtEJHd9BqbShE4/VNnnZdr7YCPOjd+CBmYca/7WWWCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 	<script type="text/javascript">
 		function cmsTinyMceInit(w, h, r) {
 			tinymce.init({
 				selector: "textarea.mceEditor",
+				promotion: false,
+				convert_unsafe_embeds: true,
 				height: h,
 				width: w,
 				resize: r,
 				menubar: false,
-				plugins: 'image imagetools link lists media charmap searchreplace visualblocks paste print table preview code codesample help',
+				plugins: 'image link lists media charmap searchreplace visualblocks table preview code codesample help',
 				toolbar: [
-					'undo redo | formatselect forecolor backcolor | bold italic backcolor | bullist numlist outdent indent | help',
-					'bold italic underline strikethrough sub sup | alignleft aligncenter alignright alignjustify | removeformat pastetext charmap | codesample code preview visualblocks'
+					'bold italic underline strikethrough sub sup | blocks forecolor backcolor | blockquote alignleft aligncenter alignright alignjustify outdent indent | help | ',
+					'undo redo searchreplace | bullist numlist | removeformat pastetext | link unlink anchor image media customfilebrowser | charmap codesample code preview visualblocks'
 				],
 				content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
 			});

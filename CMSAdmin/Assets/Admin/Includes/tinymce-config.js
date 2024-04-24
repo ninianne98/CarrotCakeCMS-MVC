@@ -32,6 +32,7 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 		file_picker_types: 'file image media',
 		file_picker_callback: cmsTinyFileBrowserCallback,
 		promotion: false,
+		convert_unsafe_embeds: true,
 		plugins: 'image link lists media charmap searchreplace visualblocks table preview code codesample help',
 		toolbar1: 'bold italic underline strikethrough sub sup | blocks forecolor backcolor | blockquote alignleft aligncenter alignright alignjustify outdent indent | help | ',
 		toolbar2: 'undo redo searchreplace | bullist numlist | removeformat pastetext | link unlink anchor image media customfilebrowser | charmap codesample code preview visualblocks',

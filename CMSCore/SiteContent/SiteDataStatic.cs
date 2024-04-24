@@ -916,6 +916,16 @@ namespace Carrotware.CMS.Core {
 			get { return CurrentVersion.ToString(); }
 		}
 
+		public static string CarrotCakeCMSVersionShort {
+			get {
+#if DEBUG
+				return string.Format("MVC {0} (debug)", CurrentDLLVersion);
+#else
+				return string.Format("MVC {0}", CurrentDLLVersion);
+#endif
+			}
+		}
+
 		public static string CurrentDLLMajorMinorVersion {
 			get {
 				Version v = CurrentVersion;
@@ -927,8 +937,9 @@ namespace Carrotware.CMS.Core {
 			get {
 #if DEBUG
 				return string.Format("CarrotCake CMS MVC {0} DEBUG MODE", CurrentDLLVersion);
-#endif
+#else
 				return string.Format("CarrotCake CMS MVC {0}", CurrentDLLVersion);
+#endif
 			}
 		}
 
@@ -936,8 +947,9 @@ namespace Carrotware.CMS.Core {
 			get {
 #if DEBUG
 				return string.Format("CarrotCake CMS {0} (debug)", CurrentDLLMajorMinorVersion);
-#endif
+#else
 				return string.Format("CarrotCake CMS {0}", CurrentDLLMajorMinorVersion);
+#endif
 			}
 		}
 

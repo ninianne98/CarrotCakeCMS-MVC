@@ -33,8 +33,10 @@ namespace Carrotware.CMS.Data {
 				iDBConnCounter = 0;
 			}
 			return _db;
-#endif
+#else
 			return new CarrotCMSDataContext(connection);
+#endif
+
 		}
 
 		public static CarrotCMSDataContext Create(IDbConnection connection) {
@@ -46,8 +48,10 @@ namespace Carrotware.CMS.Data {
 				iDBConnCounter = 0;
 			}
 			return _db;
-#endif
+#else
 			return new CarrotCMSDataContext(connection);
+#endif
+
 		}
 
 		//public CarrotCMSDataContext() :
