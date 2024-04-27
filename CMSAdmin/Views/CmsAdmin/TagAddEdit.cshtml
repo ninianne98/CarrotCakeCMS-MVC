@@ -121,20 +121,19 @@
 		</tr>
 	</table>
 	<br />
-	<input type="submit" name="btnSaveButton" value="Save" id="btnSaveButton" /><text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</text>
+	<input type="button" name="btnSaveButton" value="Save" onclick="return SubmitPage();" id="btnSaveButton" /><text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</text>
 	<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing();" /><text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</text>
 	if (Model.ContentTagID != Guid.Empty) {
 		<input type="button" id="btnDeleteButton" value="Delete" onclick="return DeleteItem();" />
 	}
-
 	<div style="display: none">
+		<input type="submit" name="btnSave" value="Save" id="btnSave" />
 		@Html.HiddenFor(m => m.ContentTagID)
 
 		<div id="formPrettyValidationSummary">
 			@Html.ValidationSummary(true, "")
 		</div>
 	</div>
-
 }
 
 <div style="display: none">
@@ -162,6 +161,19 @@
 
 	function ClickDeleteItem() {
 		$('#btnDelete').click();
+	}
+
+	function SubmitPage() {
+		GenerateSlug();
+		setTimeout("CheckSlug();", 500);
+		ClickSaveBtn();
+		return true;
+	}
+
+	function ClickSaveBtn() {
+		setTimeout(function () {
+			$('#btnSave').click();
+		}, 750);
 	}
 
 	function cancelEditing() {
