@@ -383,8 +383,9 @@
 	<br />
 	<br />
 </div>
-@using (Html.BeginForm()) {
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "contentForm" })) {
 	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.SerialCache, new { @class = "non-serial-data" })
 
 	<div id="PageContents">
 		<table class="table-lg">
@@ -666,22 +667,22 @@
 						<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing();" />
 						&nbsp;&nbsp;
 						@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
-						<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
+							<input type="button" id="btnDeleteButton" value="Delete" onclick="return deleteContent();" />
 						}
 					</td>
 					@if (Model.ContentPage.Root_ContentID != Guid.Empty) {
-					<td>
-						&nbsp;&nbsp;
-					</td>
-					<td align="right">
-						@Html.DropDownList("ddlVersions", new SelectList(Model.VersionHistory, "Key", "Value"), "[Select Version]")
-					</td>
-					<td>
-						&nbsp;&nbsp;
-					</td>
-					<td align="left">
-						<input type="button" onclick="javascript:cmsPageVersionNav();" name="btnReview" value="Review / Revert" />
-					</td>
+						<td>
+							&nbsp;&nbsp;
+						</td>
+						<td align="right">
+							@Html.DropDownList("ddlVersions", new SelectList(Model.VersionHistory, "Key", "Value"), "[Select Version]")
+						</td>
+						<td>
+							&nbsp;&nbsp;
+						</td>
+						<td align="left">
+							<input type="button" onclick="javascript:cmsPageVersionNav();" name="btnReview" value="Review / Revert" />
+						</td>
 					}
 				</tr>
 			</table>
@@ -706,7 +707,7 @@
 		</div>
 	</div>
 
-						}
+}
 
 <div style="display: none">
 	@using (Html.BeginForm("DeleteContentPage", CmsRouteConstants.CmsController.Admin)) {
@@ -785,7 +786,7 @@
 </script>
 <script type="text/javascript">
 	$(document).ready(function () {
-		$(".chosen-select").chosen({width: "695px"});
+		$(".chosen-select").chosen({ width: "695px" });
 
 		setTimeout("$('#jqtabs').tabs('option', 'active', 1);", 500);
 	});

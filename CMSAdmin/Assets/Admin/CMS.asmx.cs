@@ -721,34 +721,39 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		public string GenerateCategoryTagSlug(string TheSlug, string ItemID, string Mode) {
 			try {
 				Guid CurrentItemGuid = new Guid(ItemID);
-				TheSlug = CMSConfigHelper.DecodeBase64(TheSlug);
-				TheSlug = ContentPageHelper.ScrubSlug(TheSlug).ToLowerInvariant();
+				var theSlug = CMSConfigHelper.DecodeBase64(TheSlug);
+				var originalSlug = theSlug;
+				theSlug = ContentPageHelper.ScrubSlug(theSlug).ToLowerInvariant();
 				var matches = 0;
 				var count = 0;
 				var siteid = SiteData.CurrentSite.SiteID;
 
 				if (Mode.ToLowerInvariant() == "category") {
-					matches = ContentCategory.GetSimilar(siteid, CurrentItemGuid, TheSlug);
+					matches = ContentCategory.GetSimilar(siteid, CurrentItemGuid, theSlug);
 					if (matches > 0) {
 						count = 1;
 						while (count < 2000 && matches > 0) {
-							TheSlug = string.Format("{0}-{1}", TheSlug, count);
-							matches = ContentCategory.GetSimilar(siteid, CurrentItemGuid, TheSlug);
+							theSlug = string.Format("{0}-{1}", originalSlug, count);
+							theSlug = ContentPageHelper.ScrubSlug(theSlug).ToLowerInvariant();
+							matches = ContentCategory.GetSimilar(siteid, CurrentItemGuid, theSlug);
+							count++;
 						}
 					}
 				}
 				if (Mode.ToLowerInvariant() == "tag") {
-					matches = ContentTag.GetSimilar(siteid, CurrentItemGuid, TheSlug);
+					matches = ContentTag.GetSimilar(siteid, CurrentItemGuid, theSlug);
 					if (matches > 0) {
 						count = 1;
 						while (count < 2000 && matches > 0) {
-							TheSlug = string.Format("{0}-{1}", TheSlug, count);
-							matches = ContentTag.GetSimilar(siteid, CurrentItemGuid, TheSlug);
+							theSlug = string.Format("{0}-{1}", originalSlug, count);
+							theSlug = ContentPageHelper.ScrubSlug(theSlug).ToLowerInvariant();
+							matches = ContentTag.GetSimilar(siteid, CurrentItemGuid, theSlug);
+							count++;
 						}
 					}
 				}
 
-				return ContentPageHelper.ScrubSlug(TheSlug);
+				return ContentPageHelper.ScrubSlug(theSlug);
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 

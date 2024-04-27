@@ -348,8 +348,9 @@
 	<br />
 	<br />
 </div>
-@using (Html.BeginForm()) {
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "contentForm" })) {
 	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.SerialCache, new { @class = "non-serial-data" })
 
 	<div id="PageContents">
 		<table class="table-lg">
@@ -656,7 +657,7 @@
 		</div>
 	</div>
 
-						}
+}
 
 <div style="display: none">
 	@using (Html.BeginForm("DeleteContentPage", CmsRouteConstants.CmsController.Admin)) {

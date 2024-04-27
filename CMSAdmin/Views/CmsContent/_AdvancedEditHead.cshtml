@@ -4,8 +4,10 @@
 
 @*
 	<!-- jQuery CDN -->
-	<script> setTimeout(function () { window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"><\/script>'); }, 100);  </script>
-	<script> setTimeout(function () { window.jQuery.ui || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"><\/script>'); }, 200);  </script>
+	<!-- https://cdnjs.com/libraries/jquery -->
+	<!-- https://cdnjs.com/libraries/jqueryui -->
+	<script> setTimeout(function () { window.jQuery || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" type="text/javascript"><\/script>'); }, 100);  </script>
+	<script> setTimeout(function () { window.jQuery.ui || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js" type="text/javascript"><\/script>'); }, 200);  </script>
 *@
 @*
 	<script> (!window.jQuery || (typeof jQuery == 'undefined')) || document.write('<script src="@jquery.GeneralUri" type="text/javascript"><\/script>'); </script>
