@@ -50,6 +50,11 @@
 		.calendarEventDetailList table {
 			border: 0;
 		}
+
+		.divCalendarDetailText {
+			text-align: left;
+			margin: 0.1em;
+		}
 	</style>
 
 	<script type="text/javascript">
@@ -121,8 +126,8 @@
 		grid.ConfigName(Html.NameFor(x => x.MonthDates));
 
 		grid
-		.AddColumn(x => x.EventDate, new CarrotGridColumn { HasHeadingText = false, CellFormatString = WebHelper.ShortDateFormatPattern })
-		.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEvent> {
+			.AddColumn(x => x.EventDate, new CarrotGridColumn { HasHeadingText = false, CellFormatString = WebHelper.ShortDateFormatPattern })
+			.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEvent> {
 			HasHeadingText = false,
 			BodyAttributes = new { @class = "leftAlignCell" },
 			FormatTemplate = @<text>
@@ -136,7 +141,7 @@
 					}
 				}
 			</text>
-		})
+			})
 		.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEvent> {
 			HasHeadingText = false,
 			BodyAttributes = new { @class = "leftAlignCell" },
@@ -151,8 +156,10 @@
 						</b>
 					</div>
 				</div>
-				@Html.Raw(item.EventSeriesDetail)
-				@Html.Raw(item.EventDetail)
+				<div class="divCalendarDetailText">
+					@Html.Raw(item.EventSeriesDetail)
+					@Html.Raw(item.EventDetail)
+				</div>
 			</text>
 		});
 	}

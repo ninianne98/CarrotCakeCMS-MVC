@@ -55,6 +55,11 @@
 		.calendarEventDetailList table {
 			border: 0;
 		}
+
+		.divCalendarDetail2Text {
+			text-align: left;
+			margin: 0.1em;
+		}
 	</style>
 
 	<script type="text/javascript">
@@ -169,23 +174,25 @@
 								@item.EventTitle
 								@if (!item.IsAllDayEvent) {
 									if (item.EventStartTime.HasValue && item.EventEndTime.HasValue) {
-								<span> at </span>
-								@item.EventDate.ToString(WebHelper.ShortTimePattern)
-								<span> - </span>
-								@item.EventEndDate.ToString(WebHelper.ShortTimePattern)
+										<span> at </span>
+										@item.EventDate.ToString(WebHelper.ShortTimePattern)
+										<span> - </span>
+										@item.EventEndDate.ToString(WebHelper.ShortTimePattern)
 									} else if (item.EventStartTime.HasValue) {
-								<span> at </span>
-								@item.EventDate.ToString(WebHelper.ShortTimePattern)
+										<span> at </span>
+										@item.EventDate.ToString(WebHelper.ShortTimePattern)
 									}
 								}
 								@if (item.IsCancelledSeries || item.IsCancelledEvent) {
-								<span> (CANCELLED) </span>
+									<span> (CANCELLED) </span>
 								}
 							</b>
 						</div>
 					</div>
-					@Html.Raw(item.EventSeriesDetail)
-					@Html.Raw(item.EventDetail)
+					<div class="divCalendarDetail2Text">
+						@Html.Raw(item.EventSeriesDetail)
+						@Html.Raw(item.EventDetail)
+					</div>
 				</div>
 			}
 

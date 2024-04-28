@@ -6,6 +6,19 @@ where [TextWidgetAssembly] like '%Carrotware.CMS.UI.Controls.EmailEscapeInBody%'
 update [dbo].[carrot_Widget]
 set [ControlPath] = 'ShowPrettyPhotoGallery:CarrotCake.CMS.Plugins.PhotoGallery.Controllers.HomeController, CarrotCake.CMS.Plugins.PhotoGallery'
 where [ControlPath] like '%PhotoGallery%' AND [ControlPath] like '%ascx'
+	
+
+update [dbo].[carrot_Widget]
+set [ControlPath] = 'CalendarUpcoming:CarrotCake.CMS.Plugins.EventCalendarModule.Controllers.HomeController, CarrotCake.CMS.Plugins.EventCalendarModule'
+where [ControlPath] like '%Calendar%Upcoming%' and [ControlPath] like '%Event%' AND [ControlPath] like '%ascx'
+
+update [dbo].[carrot_Widget]
+set [ControlPath] = 'EventCalendarDisplay2:CarrotCake.CMS.Plugins.EventCalendarModule.Controllers.HomeController, CarrotCake.CMS.Plugins.EventCalendarModule'
+where [ControlPath] like '%CalendarDisplay2%' and [ControlPath] like '%Event%' AND [ControlPath] like '%ascx'
+
+update [dbo].[carrot_Widget]
+set [ControlPath] = 'EventCalendarDisplay:CarrotCake.CMS.Plugins.EventCalendarModule.Controllers.HomeController, CarrotCake.CMS.Plugins.EventCalendarModule'
+where [ControlPath] like '%CalendarDisplay%' and [ControlPath] like '%Event%' AND [ControlPath] like '%ascx'
 
 
 update [dbo].[carrot_Widget]

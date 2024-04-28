@@ -323,6 +323,21 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		private List<SiteNav> _parentsib = null;
+
+		public List<SiteNav> ParentSiblingNav {
+			get {
+				if (_parentsib == null) {
+					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
+						_parentsib = navHelper.GetSiblingNavigation(this.TheSite.SiteID, this.ThePage.Parent_ContentID ?? Guid.Empty, !SecurityData.IsAuthEditor);
+					}
+					_parentsib = TweakData(_parentsib);
+				}
+
+				return _parentsib;
+			}
+		}
+
 		private SiteNav _parentnav = null;
 
 		public SiteNav ParentNav {
