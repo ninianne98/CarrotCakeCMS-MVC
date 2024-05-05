@@ -17,15 +17,15 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 
 	public static class WebHelper {
 
-		public static string ReadEmbededScript(string sResouceName) {
-			string sReturn = null;
+		public static string ReadEmbededScript(string resouceName) {
+			string ret = null;
 
-			Assembly _assembly = Assembly.GetExecutingAssembly();
-			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(sResouceName))) {
-				sReturn = stream.ReadToEnd();
+			Assembly a = Assembly.GetExecutingAssembly();
+			using (var stream = new StreamReader(a.GetManifestResourceStream(resouceName))) {
+				ret = stream.ReadToEnd();
 			}
 
-			return sReturn;
+			return ret;
 		}
 
 		private static string _areaName = null;
@@ -33,9 +33,9 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		public static string AssemblyName {
 			get {
 				if (_areaName == null) {
-					Assembly asmbly = Assembly.GetExecutingAssembly();
+					Assembly a = Assembly.GetExecutingAssembly();
 
-					_areaName = asmbly.GetAssemblyName();
+					_areaName = a.GetAssemblyName();
 				}
 
 				return _areaName;
@@ -71,11 +71,11 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		public static string ShortTimePattern {
 			get {
 				if (_shortTimePattern == null) {
-					DateTimeFormatInfo _dtf = CultureInfo.CurrentCulture.DateTimeFormat;
-					if (_dtf == null) {
-						_dtf = CultureInfo.CreateSpecificCulture("en-US").DateTimeFormat;
+					DateTimeFormatInfo dtf = CultureInfo.CurrentCulture.DateTimeFormat;
+					if (dtf == null) {
+						dtf = CultureInfo.CreateSpecificCulture("en-US").DateTimeFormat;
 					}
-					_shortTimePattern = _dtf.ShortTimePattern ?? "hh:mm tt";
+					_shortTimePattern = dtf.ShortTimePattern ?? "hh:mm tt";
 				}
 
 				return _shortTimePattern;

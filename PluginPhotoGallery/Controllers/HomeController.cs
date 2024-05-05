@@ -36,16 +36,16 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 		[WidgetActionSettingModel("CarrotCake.CMS.Plugins.PhotoGallery.GallerySettings, CarrotCake.CMS.Plugins.PhotoGallery")]
 		public PartialViewResult ShowPrettyPhotoGallery() {
-			GallerySettings settings = new GallerySettings();
+			var settings = new GallerySettings();
 
 			if (WidgetPayload is GallerySettings) {
-				settings = (GallerySettings)WidgetPayload;
+				settings = (GallerySettings)this.WidgetPayload;
 				settings.LoadData();
 			}
 
 			var model = BuildModel(settings);
 
-			if (string.IsNullOrEmpty(settings.AlternateViewFile)) {
+			if (string.IsNullOrWhiteSpace(settings.AlternateViewFile)) {
 				return PartialView(model);
 			} else {
 				return PartialView(settings.AlternateViewFile, model);

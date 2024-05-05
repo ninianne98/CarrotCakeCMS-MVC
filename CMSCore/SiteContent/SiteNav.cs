@@ -157,7 +157,7 @@ namespace Carrotware.CMS.Core {
 		[Display(Name = "Retired")]
 		public bool IsRetired {
 			get {
-				if (SiteData.IsWebView && SiteData.CurrentSiteExists) {
+				if (SiteData.CurrentSiteExists) {
 					return this.RetireDate <= SiteData.CurrentSite.Now;
 				} else {
 					return this.RetireDate <= DateTime.UtcNow;
@@ -168,7 +168,7 @@ namespace Carrotware.CMS.Core {
 		[Display(Name = "Unreleased")]
 		public bool IsUnReleased {
 			get {
-				if (SiteData.IsWebView && SiteData.CurrentSiteExists) {
+				if (SiteData.CurrentSiteExists) {
 					return this.GoLiveDate >= SiteData.CurrentSite.Now;
 				} else {
 					return this.GoLiveDate >= DateTime.UtcNow;

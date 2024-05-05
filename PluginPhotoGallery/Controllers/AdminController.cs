@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -20,9 +21,28 @@ using System.Web.Mvc;
 namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 	public class AdminController : BaseAdminWidgetController {
+		private GalleryHelper _helper;
+
+		protected override void Initialize(RequestContext requestContext) {
+			base.Initialize(requestContext);
+
+			if (this.TestSiteID != Guid.Empty.ToString()) {
+				this.SiteID = new Guid(this.TestSiteID);
+			}
+
+			_helper = new GalleryHelper(this.SiteID);
+		}
+
+		protected override void Dispose(bool disposing) {
+			base.Dispose(disposing);
+
+			if (_helper != null) {
+				_helper.Dispose();
+			}
+		}
 
 		public ActionResult Index() {
-			PagedData<GalleryGroup> model = new PagedData<GalleryGroup>();
+			var model = new PagedData<GalleryGroup>();
 			model.InitOrderBy(x => x.GalleryTitle, true);
 			model.PageSize = 25;
 			model.PageNumber = 1;
@@ -33,19 +53,15 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult Index(PagedData<GalleryGroup> model) {
-			GalleryHelper gh = new GalleryHelper(this.SiteID);
-
 			model.ToggleSort();
 			var srt = model.ParseSort();
 
-			List<GalleryGroup> lst = gh.GalleryGroupListGetBySiteID();
+			model.TotalRecords = _helper.GalleryGroupListGetBySiteIDCount();
+			var query = _helper.GalleryGroupListGetBySiteID();
+			query = query.SortByParm(srt.SortField, srt.SortDirection);
 
-			IQueryable<GalleryGroup> query = lst.AsQueryable();
-			query = query.SortByParm<GalleryGroup>(srt.SortField, srt.SortDirection);
-
-			model.DataSource = query.Skip(model.PageSize * model.PageNumberZeroIndex).Take(model.PageSize).ToList();
-
-			model.TotalRecords = lst.Count();
+			model.DataSource = query.Skip(model.PageSize * model.PageNumberZeroIndex).Take(model.PageSize)
+						.Select(x => new GalleryGroup(x)).ToList();
 
 			ModelState.Clear();
 
@@ -53,17 +69,14 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		}
 
 		public ActionResult EditGallery(Guid id) {
-			GalleryHelper gh = new GalleryHelper(this.SiteID);
-
-			return View("EditGallery", gh.GalleryGroupGetByID(id));
+			return View("EditGallery", _helper.GalleryGroupGetByID(id));
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public ActionResult EditGallery(GalleryGroup model) {
 			if (ModelState.IsValid) {
-				GalleryHelper gh = new GalleryHelper(this.SiteID);
-				GalleryGroup m = gh.GalleryGroupGetByID(model.GalleryID);
+				GalleryGroup m = _helper.GalleryGroupGetByID(model.GalleryID);
 				if (m == null) {
 					m = new GalleryGroup();
 					m.SiteID = this.SiteID;
@@ -101,31 +114,31 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 			if (!model.SaveGallery) {
 				model.LoadGallery();
+
 				return View(model);
 			} else {
 				model.Save();
 				model.LoadGallery();
+
 				return RedirectToAction("EditGalleryPhotos", new { @id = model.GalleryID });
 			}
 		}
 
 		public ActionResult GalleryDatabase() {
-			List<string> lst = new List<string>();
+			var lst = new List<string>();
+			var du = new DatabaseUpdate();
 
-			DatabaseUpdate du = new DatabaseUpdate();
-			DatabaseUpdateResponse dbRes = new DatabaseUpdateResponse();
-			string sqlUpdate = "";
-			string sqlTest = "";
 			try {
-				sqlUpdate = GalleryHelper.ReadEmbededScript("CarrotCake.CMS.Plugins.PhotoGallery.tblGallery.sql");
+				var sqlUpdate = GalleryHelper.ReadEmbededScript("CarrotCake.CMS.Plugins.PhotoGallery.tblGallery.sql");
 
-				sqlTest = "select * from [INFORMATION_SCHEMA].[COLUMNS] where table_name in('tblGalleryImageMeta')";
-				dbRes = du.ApplyUpdateIfNotFound(sqlTest, sqlUpdate, false);
+				var sqlTest = "select * from [INFORMATION_SCHEMA].[COLUMNS] where table_name in('tblGalleryImageMeta')";
 
-				if (dbRes.LastException != null && !string.IsNullOrEmpty(dbRes.LastException.Message)) {
-					lst.Add(dbRes.LastException.Message);
+				var res = du.ApplyUpdateIfNotFound(sqlTest, sqlUpdate, false);
+
+				if (res.LastException != null && !string.IsNullOrEmpty(res.LastException.Message)) {
+					lst.Add(res.LastException.Message);
 				} else {
-					lst.Add(dbRes.Response);
+					lst.Add(res.Response);
 				}
 			} catch (Exception ex) {
 				lst.Add(ex.ToString());
@@ -136,7 +149,6 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 		[HttpGet]
 		public ActionResult EditImageMetaData(string path) {
-			GalleryHelper gh = new GalleryHelper(this.SiteID);
 			string imageFile = string.Empty;
 
 			if (!string.IsNullOrEmpty(path)) {
@@ -145,7 +157,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 			ValidateGalleryImage(imageFile);
 
-			GalleryMetaData model = gh.GalleryMetaDataGetByFilename(imageFile);
+			GalleryMetaData model = _helper.GalleryMetaDataGetByFilename(imageFile);
 			if (model == null) {
 				model = new GalleryMetaData();
 				model.SiteID = this.SiteID;
@@ -160,9 +172,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		[ValidateAntiForgeryToken]
 		[ValidateInput(false)]
 		public ActionResult EditImageMetaData(GalleryMetaData model) {
-			GalleryHelper gh = new GalleryHelper(this.SiteID);
-
-			GalleryMetaData meta = gh.GalleryMetaDataGetByFilename(model.GalleryImage);
+			GalleryMetaData meta = _helper.GalleryMetaDataGetByFilename(model.GalleryImage);
 
 			if (meta == null) {
 				meta = new GalleryMetaData();

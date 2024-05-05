@@ -20,6 +20,7 @@
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -266,18 +267,18 @@
   </ProjectExtensions>
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)\bin\$(TargetName).*" "$(SolutionDir)\CMSAdmin\bin\" /F /R /Y /I /S
-xcopy "$(ProjectDir)\Assets\prettyPhoto\*" "$(SolutionDir)\CMSAdmin\Assets\prettyPhoto\" /F /R /Y /I /S
 xcopy "$(ProjectDir)\Views\*.config" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\" /F /R /Y /I
-
-del "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\*.cshtml"
 
 xcopy "$(ProjectDir)\Views\Admin\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\Admin\" /F /R /Y /I /S
 xcopy "$(ProjectDir)\Views\Home\*.cshtml" "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\Home\" /F /R /Y /I /S
-
-
-
-xcopy "$(SolutionDir)\CMSAdmin\Assets\Admin\*.png" "$(ProjectDir)\Assets\Admin\" /F /R /Y /I /S
 </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>xcopy "$(ProjectDir)\Assets\prettyPhoto\*" "$(SolutionDir)\CMSAdmin\Assets\prettyPhoto\" /F /R /Y /I /S
+xcopy "$(SolutionDir)\CMSAdmin\Assets\Admin\*.png" "$(ProjectDir)\Assets\Admin\" /F /R /Y /I /S
+
+REM del "$(SolutionDir)\CMSAdmin\Views\$(TargetName)\*.cshtml"
+</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

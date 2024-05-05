@@ -44,12 +44,12 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 				//}
 				Dictionary<string, string> _dict = null;
 
-				GalleryHelper gh = new GalleryHelper(SiteID);
-
-				_dict = (from c in gh.GalleryGroupListGetBySiteID()
-						 orderby c.GalleryTitle
-						 where c.SiteID == SiteID
-						 select c).ToList().ToDictionary(k => k.GalleryID.ToString(), v => v.GalleryTitle);
+				using (var gh = new GalleryHelper(this.SiteID)) {
+					_dict = (from c in gh.GalleryGroupListGetBySiteID()
+							 orderby c.GalleryTitle
+							 where c.SiteID == SiteID
+							 select c).ToList().ToDictionary(k => k.GalleryID.ToString(), v => v.GalleryTitle);
+				}
 
 				return _dict;
 			}
@@ -62,7 +62,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 		[Widget(WidgetAttribute.FieldMode.DictionaryList)]
 		public Dictionary<string, string> lstSizes {
 			get {
-				Dictionary<string, string> _dict = new Dictionary<string, string>();
+				var _dict = new Dictionary<string, string>();
 
 				_dict.Add("25", "25px");
 				_dict.Add("50", "50px");
@@ -86,7 +86,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 		[Widget(WidgetAttribute.FieldMode.DictionaryList)]
 		public Dictionary<string, string> lstPrettySkins {
 			get {
-				Dictionary<string, string> _dict = new Dictionary<string, string>();
+				var _dict = new Dictionary<string, string>();
 				_dict.Add("pp_default", "default");
 				_dict.Add("light_square", "light square");
 				_dict.Add("light_rounded", "light rounded");

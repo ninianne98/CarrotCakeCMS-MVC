@@ -18,13 +18,13 @@ using System.Web.Mvc;
 namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 
 	public class HomeController : BaseController {
-		private CalendarDataContext db = CalendarDataContext.GetDataContext();
+		private CalendarDataContext _db = CalendarDataContext.GetDataContext();
 
 		protected override void Dispose(bool disposing) {
 			base.Dispose(disposing);
 
-			if (db != null) {
-				db.Dispose();
+			if (_db != null) {
+				_db.Dispose();
 			}
 		}
 

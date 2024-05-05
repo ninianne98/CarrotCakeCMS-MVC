@@ -19,19 +19,19 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 				model.InstanceId = settings.WidgetClientID;
 
-				GalleryHelper gh = new GalleryHelper(settings.SiteID);
+				using (var gh = new GalleryHelper(settings.SiteID)) {
+					var gal = gh.GalleryGroupGetByID(settings.GalleryID);
 
-				var gal = gh.GalleryGroupGetByID(model.GalleryID);
-
-				if (gal != null) {
-					model.Gallery = gal;
-					model.Images = (from g in gal.GalleryImages
-									where g.GalleryID == model.GalleryID
-									orderby g.ImageOrder ascending
-									select g).ToList();
-				} else {
-					model.Gallery = new GalleryGroup();
-					model.Images = new List<GalleryImageEntry>();
+					if (gal != null) {
+						model.Gallery = gal;
+						model.Images = (from g in gal.GalleryImages
+										where g.GalleryID == settings.GalleryID
+										orderby g.ImageOrder ascending
+										select g).ToList();
+					} else {
+						model.Gallery = new GalleryGroup();
+						model.Images = new List<GalleryImageEntry>();
+					}
 				}
 			}
 

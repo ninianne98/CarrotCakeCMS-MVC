@@ -55,13 +55,13 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 		}
 
 		public void Save() {
-			if (!String.IsNullOrEmpty(this.GalleryImage)) {
+			if (!string.IsNullOrEmpty(this.GalleryImage)) {
 				this.ValidateGalleryImage();
 
-				using (PhotoGalleryDataContext db = PhotoGalleryDataContext.GetDataContext()) {
-					tblGalleryImageMeta gal = (from c in db.tblGalleryImageMetas
-											   where c.GalleryImage.ToLower() == this.GalleryImage.ToLower()
-											   select c).FirstOrDefault();
+				using (var db = PhotoGalleryDataContext.GetDataContext()) {
+					var gal = (from c in db.tblGalleryImageMetas
+							   where c.GalleryImage.ToLower() == this.GalleryImage.ToLower()
+							   select c).FirstOrDefault();
 
 					if (gal == null || this.GalleryImageMetaID == Guid.Empty) {
 						gal = new tblGalleryImageMeta();
@@ -88,7 +88,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 			return this.ImageTitle;
 		}
 
-		public override bool Equals(Object obj) {
+		public override bool Equals(object obj) {
 			//Check for null and compare run-time types.
 			if (obj == null || GetType() != obj.GetType()) return false;
 			if (obj is GalleryMetaData) {

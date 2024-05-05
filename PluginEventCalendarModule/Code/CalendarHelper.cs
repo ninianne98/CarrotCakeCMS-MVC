@@ -35,7 +35,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		public static string HEX_Black = "#000000";
 
 		public static void SeedCalendarCategories(Guid siteID) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				if (!db.carrot_CalendarEventCategories.Where(x => x.SiteID == siteID).Any()) {
 					carrot_CalendarEventCategory itm = new carrot_CalendarEventCategory();
 
@@ -57,7 +57,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		public static List<vw_carrot_CalendarEvent> GetDisplayEvents(Guid siteid, DateTime dtStart, DateTime dtEnd, int takeTop, bool activeOnly) {
 			IQueryable<vw_carrot_CalendarEvent> events = null;
 
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				if (activeOnly) {
 					events = (from c in db.vw_carrot_CalendarEvents
 							  where c.EventDate >= dtStart
@@ -86,7 +86,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		}
 
 		public static List<carrot_CalendarEventCategory> GetCalendarCategories(Guid siteID) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				return (from c in db.carrot_CalendarEventCategories
 						orderby c.CategoryName
 						where c.SiteID == siteID
@@ -95,7 +95,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		}
 
 		public static carrot_CalendarEventCategory GetCalendarCategory(Guid calendarEventCategoryID) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				return (from c in db.carrot_CalendarEventCategories
 						where c.CalendarEventCategoryID == calendarEventCategoryID
 						select c).FirstOrDefault();
@@ -103,7 +103,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		}
 
 		public static List<carrot_CalendarEventProfile> GetProfileList(Guid siteID) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				return (from c in db.carrot_CalendarEventProfiles
 						orderby c.EventStartDate
 						where c.SiteID == siteID
@@ -112,7 +112,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		}
 
 		public static List<vw_carrot_CalendarEventProfile> GetProfileView(Guid siteID) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				return (from c in db.vw_carrot_CalendarEventProfiles
 						orderby c.EventStartDate
 						where c.SiteID == siteID
@@ -121,7 +121,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		}
 
 		public static List<vw_carrot_CalendarEventProfile> GetProfileView(Guid siteID, int eventYear) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				DateTime dateStart = DateTime.MinValue;
 				DateTime dateEnd = DateTime.MaxValue;
 
@@ -163,7 +163,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 			lst2.Add((int)EventLookupType.Current, "Current Events");
 			lst2.Add((int)EventLookupType.Future, "Future Only");
 
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				MinMaxDate mm = (from c in db.vw_carrot_CalendarEventProfiles
 								 where c.SiteID == siteID
 								 group c by 1 into g
@@ -191,7 +191,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		}
 
 		public static carrot_CalendarEventProfile GetProfile(Guid calendarEventProfileID) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				return (from c in db.carrot_CalendarEventProfiles
 						where c.CalendarEventProfileID == calendarEventProfileID
 						select c).FirstOrDefault();
@@ -199,7 +199,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		}
 
 		public static void RemoveEvent(Guid calendarEventProfileID) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				var profile = (from c in db.carrot_CalendarEventProfiles
 							   where c.CalendarEventProfileID == calendarEventProfileID
 							   select c).FirstOrDefault();
@@ -219,7 +219,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		public static carrot_CalendarEventProfile CopyEvent(Guid calendarEventProfileID) {
 			var srcProfile = GetProfile(calendarEventProfileID);
 
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				var item = new carrot_CalendarEventProfile();
 				item.CalendarEventProfileID = Guid.NewGuid();
 				item.SiteID = srcProfile.SiteID;
@@ -266,7 +266,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		}
 
 		public static List<carrot_CalendarEvent> GetEventList(Guid calendarEventProfileID) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				return (from c in db.carrot_CalendarEvents
 						orderby c.EventDate
 						where c.CalendarEventProfileID == calendarEventProfileID
@@ -275,7 +275,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		}
 
 		public static List<vw_carrot_CalendarEvent> GetEventView(Guid calendarEventProfileID) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				return (from c in db.vw_carrot_CalendarEvents
 						orderby c.EventDate
 						where c.CalendarEventProfileID == calendarEventProfileID
@@ -294,7 +294,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		}
 
 		public static carrot_CalendarEvent GetEvent(Guid calendarEventID) {
-			using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
+			using (var db = CalendarDataContext.GetDataContext()) {
 				return (from c in db.carrot_CalendarEvents
 						where c.CalendarEventID == calendarEventID
 						select c).FirstOrDefault();
@@ -303,7 +303,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 
 		public static Dictionary<int, string> DaysOfTheWeek {
 			get {
-				Dictionary<int, string> daysOfWeek = new Dictionary<int, string>();
+				var daysOfWeek = new Dictionary<int, string>();
 
 				daysOfWeek.Add(64, DayOfWeek.Sunday.ToString());
 				daysOfWeek.Add(1, DayOfWeek.Monday.ToString());

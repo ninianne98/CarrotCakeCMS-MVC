@@ -58,10 +58,10 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 		}
 
 		public void Save() {
-			using (PhotoGalleryDataContext db = PhotoGalleryDataContext.GetDataContext()) {
-				tblGalleryImage gal = (from c in db.tblGalleryImages
-									   where c.GalleryImageID == this.GalleryImageID
-									   select c).FirstOrDefault();
+			using (var db = PhotoGalleryDataContext.GetDataContext()) {
+				var gal = (from c in db.tblGalleryImages
+						   where c.GalleryImageID == this.GalleryImageID
+						   select c).FirstOrDefault();
 
 				if (gal == null || this.GalleryID == Guid.Empty) {
 					gal = new tblGalleryImage();
@@ -88,7 +88,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 			return this.GalleryImage;
 		}
 
-		public override bool Equals(Object obj) {
+		public override bool Equals(object obj) {
 			//Check for null and compare run-time types.
 			if (obj == null || GetType() != obj.GetType()) return false;
 			if (obj is GalleryImageEntry) {
@@ -102,7 +102,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery {
 		}
 
 		public override int GetHashCode() {
-			return GalleryImageID.GetHashCode() ^ GalleryID.GetHashCode() ^ GalleryImage.GetHashCode();
+			return this.GalleryImageID.GetHashCode() ^ this.GalleryID.GetHashCode() ^ this.GalleryImage.GetHashCode();
 		}
 	}
 }

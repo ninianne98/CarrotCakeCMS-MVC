@@ -23,13 +23,13 @@ using System.Web.Routing;
 namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 
 	public class AdminController : BaseAdminWidgetController {
-		private CalendarDataContext db = CalendarDataContext.GetDataContext();
+		private CalendarDataContext _db = CalendarDataContext.GetDataContext();
 
 		protected override void Dispose(bool disposing) {
 			base.Dispose(disposing);
 
-			if (db != null) {
-				db.Dispose();
+			if (_db != null) {
+				_db.Dispose();
 			}
 		}
 
@@ -121,30 +121,29 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 			if (ModelState.IsValid) {
 				bool bAdd = false;
 
-				using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
-					var itm = (from c in db.carrot_CalendarEventCategories
-							   where c.CalendarEventCategoryID == model.CalendarEventCategoryID
-							   select c).FirstOrDefault();
+				var itm = (from c in _db.carrot_CalendarEventCategories
+						   where c.CalendarEventCategoryID == model.CalendarEventCategoryID
+						   select c).FirstOrDefault();
 
-					if (itm == null) {
-						bAdd = true;
-						itm = new carrot_CalendarEventCategory();
-						itm.CalendarEventCategoryID = Guid.NewGuid();
-						itm.SiteID = this.SiteID;
+				if (itm == null) {
+					bAdd = true;
+					itm = new carrot_CalendarEventCategory();
+					itm.CalendarEventCategoryID = Guid.NewGuid();
+					itm.SiteID = this.SiteID;
 
-						model.CalendarEventCategoryID = itm.CalendarEventCategoryID;
-					}
-
-					itm.CategoryName = model.CategoryName;
-					itm.CategoryFGColor = model.CategoryFGColor;
-					itm.CategoryBGColor = model.CategoryBGColor;
-
-					if (bAdd) {
-						db.carrot_CalendarEventCategories.InsertOnSubmit(itm);
-					}
-
-					db.SubmitChanges();
+					model.CalendarEventCategoryID = itm.CalendarEventCategoryID;
 				}
+
+				itm.CategoryName = model.CategoryName;
+				itm.CategoryFGColor = model.CategoryFGColor;
+				itm.CategoryBGColor = model.CategoryBGColor;
+
+				if (bAdd) {
+					_db.carrot_CalendarEventCategories.InsertOnSubmit(itm);
+				}
+
+				_db.SubmitChanges();
+
 				return RedirectToAction(this.GetActionName(x => x.CategoryDetail(model.CalendarEventCategoryID)), new { @id = model.CalendarEventCategoryID });
 			}
 
@@ -162,7 +161,6 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 
 		[HttpPost]
 		public ActionResult ProfileList(ProfileDisplayModel model) {
-			var selected = model.SelectedValue;
 			model.SiteID = this.SiteID;
 			model.Load();
 
@@ -199,7 +197,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 					model.ItemData.CalendarEventProfileID = p.CalendarEventProfileID;
 				}
 
-				var currItem = (from c in db.carrot_CalendarEventProfiles
+				var currItem = (from c in _db.carrot_CalendarEventProfiles
 								where c.CalendarEventProfileID == model.ItemID
 								select c).FirstOrDefault();
 
@@ -253,12 +251,12 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 				}
 
 				if (bAdd) {
-					db.carrot_CalendarEventProfiles.InsertOnSubmit(currItem);
+					_db.carrot_CalendarEventProfiles.InsertOnSubmit(currItem);
 				}
 
-				CalendarFrequencyHelper.SaveFrequencies(db, new CalendarEvent(currItem), origItem);
+				CalendarFrequencyHelper.SaveFrequencies(_db, new CalendarEvent(currItem), origItem);
 
-				db.SubmitChanges();
+				_db.SubmitChanges();
 
 				return RedirectToAction(this.GetActionName(x => x.EventDetail(model.ItemID)), new { @id = model.ItemID });
 			}
@@ -305,30 +303,28 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 			if (ModelState.IsValid) {
 				bool bAdd = false;
 
-				using (CalendarDataContext db = CalendarDataContext.GetDataContext()) {
-					var currItem = (from c in db.carrot_CalendarEvents
-									where c.CalendarEventID == model.ItemID
-									select c).FirstOrDefault();
+				var currItem = (from c in _db.carrot_CalendarEvents
+								where c.CalendarEventID == model.ItemID
+								select c).FirstOrDefault();
 
-					if (currItem == null) {
-						bAdd = true;
-						model.ItemID = Guid.NewGuid();
-						currItem = new carrot_CalendarEvent();
-						currItem.CalendarEventID = model.ItemID;
-					}
-
-					currItem.EventDetail = model.ItemData.EventDetail;
-					currItem.IsCancelled = model.ItemData.IsCancelled;
-
-					currItem.EventStartTime = CalendarHelper.GetTimeSpan(model.EventStartTime);
-					currItem.EventEndTime = CalendarHelper.GetTimeSpan(model.EventEndTime);
-
-					if (bAdd) {
-						db.carrot_CalendarEvents.InsertOnSubmit(currItem);
-					}
-
-					db.SubmitChanges();
+				if (currItem == null) {
+					bAdd = true;
+					model.ItemID = Guid.NewGuid();
+					currItem = new carrot_CalendarEvent();
+					currItem.CalendarEventID = model.ItemID;
 				}
+
+				currItem.EventDetail = model.ItemData.EventDetail;
+				currItem.IsCancelled = model.ItemData.IsCancelled;
+
+				currItem.EventStartTime = CalendarHelper.GetTimeSpan(model.EventStartTime);
+				currItem.EventEndTime = CalendarHelper.GetTimeSpan(model.EventEndTime);
+
+				if (bAdd) {
+					_db.carrot_CalendarEvents.InsertOnSubmit(currItem);
+				}
+
+				_db.SubmitChanges();
 
 				return RedirectToAction(this.GetActionName(x => x.EventDetailSingle(model.ItemID)), new { @id = model.ItemID });
 			}

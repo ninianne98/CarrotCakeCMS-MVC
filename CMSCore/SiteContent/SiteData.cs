@@ -291,7 +291,7 @@ namespace Carrotware.CMS.Core {
 
 		public DateTime Now {
 			get {
-				if (IsWebView && SiteData.CurrentSite != null) {
+				if (SiteData.CurrentSite != null) {
 					return SiteData.CurrentSite.ConvertUTCToSiteTime(DateTime.UtcNow);
 				} else {
 					return DateTime.Now;
@@ -302,10 +302,8 @@ namespace Carrotware.CMS.Core {
 		public TimeZoneInfo SiteTimeZoneInfo {
 			get {
 				TimeZoneInfo oTZ = TimeZoneInfo.Local;
-				if (IsWebView) {
-					if (!string.IsNullOrEmpty(this.TimeZoneIdentifier)) {
-						try { oTZ = TimeZoneInfo.FindSystemTimeZoneById(this.TimeZoneIdentifier); } catch { }
-					}
+				if (!string.IsNullOrEmpty(this.TimeZoneIdentifier)) {
+					try { oTZ = TimeZoneInfo.FindSystemTimeZoneById(this.TimeZoneIdentifier); } catch { }
 				}
 				return oTZ;
 			}

@@ -27,39 +27,39 @@ namespace Carrotware.CMS.Core {
 
 		public SecurityData() { }
 
-		public static UserRole FindRole(string RoleName) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from r in _db.membership_Roles
-						where r.Name == RoleName
+		public static UserRole FindRole(string roleName) {
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from r in db.membership_Roles
+						where r.Name == roleName
 						select new UserRole(r)).FirstOrDefault();
 			}
 		}
 
 		public static UserRole FindRoleByID(string roleID) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from r in _db.membership_Roles
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from r in db.membership_Roles
 						where r.Id == roleID
 						select new UserRole(r)).FirstOrDefault();
 			}
 		}
 
 		public static List<UserRole> GetRoleList() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from r in _db.membership_Roles
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from r in db.membership_Roles
 						orderby r.Name
 						select new UserRole(r)).ToList();
 			}
 		}
 
 		public static List<UserRole> GetRoleListRestricted() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
+			using (var db = CarrotCMSDataContext.Create()) {
 				if (!SecurityData.IsAdmin) {
-					return (from r in _db.membership_Roles
+					return (from r in db.membership_Roles
 							where r.Name != SecurityData.CMSGroup_Users && r.Name != SecurityData.CMSGroup_Admins
 							orderby r.Name
 							select new UserRole(r)).ToList();
 				} else {
-					return (from r in _db.membership_Roles
+					return (from r in db.membership_Roles
 							where r.Name != SecurityData.CMSGroup_Users
 							orderby r.Name
 							select new UserRole(r)).ToList();
@@ -77,9 +77,9 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static UserProfile GetProfileByUserID(Guid userId) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from u in _db.membership_Users
-						join ud1 in _db.carrot_UserDatas on u.Id equals ud1.UserKey into ud2
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from u in db.membership_Users
+						join ud1 in db.carrot_UserDatas on u.Id equals ud1.UserKey into ud2
 						from ud in ud2.DefaultIfEmpty()
 						where ud.UserId == userId
 						select new UserProfile(u, ud)).FirstOrDefault();
@@ -87,9 +87,9 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static UserProfile GetProfileByUserName(string userName) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from u in _db.membership_Users
-						join ud1 in _db.carrot_UserDatas on u.Id equals ud1.UserKey into ud2
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from u in db.membership_Users
+						join ud1 in db.carrot_UserDatas on u.Id equals ud1.UserKey into ud2
 						from ud in ud2.DefaultIfEmpty()
 						where u.UserName == userName
 						select new UserProfile(u, ud)).FirstOrDefault();
@@ -97,9 +97,9 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static List<UserProfile> GetUserProfileSearch(string searchTerm) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from u in _db.membership_Users
-						join ud1 in _db.carrot_UserDatas on u.Id equals ud1.UserKey into ud2
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from u in db.membership_Users
+						join ud1 in db.carrot_UserDatas on u.Id equals ud1.UserKey into ud2
 						from ud in ud2.DefaultIfEmpty()
 						where u.UserName.Contains(searchTerm)
 								   || u.Email.Contains(searchTerm)
@@ -112,16 +112,16 @@ namespace Carrotware.CMS.Core {
 			List<string> admins = null;
 			List<string> editors = null;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				admins = (from ur in _db.membership_UserRoles
-						  join u in _db.membership_Users on ur.UserId equals u.Id
-						  join r in _db.membership_Roles on ur.RoleId equals r.Id
-						  join ud in _db.carrot_UserDatas on u.Id equals ud.UserKey
+			using (var db = CarrotCMSDataContext.Create()) {
+				admins = (from ur in db.membership_UserRoles
+						  join u in db.membership_Users on ur.UserId equals u.Id
+						  join r in db.membership_Roles on ur.RoleId equals r.Id
+						  join ud in db.carrot_UserDatas on u.Id equals ud.UserKey
 						  where r.Name == CMSGroup_Admins
 						  select ud.UserKey).ToList();
 
-				editors = (from sm in _db.carrot_UserSiteMappings
-						   join ud in _db.carrot_UserDatas on sm.UserId equals ud.UserId
+				editors = (from sm in db.carrot_UserSiteMappings
+						   join ud in db.carrot_UserDatas on sm.UserId equals ud.UserId
 						   where sm.SiteID == SiteData.CurrentSiteID
 						   select ud.UserKey).ToList();
 			}
@@ -142,21 +142,21 @@ namespace Carrotware.CMS.Core {
 			List<string> admins = null;
 			List<string> editors = null;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				admins = (from ur in _db.membership_UserRoles
-						  join u in _db.membership_Users on ur.UserId equals u.Id
-						  join r in _db.membership_Roles on ur.RoleId equals r.Id
-						  join ud in _db.carrot_UserDatas on u.Id equals ud.UserKey
+			using (var db = CarrotCMSDataContext.Create()) {
+				admins = (from ur in db.membership_UserRoles
+						  join u in db.membership_Users on ur.UserId equals u.Id
+						  join r in db.membership_Roles on ur.RoleId equals r.Id
+						  join ud in db.carrot_UserDatas on u.Id equals ud.UserKey
 						  where r.Name == CMSGroup_Admins
 						  select ud.UserKey).ToList();
 
-				editors = (from sm in _db.carrot_UserSiteMappings
-						   join ud in _db.carrot_UserDatas on sm.UserId equals ud.UserId
+				editors = (from sm in db.carrot_UserSiteMappings
+						   join ud in db.carrot_UserDatas on sm.UserId equals ud.UserId
 						   where sm.SiteID == SiteData.CurrentSiteID
 						   select ud.UserKey).ToList();
 
-				usrs = (from u in _db.membership_Users
-						join ud1 in _db.carrot_UserDatas on u.Id equals ud1.UserKey into ud2
+				usrs = (from u in db.membership_Users
+						join ud1 in db.carrot_UserDatas on u.Id equals ud1.UserKey into ud2
 						from ud in ud2.DefaultIfEmpty()
 						where (u.UserName.Contains(searchTerm)
 									|| u.Email.Contains(searchTerm))
@@ -175,10 +175,10 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public static List<ApplicationUser> GetUserListByName(string usrName) {
+		public static List<ApplicationUser> GetUserListByName(string userName) {
 			using (var securityHelper = new SecurityHelper()) {
 				return (from u in securityHelper.DataContext.Users
-						where (u.UserName.Contains(usrName))
+						where (u.UserName.Contains(userName))
 						select securityHelper.UserManager.FindByName(u.UserName)).Take(50).ToList();
 			}
 		}
@@ -233,7 +233,7 @@ namespace Carrotware.CMS.Core {
 		public static bool GetIsAdminFromCache() {
 			bool keyVal = false;
 			try {
-				if (SiteData.IsWebView && IsAuthenticated) {
+				if (IsAuthenticated) {
 					string key = string.Format("{0}_{1}", keyIsAdmin, SecurityData.CurrentUserIdentityName);
 					if (HttpContext.Current.Cache[key] != null) {
 						keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
@@ -251,7 +251,7 @@ namespace Carrotware.CMS.Core {
 		public static bool GetIsSiteEditorFromCache() {
 			bool keyVal = false;
 			try {
-				if (SiteData.IsWebView && IsAuthenticated) {
+				if (IsAuthenticated) {
 					string key = string.Format("{0}_{1}_{2}", keyIsSiteEditor, SecurityData.CurrentUserIdentityName, SiteData.CurrentSiteID);
 					if (HttpContext.Current.Cache[key] != null) {
 						keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
@@ -278,7 +278,7 @@ namespace Carrotware.CMS.Core {
 		public static bool IsEditor {
 			get {
 				try {
-					if (SiteData.IsWebView && IsAuthenticated) {
+					if (IsAuthenticated) {
 						return IsUserInRole(SecurityData.CMSGroup_Editors);
 					}
 				} catch (Exception ex) {
@@ -291,7 +291,7 @@ namespace Carrotware.CMS.Core {
 		public static bool IsUsers {
 			get {
 				try {
-					if (SiteData.IsWebView && IsAuthenticated) {
+					if (IsAuthenticated) {
 						return IsUserInRole(SecurityData.CMSGroup_Users);
 					}
 				} catch (Exception ex) {
@@ -309,11 +309,7 @@ namespace Carrotware.CMS.Core {
 
 		public static bool IsAuthenticated {
 			get {
-				if (SiteData.IsWebView && UserPrincipal.Identity.IsAuthenticated) {
-					return true;
-				}
-
-				return false;
+				return UserPrincipal.Identity.IsAuthenticated;
 			}
 		}
 
@@ -334,7 +330,7 @@ namespace Carrotware.CMS.Core {
 		public static bool IsUserInRole(string userName, string groupName) {
 			bool keyVal = false;
 
-			if (SiteData.IsWebView && IsAuthenticated) {
+			if (IsAuthenticated) {
 				string key = string.Format("{0}_{1}_{2}", keyIsUserInRole, userName, groupName);
 
 				if (HttpContext.Current.Cache[key] != null) {
@@ -360,7 +356,7 @@ namespace Carrotware.CMS.Core {
 
 		public static bool IsAuthEditor {
 			get {
-				if (SiteData.IsWebView && IsAuthenticated) {
+				if (IsAuthenticated) {
 					return AdvancedEditMode || IsAdmin || IsSiteEditor;
 				} else {
 					return false;
@@ -370,7 +366,7 @@ namespace Carrotware.CMS.Core {
 
 		public static bool IsAuthUser {
 			get {
-				if (SiteData.IsWebView && IsAuthenticated) {
+				if (IsAuthenticated) {
 					return IsAdmin || IsSiteEditor || IsUsers;
 				} else {
 					return false;
@@ -391,16 +387,16 @@ namespace Carrotware.CMS.Core {
 		public static UserProfile CurrentUser {
 			get {
 				UserProfile currentUser = null;
-				if (SiteData.IsWebView && IsAuthenticated) {
+				if (IsAuthenticated) {
 					string userName = SecurityData.CurrentUserIdentityName;
 					string key = string.Format("cms_CurrentUserProfile_{0}", userName);
 
 					if (HttpContext.Current.Cache[key] != null) {
 						currentUser = (UserProfile)HttpContext.Current.Cache[key];
 					} else {
-						using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-							currentUser = (from u in _db.membership_Users
-										   join ud1 in _db.carrot_UserDatas on u.Id equals ud1.UserKey into ud2
+						using (var db = CarrotCMSDataContext.Create()) {
+							currentUser = (from u in db.membership_Users
+										   join ud1 in db.carrot_UserDatas on u.Id equals ud1.UserKey into ud2
 										   from ud in ud2.DefaultIfEmpty()
 										   where u.UserName == userName
 										   select new UserProfile(u, ud)).FirstOrDefault();
@@ -425,15 +421,15 @@ namespace Carrotware.CMS.Core {
 			get {
 				ExtendedUserData currentUser = null;
 
-				if (SiteData.IsWebView && IsAuthenticated) {
+				if (IsAuthenticated) {
 					string userName = SecurityData.CurrentUserIdentityName;
 					string key = string.Format("cms_CurrentExUser_{0}", userName);
 
 					if (HttpContext.Current.Cache[key] != null) {
 						currentUser = (ExtendedUserData)HttpContext.Current.Cache[key];
 					} else {
-						using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-							currentUser = (from u in _db.vw_carrot_UserDatas
+						using (var db = CarrotCMSDataContext.Create()) {
+							currentUser = (from u in db.vw_carrot_UserDatas
 										   where u.UserName == userName
 										   select new ExtendedUserData(u)).FirstOrDefault();
 						}
@@ -486,7 +482,7 @@ namespace Carrotware.CMS.Core {
 		public static bool AdvancedEditMode {
 			get {
 				bool _Advanced = false;
-				if (SiteData.IsWebView && IsAuthenticated) {
+				if (IsAuthenticated) {
 					if (HttpContext.Current.Request.QueryString[SiteData.AdvancedEditParameter] != null && (SecurityData.IsAdmin || SecurityData.IsSiteEditor)) {
 						_Advanced = true;
 					} else {
@@ -504,7 +500,7 @@ namespace Carrotware.CMS.Core {
 
 		public static string CurrentUserIdentityName {
 			get {
-				if (SiteData.IsWebView && IsAuthenticated) {
+				if (IsAuthenticated) {
 					return UserPrincipal.Identity.Name.ToLowerInvariant();
 				}
 				return string.Empty;
@@ -627,17 +623,17 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static bool RemoveUserFromRole(string userName, string roleName) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				membership_UserRole usrRole = (from r in _db.membership_Roles
-											   join ur in _db.membership_UserRoles on r.Id equals ur.RoleId
-											   join u in _db.membership_Users on ur.UserId equals u.Id
+			using (var db = CarrotCMSDataContext.Create()) {
+				membership_UserRole usrRole = (from r in db.membership_Roles
+											   join ur in db.membership_UserRoles on r.Id equals ur.RoleId
+											   join u in db.membership_Users on ur.UserId equals u.Id
 											   where r.Name == roleName
 													   && u.UserName == userName
 											   select ur).FirstOrDefault();
 
 				if (usrRole != null) {
-					_db.membership_UserRoles.DeleteOnSubmit(usrRole);
-					_db.SubmitChanges();
+					db.membership_UserRoles.DeleteOnSubmit(usrRole);
+					db.SubmitChanges();
 
 					return true;
 				}
@@ -646,18 +642,18 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static bool AddUserToRole(string userName, string roleName) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				membership_Role role = (from r in _db.membership_Roles
+			using (var db = CarrotCMSDataContext.Create()) {
+				membership_Role role = (from r in db.membership_Roles
 										where r.Name == roleName
 										select r).FirstOrDefault();
 
-				membership_User user = (from u in _db.membership_Users
+				membership_User user = (from u in db.membership_Users
 										where u.UserName == userName
 										select u).FirstOrDefault();
 
-				membership_UserRole usrRole = (from r in _db.membership_Roles
-											   join ur in _db.membership_UserRoles on r.Id equals ur.RoleId
-											   join u in _db.membership_Users on ur.UserId equals u.Id
+				membership_UserRole usrRole = (from r in db.membership_Roles
+											   join ur in db.membership_UserRoles on r.Id equals ur.RoleId
+											   join u in db.membership_Users on ur.UserId equals u.Id
 											   where r.Name == roleName
 													   && u.UserName == userName
 											   select ur).FirstOrDefault();
@@ -666,8 +662,8 @@ namespace Carrotware.CMS.Core {
 					usrRole = new membership_UserRole();
 					usrRole.UserId = user.Id;
 					usrRole.RoleId = role.Id;
-					_db.membership_UserRoles.InsertOnSubmit(usrRole);
-					_db.SubmitChanges();
+					db.membership_UserRoles.InsertOnSubmit(usrRole);
+					db.SubmitChanges();
 
 					return true;
 				}
@@ -676,20 +672,20 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static bool AddUserToRole(Guid UserId, string roleName) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				membership_Role role = (from r in _db.membership_Roles
+			using (var db = CarrotCMSDataContext.Create()) {
+				membership_Role role = (from r in db.membership_Roles
 										where r.Name == roleName
 										select r).FirstOrDefault();
 
-				membership_User user = (from u in _db.membership_Users
-										join ud in _db.carrot_UserDatas on u.Id equals ud.UserKey
+				membership_User user = (from u in db.membership_Users
+										join ud in db.carrot_UserDatas on u.Id equals ud.UserKey
 										where ud.UserId == UserId
 										select u).FirstOrDefault();
 
-				membership_UserRole usrRole = (from r in _db.membership_Roles
-											   join ur in _db.membership_UserRoles on r.Id equals ur.RoleId
-											   join u in _db.membership_Users on ur.UserId equals u.Id
-											   join ud in _db.carrot_UserDatas on u.Id equals ud.UserKey
+				membership_UserRole usrRole = (from r in db.membership_Roles
+											   join ur in db.membership_UserRoles on r.Id equals ur.RoleId
+											   join u in db.membership_Users on ur.UserId equals u.Id
+											   join ud in db.carrot_UserDatas on u.Id equals ud.UserKey
 											   where r.Name == roleName
 													   && ud.UserId == UserId
 											   select ur).FirstOrDefault();
@@ -698,8 +694,8 @@ namespace Carrotware.CMS.Core {
 					usrRole = new membership_UserRole();
 					usrRole.UserId = user.Id;
 					usrRole.RoleId = role.Id;
-					_db.membership_UserRoles.InsertOnSubmit(usrRole);
-					_db.SubmitChanges();
+					db.membership_UserRoles.InsertOnSubmit(usrRole);
+					db.SubmitChanges();
 
 					return true;
 				}

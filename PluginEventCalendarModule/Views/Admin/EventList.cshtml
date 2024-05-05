@@ -25,18 +25,20 @@
 		FormatTemplate = @<text> @CarrotWeb.ActionImage("EventDetailSingle", "Admin", new { @id = @item.CalendarEventID }, "~/assets/admin/images/pencil.png", String.Format("This occurrence {0:yyyy-MM-dd}", item.EventDate), null, null) </text>
 	})
 	.AddColumn(x => x.EventDate, new CarrotGridColumn { HasHeadingText = false, CellFormatString = WebHelper.ShortDateFormatPattern })
-	.AddColumn(x => x.IsCancelledEvent, new CarrotGridBooleanImageColumn {
-		HasHeadingText = false,
-		AlternateTextTrue = "Event Cancelled",
-		AlternateTextFalse = "Event Active",
-		ImagePathTrue = "~/Assets/Admin/Images/lightbulb_off.png",
-		ImagePathFalse = "~/Assets/Admin/Images/lightbulb.png", })
 	.AddColumn(x => x.IsCancelledSeries, new CarrotGridBooleanImageColumn {
 		HasHeadingText = false,
 		AlternateTextTrue = "Series Cancelled",
 		AlternateTextFalse = "Series Active",
 		ImagePathTrue = "~/Assets/Admin/Images/lightbulb_off.png",
-		ImagePathFalse = "~/Assets/Admin/Images/lightbulb.png", })
+		ImagePathFalse = "~/Assets/Admin/Images/lightbulb.png"
+	})
+	.AddColumn(x => x.IsCancelledEvent, new CarrotGridBooleanImageColumn {
+		HasHeadingText = false,
+		AlternateTextTrue = "Event Cancelled",
+		AlternateTextFalse = "Event Active",
+		ImagePathTrue = "~/Assets/Admin/Images/lightbulb_off.png",
+		ImagePathFalse = "~/Assets/Admin/Images/lightbulb.png"
+	})
 	.AddColumn(x => x.IsPublic, new CarrotGridBooleanImageColumn {
 		HasHeadingText = false,
 		AlternateTextTrue = "Public Event",
@@ -51,7 +53,8 @@
 					<b> @item.EventTitle </b> @item.FrequencyName
 				</div>
 			</div>
-			@string.Format(WebHelper.ShortDateFormatPattern, item.EventStartDate) to @string.Format(WebHelper.ShortDateFormatPattern, item.EventEndDate) <br />
+			@string.Format(WebHelper.ShortDateFormatPattern, item.EventStartDate) to @string.Format(WebHelper.ShortDateFormatPattern, item.EventEndDate)
+			<br />
 			@Html.Raw(item.EventSeriesDetail)
 			@Html.Raw(item.EventDetail)
 		</text>

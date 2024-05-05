@@ -96,8 +96,9 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 		}
 
 		public void LoadGallery() {
-			GalleryHelper gh = new GalleryHelper(this.SiteID);
-			this.Gallery = gh.GalleryGroupGetByID(this.GalleryID);
+			using (var gh = new GalleryHelper(this.SiteID)) {
+				this.Gallery = gh.GalleryGroupGetByID(this.GalleryID);
+			}
 		}
 
 		protected void LoadLists() {
@@ -201,35 +202,34 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 		}
 
 		public void Save() {
-			var gh = new GalleryHelper(this.SiteID);
+			using (var gh = new GalleryHelper(this.SiteID)) {
+				Dictionary<int, string> images = ParseGalleryImages();
 
-			Dictionary<int, string> images = ParseGalleryImages();
+				if (images != null) {
+					int pos = 0;
+					foreach (var img in images) {
+						if (!string.IsNullOrEmpty(img.Value)) {
+							var theImg = gh.GalleryImageEntryGetByFilename(this.GalleryID, img.Value);
 
-			if (images != null) {
-				int pos = 0;
-				foreach (var img in images) {
-					if (!string.IsNullOrEmpty(img.Value)) {
-						var theImg = gh.GalleryImageEntryGetByFilename(this.GalleryID, img.Value);
+							if (theImg == null) {
+								theImg = new GalleryImageEntry();
+								theImg.GalleryImage = img.Value;
+								theImg.GalleryImageID = Guid.NewGuid();
+								theImg.GalleryID = this.GalleryID;
+							}
 
-						if (theImg == null) {
-							theImg = new GalleryImageEntry();
-							theImg.GalleryImage = img.Value;
-							theImg.GalleryImageID = Guid.NewGuid();
-							theImg.GalleryID = this.GalleryID;
+							theImg.ImageOrder = pos;
+
+							theImg.Save();
 						}
 
-						theImg.ImageOrder = pos;
-
-						theImg.Save();
+						pos++;
 					}
 
-					pos++;
+					List<string> lst = (from l in images select l.Value.ToLower()).ToList();
+
+					gh.GalleryImageCleanup(this.GalleryID, lst);
 				}
-
-				List<string> lst = (from l in images
-									select l.Value.ToLower()).ToList();
-
-				gh.GalleryImageCleanup(this.GalleryID, lst);
 			}
 		}
 	}

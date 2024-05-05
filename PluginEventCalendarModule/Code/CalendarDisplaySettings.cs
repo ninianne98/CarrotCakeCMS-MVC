@@ -39,7 +39,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 			base.LoadData();
 
 			this.GenerateCss = Convert.ToBoolean(this.GetParmValue("GenerateCss", "true"));
-			this.SpecifiedCssFile = this.GetParmValue("SpecifiedCssFile", String.Empty);
+			this.SpecifiedCssFile = this.GetParmValue("SpecifiedCssFile", string.Empty);
 		}
 	}
 }
