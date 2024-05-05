@@ -1,8 +1,15 @@
-﻿/*! jQuery UI - v1.13.2 - 2023-04-13
-* http://jqueryui.com
-* Includes: draggable.css, core.css, resizable.css, selectable.css, sortable.css, accordion.css, autocomplete.css, menu.css, button.css, controlgroup.css, checkboxradio.css, datepicker.css, dialog.css, progressbar.css, selectmenu.css, slider.css, spinner.css, tabs.css, tooltip.css, theme.css
+﻿/*! jQuery UI - v1.13.3 - 2024-04-26
+* https://jqueryui.com
+* Includes: core.css, accordion.css, autocomplete.css, menu.css, button.css, controlgroup.css, checkboxradio.css, datepicker.css, dialog.css, draggable.css, resizable.css, progressbar.css, selectable.css, selectmenu.css, slider.css, sortable.css, spinner.css, tabs.css, tooltip.css, theme.css
 * To view and modify this theme, visit http://jqueryui.com/themeroller/?scope=&folderName=custom-theme&bgImgOpacityHeader=100&bgImgOpacityContent=100&bgImgOpacityDefault=80&bgImgOpacityHover=100&bgImgOpacityActive=50&bgImgOpacityHighlight=25&bgImgOpacityError=15&cornerRadiusShadow=8px&offsetLeftShadow=-7px&offsetTopShadow=-7px&thicknessShadow=7px&opacityShadow=30&bgImgOpacityShadow=70&bgTextureShadow=flat&bgColorShadow=%23000000&opacityOverlay=80&bgImgOpacityOverlay=90&bgTextureOverlay=hexagon&bgColorOverlay=%23eeeeee&iconColorError=%23cd0a0a&fcError=%23363636&borderColorError=%23cd0a0a&bgTextureError=flat&bgColorError=%23fceaea&iconColorHighlight=%232e83ff&fcHighlight=%23363636&borderColorHighlight=%23f5d514&bgTextureHighlight=flat&bgColorHighlight=%23fbf9ee&iconColorActive=%23efefef&fcActive=%23efefef&borderColorActive=%23333333&bgTextureActive=flat&bgColorActive=%23006E6D&iconColorHover=%23333333&fcHover=%23333333&borderColorHover=%23006E6D&bgTextureHover=flat&bgColorHover=%23d5efef&iconColorDefault=%23222222&fcDefault=%23222222&borderColorDefault=%23006E6D&bgTextureDefault=flat&bgColorDefault=%23c5d7d7&iconColorContent=%23222222&fcContent=%23222222&borderColorContent=%23d1d1d1&bgTextureContent=flat&bgColorContent=%23eeeeee&iconColorHeader=%23222222&fcHeader=%23222222&borderColorHeader=%23444444&bgTextureHeader=flat&bgColorHeader=%23609393&cornerRadius=6px&fwDefault=bold&fsDefault=1.1em&ffDefault=Lucida%20Grande%2CLucida%20Sans%2CArial%2Csans-serif
-* Copyright jQuery Foundation and other contributors; Licensed MIT */
+* Copyright OpenJS Foundation and other contributors; Licensed MIT */
+/* 
+* This LESS template of jQuery UI
+* http://www.carrotware.com/
+* Copyright 2015, 2023, Samantha Copeland
+* Dual licensed under the MIT or GPL Version 3 licenses.
+* Date: June 2023
+*/
 .cms-seagreen .cms-theme-color-code {
   color: #00758f;
 }

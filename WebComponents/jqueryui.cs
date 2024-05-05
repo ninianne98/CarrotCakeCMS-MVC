@@ -29,7 +29,7 @@ namespace Carrotware.Web.UI.Components {
 		public static string GeneralUri {
 			get {
 				if (string.IsNullOrEmpty(_generalUri)) {
-					_generalUri = CarrotWeb.GetWebResourceUrl("jquery.jqueryui-1-13-2.js");
+					_generalUri = CarrotWeb.GetWebResourceUrl("jquery.jqueryui-1-13-3.js");
 				}
 
 				return _generalUri;
@@ -64,8 +64,8 @@ namespace Carrotware.Web.UI.Components {
 
 				case "1.13":
 				default:
-					jqVer = "1.13.2";
-					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jqueryui-1-13-2.js");
+					jqVer = "1.13.3";
+					sJQFile = CarrotWeb.GetWebResourceUrl("jquery.jqueryui-1-13-3.js");
 					break;
 			}
 
