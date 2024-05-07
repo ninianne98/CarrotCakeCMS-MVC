@@ -146,32 +146,32 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static ContentTag Get(Guid TagID) {
-			ContentTag _item = null;
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				carrot_ContentTag query = CompiledQueries.cqGetContentTagByID(_db, TagID);
+			ContentTag item = null;
+			using (var db = CarrotCMSDataContext.Create()) {
+				carrot_ContentTag query = CompiledQueries.cqGetContentTagByID(db, TagID);
 				if (query != null) {
-					_item = new ContentTag(query);
+					item = new ContentTag(query);
 				}
 			}
 
-			return _item;
+			return item;
 		}
 
 		public static ContentTag GetByURL(Guid SiteID, string requestedURL) {
-			ContentTag _item = null;
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				vw_carrot_TagURL query = CompiledQueries.cqGetContentTagByURL(_db, SiteID, requestedURL);
+			ContentTag item = null;
+			using (var db = CarrotCMSDataContext.Create()) {
+				vw_carrot_TagURL query = CompiledQueries.cqGetContentTagByURL(db, SiteID, requestedURL);
 				if (query != null) {
-					_item = new ContentTag(query);
+					item = new ContentTag(query);
 				}
 			}
 
-			return _item;
+			return item;
 		}
 
 		public static int GetSimilar(Guid SiteID, Guid TagID, string tagSlug) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<carrot_ContentTag> query = CompiledQueries.cqGetContentTagNoMatch(_db, SiteID, TagID, tagSlug);
+			using (var db = CarrotCMSDataContext.Create()) {
+				IQueryable<carrot_ContentTag> query = CompiledQueries.cqGetContentTagNoMatch(db, SiteID, TagID, tagSlug);
 
 				return query.Count();
 			}
@@ -180,30 +180,30 @@ namespace Carrotware.CMS.Core {
 		public static int GetSiteCount(Guid siteID) {
 			int iCt = -1;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				iCt = CompiledQueries.cqGetContentTagCountBySiteID(_db, siteID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				iCt = CompiledQueries.cqGetContentTagCountBySiteID(db, siteID);
 			}
 
 			return iCt;
 		}
 
 		public static List<ContentTag> BuildTagList(Guid rootContentID) {
-			List<ContentTag> _types = null;
+			List<ContentTag> types = null;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<carrot_ContentTag> query = CompiledQueries.cqGetContentTagByContentID(_db, rootContentID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				IQueryable<carrot_ContentTag> query = CompiledQueries.cqGetContentTagByContentID(db, rootContentID);
 
-				_types = (from d in query.ToList()
-						  select new ContentTag(d)).ToList();
+				types = (from d in query.ToList()
+						 select new ContentTag(d)).ToList();
 			}
 
-			return _types;
+			return types;
 		}
 
 		public void Save() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
+			using (var db = CarrotCMSDataContext.Create()) {
 				bool bNew = false;
-				carrot_ContentTag s = CompiledQueries.cqGetContentTagByID(_db, this.ContentTagID);
+				carrot_ContentTag s = CompiledQueries.cqGetContentTagByID(db, this.ContentTagID);
 
 				if (s == null || (s != null && s.ContentTagID == Guid.Empty)) {
 					s = new carrot_ContentTag();
@@ -217,27 +217,27 @@ namespace Carrotware.CMS.Core {
 				s.IsPublic = this.IsPublic;
 
 				if (bNew) {
-					_db.carrot_ContentTags.InsertOnSubmit(s);
+					db.carrot_ContentTags.InsertOnSubmit(s);
 				}
 
-				_db.SubmitChanges();
+				db.SubmitChanges();
 
 				this.ContentTagID = s.ContentTagID;
 			}
 		}
 
 		public void Delete() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				carrot_ContentTag s = CompiledQueries.cqGetContentTagByID(_db, this.ContentTagID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				carrot_ContentTag s = CompiledQueries.cqGetContentTagByID(db, this.ContentTagID);
 
 				if (s != null) {
-					IQueryable<carrot_TagContentMapping> lst = (from m in _db.carrot_TagContentMappings
+					IQueryable<carrot_TagContentMapping> lst = (from m in db.carrot_TagContentMappings
 																where m.ContentTagID == s.ContentTagID
 																select m);
 
-					_db.carrot_TagContentMappings.BatchDelete(lst);
-					_db.carrot_ContentTags.DeleteOnSubmit(s);
-					_db.SubmitChanges();
+					db.carrot_TagContentMappings.BatchDelete(lst);
+					db.carrot_ContentTags.DeleteOnSubmit(s);
+					db.SubmitChanges();
 				}
 			}
 		}

@@ -115,8 +115,8 @@ namespace Carrotware.CMS.Core {
 				dateEnd = editDate.Value.Date.AddDays(1);
 			}
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from h in _db.vw_carrot_EditHistories
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from h in db.vw_carrot_EditHistories
 						where h.SiteID == siteID
 							&& (!showLatestOnly || h.IsLatestVersion == true)
 							&& (!editDate.HasValue
@@ -171,10 +171,10 @@ namespace Carrotware.CMS.Core {
 				IsContentProp = ReflectionUtilities.DoesPropertyExist(typeof(vw_carrot_EditHistory), srt.SortField);
 			}
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
+			using (var db = CarrotCMSDataContext.Create()) {
 				List<EditHistory> _history = null;
 
-				IQueryable<vw_carrot_EditHistory> queryable = (from h in _db.vw_carrot_EditHistories
+				IQueryable<vw_carrot_EditHistory> queryable = (from h in db.vw_carrot_EditHistories
 															   where h.SiteID == siteID
 																   && (!showLatestOnly || h.IsLatestVersion == true)
 																   && (!editDate.HasValue

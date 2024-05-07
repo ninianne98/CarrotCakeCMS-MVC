@@ -26,13 +26,13 @@ namespace Carrotware.CMS.Data {
 
 		public static CarrotCMSDataContext Create(string connection) {
 #if DEBUG
-			CarrotCMSDataContext _db = new CarrotCMSDataContext(connection);
-			DataDiagnostic dd = new DataDiagnostic(_db, iDBConnCounter);
+			var db = new CarrotCMSDataContext(connection);
+			DataDiagnostic dd = new DataDiagnostic(db, iDBConnCounter);
 			iDBConnCounter++;
 			if (iDBConnCounter > 4096) {
 				iDBConnCounter = 0;
 			}
-			return _db;
+			return db;
 #else
 			return new CarrotCMSDataContext(connection);
 #endif
@@ -41,13 +41,13 @@ namespace Carrotware.CMS.Data {
 
 		public static CarrotCMSDataContext Create(IDbConnection connection) {
 #if DEBUG
-			CarrotCMSDataContext _db = new CarrotCMSDataContext(connection);
-			DataDiagnostic dd = new DataDiagnostic(_db, iDBConnCounter);
+			var db = new CarrotCMSDataContext(connection);
+			DataDiagnostic dd = new DataDiagnostic(db, iDBConnCounter);
 			iDBConnCounter++;
 			if (iDBConnCounter > 4096) {
 				iDBConnCounter = 0;
 			}
-			return _db;
+			return db;
 #else
 			return new CarrotCMSDataContext(connection);
 #endif

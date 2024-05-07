@@ -235,14 +235,14 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string GetExportXML<T>(T cpe) {
-			XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-			string sXML = string.Empty;
-			using (StringWriter stringWriter = new StringWriter()) {
+			var xmlSerializer = new XmlSerializer(typeof(T));
+			string xml = string.Empty;
+			using (var stringWriter = new StringWriter()) {
 				xmlSerializer.Serialize(stringWriter, cpe);
-				sXML = stringWriter.ToString();
+				xml = stringWriter.ToString();
 			}
 
-			return sXML;
+			return xml;
 		}
 
 		public static string GetContentPageExportXML(Guid siteID, Guid rootContentID) {
@@ -268,8 +268,8 @@ namespace Carrotware.CMS.Core {
 		public static ContentPageExport GetSerializedContentPageExport(Guid rootContentID) {
 			ContentPageExport c = null;
 			try {
-				string sXML = GetSerialized(rootContentID);
-				c = GetSerialData<ContentPageExport>(sXML) as ContentPageExport;
+				string xml = GetSerialized(rootContentID);
+				c = GetSerialData<ContentPageExport>(xml) as ContentPageExport;
 			} catch (Exception ex) { }
 			return c;
 		}
@@ -277,8 +277,8 @@ namespace Carrotware.CMS.Core {
 		public static SiteExport GetSerializedSiteExport(Guid siteID) {
 			SiteExport c = null;
 			try {
-				string sXML = GetSerialized(siteID);
-				c = GetSerialData<SiteExport>(sXML) as SiteExport;
+				string xml = GetSerialized(siteID);
+				c = GetSerialData<SiteExport>(xml) as SiteExport;
 			} catch (Exception ex) { }
 			return c;
 		}
@@ -286,33 +286,33 @@ namespace Carrotware.CMS.Core {
 		public static WordPressSite GetSerializedWPExport(Guid siteID) {
 			WordPressSite c = null;
 			try {
-				string sXML = GetSerialized(siteID);
-				c = GetSerialData<WordPressSite>(sXML) as WordPressSite;
+				string xml = GetSerialized(siteID);
+				c = GetSerialData<WordPressSite>(xml) as WordPressSite;
 			} catch (Exception ex) { }
 			return c;
 		}
 
-		public static ContentPageExport DeserializeContentPageExport(string sXML) {
-			ContentPageExport c = GetSerialData<ContentPageExport>(sXML) as ContentPageExport;
+		public static ContentPageExport DeserializeContentPageExport(string xml) {
+			ContentPageExport c = GetSerialData<ContentPageExport>(xml) as ContentPageExport;
 			return c;
 		}
 
-		public static SiteExport DeserializeSiteExport(string sXML) {
-			SiteExport c = GetSerialData<SiteExport>(sXML) as SiteExport;
+		public static SiteExport DeserializeSiteExport(string xml) {
+			SiteExport c = GetSerialData<SiteExport>(xml) as SiteExport;
 			return c;
 		}
 
-		public static WordPressSite DeserializeWPExport(string sXML) {
+		public static WordPressSite DeserializeWPExport(string xml) {
 			WPBlogReader wbp = new WPBlogReader();
-			XmlDocument doc = wbp.LoadText(sXML);
+			XmlDocument doc = wbp.LoadText(xml);
 			//WordPressSite site = wbp.GetContent(doc);
 			WordPressSite site = wbp.GetAllData(doc);
 			return site;
 		}
 
-		public static WordPressSite DeserializeWPExportAll(string sXML) {
+		public static WordPressSite DeserializeWPExportAll(string xml) {
 			WPBlogReader wbp = new WPBlogReader();
-			XmlDocument doc = wbp.LoadText(sXML);
+			XmlDocument doc = wbp.LoadText(xml);
 			WordPressSite site = wbp.GetAllData(doc);
 			return site;
 		}
@@ -321,22 +321,22 @@ namespace Carrotware.CMS.Core {
 			if (theData == null) {
 				CMSConfigHelper.ClearSerialized(guidKey, keyPageImport);
 			} else {
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
-				string sXML = string.Empty;
-				using (StringWriter stringWriter = new StringWriter()) {
+				var xmlSerializer = new XmlSerializer(typeof(T));
+				string xml = string.Empty;
+				using (var stringWriter = new StringWriter()) {
 					xmlSerializer.Serialize(stringWriter, theData);
-					sXML = stringWriter.ToString();
+					xml = stringWriter.ToString();
 				}
-				CMSConfigHelper.SaveSerialized(guidKey, keyPageImport, sXML);
+				CMSConfigHelper.SaveSerialized(guidKey, keyPageImport, xml);
 			}
 		}
 
-		public static Object GetSerialData<T>(string sXML) {
+		public static Object GetSerialData<T>(string xml) {
 			Object obj = null;
 			try {
-				XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+				var xmlSerializer = new XmlSerializer(typeof(T));
 
-				using (StringReader stringReader = new StringReader(sXML)) {
+				using (StringReader stringReader = new StringReader(xml)) {
 					obj = xmlSerializer.Deserialize(stringReader);
 				}
 			} catch (Exception ex) { }

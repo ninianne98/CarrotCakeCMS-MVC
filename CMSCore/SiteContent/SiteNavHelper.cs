@@ -57,8 +57,8 @@ namespace Carrotware.CMS.Core {
 		internal static List<string> GetSiteDirectoryPaths() {
 			List<string> lstContent = null;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				lstContent = (from ct in _db.vw_carrot_Contents
+			using (var db = CarrotCMSDataContext.Create()) {
+				lstContent = (from ct in db.vw_carrot_Contents
 							  where ct.IsLatestVersion == true
 								  && ct.FileName.ToLowerInvariant().EndsWith(SiteData.DefaultDirectoryFilename)
 							  select ct.FileName.ToLowerInvariant()).Distinct().ToList();

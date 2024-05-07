@@ -1,9 +1,7 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Web;
 using System.Xml.Serialization;
 
@@ -53,13 +51,13 @@ namespace Carrotware.CMS.UI.Components {
 			if (config != null && config.ValidateHuman != null) {
 				this.UseValidateHuman = true;
 				this.ValidateHumanClass = config.ValidateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(config.ValidateHuman.AltValidationFailText)) {
+				if (!string.IsNullOrEmpty(config.ValidateHuman.AltValidationFailText)) {
 					this.ValidationFailText = config.ValidateHuman.AltValidationFailText;
 				}
 			} else {
 				this.UseValidateHuman = false;
-				this.ValidateHumanClass = String.Empty;
-				this.ValidationFailText = String.Empty;
+				this.ValidateHumanClass = string.Empty;
+				this.ValidationFailText = string.Empty;
 			}
 		}
 
@@ -67,13 +65,13 @@ namespace Carrotware.CMS.UI.Components {
 			if (validateHuman != null) {
 				this.UseValidateHuman = true;
 				this.ValidateHumanClass = validateHuman.GetType().AssemblyQualifiedName;
-				if (!String.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
+				if (!string.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
 					this.ValidationFailText = validateHuman.AltValidationFailText;
 				}
 			} else {
 				this.UseValidateHuman = false;
-				this.ValidateHumanClass = String.Empty;
-				this.ValidationFailText = String.Empty;
+				this.ValidateHumanClass = string.Empty;
+				this.ValidationFailText = string.Empty;
 			}
 		}
 	}
@@ -91,7 +89,7 @@ namespace Carrotware.CMS.UI.Components {
 	public abstract class FormConfigRootBase : IFormConfigRootBase {
 
 		public FormConfigRootBase() {
-			this.PostPartialName = String.Empty;
+			this.PostPartialName = string.Empty;
 		}
 
 		public FormConfigRootBase(string partialName)
@@ -149,19 +147,19 @@ namespace Carrotware.CMS.UI.Components {
 		public void GetSettings(Type type) {
 			this.ValidateSettings = null;
 
-			if (!String.IsNullOrEmpty(this.EncodedSettings)) {
-				string sXML = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
-				XmlSerializer xmlSerializer = new XmlSerializer(type);
-				using (StringReader stringReader = new StringReader(sXML)) {
+			if (!string.IsNullOrEmpty(this.EncodedSettings)) {
+				string xml = CMSConfigHelper.DecodeBase64(this.EncodedSettings);
+				var xmlSerializer = new XmlSerializer(type);
+				using (var stringReader = new StringReader(xml)) {
 					this.ValidateSettings = xmlSerializer.Deserialize(stringReader);
 				}
 
 				if (this.ValidateSettings != null && this.ValidateSettings is IFormSettingBase) {
 					IFormSettingBase settings = this.ValidateSettings as IFormSettingBase;
 
-					if (!String.IsNullOrEmpty(settings.ValidateHumanClass)) {
+					if (!string.IsNullOrEmpty(settings.ValidateHumanClass)) {
 						Type objType = ReflectionUtilities.GetTypeFromString(settings.ValidateHumanClass);
-						Object obj = Activator.CreateInstance(objType);
+						object obj = Activator.CreateInstance(objType);
 						this.ValidateHuman = (IValidateHuman)obj;
 						this.ValidateHuman.AltValidationFailText = settings.ValidationFailText;
 					}

@@ -18,7 +18,7 @@ using System.Web.Caching;
 namespace Carrotware.CMS.Core {
 
 	public class ContentPageType : IDisposable {
-		private CarrotCMSDataContext db = CarrotCMSDataContext.Create();
+		private CarrotCMSDataContext _db = CarrotCMSDataContext.Create();
 
 		public enum PageType {
 			Unknown,
@@ -47,8 +47,8 @@ namespace Carrotware.CMS.Core {
 				}
 
 				if (!bCached) {
-					using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-						IQueryable<carrot_ContentType> query = CompiledQueries.cqGetContentTypes(_db);
+					using (var db = CarrotCMSDataContext.Create()) {
+						IQueryable<carrot_ContentType> query = CompiledQueries.cqGetContentTypes(db);
 
 						_types = (from d in query.ToList()
 								  select new ContentPageType {
@@ -96,8 +96,8 @@ namespace Carrotware.CMS.Core {
 		#region IDisposable Members
 
 		public void Dispose() {
-			if (db != null) {
-				db.Dispose();
+			if (_db != null) {
+				_db.Dispose();
 			}
 		}
 

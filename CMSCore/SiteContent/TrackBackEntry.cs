@@ -16,8 +16,8 @@ using System.Linq;
 namespace Carrotware.CMS.Core {
 
 	public class TrackBackEntry : IDisposable {
-		private CarrotCMSDataContext db = CarrotCMSDataContext.Create();
-		//private CarrotCMSDataContext db = CompiledQueries.dbConn;
+		private CarrotCMSDataContext _db = CarrotCMSDataContext.Create();
+		//private CarrotCMSDataContext _db = CompiledQueries.dbConn;
 
 		public Guid TrackbackQueueID { get; set; }
 		public Guid Root_ContentID { get; set; }
@@ -44,8 +44,8 @@ namespace Carrotware.CMS.Core {
 
 		public static TrackBackEntry Get(Guid TrackbackQueueID) {
 			TrackBackEntry _item = null;
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				vw_carrot_TrackbackQueue query = CompiledQueries.cqGetTrackbackByID(_db, TrackbackQueueID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				vw_carrot_TrackbackQueue query = CompiledQueries.cqGetTrackbackByID(db, TrackbackQueueID);
 				_item = new TrackBackEntry(query);
 			}
 
@@ -54,7 +54,7 @@ namespace Carrotware.CMS.Core {
 
 		public void Save() {
 			bool bNew = false;
-			carrot_TrackbackQueue s = CompiledQueries.cqGetTrackbackTblByID(db, this.TrackbackQueueID);
+			carrot_TrackbackQueue s = CompiledQueries.cqGetTrackbackTblByID(_db, this.TrackbackQueueID);
 
 			if (s == null) {
 				s = new carrot_TrackbackQueue();
@@ -70,19 +70,19 @@ namespace Carrotware.CMS.Core {
 			s.TrackedBack = this.TrackedBack;
 
 			if (bNew) {
-				db.carrot_TrackbackQueues.InsertOnSubmit(s);
+				_db.carrot_TrackbackQueues.InsertOnSubmit(s);
 			}
 
 			this.TrackbackQueueID = s.TrackbackQueueID;
 
-			db.SubmitChanges();
+			_db.SubmitChanges();
 		}
 
 		public static List<TrackBackEntry> GetPageTrackBackList(Guid rootContentID) {
 			List<TrackBackEntry> _types = null;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<vw_carrot_TrackbackQueue> query = CompiledQueries.cqGetTrackbackByRootID(_db, rootContentID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				IQueryable<vw_carrot_TrackbackQueue> query = CompiledQueries.cqGetTrackbackByRootID(db, rootContentID);
 
 				_types = (from d in query.ToList()
 						  select new TrackBackEntry(d)).ToList();
@@ -94,8 +94,8 @@ namespace Carrotware.CMS.Core {
 		public static List<TrackBackEntry> GetTrackBackQueue(Guid rootContentID) {
 			List<TrackBackEntry> _types = null;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<vw_carrot_TrackbackQueue> query = CompiledQueries.cqGetTrackbackByRootIDUnTracked(_db, rootContentID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				IQueryable<vw_carrot_TrackbackQueue> query = CompiledQueries.cqGetTrackbackByRootIDUnTracked(db, rootContentID);
 
 				_types = (from d in query.ToList()
 						  select new TrackBackEntry(d)).ToList();
@@ -107,8 +107,8 @@ namespace Carrotware.CMS.Core {
 		public static List<TrackBackEntry> GetTrackBackSiteQueue(Guid siteID) {
 			List<TrackBackEntry> _types = null;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<vw_carrot_TrackbackQueue> query = CompiledQueries.cqGetTrackbackBySiteIDUnTracked(_db, siteID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				IQueryable<vw_carrot_TrackbackQueue> query = CompiledQueries.cqGetTrackbackBySiteIDUnTracked(db, siteID);
 
 				_types = (from d in query.ToList()
 						  select new TrackBackEntry(d)).ToList();
@@ -120,8 +120,8 @@ namespace Carrotware.CMS.Core {
 		public static List<TrackBackEntry> FindTrackbackByURL(Guid rootContentID, string sURL) {
 			List<TrackBackEntry> _types = null;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<vw_carrot_TrackbackQueue> query = CompiledQueries.cqGetTrackbackByRootIDAndUrl(_db, rootContentID, sURL);
+			using (var db = CarrotCMSDataContext.Create()) {
+				IQueryable<vw_carrot_TrackbackQueue> query = CompiledQueries.cqGetTrackbackByRootIDAndUrl(db, rootContentID, sURL);
 
 				_types = (from d in query.ToList()
 						  select new TrackBackEntry(d)).ToList();
@@ -150,8 +150,8 @@ namespace Carrotware.CMS.Core {
 		#region IDisposable Members
 
 		public void Dispose() {
-			if (db != null) {
-				db.Dispose();
+			if (_db != null) {
+				_db.Dispose();
 			}
 		}
 

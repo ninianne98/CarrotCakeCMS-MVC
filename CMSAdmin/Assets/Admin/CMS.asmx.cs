@@ -90,10 +90,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 			get {
 				ContentPage c = null;
 				try {
-					string sXML = GetSerialized(CMSConfigHelper.keyAdminContent);
-					XmlSerializer xmlSerializer = new XmlSerializer(typeof(ContentPage));
-					Object genpref = null;
-					using (StringReader stringReader = new StringReader(sXML)) {
+					string xml = GetSerialized(CMSConfigHelper.keyAdminContent);
+					var xmlSerializer = new XmlSerializer(typeof(ContentPage));
+					object genpref = null;
+					using (var stringReader = new StringReader(xml)) {
 						genpref = xmlSerializer.Deserialize(stringReader);
 					}
 					c = genpref as ContentPage;
@@ -104,13 +104,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				if (value == null) {
 					ClearSerialized(CMSConfigHelper.keyAdminContent);
 				} else {
-					string sXML = string.Empty;
-					XmlSerializer xmlSerializer = new XmlSerializer(typeof(ContentPage));
-					using (StringWriter stringWriter = new StringWriter()) {
-						xmlSerializer.Serialize(stringWriter, value);
-						sXML = stringWriter.ToString();
+					string xml = string.Empty;
+					var xmlSerializer = new XmlSerializer(typeof(ContentPage));
+					using (var sw = new StringWriter()) {
+						xmlSerializer.Serialize(sw, value);
+						xml = sw.ToString();
 					}
-					SaveSerialized(CMSConfigHelper.keyAdminContent, sXML);
+					SaveSerialized(CMSConfigHelper.keyAdminContent, xml);
 				}
 			}
 		}
@@ -118,12 +118,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		public List<Widget> cmsAdminWidget {
 			get {
 				List<Widget> c = null;
-				string sXML = GetSerialized(CMSConfigHelper.keyAdminWidget);
+				string xml = GetSerialized(CMSConfigHelper.keyAdminWidget);
 				//since a page may not have any widgets, initialize it and skip deserializing
-				if (!string.IsNullOrEmpty(sXML)) {
-					XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Widget>));
-					Object genpref = null;
-					using (StringReader stringReader = new StringReader(sXML)) {
+				if (!string.IsNullOrEmpty(xml)) {
+					var xmlSerializer = new XmlSerializer(typeof(List<Widget>));
+					object genpref = null;
+					using (var stringReader = new StringReader(xml)) {
 						genpref = xmlSerializer.Deserialize(stringReader);
 					}
 					c = genpref as List<Widget>;
@@ -136,13 +136,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 				if (value == null) {
 					ClearSerialized(CMSConfigHelper.keyAdminWidget);
 				} else {
-					string sXML = string.Empty;
-					XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Widget>));
-					using (StringWriter stringWriter = new StringWriter()) {
-						xmlSerializer.Serialize(stringWriter, value);
-						sXML = stringWriter.ToString();
+					string xml = string.Empty;
+					var xmlSerializer = new XmlSerializer(typeof(List<Widget>));
+					using (var sw = new StringWriter()) {
+						xmlSerializer.Serialize(sw, value);
+						xml = sw.ToString();
 					}
-					SaveSerialized(CMSConfigHelper.keyAdminWidget, sXML);
+					SaveSerialized(CMSConfigHelper.keyAdminWidget, xml);
 				}
 			}
 		}
@@ -169,7 +169,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Service {
 		}
 
 		protected void LoadGuids() {
-			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+			using (var pageHelper = new ContentPageHelper()) {
 				if (!string.IsNullOrEmpty(CurrentEditPage)) {
 					filePage = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, CurrentEditPage);
 					if (filePage != null) {

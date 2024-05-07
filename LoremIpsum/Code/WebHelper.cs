@@ -8,15 +8,15 @@ using System.Web;
 
 namespace CarrotCake.CMS.Plugins.LoremIpsum.Code {
 	public class WebHelper {
-		public static string ReadEmbededScript(string sResouceName) {
-			string sReturn = null;
+		public static string ReadEmbededScript(string resouceName) {
+			string ret = null;
 
-			Assembly _assembly = Assembly.GetExecutingAssembly();
-			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(sResouceName))) {
-				sReturn = stream.ReadToEnd();
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			using (var stream = new StreamReader(assembly.GetManifestResourceStream(resouceName))) {
+				ret = stream.ReadToEnd();
 			}
 
-			return sReturn;
+			return ret;
 		}
 
 		private static string _shortDatePattern = null;

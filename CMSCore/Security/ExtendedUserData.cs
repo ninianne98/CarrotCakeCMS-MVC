@@ -111,15 +111,15 @@ namespace Carrotware.CMS.Core {
 		public ExtendedUserData() { }
 
 		public ExtendedUserData(string UserName) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByName(_db, UserName);
+			using (var db = CarrotCMSDataContext.Create()) {
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByName(db, UserName);
 				LoadUserData(rc);
 			}
 		}
 
 		public ExtendedUserData(Guid UserID) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(_db, UserID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(db, UserID);
 				LoadUserData(rc);
 			}
 		}
@@ -127,8 +127,8 @@ namespace Carrotware.CMS.Core {
 		public static ExtendedUserData FindByUsername(string UserName) {
 			ExtendedUserData usr = new ExtendedUserData();
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByName(_db, UserName);
+			using (var db = CarrotCMSDataContext.Create()) {
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByName(db, UserName);
 				usr.LoadUserData(rc);
 			}
 
@@ -138,8 +138,8 @@ namespace Carrotware.CMS.Core {
 		public static ExtendedUserData FindByEmail(string Email) {
 			ExtendedUserData usr = new ExtendedUserData();
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByEmail(_db, Email);
+			using (var db = CarrotCMSDataContext.Create()) {
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByEmail(db, Email);
 				usr.LoadUserData(rc);
 			}
 
@@ -149,8 +149,8 @@ namespace Carrotware.CMS.Core {
 		public static ExtendedUserData FindByUserID(Guid UserID) {
 			ExtendedUserData usr = new ExtendedUserData();
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(_db, UserID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(db, UserID);
 				usr.LoadUserData(rc);
 			}
 
@@ -191,8 +191,8 @@ namespace Carrotware.CMS.Core {
 		public List<Guid> MemberSiteIDs {
 			get {
 				if (_siteIDs == null) {
-					using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-						_siteIDs = (from m in _db.carrot_UserSiteMappings
+					using (var db = CarrotCMSDataContext.Create()) {
+						_siteIDs = (from m in db.carrot_UserSiteMappings
 									where m.UserId == this.UserId
 									select m.SiteID).Distinct().ToList();
 					}
@@ -202,20 +202,20 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public List<SiteData> GetSiteList() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from m in _db.carrot_UserSiteMappings
-						join s in _db.carrot_Sites on m.SiteID equals s.SiteID
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from m in db.carrot_UserSiteMappings
+						join s in db.carrot_Sites on m.SiteID equals s.SiteID
 						where m.UserId == this.UserId
 						select new SiteData(s)).ToList();
 			}
 		}
 
 		public List<UserRole> GetRoles() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from ur in _db.membership_UserRoles
-						join u in _db.membership_Users on ur.UserId equals u.Id
-						join r in _db.membership_Roles on ur.RoleId equals r.Id
-						join ud in _db.carrot_UserDatas on u.Id equals ud.UserKey
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from ur in db.membership_UserRoles
+						join u in db.membership_Users on ur.UserId equals u.Id
+						join r in db.membership_Roles on ur.RoleId equals r.Id
+						join ud in db.carrot_UserDatas on u.Id equals ud.UserKey
 						where u.UserName == this.UserName
 						orderby r.Name
 						select new UserRole(r)).ToList();
@@ -231,8 +231,8 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public bool AddToSite(Guid siteID) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				carrot_UserSiteMapping map = (from m in _db.carrot_UserSiteMappings
+			using (var db = CarrotCMSDataContext.Create()) {
+				carrot_UserSiteMapping map = (from m in db.carrot_UserSiteMappings
 											  where m.UserId == this.UserId
 												&& m.SiteID == siteID
 											  select m).FirstOrDefault();
@@ -245,8 +245,8 @@ namespace Carrotware.CMS.Core {
 					map.SiteID = siteID;
 					map.UserId = this.UserId;
 
-					_db.carrot_UserSiteMappings.InsertOnSubmit(map);
-					_db.SubmitChanges();
+					db.carrot_UserSiteMappings.InsertOnSubmit(map);
+					db.SubmitChanges();
 
 					return true;
 				} else {
@@ -256,8 +256,8 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public bool RemoveFromSite(Guid siteID) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				carrot_UserSiteMapping map = (from m in _db.carrot_UserSiteMappings
+			using (var db = CarrotCMSDataContext.Create()) {
+				carrot_UserSiteMapping map = (from m in db.carrot_UserSiteMappings
 											  where m.UserId == this.UserId
 												&& m.SiteID == siteID
 											  select m).FirstOrDefault();
@@ -265,8 +265,8 @@ namespace Carrotware.CMS.Core {
 				if (map != null) {
 					_siteIDs = null;
 
-					_db.carrot_UserSiteMappings.DeleteOnSubmit(map);
-					_db.SubmitChanges();
+					db.carrot_UserSiteMappings.DeleteOnSubmit(map);
+					db.SubmitChanges();
 
 					return true;
 				} else {
@@ -276,9 +276,9 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public void Save() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
+			using (var db = CarrotCMSDataContext.Create()) {
 				bool bNew = false;
-				carrot_UserData usr = CompiledQueries.cqFindUserTblByID(_db, this.UserId);
+				carrot_UserData usr = CompiledQueries.cqFindUserTblByID(db, this.UserId);
 
 				if (usr == null) {
 					usr = new carrot_UserData();
@@ -293,15 +293,15 @@ namespace Carrotware.CMS.Core {
 				usr.UserBio = this.UserBio;
 
 				if (bNew) {
-					_db.carrot_UserDatas.InsertOnSubmit(usr);
+					db.carrot_UserDatas.InsertOnSubmit(usr);
 				}
 
-				_db.SubmitChanges();
+				db.SubmitChanges();
 
 				this.UserId = usr.UserId;
 
 				//grab fresh copy from DB
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(_db, usr.UserId);
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(db, usr.UserId);
 				LoadUserData(rc);
 			}
 		}
@@ -335,24 +335,24 @@ namespace Carrotware.CMS.Core {
 		//================================================
 
 		public static List<ExtendedUserData> GetUserList() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				List<ExtendedUserData> lstUsr = (from u in CompiledQueries.cqGetUserList(_db)
+			using (var db = CarrotCMSDataContext.Create()) {
+				List<ExtendedUserData> lstUsr = (from u in CompiledQueries.cqGetUserList(db)
 												 select new ExtendedUserData(u)).ToList();
 				return lstUsr;
 			}
 		}
 
 		public static IQueryable<ExtendedUserData> GetUsers() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<ExtendedUserData> lstUsr = (from u in CompiledQueries.cqGetUserList(_db)
+			using (var db = CarrotCMSDataContext.Create()) {
+				IQueryable<ExtendedUserData> lstUsr = (from u in CompiledQueries.cqGetUserList(db)
 													   select new ExtendedUserData(u));
 				return lstUsr;
 			}
 		}
 
 		public static ExtendedUserData GetEditorFromURL() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				vw_carrot_EditorURL query = CompiledQueries.cqGetEditorByURL(_db, SiteData.CurrentSiteID, SiteData.CurrentScriptName);
+			using (var db = CarrotCMSDataContext.Create()) {
+				vw_carrot_EditorURL query = CompiledQueries.cqGetEditorByURL(db, SiteData.CurrentSiteID, SiteData.CurrentScriptName);
 				if (query != null) {
 					ExtendedUserData usr = new ExtendedUserData(query.UserId);
 					return usr;

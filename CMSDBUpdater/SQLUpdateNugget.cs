@@ -52,11 +52,11 @@ namespace Carrotware.CMS.DBUpdater {
 				if (_nuggets == null) {
 					lock (nuggetLocker) {
 						_nuggets = new List<SQLUpdateNugget>();
-						Assembly _assembly = Assembly.GetExecutingAssembly();
+						Assembly assembly = Assembly.GetExecutingAssembly();
 
 						DataSet ds = new DataSet();
 						string filePath = "Carrotware.CMS.DBUpdater.DatabaseChecks.xml";
-						using (var stream = new StreamReader(_assembly.GetManifestResourceStream(filePath))) {
+						using (var stream = new StreamReader(assembly.GetManifestResourceStream(filePath))) {
 							ds.ReadXml(stream);
 						}
 

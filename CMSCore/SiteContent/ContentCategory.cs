@@ -147,8 +147,8 @@ namespace Carrotware.CMS.Core {
 
 		public static ContentCategory Get(Guid CategoryID) {
 			ContentCategory _item = null;
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				carrot_ContentCategory query = CompiledQueries.cqGetContentCategoryByID(_db, CategoryID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				carrot_ContentCategory query = CompiledQueries.cqGetContentCategoryByID(db, CategoryID);
 				if (query != null) {
 					_item = new ContentCategory(query);
 				}
@@ -159,8 +159,8 @@ namespace Carrotware.CMS.Core {
 
 		public static ContentCategory GetByURL(Guid SiteID, string requestedURL) {
 			ContentCategory _item = null;
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				vw_carrot_CategoryURL query = CompiledQueries.cqGetContentCategoryByURL(_db, SiteID, requestedURL);
+			using (var db = CarrotCMSDataContext.Create()) {
+				vw_carrot_CategoryURL query = CompiledQueries.cqGetContentCategoryByURL(db, SiteID, requestedURL);
 				if (query != null) {
 					_item = new ContentCategory(query);
 				}
@@ -170,8 +170,8 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static int GetSimilar(Guid SiteID, Guid CategoryID, string categorySlug) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<carrot_ContentCategory> query = CompiledQueries.cqGetContentCategoryNoMatch(_db, SiteID, CategoryID, categorySlug);
+			using (var db = CarrotCMSDataContext.Create()) {
+				IQueryable<carrot_ContentCategory> query = CompiledQueries.cqGetContentCategoryNoMatch(db, SiteID, CategoryID, categorySlug);
 
 				return query.Count();
 			}
@@ -180,8 +180,8 @@ namespace Carrotware.CMS.Core {
 		public static int GetSiteCount(Guid siteID) {
 			int iCt = -1;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				iCt = CompiledQueries.cqGetContentCategoryCountBySiteID(_db, siteID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				iCt = CompiledQueries.cqGetContentCategoryCountBySiteID(db, siteID);
 			}
 
 			return iCt;
@@ -190,8 +190,8 @@ namespace Carrotware.CMS.Core {
 		public static List<ContentCategory> BuildCategoryList(Guid rootContentID) {
 			List<ContentCategory> _types = null;
 
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				IQueryable<carrot_ContentCategory> query = CompiledQueries.cqGetContentCategoryByContentID(_db, rootContentID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				IQueryable<carrot_ContentCategory> query = CompiledQueries.cqGetContentCategoryByContentID(db, rootContentID);
 
 				_types = (from d in query.ToList()
 						  select new ContentCategory(d)).ToList();
@@ -201,9 +201,9 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public void Save() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
+			using (var db = CarrotCMSDataContext.Create()) {
 				bool bNew = false;
-				carrot_ContentCategory s = CompiledQueries.cqGetContentCategoryByID(_db, this.ContentCategoryID);
+				carrot_ContentCategory s = CompiledQueries.cqGetContentCategoryByID(db, this.ContentCategoryID);
 
 				if (s == null || (s != null && s.ContentCategoryID == Guid.Empty)) {
 					s = new carrot_ContentCategory();
@@ -217,27 +217,27 @@ namespace Carrotware.CMS.Core {
 				s.IsPublic = this.IsPublic;
 
 				if (bNew) {
-					_db.carrot_ContentCategories.InsertOnSubmit(s);
+					db.carrot_ContentCategories.InsertOnSubmit(s);
 				}
 
-				_db.SubmitChanges();
+				db.SubmitChanges();
 
 				this.ContentCategoryID = s.ContentCategoryID;
 			}
 		}
 
 		public void Delete() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				carrot_ContentCategory s = CompiledQueries.cqGetContentCategoryByID(_db, this.ContentCategoryID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				carrot_ContentCategory s = CompiledQueries.cqGetContentCategoryByID(db, this.ContentCategoryID);
 
 				if (s != null) {
-					IQueryable<carrot_CategoryContentMapping> lst = (from m in _db.carrot_CategoryContentMappings
+					IQueryable<carrot_CategoryContentMapping> lst = (from m in db.carrot_CategoryContentMappings
 																	 where m.ContentCategoryID == s.ContentCategoryID
 																	 select m);
 
-					_db.carrot_CategoryContentMappings.BatchDelete(lst);
-					_db.carrot_ContentCategories.DeleteOnSubmit(s);
-					_db.SubmitChanges();
+					db.carrot_CategoryContentMappings.BatchDelete(lst);
+					db.carrot_ContentCategories.DeleteOnSubmit(s);
+					db.SubmitChanges();
 				}
 			}
 		}

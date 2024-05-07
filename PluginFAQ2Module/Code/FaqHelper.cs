@@ -157,15 +157,15 @@ namespace CarrotCake.CMS.Plugins.FAQ2 {
 			return true;
 		}
 
-		public static string ReadEmbededScript(string sResouceName) {
-			string sReturn = null;
+		public static string ReadEmbededScript(string resouceName) {
+			string ret = null;
 
-			Assembly _assembly = Assembly.GetExecutingAssembly();
-			using (var stream = new StreamReader(_assembly.GetManifestResourceStream(sResouceName))) {
-				sReturn = stream.ReadToEnd();
+			Assembly assembly = Assembly.GetExecutingAssembly();
+			using (var stream = new StreamReader(assembly.GetManifestResourceStream(resouceName))) {
+				ret = stream.ReadToEnd();
 			}
 
-			return sReturn;
+			return ret;
 		}
 
 		#region IDisposable Members

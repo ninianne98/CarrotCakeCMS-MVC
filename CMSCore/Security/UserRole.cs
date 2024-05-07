@@ -51,20 +51,20 @@ namespace Carrotware.CMS.Core {
 		public string LoweredRoleName { get { return (this.RoleName ?? string.Empty).ToLowerInvariant(); } }
 
 		public void Save() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				membership_Role role = (from r in _db.membership_Roles
+			using (var db = CarrotCMSDataContext.Create()) {
+				membership_Role role = (from r in db.membership_Roles
 										where r.Name == this.RoleName || r.Id == this.RoleId
 										select r).FirstOrDefault();
 
 				if (role == null) {
 					role = new membership_Role();
 					role.Id = Guid.NewGuid().ToString().ToLowerInvariant();
-					_db.membership_Roles.InsertOnSubmit(role);
+					db.membership_Roles.InsertOnSubmit(role);
 				}
 
 				role.Name = this.RoleName.Trim();
 
-				_db.SubmitChanges();
+				db.SubmitChanges();
 
 				this.RoleName = role.Name;
 				this.RoleId = role.Id;
@@ -72,10 +72,10 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public List<ExtendedUserData> GetMembers() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from ur in _db.membership_UserRoles
-						join r in _db.membership_Roles on ur.RoleId equals r.Id
-						join ud in _db.vw_carrot_UserDatas on ur.UserId equals ud.UserKey
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from ur in db.membership_UserRoles
+						join r in db.membership_Roles on ur.RoleId equals r.Id
+						join ud in db.vw_carrot_UserDatas on ur.UserId equals ud.UserKey
 						where r.Id == this.RoleId
 						orderby ud.UserName
 						select new ExtendedUserData(ud)).ToList();

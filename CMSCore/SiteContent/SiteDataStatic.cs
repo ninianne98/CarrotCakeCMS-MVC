@@ -99,14 +99,14 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static List<SiteData> GetSiteList() {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				return (from l in _db.carrot_Sites orderby l.SiteName select new SiteData(l)).ToList();
+			using (var db = CarrotCMSDataContext.Create()) {
+				return (from l in db.carrot_Sites orderby l.SiteName select new SiteData(l)).ToList();
 			}
 		}
 
 		public static SiteData GetSiteByID(Guid siteID) {
-			using (CarrotCMSDataContext _db = CarrotCMSDataContext.Create()) {
-				carrot_Site s = CompiledQueries.cqGetSiteByID(_db, siteID);
+			using (var db = CarrotCMSDataContext.Create()) {
+				carrot_Site s = CompiledQueries.cqGetSiteByID(db, siteID);
 
 				if (s != null) {
 #if DEBUG

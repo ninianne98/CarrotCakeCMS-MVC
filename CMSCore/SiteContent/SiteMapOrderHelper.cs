@@ -16,8 +16,8 @@ using System.Linq;
 namespace Carrotware.CMS.Core {
 
 	public class SiteMapOrderHelper : IDisposable {
-		private CarrotCMSDataContext db = CarrotCMSDataContext.Create();
-		//private CarrotCMSDataContext db = CompiledQueries.dbConn;
+		private CarrotCMSDataContext _db = CarrotCMSDataContext.Create();
+		//private CarrotCMSDataContext _db = CompiledQueries.dbConn;
 
 		public SiteMapOrderHelper() { }
 
@@ -50,7 +50,7 @@ namespace Carrotware.CMS.Core {
 			List<SiteMapOrder> m = new List<SiteMapOrder>();
 			sMapText = sMapText.Trim();
 
-			carrot_Content c = (from ct in db.carrot_Contents
+			carrot_Content c = (from ct in _db.carrot_Contents
 								where ct.Root_ContentID == contentID
 								   && ct.IsLatestVersion == true
 								select ct).FirstOrDefault();
@@ -76,7 +76,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public List<SiteMapOrder> GetSiteFileList(Guid siteID) {
-			List<SiteMapOrder> lstContent = CannedQueries.GetAllContentList(db, siteID).Select(ct => new SiteMapOrder(ct)).ToList();
+			List<SiteMapOrder> lstContent = CannedQueries.GetAllContentList(_db, siteID).Select(ct => new SiteMapOrder(ct)).ToList();
 
 			return lstContent;
 		}
@@ -86,7 +86,7 @@ namespace Carrotware.CMS.Core {
 
 			if (site.Blog_Root_ContentID.HasValue) {
 				// because sometimes the db is manually manipulated, provides way of re-setting blog/index page by validating page is part of the site
-				var blogIndexPage = CannedQueries.GetContentByRoot(db, site.Blog_Root_ContentID.Value).FirstOrDefault();
+				var blogIndexPage = CannedQueries.GetContentByRoot(_db, site.Blog_Root_ContentID.Value).FirstOrDefault();
 				Guid contentTypeID = ContentPageType.GetIDByType(ContentPageType.PageType.ContentEntry);
 				if (blogIndexPage != null) {
 					// found blog, but not in this site or is not a page
@@ -101,7 +101,7 @@ namespace Carrotware.CMS.Core {
 		public void FixOrphanPages(Guid siteID) {
 			FixBlogIndex(siteID);
 
-			List<SiteMapOrder> lstContent = CannedQueries.GetAllContentList(db, siteID).Select(ct => new SiteMapOrder(ct)).ToList();
+			List<SiteMapOrder> lstContent = CannedQueries.GetAllContentList(_db, siteID).Select(ct => new SiteMapOrder(ct)).ToList();
 			List<Guid> lstIDs = lstContent.Select(x => x.Root_ContentID).ToList();
 
 			lstContent.RemoveAll(x => x.Parent_ContentID == null);
@@ -109,33 +109,33 @@ namespace Carrotware.CMS.Core {
 
 			lstIDs = lstContent.Select(x => x.Root_ContentID).ToList();
 
-			IQueryable<carrot_Content> querySite = (from c in db.carrot_Contents
+			IQueryable<carrot_Content> querySite = (from c in _db.carrot_Contents
 													where c.IsLatestVersion == true
 														&& c.Parent_ContentID != null
 														&& lstIDs.Contains(c.Root_ContentID)
 													select c);
 
-			db.carrot_Contents.BatchUpdate(querySite, p => new carrot_Content { Parent_ContentID = null });
+			_db.carrot_Contents.BatchUpdate(querySite, p => new carrot_Content { Parent_ContentID = null });
 
-			IQueryable<carrot_Content> querySite2 = (from c in db.carrot_Contents
-													 join rc in db.carrot_RootContents on c.Root_ContentID equals rc.Root_ContentID
+			IQueryable<carrot_Content> querySite2 = (from c in _db.carrot_Contents
+													 join rc in _db.carrot_RootContents on c.Root_ContentID equals rc.Root_ContentID
 													 where c.IsLatestVersion == true
 														&& c.Parent_ContentID != null
 														&& rc.SiteID == siteID
 														&& rc.ContentTypeID == ContentPageType.GetIDByType(ContentPageType.PageType.BlogEntry)
 													 select c);
 
-			db.carrot_Contents.BatchUpdate(querySite2, p => new carrot_Content { Parent_ContentID = null });
+			_db.carrot_Contents.BatchUpdate(querySite2, p => new carrot_Content { Parent_ContentID = null });
 
-			db.SubmitChanges();
+			_db.SubmitChanges();
 		}
 
 		public void UpdateSiteMap(Guid siteID, List<SiteMapOrder> oMap) {
 			oMap.Where(m => m.Parent_ContentID == Guid.Empty).ToList().ForEach(m => m.Parent_ContentID = null);
 
 			foreach (SiteMapOrder m in oMap.OrderBy(m => m.NavOrder)) {
-				carrot_Content c = (from ct in db.carrot_Contents
-									join r in db.carrot_RootContents on ct.Root_ContentID equals r.Root_ContentID
+				carrot_Content c = (from ct in _db.carrot_Contents
+									join r in _db.carrot_RootContents on ct.Root_ContentID equals r.Root_ContentID
 									where r.SiteID == siteID
 										&& r.Root_ContentID == m.Root_ContentID
 										&& ct.IsLatestVersion == true
@@ -145,14 +145,14 @@ namespace Carrotware.CMS.Core {
 				c.NavOrder = (m.NavOrder * 10);
 			}
 
-			db.SubmitChanges();
+			_db.SubmitChanges();
 		}
 
 		public List<SiteMapOrder> GetChildPages(Guid siteID, Guid? parentID, Guid contentID) {
-			List<vw_carrot_Content> lstOtherPages = CompiledQueries.GetOtherNotPage(db, siteID, contentID, parentID).ToList();
+			List<vw_carrot_Content> lstOtherPages = CompiledQueries.GetOtherNotPage(_db, siteID, contentID, parentID).ToList();
 
 			if (!lstOtherPages.Any() && parentID == Guid.Empty) {
-				lstOtherPages = CompiledQueries.TopLevelPages(db, siteID, false).ToList();
+				lstOtherPages = CompiledQueries.TopLevelPages(_db, siteID, false).ToList();
 			}
 
 			lstOtherPages.RemoveAll(x => x.Root_ContentID == contentID);
@@ -175,7 +175,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public SiteMapOrder GetPageWithLevel(Guid siteID, Guid? contentID, int iLevel) {
-			SiteMapOrder cont = (from ct in CompiledQueries.cqGetLatestContentPages(db, siteID, contentID).ToList()
+			SiteMapOrder cont = (from ct in CompiledQueries.cqGetLatestContentPages(_db, siteID, contentID).ToList()
 								 select new SiteMapOrder {
 									 NavLevel = iLevel,
 									 NavMenuText = (ct.PageActive ? "" : "{*U*} ") + ct.NavMenuText,
@@ -192,7 +192,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public List<SiteMapOrder> GetAdminPageList(Guid siteID, Guid contentID) {
-			List<SiteMapOrder> lstSite = (from ct in CompiledQueries.ContentNavAll(db, siteID, false).ToList()
+			List<SiteMapOrder> lstSite = (from ct in CompiledQueries.ContentNavAll(_db, siteID, false).ToList()
 										  select new SiteMapOrder {
 											  NavLevel = -1,
 											  NavMenuText = ct.NavMenuText,
@@ -274,8 +274,8 @@ namespace Carrotware.CMS.Core {
 		#region IDisposable Members
 
 		public void Dispose() {
-			if (db != null) {
-				db.Dispose();
+			if (_db != null) {
+				_db.Dispose();
 			}
 		}
 

@@ -139,7 +139,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			string realPath = HttpContext.Current.Server.MapPath(this.EditFile);
 
 			if (File.Exists(realPath)) {
-				using (StreamReader sr = new StreamReader(realPath)) {
+				using (var sr = new StreamReader(realPath)) {
 					this.FileContents = sr.ReadToEnd();
 				}
 
