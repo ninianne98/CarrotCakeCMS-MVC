@@ -74,7 +74,12 @@ function cmsSetDateRegion() {
 			showOn: "both",
 			buttonImage: '/Assets/Admin/images/calendar.png',
 			buttonImageOnly: true,
-			constrainInput: true
+			constrainInput: true,
+			beforeShow: function () {
+				setTimeout(function () {
+					$('.ui-datepicker').css('z-index', 15);
+				}, 0);
+			}
 		});
 	});
 }
@@ -94,6 +99,9 @@ function cmsSetTimeRegion() {
 	$(".timeRegion").each(function () {
 		if (!$(this).hasClass("hasTimePicker")) {
 			$(this).addClass("hasTimePicker");
+			$(this).parent().css('z-index', 15);
+			$(this).parent().css('position', 'relative');
+
 			var id = $(this).attr('id');
 			$('<img class="ui-timepicker-trigger" src="/Assets/Admin/images/clock.png" for="' + id + '" id="' + id + '_triggerbtn" alt="' + cmsTimePattern + '" title="' + cmsTimePattern + '">').insertAfter(this);
 
@@ -103,7 +111,8 @@ function cmsSetTimeRegion() {
 				showPeriodLabels: showAmPm,
 				showPeriod: showAmPm,
 				amPmText: [stringAM, stringPM],
-				showLeadingZero: true
+				showLeadingZero: true,
+				zIndex: 99
 			});
 		};
 	});
