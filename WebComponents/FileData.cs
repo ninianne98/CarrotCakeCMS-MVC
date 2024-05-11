@@ -347,6 +347,7 @@ namespace Carrotware.Web.UI.Components {
 			get {
 				if (_dict == null) {
 					_dict = new ConcurrentDictionary<string, string>();
+					_dict.TryAdd(".7z", "application/octet-stream");
 					_dict.TryAdd(".ai", "application/postscript");
 					_dict.TryAdd(".aif", "audio/aiff");
 					_dict.TryAdd(".aifc", "audio/aiff");
@@ -450,11 +451,13 @@ namespace Carrotware.Web.UI.Components {
 					_dict.TryAdd(".man", "application/x-troff-man");
 					_dict.TryAdd(".map", "application/x-navimap");
 					_dict.TryAdd(".mcd", "application/mcad");
+					_dict.TryAdd(".md", "text/plain");
 					_dict.TryAdd(".mht", "message/rfc822");
 					_dict.TryAdd(".mhtml", "message/rfc822");
 					_dict.TryAdd(".mid", "audio/midi");
 					_dict.TryAdd(".midi", "audio/midi");
 					_dict.TryAdd(".mime", "message/rfc822");
+					_dict.TryAdd(".mkv", "video/webm");
 					_dict.TryAdd(".mm", "application/base64");
 					_dict.TryAdd(".mod", "audio/mod");
 					_dict.TryAdd(".moov", "video/quicktime");

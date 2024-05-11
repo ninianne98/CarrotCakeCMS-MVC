@@ -229,8 +229,9 @@
 	<br />
 	<br />
 </div>
-@using (Html.BeginForm()) {
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "contentForm" })) {
 	@Html.AntiForgeryToken()
+	@Html.HiddenFor(m => m.SerialCache, new { @class = "non-serial-data" })
 
 	<table style="width: 820px;">
 		<tr>
@@ -342,7 +343,7 @@
 		</div>
 	</div>
 
-					}
+}
 
 @if (!bLocked) {
 	<div style="display: none">

@@ -22,6 +22,7 @@
 
 	<script type="text/javascript">
 		var imgFileExt = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'webp'];
+		var vidFileExt = ['mp4', 'm4v', 'avi', 'mkv', 'mpg', 'mpeg'];
 		var defaultImage = '/Assets/Admin/images/LargeDoc.png';
 
 		var imgPreviewId = '#imgWrapperMain';
@@ -30,6 +31,7 @@
 		var imgSizeId = '#imgPreviewCaption';
 		var selFile = '#filePickerFileName';
 		var selFileImgPrev = '#imgThmbnailSelected';
+		var selFileVidPrev = '#vidThmbnailSelected';
 		var fileZone = '#fileZone';
 
 		$(document).ready(function () {
@@ -48,12 +50,35 @@
 		}
 
 		function cmsUpdateFileName() {
+			$(selFileImgPrev).show();
+			$(selFileVidPrev).hide();
 			$(selFileImgPrev).attr('src', defaultImage);
+			$(selFileVidPrev).html('');
 
 			var uri = $(selFile).val();
 			var uriExt = uri.substr(uri.lastIndexOf('.') + 1);
+
 			if ($.inArray(uriExt.toLowerCase(), imgFileExt) > -1) {
+				$(selFileImgPrev).show();
+				$(selFileVidPrev).hide();
 				$(selFileImgPrev).attr('src', uri);
+			}
+
+			if ($.inArray(uriExt.toLowerCase(), vidFileExt) > -1) {
+				$(selFileImgPrev).attr('src', '/Assets/Admin/Images/snake-md.gif');
+
+				setTimeout(function () {
+					$(selFileVidPrev).html('<source src="' + uri + '" />');
+
+					setTimeout(function () {
+						$(selFileImgPrev).hide();
+
+						setTimeout(function () {
+							$(selFileVidPrev).show();
+
+						}, 500);
+					}, 1000);
+				}, 500);
 			}
 		}
 
@@ -254,6 +279,8 @@
 								</th>
 								<th style="width: 20px;">
 								</th>
+								<th style="width: 20px;">
+								</th>
 								<th class="headerRowText">
 									Filename
 								</th>
@@ -277,6 +304,10 @@
 										</td>
 										<td>
 											<img src="@String.Format("/Assets/Admin/images/{0}.png", Model.FileImageLink(f.MimeType))" alt="filetype" />
+										</td>
+																				<td>
+											<a target="_blank" href="@f.FullFileName"><img src="/Assets/Admin/images/link.png" 
+													alt="open file in new window" title="open file in new window" /></a>
 										</td>
 										<td>
 											<div class="ImgGroup" id="imgContainerGroup">
@@ -341,7 +372,7 @@
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<input type="button" id="Button1" name="cancel" value="Cancel" onclick="window.close();" />
 						</div>
-				}
+					}
 
 					<div style="clear: both; height:110px">
 						@if (Model.UseTinyMCE) {
@@ -356,11 +387,13 @@
 					</div>
 				</div>
 
-				<div class="ui-widget-header ui-corner-all" style="margin: auto; margin: 5px 0 0 25px; height:160px; width:325px; float:left; display:block; border: 1px solid #666;">
-					<img style="max-height: 99%; max-width: 99%; display: block; margin:2px;  margin-left: auto; margin-right: auto;" id="imgThmbnailSelected" src="~/Assets/Admin/images/LargeDoc.png" />
+				<div class="ui-widget-header ui-corner-all" style="margin: auto; margin: 5px 0 0 25px; height:160px; width:325px; float:left; align-items: center; display: flex; border: 1px solid #666;">
+					<img style="display: block; max-height: 99%; max-width: 99%; margin:2px; margin: auto;" id="imgThmbnailSelected" src="/Assets/Admin/images/LargeDoc.png" />
+					<video style="display: none; margin: auto;" controls="controls" width="310" height="150" id="vidThmbnailSelected">
+					</video>
 				</div>
 			</div>
-								}
+			}
 	</div>
 
 	<div id="imgWrapperMain" style="display: none;">
