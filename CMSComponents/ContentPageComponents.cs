@@ -1,7 +1,7 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
+using System;
 using System.Web;
-using System.Web.Mvc;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -193,26 +193,40 @@ namespace Carrotware.CMS.UI.Components {
 			this.ContentPage = null;
 		}
 
-		public bool Enable301Redirect { get; set; }
+		public SiteCanonicalURL(ContentPage page) {
+			this.Enable301Redirect = false;
+			this.ContentPage = page;
+		}
+
+		public bool Enable301Redirect { get; set; } = false;
 
 		public ContentPage ContentPage { get; set; }
 
 		public override string GetHtml() {
-			string pageUri = string.Empty;
+			var site = SiteData.CurrentSite;
+			var blogIndexId = site.Blog_Root_ContentID.HasValue ? site.Blog_Root_ContentID.Value : Guid.Empty;
+			var pageUri = string.Empty;
+			var pageisIndex = false;
 
-			SiteData sd = SiteData.CurrentSite;
+			if (site != null) {
+				pageisIndex = this.ContentPage.Root_ContentID == blogIndexId;
+				pageUri = site.DefaultCanonicalURL;
 
-			if (sd != null) {
-				pageUri = sd.DefaultCanonicalURL;
 				if (this.ContentPage == null) {
 					this.ContentPage = SiteData.GetCurrentPage();
 				}
 
-				if (ContentPage != null) {
-					if (ContentPage.NavOrder == 0) {
-						pageUri = sd.MainCanonicalURL;
+				if (this.ContentPage != null) {
+					if (this.ContentPage.NavOrder == 0) {
+						pageUri = site.MainCanonicalURL;
 					} else {
-						pageUri = sd.DefaultCanonicalURL;
+						if (pageisIndex && SiteData.CurrentScriptName.Length > 1
+								&& this.ContentPage.FileName.ToLowerInvariant() != SiteData.CurrentScriptName.ToLowerInvariant()) {
+							// if blog index, use whatever the url is as the valid url
+							pageUri = site.MainCanonicalURL + SiteData.CurrentScriptName.Substring(1);
+						} else {
+							pageUri = site.DefaultCanonicalURL;
+						}
 					}
 				}
 			} else {
@@ -221,10 +235,11 @@ namespace Carrotware.CMS.UI.Components {
 
 			string lnk = string.Format("<link rel=\"canonical\" href=\"{0}\" />", pageUri);
 
-			if (this.Enable301Redirect) {
+			// do not do a redirect on index because its URLs can vary legitimately
+			if (this.Enable301Redirect && pageisIndex == false) {
 				HttpContext ctx = HttpContext.Current;
 
-				if (!SiteData.CurrentSite.MainCanonicalURL.ToLowerInvariant().Contains(@"://" + CMSConfigHelper.DomainName.ToLowerInvariant())) {
+				if (!site.MainCanonicalURL.ToLowerInvariant().Contains(@"://" + CMSConfigHelper.DomainName.ToLowerInvariant())) {
 					ctx.Response.Status = "301 Moved Permanently";
 					ctx.Response.AddHeader("Location", pageUri);
 				}

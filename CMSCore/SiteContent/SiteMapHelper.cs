@@ -81,26 +81,31 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static HtmlString GetSiteMap() {
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
+			string dateFormat = "yyyy-MM-dd";
 
-			SiteData site = SiteData.CurrentSite;
-			List<SiteNav> lstNav = new List<SiteNav>();
+			var site = SiteData.CurrentSite;
+			var lstNav = new List<SiteNav>();
+			var lstBlog = new List<SiteNav>();
+
+			var blogIndexId = site.Blog_Root_ContentID.HasValue ? site.Blog_Root_ContentID.Value : Guid.Empty;
 
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-				//lstNav = navHelper.GetTwoLevelNavigation(SiteData.CurrentSiteID, true);
-				lstNav = navHelper.GetLevelDepthNavigation(SiteData.CurrentSiteID, 4, true);
+				lstNav = navHelper.GetLevelDepthNavigation(site.SiteID, 4, true);
+				lstBlog = navHelper.GetFilteredContentPagedList(site, "", true, 25, 0, "GoLiveDate", "DESC");
 			}
-			lstNav.RemoveAll(x => x.ShowInSiteMap == false);
 
-			DateTime dtMax = lstNav.Min(x => x.EditDate);
-			string DateFormat = "yyyy-MM-dd";
+			lstNav.RemoveAll(x => x.ShowInSiteMap == false || x.NavOrder < 1);
+			lstNav = lstNav.Union(lstBlog).ToList();
 
-			XmlWriterSettings settings = new XmlWriterSettings();
+			DateTime dtMax = lstNav.Max(x => x.EditDate);
+
+			var settings = new XmlWriterSettings();
 			settings.Indent = true;
 			settings.Encoding = Encoding.UTF8;
 			settings.CheckCharacters = true;
 
-			XmlWriter writer = XmlWriter.Create(sb, settings);
+			var writer = XmlWriter.Create(sb, settings);
 
 			//writer.WriteStartDocument();
 			writer.WriteProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\"");
@@ -112,19 +117,33 @@ namespace Carrotware.CMS.Core {
 			writer.WriteRaw("\n");
 			writer.WriteStartElement("url");
 			writer.WriteElementString("loc", site.MainURL);
-			writer.WriteElementString("lastmod", dtMax.ToString(DateFormat));
+			writer.WriteElementString("lastmod", dtMax.ToString(dateFormat));
 			writer.WriteElementString("priority", "1.0");
+			writer.WriteElementString("changefreq", "daily");
 			writer.WriteEndElement();
 			writer.WriteRaw("\n");
 
 			// always, hourly, daily, weekly, monthly, yearly, never
 
-			foreach (SiteNav n in lstNav) {
+			foreach (var n in lstNav) {
 				writer.WriteStartElement("url");
 				writer.WriteElementString("loc", site.ConstructedCanonicalURL(n));
-				writer.WriteElementString("lastmod", n.EditDate.ToString(DateFormat));
-				writer.WriteElementString("changefreq", "weekly");
-				writer.WriteElementString("priority", n.Parent_ContentID.HasValue ? "0.60" : "0.80");
+				writer.WriteElementString("lastmod", n.EditDate.ToString(dateFormat));
+
+				if (n.ContentType == ContentPageType.PageType.ContentEntry) {
+					var contentPriority = (n.Parent_ContentID.HasValue == false
+											|| n.Root_ContentID == blogIndexId);
+
+					writer.WriteElementString("priority", contentPriority ? "0.80" : "0.60");
+					writer.WriteElementString("changefreq", contentPriority ? "daily" : "weekly");
+				} else {
+					var recentPost = n.EditDate.Date.AddDays(42) > site.Now.Date
+									|| n.GoLiveDate.Date.AddDays(42) > site.Now.Date;
+
+					writer.WriteElementString("priority", recentPost ? "0.75" : "0.50");
+					writer.WriteElementString("changefreq", recentPost ? "weekly" : "monthly");
+				}
+
 				writer.WriteEndElement();
 				writer.WriteRaw("\n");
 			}
