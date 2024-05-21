@@ -73,6 +73,30 @@ namespace Carrotware.CMS.UI.Components {
 		public object ULClassLowerAttributes { get; set; }
 		public object HasChildrenAttributes { get; set; }
 
+		public void SetItemAttributes(object attribute) {
+			this.ItemAttributes = attribute;
+		}
+
+		public void SetAnchorAttributes(object attribute) {
+			this.AnchorAttributes = attribute;
+		}
+
+		public void SetSelectedAttributes(object attribute) {
+			this.SelectedAttributes = attribute;
+		}
+
+		public void SetULClassTopAttributes(object attribute) {
+			this.ULClassTopAttributes = attribute;
+		}
+
+		public void SetULClassLowerAttributes(object attribute) {
+			this.ULClassLowerAttributes = attribute;
+		}
+
+		public void SetHasChildrenAttributes(object attribute) {
+			this.HasChildrenAttributes = attribute;
+		}
+
 		public string ElementId { get; set; }
 
 		public List<SiteNav> NavigationData { get; set; }

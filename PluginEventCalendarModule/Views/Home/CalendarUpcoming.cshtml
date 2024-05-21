@@ -16,7 +16,7 @@
 		<div>
 			<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
 				<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
-					<b>
+					<span style="font-weight: bold; color: @item.CategoryFGColor;">
 						@item.EventTitle
 						@if (!item.IsAllDayEvent) {
 							if (item.EventStartTime.HasValue && item.EventEndTime.HasValue) {
@@ -32,7 +32,7 @@
 						@if (item.IsCancelledSeries || item.IsCancelledEvent) {
 							<span> (CANCELLED) </span>
 						}
-					</b>
+					</span>
 				</div>
 			</div>
 		</div>

@@ -18,10 +18,9 @@
 			url: webMthd,
 			data: JSON.stringify({ DBKey: val, ThisPage: thisPageID }),
 			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			success: cmsReqContentCallback,
-			error: cmsAjaxFailed
-		});
+			dataType: "json"
+		}).done(cmsReqContentCallback)
+			.fail(cmsAjaxFailed);
 	}
 
 	function cmsDoToolTipDataRequest(val) {

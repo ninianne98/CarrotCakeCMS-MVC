@@ -19,6 +19,10 @@ CarrotCake CMS Theme Stylesheet - Main
   padding: 0.1em;
   margin: 0.25em 0 0.5em 0;
 }
+.row {
+  display: flex;
+  margin: 0.25em 1em 0.25em 0;
+}
 .dl-horizontal dt {
   float: left;
   width: 160px;
@@ -169,7 +173,7 @@ table.table thead.header {
   text-align: right;
   font-weight: bolder;
   padding: 0;
-  margin: 0.25em 1em 0.25em 0;
+  padding-right: 1em;
 }
 .form-control {
   padding: 0;
@@ -793,7 +797,14 @@ samp {
   min-width: 900px;
   width: 90%;
 }
-fieldset {
+fieldset,
+.fieldset-free,
+.fieldset-xsm,
+.fieldset-sm,
+.fieldset-med,
+.fieldset-lg,
+.fieldset-xlg,
+.fieldset-xxlg {
   clear: both;
   display: inline;
   margin: 1.2em 0;
@@ -805,7 +816,14 @@ fieldset {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
 }
-fieldset legend label {
+fieldset legend label,
+.fieldset-free legend label,
+.fieldset-xsm legend label,
+.fieldset-sm legend label,
+.fieldset-med legend label,
+.fieldset-lg legend label,
+.fieldset-xlg legend label,
+.fieldset-xxlg legend label {
   display: block;
   font-size: 1.35em;
   margin: 0;
@@ -1099,6 +1117,16 @@ drilldown stuff
   padding: 2px;
   margin: 2px;
   float: left;
+  font-size: 12pt;
+  line-height: 1.3em;
+}
+#nodedrilldown .ui-button {
+  height: 25px;
+  font-size: 12pt;
+  line-height: 1.3em;
+}
+.bootstrap-content #nodedrilldown .ui-button {
+  height: 34px;
 }
 div.scroll {
   height: 115px;
@@ -1138,6 +1166,7 @@ div.scrollcontainerheight {
   padding: 0;
   margin: 0;
   float: left;
+  font-size: 12pt;
   line-height: 0.8em;
 }
 .pageNodeDrillDown1,
@@ -1151,7 +1180,8 @@ div.scrollcontainerheight {
 }
 .pageNodeDrillDown2,
 .pageNodeDrillDown6 {
-  height: 1.1em;
+  font-size: 12pt;
+  height: 34px;
   line-height: 1em;
   padding: 4px;
   margin: 2px;
@@ -1162,16 +1192,17 @@ div.scrollcontainerheight {
   width: 6.5em;
 }
 .pageNodeDrillDown6 {
-  min-width: 35px;
+  min-width: 36px;
   width: 6em;
 }
 .pageNodeDrillDown3,
 .pageNodeDrillDown4 {
-  height: 1.4em;
-  padding: 0.2em 4px 0.7em 4px;
+  font-size: 12pt;
+  height: 34px;
+  padding: 2px 4px 8px 4px;
 }
 .drill-placeholder {
-  height: 1.2em;
+  height: 28px;
   width: 2px;
   margin: 2px;
   padding: 1px;
@@ -1194,4 +1225,7 @@ div.scrollcontainerheight {
 }
 .pageNodeDrillDown2 .ui-icon {
   margin: auto 0 auto 4px;
+}
+.ui-timepicker-table td a {
+  width: 30px;
 }

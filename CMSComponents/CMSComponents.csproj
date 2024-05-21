@@ -122,6 +122,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminScriptInfo.cs" />
     <Compile Include="AdvContentModel.cs" />
     <Compile Include="BaseToolboxComponent.cs" />
     <Compile Include="BaseTwoPartCmsComponent.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="ListInBody.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="adminHelp.js" />
     <Content Include="editor\advedit.amethystorchid.css">
       <DependentUpon>advedit.amethystorchid.less</DependentUpon>
     </Content>

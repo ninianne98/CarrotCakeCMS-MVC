@@ -5,6 +5,8 @@
 
 	var settings = new ModuleInfo(this.ViewContext);
 
+	int sectionSequence = 0;
+
 }
 
 @section scripts {
@@ -17,28 +19,57 @@
 	<tr>
 		<td style="width: 275px;">
 			<div style="width: 250px; padding-right: 25px;">
-				<div id="module-accordion">
+				<div id="module-accordion" class="accordion">
 					@foreach (var mod in settings.Modules) {
+						string sectionId = String.Format("moduleGroup{0}", sectionSequence);
+						string sectionSubId = String.Format("moduleSubGroup{0}", sectionSequence);
 						settings.EvalModule(mod);
 
-						<h3>
-							<a href="#">
-								@mod.PluginName
-							</a>
-						</h3>
-						<div>
-							<input type="hidden" name="hdnID" id="hdnID" value="@mod.AreaKey" />
-							@foreach (var plug in mod.PluginMenus.OrderBy(x => x.SortOrder).Where(x => x.IsVisible)) {
-								settings.EvalPlug(plug);
+						if (!Helper.UseBootstrap) {
+							<h3>
+								<a href="#">
+									@mod.PluginName
+								</a>
+							</h3>
+							<div>
+								<input type="hidden" name="hdnID" id="hdnID" value="@mod.AreaKey" />
+								@foreach (var plug in mod.PluginMenus.OrderBy(x => x.SortOrder).Where(x => x.IsVisible)) {
+									settings.EvalPlug(plug);
 
-								<div class="moduleLink">
-									<a class="@settings.SelectedCssClass" href="@String.Format("/{0}/{1}/{2}", plug.AreaKey, plug.Controller, plug.Action)">
-										@plug.Caption
-									</a>
+									<div class="moduleLink">
+										<a class="@settings.SelectedCssClass" href="@String.Format("/{0}/{1}/{2}", plug.AreaKey, plug.Controller, plug.Action)">
+											@plug.Caption
+										</a>
+									</div>
+								}
+							</div>
+						} else {
+							<div class="accordion-item">
+								<h3 class="accordion-header" id="@sectionId">
+									<button type="button" class="accordion-button" data-bs-toggle="collapse"
+											data-bs-target="#@sectionSubId" aria-expanded="true" aria-controls="@sectionSubId">
+										@mod.PluginName
+									</button>
+								</h3>
+								<div id="@sectionSubId" class="accordion-collapse collapse" aria-labelledby="@sectionId" data-bs-parent="#module-accordion">
+									<div class="accordion-body">
+										<input type="hidden" name="hdnID" id="hdnID" value="@mod.AreaKey" />
+										@foreach (var plug in mod.PluginMenus.OrderBy(x => x.SortOrder).Where(x => x.IsVisible)) {
+											settings.EvalPlug(plug);
+
+											<div class="moduleLink">
+												<a class="@settings.SelectedCssClass" href="@String.Format("/{0}/{1}/{2}", plug.AreaKey, plug.Controller, plug.Action)">
+													@plug.Caption
+												</a>
+											</div>
+										}
+									</div>
 								</div>
-							}
-						</div>
-							settings.OpenTab++;
+							</div>
+						}
+
+						settings.OpenTab++;
+						sectionSequence++;
 					}
 				</div>
 			</div>
@@ -68,12 +99,20 @@
 				}
 
 				function modulePageLoad() {
-					$("#module-accordion").accordion({
-						heightStyle: "content",
-						active: parseInt('@settings.SelectedTab')
-					});
-
-					$('#tabExtensions').attr('class', "current sub");
+					@if (!Helper.UseBootstrap) {
+						<text>
+						$('#tabExtensions').addClass("current sub active");
+						$("#module-accordion").accordion({
+							heightStyle: "content",
+							active: parseInt('@settings.SelectedTab')
+						});
+						</text>
+					} else {
+						<text>
+						$('#tabExtensions').addClass("current active");
+						$('#moduleSubGroup' + '@settings.SelectedTab').attr('class', "accordion-collapse collapse show");
+						</text>
+					}
 				}
 			</script>
 

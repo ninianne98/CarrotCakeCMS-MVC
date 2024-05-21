@@ -588,7 +588,6 @@
     <Content Include="Assets\Admin\Includes\filebrowser.css" />
     <Content Include="Assets\Admin\Includes\FindUsers.js" />
     <Content Include="Assets\Admin\Includes\jquery.blockUI.js" />
-    <Content Include="Assets\Admin\Includes\jquery.form.min.js" />
     <Content Include="Assets\Admin\Includes\jquery.simplemodal.js" />
     <Content Include="Assets\Admin\Includes\jquery.ui.nestedSortable.js" />
     <Content Include="Assets\Admin\Includes\jquery.ui.timepicker.css" />
@@ -809,6 +808,12 @@
     <Content Include="GPL-LICENSE.txt" />
     <Content Include="MIT-LICENSE.txt" />
     <EmbeddedResource Include="Views\CmsContent\PlainPage\plain.css" />
+    <Content Include="Views\CmsAdmin\_LayoutMain.cshtml" />
+    <Content Include="Views\CmsAdmin\_LayoutMain_bs.cshtml" />
+    <Content Include="Views\CmsAdmin\_LayoutMain_ccc.cshtml" />
+    <Content Include="Views\CmsAdmin\_LayoutPopup.cshtml" />
+    <Content Include="Views\CmsAdmin\_LayoutPopup_bs.cshtml" />
+    <Content Include="Views\CmsAdmin\_LayoutPopup_ccc.cshtml" />
     <Content Include="Views\Templates\Aqueous\blog-index.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1100,8 +1105,6 @@
     <Content Include="Views\CmsAdmin\Index.cshtml" />
     <Content Include="Views\CmsContent\_EditNotifier.cshtml" />
     <Content Include="Views\CmsAdmin\_LayoutPublic.cshtml" />
-    <Content Include="Views\CmsAdmin\_LayoutMain.cshtml" />
-    <Content Include="Views\CmsAdmin\_LayoutPopup.cshtml" />
     <Content Include="Views\CmsContent\_EmptyHome.cshtml" />
     <Content Include="Views\CmsAdmin\SiteInfo.cshtml" />
     <Content Include="Views\CmsAdmin\_SitePageDrillDown.cshtml" />

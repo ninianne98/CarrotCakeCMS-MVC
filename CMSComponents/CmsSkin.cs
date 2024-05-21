@@ -21,6 +21,7 @@ namespace Carrotware.CMS.UI.Components {
 		private string _rootThemePathSkin = "/Assets/Admin/skins/";
 		private string _rootThemePathEdit = "/Assets/Admin/editor/";
 		private jquerybasic _jqb = new jquerybasic();
+		private Bootstrap5 _bs5 = new Bootstrap5();
 
 		public enum SkinOption {
 			None,
@@ -69,6 +70,8 @@ namespace Carrotware.CMS.UI.Components {
 
 		public SkinOption SelectedColor { get; set; }
 		public SkinMode WindowMode { get; set; }
+
+		public bool EmitBootstrap { get; set; } = false;
 
 		public static string GetPrimaryColorCode(SkinOption color) {
 			string colorCode = "#cccccc";
@@ -239,9 +242,10 @@ namespace Carrotware.CMS.UI.Components {
 
 		public override string GetHtml() {
 			GetEditState();
-
 			var sb = new StringBuilder();
-			_jqb.SelectedSkin = jquerybasic.jQueryTheme.Silver;
+
+			_jqb.SelectedSkin = jquerybasic.jQueryTheme.LightGreen;
+			_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Classic;
 
 			switch (this.SelectedColor) {
 				case SkinOption.Classic:
@@ -275,6 +279,42 @@ namespace Carrotware.CMS.UI.Components {
 					break;
 			}
 
+			switch (this.SelectedColor) {
+				case SkinOption.AmethystOrchid:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.AmethystOrchid;
+					break;
+				case SkinOption.BlueIzis:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.BlueIzis;
+					break;
+				case SkinOption.FrenchBlue:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.FrenchBlue;
+					break;
+				case SkinOption.Mauve:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Mauve;
+					break;
+				case SkinOption.MosaicBlue:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.MosaicBlue;
+					break;
+				case SkinOption.Plum:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Plum;
+					break;
+				case SkinOption.QuetzalGreen:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.QuetzalGreen;
+					break;
+				case SkinOption.Rust:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Rust;
+					break;
+				case SkinOption.Sandstone:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Sandstone;
+					break;
+				case SkinOption.SugarAlmond:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.SugarAlmond;
+					break;
+				default:
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Classic;
+					break;
+			}
+
 			var rootPath = _useEditor ? _rootThemePathEdit : _rootThemePathSkin;
 
 			var versionKey = string.Format("?cms={0}&ts={1}", SiteData.CurrentDLLVersion, CarrotWeb.DateKey());
@@ -292,6 +332,10 @@ namespace Carrotware.CMS.UI.Components {
 			}
 
 			sb.AppendLine(string.Format("<!-- CMS {0} Theme   -->", this.SelectedColor) + csstag.RenderSelfClosingTag());
+
+			if (this.EmitBootstrap) {
+				sb.AppendLine(_bs5.GetHtml().Trim());
+			}
 
 			sb.AppendLine(string.Format("<!-- END {0} Theme   -->", this.SelectedColor));
 

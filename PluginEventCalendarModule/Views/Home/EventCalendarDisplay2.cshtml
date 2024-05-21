@@ -82,7 +82,7 @@
 			});
 
 			setTimeout(function () {
-				$("#divCalendarResults2 button").addClass('btn');
+				$("#divCalendarResults2 button").addClass('btn btn-default btn btn-primary');
 				$("#divCalendarResults2 button").button();
 			}, 250);
 		}
@@ -136,7 +136,7 @@
 		@Html.AntiForgeryToken()
 
 		<div id="divDatePicker" class="calendarCenter1">
-			@Html.TextBox("CalendarInputDate", string.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", @class = "eventDateRegion form-control-sm" })
+			@Html.TextBox("CalendarInputDate", string.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", style = "width: 10em; display:inline; margin:1em", @class = "eventDateRegion form-control-sm" })
 		</div>
 
 		<div class="calendarCenter2">
@@ -170,7 +170,7 @@
 				<div>
 					<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
 						<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
-							<b>
+							<span style="font-weight: bold; color: @item.CategoryFGColor;">
 								@item.EventTitle
 								@if (!item.IsAllDayEvent) {
 									if (item.EventStartTime.HasValue && item.EventEndTime.HasValue) {
@@ -186,7 +186,7 @@
 								@if (item.IsCancelledSeries || item.IsCancelledEvent) {
 									<span> (CANCELLED) </span>
 								}
-							</b>
+							</span>
 						</div>
 					</div>
 					<div class="divCalendarDetail2Text">
@@ -203,7 +203,7 @@
 	@foreach (var item in Model.Colors) {
 		<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
 			<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
-				<b> @item.CategoryName </b>
+				<span style="font-weight: bold; color: @item.CategoryFGColor;"> @item.CategoryName </span>
 			</div>
 		</div>
 	}

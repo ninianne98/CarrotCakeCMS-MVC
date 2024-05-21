@@ -27,14 +27,15 @@ namespace Carrotware.CMS.Interface.Controllers {
 
 		public BaseWidgetController()
 			: base() {
-			Assembly asmbly = this.GetType().Assembly;
+			Assembly a = this.GetType().Assembly;
 
-			string assemblyName = asmbly.GetAssemblyName();
+			string assemblyName = a.GetAssemblyName();
 
 			this.ViewData[CarrotViewEngineWidget.Key] = assemblyName;
 			this.AssemblyName = assemblyName;
 
 			ViewBag.WidgetAssemblyName = assemblyName;
+			ViewBag.WidgetAreaAlias = string.Format("{0}_Default", assemblyName);
 		}
 
 		protected override void Dispose(bool disposing) {

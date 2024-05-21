@@ -41,13 +41,20 @@ namespace Carrotware.CMS.Core {
 			requestedUri = string.IsNullOrEmpty(requestedUri) ? @"/" : requestedUri.ToLowerInvariant();
 			requestedUri = requestedUri.FixPathSlashes();
 
-			if (requestedUri.EndsWith(".ashx")) {
-				if (requestedUri == SiteFilename.RssFeedUri) {
+			if (requestedUri.EndsWith(".ashx")
+						|| requestedUri.ToLowerInvariant().Contains("rss.")
+						|| requestedUri.ToLowerInvariant().Contains("sitemap.")) {
+
+				if (requestedUri == SiteFilename.RssFeedUri.ToLowerInvariant()
+						|| requestedUri == SiteFilename.RssFeedUri.ToLowerInvariant().Replace(".ashx", ".axd")
+						|| requestedUri == SiteFilename.RssFeedUri.ToLowerInvariant().Replace(".ashx", ".xml")) {
 					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 					requestCtx.RouteData.Values["action"] = CmsRouteConstants.RssAction;
 					return base.GetHttpHandler(requestCtx);
 				}
-				if (requestedUri == SiteFilename.SiteMapUri) {
+				if (requestedUri == SiteFilename.SiteMapUri.ToLowerInvariant()
+						|| requestedUri == SiteFilename.SiteMapUri.ToLowerInvariant().Replace(".ashx", ".axd")
+						|| requestedUri == SiteFilename.SiteMapUri.ToLowerInvariant().Replace(".ashx", ".xml")) {
 					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 					requestCtx.RouteData.Values["action"] = CmsRouteConstants.SiteMapAction;
 					return base.GetHttpHandler(requestCtx);

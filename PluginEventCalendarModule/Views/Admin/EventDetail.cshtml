@@ -25,7 +25,7 @@
 	@Html.HiddenFor(m => m.ItemData.CalendarEventProfileID)
 	@Html.HiddenFor(m => m.Operation)
 
-	<fieldset style="width: 750px;">
+	<fieldset style="width: 750px;" class="fieldset-free">
 		<legend>
 			<label>
 				Event
@@ -74,11 +74,11 @@
 							<tbody>
 								<tr>
 									@for (int d = 0; d < Model.DaysOfTheWeek.Count; d++) {
-									<td>
-										@Html.CheckBoxFor(m => Model.DaysOfTheWeek[d].Selected)
-										@Html.HiddenFor(m => Model.DaysOfTheWeek[d].Value)
-										@Model.DaysOfTheWeek[d].Text
-									</td>
+										<td>
+											@Html.CheckBoxFor(m => Model.DaysOfTheWeek[d].Selected)
+											@Html.HiddenFor(m => Model.DaysOfTheWeek[d].Value)
+											@Model.DaysOfTheWeek[d].Text
+										</td>
 									}
 								</tr>
 							</tbody>
@@ -151,7 +151,7 @@
 			</tbody>
 		</table>
 	</fieldset>
-	<fieldset style="width: 700px;">
+	<fieldset style="width: 700px;" class="fieldset-free">
 		<legend>
 			<label>
 				Details

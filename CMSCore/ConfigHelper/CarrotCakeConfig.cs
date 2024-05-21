@@ -123,15 +123,22 @@ namespace Carrotware.CMS.Core {
 
 		[Description("Override parameter for admin folder")]
 		[ConfigurationProperty("AdminFolderPath", DefaultValue = "/c3-admin/", IsRequired = false)]
-		public String AdminFolderPath {
-			get { return (String)this["AdminFolderPath"]; }
+		public string AdminFolderPath {
+			get { return (string)this["AdminFolderPath"]; }
 			set { this["AdminFolderPath"] = value; }
+		}
+
+		[Description("Override parameter to apply a bootstrap CSS for admin area")]
+		[ConfigurationProperty("UseBootstrap", DefaultValue = false, IsRequired = false)]
+		public bool UseBootstrap {
+			get { return (bool)this["UseBootstrap"]; }
+			set { this["UseBootstrap"] = value; }
 		}
 
 		[Description("Override parameter for site skin")]
 		[ConfigurationProperty("SiteSkin", DefaultValue = "Classic", IsRequired = false)]
-		public String SiteSkin {
-			get { return (String)this["SiteSkin"]; }
+		public string SiteSkin {
+			get { return (string)this["SiteSkin"]; }
 			set { this["SiteSkin"] = value; }
 		}
 	}
@@ -141,8 +148,8 @@ namespace Carrotware.CMS.Core {
 
 		[Description("File extensions to block from the CMS file browser")]
 		[ConfigurationProperty("BlockedExtensions", DefaultValue = null, IsRequired = false)]
-		public String BlockedExtensions {
-			get { return (String)this["BlockedExtensions"]; }
+		public string BlockedExtensions {
+			get { return (string)this["BlockedExtensions"]; }
 			set { this["BlockedExtensions"] = value; }
 		}
 	}
@@ -162,26 +169,26 @@ namespace Carrotware.CMS.Core {
 	public class ConfigFileElement : ConfigurationElement {
 
 		[ConfigurationProperty("SiteMapping", DefaultValue = "SiteMapping.config", IsRequired = false)]
-		public String SiteMapping {
-			get { return (String)this["SiteMapping"]; }
+		public string SiteMapping {
+			get { return (string)this["SiteMapping"]; }
 			set { this["SiteMapping"] = value; }
 		}
 
 		[ConfigurationProperty("TextContentProcessors", DefaultValue = "TextContentProcessors.config", IsRequired = false)]
-		public String TextContentProcessors {
-			get { return (String)this["TextContentProcessors"]; }
+		public string TextContentProcessors {
+			get { return (string)this["TextContentProcessors"]; }
 			set { this["TextContentProcessors"] = value; }
 		}
 
 		[ConfigurationProperty("TemplatePath", DefaultValue = "~/Views/Templates/", IsRequired = false)]
-		public String TemplatePath {
-			get { return (String)this["TemplatePath"]; }
+		public string TemplatePath {
+			get { return (string)this["TemplatePath"]; }
 			set { this["TemplatePath"] = value; }
 		}
 
 		[ConfigurationProperty("PluginPath", DefaultValue = "~/Views/", IsRequired = false)]
-		public String PluginPath {
-			get { return (String)this["PluginPath"]; }
+		public string PluginPath {
+			get { return (string)this["PluginPath"]; }
 			set { this["PluginPath"] = value; }
 		}
 	}
@@ -190,20 +197,20 @@ namespace Carrotware.CMS.Core {
 	public class AdminFooterElement : ConfigurationElement {
 
 		[ConfigurationProperty("ViewPathMain", DefaultValue = null, IsRequired = false)]
-		public String ViewPathMain {
-			get { return (String)this["ViewPathMain"]; }
+		public string ViewPathMain {
+			get { return (string)this["ViewPathMain"]; }
 			set { this["ViewPathMain"] = value; }
 		}
 
 		[ConfigurationProperty("ViewPathPopup", DefaultValue = null, IsRequired = false)]
-		public String ViewPathPopup {
-			get { return (String)this["ViewPathPopup"]; }
+		public string ViewPathPopup {
+			get { return (string)this["ViewPathPopup"]; }
 			set { this["ViewPathPopup"] = value; }
 		}
 
 		[ConfigurationProperty("ViewPathPublic", DefaultValue = null, IsRequired = false)]
-		public String ViewPathPublic {
-			get { return (String)this["ViewPathPublic"]; }
+		public string ViewPathPublic {
+			get { return (string)this["ViewPathPublic"]; }
 			set { this["ViewPathPublic"] = value; }
 		}
 	}
@@ -212,14 +219,14 @@ namespace Carrotware.CMS.Core {
 	public class PublicSiteElement : ConfigurationElement {
 
 		[ConfigurationProperty("ViewPathHeader", DefaultValue = null, IsRequired = false)]
-		public String ViewPathHeader {
-			get { return (String)this["ViewPathHeader"]; }
+		public string ViewPathHeader {
+			get { return (string)this["ViewPathHeader"]; }
 			set { this["ViewPathHeader"] = value; }
 		}
 
 		[ConfigurationProperty("ViewPathFooter", DefaultValue = null, IsRequired = false)]
-		public String ViewPathFooter {
-			get { return (String)this["ViewPathFooter"]; }
+		public string ViewPathFooter {
+			get { return (string)this["ViewPathFooter"]; }
 			set { this["ViewPathFooter"] = value; }
 		}
 	}

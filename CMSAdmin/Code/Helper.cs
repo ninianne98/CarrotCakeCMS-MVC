@@ -36,7 +36,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 
 		public static string WebServiceAddress {
 			get {
-				return VirtualPathUtility.ToAbsolute("~/Assets/Admin/CMS.asmx");
+				return CarrotCakeHtml.WebServiceAddress;
 			}
 		}
 
@@ -45,7 +45,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 		public static SkinOption SiteSkin {
 			get {
 				if (_theme == SkinOption.None) {
-					CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+					var config = CarrotCakeConfig.GetConfig();
 					string skin = config.MainConfig.SiteSkin;
 					var actualSkin = SkinOption.Classic;
 					try { actualSkin = (SkinOption)Enum.Parse(typeof(SkinOption), skin, true); } catch { }
@@ -58,12 +58,23 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 		}
 
 		public static string MainColorCode {
-
 			get {
 				return CmsSkin.GetPrimaryColorCode(SiteSkin);
 			}
 		}
 
+		public static bool? _bootstrap = null;
+
+		public static bool UseBootstrap {
+			get {
+				if (_bootstrap == null) {
+					var config = CarrotCakeConfig.GetConfig();
+					_bootstrap = config.MainConfig.UseBootstrap;
+				}
+
+				return _bootstrap.HasValue ? _bootstrap.Value : false;
+			}
+		}
 
 		public static string InsertSpecialView(ViewLocation CtrlKey) {
 			string sViewPath = string.Empty;

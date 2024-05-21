@@ -818,7 +818,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string TemplatePreviewParameter {
-			get { return "carrot_templatepreview".ToLowerInvariant(); }
+			get { return "c3pv".ToLowerInvariant(); }
 		}
 
 		public static string DefaultDirectoryFilename {
@@ -980,21 +980,21 @@ namespace Carrotware.CMS.Core {
 		public static string AdminFolderPath {
 			get {
 				if (_adminFolderPath == null) {
-					string _defPath = "/c3-admin/";
+					string defPath = "/c3-admin/";
 					try {
-						CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+						var config = CarrotCakeConfig.GetConfig();
 						if (config.MainConfig != null && !string.IsNullOrEmpty(config.MainConfig.AdminFolderPath)) {
 							_adminFolderPath = config.MainConfig.AdminFolderPath;
 							_adminFolderPath = string.Format("/{0}/", _adminFolderPath).Replace(@"\", "/").Replace("///", "/").Replace("//", "/").Replace("//", "/").Trim();
 						} else {
-							_adminFolderPath = _defPath;
+							_adminFolderPath = defPath;
 						}
 						if (string.IsNullOrEmpty(_adminFolderPath) || _adminFolderPath.Length < 2) {
-							_adminFolderPath = _defPath;
+							_adminFolderPath = defPath;
 						}
 					} catch (Exception ex) {
 						SiteData.WriteDebugException("adminfolderpath", ex);
-						return _defPath;
+						return defPath;
 					}
 				}
 				return _adminFolderPath;

@@ -47,7 +47,9 @@
 		}
 
 		function cmsPreSaveTrigger() {
-			var tgr = tinymce.triggerSave();
+			if (tinymce) {
+				var tgr = tinymce.triggerSave();
+			}
 
 			return true;
 		}

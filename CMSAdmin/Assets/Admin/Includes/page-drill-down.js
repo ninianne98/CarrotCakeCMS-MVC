@@ -56,10 +56,9 @@ function getCrumbs() {
 			url: webMthd,
 			data: JSON.stringify({ PageID: myVal, CurrPageID: thisPage }),
 			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			success: ajaxReturnCrumb,
-			error: cmsAjaxFailedSwallow
-		});
+			dataType: "json"
+		}).done(ajaxReturnCrumb)
+			.fail(cmsAjaxFailedSwallow);
 	}
 }
 
@@ -145,10 +144,9 @@ function mouseNode() {
 				url: webMthd,
 				data: JSON.stringify({ PageID: myVal, CurrPageID: thisPage }),
 				contentType: "application/json; charset=utf-8",
-				dataType: "json",
-				success: ajaxReturnNode,
-				error: cmsAjaxFailedSwallow
-			});
+				dataType: "json"
+			}).done(ajaxReturnNode)
+				.fail(cmsAjaxFailedSwallow);
 		}
 	}
 

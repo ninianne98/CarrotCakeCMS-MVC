@@ -1,7 +1,6 @@
 ﻿@{
 	var versionKey = string.Format("cms={0}&ts={1}", SiteData.CurrentDLLVersion, string.Format("{0:yyyyMMddHH}", DateTime.UtcNow));
 }
-
 @*
 	<!-- jQuery CDN -->
 	<!-- https://cdnjs.com/libraries/jquery -->
@@ -13,8 +12,8 @@
 	<script> (!window.jQuery || (typeof jQuery == 'undefined')) || document.write('<script src="@jquery.GeneralUri" type="text/javascript"><\/script>'); </script>
 	<script> window.jQuery.ui || document.write('<script src="@jqueryui.GeneralUri" type="text/javascript"><\/script>'); </script>
 *@
-
 <!-- Adv Edit Head -->
+@(new AdminScriptInfo())
 <script src="~/Assets/Admin/Includes/jquery.simplemodal.js?@versionKey" type="text/javascript"></script>
 <script src="~/Assets/Admin/Includes/jquery.blockUI.js?@versionKey" type="text/javascript"></script>
 <script src="~/Assets/Admin/Includes/base64.js?@versionKey" type="text/javascript"></script>

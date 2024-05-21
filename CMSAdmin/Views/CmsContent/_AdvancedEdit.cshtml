@@ -7,10 +7,10 @@
 	var lockUser = CmsPage.LockUser;
 	string lockUsername = lockUser != null ? lockUser.UserName : String.Empty;
 
-	var EditorPrefs = UserEditState.cmsUserEditState;
-	if (EditorPrefs == null) {
-		EditorPrefs = new UserEditState();
-		EditorPrefs.Init();
+	var editorPrefs = UserEditState.cmsUserEditState;
+	if (editorPrefs == null) {
+		editorPrefs = new UserEditState();
+		editorPrefs.Init();
 	}
 
 	string clickJsEditInfo = "cmsShowEditPageInfo();";
@@ -24,9 +24,9 @@
 	var cmsPageInit2 = false;
 	var cmsPageLocked = @lockStatus;
 
-	$(document).ready(function () {
+	setTimeout(function () {
 		cmsToolbarPageInit2();
-	});
+	}, 50);
 
 	function cmsToolbarPageInit2() {
 		if (!cmsPageInit2) {
@@ -47,9 +47,9 @@
 
 	var cmsPageInit1 = false;
 
-	$(document).ready(function () {
+	setTimeout(function () {
 		cmsToolbarPageInit1();
-	});
+	}, 50);
 
 	function cmsToolbarPageInit1() {
 
@@ -58,11 +58,11 @@
 		var cmsThisPage = "@CmsPage.ThePage.FileName";
 		var cmsThisPageID = "@CmsPage.ThePage.Root_ContentID";
 
-		var cmsMargin = '@EditorPrefs.EditorMargin';
-		var cmsTabIdx = parseInt('@EditorPrefs.EditorSelectedTabIdx');
-		var cmsScrollPos = parseInt('@EditorPrefs.EditorScrollPosition');
-		var cmsScrollWPos = parseInt('@EditorPrefs.EditorWidgetScrollPosition');
-		var cmsOpenStat = @String.Format("{0};", EditorPrefs.EditorOpen.ToString().ToLowerInvariant())
+		var cmsMargin = '@editorPrefs.EditorMargin';
+		var cmsTabIdx = parseInt('@editorPrefs.EditorSelectedTabIdx');
+		var cmsScrollPos = parseInt('@editorPrefs.EditorScrollPosition');
+		var cmsScrollWPos = parseInt('@editorPrefs.EditorWidgetScrollPosition');
+		var cmsOpenStat = @String.Format("{0};", editorPrefs.EditorOpen.ToString().ToLowerInvariant())
 
 		cmsSetPageStatus(cmsPageLocked);
 
@@ -71,8 +71,6 @@
 		cmsSetServiceParms(cmsWebSvc, cmsThisPage, cmsThisPageID);
 
 		cmsSetTemplateDDL('#ddlCmsTemplateList');
-
-		cmsSetPreviewFileName('@SiteData.PreviewTemplateFilePage');
 
 		cmsOverridePageName('@CmsPage.GeneratedFileName');
 
@@ -168,8 +166,10 @@
 															<p class="cmsToolItem cms-seagreen">
 																@Html.Raw(widget.Caption)
 																@if (widget.SystemPlugin) {
-																	<span style="float:right;" class="ui-icon ui-icon-star"></span>		} else {
-																	<span style="float:right;" class="ui-icon ui-icon-tag"></span>		}
+																	<span style="float:right;" class="ui-icon ui-icon-star"></span>
+																} else {
+																	<span style="float:right;" class="ui-icon ui-icon-tag"></span>
+																}
 															</p>
 															<p class="cmsWidgetToolboxPath">
 																@String.Format("{0}", widget.FilePath).Replace(".", ". ").Replace("/", "/ ")
@@ -291,17 +291,6 @@
 	<div style="clear: both;">
 		&nbsp;
 	</div>
-</div>
-
-<div style="display: none;">
-	<img src="~/Assets/Admin/Images/cog.png" alt="" />
-	<img src="~/Assets/Admin/Images/cross.png" alt="" />
-	<img src="~/Assets/Admin/Images/pencil.png" alt="" />
-	<img src="~/Assets/Admin/Images/application_view_tile.png" alt="" />
-	<img src="~/Assets/Admin/Images/layout.png" alt="" />
-	<img src="~/Assets/Admin/Images/arrow_in.png" alt="" />
-	<img src="~/Assets/Admin/Images/dragbg.png" alt="" />
-	<img src="~/Assets/Admin/Images/x.png" alt="x" />
 </div>
 
 <!-- CarrotCake CMS Editor Control END -->

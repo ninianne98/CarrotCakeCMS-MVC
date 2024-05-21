@@ -20,6 +20,15 @@ function AjaxBtnLoad() {
 
 	$("input:button, input:submit, input:reset, button").button();
 
+	$("input:button, input:submit, input:reset, button").each(function () {
+		if (!$(this).hasClass("btn") && !$(this).hasClass("accordion-button")) {
+			$(this).addClass('btn btn-primary');
+		}
+		if ($(this).hasClass("btn-default")) {
+			$(this).addClass('btn btn-primary');
+		}
+	});
+
 	initCheckboxStyle();
 
 	if (!cmsDatePattern || cmsDatePattern.length < 1) {
@@ -34,8 +43,6 @@ function AjaxBtnLoad() {
 		cmsSetTimeRegion();
 	}
 }
-
-var webSvc = "/Assets/Admin/CMS.asmx";
 
 function cmsScrubDate(val) {
 	val = val.replace(/m/gi, 'mm');
@@ -146,10 +153,8 @@ function uncheckGridBoxes(gridID) {
 
 //===================
 
-var webSvc = "/Assets/Admin/CMS.asmx";
-
 function cmsGetServiceAddress() {
-	return webSvc;
+	return cmsWebServiceApi;
 }
 
 function MakeStringSafe(val) {
@@ -497,43 +502,6 @@ function checkFloatNumber(obj) {
 	}
 }
 
-//function cmsSendTrackbackBatch() {
-//	var webMthd = webSvc + "/SendTrackbackBatch";
-
-//	if (!cmsGetOKToLeaveStatus()) {
-//		$.ajax({
-//			type: "POST",
-//			url: webMthd,
-//			contentType: "application/json; charset=utf-8",
-//			dataType: "json",
-//			success: cmsAjaxGeneralCallback,
-//			error: cmsAjaxFailedSwallow
-//		});
-//	}
-
-//	setTimeout("cmsSendTrackbackBatch();", 10000);
-//}
-
-////setTimeout("cmsSendTrackbackBatch();", 5000);
-
-//function cmsSendTrackbackPageBatch(thePageID) {
-//	var webMthd = webSvc + "/SendTrackbackPageBatch";
-
-//	if (!cmsGetOKToLeaveStatus()) {
-//		$.ajax({
-//			type: "POST",
-//			url: webMthd,
-//			data: JSON.stringify({ ThisPage: thePageID }),
-//			contentType: "application/json; charset=utf-8",
-//			dataType: "json",
-//			success: cmsAjaxGeneralCallback,
-//			error: cmsAjaxFailedSwallow
-//		});
-//	}
-
-//	setTimeout("cmsSendTrackbackPageBatch('" + thePageID + "');", 12000);
-//}
-
 function cmsSaveMakeOKAndCancelLeave() {
 	cmsMakeOKToLeave();
 	setTimeout("cmsMakeNotOKToLeave();", 15 * 1000);
@@ -551,7 +519,7 @@ function cmsForceInputValidation(inputId) {
 
 //====================================
 
-var TheURL = '';
+var realFrameUri = '';
 var RefreshPage = 0;
 
 //============ full page
@@ -571,9 +539,9 @@ function SetIframeRealSrc(theFrameID) {
 }
 
 function LaunchWindow(theURL) {
-	TheURL = theURL;
+	realFrameUri = theURL;
 
-	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="90%" height="550" realsrc="' + TheURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
+	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="90%" height="550" realsrc="' + realFrameUri + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
 
 	setTimeout("SetIframeRealSrc('cmsFrameEditor');", 1500);
 
@@ -600,9 +568,9 @@ function ShowWindowPop(theURL) {
 }
 
 function LaunchWindowPop(theURL) {
-	TheURL = theURL;
+	realFrameUri = theURL;
 
-	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="768" height="400" realsrc="' + TheURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
+	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="768" height="400" realsrc="' + realFrameUri + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
 
 	setTimeout("SetIframeRealSrc('cmsFrameEditor');", 1500);
 
@@ -701,36 +669,21 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 
 //=======================
 
-var adminUri = "/c3-admin/";
-
-function cmsGetAdminPath() {
-	var webMthd = webSvc + "/GetSiteAdminFolder";
-
-	$.ajax({
-		type: "POST",
-		url: webMthd,
-		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: cmsSetAdminPath,
-		error: cmsAjaxFailed
-	});
-}
-
-function cmsSetAdminPath(data, status) {
-	adminUri = data.d;
-}
-
-$(document).ready(function () {
-	cmsGetAdminPath();
-});
+var cmsAdminUri = cmsAdminBasePath;  //  "/c3-admin/";
+var cmsWebSvc = cmsWebServiceApi;  // "/Assets/Admin/CMS.asmx";
 
 var fldNameRet = '';
+
+function cmsGetAdminPath() {
+	cmsWebSvc = cmsWebServiceApi;
+	cmsAdminUri = cmsAdminBasePath;
+}
 
 function cmsFileBrowserOpenReturn(fldN) {
 	var fld = $('#' + fldN);
 	fldNameRet = fld.attr('id');
 
-	ShowWindowNoRefresh(adminUri + 'FileBrowser?returnvalue=1&viewmode=file&fldrpath=/');
+	ShowWindowNoRefresh(cmsAdminUri + 'FileBrowser?returnvalue=1&viewmode=file&fldrpath=/');
 
 	return false;
 }
@@ -739,7 +692,7 @@ function cmsFileBrowserOpenReturnPop(fldN) {
 	var fld = $('#' + fldN);
 	fldNameRet = fld.attr('id');
 
-	ShowWindowNoRefreshPop(adminUri + 'FileBrowser?returnvalue=1&viewmode=file&fldrpath=/');
+	ShowWindowNoRefreshPop(cmsAdminUri + 'FileBrowser?returnvalue=1&viewmode=file&fldrpath=/');
 
 	return false;
 }
@@ -768,7 +721,6 @@ function cmsSerializeForm(frmName) {
 
 $(document).ready(function () {
 	setTimeout(function () {
-
 		if ($('#contentForm').length > 0) {
 			if ($('#SerialCache').val().length < 10) {
 				cmsContentFormSerial = cmsSerializeForm('#contentForm');

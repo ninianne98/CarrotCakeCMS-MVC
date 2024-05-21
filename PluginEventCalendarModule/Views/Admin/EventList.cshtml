@@ -50,7 +50,7 @@
 		FormatTemplate = @<text>
 			<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
 				<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
-					<b> @item.EventTitle </b> @item.FrequencyName
+					<span style="font-weight: bold; color: @item.CategoryFGColor;"> @item.EventTitle </span> @item.FrequencyName
 				</div>
 			</div>
 			@string.Format(WebHelper.ShortDateFormatPattern, item.EventStartDate) to @string.Format(WebHelper.ShortDateFormatPattern, item.EventEndDate)
@@ -149,7 +149,7 @@
 	@Html.AntiForgeryToken()
 
 	<div id="divDatePicker" class="calendarCenter1">
-		@Html.TextBox("CalendarInputDate", String.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
+		@Html.TextBox("CalendarInputDate", String.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", style = "width: 10em; display:inline; margin:1em", @class = "dateRegion form-control-sm" })
 	</div>
 
 	<div class="calendarCenter2">

@@ -77,7 +77,7 @@
 			});
 
 			setTimeout(function () {
-				$("#divCalendarResults button").addClass('btn');
+				$("#divCalendarResults button").addClass('btn btn-default btn btn-primary');
 				$("#divCalendarResults button").button();
 			}, 250);
 		}
@@ -123,45 +123,45 @@
 		grid.TableAttributes = new { @class = " " };
 		grid.THeadAttributes = new { @class = " " };
 		grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
-		grid.ConfigName(Html.NameFor(x => x.MonthDates));
+grid.ConfigName(Html.NameFor(x => x.MonthDates));
 
-		grid
-			.AddColumn(x => x.EventDate, new CarrotGridColumn { HasHeadingText = false, CellFormatString = WebHelper.ShortDateFormatPattern })
-			.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEvent> {
-			HasHeadingText = false,
-			BodyAttributes = new { @class = "leftAlignCell" },
-			FormatTemplate = @<text>
-				@if (!item.IsAllDayEvent) {
-					if (item.EventStartTime.HasValue && item.EventEndTime.HasValue) {
-						@item.EventDate.ToString(WebHelper.ShortTimePattern)
-						<span> - </span>
-						@item.EventEndDate.ToString(WebHelper.ShortTimePattern)
-					} else if (item.EventStartTime.HasValue) {
-						@item.EventDate.ToString(WebHelper.ShortTimePattern)
-					}
-				}
-			</text>
+grid
+.AddColumn(x => x.EventDate, new CarrotGridColumn { HasHeadingText = false, CellFormatString = WebHelper.ShortDateFormatPattern })
+.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEvent> {
+HasHeadingText = false,
+BodyAttributes = new { @class = "leftAlignCell" },
+FormatTemplate = @<text>
+	@if (!item.IsAllDayEvent) {
+		if (item.EventStartTime.HasValue && item.EventEndTime.HasValue) {
+			@item.EventDate.ToString(WebHelper.ShortTimePattern)
+			<span> - </span>
+			@item.EventEndDate.ToString(WebHelper.ShortTimePattern)
+		} else if (item.EventStartTime.HasValue) {
+			@item.EventDate.ToString(WebHelper.ShortTimePattern)
+		}
+	}
+</text>
 			})
 		.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEvent> {
 			HasHeadingText = false,
 			BodyAttributes = new { @class = "leftAlignCell" },
 			FormatTemplate = @<text>
-				<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
-					<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
-						<b>
-							@item.EventTitle
-							@if (item.IsCancelledSeries || item.IsCancelledEvent) {
-								<span> (CANCELLED) </span>
-							}
-						</b>
-					</div>
-				</div>
-				<div class="divCalendarDetailText">
-					@Html.Raw(item.EventSeriesDetail)
-					@Html.Raw(item.EventDetail)
-				</div>
+	<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
+		<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
+			<span style="font-weight: bold; color: @item.CategoryFGColor;">
+				@item.EventTitle
+				@if (item.IsCancelledSeries || item.IsCancelledEvent) {
+					<span> (CANCELLED) </span>
+				}
+			</span>
+		</div>
+	</div>
+	<div class="divCalendarDetailText">
+		@Html.Raw(item.EventSeriesDetail)
+		@Html.Raw(item.EventDetail)
+	</div>
 			</text>
-		});
+					});
 	}
 
 	@if (Model.GenerateCss) {
@@ -179,7 +179,7 @@
 		@Html.AntiForgeryToken()
 
 		<div id="divDatePicker" class="calendarCenter1">
-			@Html.TextBox("CalendarInputDate", string.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", @class = "eventDateRegion form-control-sm" })
+			@Html.TextBox("CalendarInputDate", string.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", style = "width: 10em; display:inline; margin:1em", @class = "eventDateRegion form-control-sm" })
 		</div>
 
 		<div class="calendarCenter2">
@@ -211,7 +211,7 @@
 	@foreach (var item in Model.Colors) {
 		<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
 			<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
-				<b> @item.CategoryName </b>
+				<span style="font-weight: bold; color: @item.CategoryFGColor;"> @item.CategoryName </span>
 			</div>
 		</div>
 	}

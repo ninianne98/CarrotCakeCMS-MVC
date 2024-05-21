@@ -38,6 +38,7 @@
 								<xs:complexType>
 									<xs:attribute name="SiteID" type="guid" use="optional" />
 									<xs:attribute name="SiteSkin" type="color" use="optional" />
+									<xs:attribute name="UseBootstrap" type="xs:boolean" use="optional" />
 									<xs:attribute name="AdminFolderPath" type="xs:string" use="optional" />
 								</xs:complexType>
 							</xs:element>

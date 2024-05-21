@@ -307,6 +307,18 @@ namespace Carrotware.CMS.UI.Components {
 			get { return SiteFilename.RssFeedUri; }
 		}
 
+		public static string AdminScriptValues {
+			get {
+				return "/carrotcakeadmininfo.ashx";
+			}
+		}
+
+		public static string WebServiceAddress {
+			get {
+				return VirtualPathUtility.ToAbsolute("~/Assets/Admin/CMS.asmx");
+			}
+		}
+
 		public static HtmlString Rss(SiteData.RSSFeedInclude mode) {
 			return new HtmlString(string.Format("<!-- RSS Header Feed --> <link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS Feed\" href=\"{0}?type={1}\" /> ", CarrotCakeHtml.RssUri, mode));
 		}

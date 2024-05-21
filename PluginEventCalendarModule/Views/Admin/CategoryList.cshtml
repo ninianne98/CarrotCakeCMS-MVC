@@ -6,8 +6,8 @@
 
 	var grid = CarrotWeb.CarrotWebGrid<carrot_CalendarEventCategory>(Model);
 	grid.PrettifyHeadings = true;
-	grid.TableAttributes = new { @class = "datatable table" };
-	grid.THeadAttributes = new { @class = "tablehead header" };
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead header thead-dark" };
 	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
 
 	grid

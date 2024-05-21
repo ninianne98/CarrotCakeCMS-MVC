@@ -47,7 +47,7 @@ namespace Carrotware.CMS.Interface {
 
 			if (this.AreaName.ToLowerInvariant() != nsp.ToLowerInvariant()) {
 				context.MapRoute(
-						name: this.AreaName + "_Default",
+						name: string.Format("{0}_Default", this.AreaName),
 						url: this.AreaName + "/{controller}/{action}/{id}",
 						defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
 						namespaces: _namespaces.ToArray()

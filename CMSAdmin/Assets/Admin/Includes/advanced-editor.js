@@ -1,6 +1,8 @@
 ﻿if (typeof jQuery === 'undefined') {
 	throw new Error('Advanced Editor JavaScript requires jQuery')
 }
+//var $j = jQuery.noConflict();
+
 
 var cmsIsPageLocked = true;
 
@@ -8,8 +10,8 @@ function cmsSetPageStatus(stat) {
 	cmsIsPageLocked = stat;
 }
 
-var webSvc = "/Assets/Admin/CMS.asmx";
-var adminUri = "/c3-admin/";
+var cmsWebSvc = cmsWebServiceApi;  // "/Assets/Admin/CMS.asmx";
+var cmsAdminUri = cmsAdminBasePath;  // "/c3-admin/";
 var thisPage = ""; // used in escaped fashion
 var thisPageNav = "";  // used non-escaped (redirects)
 var thisPageNavSaved = "";  // used non-escaped (redirects)
@@ -17,30 +19,12 @@ var thisPageID = "";
 var cmsTimeTick = 9999;
 
 function cmsGetAdminPath() {
-	var webMthd = webSvc + "/GetSiteAdminFolder";
-
-	$.ajax({
-		type: "POST",
-		url: webMthd,
-		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: cmsSetAdminPath,
-		error: cmsAjaxFailed
-	});
+	cmsWebSvc = cmsWebServiceApi;
+	cmsAdminUri = cmsAdminBasePath;
 }
-
-function cmsSetAdminPath(data, status) {
-	adminUri = data.d;
-}
-
-$(document).ready(function () {
-	cmsGetAdminPath();
-});
 
 function cmsSetServiceParms(serviceURL, pagePath, pageID) {
-	cmsGetAdminPath();
-
-	webSvc = serviceURL;
+	cmsWebSvc = serviceURL;
 	thisPageNav = pagePath;
 	thisPage = cmsMakeStringSafe(pagePath);
 	thisPageID = pageID;
@@ -257,17 +241,16 @@ function cmsEditHB() {
 	if (!cmsIsPageLocked) {
 		setTimeout("cmsEditHB();", 25 * 1000);
 
-		var webMthd = webSvc + "/RecordHeartbeat";
+		var webMthd = cmsWebSvc + "/RecordHeartbeat";
 
 		$.ajax({
 			type: "POST",
 			url: webMthd,
 			data: JSON.stringify({ PageID: thisPageID }),
 			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			success: cmsUpdateHeartbeat,
-			error: cmsAjaxFailed
-		});
+			dataType: "json"
+		}).done(cmsUpdateHeartbeat)
+			.fail(cmsAjaxFailed);
 	}
 }
 
@@ -276,23 +259,22 @@ function cmsSaveToolbarPosition() {
 	var scrollWTopPos = $('#cmsToolBox').scrollTop();
 	var tabID = $('#cmsTabbedToolbox').tabs("option", "active");
 
-	var webMthd = webSvc + "/RecordEditorPosition";
+	var webMthd = cmsWebSvc + "/RecordEditorPosition";
 
 	$.ajax({
 		type: "POST",
 		url: webMthd,
 		data: JSON.stringify({ ToolbarState: cmsMnuVis, ToolbarMargin: cmsToolbarMargin, ToolbarScroll: scrollTopPos, WidgetScroll: scrollWTopPos, SelTabID: tabID }),
 		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: cmsAjaxGeneralCallback,
-		error: cmsAjaxFailed
-	});
+		dataType: "json"
+	}).done(cmsAjaxGeneralCallback)
+		.fail(cmsAjaxFailed);
 }
 
 function cmsSaveContent(val, zone) {
 	cmsSaveToolbarPosition();
 
-	var webMthd = webSvc + "/CacheContentZoneText";
+	var webMthd = cmsWebSvc + "/CacheContentZoneText";
 
 	val = cmsMakeStringSafe(val);
 	zone = cmsMakeStringSafe(zone);
@@ -302,16 +284,15 @@ function cmsSaveContent(val, zone) {
 		url: webMthd,
 		data: JSON.stringify({ ZoneText: val, Zone: zone, ThisPage: thisPageID }),
 		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: cmsSaveContentCallback,
-		error: cmsAjaxFailed
-	});
+		dataType: "json"
+	}).done(cmsSaveContentCallback)
+		.fail(cmsAjaxFailed);
 }
 
 function cmsSaveGenericContent(val, key) {
 	cmsSaveToolbarPosition();
 
-	var webMthd = webSvc + "/CacheGenericContent";
+	var webMthd = cmsWebSvc + "/CacheGenericContent";
 
 	val = cmsMakeStringSafe(val);
 
@@ -320,23 +301,16 @@ function cmsSaveGenericContent(val, key) {
 		url: webMthd,
 		data: JSON.stringify({ ZoneText: val, DBKey: key, ThisPage: thisPageID }),
 		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: cmsSaveContentCallback,
-		error: cmsAjaxFailed
-	});
-}
-
-var cmsTemplatePreview = "";
-
-function cmsSetPreviewFileName(tmplName) {
-	cmsTemplatePreview = tmplName;
+		dataType: "json"
+	}).done(cmsSaveContentCallback)
+		.fail(cmsAjaxFailed);
 }
 
 function cmsPreviewTemplate2() {
 	var tmpl = $(cmsTemplateListPreviewer).val();
 	tmpl = cmsMakeStringSafe(tmpl);
 
-	var srcURL = cmsTemplatePreview + "?carrot_templatepreview=" + tmpl;
+	var srcURL = cmsTemplatePreview + "?" + cmsTemplatePreviewQS + "=" + tmpl;
 
 	var editIFrame = $('#cmsFrameEditorPreview');
 	$(editIFrame).attr('src', srcURL);
@@ -370,7 +344,7 @@ function cmsPreviewTemplate() {
 	var tmplReal = $(cmsTemplateDDL).val();
 	tmpl = cmsMakeStringSafe(tmplReal);
 
-	cmsLaunchWindowOnly(cmsTemplatePreview + "?carrot_templatepreview=" + tmpl);
+	cmsLaunchWindowOnly(cmsTemplatePreview + "?" + cmsTemplatePreviewQS + "=" + tmpl);
 
 	var editFrame = $('#cmsModalFrame');
 
@@ -390,10 +364,10 @@ function cmsPreviewTemplate() {
 	var btnApply = ' <input type="button" class="cms-seagreen" id="btnApplyTemplateCMS" value="Apply Template" onclick="cmsUpdateTemplate();" /> &nbsp;&nbsp;&nbsp; ';
 
 	$(editFrame).append('<div id="cms-seagreen-id" class="cms-seagreen"><div id="cmsPreviewControls" class="cms-seagreen cmsPreviewButtons"> '
-					+ '<div id="cmsPreviewTab" class="cmsTabs cmsPreview-Left cms-seagreen"><ul class="cms-seagreen"> <li>' + btnWide1 + '</li> <li>' + btnWide2 + '</li> <li>' + btnWide3 + '</li>  </ul> '
-					+ ' \r\n <div id="cmsPreviewTabPanel" style="display: none;" >    </div>\r\n   </div> '
-					+ ' <div class="cmsPreview-Right cms-seagreen">' + ddlPreview + btnClose + btnApply + '</div> </div>'
-					+ ' </div>');
+		+ '<div id="cmsPreviewTab" class="cmsTabs cmsPreview-Left cms-seagreen"><ul class="cms-seagreen"> <li>' + btnWide1 + '</li> <li>' + btnWide2 + '</li> <li>' + btnWide3 + '</li>  </ul> '
+		+ ' \r\n <div id="cmsPreviewTabPanel" style="display: none;" >    </div>\r\n   </div> '
+		+ ' <div class="cmsPreview-Right cms-seagreen">' + ddlPreview + btnClose + btnApply + '</div> </div>'
+		+ ' </div>');
 
 	window.setTimeout("cmsPreviewStyling();", 250);
 
@@ -487,17 +461,16 @@ function cmsUpdateTemplate() {
 
 	tmpl = cmsMakeStringSafe(tmpl);
 
-	var webMthd = webSvc + "/UpdatePageTemplate";
+	var webMthd = cmsWebSvc + "/UpdatePageTemplate";
 
 	$.ajax({
 		type: "POST",
 		url: webMthd,
 		data: JSON.stringify({ TheTemplate: tmpl, ThisPage: thisPageID }),
 		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: cmsSaveContentCallback,
-		error: cmsAjaxFailed
-	});
+		dataType: "json"
+	}).done(cmsSaveContentCallback)
+		.fail(cmsAjaxFailed);
 }
 
 var cmsWidgetUpdateInProgress = false;
@@ -506,7 +479,7 @@ function cmsUpdateWidgets() {
 	cmsSaveToolbarPosition();
 	cmsSpinnerLong();
 
-	var webMthd = webSvc + "/CacheWidgetUpdate";
+	var webMthd = cmsWebSvc + "/CacheWidgetUpdate";
 
 	if (!cmsWidgetUpdateInProgress) {
 		cmsWidgetUpdateInProgress = true;
@@ -520,10 +493,9 @@ function cmsUpdateWidgets() {
 			url: webMthd,
 			data: JSON.stringify({ WidgetAddition: val, ThisPage: thisPageID }),
 			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			success: cmsSaveWidgetsCallback,
-			error: cmsAjaxFailed
-		});
+			dataType: "json"
+		}).done(cmsSaveWidgetsCallback)
+			.fail(cmsAjaxFailed);
 	}
 }
 
@@ -531,7 +503,7 @@ function cmsRemoveWidget(key) {
 	cmsSaveToolbarPosition();
 	cmsSpinnerLong();
 
-	var webMthd = webSvc + "/RemoveWidget";
+	var webMthd = cmsWebSvc + "/RemoveWidget";
 
 	if (!cmsWidgetUpdateInProgress) {
 		cmsWidgetUpdateInProgress = true;
@@ -541,10 +513,9 @@ function cmsRemoveWidget(key) {
 			url: webMthd,
 			data: JSON.stringify({ DBKey: key, ThisPage: thisPageID }),
 			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			success: cmsSaveWidgetsCallback,
-			error: cmsAjaxFailed
-		});
+			dataType: "json"
+		}).done(cmsSaveWidgetsCallback)
+			.fail(cmsAjaxFailed);
 	}
 }
 
@@ -552,7 +523,7 @@ function cmsActivateWidgetLink(key) {
 	cmsSaveToolbarPosition();
 	cmsSpinnerLong();
 
-	var webMthd = webSvc + "/ActivateWidget";
+	var webMthd = cmsWebSvc + "/ActivateWidget";
 
 	if (!cmsWidgetUpdateInProgress) {
 		cmsWidgetUpdateInProgress = true;
@@ -562,10 +533,9 @@ function cmsActivateWidgetLink(key) {
 			url: webMthd,
 			data: JSON.stringify({ DBKey: key, ThisPage: thisPageID }),
 			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			success: cmsSaveWidgetsCallback,
-			error: cmsAjaxFailed
-		});
+			dataType: "json"
+		}).done(cmsSaveWidgetsCallback)
+			.fail(cmsAjaxFailed);
 	}
 }
 
@@ -573,7 +543,7 @@ function cmsMoveWidgetZone(zone, val) {
 	cmsSaveToolbarPosition();
 	cmsSpinnerLong();
 
-	var webMthd = webSvc + "/MoveWidgetToNewZone";
+	var webMthd = cmsWebSvc + "/MoveWidgetToNewZone";
 
 	if (!cmsWidgetUpdateInProgress) {
 		cmsWidgetUpdateInProgress = true;
@@ -583,17 +553,16 @@ function cmsMoveWidgetZone(zone, val) {
 			url: webMthd,
 			data: JSON.stringify({ WidgetTarget: zone, WidgetDropped: val, ThisPage: thisPageID }),
 			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			success: cmsSaveWidgetsCallback,
-			error: cmsAjaxFailed
-		});
+			dataType: "json"
+		}).done(cmsSaveWidgetsCallback)
+			.fail(cmsAjaxFailed);
 	}
 }
 
 var IsPublishing = false;
 
 function cmsApplyChanges() {
-	var webMthd = webSvc + "/PublishChanges";
+	var webMthd = cmsWebSvc + "/PublishChanges";
 
 	// prevent multiple submissions
 	if (!IsPublishing) {
@@ -602,10 +571,9 @@ function cmsApplyChanges() {
 			url: webMthd,
 			data: JSON.stringify({ ThisPage: thisPageID }),
 			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			success: cmsSavePageCallback,
-			error: cmsAjaxFailed
-		});
+			dataType: "json"
+		}).done(cmsSavePageCallback)
+			.fail(cmsAjaxFailed);
 	}
 
 	IsPublishing = true;
@@ -694,17 +662,16 @@ function cmsNotifySaved() {
 }
 
 function cmsRecordCancellation() {
-	var webMthd = webSvc + "/CancelEditing";
+	var webMthd = cmsWebSvc + "/CancelEditing";
 
 	$.ajax({
 		type: "POST",
 		url: webMthd,
 		data: JSON.stringify({ ThisPage: thisPageID }),
 		contentType: "application/json; charset=utf-8",
-		dataType: "json",
-		success: cmsAjaxGeneralCallback,
-		error: cmsAjaxFailed
-	});
+		dataType: "json"
+	}).done(cmsAjaxGeneralCallback)
+		.fail(cmsAjaxFailed);
 }
 
 function cmsCancelEdit() {
@@ -733,46 +700,6 @@ function cmsCancelEdit() {
 	cmsFixDialog('CMScancelconfirmmsg');
 	return false;
 }
-
-//function cmsSendTrackbackBatch() {
-//	var webMthd = webSvc + "/SendTrackbackBatch";
-
-//	if (!cmsGetOKToLeaveStatus()) {
-//		$.ajax({
-//			type: "POST",
-//			url: webMthd,
-//			contentType: "application/json; charset=utf-8",
-//			dataType: "json",
-//			success: cmsAjaxGeneralCallback,
-//			error: cmsAjaxFailedSwallow
-//		});
-//	}
-
-//	setTimeout("cmsSendTrackbackBatch();", 15000);
-//}
-
-//setTimeout("cmsSendTrackbackBatch();", 5000);
-
-//function cmsSendTrackbackPageBatch() {
-//	var webMthd = webSvc + "/SendTrackbackPageBatch";
-
-//	if (!cmsGetOKToLeaveStatus()) {
-//		$.ajax({
-//			type: "POST",
-//			url: webMthd,
-//			data: JSON.stringify({ ThisPage: thisPageID }),
-//			contentType: "application/json; charset=utf-8",
-//			dataType: "json",
-//			success: cmsAjaxGeneralCallback,
-//			error: cmsAjaxFailedSwallow
-//		});
-//	}
-
-//	setTimeout("cmsSendTrackbackPageBatch();", 3000);
-//}
-
-//setTimeout("cmsSendTrackbackPageBatch();", 1500);
-
 function cmsAjaxFailedSwallow(request) {
 	var s = "";
 	if (request.status > 0) {
@@ -832,54 +759,54 @@ function cmsAlertModalXLarge(request) {
 // do a lot of iFrame magic
 
 function cmsShowWidgetList() {
-	cmsLaunchWindow(adminUri + 'WidgetList/' + thisPageID + "?zone=cms-all-placeholder-zones");
+	cmsLaunchWindow(cmsAdminUri + 'WidgetList/' + thisPageID + "?zone=cms-all-placeholder-zones");
 }
 function cmsManageWidgetList(zoneName) {
 	//alert(zoneName);
-	cmsLaunchWindow(adminUri + 'WidgetList/' + thisPageID + "?zone=" + zoneName);
+	cmsLaunchWindow(cmsAdminUri + 'WidgetList/' + thisPageID + "?zone=" + zoneName);
 }
 function cmsManageWidgetHistory(widgetID) {
 	//alert(widgetID);
-	cmsLaunchWindow(adminUri + 'WidgetHistory/' + thisPageID + "?widgetid=" + widgetID);
+	cmsLaunchWindow(cmsAdminUri + 'WidgetHistory/' + thisPageID + "?widgetid=" + widgetID);
 }
 function cmsManageWidgetTime(widgetID) {
 	//alert(widgetID);
-	cmsLaunchWindow(adminUri + 'WidgetTime/' + thisPageID + "?widgetid=" + widgetID);
+	cmsLaunchWindow(cmsAdminUri + 'WidgetTime/' + thisPageID + "?widgetid=" + widgetID);
 }
 
 function cmsShowEditPageInfo() {
-	cmsLaunchWindow(adminUri + 'PageEdit/' + thisPageID);
+	cmsLaunchWindow(cmsAdminUri + 'PageEdit/' + thisPageID);
 }
 
 function cmsShowEditPostInfo() {
-	cmsLaunchWindow(adminUri + 'BlogPostEdit/' + thisPageID);
+	cmsLaunchWindow(cmsAdminUri + 'BlogPostEdit/' + thisPageID);
 }
 function cmsShowAddPage() {
-	cmsLaunchWindow(adminUri + 'PageAddChild/' + thisPageID);
+	cmsLaunchWindow(cmsAdminUri + 'PageAddChild/' + thisPageID);
 }
 function cmsShowAddChildPage() {
-	cmsLaunchWindow(adminUri + 'PageAddChild/' + thisPageID);
+	cmsLaunchWindow(cmsAdminUri + 'PageAddChild/' + thisPageID);
 }
 function cmsShowAddTopPage() {
-	cmsLaunchWindow(adminUri + 'PageAddChild/' + thisPageID + '?addtoplevel=true');
+	cmsLaunchWindow(cmsAdminUri + 'PageAddChild/' + thisPageID + '?addtoplevel=true');
 }
 function cmsEditSiteMap() {
-	cmsLaunchWindow(adminUri + 'SiteMapPop');
+	cmsLaunchWindow(cmsAdminUri + 'SiteMapPop');
 }
 
 function cmsSortChildren() {
 	//cmsAlertModal("cmsSortChildren");
-	cmsLaunchWindowOnly(adminUri + 'PageChildSort/' + thisPageID);
+	cmsLaunchWindowOnly(cmsAdminUri + 'PageChildSort/' + thisPageID);
 }
 
 function cmsShowEditWidgetForm(w, m) {
 	//cmsAlertModal("cmsShowEditWidgetForm");
-	cmsLaunchWindow(adminUri + 'ContentEdit/' + thisPageID + '?widgetid=' + w + '&mode=' + m);
+	cmsLaunchWindow(cmsAdminUri + 'ContentEdit/' + thisPageID + '?widgetid=' + w + '&mode=' + m);
 }
 
 function cmsShowEditContentForm(f, m) {
 	//cmsAlertModal("cmsShowEditContentForm");
-	cmsLaunchWindow(adminUri + 'ContentEdit/' + thisPageID + '?field=' + f + '&mode=' + m);
+	cmsLaunchWindow(cmsAdminUri + 'ContentEdit/' + thisPageID + '?field=' + f + '&mode=' + m);
 }
 
 function cmsFixSpinner() {
@@ -942,14 +869,14 @@ function cmsBuildOrder() {
 }
 
 function cmsCopyWidgetFrom(zoneName) {
-	cmsLaunchWindow(adminUri + 'DuplicateWidgetFrom/' + thisPageID + "?zone=" + zoneName);
+	cmsLaunchWindow(cmsAdminUri + 'DuplicateWidgetFrom/' + thisPageID + "?zone=" + zoneName);
 }
 
 function cmsCopyWidget(key) {
 	cmsSaveToolbarPosition();
 	cmsSpinnerLong();
 
-	var webMthd = webSvc + "/CopyWidget";
+	var webMthd = cmsWebSvc + "/CopyWidget";
 
 	if (!cmsWidgetUpdateInProgress) {
 		cmsWidgetUpdateInProgress = true;
@@ -959,10 +886,9 @@ function cmsCopyWidget(key) {
 			url: webMthd,
 			data: JSON.stringify({ DBKey: key, ThisPage: thisPageID }),
 			contentType: "application/json; charset=utf-8",
-			dataType: "json",
-			success: cmsSaveWidgetsCallback,
-			error: cmsAjaxFailed
-		});
+			dataType: "json"
+		}).done(cmsSaveWidgetsCallback)
+			.fail(cmsAjaxFailed);
 	}
 }
 
@@ -1129,12 +1055,12 @@ function cmsDblClickWidgetTarget(item) {
 
 function cmsCreateNewWidget() {
 	var widget = '<div id="cmsToolItemDiv" class="cmsToolItem cmsToolItemWrapper cms-seagreen"> \r\n ' +
-					'<div class="cmsWidgetControlItem cmsWidgetToolboxItem cmsWidgetCtrlPath cms-seagreen" id="cmsControl"> \r\n ' +
-					'<p class="cmsToolItem cms-seagreen"> ' + cmsLastWidgetName + ' </p> \r\n ' +
-					'<input type="hidden" id="cmsCtrlID" value="' + cmsLastWidget + '" /> \r\n ' +
-					'<input type="hidden" id="cmsCtrlOrder" value="-1" /> \r\n ' +
-					'</div> \r\n ' +
-				 '</div>';
+		'<div class="cmsWidgetControlItem cmsWidgetToolboxItem cmsWidgetCtrlPath cms-seagreen" id="cmsControl"> \r\n ' +
+		'<p class="cmsToolItem cms-seagreen"> ' + cmsLastWidgetName + ' </p> \r\n ' +
+		'<input type="hidden" id="cmsCtrlID" value="' + cmsLastWidget + '" /> \r\n ' +
+		'<input type="hidden" id="cmsCtrlOrder" value="-1" /> \r\n ' +
+		'</div> \r\n ' +
+		'</div>';
 
 	var zone = $('#cms_' + cmsLastWidgetTarget);
 
@@ -1149,7 +1075,7 @@ function cmsCreateNewWidget() {
 
 function cmsClickAddWidget() {
 	if (cmsLastWidget.length > 1
-			&& cmsLastWidgetTarget.length > 1) {
+		&& cmsLastWidgetTarget.length > 1) {
 		$("#CMSaddconfirm").dialog({
 			open: function () {
 				$(this).parents('.ui-dialog-buttonpane button:eq(0)').focus();
@@ -1244,12 +1170,10 @@ function cmsOverrideCSSScope(elm, xtra) {
 }
 
 function cmsGenericEdit(PageId, WidgetId) {
-	cmsLaunchWindow(adminUri + 'ControlPropertiesEdit?pageid=' + PageId + '&id=' + WidgetId);
+	cmsLaunchWindow(cmsAdminUri + 'ControlPropertiesEdit?pageid=' + PageId + '&id=' + WidgetId);
 }
 
 function cmsLaunchWindow(theURL) {
-	var TheURL = theURL;
-
 	cmsSetiFrameSource(theURL);
 
 	cmsSaveToolbarPosition();
@@ -1291,9 +1215,9 @@ function cmsSetIframeRealSrc(theFrameID) {
 }
 
 function cmsSetiFrameSource(theURL) {
-	var TheURL = theURL;
+	var realURL = theURL;
 
-	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="96%" height="500" realsrc="' + TheURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
+	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="96%" height="500" realsrc="' + realURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
 
 	setTimeout("cmsSetIframeRealSrc('cmsFrameEditor');", 750);
 
@@ -1309,8 +1233,6 @@ function cmsSetiFrameSource(theURL) {
 }
 
 function cmsLaunchWindowOnly(theURL) {
-	var TheURL = theURL;
-
 	cmsSetiFrameSource(theURL);
 
 	cmsSaveToolbarPosition();

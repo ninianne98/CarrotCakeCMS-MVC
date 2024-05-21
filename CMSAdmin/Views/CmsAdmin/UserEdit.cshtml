@@ -79,9 +79,9 @@
 				</td>
 				<td class="tablecontents">
 					@{
-	SplitDateTime rdt = new SplitDateTime();
-	rdt.CombinedDateTime = Model.User.LockoutEndDateUtc;
-	rdt.FieldName = Html.NameFor(model => Model.User.LockoutEndDateUtc).ToString();
+					SplitDateTime rdt = new SplitDateTime();
+					rdt.CombinedDateTime = Model.User.LockoutEndDateUtc;
+					rdt.FieldName = Html.NameFor(model => Model.User.LockoutEndDateUtc).ToString();
 					}
 
 					@Html.Partial("_datetime", rdt)
@@ -90,9 +90,9 @@
 		</table>
 	</fieldset>
 	<br />
-	<fieldset>
+	<fieldset class="fieldset-free">
 		<legend>
-			@Html.LabelFor(m => m.User.UserBio, htmlAttributes: new { @class = "control-label" })
+			@Html.LabelFor(m => m.User.UserBio)
 		</legend>
 		@Html.TextAreaFor(m => m.User.UserBio, new { rows = "20", cols = "55", @class = "mceEditor", style = "height: 250px; width: 525px;" })
 		<br />

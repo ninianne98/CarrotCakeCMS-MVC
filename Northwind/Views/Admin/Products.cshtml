@@ -31,8 +31,8 @@
 	var grid = CarrotWeb.CarrotWebGrid(Model);
 	grid.PrettifyHeadings = true;
 	grid.HtmlFormId = "frmNorthwindProducts";
-	grid.TableAttributes = new { @class = "datatable table" };
-	grid.THeadAttributes = new { @class = "tablehead header" };
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead header thead-dark" };
 	//grid.ConfigName(Html.NameFor(x => x));
 
 	//grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
@@ -46,7 +46,7 @@
 		.AddColumn(x => x.ProductID, new CarrotGridColumn { Sortable = true })
 		.AddColumn(new CarrotGridTemplateColumn<Product> {
 			HeaderText = "SUP",
-			FormatTemplate = @<text> @grid.DropDownFor(m => m.SupplierID, new SelectList(ViewBag.SupplierList, "SupplierID", "CompanyName"), String.Empty, new { @class = "form-control" }) </text>
+			FormatTemplate = @<text> @grid.DropDownFor(m => m.SupplierID, new SelectList(ViewBag.SupplierList, "SupplierID", "CompanyName"), String.Empty, new { @class = "form-control form-select" }) </text>
 		})
 		.AddColumn(x => x.Supplier.CompanyName, new CarrotGridColumn { Sortable = true })
 		.AddColumn(new CarrotGridTemplateColumn<Product> {

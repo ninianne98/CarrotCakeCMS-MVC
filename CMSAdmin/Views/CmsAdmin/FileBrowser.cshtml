@@ -15,9 +15,9 @@
 	<link href="~/Assets/Admin/Includes/uploadfile.css?@versionKey" rel="stylesheet" type="text/css" />
 	<link href="~/Assets/Admin/Includes/filebrowser.css?@versionKey" rel="stylesheet" type="text/css" />
 
+	@(new AdminScriptInfo())
 	<script src="~/Assets/iCheck/icheck.min.js?@versionKey" type="text/javascript"></script>
 	<script src="~/Assets/Admin/Includes/icheck.init.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/Includes/jquery.form.min.js?@versionKey" type="text/javascript"></script>
 	<script src="~/Assets/Admin/Includes/jquery.uploadfile.min.js?@versionKey" type="text/javascript"></script>
 
 	<script type="text/javascript">
@@ -269,7 +269,7 @@
 									</div>
 								</div>
 							</div>
-					}
+						}
 					</div>
 				} else {
 					<div id="rpFiles">
@@ -305,9 +305,11 @@
 										<td>
 											<img src="@String.Format("/Assets/Admin/images/{0}.png", Model.FileImageLink(f.MimeType))" alt="filetype" />
 										</td>
-																				<td>
-											<a target="_blank" href="@f.FullFileName"><img src="/Assets/Admin/images/link.png" 
-													alt="open file in new window" title="open file in new window" /></a>
+										<td>
+											<a target="_blank" href="@f.FullFileName">
+												<img src="/Assets/Admin/images/link.png"
+													 alt="open file in new window" title="open file in new window" />
+											</a>
 										</td>
 										<td>
 											<div class="ImgGroup" id="imgContainerGroup">
@@ -336,7 +338,7 @@
 							}
 						</table>
 					</div>
-								}
+				}
 			</div>
 
 			<div>
@@ -393,7 +395,7 @@
 					</video>
 				</div>
 			</div>
-			}
+		}
 	</div>
 
 	<div id="imgWrapperMain" style="display: none;">

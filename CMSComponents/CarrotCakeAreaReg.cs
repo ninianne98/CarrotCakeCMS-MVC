@@ -48,6 +48,12 @@ namespace Carrotware.CMS.UI.Components {
 					url: TwoLevelNavigation.NavigationStylePath.Replace("/", "") + "/{id}",
 					defaults: new { controller = "Home", action = "GetNavigationCss", id = UrlParameter.Optional },
 					namespaces: _namespaces.ToArray());
+
+			context.MapRoute(
+				name: this.AreaName + "_GetAdminScriptValues",
+				url: CarrotCakeHtml.AdminScriptValues.Replace("/", "") + "/{id}",
+				defaults: new { controller = "Home", action = "GetAdminScriptValues", id = UrlParameter.Optional },
+				namespaces: _namespaces.ToArray());
 		}
 	}
 }
