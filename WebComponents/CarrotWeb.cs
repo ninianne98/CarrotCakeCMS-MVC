@@ -9,7 +9,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.WebPages;
@@ -426,6 +425,18 @@ namespace Carrotware.Web.UI.Components {
 			return returnBytes;
 		}
 
+		public static string AssemblyVersion {
+			get { return Assembly.GetExecutingAssembly().GetName().Version.ToString(); }
+		}
+
+		public static string FileVersion {
+			get {
+				var assembly = Assembly.GetExecutingAssembly();
+				var fvi = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location);
+				return fvi.FileVersion;
+			}
+		}
+
 		//================================
 		public static CarrotWebGrid<T> CarrotWebGrid<T>() where T : class {
 			return new CarrotWebGrid<T>(Html);
@@ -655,6 +666,7 @@ namespace Carrotware.Web.UI.Components {
 		public static string ToKebabCase(this string input) {
 			return string.Concat(input.Select((c, i) => (char.IsUpper(c) && i > 0 ? "-" : string.Empty) + char.ToLower(c)));
 		}
+
 		public static string ToSpacedPascal(this string input) {
 			if (string.IsNullOrWhiteSpace(input)) {
 				return input;

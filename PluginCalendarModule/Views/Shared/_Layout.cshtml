@@ -3,19 +3,30 @@
 	Layout = null;
 
 	string areaName = ViewBag.WidgetAssemblyName;
-	string areaAlias = string.Format("{0}_Default", areaName);
+	string areaAlias = ViewBag.WidgetAreaAlias;
+	var widgetParts = areaName.Split('.');
+	var widgetName = areaName;
+	if (widgetParts.Length > 1) {
+		widgetName = widgetParts[widgetParts.Length - 1];
+	}
 }
 <html>
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewBag.Title - @ViewBag.WidgetAssemblyName</title>
+	<title>@ViewBag.Title - @areaName</title>
 	@CarrotWeb.RenderControlToHtml((new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver }))
-	@(new Bootstrap() { SelectedSkin = Bootstrap.BootstrapColorScheme.RaspberrySorbet })
+	@(new Bootstrap5() { SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.RaspberrySorbet })
 
 	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
 
 	<script type="text/javascript">
+		function cmsInputEnterBlock() {
+			$('input').each(function () {
+				$(this).attr('onkeypress', "return ProcessKeyPress(event)");
+			});
+		}
+
 		$(document).ready(function () {
 			doStyles();
 		});
@@ -26,7 +37,15 @@
 
 		function doStyles() {
 			$("input:button, input:submit, input:reset, button").button();
-			$("input:button, input:submit, input:reset, button").addClass('btn');
+
+			$("input:button, input:submit, input:reset, button").each(function () {
+				if (!$(this).hasClass("btn")) {
+					$(this).addClass('btn btn-primary');
+				}
+				if ($(this).hasClass("btn-default")) {
+					$(this).addClass('btn-primary');
+				}
+			});
 
 			$(".dateRegion").each(function () {
 				$(this).datepicker({
@@ -35,11 +54,15 @@
 					showOn: "both",
 					buttonImage: '/Content/calendar.png',
 					buttonImageOnly: true,
-					constrainInput: true
+					constrainInput: true,
+					beforeShow: function () {
+						setTimeout(function () {
+							$('.ui-datepicker').css('z-index', 15);
+						}, 0);
+					}
 				});
 			});
 		}
-
 	</script>
 
 	@* https://cdnjs.com/libraries/tinymce/6.8.3 *@
@@ -65,7 +88,9 @@
 		}
 
 		function cmsPreSaveTrigger() {
-			var tgr = tinymce.triggerSave();
+			if (tinymce) {
+				var tgr = tinymce.triggerSave();
+			}
 
 			return true;
 		}
@@ -96,41 +121,39 @@
 	@RenderSection("scripts", required: false)
 </head>
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				@Html.ActionLink("Widget: Calendar", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					@using (CarrotWeb.BeginWrappedItem("li", "TestView1;", "Test", new { @class = "active" }, null)) {
-						@Html.RouteLink("Display 1", areaAlias, new { action = "TestView1", controller = "Test" })
+	<h2>Widget : @areaName</h2>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="navbar">
+		<div class="container-xl">
+			@Html.ActionLink(string.Format("{0}  (MVC5)", widgetName), "Index", "Admin", null, new { @class = "navbar-brand" })
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarWidget" aria-controls="navbarWidget" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarWidget">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					@using (CarrotWeb.BeginWrappedItem("li", "TestView1;", "Test", new { @class = "nav-item active" }, new { @class = "nav-item" })) {
+						@Html.RouteLink("Display 1", areaAlias, new { action = "TestView1", controller = "Test" }, new { @class = "nav-link" })
 					}
-					@using (CarrotWeb.BeginWrappedItem("li", "TestView2", "Test", new { @class = "active" }, null)) {
-						@Html.RouteLink("Display 2", areaAlias, new { action = "TestView2", controller = "Test" })
+					@using (CarrotWeb.BeginWrappedItem("li", "TestView2", "Test", new { @class = "nav-item active" }, new { @class = "nav-item" })) {
+						@Html.RouteLink("Display 2", areaAlias, new { action = "TestView2", controller = "Test" }, new { @class = "nav-link" })
 					}
-					@using (CarrotWeb.BeginWrappedItem("li", "TestView3", "Test", new { @class = "active" }, null)) {
-						@Html.RouteLink("Display 3", areaAlias, new { action = "TestView3", controller = "Test" })
+					@using (CarrotWeb.BeginWrappedItem("li", "TestView3", "Test", new { @class = "nav-item active" }, new { @class = "nav-item" })) {
+						@Html.RouteLink("Display 3", areaAlias, new { action = "TestView3", controller = "Test" }, new { @class = "nav-link" })
 					}
 
-					@using (CarrotWeb.BeginWrappedItem("li", "*", "Admin", new { @id = "tabAdmin", @class = "active dropdown" }, new { @id = "tabAdmin", @class = "dropdown" })) {
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Test <b class="caret"></b></a>
+					@using (CarrotWeb.BeginWrappedItem("li", "*", "Admin", new { @id = "tabAdmin", @class = "active nav-item dropdown" }, new { @id = "tabAdmin", @class = "nav-item dropdown" })) {
+						<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Admin Test </a>
 						<ul class="dropdown-menu">
-							<li>@Html.ActionLink("Database", "CalendarDatabase", "Admin")</li>
-							<li>@Html.ActionLink("List Events", "Index", "Admin")</li>
-							<li>@Html.ActionLink("Add Event", "CalendarAdminAdd", "Admin")</li>
-							@*<li>@Html.ActionLink("Categories", "CalendarAdminCat", "Admin")</li>*@
+							<li>@Html.ActionLink("Database", "CalendarDatabase", "Admin", null, new { @class = "dropdown-item" })</li>
+							<li>@Html.ActionLink("List Events", "Index", "Admin", null, new { @class = "dropdown-item" })</li>
+							<li>@Html.ActionLink("Add Event", "CalendarAdminAdd", "Admin", null, new { @class = "dropdown-item" })</li>
+							@*<li>@Html.ActionLink("Categories", "CalendarAdminCat", "Admin", null, new { @class = "dropdown-item" })</li> *@
 						</ul>
 					}
 				</ul>
 			</div>
 		</div>
-	</div>
+	</nav>
 
 	<div class="container body-content">
 		@RenderBody()

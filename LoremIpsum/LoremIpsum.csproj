@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Code\lorem.txt" />
+    <Content Include="Content\calendar.png" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />

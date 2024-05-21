@@ -6,7 +6,7 @@
 
 <h2>@ViewBag.Title</h2>
 <div class="ui-widget">
-	<div class="ui-state-highlight ui-corner-all" style="padding: 0.2em; width: 680px; height: auto;">
+	<div class="ui-state-highlight ui-corner-all" style="padding: 0.2em; width: 680px; height: auto; font-size: 12px;">
 		<div style="font-size: 1.3em; margin: 0.25em;">
 			<div class="ui-icon ui-icon-info" style="float: left; margin: 5px; height: 16px;width: 16px"></div>
 			<div style="float: left; margin: 0.2em; width: 600px; min-height: 2em;">
@@ -24,70 +24,74 @@
 
 	<div class="form-horizontal">
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-		<div class="form-group">
-			@Html.LabelFor(model => model.HowMany, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="form-group row">
+			@Html.LabelFor(m => m.HowMany, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
 			<div class="col-md-10">
-				@Html.EditorFor(model => model.HowMany, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-				@Html.ValidationMessageFor(model => model.HowMany, "", new { @class = "text-danger" })
+				@Html.EditorFor(m => m.HowMany, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+				@Html.ValidationMessageFor(m => m.HowMany, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
 		@if (Model.ContentType == Carrotware.CMS.Core.ContentPageType.PageType.ContentEntry) {
-			<div class="form-group">
-				@Html.LabelFor(model => model.TopLevel, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="form-group row">
+				@Html.LabelFor(m => m.TopLevel, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
 				<div class="col-md-10">
-					@Html.EditorFor(model => model.TopLevel)
-					@Html.ValidationMessageFor(model => model.TopLevel, "", new { @class = "text-danger" })
+					@Html.EditorFor(m => m.TopLevel)
+					@Html.ValidationMessageFor(m => m.TopLevel, "", new { @class = "text-danger" })
 				</div>
 			</div>
 		}
 
 		@if (Model.ContentType == Carrotware.CMS.Core.ContentPageType.PageType.BlogEntry) {
-			<div class="form-group">
-				@Html.LabelFor(model => model.Tags, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="form-group row">
+				@Html.LabelFor(m => m.Tags, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
 				<div class="col-md-10">
-					@Html.EditorFor(model => model.Tags, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-					@Html.ValidationMessageFor(model => model.Tags, "", new { @class = "text-danger" })
+					@Html.EditorFor(m => m.Tags, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+					@Html.ValidationMessageFor(m => m.Tags, "", new { @class = "text-danger" })
 				</div>
 			</div>
 
-			<div class="form-group">
-				@Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="form-group row">
+				@Html.LabelFor(m => m.Categories, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
 				<div class="col-md-10">
-					@Html.EditorFor(model => model.Categories, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-					@Html.ValidationMessageFor(model => model.Categories, "", new { @class = "text-danger" })
+					@Html.EditorFor(m => m.Categories, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+					@Html.ValidationMessageFor(m => m.Categories, "", new { @class = "text-danger" })
 				</div>
 			</div>
 
-			<div class="form-group">
-				@Html.LabelFor(model => model.BlogComments, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="form-group row">
+				@Html.LabelFor(m => m.BlogComments, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
 				<div class="col-md-10">
-					@Html.EditorFor(model => model.BlogComments, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-					@Html.ValidationMessageFor(model => model.BlogComments, "", new { @class = "text-danger" })
+					@Html.EditorFor(m => m.BlogComments, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+					@Html.ValidationMessageFor(m => m.BlogComments, "", new { @class = "text-danger" })
 				</div>
 			</div>
 
-			<div class="form-group">
-				@Html.LabelFor(model => model.DateFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="form-group row">
+				@Html.LabelFor(m => m.DateFrom, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
 				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.DateFrom, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
-					@*@Html.EditorFor(model => model.DateFrom, new { htmlAttributes = new { @class = "form-control form-control-sm" } }) *@
-					@Html.ValidationMessageFor(model => model.DateFrom, "", new { @class = "text-danger" })
+					<div class="input-group">
+						@Html.TextBoxFor(m => m.DateFrom, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion form-control form-control-sm" })
+						@*@Html.EditorFor(m=> m.DateFrom, new { htmlAttributes = new { @class = "form-control form-control-sm" } }) *@
+						@Html.ValidationMessageFor(m => m.DateFrom, "", new { @class = "text-danger" })
+					</div>
 				</div>
 			</div>
 
-			<div class="form-group">
-				@Html.LabelFor(model => model.DateTo, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="form-group row">
+				@Html.LabelFor(m => m.DateTo, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
 				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.DateTo, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion form-control-sm" })
-					@*@Html.EditorFor(model => model.DateTo, new { htmlAttributes = new { @class = "form-control form-control-sm" } })*@
-					@Html.ValidationMessageFor(model => model.DateTo, "", new { @class = "text-danger" })
+					<div class="input-group">
+						@Html.TextBoxFor(m => m.DateTo, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion form-control form-control-sm" })
+						@*@Html.EditorFor(m=> m.DateTo, new { htmlAttributes = new { @class = "form-control form-control-sm" } })*@
+						@Html.ValidationMessageFor(m => m.DateTo, "", new { @class = "text-danger" })
+					</div>
 				</div>
 			</div>
 		}
 
-		<div class="form-group">
-			<div class="col-md-offset-2 col-md-10">
+		<div class="form-group row">
+			<div class="col-md-offset-2 offset-sm-2 col-md-10">
 				<input type="submit" value="Save" class="btn btn-default" />
 			</div>
 		</div>
@@ -97,9 +101,9 @@
 @if (Model.PageLinks.Any()) {
 	<b>@string.Format("{0} entries created", Model.PageLinks.Count) </b>
 	<ul>
-		@foreach (var p in Model.PageLinks) {
+		@foreach (var pl in Model.PageLinks) {
 			<li>
-				<a target="_blank" href="@p">@p</a>
+				<a target="_blank" href="@pl">@pl</a>
 			</li>
 		}
 	</ul>

@@ -1,0 +1,139 @@
+﻿/*
+* This LESS template for Bootstrap
+* http://www.carrotware.com/
+* Copyright 2024, Samantha Copeland
+* Dual licensed under the MIT or GPL Version 3 licenses.
+* Date: May 2024
+*/
+.bg-dark {
+  background: #76608a;
+  background-color: #76608a !important;
+}
+.navbar {
+  background: #76608a;
+  color: #000000;
+}
+.navbar .nav-link,
+.navbar .dropdown {
+  color: #000000;
+}
+.navbar-dark {
+  background-color: #574766;
+}
+.navbar-dark .navbar-nav > .active > a:hover,
+.navbar-dark .navbar-nav > li > a:hover,
+.navbar-dark .navbar-nav > li > a:focus {
+  background-color: #88719c;
+}
+.navbar-dark .navbar-nav > .active > a,
+.navbar-dark .navbar-nav > .open > a,
+.navbar-dark .navbar-nav > .open > a,
+.navbar-dark .navbar-nav > .open > a:hover,
+.navbar-dark .navbar-nav > .open > a,
+.navbar-dark .navbar-nav > .open > a:hover,
+.navbar-dark .navbar-nav > .open > a:focus {
+  background-color: #88719c;
+}
+.dropdown-menu {
+  background-color: #88719c;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  background-color: #cfc5d7;
+  color: #000000;
+}
+.navbar-dark {
+  background-image: none;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  background-image: none;
+}
+.navbar-dark {
+  border-color: #8f7aa3;
+}
+.navbar-dark .navbar-brand {
+  color: #ffffff;
+}
+.navbar-dark .navbar-brand:hover {
+  color: #ffffff;
+}
+.navbar-dark .navbar-nav > li > a {
+  color: #ffffff;
+}
+.navbar-dark .navbar-nav > li > a:hover,
+.navbar-dark .navbar-nav > li > a:focus {
+  color: #ffffff;
+}
+.navbar-dark .navbar-nav > .active > a,
+.navbar-dark .navbar-nav > .open > a,
+.navbar-dark .navbar-nav > .open > a:hover,
+.navbar-dark .navbar-nav > .open > a:focus {
+  color: #ffffff;
+}
+.navbar-dark .navbar-nav > .active > a:hover,
+.navbar-dark .navbar-nav > .active > a:focus {
+  color: #ffffff;
+}
+.dropdown-menu > li > a {
+  color: #ffffff;
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  background-color: #cfc5d7;
+  color: #000000;
+}
+.navbar-dark .navbar-nav > .dropdown > a .caret {
+  border-top-color: #ffffff;
+}
+.navbar-dark .navbar-nav > .dropdown > a:hover .caret {
+  border-top-color: #ffffff;
+}
+.navbar-dark .navbar-nav > .dropdown > a .caret {
+  border-bottom-color: #ffffff;
+}
+.navbar-dark .navbar-nav > .dropdown > a:hover .caret {
+  border-bottom-color: #ffffff;
+}
+a {
+  color: #292130;
+}
+a:focus,
+a:hover {
+  color: #88719c;
+}
+.pagination > li > a,
+.pagination > li > span {
+  color: #574766;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  color: #88719c;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  background-color: #574766;
+  border-color: #574766;
+}
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #5c4b6c;
+  --bs-btn-border-color: #5c4b6c;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #362c3f;
+  --bs-btn-hover-border-color: #362c3f;
+  --bs-btn-focus-shadow-rgb: 49,132,253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #362c3f;
+  --bs-btn-active-border-color: #362c3f;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #362c3f;
+  --bs-btn-disabled-border-color: #5c4b6c;
+}

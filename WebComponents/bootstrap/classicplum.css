@@ -1,4 +1,11 @@
-﻿.navbar-inverse {
+﻿/* 
+* This LESS template for Bootstrap
+* http://www.carrotware.com/
+* Copyright 2023, Samantha Copeland
+* Dual licensed under the MIT or GPL Version 3 licenses.
+* Date: June 2023
+*/
+.navbar-inverse {
   background-color: #5c2c5c;
 }
 .navbar-inverse .navbar-nav > .active > a:hover,

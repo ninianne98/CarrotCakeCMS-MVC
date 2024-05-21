@@ -29,7 +29,6 @@ function __carrotOnAjaxRequestFailureAlert(xhr, status, error) {
 	console.log(error);
 	console.log(xhr.responseText);
 }
-
 function __carrotOnAjaxRequestComplete(xhr, status) {
 	console.log("This is the __carrotOnAjaxRequestComplete Callback: " + status);
 }
@@ -164,7 +163,6 @@ $(document).on("click", "form[data-ajax=true] :submit", function (e) {
 	}
 });
 */
-
 function __carrotAjaxPostForm(formid, div, postUri, replace) {
 	var data = $("#" + formid).serialize();
 	//console.log(formid + ' ' + div + " ---------------------- ");

@@ -123,6 +123,7 @@
   <ItemGroup>
     <Compile Include="BaseTwoPartWebComponent.cs" />
     <Compile Include="BaseWebComponent.cs" />
+    <Compile Include="Bootstrap5.cs" />
     <Compile Include="Captcha2.cs" />
     <Compile Include="captcha\CaptchaImage.cs" />
     <Compile Include="CarrotWebAreaReg.cs" />
@@ -286,6 +287,302 @@
     <EmbeddedResource Include="Grid\cancel.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bootstrap5\amethystorchid.css">
+      <DependentUpon>amethystorchid.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\amethystorchid.min.css">
+      <DependentUpon>amethystorchid.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\blue.css">
+      <DependentUpon>blue.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\blue.min.css">
+      <DependentUpon>blue.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\blueizis.css">
+      <DependentUpon>blueizis.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\blueizis.min.css">
+      <DependentUpon>blueizis.css</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="bootstrap5\bootstrap.min.js" />
+    <EmbeddedResource Include="bootstrap5\bootstrap.min.css" />
+    <Content Include="bootstrap5\burntcoral.css">
+      <DependentUpon>burntcoral.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\burntcoral.min.css">
+      <DependentUpon>burntcoral.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\buttercream.css">
+      <DependentUpon>buttercream.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\buttercream.min.css">
+      <DependentUpon>buttercream.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\cerulean.css">
+      <DependentUpon>cerulean.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\cerulean.min.css">
+      <DependentUpon>cerulean.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\classic.css">
+      <DependentUpon>classic.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\classic.min.css">
+      <DependentUpon>classic.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\classicblue.css">
+      <DependentUpon>classicblue.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\classicblue.min.css">
+      <DependentUpon>classicblue.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\classicgreen.css">
+      <DependentUpon>classicgreen.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\classicgreen.min.css">
+      <DependentUpon>classicgreen.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\classicorange.css">
+      <DependentUpon>classicorange.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\classicorange.min.css">
+      <DependentUpon>classicorange.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\classicplum.css">
+      <DependentUpon>classicplum.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\classicplum.min.css">
+      <DependentUpon>classicplum.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\classicpurple.css">
+      <DependentUpon>classicpurple.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\classicpurple.min.css">
+      <DependentUpon>classicpurple.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\classicred.css">
+      <DependentUpon>classicred.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\classicred.min.css">
+      <DependentUpon>classicred.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\classicteal.css">
+      <DependentUpon>classicteal.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\classicteal.min.css">
+      <DependentUpon>classicteal.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\classicviolet.css">
+      <DependentUpon>classicviolet.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\classicviolet.min.css">
+      <DependentUpon>classicviolet.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\darkblue.css">
+      <DependentUpon>darkblue.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\darkblue.min.css">
+      <DependentUpon>darkblue.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\darken.css">
+      <DependentUpon>darken.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\darken.min.css">
+      <DependentUpon>darken.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\darkgreen.css">
+      <DependentUpon>darkgreen.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\darkgreen.min.css">
+      <DependentUpon>darkgreen.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\darkorange.css">
+      <DependentUpon>darkorange.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\darkorange.min.css">
+      <DependentUpon>darkorange.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\darkpurple.css">
+      <DependentUpon>darkpurple.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\darkpurple.min.css">
+      <DependentUpon>darkpurple.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\darkred.css">
+      <DependentUpon>darkred.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\darkred.min.css">
+      <DependentUpon>darkred.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\desertmist.css">
+      <DependentUpon>desertmist.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\desertmist.min.css">
+      <DependentUpon>desertmist.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\frenchblue.css">
+      <DependentUpon>frenchblue.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\frenchblue.min.css">
+      <DependentUpon>frenchblue.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\green.css">
+      <DependentUpon>green.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\green.min.css">
+      <DependentUpon>green.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\greenash.css">
+      <DependentUpon>greenash.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\greenash.min.css">
+      <DependentUpon>greenash.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\grey.css">
+      <DependentUpon>grey.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\grey.min.css">
+      <DependentUpon>grey.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\illuminating.css">
+      <DependentUpon>illuminating.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\illuminating.min.css">
+      <DependentUpon>illuminating.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\inkwell.css">
+      <DependentUpon>inkwell.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\inkwell.min.css">
+      <DependentUpon>inkwell.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\lightblue.css">
+      <DependentUpon>lightblue.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\lightblue.min.css">
+      <DependentUpon>lightblue.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\lightgreen.css">
+      <DependentUpon>lightgreen.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\lightgreen.min.css">
+      <DependentUpon>lightgreen.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\lightpurple.css">
+      <DependentUpon>lightpurple.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\lightpurple.min.css">
+      <DependentUpon>lightpurple.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\magenta.css">
+      <DependentUpon>magenta.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\magenta.min.css">
+      <DependentUpon>magenta.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\marigold.css">
+      <DependentUpon>marigold.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\marigold.min.css">
+      <DependentUpon>marigold.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\mauve.css">
+      <DependentUpon>mauve.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\mauve.min.css">
+      <DependentUpon>mauve.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\mint.css">
+      <DependentUpon>mint.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\mint.min.css">
+      <DependentUpon>mint.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\mosaicblue.css">
+      <DependentUpon>mosaicblue.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\mosaicblue.min.css">
+      <DependentUpon>mosaicblue.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\orange.css">
+      <DependentUpon>orange.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\orange.min.css">
+      <DependentUpon>orange.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\plum.css">
+      <DependentUpon>plum.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\plum.min.css">
+      <DependentUpon>plum.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\purple.css">
+      <DependentUpon>purple.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\purple.min.css">
+      <DependentUpon>purple.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\quetzalgreen.css">
+      <DependentUpon>quetzalgreen.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\quetzalgreen.min.css">
+      <DependentUpon>quetzalgreen.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\raspberrysorbet.css">
+      <DependentUpon>raspberrysorbet.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\raspberrysorbet.min.css">
+      <DependentUpon>raspberrysorbet.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\red.css">
+      <DependentUpon>red.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\red.min.css">
+      <DependentUpon>red.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\rust.css">
+      <DependentUpon>rust.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\rust.min.css">
+      <DependentUpon>rust.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\sandstone.css">
+      <DependentUpon>sandstone.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\sandstone.min.css">
+      <DependentUpon>sandstone.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\sugaralmond.css">
+      <DependentUpon>sugaralmond.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\sugaralmond.min.css">
+      <DependentUpon>sugaralmond.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\teal.css">
+      <DependentUpon>teal.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\teal.min.css">
+      <DependentUpon>teal.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\ultimategray.css">
+      <DependentUpon>ultimategray.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\ultimategray.min.css">
+      <DependentUpon>ultimategray.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\willow.css">
+      <DependentUpon>willow.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\willow.min.css">
+      <DependentUpon>willow.css</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="bootstrap5\yellow.css">
+      <DependentUpon>yellow.less</DependentUpon>
+    </Content>
+    <EmbeddedResource Include="bootstrap5\yellow.min.css">
+      <DependentUpon>yellow.css</DependentUpon>
+    </EmbeddedResource>
     <Content Include="bootstrap\amethystorchid.css">
       <DependentUpon>amethystorchid.less</DependentUpon>
     </Content>
@@ -295,6 +592,57 @@
     <Content Include="bootstrap\blue.css">
       <DependentUpon>blue.less</DependentUpon>
     </Content>
+    <None Include="bootstrap5\amethystorchid.less" />
+    <None Include="bootstrap5\blue.less" />
+    <None Include="bootstrap5\blueizis.less" />
+    <EmbeddedResource Include="bootstrap5\bootstrap.min.css.map" />
+    <None Include="bootstrap5\burntcoral.less" />
+    <None Include="bootstrap5\buttercream.less" />
+    <None Include="bootstrap5\cerulean.less" />
+    <None Include="bootstrap5\classic.less" />
+    <None Include="bootstrap5\classicblue.less" />
+    <None Include="bootstrap5\classicgreen.less" />
+    <None Include="bootstrap5\classicorange.less" />
+    <None Include="bootstrap5\classicplum.less" />
+    <None Include="bootstrap5\classicpurple.less" />
+    <None Include="bootstrap5\classicred.less" />
+    <None Include="bootstrap5\classicteal.less" />
+    <None Include="bootstrap5\classicviolet.less" />
+    <None Include="bootstrap5\darkblue.less" />
+    <None Include="bootstrap5\darken.less" />
+    <None Include="bootstrap5\darkgreen.less" />
+    <None Include="bootstrap5\darkorange.less" />
+    <None Include="bootstrap5\darkpurple.less" />
+    <None Include="bootstrap5\darkred.less" />
+    <None Include="bootstrap5\desertmist.less" />
+    <None Include="bootstrap5\frenchblue.less" />
+    <None Include="bootstrap5\green.less" />
+    <None Include="bootstrap5\greenash.less" />
+    <None Include="bootstrap5\grey.less" />
+    <None Include="bootstrap5\illuminating.less" />
+    <None Include="bootstrap5\inkwell.less" />
+    <None Include="bootstrap5\lightblue.less" />
+    <None Include="bootstrap5\lightgreen.less" />
+    <None Include="bootstrap5\lightpurple.less" />
+    <None Include="bootstrap5\magenta.less" />
+    <None Include="bootstrap5\marigold.less" />
+    <None Include="bootstrap5\mauve.less" />
+    <None Include="bootstrap5\mint.less" />
+    <None Include="bootstrap5\mosaicblue.less" />
+    <None Include="bootstrap5\orange.less" />
+    <None Include="bootstrap5\plum.less" />
+    <None Include="bootstrap5\purple.less" />
+    <None Include="bootstrap5\quetzalgreen.less" />
+    <None Include="bootstrap5\raspberrysorbet.less" />
+    <None Include="bootstrap5\red.less" />
+    <None Include="bootstrap5\rust.less" />
+    <None Include="bootstrap5\sandstone.less" />
+    <None Include="bootstrap5\sugaralmond.less" />
+    <None Include="bootstrap5\teal.less" />
+    <None Include="bootstrap5\ultimategray.less" />
+    <None Include="bootstrap5\willow.less" />
+    <None Include="bootstrap5\yellow.less" />
+    <None Include="bootstrap5\_colors.less" />
     <None Include="bootstrap\blue.less" />
     <Content Include="bootstrap\burntcoral.css">
       <DependentUpon>burntcoral.less</DependentUpon>

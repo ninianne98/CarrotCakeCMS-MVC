@@ -137,7 +137,7 @@ namespace Carrotware.Web.UI.Components {
 
 			string key = CarrotWeb.DateKey();
 
-			sb.AppendLine(UrlPaths.CreateJavascriptTag("Carrot Helpers", string.Format("{0}?ts={1}", UrlPaths.HelperPath, key)));
+			sb.AppendLine(UrlPaths.CreateJavascriptTag("Carrot Helpers", string.Format("{0}?ts={1}&v={2}", UrlPaths.HelperPath, CarrotWeb.DateKey(), CarrotWeb.FileVersion.Replace(".", string.Empty))));
 
 			return sb.ToString().Trim();
 		}

@@ -3,16 +3,22 @@
 	Layout = null;
 
 	string areaName = ViewBag.WidgetAssemblyName;
-	string areaAlias = string.Format("{0}_Default", areaName);
+	string areaAlias = ViewBag.WidgetAreaAlias;
+	var widgetParts = areaName.Split('.');
+	var widgetName = areaName;
+	if (widgetParts.Length > 1) {
+		widgetName = widgetParts[widgetParts.Length - 1];
+	}
 }
 
-<html>
+<html lang="en" data-bs-theme="auto">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewBag.Title - @ViewBag.WidgetAssemblyName</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>@ViewBag.Title - @areaName</title>
 	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver })
-	@(new Bootstrap() { SelectedSkin = Bootstrap.BootstrapColorScheme.ClassicViolet })
+	@(new Bootstrap5() { SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.ClassicViolet })
 	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
 
 	<script type="text/javascript">
@@ -26,114 +32,84 @@
 
 		function doStyles() {
 			$("input:button, input:submit, input:reset, button").button();
-			$("input:button, input:submit, input:reset, button").addClass('btn');
+
+			$("input:button, input:submit, input:reset, button").each(function () {
+				if (!$(this).hasClass("btn")) {
+					$(this).addClass('btn btn-primary');
+				}
+				if ($(this).hasClass("btn-default")) {
+					$(this).addClass('btn-primary');
+				}
+			});
 		}
 
 		$(document).ready(function () {
-
-			$(".date-picker, .dateRegion ").datepicker({
-				inline: true
+			$(".date-picker, .dateRegion ").each(function () {
+				$(this).datepicker({
+					changeMonth: true,
+					changeYear: true,
+					showOn: "both",
+					buttonImage: '/Content/calendar.png',
+					buttonImageOnly: true,
+					constrainInput: true,
+					beforeShow: function () {
+						setTimeout(function () {
+							$('.ui-datepicker').css('z-index', 15);
+						}, 0);
+					}
+				});
 			});
-
-			$('.time-picker').timepicker({
-				showPeriod: true,
-				showLeadingZero: true
-			});
-
-		});
-	</script>
-
-	@* https://cdnjs.com/libraries/tinymce/6.8.3 *@
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" integrity="sha512-VCEWnpOl7PIhbYMcb64pqGZYez41C2uws/M/mDdGPy+vtEJHd9BqbShE4/VNnnZdr7YCPOjd+CBmYca/7WWWCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-	<script type="text/javascript">
-		function cmsTinyMceInit(w, h, r) {
-			tinymce.init({
-				selector: "textarea.mceEditor",
-				promotion: false,
-				convert_unsafe_embeds: true,
-				height: h,
-				width: w,
-				resize: r,
-				menubar: false,
-				plugins: 'image link lists media charmap searchreplace visualblocks table preview code codesample help',
-				toolbar: [
-					'bold italic underline strikethrough sub sup | blocks forecolor backcolor | blockquote alignleft aligncenter alignright alignjustify outdent indent | help | ',
-					'undo redo searchreplace | bullist numlist | removeformat pastetext | link unlink anchor image media customfilebrowser | charmap codesample code preview visualblocks'
-				],
-				content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-			});
-		}
-
-		function cmsPreSaveTrigger() {
-			var tgr = tinymce.triggerSave();
-
-			return true;
-		}
-	</script>
-
-	<script type="text/javascript">
-		var bTinyLoaded = false;
-
-		function cmsAjaxFailed() {
-		}
-
-		function AjaxTinyLoad() {
-			if (!bTinyLoaded) {
-				cmsTinyMceInit(875, 500, false);
-			}
-			bTinyLoaded = true;
-		}
-
-		$(document).ready(function () {
-			AjaxTinyLoad();
-		});
-
-		$(document).ajaxComplete(function (event, xhr, settings) {
-			AjaxTinyLoad();
 		});
 	</script>
 </head>
 <body>
-	<div class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				@Html.ActionLink(areaName, "Index", "Admin", new { area = "" }, new { @class = "navbar-brand" })
-			</div>
-			<div class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
+	<h2>Widget : @areaName</h2>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="navbar">
+		<div class="container-xl">
+			@Html.ActionLink(string.Format("{0}  (MVC5)", widgetName), "Index", "Admin", new { area = "" }, new { @class = "navbar-brand" })
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarWidget" aria-controls="navbarWidget" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarWidget">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					@if (User.Identity.IsAuthenticated) {
-						<li class="nav-item"><a> Hello @User.Identity.Name! </a></li>
-						<li class="nav-item"> @Html.ActionLink("Log Out", "LogOut", "Admin") </li>
+						<li class="nav-item"><a class="nav-link"> Hello @User.Identity.Name! </a></li>
+						<li class="nav-item"> @Html.ActionLink("Log Out", "LogOut", "Admin", null, new { @class = "nav-link" }) </li>
 					} else {
-						using (CarrotWeb.BeginWrappedItem("li", "Login", "Admin", new { @class = "active nav-item" }, new { @class = "nav-item" })) {
-							@Html.ActionLink("Login", "Login", "Admin")
+						using (CarrotWeb.BeginWrappedItem("li", "Login", "Admin", new { @class = "nav-item active" }, new { @class = "nav-item" })) {
+							@Html.ActionLink("Login", "Login", "Admin", null, new { @class = "nav-link" })
 						}
 					}
-
-					@using (CarrotWeb.BeginWrappedItem("li", "*", "Admin", new { @id = "tabAdmin", @class = "active dropdown" }, new { @id = "tabAdmin", @class = "dropdown" })) {
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin Test <b class="caret"></b></a>
+					<li>&nbsp;</li>
+					@using (CarrotWeb.BeginWrappedItem("li", "Index", "Admin", new { @class = "nav-item active" }, new { @class = "nav-item" })) {
+						@Html.ActionLink("Index", "Index", "Admin", null, new { @class = "nav-link" })
+					}
+					@using (CarrotWeb.BeginWrappedItem("li", "Pages", "Admin", new { @class = "nav-item active" }, new { @class = "nav-item" })) {
+						@Html.ActionLink("Pages", "Pages", "Admin", null, new { @class = "nav-link" })
+					}
+					@using (CarrotWeb.BeginWrappedItem("li", "Posts", "Admin", new { @class = "nav-item active" }, new { @class = "nav-item" })) {
+						@Html.ActionLink("Posts", "Posts", "Admin", null, new { @class = "nav-link" })
+					}
+					<li>&nbsp;</li>
+					@using (CarrotWeb.BeginWrappedItem("li", "Pages;Posts", "Admin", new { @id = "tabAdmin", @class = "nav-item dropdown active" }, new { @id = "tabAdmin", @class = "nav-item dropdown" })) {
+						<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Admin Test </a>
 						<ul class="dropdown-menu">
-							<li>@Html.ActionLink("Create Pages", "Pages", "Admin")</li>
-							<li>@Html.ActionLink("Create Posts", "Posts", "Admin")</li>
+							<li>@Html.ActionLink("Create Pages", "Pages", "Admin", null, new { @class = "dropdown-item" })</li>
+							<li>@Html.ActionLink("Create Posts", "Posts", "Admin", null, new { @class = "dropdown-item" })</li>
 						</ul>
 					}
 				</ul>
 			</div>
 		</div>
-	</div>
-	<br />
+	</nav>
+
 	<br />
 	<div class="container body-content">
 		@RenderBody()
 		<hr />
 		<footer>
-			<p>&copy; @DateTime.Now.Year -@areaName</p>
+			<p>&copy; @DateTime.Now.Year - @areaName</p>
 		</footer>
 	</div>
 </body>
