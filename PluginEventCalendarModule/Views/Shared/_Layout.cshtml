@@ -58,13 +58,21 @@
 					showOn: "both",
 					buttonImage: '/Content/calendar.png',
 					buttonImageOnly: true,
-					constrainInput: true
+					constrainInput: true,
+					beforeShow: function () {
+						setTimeout(function () {
+							$('.ui-datepicker').css('z-index', 15);
+						}, 0);
+					}
 				});
 			});
 
 			$(".timeRegion").each(function () {
 				if (!$(this).hasClass("hasTimePicker")) {
 					$(this).addClass("hasTimePicker");
+					$(this).parent().css('z-index', 15);
+					$(this).parent().css('position', 'relative');
+
 					var id = $(this).attr('id');
 					$('<img class="ui-timepicker-trigger" src="/Content/clock.png" for="' + id + '" id="' + id + '_triggerbtn" alt="hh:mm" title="hh:mm">').insertAfter(this);
 

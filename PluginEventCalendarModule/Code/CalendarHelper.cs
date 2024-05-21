@@ -223,6 +223,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 				var item = new carrot_CalendarEventProfile();
 				item.CalendarEventProfileID = Guid.NewGuid();
 				item.SiteID = srcProfile.SiteID;
+				item.EventTitle = string.Format("{0} (COPY)", srcProfile.EventTitle);
 				item.EventDetail = srcProfile.EventDetail;
 
 				item.EventRepeatPattern = srcProfile.EventRepeatPattern;
@@ -257,9 +258,9 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 
 						db.carrot_CalendarEvents.InsertOnSubmit(evt);
 					}
-
-					db.SubmitChanges();
 				}
+
+				db.SubmitChanges();
 
 				return item;
 			}
