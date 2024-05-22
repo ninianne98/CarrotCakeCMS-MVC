@@ -118,8 +118,7 @@ function cmsSetTimeRegion() {
 				showPeriodLabels: showAmPm,
 				showPeriod: showAmPm,
 				amPmText: [stringAM, stringPM],
-				showLeadingZero: true,
-				zIndex: 99
+				showLeadingZero: true
 			});
 		};
 	});
@@ -675,8 +674,8 @@ var cmsWebSvc = cmsWebServiceApi;  // "/Assets/Admin/CMS.asmx";
 var fldNameRet = '';
 
 function cmsGetAdminPath() {
-	cmsWebSvc = cmsWebServiceApi;
 	cmsAdminUri = cmsAdminBasePath;
+	cmsWebSvc = cmsWebServiceApi;
 }
 
 function cmsFileBrowserOpenReturn(fldN) {
@@ -721,16 +720,31 @@ function cmsSerializeForm(frmName) {
 
 $(document).ready(function () {
 	setTimeout(function () {
-		if ($('#contentForm').length > 0) {
-			if ($('#SerialCache').val().length < 10) {
-				cmsContentFormSerial = cmsSerializeForm('#contentForm');
-				$('#SerialCache').val(cmsContentFormSerial);
-			} else {
-				cmsContentFormSerial = $('#SerialCache').val();
-			}
-		}
-	}, 500);
+		cmsDirtyPageInit();
+	}, 2500);
 });
+
+function cmsDirtyPageForceInit() {
+	if ($('#SerialCache').val().length < 10) {
+		$('#SerialCache').val('');
+		cmsContentFormSerial = '';
+	}
+
+	setTimeout(function () {
+		cmsDirtyPageInit();
+	}, 1250);
+}
+
+function cmsDirtyPageInit() {
+	if ($('#contentForm').length > 0) {
+		if ($('#SerialCache').val().length < 10) {
+			cmsContentFormSerial = cmsSerializeForm('#contentForm');
+			$('#SerialCache').val(cmsContentFormSerial);
+		} else {
+			cmsContentFormSerial = $('#SerialCache').val();
+		}
+	}
+}
 
 function cmsGetPageStatus() {
 	if (cmsConfirmLeavingPage == true) {

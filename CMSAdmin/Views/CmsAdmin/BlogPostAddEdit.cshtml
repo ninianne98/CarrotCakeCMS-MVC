@@ -750,8 +750,6 @@
 	$(document).ready(function () {
 		cmsInputEnterBlock();
 	});
-</script>
-<script type="text/javascript">
 
 	function SubmitPage() {
 		var sc = SaveCommon();
@@ -782,11 +780,12 @@
 		cmsSaveMakeOKAndCancelLeave();
 		return true;
 	}
-</script>
-<script type="text/javascript">
+
 	$(document).ready(function () {
 		$(".chosen-select").chosen({ width: "695px" });
 
 		setTimeout("$('#jqtabs').tabs('option', 'active', 1);", 500);
 	});
+
+	cmsDirtyPageForceInit();
 </script>
