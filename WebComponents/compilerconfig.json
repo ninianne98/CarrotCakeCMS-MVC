@@ -358,5 +358,9 @@
   {
     "outputFile": "bootstrap5/green.css",
     "inputFile": "bootstrap5/green.less"
+  },
+  {
+    "outputFile": "bootstrap5/seafoam.css",
+    "inputFile": "bootstrap5/seafoam.less"
   }
 ]

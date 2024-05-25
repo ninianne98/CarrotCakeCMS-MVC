@@ -13,22 +13,22 @@
 	<div>
 		<div class="form-horizontal">
 
-			<div class="form-group">
-				@Html.LabelFor(model => model.SelectedCategories, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="form-group row mb-3">
+				@Html.LabelFor(model => model.SelectedCategories, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
 				<div class="col-md-8">
 					@Html.ListBoxFor(m => m.SelectedCategories,
 					  new MultiSelectList(Model.Categories, "CategoryID", "CategoryName", Model.SelectedCategories),
 					 new { @class = "form-control chosen-select", @data_placeholder = "Select Categories" })
 				</div>
 			</div>
-			<div class="form-group">
-				@Html.LabelFor(model => model.SelectedView, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="form-group row mb-3">
+				@Html.LabelFor(model => model.SelectedView, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
 				<div class="col-md-8">
-					@Html.DropDownListFor(m => m.SelectedView, new SelectList(Model.Views, Model.SelectedView), "[select]")
+					@Html.DropDownListFor(m => m.SelectedView, new SelectList(Model.Views, Model.SelectedView), "[select]", new { @class = "form-control form-select smtext" })
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group row mb-3">
 				<div class="col-md-offset-2 col-md-8">
 					<input type="submit" value="Save" class="btn btn-primary" />
 				</div>

@@ -245,7 +245,7 @@ namespace Carrotware.CMS.UI.Components {
 			var sb = new StringBuilder();
 
 			_jqb.SelectedSkin = jquerybasic.jQueryTheme.LightGreen;
-			_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Classic;
+			_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Seafoam;
 
 			switch (this.SelectedColor) {
 				case SkinOption.Classic:
@@ -311,7 +311,7 @@ namespace Carrotware.CMS.UI.Components {
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.SugarAlmond;
 					break;
 				default:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Classic;
+					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Seafoam;
 					break;
 			}
 

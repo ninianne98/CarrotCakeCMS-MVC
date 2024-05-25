@@ -5,20 +5,9 @@
 * Dual licensed under the MIT or GPL Version 3 licenses.
 * Date: May 2024
 */
-.bg-dark {
-  background: #707070;
-  background-color: #707070 !important;
-}
-.navbar {
-  background: #707070;
+.navbar-dark .nav-link,
+.navbar-dark .dropdown {
   color: #000000;
-}
-.navbar .nav-link,
-.navbar .dropdown {
-  color: #000000;
-}
-.navbar-dark {
-  background-color: #515151;
 }
 .navbar-dark .navbar-nav > .active > a:hover,
 .navbar-dark .navbar-nav > li > a:hover,
@@ -124,16 +113,10 @@ a:hover {
 .btn-primary {
   --bs-btn-color: #fff;
   --bs-btn-bg: #575757;
-  --bs-btn-border-color: #575757;
+  --bs-btn-border-color: #303030;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #303030;
-  --bs-btn-hover-border-color: #303030;
-  --bs-btn-focus-shadow-rgb: 49,132,253;
   --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: #303030;
-  --bs-btn-active-border-color: #303030;
-  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   --bs-btn-disabled-color: #fff;
-  --bs-btn-disabled-bg: #303030;
+  --bs-btn-disabled-bg: #b0b0b0;
   --bs-btn-disabled-border-color: #575757;
 }

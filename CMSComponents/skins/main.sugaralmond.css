@@ -19,6 +19,10 @@ CarrotCake CMS Theme Stylesheet - Main
   padding: 0.1em;
   margin: 0.25em 0 0.5em 0;
 }
+.row {
+  display: flex;
+  margin: 0.25em 1em 0.25em 0;
+}
 .dl-horizontal dt {
   float: left;
   width: 160px;
@@ -169,11 +173,14 @@ table.table thead.header {
   text-align: right;
   font-weight: bolder;
   padding: 0;
-  margin: 0.25em 1em 0.25em 0;
+  padding-right: 1em;
 }
 .form-control {
   padding: 0;
   margin: 0.25em;
+}
+.bootstrap-content .form-control {
+  margin: 0;
 }
 textarea.form-control {
   height: auto;

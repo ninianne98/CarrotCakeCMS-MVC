@@ -16,7 +16,7 @@
 	})) {
 
 		<div>
-			@Html.DropDownListFor(m => m.SelectedCat, new SelectList(Model.Options, "CategoryID", "CategoryName", Model.SelectedCat), "[select]")
+			@Html.DropDownListFor(m => m.SelectedCat, new SelectList(Model.Options, "CategoryID", "CategoryName", Model.SelectedCat), "[select]", new { @class = "form-control form-select smtext" })
 		</div>
 		@Html.HiddenFor(m => m.AltViewName)
 		<br />

@@ -21,7 +21,7 @@
 	<div class="form-horizontal">
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-		<div class="form-group">
+		<div class="form-group row mb-3">
 			@Html.LabelFor(m => m.Caption, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
 				@Html.TextBoxFor(m => m.Caption, new { @class = "form-control form-control-lg" })
@@ -29,7 +29,7 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group row mb-3">
 			@Html.LabelFor(m => m.Question, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
 				@Html.ValidationMessageFor(m => m.Question, "", new { @class = "text-danger" })
@@ -37,7 +37,7 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group row mb-3">
 			@Html.LabelFor(m => m.Answer, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
 				@Html.ValidationMessageFor(m => m.Answer, "", new { @class = "text-danger" })
@@ -45,7 +45,7 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group row mb-3">
 			@Html.LabelFor(m => m.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-2">
 				@Html.EditorFor(m => m.IsActive)
@@ -59,7 +59,7 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group row mb-3">
 			<div class="col-md-offset-2 col-md-8">
 				<input type="button" value="Save" class="btn btn-default" onclick="SaveItem()" />
 				<text>

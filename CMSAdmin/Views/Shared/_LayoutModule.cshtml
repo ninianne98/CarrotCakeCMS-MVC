@@ -46,7 +46,7 @@
 						} else {
 							<div class="accordion-item">
 								<h3 class="accordion-header" id="@sectionId">
-									<button type="button" class="accordion-button" data-bs-toggle="collapse"
+									<button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
 											data-bs-target="#@sectionSubId" aria-expanded="true" aria-controls="@sectionSubId">
 										@mod.PluginName
 									</button>
@@ -104,13 +104,15 @@
 						$('#tabExtensions').addClass("current sub active");
 						$("#module-accordion").accordion({
 							heightStyle: "content",
+							collapsible: true,
 							active: parseInt('@settings.SelectedTab')
 						});
 						</text>
 					} else {
 						<text>
 						$('#tabExtensions').addClass("current active");
-						$('#moduleSubGroup' + '@settings.SelectedTab').attr('class', "accordion-collapse collapse show");
+						$('#moduleGroup' + '@settings.SelectedTab' + ' button').removeClass("collapsed");
+						$('#moduleSubGroup' + '@settings.SelectedTab').addClass("show");
 						</text>
 					}
 				}

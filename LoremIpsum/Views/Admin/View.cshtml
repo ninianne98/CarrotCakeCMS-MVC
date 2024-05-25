@@ -26,7 +26,7 @@
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 		<div class="form-group row">
 			@Html.LabelFor(m => m.HowMany, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
-			<div class="col-md-10">
+			<div class="col-md-6">
 				@Html.EditorFor(m => m.HowMany, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
 				@Html.ValidationMessageFor(m => m.HowMany, "", new { @class = "text-danger" })
 			</div>
@@ -35,7 +35,7 @@
 		@if (Model.ContentType == Carrotware.CMS.Core.ContentPageType.PageType.ContentEntry) {
 			<div class="form-group row">
 				@Html.LabelFor(m => m.TopLevel, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
-				<div class="col-md-10">
+				<div class="col-md-6">
 					@Html.EditorFor(m => m.TopLevel)
 					@Html.ValidationMessageFor(m => m.TopLevel, "", new { @class = "text-danger" })
 				</div>
@@ -45,7 +45,7 @@
 		@if (Model.ContentType == Carrotware.CMS.Core.ContentPageType.PageType.BlogEntry) {
 			<div class="form-group row">
 				@Html.LabelFor(m => m.Tags, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
-				<div class="col-md-10">
+				<div class="col-md-6">
 					@Html.EditorFor(m => m.Tags, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
 					@Html.ValidationMessageFor(m => m.Tags, "", new { @class = "text-danger" })
 				</div>
@@ -53,7 +53,7 @@
 
 			<div class="form-group row">
 				@Html.LabelFor(m => m.Categories, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
-				<div class="col-md-10">
+				<div class="col-md-6">
 					@Html.EditorFor(m => m.Categories, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
 					@Html.ValidationMessageFor(m => m.Categories, "", new { @class = "text-danger" })
 				</div>
@@ -61,7 +61,7 @@
 
 			<div class="form-group row">
 				@Html.LabelFor(m => m.BlogComments, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
-				<div class="col-md-10">
+				<div class="col-md-6">
 					@Html.EditorFor(m => m.BlogComments, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
 					@Html.ValidationMessageFor(m => m.BlogComments, "", new { @class = "text-danger" })
 				</div>
@@ -69,7 +69,7 @@
 
 			<div class="form-group row">
 				@Html.LabelFor(m => m.DateFrom, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
-				<div class="col-md-10">
+				<div class="col-md-6">
 					<div class="input-group">
 						@Html.TextBoxFor(m => m.DateFrom, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion form-control form-control-sm" })
 						@*@Html.EditorFor(m=> m.DateFrom, new { htmlAttributes = new { @class = "form-control form-control-sm" } }) *@
@@ -80,7 +80,7 @@
 
 			<div class="form-group row">
 				@Html.LabelFor(m => m.DateTo, htmlAttributes: new { @class = "control-label col-form-label col-md-2" })
-				<div class="col-md-10">
+				<div class="col-md-6">
 					<div class="input-group">
 						@Html.TextBoxFor(m => m.DateTo, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion form-control form-control-sm" })
 						@*@Html.EditorFor(m=> m.DateTo, new { htmlAttributes = new { @class = "form-control form-control-sm" } })*@

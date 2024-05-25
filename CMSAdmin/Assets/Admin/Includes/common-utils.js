@@ -5,6 +5,16 @@
 var cmsDatePattern = '';
 var cmsTimePattern = '';
 
+var cmsBootstrap = (typeof bootstrap === 'undefined') == false;
+
+//alert(cmsBootstrap);
+//console.log('jQuery:  ' + ((typeof jQuery === 'undefined') == false));
+//console.log('bootstrap:  ' + cmsBootstrap);
+//if (cmsBootstrap) {
+//	console.log(bootstrap.Tooltip.VERSION);
+//	console.log(typeof (ropdown));
+//}
+
 function AjaxBtnLoad() {
 	$(function () {
 		$('#jqtabs, .jqtabs').tabs();
@@ -72,22 +82,40 @@ function cmsGetShortDatePattern() {
 }
 
 function cmsSetDateRegion() {
+	var calSetting = {
+		dateFormat: cmsDatePattern,
+		buttonText: cmsDatePattern,
+		changeMonth: true,
+		changeYear: true,
+		constrainInput: true,
+		beforeShow: function () {
+			setTimeout(function () {
+				$('.ui-datepicker').css('z-index', 15);
+			}, 0);
+		}
+	};
+
+	if (cmsBootstrap == false) {
+		calSetting.showOn = "both";
+		calSetting.buttonImageOnly = true;
+		calSetting.buttonImage = '/Assets/Admin/images/calendar.png';
+	}
+
+	var parentGrp = $(this).parent().hasClass('input-group');
+	var nextItem = $(this).next().hasClass('input-group-text');
+
 	$(".dateRegion").each(function () {
-		$(this).datepicker({
-			dateFormat: cmsDatePattern,
-			buttonText: cmsDatePattern,
-			changeMonth: true,
-			changeYear: true,
-			showOn: "both",
-			buttonImage: '/Assets/Admin/images/calendar.png',
-			buttonImageOnly: true,
-			constrainInput: true,
-			beforeShow: function () {
-				setTimeout(function () {
-					$('.ui-datepicker').css('z-index', 15);
-				}, 0);
+		if ($(this).hasClass('hasDatepicker') == false) {
+
+			if (cmsBootstrap == true && parentGrp == false && nextItem == false) {
+				var id = $(this).attr('id');
+				$(this).addClass('form-control');
+				$(this).wrap('<div style="width:12em" class="input-group" />')
+				$('<label for="' + id + '" id="' + id + '_triggerbtn" class="input-group-addon input-group-text"><span class="bi bi-calendar3"></span></label>').insertAfter($(this));
 			}
-		});
+
+			$(this).datepicker(calSetting);
+		}
 	});
 }
 
@@ -106,11 +134,22 @@ function cmsSetTimeRegion() {
 	$(".timeRegion").each(function () {
 		if (!$(this).hasClass("hasTimePicker")) {
 			$(this).addClass("hasTimePicker");
+			var id = $(this).attr('id');
+			var parentGrp = $(this).parent().hasClass('input-group');
+			var nextItem = $(this).next().hasClass('input-group-text');
+
 			$(this).parent().css('z-index', 15);
 			$(this).parent().css('position', 'relative');
 
-			var id = $(this).attr('id');
-			$('<img class="ui-timepicker-trigger" src="/Assets/Admin/images/clock.png" for="' + id + '" id="' + id + '_triggerbtn" alt="' + cmsTimePattern + '" title="' + cmsTimePattern + '">').insertAfter(this);
+			if (cmsBootstrap == true && parentGrp == false && nextItem == false) {
+				$(this).addClass('form-control');
+				$(this).wrap('<div style="width:12em" class="input-group" />')
+				$('<label for="' + id + '" id="' + id + '_triggerbtn" class="ui-timepicker-trigger input-group-addon input-group-text"><span class="bi bi-clock"></span></label>').insertAfter($(this));
+			}
+
+			if (cmsBootstrap == false) {
+				$('<img class="ui-timepicker-trigger" src="/Assets/Admin/images/clock.png" for="' + id + '" id="' + id + '_triggerbtn" alt="' + cmsTimePattern + '" title="' + cmsTimePattern + '">').insertAfter($(this));
+			}
 
 			$(this).timepicker({
 				showOn: "both",

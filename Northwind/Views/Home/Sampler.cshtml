@@ -113,10 +113,10 @@
 
 <div>
 	@using (Html.BeginForm()) {
-		<div class="form-group">
-			@Html.LabelFor(model => model.SelectedItem, new { @class = "control-label col-md-2" })
+		<div class="form-group row mb-3">
+			@Html.LabelFor(model => model.SelectedItem, new { @class = "control-label col-form-label col-md-2" })
 			<div class="col-md-4">
-				@Html.DropDownListFor(x => x.SelectedItem, new SelectList(Model.Options, "SkinName", "SkinName"), new { @class = "form-control smtext" })
+				@Html.DropDownListFor(x => x.SelectedItem, new SelectList(Model.Options, "SkinName", "SkinName"), new { @class = "form-control form-select smtext" })
 				@Html.ValidationMessageFor(model => model.SelectedItem)
 			</div>
 			<div col-md-2">
@@ -133,33 +133,32 @@
 
 <div>
 	<div class="form-horizontal">
-
-		<div class="form-group">
-			<label class="control-label col-md-4">Date Sample</label>
+		<div class="form-group row mb-3">
+			<label class="control-label col-form-label col-md-4">Date Sample</label>
 			<div class="col-md-3">
 				<div class="input-group">
 					@Html.TextBox("SampleDate", DateTime.Now, "{0:MM/dd/yyyy}", new { maxlength = "12", @class = "date-picker form-control" })
-					<label for="SampleDate" class="input-group-addon btn">
-						<span class="glyphicon glyphicon-calendar"></span>
+					<label for="SampleDate" class="input-group-addon input-group-text">
+						<span class="glyphicon glyphicon-calendar bi bi-clock-history"></span>
 					</label>
 				</div>
 			</div>
 		</div>
 
-		<div class="form-group">
-			<label class="control-label col-md-4">Time Sampler</label>
+		<div class="form-group row mb-3">
+			<label class="control-label col-form-label col-md-4">Time Sampler</label>
 			<div class="col-md-3">
 				<div class="input-group">
 					@Html.TextBox("SampleTime", DateTime.Now, "{0:hh:mm tt}", new { maxlength = "16", @class = "time-picker form-control" })
-					<label for="SampleTime" class="input-group-addon btn">
-						<span class="glyphicon glyphicon-time"></span>
+					<label for="SampleTime" class="input-group-addon input-group-text">
+						<span class="glyphicon glyphicon-time bi bi-calendar3"></span>
 					</label>
 				</div>
 			</div>
 		</div>
 
-		<div class="form-group">
-			<label class="control-label col-md-4">Multi-Select Sampler</label>
+		<div class="form-group row mb-3">
+			<label class="control-label col-form-label col-md-4">Multi-Select Sampler</label>
 			<div class="col-md-5">
 				@Html.ListBox("SelSampleChosen",
 							 new MultiSelectList(dates, "Key", "Value"),
@@ -2360,14 +2359,14 @@
 					<fieldset>
 						<legend>Bootstrap 3 Inputs</legend>
 						<div class="control-group">
-							<label class="control-label" for="input01">Text input</label>
+							<label class="control-label col-form-label" for="input01">Text input</label>
 							<div class="controls">
 								<input type="text" class="form-control input-xlarge" id="input01">
 								<p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="optionsCheckbox">Checkbox</label>
+							<label class="control-label col-form-label" for="optionsCheckbox">Checkbox</label>
 							<div class="controls">
 								<label class="checkbox">
 									&nbsp;&nbsp;&nbsp;&nbsp; <input type="checkbox" id="optionsCheckbox" value="option1">
@@ -2376,7 +2375,7 @@
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="select01">Select list</label>
+							<label class="control-label col-form-label" for="select01">Select list</label>
 							<div class="controls">
 								<select id="select01" class="form-control">
 									<option>something</option>
@@ -2388,7 +2387,7 @@
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="multiSelect">Multicon-select</label>
+							<label class="control-label col-form-label" for="multiSelect">Multicon-select</label>
 							<div class="controls">
 								<select multiple="multiple" id="multiSelect" class="form-control">
 									<option>1</option>
@@ -2400,19 +2399,19 @@
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="fileInput">File input</label>
+							<label class="control-label col-form-label" for="fileInput">File input</label>
 							<div class="controls">
 								<input class="form-control input-file" id="fileInput" type="file">
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="textarea">Textarea</label>
+							<label class="control-label col-form-label" for="textarea">Textarea</label>
 							<div class="controls">
 								<textarea class="form-control input-xlarge" id="textarea" rows="3"></textarea>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="optionsCheckbox2">Disabled checkbox</label>
+							<label class="control-label col-form-label" for="optionsCheckbox2">Disabled checkbox</label>
 							<div class="controls">
 								<label class="checkbox">
 									&nbsp;&nbsp;&nbsp;&nbsp; <input type="checkbox" id="optionsCheckbox2" value="option1" disabled="">
@@ -2421,7 +2420,7 @@
 							</div>
 						</div>
 						<div class="control-group warning">
-							<label class="control-label" for="inputWarning">Input with warning</label>
+							<label class="control-label col-form-label" for="inputWarning">Input with warning</label>
 							<div class="controls">
 								<input type="text" id="inputWarning" class="form-control">
 								<span class="help-inline">Something may have gone wrong</span>
