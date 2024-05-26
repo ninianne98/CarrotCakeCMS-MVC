@@ -3,7 +3,7 @@
 <div id="divCalendarResults">
 	<style type="text/css">
 		.calendarCenter1 {
-			width: 100%;
+			width: 225px;
 			margin: 0 auto;
 			border: 1px solid transparent;
 			text-align: center;
@@ -179,7 +179,7 @@ FormatTemplate = @<text>
 		@Html.AntiForgeryToken()
 
 		<div id="divDatePicker" class="calendarCenter1">
-			@Html.TextBox("CalendarInputDate", string.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", style = "width: 10em; display:inline; margin:1em", @class = "eventDateRegion form-control-sm" })
+			@Html.TextBox("CalendarInputDate", string.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", style = "width: 120px; display:inline; margin:1em", @class = "eventDateRegion form-control-sm" })
 		</div>
 
 		<div class="calendarCenter2">

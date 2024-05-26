@@ -90,9 +90,29 @@ namespace Carrotware.Web.UI.Components {
 		public object TBodyAttributes { get; set; }
 
 		public void SetTableAttributes(object tableAttrib, object headAttrib, object bodyAttrib) {
-			this.TableAttributes = InitAttrib(tableAttrib);
-			this.THeadAttributes = InitAttrib(headAttrib);
-			this.TBodyAttributes = InitAttrib(bodyAttrib);
+			this.TableAttributes = tableAttrib;
+			this.THeadAttributes = headAttrib;
+			this.TBodyAttributes = bodyAttrib;
+		}
+
+		protected object MergeAttributes(object attributes, object newAttribute) {
+			IDictionary<string, object> tagAttrib = new Dictionary<string, object>();
+			IDictionary<string, object> tagNewAttrib = new Dictionary<string, object>();
+
+			if (attributes != null) {
+				tagAttrib = attributes.ToAttributeDictionary();
+			}
+			if (newAttribute != null) {
+				tagNewAttrib = newAttribute.ToAttributeDictionary();
+			}
+
+			foreach (var kvp in tagNewAttrib) {
+				if (!tagAttrib.ContainsKey(kvp.Key)) {
+					tagAttrib.Add(kvp.Key, kvp.Value);
+				}
+			}
+
+			return tagAttrib;
 		}
 
 		protected IDictionary<string, object> InitAttrib(object htmlAttribs) {

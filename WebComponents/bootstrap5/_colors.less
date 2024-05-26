@@ -5,7 +5,7 @@
 * Dual licensed under the MIT or GPL Version 3 licenses.
 * Date: May 2024
 */
-@classic: #6f997d;
+@seafoam: #6f997d;
 @plum: #854085;
 @amethystorchid: #926aa6;
 @violet: #614791;
@@ -73,13 +73,14 @@
 
 
 .bootstrapColorTheme(@themeColor) {
-	@navText: contrast(@themeColor, darken(@themeColor, 75%), lighten(@themeColor, 75%));
+	@navText: contrast(@themeColor, @black, @white);
 	@navColor: lighten(@themeColor, 7%);
 	@inverseColor: darken(@themeColor, 12%);
 	@linkColor: contrast(@themeColor, darken(@themeColor, 10%), lighten(@themeColor, 10%));
 
 	@hoverColor: contrast(@themeColor, darken(@themeColor, 35%), lighten(@themeColor, 35%));
 	@hoverText: contrast(@hoverColor, darken(@themeColor, 65%), lighten(@themeColor, 65%));
+
 	@themeDark55: darken(@themeColor, 55%);
 	@themeDark30: darken(@themeColor, 30%);
 	@themeDark15: darken(@themeColor, 15%);
@@ -97,8 +98,8 @@
 
 	@themePale: screen(@themeLight25, #bbbbbb);
 
-	.navbar-dark .nav-link, .navbar-dark .dropdown {
-		color: contrast(@themePale, darken(@themeColor, 75%), lighten(@themeColor, 75%));
+	.navbar-dark {
+		background-color: @inverseColor;
 	}
 
 	.navbar-dark .navbar-nav > .active > a:hover, .navbar-dark .navbar-nav > li > a:hover, .navbar-dark .navbar-nav > li > a:focus {
@@ -106,10 +107,6 @@
 	}
 
 	.navbar-dark .navbar-nav > .active > a, .navbar-dark .navbar-nav > .open > a, .navbar-dark .navbar-nav > .open > a, .navbar-dark .navbar-nav > .open > a:hover, .navbar-dark .navbar-nav > .open > a, .navbar-dark .navbar-nav > .open > a:hover, .navbar-dark .navbar-nav > .open > a:focus {
-		background-color: @navColor;
-	}
-
-	.dropdown-menu {
 		background-color: @navColor;
 	}
 
@@ -154,10 +151,6 @@
 		color: @navText;
 	}
 
-	.dropdown-menu > li > a {
-		color: @navText;
-	}
-
 	.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
 		background-color: @hoverColor;
 		color: @hoverText;
@@ -179,44 +172,16 @@
 		border-bottom-color: @navText;
 	}
 
-	a {
-		color: @themeDark30;
-	}
-
-	a:focus, a:hover {
-		color: @navColor;
-	}
-
-	.pagination > li > a,
-	.pagination > li > span {
-		color: @inverseColor;
-	}
-
-	.pagination > li > a:hover,
-	.pagination > li > span:hover,
-	.pagination > li > a:focus,
-	.pagination > li > span:focus {
-		color: @navColor;
-	}
-
-	.pagination > .active > a,
-	.pagination > .active > span,
-	.pagination > .active > a:hover,
-	.pagination > .active > span:hover,
-	.pagination > .active > a:focus,
-	.pagination > .active > span:focus {
-		background-color: @inverseColor;
-		border-color: @inverseColor;
-	}
-
 	.btn-primary {
-		--bs-btn-color: #fff;
+		--bs-btn-color: @navText;
 		--bs-btn-bg: @themeDark10;
-		--bs-btn-border-color: @themeDark25;
-		--bs-btn-hover-color: #fff;
-		--bs-btn-active-color: #fff;
-		--bs-btn-disabled-color: #fff;
+		--bs-btn-border-color: @themeDark10;
+		--bs-btn-hover-color: @hoverText;
+		--bs-btn-hover-bg: @hoverColor;
+		--bs-btn-hover-border-color: @themeDark25;
+		--bs-btn-active-color: @hoverText;
+		--bs-btn-active-bg: @hoverColor;
+		--bs-btn-disabled-color: @navText;
 		--bs-btn-disabled-bg: @themeLight25;
-		--bs-btn-disabled-border-color: @themeDark10;
 	}
 }

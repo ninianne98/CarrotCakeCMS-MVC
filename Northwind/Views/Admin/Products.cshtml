@@ -31,12 +31,10 @@
 	var grid = CarrotWeb.CarrotWebGrid(Model);
 	grid.PrettifyHeadings = true;
 	grid.HtmlFormId = "frmNorthwindProducts";
-	grid.TableAttributes = new { @class = "datatable" };
-	grid.THeadAttributes = new { @class = "tablehead header thead-dark" };
-	//grid.ConfigName(Html.NameFor(x => x));
 
-	//grid.SetupFooter("ul", new { @class = "tablepager ui-widget ui-helper-clearfix" }, "li", new { @class = "ui-state-default ui-state-active ui-corner-all" }, new { @class = "ui-state-default ui-corner-all" });
-	grid.SetupFooter("ul", new { @class = "pagination" }, "li", new { @class = "active" }, null);
+	grid.TableAttributes = new { @class = "datatable" };
+	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.SetupFooter("ul", new { @class = "pagination flex-wrap mb-3" }, "li", new { @class = "page-item active" }, new { @class = "page-item" });
 
 	grid
 		.AddColumn(new CarrotGridTemplateColumn<Product> {

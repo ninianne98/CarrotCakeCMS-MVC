@@ -405,6 +405,7 @@ namespace Carrotware.Web.UI.Components {
 					_dict.TryAdd(".fif", "image/fif");
 					_dict.TryAdd(".fli", "video/x-fli");
 					_dict.TryAdd(".flo", "image/florian");
+					_dict.TryAdd(".flv", "video/x-flv");
 					_dict.TryAdd(".flx", "text/vnd.fmi.flexstor");
 					_dict.TryAdd(".fmf", "video/x-atomic3d-feature");
 					_dict.TryAdd(".for", "text/plain");

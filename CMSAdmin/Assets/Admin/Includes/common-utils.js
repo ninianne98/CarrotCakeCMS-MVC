@@ -110,6 +110,8 @@ function cmsSetDateRegion() {
 			if (cmsBootstrap == true && parentGrp == false && nextItem == false) {
 				var id = $(this).attr('id');
 				$(this).addClass('form-control');
+				$(this).css("width", '');
+				$(this).css("margin", '');
 				$(this).wrap('<div style="width:12em" class="input-group" />')
 				$('<label for="' + id + '" id="' + id + '_triggerbtn" class="input-group-addon input-group-text"><span class="bi bi-calendar3"></span></label>').insertAfter($(this));
 			}
@@ -143,6 +145,8 @@ function cmsSetTimeRegion() {
 
 			if (cmsBootstrap == true && parentGrp == false && nextItem == false) {
 				$(this).addClass('form-control');
+				$(this).css("width", '');
+				$(this).css("margin", '');
 				$(this).wrap('<div style="width:12em" class="input-group" />')
 				$('<label for="' + id + '" id="' + id + '_triggerbtn" class="ui-timepicker-trigger input-group-addon input-group-text"><span class="bi bi-clock"></span></label>').insertAfter($(this));
 			}

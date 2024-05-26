@@ -18,14 +18,14 @@ namespace Carrotware.Web.UI.Components {
 
 	public class WrappedItem : IDisposable {
 		protected HtmlHelper _helper = null;
-		protected StringBuilder _stringbldr = null;
+		protected StringBuilder _stringbldr = new StringBuilder();
 
 		protected string _tag = "li";
 		protected string _defaultActionName = "Index";
 
 		public WrappedItem(HtmlHelper htmlHelper, string tag,
-							string actionName, string controllerName,
-							object activeAttributes = null, object inactiveAttributes = null) {
+								string actionName, string controllerName,
+								object activeAttributes = null, object inactiveAttributes = null) {
 			_helper = htmlHelper;
 			var sb = new StringBuilder();
 
@@ -36,8 +36,8 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public WrappedItem(HtmlHelper htmlHelper, string tag,
-							int currentPage, int selectedPage,
-							object activeAttributes = null, object inactiveAttributes = null) {
+								int currentPage, int selectedPage,
+								object activeAttributes = null, object inactiveAttributes = null) {
 			_helper = htmlHelper;
 			var sb = new StringBuilder();
 
@@ -61,6 +61,7 @@ namespace Carrotware.Web.UI.Components {
 		public WrappedItem(HtmlHelper htmlHelper, StringBuilder sb, string tag,
 						string actionName, string controllerName,
 						object activeAttributes = null, object inactiveAttributes = null) {
+			_helper = htmlHelper;
 			_stringbldr = sb;
 
 			OpenTag(htmlHelper, sb, tag, actionName, controllerName, activeAttributes, inactiveAttributes);
@@ -69,6 +70,7 @@ namespace Carrotware.Web.UI.Components {
 		public WrappedItem(HtmlHelper htmlHelper, StringBuilder sb, string tag,
 							int currentPage, int selectedPage,
 							object activeAttributes = null, object inactiveAttributes = null) {
+			_helper = htmlHelper;
 			_stringbldr = sb;
 
 			OpenTag(htmlHelper, sb, tag, currentPage, selectedPage, activeAttributes, inactiveAttributes);
@@ -85,6 +87,8 @@ namespace Carrotware.Web.UI.Components {
 		private string OpenTag(HtmlHelper htmlHelper, StringBuilder sb, string tag,
 				string actionName, string controllerName,
 				object activeAttributes = null, object inactiveAttributes = null) {
+
+			_helper = htmlHelper;
 			_stringbldr = sb;
 			_tag = string.IsNullOrEmpty(tag) ? "li" : tag;
 
@@ -138,6 +142,8 @@ namespace Carrotware.Web.UI.Components {
 		private string OpenTag(HtmlHelper htmlHelper, StringBuilder sb, string tag,
 							int currentPage, int selectedPage,
 							object activeAttributes = null, object inactiveAttributes = null) {
+
+			_helper = htmlHelper;
 			_stringbldr = sb;
 			_tag = string.IsNullOrEmpty(tag) ? "li" : tag;
 

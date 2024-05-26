@@ -249,8 +249,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[HttpGet]
-		public ActionResult FileBrowser(string fldrpath, string useTiny, string returnvalue, string viewmode) {
-			FileBrowserModel model = new FileBrowserModel(fldrpath, useTiny, returnvalue, viewmode);
+		public ActionResult FileBrowser(string fldrpath, string useTiny, string returnvalue, string viewmode, string sort) {
+			FileBrowserModel model = new FileBrowserModel(fldrpath, useTiny, returnvalue, viewmode, sort);
 
 			return View(model);
 		}
@@ -266,7 +266,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				msg = model.FileMsg;
 				msgCss = model.FileMsgCss;
 
-				model = new FileBrowserModel(model.QueryPath, model.UseTinyMCE.ToString(), model.ReturnMode.ToString(), model.ViewMode);
+				model = new FileBrowserModel(model.QueryPath, model.UseTinyMCE.ToString(), model.ReturnMode.ToString(), model.ViewMode, model.Sort);
 
 				model.FileMsg = msg;
 				model.FileMsgCss = msgCss;

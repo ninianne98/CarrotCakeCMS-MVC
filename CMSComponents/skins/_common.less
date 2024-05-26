@@ -112,6 +112,15 @@ Common CarrotCake CMS stylesheet
 		font-size: 1.1em;
 	}
 
+	.bootstrap-content #module-accordion .accordion-body,
+	.bootstrap-content #module-accordion .accordion-body a {
+		font-size: 0.9em;
+	}
+
+	.bootstrap-content #module-accordion .accordion-body a {
+		color: @themeDark15;
+	}
+
 	.jqradioset label {
 		margin-left: 0.5em;
 		margin-right: 3em;
@@ -287,6 +296,14 @@ Common CarrotCake CMS stylesheet
 		color: @themeDark55;
 	}
 
+	.bootstrap-content fieldset legend {
+		float: none;
+		width: auto;
+		margin: 2px;
+		padding: 2px;
+		font-size: 1.1em;
+	}
+
 	legend button, legend .ui-widget, legend .ui-button {
 		font-size: 0.8em;
 	}
@@ -384,7 +401,7 @@ Common CarrotCake CMS stylesheet
 		border-radius: 8px;
 		border: 1px solid #676767;
 		color: @themeDark55;
-		width: 762px;
+		width: 750px;
 		padding: 9px;
 		clear: both;
 		background: @themeLight40;
@@ -397,13 +414,23 @@ Common CarrotCake CMS stylesheet
 		color: @themeDark55;
 		height: 110px;
 		width: 110px;
-		padding: 10px;
+		padding: 8px;
 		margin: 10px;
 		float: left;
 		font-size: 0.95em;
 		text-align: center;
 		background: @themePale;
 		background-image: radial-gradient(ellipse at top, @themePale, transparent), radial-gradient(ellipse at bottom, @themeLight15, transparent);
+	}
+
+	.bootstrap-content #cmsDashboardIcons {
+		width: 730px;
+	}
+
+	.bootstrap-content #cmsDashboardIcons .dashboardCell {
+		height: 120px;
+		width: 120px;
+		font-size: 0.85em;
 	}
 
 	#cmsDashboardIcons .dashboardCell a,
@@ -413,15 +440,38 @@ Common CarrotCake CMS stylesheet
 		color: contrast(@themePale, darken(@themeColor, 75%), lighten(@themeColor, 75%));
 	}
 
+	#cmsDashboardIcons .dashboardCell .dash-icon {
+		padding: 0;
+		margin-bottom: 0.75em;
+	}
+
+	#cmsDashboardIcons .dashboardCell a {
+		text-decoration: none;
+	}
+
+	#cmsDashboardIcons .dashboardCell a:hover {
+		text-decoration: underline;
+	}
+
 	@media screen and (min-width: 1610px) {
 		#cmsDashboardIcons {
-			width: 838px;
+			width: 825px;
 		}
 
 		#cmsDashboardIcons .dashboardCell {
-			line-height: 1em;
+			line-height: 1.3em;
 			height: 125px;
 			width: 125px;
+		}
+
+		.bootstrap-content #cmsDashboardIcons {
+			width: 805px;
+		}
+
+		.bootstrap-content #cmsDashboardIcons .dashboardCell {
+			line-height: 1.65em;
+			height: 135px;
+			width: 135px;
 		}
 	}
 
@@ -699,6 +749,8 @@ drilldown stuff
 	}
 
 	.ui-timepicker-table td a {
+		min-width: 1.6em;
+		padding: 1px;
 		width: 30px;
 	}
 }

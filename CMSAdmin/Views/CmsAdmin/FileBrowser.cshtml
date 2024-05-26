@@ -277,20 +277,29 @@
 							<tr class="headerRow">
 								<th style="width: 20px;">
 								</th>
-								<th style="width: 20px;">
+								<th class="headerRowText" style="width: 30px;">
+									<a href="@Model.GenerateSortLink("type")">
+										@Model.GenerateSortText("type", "Type")
+									</a>
 								</th>
 								<th style="width: 20px;">
 								</th>
 								<th class="headerRowText">
-									Filename
+									<a href="@Model.GenerateSortLink("file")">
+										@Model.GenerateSortText("file", "Filename")
+									</a>
 								</th>
 								<th style="width: 150px;" class="headerRowText">
-									Date
+									<a href="@Model.GenerateSortLink("date")">
+										@Model.GenerateSortText("date", "Date")
+									</a>
 								</th>
 								<th>
 								</th>
 								<th style="width: 80px;" class="headerRowText">
-									Size
+									<a href="@Model.GenerateSortLink("size")">
+										@Model.GenerateSortText("size", "Size")
+									</a>
 								</th>
 							</tr>
 
@@ -303,11 +312,11 @@
 											@Html.HiddenFor(m => Model.Files[j].FileName)
 										</td>
 										<td>
-											<img src="@String.Format("/Assets/Admin/images/{0}.png", Model.FileImageLink(f.MimeType))" alt="filetype" />
+											<img class="fileIcon" src="@String.Format("/Assets/Admin/images/{0}.png", Model.FileImageLink(f.MimeType))" alt="@Model.FileType(f.FileExtension)" title="@Model.FileType(f.FileExtension)" />
 										</td>
 										<td>
 											<a target="_blank" href="@f.FullFileName">
-												<img src="/Assets/Admin/images/link.png"
+												<img class="fileIcon" src="/Assets/Admin/images/link.png"
 													 alt="open file in new window" title="open file in new window" />
 											</a>
 										</td>

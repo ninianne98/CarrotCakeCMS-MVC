@@ -9,9 +9,9 @@
 	@themeLight60: lighten(@themeColor, 60%);
 
 	/*
-	* portions of this css extracted from bootstrap - get the layout without all the other stuff!
-	* Bootstrap v3.2.0 (http://getbootstrap.com)
-	* Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+* portions of this css extracted from bootstrap - get the layout without all the other stuff!
+* Bootstrap v3.2.0 (http://getbootstrap.com)
+* Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 	.form-horizontal, .form-group, .row, .dl-horizontal {
 		width: 100%;
@@ -247,5 +247,14 @@
 	.pagination > li:last-child > a, .pagination > li:last-child > span {
 		border-bottom-right-radius: 6px;
 		border-top-right-radius: 6px;
+	}
+
+	.bootstrap-content ul.pagination, .bootstrap-content .pagination a {
+		font-size: 0.95em;
+	}
+
+	.bootstrap-content .pagination > li > a,
+	.bootstrap-content .pagination > li > span {
+		border: 1px solid #ddd;
 	}
 }
