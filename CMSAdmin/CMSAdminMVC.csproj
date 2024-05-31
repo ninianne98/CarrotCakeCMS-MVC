@@ -222,6 +222,7 @@
     <Content Include="Assets\Admin\Images\clock_red.png" />
     <Content Include="Assets\Admin\Images\clock_stop.png" />
     <Content Include="Assets\Admin\Images\cloud-up.png" />
+    <Content Include="Assets\Admin\Images\cloud-upload.png" />
     <Content Include="Assets\Admin\Images\cog.png" />
     <Content Include="Assets\Admin\Images\cog_edit.png" />
     <Content Include="Assets\Admin\Images\cog_go.png" />
@@ -248,6 +249,7 @@
     <Content Include="Assets\Admin\Images\flag_red.png" />
     <Content Include="Assets\Admin\Images\flag_yellow.png" />
     <Content Include="Assets\Admin\Images\folder.png" />
+    <Content Include="Assets\Admin\Images\folder2.png" />
     <Content Include="Assets\Admin\Images\group.png" />
     <Content Include="Assets\Admin\Images\GroupList.png" />
     <Content Include="Assets\Admin\Images\heading-gradient.png" />
@@ -362,6 +364,17 @@
     <Content Include="Assets\Admin\Includes\jquery.tooltipster.min.js" />
     <Content Include="Assets\Admin\Includes\tinymceoverride.css" />
     <Content Include="Assets\Admin\Includes\tooltipster.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.amethystorchid.min.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.blueizis.min.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.classic.min.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.frenchblue.min.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.mauve.min.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.mosaicblue.min.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.plum.min.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.quetzalgreen.min.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.rust.min.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.sandstone.min.css" />
+    <Content Include="Assets\Admin\skins\filebrowse.sugaralmond.min.css" />
     <Content Include="Assets\Admin\skins\logon.amethystorchid.min.css" />
     <Content Include="Assets\Admin\skins\logon.blueizis.min.css" />
     <Content Include="Assets\Admin\skins\logon.classic.min.css" />
@@ -585,7 +598,6 @@
     <Content Include="Assets\Admin\Includes\chosen.jquery.min.js" />
     <Content Include="Assets\Admin\Includes\chosen.min.css" />
     <Content Include="Assets\Admin\Includes\common-utils.js" />
-    <Content Include="Assets\Admin\Includes\filebrowser.css" />
     <Content Include="Assets\Admin\Includes\FindUsers.js" />
     <Content Include="Assets\Admin\Includes\jquery.blockUI.js" />
     <Content Include="Assets\Admin\Includes\jquery.simplemodal.js" />
@@ -794,8 +806,6 @@
     <Content Include="env.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Assets\Admin\Images\webpage.pdn" />
-    <Content Include="Assets\Admin\Images\x.pdn" />
     <None Include="Assets\Admin\Includes\C3SiteConfigSchema.xsd">
       <SubType>Designer</SubType>
     </None>

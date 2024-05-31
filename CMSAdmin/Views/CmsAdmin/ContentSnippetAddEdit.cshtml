@@ -231,7 +231,7 @@
 
 	<table style="width: 820px;">
 		<tr>
-			<td style="width: 110px;" class="tablecaption">
+			<td style="width: 150px;" class="tablecaption">
 				name:
 			</td>
 			<td>
@@ -289,7 +289,9 @@
 				snippet text:
 			</td>
 			<td>
-				@Html.TextAreaFor(m => m.ContentBody, new { rows = "20", cols = "60", @class = @editCSS, style = "height: 400px; width: 650px;" })
+				<div style="width: 660px;">
+					@Html.TextAreaFor(m => m.ContentBody, new { rows = "20", cols = "60", @class = @editCSS, style = "height: 400px; width: 650px;" })
+				</div>
 				<br />
 			</td>
 		</tr>
@@ -376,7 +378,13 @@
 
 	}
 
+	function cmsTinyMceSave() {
+		SubmitPage();
+	}
+
+	cmsTinyMceSaveShow();
 	cmsDirtyPageForceInit();
+	cmsStripTinyWidthsInit();
 
 	function SubmitPage() {
 		var sc = SaveCommon();

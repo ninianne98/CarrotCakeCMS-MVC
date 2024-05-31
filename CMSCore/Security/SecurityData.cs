@@ -235,8 +235,9 @@ namespace Carrotware.CMS.Core {
 			try {
 				if (IsAuthenticated) {
 					string key = string.Format("{0}_{1}", keyIsAdmin, SecurityData.CurrentUserIdentityName);
-					if (HttpContext.Current.Cache[key] != null) {
-						keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
+					var ret = GetCacheItem(key);
+					if (ret != null) {
+						keyVal = Convert.ToBoolean(ret);
 					} else {
 						keyVal = IsUserInRole(SecurityData.CMSGroup_Admins);
 						HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(30), Cache.NoSlidingExpiration);
@@ -253,8 +254,9 @@ namespace Carrotware.CMS.Core {
 			try {
 				if (IsAuthenticated) {
 					string key = string.Format("{0}_{1}_{2}", keyIsSiteEditor, SecurityData.CurrentUserIdentityName, SiteData.CurrentSiteID);
-					if (HttpContext.Current.Cache[key] != null) {
-						keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
+					var ret = GetCacheItem(key);
+					if (ret != null) {
+						keyVal = Convert.ToBoolean(ret);
 					} else {
 						ExtendedUserData usrEx = SecurityData.CurrentExUser;
 
@@ -267,6 +269,18 @@ namespace Carrotware.CMS.Core {
 				SiteData.WriteDebugException("getissiteeditorfromcache", ex);
 			}
 			return keyVal;
+		}
+
+		public static object GetCacheItem(string key) {
+			if (HttpContext.Current.Cache[key] != null) {
+				return HttpContext.Current.Cache[key];
+			}
+			return null;
+		}
+
+		public static string GetCacheItemString(string key) {
+			var item = GetCacheItem(key);
+			return item != null ? item.ToString() : null;
 		}
 
 		public static bool IsAdmin {
@@ -332,9 +346,10 @@ namespace Carrotware.CMS.Core {
 
 			if (IsAuthenticated) {
 				string key = string.Format("{0}_{1}_{2}", keyIsUserInRole, userName, groupName);
+				var ret = GetCacheItem(key);
 
-				if (HttpContext.Current.Cache[key] != null) {
-					keyVal = Convert.ToBoolean(HttpContext.Current.Cache[key]);
+				if (ret != null) {
+					keyVal = Convert.ToBoolean(ret);
 				} else {
 					using (var securityHelper = new SecurityHelper()) {
 						var _user = securityHelper.UserManager.FindByName(userName);
@@ -390,9 +405,10 @@ namespace Carrotware.CMS.Core {
 				if (IsAuthenticated) {
 					string userName = SecurityData.CurrentUserIdentityName;
 					string key = string.Format("cms_CurrentUserProfile_{0}", userName);
+					var ret = GetCacheItem(key);
 
-					if (HttpContext.Current.Cache[key] != null) {
-						currentUser = (UserProfile)HttpContext.Current.Cache[key];
+					if (ret != null) {
+						currentUser = (UserProfile)ret;
 					} else {
 						using (var db = CarrotCMSDataContext.Create()) {
 							currentUser = (from u in db.membership_Users
@@ -424,9 +440,10 @@ namespace Carrotware.CMS.Core {
 				if (IsAuthenticated) {
 					string userName = SecurityData.CurrentUserIdentityName;
 					string key = string.Format("cms_CurrentExUser_{0}", userName);
+					var ret = GetCacheItem(key);
 
-					if (HttpContext.Current.Cache[key] != null) {
-						currentUser = (ExtendedUserData)HttpContext.Current.Cache[key];
+					if (ret != null) {
+						currentUser = (ExtendedUserData)ret;
 					} else {
 						using (var db = CarrotCMSDataContext.Create()) {
 							currentUser = (from u in db.vw_carrot_UserDatas

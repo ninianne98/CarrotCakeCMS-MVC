@@ -121,7 +121,9 @@
 	@RenderSection("scripts", required: false)
 </head>
 <body>
-	<h2>Widget : @areaName</h2>
+	<div class="container-xl container">
+		<h2>Widget : @areaName</h2>
+	</div>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" aria-label="navbar">
 		<div class="container-xl">
 			@Html.ActionLink(string.Format("{0}  (MVC5)", widgetName), "Index", "Admin", null, new { @class = "navbar-brand" })
@@ -155,7 +157,7 @@
 		</div>
 	</nav>
 
-	<div class="container body-content">
+	<div class="container-xl container body-content">
 		@RenderBody()
 		<hr />
 		<footer>

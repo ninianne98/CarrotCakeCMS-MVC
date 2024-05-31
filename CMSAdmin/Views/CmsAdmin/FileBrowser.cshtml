@@ -9,13 +9,12 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.LightGreen, UseJqueryMigrate = true })
-
 	<link href="~/Assets/iCheck/iCheck.css" rel="stylesheet" type="text/css" />
 	<link href="~/Assets/Admin/Includes/uploadfile.css?@versionKey" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/Includes/filebrowser.css?@versionKey" rel="stylesheet" type="text/css" />
 
+	@(new CmsSkin() { SelectedColor = Helper.SiteSkin, WindowMode = CmsSkin.SkinMode.Filebrowse })
 	@(new AdminScriptInfo())
+
 	<script src="~/Assets/iCheck/icheck.min.js?@versionKey" type="text/javascript"></script>
 	<script src="~/Assets/Admin/Includes/icheck.init.js?@versionKey" type="text/javascript"></script>
 	<script src="~/Assets/Admin/Includes/jquery.uploadfile.min.js?@versionKey" type="text/javascript"></script>
@@ -195,7 +194,7 @@
 			<br />
 			@if (Model.UpLinkVisible) {
 				<a href="@Model.UpLink">
-					<img src="~/Assets/Admin/images/back.png" border="0" alt="back" /><img src="~/Assets/Admin/images/folder.png" border="0" alt="folder" />
+					<img src="~/Assets/Admin/images/back.png" border="0" alt="back" /><img src="~/Assets/Admin/images/folder2.png" border="0" alt="folder" />
 				</a>
 			}
 			<br />
@@ -206,7 +205,7 @@
 				@foreach (var f in Model.Dirs) {
 					<tr>
 						<td style="width: 32px">
-							<img src="~/Assets/Admin/images/folder.png" alt="folder" />
+							<img src="~/Assets/Admin/images/folder2.png" alt="folder" />
 						</td>
 						<td>
 							<a id="lnkContent"
@@ -248,10 +247,13 @@
 			@Html.HiddenFor(m => m.ReturnMode)
 			@Html.HiddenFor(m => m.UseTinyMCE)
 			@Html.HiddenFor(m => m.ViewMode)
+			@Html.HiddenFor(m => m.SortField)
+			@Html.HiddenFor(m => m.SortDir)
+			@Html.HiddenFor(m => m.Sort)
 
 			<div class="scroll" id="fileZone">
 				@if (Model.Thumbnails) {
-					<div id="rpThumbs">
+					<div id="file-thumbs">
 						@foreach (var f in Model.Files) {
 							<div class="ui-widget-header ui-corner-all thumbCell" id="imgContainerGroup">
 								<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'thumb')">
@@ -272,85 +274,88 @@
 						}
 					</div>
 				} else {
-					<div id="rpFiles">
+					<div id="file-list">
 						<table style="width: 98%;">
-							<tr class="headerRow">
-								<th style="width: 20px;">
-								</th>
-								<th class="headerRowText" style="width: 30px;">
-									<a href="@Model.GenerateSortLink("type")">
-										@Model.GenerateSortText("type", "Type")
-									</a>
-								</th>
-								<th style="width: 20px;">
-								</th>
-								<th class="headerRowText">
-									<a href="@Model.GenerateSortLink("file")">
-										@Model.GenerateSortText("file", "Filename")
-									</a>
-								</th>
-								<th style="width: 150px;" class="headerRowText">
-									<a href="@Model.GenerateSortLink("date")">
-										@Model.GenerateSortText("date", "Date")
-									</a>
-								</th>
-								<th>
-								</th>
-								<th style="width: 80px;" class="headerRowText">
-									<a href="@Model.GenerateSortLink("size")">
-										@Model.GenerateSortText("size", "Size")
-									</a>
-								</th>
-							</tr>
-
-							@{
-								int j = 0;
-								foreach (var f in Model.Files) {
-									<tr>
-										<td>
-											@Html.CheckBoxFor(m => Model.Files[j].SelectedItem)
-											@Html.HiddenFor(m => Model.Files[j].FileName)
-										</td>
-										<td>
-											<img class="fileIcon" src="@String.Format("/Assets/Admin/images/{0}.png", Model.FileImageLink(f.MimeType))" alt="@Model.FileType(f.FileExtension)" title="@Model.FileType(f.FileExtension)" />
-										</td>
-										<td>
-											<a target="_blank" href="@f.FullFileName">
-												<img class="fileIcon" src="/Assets/Admin/images/link.png"
-													 alt="open file in new window" title="open file in new window" />
-											</a>
-										</td>
-										<td>
-											<div class="ImgGroup" id="imgContainerGroup">
-												<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'file')">
-													<a id="lnkContent" href='@Model.CreateFileLink(f.FullFileName)'>
-														@f.FileName
-													</a>
+							<thead class="filelisthead">
+								<tr class="headerRow">
+									<th style="width: 20px;">
+									</th>
+									<th class="headerRowText" style="width: 30px;">
+										<a href="@Model.GenerateSortLink("type")">
+											@Model.GenerateSortText("type", "Type")
+										</a>
+									</th>
+									<th style="width: 20px;">
+									</th>
+									<th class="headerRowText">
+										<a href="@Model.GenerateSortLink("file")">
+											@Model.GenerateSortText("file", "Filename")
+										</a>
+									</th>
+									<th style="width: 150px;" class="headerRowText">
+										<a href="@Model.GenerateSortLink("date")">
+											@Model.GenerateSortText("date", "Date")
+										</a>
+									</th>
+									<th>
+									</th>
+									<th style="width: 80px;" class="headerRowText">
+										<a href="@Model.GenerateSortLink("size")">
+											@Model.GenerateSortText("size", "Size")
+										</a>
+									</th>
+								</tr>
+							</thead>
+							<tbody class="filelistrows">
+								@{
+									int j = 0;
+									foreach (var f in Model.Files) {
+										<tr>
+											<td>
+												@Html.CheckBoxFor(m => Model.Files[j].SelectedItem)
+												@Html.HiddenFor(m => Model.Files[j].FileName)
+											</td>
+											<td>
+												<img class="fileIcon" src="@String.Format("/Assets/Admin/images/{0}.png", Model.FileImageLink(f.MimeType))" alt="@Model.FileType(f.FileExtension)" title="@Model.FileType(f.FileExtension)" />
+											</td>
+											<td>
+												<a target="_blank" href="@f.FullFileName">
+													<img class="fileIcon" src="/Assets/Admin/images/link.png"
+														 alt="open file in new window" title="open file in new window" />
+												</a>
+											</td>
+											<td>
+												<div class="ImgGroup" id="imgContainerGroup">
+													<div id="imgContainer" onmouseout="hideImg(this)" onmouseover="showImg(this, 'file')">
+														<a id="lnkContent" href='@Model.CreateFileLink(f.FullFileName)'>
+															@f.FileName
+														</a>
+													</div>
+													<div id="imgWrapper" style="display: none;">
+														<img id="imgThmbnail" filetype="@Model.FileImageLink(f.MimeType)" alt="" src="@Model.CreateFileSrc(f.FolderPath, f.FileName, f.MimeType)" />
+													</div>
 												</div>
-												<div id="imgWrapper" style="display: none;">
-													<img id="imgThmbnail" filetype="@Model.FileImageLink(f.MimeType)" alt="" src="@Model.CreateFileSrc(f.FolderPath, f.FileName, f.MimeType)" />
-												</div>
-											</div>
-										</td>
-										<td>
-											@String.Format("{0}", f.FileDate)
-										</td>
-										<td>
-											&nbsp;
-										</td>
-										<td>
-											@String.Format("{0}", f.FileSizeFriendly)
-										</td>
-									</tr>
-									j++;
+											</td>
+											<td>
+												@String.Format("{0}", f.FileDate)
+											</td>
+											<td>
+												&nbsp;
+											</td>
+											<td>
+												@String.Format("{0}", f.FileSizeFriendly)
+											</td>
+										</tr>
+										j++;
+									}
 								}
-							}
+							</tbody>
 						</table>
 					</div>
 				}
 			</div>
 
-			<div>
+			<div id="viewmodelink">
 				@if (!Model.Thumbnails) {
 					<a href="@Model.ThumbViewLink" id="lnkThumbView">View Image Thumbnails</a>
 				} else {

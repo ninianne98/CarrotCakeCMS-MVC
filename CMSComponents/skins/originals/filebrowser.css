@@ -57,8 +57,28 @@ div.scroll {
 	height: 175px;
 	width: 90%;
 	overflow: auto;
-	border: 1px solid #666;
+	border: 1px solid #333;
 	padding: 2px;
+	position: relative;
+}
+
+#file-list thead.filelisthead th {
+	position: sticky;
+	top: 0;
+	background-color: #7dad8e;
+	color: #FFFFFF;
+	z-index: 7;
+}
+
+#file-list tbody.filelistrows {
+	position: relative;
+	z-index: 5;
+}
+
+#viewmodelink {
+	margin-top: 0.75em;
+	margin-bottom: 0.75em;
+	line-height: 1.75em;
 }
 
 #folderZone {

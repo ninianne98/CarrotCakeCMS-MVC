@@ -492,8 +492,8 @@ input[type="clear"] {
   border-radius: 8px;
   border: 1px solid #676767;
   color: #000000;
-  width: 750px;
-  padding: 9px;
+  width: 740px;
+  padding: 10px;
   clear: both;
   background: #5ce1ff;
   background-image: radial-gradient(ellipse at top, #efefef, transparent), radial-gradient(ellipse at bottom, #c2f4ff, transparent);
@@ -513,12 +513,12 @@ input[type="clear"] {
   background-image: radial-gradient(ellipse at top, #bff3ff, transparent), radial-gradient(ellipse at bottom, #00b4dc, transparent);
 }
 .bootstrap-content #cmsDashboardIcons {
-  width: 730px;
+  width: 725px;
 }
 .bootstrap-content #cmsDashboardIcons .dashboardCell {
   height: 120px;
   width: 120px;
-  font-size: 0.85em;
+  font-size: 0.8em;
 }
 #cmsDashboardIcons .dashboardCell a,
 #cmsDashboardIcons .dashboardCell a:link,
@@ -528,6 +528,7 @@ input[type="clear"] {
 }
 #cmsDashboardIcons .dashboardCell .dash-icon {
   padding: 0;
+  margin-top: 0.25em;
   margin-bottom: 0.75em;
 }
 #cmsDashboardIcons .dashboardCell a {
@@ -538,7 +539,7 @@ input[type="clear"] {
 }
 @media screen and (min-width: 1610px) {
   #cmsDashboardIcons {
-    width: 825px;
+    width: 818px;
   }
   #cmsDashboardIcons .dashboardCell {
     line-height: 1.3em;
@@ -546,7 +547,7 @@ input[type="clear"] {
     width: 125px;
   }
   .bootstrap-content #cmsDashboardIcons {
-    width: 805px;
+    width: 800px;
   }
   .bootstrap-content #cmsDashboardIcons .dashboardCell {
     line-height: 1.65em;

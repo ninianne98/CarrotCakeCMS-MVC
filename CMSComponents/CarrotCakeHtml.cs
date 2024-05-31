@@ -595,11 +595,11 @@ namespace Carrotware.CMS.UI.Components {
 				var sb = new StringBuilder();
 				sb.Append(ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._TextZone.cshtml"));
 
-				sb.Replace("[[WIDGET_CONTENT]]", m.Content);
-				sb.Replace("[[AREA_NAME]]", m.AreaName.ToString());
-				sb.Replace("[[zone]]", m.Zone);
+				sb.Replace("[[cms_zone]]", m.Zone);
 				sb.Replace("[[htmltext]]", SiteData.HtmlMode);
 				sb.Replace("[[rawtext]]", SiteData.RawMode);
+				sb.Replace("[[CMS_AREA_NAME]]", m.AreaName.ToString());
+				sb.Replace("[[Þ¤CMS_TEXT_CONTENT¤Þ]]", m.Content);
 
 				bodyText = sb.ToString() ?? string.Empty;
 			}
@@ -624,8 +624,8 @@ namespace Carrotware.CMS.UI.Components {
 				sbWidgetZone.Append(ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._WidgetZone.cshtml"));
 				sbMasterWidgetWrapper.Append(ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._WidgetWrapper.cshtml"));
 
-				sbWidgetZone.Replace("[[PLACEHOLDER]]", placeHolderName);
-				sbMasterWidgetWrapper.Replace("[[PLACEHOLDER]]", placeHolderName);
+				sbWidgetZone.Replace("[[CMS_WIDGET_PLACEHOLDER]]", placeHolderName);
+				sbMasterWidgetWrapper.Replace("[[CMS_WIDGET_PLACEHOLDER]]", placeHolderName);
 			}
 
 			int iWidgetCount = 0;
@@ -799,8 +799,8 @@ namespace Carrotware.CMS.UI.Components {
 					var sbWidget = new StringBuilder();
 					sbWidget.Append(sbMasterWidgetWrapper);
 
-					sbWidget.Replace("[[STATUS_LINK]]", sStatusTemplate);
-					sbWidget.Replace("[[WIDGET_PATH]]", widget.ControlPath);
+					sbWidget.Replace("[[CMS_STATUS_LINK]]", sStatusTemplate);
+					sbWidget.Replace("[[CMS_WIDGET_PATH]]", widget.ControlPath);
 					sbWidget.Replace("[[sequence]]", widget.WidgetOrder.ToString());
 					sbWidget.Replace("[[ITEM_ID]]", widget.Root_WidgetID.ToString());
 
@@ -825,9 +825,9 @@ namespace Carrotware.CMS.UI.Components {
 
 					if (plug != null) {
 						string sysControl = (plug.SystemPlugin ? "[CMS]" : string.Empty);
-						sbWidget.Replace("[[WIDGET_CAPTION]]", string.Format("{0}  {1}  {2}", captionPrefix, plug.Caption, sysControl).Trim());
+						sbWidget.Replace("[[CMS_WIDGET_CAPTION]]", string.Format("{0}  {1}  {2}", captionPrefix, plug.Caption, sysControl).Trim());
 					} else {
-						sbWidget.Replace("[[WIDGET_CAPTION]]", string.Format("{0}  UNTITLED", captionPrefix).Trim());
+						sbWidget.Replace("[[CMS_WIDGET_CAPTION]]", string.Format("{0}  UNTITLED", captionPrefix).Trim());
 					}
 
 					var sbMenu = new StringBuilder();
@@ -839,9 +839,9 @@ namespace Carrotware.CMS.UI.Components {
 					}
 
 					sbWidget.Replace("[[WIDGET_MENU_ITEMS]]", sbMenu.ToString().Trim());
-					sbWidget.Replace("[[WIDGET_CAPTION]]", widget.ControlPath + captionPrefix);
+					sbWidget.Replace("[[CMS_WIDGET_CAPTION]]", widget.ControlPath + captionPrefix);
 
-					sbWidget.Replace("[[WIDGET_CONTENT]]", widgetText);
+					sbWidget.Replace("[[Þ¤CMS_WIDGET_CONTENT¤Þ]]", widgetText);
 
 					widgetWrapper = sbWidget.ToString();
 				} else {
@@ -856,7 +856,7 @@ namespace Carrotware.CMS.UI.Components {
 			string bodyText = string.Empty;
 
 			if (SecurityData.AdvancedEditMode) {
-				bodyText = sbWidgetZone.Replace("[[WIDGET_CONTENT]]", sbWidgetbBody.ToString()).ToString();
+				bodyText = sbWidgetZone.Replace("[[Þ¤CMS_WIDGET_CONTENT¤Þ]]", sbWidgetbBody.ToString()).ToString();
 			} else {
 				bodyText = sbWidgetbBody.ToString();
 			}

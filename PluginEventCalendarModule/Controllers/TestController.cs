@@ -72,9 +72,9 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 		public ActionResult TestView1() {
 			var model = new TestModel();
 
-			var ctrl = RenderWidgetHelper.CreateController<HomeController>(this, "CalendarUpcoming", this.AssemblyName, this.WidgetPayload);
-			var result = RenderWidgetHelper.ExecuteAction(ctrl);
-			model.RenderedContent = new HtmlString(RenderWidgetHelper.ResultToString(ctrl, result));
+			var ctrl = this.CreateController<HomeController>("CalendarUpcoming", this.AssemblyName, this.WidgetPayload);
+			var result = ctrl.ExecuteAction();
+			model.RenderedContent = ctrl.ResultToHtmlString(result);
 
 			ViewBag.WidgetTitle = "Test Widget Display 1";
 
@@ -84,9 +84,9 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 		public ActionResult TestView2() {
 			var model = new TestModel();
 
-			var ctrl = RenderWidgetHelper.CreateController<HomeController>(this, "EventCalendarDisplay", this.AssemblyName, this.WidgetPayload);
-			var result = RenderWidgetHelper.ExecuteAction(ctrl);
-			model.RenderedContent = new HtmlString(RenderWidgetHelper.ResultToString(ctrl, result));
+			var ctrl = this.CreateController<HomeController>("EventCalendarDisplay", this.AssemblyName, this.WidgetPayload);
+			var result = ctrl.ExecuteAction();
+			model.RenderedContent = ctrl.ResultToHtmlString(result);
 
 			ViewBag.WidgetTitle = "Test Widget Display 2";
 
@@ -96,9 +96,9 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 		public ActionResult TestView3() {
 			var model = new TestModel();
 
-			var ctrl = RenderWidgetHelper.CreateController<HomeController>(this, "EventCalendarDisplay2", this.AssemblyName, this.WidgetPayload);
-			var result = RenderWidgetHelper.ExecuteAction(ctrl);
-			model.RenderedContent = new HtmlString(RenderWidgetHelper.ResultToString(ctrl, result));
+			var ctrl = this.CreateController<HomeController>("EventCalendarDisplay2", this.AssemblyName, this.WidgetPayload);
+			var result = ctrl.ExecuteAction();
+			model.RenderedContent = ctrl.ResultToHtmlString(result);
 
 			ViewBag.WidgetTitle = "Test Widget Display 3";
 

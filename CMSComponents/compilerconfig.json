@@ -218,5 +218,49 @@
   {
     "outputFile": "skins/logon.mauve.css",
     "inputFile": "skins/logon.mauve.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.amethystorchid.css",
+    "inputFile": "skins/filebrowse.amethystorchid.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.sugaralmond.css",
+    "inputFile": "skins/filebrowse.sugaralmond.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.sandstone.css",
+    "inputFile": "skins/filebrowse.sandstone.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.rust.css",
+    "inputFile": "skins/filebrowse.rust.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.quetzalgreen.css",
+    "inputFile": "skins/filebrowse.quetzalgreen.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.plum.css",
+    "inputFile": "skins/filebrowse.plum.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.mosaicblue.css",
+    "inputFile": "skins/filebrowse.mosaicblue.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.mauve.css",
+    "inputFile": "skins/filebrowse.mauve.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.frenchblue.css",
+    "inputFile": "skins/filebrowse.frenchblue.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.classic.css",
+    "inputFile": "skins/filebrowse.classic.less"
+  },
+  {
+    "outputFile": "skins/filebrowse.blueizis.css",
+    "inputFile": "skins/filebrowse.blueizis.less"
   }
 ]

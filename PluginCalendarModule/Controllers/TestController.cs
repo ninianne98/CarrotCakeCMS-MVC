@@ -1,4 +1,4 @@
-﻿ using CarrotCake.CMS.Plugins.CalendarModule.Models;
+﻿using CarrotCake.CMS.Plugins.CalendarModule.Models;
 using Carrotware.CMS.Interface;
 using System;
 using System.Web;
@@ -66,9 +66,9 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		public ActionResult TestView1() {
 			var model = new TestModel();
 
-			var ctrl = RenderWidgetHelper.CreateController<HomeController>(this, "CalendarUpcoming", this.AssemblyName, this.WidgetPayload);
-			var result = RenderWidgetHelper.ExecuteAction(ctrl);
-			model.RenderedContent = new HtmlString(RenderWidgetHelper.ResultToString(ctrl, result));
+			var ctrl = this.CreateController<HomeController>("CalendarUpcoming", this.AssemblyName, this.WidgetPayload);
+			var result = ctrl.ExecuteAction();
+			model.RenderedContent = ctrl.ResultToHtmlString(result);
 
 			ViewBag.WidgetTitle = "Test Widget Display 1";
 
@@ -78,9 +78,9 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		public ActionResult TestView2() {
 			var model = new TestModel();
 
-			var ctrl = RenderWidgetHelper.CreateController<HomeController>(this, "CalendarDisplay", this.AssemblyName, this.WidgetPayload);
-			var result = RenderWidgetHelper.ExecuteAction(ctrl);
-			model.RenderedContent = new HtmlString(RenderWidgetHelper.ResultToString(ctrl, result));
+			var ctrl = this.CreateController<HomeController>("CalendarDisplay", this.AssemblyName, this.WidgetPayload);
+			var result = ctrl.ExecuteAction();
+			model.RenderedContent = ctrl.ResultToHtmlString(result);
 
 			ViewBag.WidgetTitle = "Test Widget Display 2";
 
@@ -90,9 +90,9 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		public ActionResult TestView3() {
 			var model = new TestModel();
 
-			var ctrl = RenderWidgetHelper.CreateController<HomeController>(this, "CalendarDisplaySimple", this.AssemblyName, this.WidgetPayload);
-			var result = RenderWidgetHelper.ExecuteAction(ctrl);
-			model.RenderedContent = new HtmlString(RenderWidgetHelper.ResultToString(ctrl, result));
+			var ctrl = this.CreateController<HomeController>("CalendarDisplaySimple", this.AssemblyName, this.WidgetPayload);
+			var result = ctrl.ExecuteAction();
+			model.RenderedContent = ctrl.ResultToHtmlString(result);
 
 			ViewBag.WidgetTitle = "Test Widget Display 3";
 

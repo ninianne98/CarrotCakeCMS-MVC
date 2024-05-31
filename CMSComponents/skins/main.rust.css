@@ -161,10 +161,20 @@ table.table th[class*="col-"] {
   float: none;
   display: table-cell;
 }
-table.table thead.header {
+table.table thead.header,
+table.table thead.header th {
   font-weight: bolder;
   background-color: #a1502b;
-  color: #fff;
+  color: #fafafa;
+}
+table.table thead.header th a {
+  font-weight: bolder;
+  text-decoration: none;
+  color: #fafafa;
+}
+table.table thead.header th a:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 .text-danger {
   color: #BB0000;
@@ -202,7 +212,7 @@ textarea.form-control {
   padding: 0.5em 0.75em;
   color: #b55a30;
   text-decoration: none;
-  background-color: #fff;
+  background-color: #fafafa;
   border: 1px solid #efd0c2;
 }
 .pagination > .active > a,
@@ -212,7 +222,7 @@ textarea.form-control {
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
   z-index: 2;
-  color: #fff;
+  color: #fafafa;
   cursor: default;
   background-color: #b55a30;
   border-color: #b55a30;
@@ -270,18 +280,26 @@ textarea.form-control {
 .datatable tbody tr.tablehead {
   font-weight: bolder;
   background-color: #a1502b;
-  color: #fff;
+  color: #fafafa;
   border: 1px solid #000;
 }
 .datatable thead th,
 .datatable tbody tr.tablehead {
   text-align: center;
+  font-weight: bolder;
+  background-color: #a1502b;
+  color: #fafafa;
 }
 .datatable thead a,
 .datatable tbody tr.tablehead a {
-  color: #fff;
+  color: #fafafa;
   cursor: pointer;
+  text-decoration: none;
   font-weight: bolder;
+}
+.datatable thead a:hover,
+.datatable tbody tr.tablehead a:hover {
+  text-decoration: underline;
 }
 .datatable input.inputFld,
 .datatable td .dateRegion {
@@ -961,8 +979,8 @@ input[type="clear"] {
   border-radius: 8px;
   border: 1px solid #676767;
   color: #000000;
-  width: 750px;
-  padding: 9px;
+  width: 740px;
+  padding: 10px;
   clear: both;
   background: #efd0c2;
   background-image: radial-gradient(ellipse at top, #efefef, transparent), radial-gradient(ellipse at bottom, #ffffff, transparent);
@@ -982,12 +1000,12 @@ input[type="clear"] {
   background-image: radial-gradient(ellipse at top, #f6e6df, transparent), radial-gradient(ellipse at bottom, #d4835d, transparent);
 }
 .bootstrap-content #cmsDashboardIcons {
-  width: 730px;
+  width: 725px;
 }
 .bootstrap-content #cmsDashboardIcons .dashboardCell {
   height: 120px;
   width: 120px;
-  font-size: 0.85em;
+  font-size: 0.8em;
 }
 #cmsDashboardIcons .dashboardCell a,
 #cmsDashboardIcons .dashboardCell a:link,
@@ -997,6 +1015,7 @@ input[type="clear"] {
 }
 #cmsDashboardIcons .dashboardCell .dash-icon {
   padding: 0;
+  margin-top: 0.25em;
   margin-bottom: 0.75em;
 }
 #cmsDashboardIcons .dashboardCell a {
@@ -1007,7 +1026,7 @@ input[type="clear"] {
 }
 @media screen and (min-width: 1610px) {
   #cmsDashboardIcons {
-    width: 825px;
+    width: 818px;
   }
   #cmsDashboardIcons .dashboardCell {
     line-height: 1.3em;
@@ -1015,7 +1034,7 @@ input[type="clear"] {
     width: 125px;
   }
   .bootstrap-content #cmsDashboardIcons {
-    width: 805px;
+    width: 800px;
   }
   .bootstrap-content #cmsDashboardIcons .dashboardCell {
     line-height: 1.65em;

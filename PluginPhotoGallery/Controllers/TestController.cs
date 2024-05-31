@@ -172,7 +172,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			var model = new GalleryTest();
 			model.Settings = (GallerySettings)this.WidgetPayload;
 
-			var ctrl = RenderWidgetHelper.CreateController<HomeController>(this, "ShowPrettyPhotoGallery", this.AssemblyName, this.WidgetPayload);
+			var ctrl = this.CreateController<HomeController>("ShowPrettyPhotoGallery", this.AssemblyName, this.WidgetPayload);
 
 			var result = ((HomeController)ctrl).ShowPrettyPhotoGallery();
 			model.PartialResult = result;
@@ -238,9 +238,9 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			var model = new GalleryTest();
 			model.Settings = (GallerySettings)this.WidgetPayload;
 
-			var ctrl = RenderWidgetHelper.CreateController<HomeController>(this, "ShowPrettyPhotoGallery", this.AssemblyName, this.WidgetPayload);
-			model.PartialResult = RenderWidgetHelper.ExecuteAction(ctrl);
-			model.RenderedContent = RenderWidgetHelper.ResultToString(ctrl, model.PartialResult);
+			var ctrl = this.CreateController<HomeController>("ShowPrettyPhotoGallery", this.AssemblyName, this.WidgetPayload);
+			model.PartialResult = ctrl.ExecuteAction();
+			model.RenderedContent = ctrl.ResultToString(model.PartialResult);
 
 			ViewBag.WidgetTitle = "Test Widget Display 4";
 

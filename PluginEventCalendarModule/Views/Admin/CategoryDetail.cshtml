@@ -23,18 +23,18 @@
 	@Html.HiddenFor(m => m.CalendarEventCategoryID)
 	@Html.HiddenFor(m => m.SiteID)
 
-	<table style="width: 700px;">
+	<table style="width: 750px;">
 		<tr>
-			<td class="tablecaption">
+			<td class="tablecaption" style="min-width:125px;">
 				name:<br />
-				<div style="border: 2px dotted #aaaaaa; background-color: #ffffff; margin: 2px; padding: 2px; min-width: 64px;">
-					<div id="ColorTextSample" style="margin: 2px; padding: 4px; font-size: 14px;">
+				<div style="border: 2px dotted #aaaaaa; background-color: #ffffff; margin: 2px; padding: 2px; min-width: 75px;">
+					<div id="ColorTextSample" style="margin: 2px; padding: 4px; font-size: 16px; font-weight: bolder;">
 						Sample Text
 					</div>
 				</div>
 			</td>
 			<td>
-				@Html.TextBoxFor(m => m.CategoryName, new { size = "60", maxlength = "100" })
+				@Html.TextBoxFor(m => m.CategoryName, new { size = "50", maxlength = "100" })
 				@Html.ValidationMessageFor(m => m.CategoryName, "", new { @class = "validationError text-danger" })
 			</td>
 		</tr>

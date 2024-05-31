@@ -75,22 +75,23 @@ namespace Carrotware.CMS.DBUpdater {
 			return _connStr;
 		}
 
-		private static string ContentKey = "cms_SiteSetUpSQLState";
+		private static string _contentKey = "cms_SiteSetUpSQLState";
 
 		public static bool FailedSQL {
 			get {
 				bool c = false;
-				try { c = (bool)HttpContext.Current.Cache[ContentKey]; } catch { }
+				var ret = GetCacheItem(_contentKey);
+				try { c = Convert.ToBoolean(ret); } catch { }
 				return c;
 			}
 			set {
-				HttpContext.Current.Cache.Insert(ContentKey, value, null, DateTime.Now.AddMinutes(3), Cache.NoSlidingExpiration);
+				HttpContext.Current.Cache.Insert(_contentKey, value, null, DateTime.Now.AddMinutes(3), Cache.NoSlidingExpiration);
 			}
 		}
 
 		public static void ResetFailedSQL() {
-			HttpContext.Current.Cache.Insert(ContentKey, "False", null, DateTime.Now.AddMilliseconds(10), Cache.NoSlidingExpiration);
-			HttpContext.Current.Cache.Remove(ContentKey);
+			HttpContext.Current.Cache.Insert(_contentKey, "False", null, DateTime.Now.AddMilliseconds(10), Cache.NoSlidingExpiration);
+			HttpContext.Current.Cache.Remove(_contentKey);
 		}
 
 		public static bool SystemNeedsChecking(Exception ex) {
@@ -115,6 +116,18 @@ namespace Carrotware.CMS.DBUpdater {
 			}
 
 			return false;
+		}
+
+		public static object GetCacheItem(string key) {
+			if (HttpContext.Current.Cache[key] != null) {
+				return HttpContext.Current.Cache[key];
+			}
+			return null;
+		}
+
+		public static string GetCacheItemString(string key) {
+			var item = GetCacheItem(key);
+			return item != null ? item.ToString() : null;
 		}
 
 		public DatabaseUpdateResponse CreateCMSDatabase() {
@@ -410,15 +423,16 @@ namespace Carrotware.CMS.DBUpdater {
 			}
 		}
 
-		private static string ContentSqlStateKey = "cms_SqlTablesIncomplete";
+		private static string _contentSqlStateKey = "cms_SqlTablesIncomplete";
 
 		public static bool TablesIncomplete {
 			get {
 				string tablesIncomplete = string.Empty;
 				bool c = true;
+				var ret = GetCacheItemString(_contentSqlStateKey);
 
-				if (HttpContext.Current.Cache[ContentSqlStateKey] != null) {
-					tablesIncomplete = HttpContext.Current.Cache[ContentSqlStateKey].ToString();
+				if (ret != null) {
+					tablesIncomplete = ret;
 				} else {
 					try {
 						c = AreCMSTablesIncomplete();
@@ -428,7 +442,7 @@ namespace Carrotware.CMS.DBUpdater {
 					}
 
 					tablesIncomplete = c.ToString();
-					HttpContext.Current.Cache.Insert(ContentSqlStateKey, tablesIncomplete, null, DateTime.Now.AddMinutes(3), Cache.NoSlidingExpiration);
+					HttpContext.Current.Cache.Insert(_contentSqlStateKey, tablesIncomplete, null, DateTime.Now.AddMinutes(3), Cache.NoSlidingExpiration);
 				}
 
 				c = Convert.ToBoolean(tablesIncomplete);
@@ -437,8 +451,9 @@ namespace Carrotware.CMS.DBUpdater {
 		}
 
 		public static void ResetSQLState() {
-			if (HttpContext.Current.Cache[ContentSqlStateKey] != null) {
-				HttpContext.Current.Cache.Remove(ContentSqlStateKey);
+			var ret = GetCacheItem(_contentSqlStateKey);
+			if (ret != null) {
+				HttpContext.Current.Cache.Remove(_contentSqlStateKey);
 			}
 		}
 

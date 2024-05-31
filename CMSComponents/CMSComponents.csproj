@@ -215,6 +215,72 @@
     <Content Include="editor\advedit.rust.min.css">
       <DependentUpon>advedit.rust.css</DependentUpon>
     </Content>
+    <Content Include="skins\filebrowse.amethystorchid.css">
+      <DependentUpon>filebrowse.amethystorchid.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.amethystorchid.min.css">
+      <DependentUpon>filebrowse.amethystorchid.css</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.blueizis.css">
+      <DependentUpon>filebrowse.blueizis.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.blueizis.min.css">
+      <DependentUpon>filebrowse.blueizis.css</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.classic.css">
+      <DependentUpon>filebrowse.classic.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.classic.min.css">
+      <DependentUpon>filebrowse.classic.css</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.frenchblue.css">
+      <DependentUpon>filebrowse.frenchblue.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.frenchblue.min.css">
+      <DependentUpon>filebrowse.frenchblue.css</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.mauve.css">
+      <DependentUpon>filebrowse.mauve.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.mauve.min.css">
+      <DependentUpon>filebrowse.mauve.css</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.mosaicblue.css">
+      <DependentUpon>filebrowse.mosaicblue.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.mosaicblue.min.css">
+      <DependentUpon>filebrowse.mosaicblue.css</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.plum.css">
+      <DependentUpon>filebrowse.plum.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.plum.min.css">
+      <DependentUpon>filebrowse.plum.css</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.quetzalgreen.css">
+      <DependentUpon>filebrowse.quetzalgreen.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.quetzalgreen.min.css">
+      <DependentUpon>filebrowse.quetzalgreen.css</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.rust.css">
+      <DependentUpon>filebrowse.rust.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.rust.min.css">
+      <DependentUpon>filebrowse.rust.css</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.sandstone.css">
+      <DependentUpon>filebrowse.sandstone.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.sandstone.min.css">
+      <DependentUpon>filebrowse.sandstone.css</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.sugaralmond.css">
+      <DependentUpon>filebrowse.sugaralmond.less</DependentUpon>
+    </Content>
+    <Content Include="skins\filebrowse.sugaralmond.min.css">
+      <DependentUpon>filebrowse.sugaralmond.css</DependentUpon>
+    </Content>
     <Content Include="skins\logon.mauve.css">
       <DependentUpon>logon.mauve.less</DependentUpon>
     </Content>
@@ -251,6 +317,7 @@
     <Content Include="skins\main.sugaralmond.min.css">
       <DependentUpon>main.sugaralmond.css</DependentUpon>
     </Content>
+    <Content Include="skins\originals\filebrowser.css" />
     <Content Include="skins\popup.mauve.css">
       <DependentUpon>popup.mauve.less</DependentUpon>
     </Content>
@@ -554,6 +621,17 @@
     <None Include="editor\advedit.rust.less" />
     <None Include="editor\_colors.less" />
     <None Include="editor\_edit-notifier.less" />
+    <None Include="skins\filebrowse.amethystorchid.less" />
+    <None Include="skins\filebrowse.blueizis.less" />
+    <None Include="skins\filebrowse.classic.less" />
+    <None Include="skins\filebrowse.frenchblue.less" />
+    <None Include="skins\filebrowse.mauve.less" />
+    <None Include="skins\filebrowse.mosaicblue.less" />
+    <None Include="skins\filebrowse.plum.less" />
+    <None Include="skins\filebrowse.quetzalgreen.less" />
+    <None Include="skins\filebrowse.rust.less" />
+    <None Include="skins\filebrowse.sandstone.less" />
+    <None Include="skins\filebrowse.sugaralmond.less" />
     <None Include="skins\logon.amethystorchid.less" />
     <None Include="skins\logon.blueizis.less" />
     <None Include="skins\logon.classic.less" />
@@ -598,6 +676,7 @@
     <None Include="skins\_colors.less" />
     <None Include="skins\_common.less" />
     <None Include="skins\_fauxstrap.less" />
+    <None Include="skins\_filebrowser.less" />
     <None Include="skins\_logon-window.less" />
     <None Include="skins\_logon.less" />
     <None Include="skins\_main-popup.less" />

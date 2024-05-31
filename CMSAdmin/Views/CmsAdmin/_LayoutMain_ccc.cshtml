@@ -50,7 +50,8 @@
 		var bTinyLoaded = false;
 		function AjaxTinyLoad() {
 			if (!bTinyLoaded) {
-				cmsTinyMceInit(960, 500, false);
+				var tinyW = $(window).width() - 450;
+				cmsTinyMceInit(tinyW, 500, false);
 			}
 			bTinyLoaded = true;
 		}

@@ -12,6 +12,9 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 	if (tinyBrowseWidth < 500) {
 		tinyBrowseWidth = 500;
 	}
+	if (tinyBrowseWidth > 960) {
+		tinyBrowseWidth = 960;
+	}
 	if (tinyBrowseHeight < 100) {
 		tinyBrowseHeight = 100;
 	}
@@ -220,6 +223,61 @@ function cmsSetFileName(v) {
 
 	winBrowse.close();
 	winBrowse = null;
+}
+
+function __cmsSynchTinyWidths() {
+	$('textarea.mceEditor').each(function () {
+		var id = $(this).attr('id');
+		var wTxt = $(this).css("width");
+		var w = parseInt(wTxt || '0');
+		//console.log("tiny-text-id:  " + id);
+
+		if ($(this).hasClass('tiny-resized') == false) {
+			//console.log("tiny-text-wt:  " + wTxt);
+			//console.log("tiny-text-w:  " + w);
+
+			if (tinymce && w > 0) {
+				var tinyInst = tinymce.get(id);
+				if (tinyInst) {
+					var tinyFrame = $('#' + id + '_ifr');
+					if (tinyFrame) {
+						$(this).addClass('tiny-resized');
+						var tc = $(tinyFrame).closest('.tox-tinymce');
+						//var tw = parseInt($(tc).css("width") || '0');
+						//console.log("tiny-ed-w:  " + tw);
+
+						$(tc).css("width", wTxt);
+					}
+				}
+			}
+		}
+	});
+}
+
+function cmsSynchTinyWidthsInit() {
+	setTimeout(function () {
+		__cmsSynchTinyWidths();
+	}, 500);
+	setTimeout(function () {
+		__cmsSynchTinyWidths();
+	}, 1500);
+}
+
+
+function __cmsStripTinyWidths() {
+	$('.tox-tinymce').css("width", '');
+}
+
+function cmsStripTinyWidthsInit() {
+	setTimeout(function () {
+		__cmsStripTinyWidths();
+	}, 500);
+	setTimeout(function () {
+		__cmsStripTinyWidths();
+	}, 800);
+	setTimeout(function () {
+		__cmsStripTinyWidths();
+	}, 1200);
 }
 
 //===================

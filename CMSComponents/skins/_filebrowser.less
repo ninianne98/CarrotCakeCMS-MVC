@@ -1,0 +1,312 @@
+﻿@import "_colors.less";
+
+.fileWindow(@themeColor) {
+	/*
+CarrotCake CMS Theme Stylesheet - File Browser
+*/
+	@mainText: contrast(@themeColor, @black, @white);
+
+	@themeDark05: darken(@themeColor, 5%);
+	@themeDark25: darken(@themeColor, 25%);
+	@themeLight10: lighten(@themeColor, 10%);
+	@themeLight25: lighten(@themeColor, 25%);
+	@themeLight30: lighten(@themeColor, 30%);
+
+	body {
+		background-color: #fff;
+		text-align: left;
+		font-size: 12px;
+		font-family: Lucida Grande, Lucida Sans Arial, Arial, sans-serif;
+	}
+
+	a {
+		font-weight: bold;
+		text-decoration: none;
+	}
+
+	a:link {
+		color: @themeDark25;
+	}
+
+	a:active {
+		color: #FFDB0D;
+	}
+
+	a:visited {
+		color: #BF9232;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
+	.headerRow {
+		background-color: @themeDark05;
+		color: @mainText;
+	}
+
+	.headerRow th {
+		padding: 4px;
+	}
+
+	.headerRowText {
+		color: @mainText;
+	}
+
+	.headerRowText a {
+		color: @mainText;
+		font-weight: bold;
+		text-decoration: none;
+		font-size: 1.2em;
+	}
+
+	.fileIcon {
+		text-align: center;
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	div.scroll {
+		height: 175px;
+		width: 90%;
+		overflow: auto;
+		border: 1px solid #333;
+		padding: 2px;
+		position: relative;
+	}
+
+	#file-list thead.filelisthead th {
+		position: sticky;
+		top: 0;
+		background-color: @themeDark05;
+		color: @mainText;
+		z-index: 7;
+	}
+
+	#file-list tbody.filelistrows {
+		position: relative;
+		z-index: 5;
+	}
+
+	#viewmodelink {
+		margin-top: 0.75em;
+		margin-bottom: 0.75em;
+		line-height: 1.75em;
+	}
+
+	#folderZone {
+		height: 150px;
+	}
+
+	#fileZone {
+		height: 200px;
+	}
+
+	td {
+		font-size: 11px;
+		color: #000000;
+		background-color: #fff;
+	}
+
+	th {
+		font-size: 11px;
+		color: @mainText;
+		background-color: @themeDark05;
+	}
+
+	th a {
+		color: @mainText;
+	}
+
+	.head2 {
+		color: @themeDark05;
+	}
+
+	.ImgGroup {
+		position: relative;
+		z-index: 1200;
+	}
+
+	#imgWrapperMain {
+		min-height: 25px;
+		min-width: 25px;
+		padding: 8px;
+		position: absolute;
+		z-index: 2000;
+	}
+
+	.thumbpreview {
+		font-size: 12px;
+		color: #000000;
+		background-color: @themeLight30;
+	}
+
+	#imgDimension {
+		font-size: 12px;
+		font-weight: bold;
+		text-align: left;
+	}
+
+	#imgThmbnailPreview {
+		min-height: 2px;
+		min-width: 2px;
+		max-height: 200px;
+		width: auto;
+	}
+	/* table resets */
+	/* cellpadding */
+	th, td {
+		padding: 2px;
+	}
+	/* cellspacing */
+	table {
+		border-collapse: separate;
+		border-spacing: 2px;
+	}
+	/*  cellspacing="5" */
+
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+	/*  cellspacing="0" */
+	/* valign */
+	th, td {
+		vertical-align: top;
+	}
+	/* align (center) */
+	table.centered {
+		margin: 0 auto;
+	}
+
+	.thumbCell {
+		padding: 5px;
+		margin: 5px;
+		float: left;
+		text-align: center;
+	}
+
+	.thumbPreview {
+		padding: 2px;
+		margin: 3px;
+		border: thin solid #000000;
+		background-color: #c0c0c0;
+	}
+
+	.uploadSuccess {
+		color: #009900;
+	}
+
+	.uploadBlocked {
+		color: #990099;
+	}
+
+	.uploadNoFile {
+		color: #990000;
+	}
+
+	.uploadFail {
+		color: #990000;
+	}
+
+	.jqradioset label {
+		margin-left: 0.5em;
+		margin-right: 3em;
+	}
+
+	.fileBrowserButtons {
+		margin-left: 100px;
+		width: 300px;
+		padding: 6px;
+		clear: both;
+	}
+
+	.fileBrowserButtons #insert {
+		float: left;
+	}
+
+	.fileBrowserButtons #cancel {
+		float: right;
+	}
+
+	#btnReturnFile {
+		margin-left: 1.5em;
+	}
+
+	select, textarea, input[type="text"], input[type="password"],
+	input[type="checkbox"], input[type="radio"] {
+		padding: 3px;
+		margin: 3px;
+		margin-top: 5px;
+		margin-right: 5px;
+		background-color: #fff;
+		color: #000000;
+		border: 1px solid #c0c0c0;
+		border-radius: 2px;
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+		font-size: 1.2em;
+		font-family: Lucida Grande, Lucida Sans Arial, Arial, sans-serif;
+	}
+
+	select:focus, textarea:focus, input[type="text"]:focus, input[type="password"]:focus,
+	input[type="checkbox"]:focus, input[type="radio"]:focus {
+		border-color: @themeLight25;
+		outline: 0;
+		box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(215, 215, 215, .6);
+	}
+	//================
+
+	.ajax-file-upload-statusbar {
+		border: 1px solid @themeDark05;
+	}
+
+	.ajax-file-upload-filename {
+		color: #787878;
+	}
+
+	.ajax-file-upload-progress {
+		border: 1px solid #ddd;
+	}
+
+	.ajax-file-upload-bar {
+		background-color: @themeDark05;
+		color: #fff;
+	}
+
+	.ajax-file-upload, .ajax-file-upload-none {
+		color: #fff;
+		background: @themeLight10;
+		-moz-box-shadow: 0 2px 0 0 @themeDark05;
+		-webkit-box-shadow: 0 2px 0 0 @themeDark05;
+		box-shadow: 0 2px 0 0 @themeDark05;
+	}
+
+	.ajax-file-upload:hover {
+		background: @themeDark05;
+		-moz-box-shadow: 0 2px 0 0 @themeLight10;
+		-webkit-box-shadow: 0 2px 0 0 @themeLight10;
+		box-shadow: 0 2px 0 0 @themeLight10;
+	}
+
+	.ajax-upload-dragdrop {
+		border: 2px dotted #a5a5a5;
+		color: @themeLight10;
+		background: transparent url('../images/cloud-upload.png') no-repeat 38px 10px scroll;
+	}
+
+	.ajax-upload-dragdrop:hover, .state-hover {
+		border: 2px solid @themeLight10;
+		color: @themeDark05;
+	}
+
+	.ajax-upload-dragdrop button {
+		border: 1px solid #a5a5a5;
+		background-color: @themeLight10;
+		color: #fff;
+	}
+
+	.ajax-upload-dragdrop button:hover {
+		background-color: @themeDark05;
+	}
+}

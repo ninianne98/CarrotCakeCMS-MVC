@@ -2,8 +2,15 @@
 @{
 	Layout = null;
 
+	Layout = null;
+
 	string areaName = ViewBag.WidgetAssemblyName;
-	string areaAlias = string.Format("{0}_Default", areaName);
+	string areaAlias = ViewBag.WidgetAreaAlias;
+	var widgetParts = areaName.Split('.');
+	var widgetName = areaName;
+	if (widgetParts.Length > 1) {
+		widgetName = widgetParts[widgetParts.Length - 1];
+	}
 }
 <html>
 <head>
@@ -153,7 +160,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				@Html.ActionLink("Widget: Event Calendar", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+				@Html.ActionLink(string.Format("{0}  (MVC5)", widgetName), "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">

@@ -7,6 +7,7 @@
 	@themeLight25: lighten(@themeColor, 25%);
 	@themeLight40: lighten(@themeColor, 40%);
 	@themeLight60: lighten(@themeColor, 60%);
+	@navText: contrast(@themeColor, @black, @white);
 
 	/*
 * portions of this css extracted from bootstrap - get the layout without all the other stuff!
@@ -173,10 +174,21 @@
 		display: table-cell;
 	}
 
-	table.table thead.header {
+	table.table thead.header, table.table thead.header th {
 		font-weight: bolder;
 		background-color: @themeDark05;
-		color: #fff;
+		color: @navText;
+	}
+
+	table.table thead.header th a {
+		font-weight: bolder;
+		text-decoration: none;
+		color: @navText;
+	}
+
+	table.table thead.header th a:hover {
+		cursor: pointer;
+		text-decoration: underline;
 	}
 
 	.text-danger {
@@ -222,7 +234,7 @@
 		padding: 0.5em 0.75em;
 		color: @themeColor;
 		text-decoration: none;
-		background-color: #fff;
+		background-color: @navText;
 		border: 1px solid @themeLight40;
 	}
 
@@ -233,7 +245,7 @@
 	.pagination > .active > a:focus,
 	.pagination > .active > span:focus {
 		z-index: 2;
-		color: #fff;
+		color: @navText;
 		cursor: default;
 		background-color: @themeColor;
 		border-color: @themeColor;

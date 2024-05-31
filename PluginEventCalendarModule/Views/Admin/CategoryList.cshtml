@@ -6,8 +6,7 @@
 
 	var grid = CarrotWeb.CarrotWebGrid<carrot_CalendarEventCategory>(Model);
 	grid.PrettifyHeadings = true;
-	grid.TableAttributes = new { @class = "datatable" };
-	grid.THeadAttributes = new { @class = "tablehead header thead-dark" };
+	grid.SetTableAttributes(new { @class = "datatable table" }, new { @class = "tablehead header thead-dark" }, null);
 	grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
 
 	grid
@@ -20,7 +19,7 @@
 			HasHeadingText = false,
 			FormatTemplate = @<text>
 				<div style="border: solid 1px @item.CategoryBGColor; background-color: @item.CategoryFGColor; padding: 1px;">
-					<div style="border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
+					<div style="font-weight: bolder; border: solid 2px @item.CategoryFGColor; color: @item.CategoryFGColor; background-color: @item.CategoryBGColor; padding: 5px; margin: 1px;">
 						@item.CategoryFGColor, @item.CategoryBGColor
 					</div>
 				</div>

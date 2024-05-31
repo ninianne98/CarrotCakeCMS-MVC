@@ -1,11 +1,22 @@
 ﻿@using Northwind.Code
+@{
+	Layout = null;
+
+	string areaName = ViewBag.WidgetAssemblyName;
+	string areaAlias = ViewBag.WidgetAreaAlias;
+	var widgetParts = areaName.Split('.');
+	var widgetName = areaName;
+	if (widgetParts.Length > 1) {
+		widgetName = widgetParts[widgetParts.Length - 1];
+	}
+}
 
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>@ViewBag.Title - My ASP.NET Application</title>
+	<title>@ViewBag.Title - @areaName</title>
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/modernizr")
 
@@ -13,7 +24,6 @@
 	@(new jquerybasic() { SelectedSkin = jquerybasic.jQueryTheme.Silver })
 	@*@(new Bootstrap() { SelectedSkin= Bootstrap.BootstrapColorScheme.Violet })*@
 	@(new Bootstrap() { SelectedSkin = Helper.BootstrapColorScheme })
-
 	@*@Scripts.Render("~/bundles/jquery")*@
 	@*@Scripts.Render("~/bundles/bootstrap")*@
 
@@ -56,7 +66,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				@Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+				@Html.ActionLink(string.Format("{0}  (MVC5)", widgetName), "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
 			</div>
 
 			<div class="navbar-collapse collapse">
@@ -71,9 +81,10 @@
 						@Html.ActionLink("Contact", "Contact", "Home")
 					}
 
-					@using (CarrotWeb.BeginWrappedItem("li", "TestProductSearch;TestProductSearchMulti", "Home", new { @class = "active dropdown" }, new { @class = "dropdown" })) {
+					@using (CarrotWeb.BeginWrappedItem("li", "TestMath;TestProductSearch;TestProductSearchMulti", "Home", new { @class = "active dropdown" }, new { @class = "dropdown" })) {
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Public Test <b class="caret"></b></a>
 						<ul class="dropdown-menu">
+							<li>@Html.ActionLink("Test Math", "TestMath", "Home")</li>
 							<li>@Html.ActionLink("Product Search", "TestProductSearch", "Home")</li>
 							<li>@Html.ActionLink("Product Search Multi", "TestProductSearchMulti", "Home")</li>
 						</ul>
@@ -96,7 +107,7 @@
 		@RenderBody()
 		<hr />
 		<footer>
-			<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+			<p>&copy; @DateTime.Now.Year - @areaName</p>
 		</footer>
 	</div>
 

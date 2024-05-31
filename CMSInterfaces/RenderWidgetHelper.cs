@@ -21,8 +21,7 @@ using System.Web.Routing;
 namespace Carrotware.CMS.Interface {
 
 	public static class RenderWidgetHelper {
-
-		public static Controller CreateController<T>(Controller source, string actionName, string areaName, object widgetPayload) where T : Controller, new() {
+		public static Controller CreateController<T>(this Controller source, string actionName, string areaName, object widgetPayload) where T : Controller, new() {
 			Controller controller = null;
 
 			T ctrl = new T();
@@ -59,7 +58,7 @@ namespace Carrotware.CMS.Interface {
 			return controller;
 		}
 
-		public static PartialViewResult ExecuteAction(Controller controller) {
+		public static PartialViewResult ExecuteAction(this Controller controller) {
 			var type = controller.GetType();
 			var routeData = controller.RouteData;
 			var actionName = routeData.GetRequiredString("action");
@@ -121,7 +120,16 @@ namespace Carrotware.CMS.Interface {
 			return partialResult;
 		}
 
-		public static string ResultToString(Controller controller, ViewResultBase partialResult, string viewName = null) {
+		public static string ResultToString(this ViewResultBase partialResult, Controller controller, string viewName = null) {
+			return ResultToString(controller, partialResult, viewName);
+		}
+
+		public static HtmlString ResultToHtmlString(this Controller controller, ViewResultBase partialResult, string viewName = null) {
+			var result = ResultToString(controller, partialResult, viewName);
+			return new HtmlString(result);
+		}
+
+		public static string ResultToString(this Controller controller, ViewResultBase partialResult, string viewName = null) {
 			var context = controller.ControllerContext;
 			string stringResult = null;
 
@@ -150,7 +158,7 @@ namespace Carrotware.CMS.Interface {
 			return stringResult;
 		}
 
-		public static string RenderViewToString(Controller controller, object result, string viewName = null) {
+		public static string RenderViewToString(this Controller controller, object result, string viewName = null) {
 			object model = new object();
 			bool partialView = false;
 
@@ -171,7 +179,7 @@ namespace Carrotware.CMS.Interface {
 			return RenderViewToString(controller.ControllerContext, model, viewName, partialView);
 		}
 
-		public static string RenderViewToString(ControllerContext context, object model, string viewName = null, bool partialView = false) {
+		public static string RenderViewToString(this ControllerContext context, object model, string viewName = null, bool partialView = false) {
 			// first find the ViewEngine for this view
 			ViewEngineResult viewEngineResult = null;
 

@@ -1,0 +1,262 @@
+﻿/*
+CarrotCake CMS Theme Stylesheet - File Browser
+*/
+body {
+  background-color: #fff;
+  text-align: left;
+  font-size: 12px;
+  font-family: Lucida Grande, Lucida Sans Arial, Arial, sans-serif;
+}
+a {
+  font-weight: bold;
+  text-decoration: none;
+}
+a:link {
+  color: #4e365a;
+}
+a:active {
+  color: #FFDB0D;
+}
+a:visited {
+  color: #BF9232;
+}
+a:hover {
+  text-decoration: underline;
+}
+.headerRow {
+  background-color: #865c9a;
+  color: #fafafa;
+}
+.headerRow th {
+  padding: 4px;
+}
+.headerRowText {
+  color: #fafafa;
+}
+.headerRowText a {
+  color: #fafafa;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+.fileIcon {
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+div.scroll {
+  height: 175px;
+  width: 90%;
+  overflow: auto;
+  border: 1px solid #333;
+  padding: 2px;
+  position: relative;
+}
+#file-list thead.filelisthead th {
+  position: sticky;
+  top: 0;
+  background-color: #865c9a;
+  color: #fafafa;
+  z-index: 7;
+}
+#file-list tbody.filelistrows {
+  position: relative;
+  z-index: 5;
+}
+#viewmodelink {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+  line-height: 1.75em;
+}
+#folderZone {
+  height: 150px;
+}
+#fileZone {
+  height: 200px;
+}
+td {
+  font-size: 11px;
+  color: #000000;
+  background-color: #fff;
+}
+th {
+  font-size: 11px;
+  color: #fafafa;
+  background-color: #865c9a;
+}
+th a {
+  color: #fafafa;
+}
+.head2 {
+  color: #865c9a;
+}
+.ImgGroup {
+  position: relative;
+  z-index: 1200;
+}
+#imgWrapperMain {
+  min-height: 25px;
+  min-width: 25px;
+  padding: 8px;
+  position: absolute;
+  z-index: 2000;
+}
+.thumbpreview {
+  font-size: 12px;
+  color: #000000;
+  background-color: #d8cadf;
+}
+#imgDimension {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: left;
+}
+#imgThmbnailPreview {
+  min-height: 2px;
+  min-width: 2px;
+  max-height: 200px;
+  width: auto;
+}
+/* table resets */
+/* cellpadding */
+th,
+td {
+  padding: 2px;
+}
+/* cellspacing */
+table {
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+/*  cellspacing="5" */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/*  cellspacing="0" */
+/* valign */
+th,
+td {
+  vertical-align: top;
+}
+/* align (center) */
+table.centered {
+  margin: 0 auto;
+}
+.thumbCell {
+  padding: 5px;
+  margin: 5px;
+  float: left;
+  text-align: center;
+}
+.thumbPreview {
+  padding: 2px;
+  margin: 3px;
+  border: thin solid #000000;
+  background-color: #c0c0c0;
+}
+.uploadSuccess {
+  color: #009900;
+}
+.uploadBlocked {
+  color: #990099;
+}
+.uploadNoFile {
+  color: #990000;
+}
+.uploadFail {
+  color: #990000;
+}
+.jqradioset label {
+  margin-left: 0.5em;
+  margin-right: 3em;
+}
+.fileBrowserButtons {
+  margin-left: 100px;
+  width: 300px;
+  padding: 6px;
+  clear: both;
+}
+.fileBrowserButtons #insert {
+  float: left;
+}
+.fileBrowserButtons #cancel {
+  float: right;
+}
+#btnReturnFile {
+  margin-left: 1.5em;
+}
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="checkbox"],
+input[type="radio"] {
+  padding: 3px;
+  margin: 3px;
+  margin-top: 5px;
+  margin-right: 5px;
+  background-color: #fff;
+  color: #000000;
+  border: 1px solid #c0c0c0;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  font-size: 1.2em;
+  font-family: Lucida Grande, Lucida Sans Arial, Arial, sans-serif;
+}
+select:focus,
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+  border-color: #ccbad6;
+  outline: 0;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(215, 215, 215, 0.6);
+}
+.ajax-file-upload-statusbar {
+  border: 1px solid #865c9a;
+}
+.ajax-file-upload-filename {
+  color: #787878;
+}
+.ajax-file-upload-progress {
+  border: 1px solid #ddd;
+}
+.ajax-file-upload-bar {
+  background-color: #865c9a;
+  color: #fff;
+}
+.ajax-file-upload,
+.ajax-file-upload-none {
+  color: #fff;
+  background: #a98ab9;
+  -moz-box-shadow: 0 2px 0 0 #865c9a;
+  -webkit-box-shadow: 0 2px 0 0 #865c9a;
+  box-shadow: 0 2px 0 0 #865c9a;
+}
+.ajax-file-upload:hover {
+  background: #865c9a;
+  -moz-box-shadow: 0 2px 0 0 #a98ab9;
+  -webkit-box-shadow: 0 2px 0 0 #a98ab9;
+  box-shadow: 0 2px 0 0 #a98ab9;
+}
+.ajax-upload-dragdrop {
+  border: 2px dotted #a5a5a5;
+  color: #a98ab9;
+  background: transparent url('../images/cloud-upload.png') no-repeat 38px 10px scroll;
+}
+.ajax-upload-dragdrop:hover,
+.state-hover {
+  border: 2px solid #a98ab9;
+  color: #865c9a;
+}
+.ajax-upload-dragdrop button {
+  border: 1px solid #a5a5a5;
+  background-color: #a98ab9;
+  color: #fff;
+}
+.ajax-upload-dragdrop button:hover {
+  background-color: #865c9a;
+}

@@ -22,6 +22,44 @@
 	}
 }
 
+@if (SiteData.CurrentSiteExists) {
+	<fieldset class="fieldset-med">
+		<legend>
+			<label>
+				Feeds
+			</label>
+		</legend>
+		<div>
+			<table style="width: 80%;">
+				<tr>
+					<td class="tablecaption" style="text-align:right;margin-right:1em;">
+						Rss Blog
+					</td>
+					<td style="width:40px;text-align:left;">
+						@CarrotCakeHtml.RssLink(SiteData.RSSFeedInclude.BlogOnly, null, "Blog RSS", new { @class = "rssimage" }, new { target = "_blank", @class = "rssimage" })
+					</td>
+					<td class="tablecaption" style="text-align:right;margin-right:1em;">
+						Rss Content
+					</td>
+					<td style="width:40px;text-align:left;">
+						@CarrotCakeHtml.RssLink(SiteData.RSSFeedInclude.PageOnly, null, "Page RSS", new { @class = "rssimage" }, new { target = "_blank", @class = "rssimage" })
+					</td>
+					<td class="tablecaption" style="text-align:right;margin-right:1em;">
+						Sitemap
+					</td>
+					<td style="width:40px;text-align:left;">
+						<a href="@SiteFilename.SiteMapUri" target="_blank">
+							<img src="~/Assets/Admin/Images/chart_organisation.png" alt="Sitemap" title="Sitemap" />
+						</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<br />
+	</fieldset>
+	<br />
+}
+
 @using (Html.BeginForm()) {
 	@Html.AntiForgeryToken()
 
@@ -110,7 +148,7 @@
 						</div>
 					</td>
 				</tr>
-							}
+			}
 
 			<tr>
 				<td class="tablecaption"></td>

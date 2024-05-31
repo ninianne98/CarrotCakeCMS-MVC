@@ -8,15 +8,17 @@
 
 	<style type="text/css">
 		.calendarCenter1 {
-			width: 225px;
+			width: 300px;
 			margin: 0 auto;
 			border: 1px solid transparent;
 			text-align: center;
+			padding: 0;
+			padding-top: 5px;
 			padding-bottom: 10px;
 		}
 
 		.calendarCenter2 {
-			width: 75%;
+			min-width: 425px;
 			margin: 0 auto;
 			border: 1px solid transparent;
 			text-align: center;
@@ -24,7 +26,7 @@
 		}
 
 		.calendarEventDetailList {
-			width: 600px;
+			min-width: 425px;
 			padding: 25px;
 		}
 
@@ -82,9 +84,11 @@
 			});
 
 			setTimeout(function () {
-				$("#divCalendarResults2 button").addClass('btn btn-default btn btn-primary');
-				$("#divCalendarResults2 button").button();
-			}, 250);
+				var btnSelector = "#divCalendarResults2 input:button, #divCalendarResults2 input:submit, #divCalendarResults2 input:reset, #divCalendarResults2 button";
+				$(btnSelector).addClass('btn btn-default btn-primary');
+				$(btnSelector).button();
+				$('#divCalendarResults2 .ui-button').removeClass('ui-widget');
+			}, 100);
 		}
 	</script>
 

@@ -1,9 +1,6 @@
 ﻿@model Northwind.Models.ProductSearch
 
-@using Northwind.Models
-
 <div id="divResults">
-
 	@using (Ajax.BeginForm("ProductSearch", "Home",
 	new { area = "Northwind" },
 	new AjaxOptions {
@@ -12,15 +9,20 @@
 		UpdateTargetId = "divResults",
 		OnFailure = "__OnAjaxRequestFailure"
 	})) {
-
-		<div>
-			@Html.DropDownListFor(m => m.SelectedCat, new SelectList(Model.Options, "CategoryID", "CategoryName", Model.SelectedCat), "[select]", new { @class = "form-control form-select smtext" })
-		</div>
 		@Html.HiddenFor(m => m.AltViewName)
-		<br />
-		<div>
-			<input type="submit" value="Submit" />
-		</div>
+
+		<table>
+			<tr>
+				<td>
+					@Html.DropDownListFor(m => m.SelectedCat, new SelectList(Model.Options, "CategoryID", "CategoryName", Model.SelectedCat), "[select]", new { @class = "form-control form-select smtext" })
+				</td>
+				<td>
+					<div style="padding:1.5em">
+						<input type="submit" class="btn btn-info" value="Submit" />
+					</div>
+				</td>
+			</tr>
+		</table>
 	}
 
 	<br />

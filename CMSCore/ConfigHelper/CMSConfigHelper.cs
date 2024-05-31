@@ -286,6 +286,18 @@ namespace Carrotware.CMS.Core {
 			return FileDataHelper.MakeWebFolderPath(sDirPath);
 		}
 
+		public static object GetCacheItem(string key) {
+			if (HttpContext.Current.Cache[key] != null) {
+				return HttpContext.Current.Cache[key];
+			}
+			return null;
+		}
+
+		public static string GetCacheItemString(string key) {
+			var item = GetCacheItem(key);
+			return item != null ? item.ToString() : null;
+		}
+
 		public List<CMSAdminModule> AdminModules {
 			get {
 				var modules = new List<CMSAdminModule>();
@@ -293,7 +305,7 @@ namespace Carrotware.CMS.Core {
 				bool bCached = false;
 
 				try {
-					modules = (List<CMSAdminModule>)HttpContext.Current.Cache[keyAdminMenuModules];
+					modules = (List<CMSAdminModule>)GetCacheItem(keyAdminMenuModules);
 					if (modules != null) {
 						bCached = true;
 					}
@@ -589,7 +601,7 @@ namespace Carrotware.CMS.Core {
 				bool bCached = false;
 
 				try {
-					plugins = (List<CMSPlugin>)HttpContext.Current.Cache[keyAdminToolboxModules];
+					plugins = (List<CMSPlugin>)GetCacheItem(keyAdminToolboxModules);
 					if (plugins != null) {
 						bCached = true;
 					}
@@ -680,7 +692,7 @@ namespace Carrotware.CMS.Core {
 				bool bCached = false;
 
 				try {
-					plugins = (List<CMSTemplate>)HttpContext.Current.Cache[keyTemplates];
+					plugins = (List<CMSTemplate>)GetCacheItem(keyTemplates);
 					if (plugins != null) {
 						bCached = true;
 					}
@@ -723,7 +735,7 @@ namespace Carrotware.CMS.Core {
 				bool bCached = false;
 
 				try {
-					plugins = (List<CMSTextWidget>)HttpContext.Current.Cache[keyTxtWidgets];
+					plugins = (List<CMSTextWidget>)GetCacheItem(keyTxtWidgets);
 					if (plugins != null) {
 						bCached = true;
 					}
@@ -758,7 +770,7 @@ namespace Carrotware.CMS.Core {
 				bool bCached = false;
 
 				try {
-					sites = (List<DynamicSite>)HttpContext.Current.Cache[keyDynamicSite];
+					sites = (List<DynamicSite>)GetCacheItem(keyDynamicSite);
 					if (sites != null) {
 						bCached = true;
 					}
@@ -787,9 +799,13 @@ namespace Carrotware.CMS.Core {
 				bool bCached = false;
 
 				try {
-					var val = HttpContext.Current.Cache[keyPrimarySite].ToString();
-					site = new Guid(val);
-					bCached = val.Length > 10;
+					var val = GetCacheItemString(keyPrimarySite);
+					if (val != null) {
+						site = new Guid(val);
+						bCached = val.Length > 10;
+					} else {
+						bCached = false;
+					}
 				} catch {
 					bCached = false;
 				}
@@ -812,7 +828,7 @@ namespace Carrotware.CMS.Core {
 				bool bCached = false;
 
 				try {
-					site = (DynamicSite)HttpContext.Current.Cache[ModuleKey];
+					site = (DynamicSite)GetCacheItem(ModuleKey);
 					if (site != null) {
 						bCached = true;
 					}
@@ -876,7 +892,7 @@ namespace Carrotware.CMS.Core {
 		private static List<CMSFilePath> GetTmplateStatus() {
 			var templates = new List<CMSFilePath>();
 
-			try { templates = (List<CMSFilePath>)HttpContext.Current.Cache[keyTemplateFiles]; } catch { }
+			try { templates = (List<CMSFilePath>)GetCacheItem(keyTemplateFiles); } catch { }
 
 			if (templates == null) {
 				templates = new List<CMSFilePath>();

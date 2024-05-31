@@ -133,9 +133,9 @@
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
 	border-radius: 8px;
-	margin: 10px 0;
-	background: transparent url('../images/cloud-up.png') no-repeat 38px 6px scroll;
-	padding: 10px 10px 25px 100px;
+	margin: 12px 0;
+	background: transparent url('../images/cloud-up.png') no-repeat 38px 10px scroll;
+	padding: 10px 15px 10px 110px;
 	font-size: 14pt;
 }
 
@@ -148,7 +148,7 @@
 		display: inline-block;
 		vertical-align: middle;
 		margin: 2px;
-		padding: 4px 0;
+		padding: 10px 0;
 		line-height: normal;
 		font-size: 14pt;
 		font-weight: bolder;

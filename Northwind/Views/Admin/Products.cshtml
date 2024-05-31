@@ -32,8 +32,7 @@
 	grid.PrettifyHeadings = true;
 	grid.HtmlFormId = "frmNorthwindProducts";
 
-	grid.TableAttributes = new { @class = "datatable" };
-	grid.THeadAttributes = new { @class = "tablehead" };
+	grid.SetTableAttributes(new { @class = "datatable table" }, new { @class = "tablehead header thead-dark" }, null);
 	grid.SetupFooter("ul", new { @class = "pagination flex-wrap mb-3" }, "li", new { @class = "page-item active" }, new { @class = "page-item" });
 
 	grid

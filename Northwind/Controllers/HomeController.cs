@@ -9,6 +9,7 @@ using System.Web.Mvc;
 namespace Northwind.Controllers {
 
 	public class HomeController : BaseDataWidgetController {
+		private Guid _testGuid = Guid.NewGuid();
 
 		public ActionResult Index() {
 			return View();
@@ -16,7 +17,7 @@ namespace Northwind.Controllers {
 
 		[HttpGet]
 		public ActionResult Sampler() {
-			SelectSkin model = new SelectSkin();
+			var model = new SelectSkin();
 
 			return View(model);
 		}
@@ -39,15 +40,14 @@ namespace Northwind.Controllers {
 		[HttpGet]
 		[WidgetActionSettingModel("Carrotware.CMS.Interface.WidgetActionSettingModel, Carrotware.CMS.Interface")]
 		public ActionResult ProductSearch() {
-			WidgetActionSettingModel settings = new WidgetActionSettingModel();
+			var settings = new WidgetActionSettingModel();
 
 			if (this.WidgetPayload is WidgetActionSettingModel) {
 				settings = (WidgetActionSettingModel)this.WidgetPayload;
 				settings.LoadData();
 			}
 
-			ProductSearch model = null;
-			model = InitProductSearch(model);
+			ProductSearch model = InitProductSearch(null);
 
 			if (string.IsNullOrEmpty(settings.AlternateViewFile)) {
 				return PartialView(model);
@@ -60,7 +60,7 @@ namespace Northwind.Controllers {
 		[HttpPost]
 		[WidgetActionSettingModel(typeof(WidgetActionSettingModel))]
 		public ActionResult ProductSearch(ProductSearch model) {
-			WidgetActionSettingModel settings = new WidgetActionSettingModel();
+			var settings = new WidgetActionSettingModel();
 
 			if (this.WidgetPayload is WidgetActionSettingModel) {
 				settings = (WidgetActionSettingModel)this.WidgetPayload;
@@ -81,6 +81,10 @@ namespace Northwind.Controllers {
 
 			model.GetResult();
 
+			model.SiteID = _testGuid;
+			ViewBag.SiteID = _testGuid;
+			this.ViewData["Math_SiteID"] = _testGuid.ToString();
+
 			return View(model);
 		}
 
@@ -90,6 +94,10 @@ namespace Northwind.Controllers {
 
 			model.GetResult();
 
+			model.SiteID = _testGuid;
+			//ViewBag.SiteID =_testGuid;
+			this.ViewData["Math_SiteID"] = _testGuid.ToString();
+
 			return PartialView(model);
 		}
 
@@ -97,6 +105,11 @@ namespace Northwind.Controllers {
 		public ActionResult Math(MathModel model) {
 			model.GetResult();
 			ModelState.Clear();
+
+			model.SiteID = _testGuid;
+			//ViewBag.SiteID =_testGuid;
+			this.ViewData["Math_SiteID"] = _testGuid.ToString();
+
 			return PartialView(model);
 		}
 
@@ -118,7 +131,7 @@ namespace Northwind.Controllers {
 		[HttpGet]
 		[WidgetActionSettingModel(typeof(MultiOptions))]
 		public ActionResult ProductSearchMulti() {
-			MultiOptions settings = new MultiOptions();
+			var settings = new MultiOptions();
 
 			if (this.WidgetPayload is MultiOptions) {
 				settings = (MultiOptions)this.WidgetPayload;

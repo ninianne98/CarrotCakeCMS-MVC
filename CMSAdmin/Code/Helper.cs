@@ -7,10 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using static Carrotware.CMS.UI.Components.CmsSkin;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -40,15 +38,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			}
 		}
 
-		public static SkinOption _theme = SkinOption.None;
+		public static CmsSkin.SkinOption _theme = CmsSkin.SkinOption.None;
 
-		public static SkinOption SiteSkin {
+		public static CmsSkin.SkinOption SiteSkin {
 			get {
-				if (_theme == SkinOption.None) {
+				if (_theme == CmsSkin.SkinOption.None) {
 					var config = CarrotCakeConfig.GetConfig();
 					string skin = config.MainConfig.SiteSkin;
-					var actualSkin = SkinOption.Classic;
-					try { actualSkin = (SkinOption)Enum.Parse(typeof(SkinOption), skin, true); } catch { }
+					var actualSkin = CmsSkin.SkinOption.Classic;
+					try { actualSkin = (CmsSkin.SkinOption)Enum.Parse(typeof(CmsSkin.SkinOption), skin, true); } catch { }
 
 					_theme = actualSkin;
 				}
@@ -77,32 +75,32 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 		}
 
 		public static string InsertSpecialView(ViewLocation CtrlKey) {
-			string sViewPath = string.Empty;
-			CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+			string viewPath = string.Empty;
+			var config = CarrotCakeConfig.GetConfig();
 
 			switch (CtrlKey) {
 				case ViewLocation.AdminPublicFooter:
-					sViewPath = config.AdminFooterControls.ViewPathPublic;
+					viewPath = config.AdminFooterControls.ViewPathPublic;
 					break;
 
 				case ViewLocation.AdminPopupFooter:
-					sViewPath = config.AdminFooterControls.ViewPathPopup;
+					viewPath = config.AdminFooterControls.ViewPathPopup;
 					break;
 
 				case ViewLocation.AdminMainFooter:
-					sViewPath = config.AdminFooterControls.ViewPathMain;
+					viewPath = config.AdminFooterControls.ViewPathMain;
 					break;
 
 				case ViewLocation.PublicMainHeader:
-					sViewPath = config.PublicSiteControls.ViewPathHeader;
+					viewPath = config.PublicSiteControls.ViewPathHeader;
 					break;
 
 				case ViewLocation.PublicMainFooter:
-					sViewPath = config.PublicSiteControls.ViewPathFooter;
+					viewPath = config.PublicSiteControls.ViewPathFooter;
 					break;
 			}
 
-			return sViewPath;
+			return viewPath;
 		}
 
 		public static Dictionary<bool, string> CreateBoolFilter() {

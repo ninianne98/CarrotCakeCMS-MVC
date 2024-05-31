@@ -46,6 +46,10 @@
 
 <div id="divMathForm">
 	<h2>Do Some Math</h2>
+	<h3>Model : @Model.SiteID</h3>
+	<h3>ViewBag SiteID : @ViewBag.SiteID</h3>
+	<h3>ViewData Math_SiteID : @ViewData["Math_SiteID"]</h3>
+
 	@using (Ajax.BeginForm("Math", "Home",
 				new { area = "Northwind" },
 		new AjaxOptions() {

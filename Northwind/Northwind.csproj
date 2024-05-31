@@ -277,6 +277,7 @@
     <Content Include="Views\Home\TestProductSearchMulti.cshtml" />
     <Content Include="Views\Home\Math.cshtml" />
     <Content Include="Views\Admin\Math.cshtml" />
+    <Content Include="Views\Home\TestMath.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
