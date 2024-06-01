@@ -58,7 +58,7 @@ namespace Carrotware.CMS.UI.Components {
 			}
 		}
 
-		private static Controller HydrateController(object obj) {
+		private static Controller HydrateController(this object obj) {
 			Controller controller = null;
 			if (obj is Controller) {
 				controller = (Controller)obj;
@@ -74,12 +74,12 @@ namespace Carrotware.CMS.UI.Components {
 			object obj = Activator.CreateInstance(type);
 
 			if (obj is Controller) {
-				Controller controller = HydrateController(obj);
+				Controller controller = obj.HydrateController();
 				//Controller controller = (Controller)obj;
 				//controller.ControllerContext = new ControllerContext(Html.ViewContext.Controller.ControllerContext.RequestContext, controller);
 				//controller.ControllerContext = Html.ViewContext.Controller.ControllerContext;
 
-				return new HtmlString(RenderPartialToString((ControllerBase)controller, controller.TempData, partialViewName, model));
+				return new HtmlString(RenderPartialToString(controller, controller.TempData, partialViewName, model));
 			}
 
 			return new HtmlString(string.Empty);
@@ -106,7 +106,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			if (obj is Controller) {
 				MethodInfo methodInfo = null;
-				Controller controller = HydrateController(obj);
+				Controller controller = obj.HydrateController();
 				//Controller controller = (Controller)obj;
 				//controller.ControllerContext = new ControllerContext(Html.ViewContext.Controller.ControllerContext.RequestContext, controller);
 				//controller.ControllerContext = Html.ViewContext.Controller.ControllerContext;
@@ -182,16 +182,16 @@ namespace Carrotware.CMS.UI.Components {
 					}
 
 					if (result is PartialViewResult) {
-						PartialViewResult res = (PartialViewResult)result;
+						var partial = (PartialViewResult)result;
 
-						Html.ViewContext.Controller.ViewData[actionName] = res.ViewData;
-						Html.ViewContext.Controller.TempData[actionName] = res.TempData;
+						Html.ViewContext.Controller.ViewData[actionName] = partial.ViewData;
+						Html.ViewContext.Controller.TempData[actionName] = partial.TempData;
 
-						if (string.IsNullOrEmpty(res.ViewName)) {
-							res.ViewName = actionName;
+						if (string.IsNullOrWhiteSpace(partial.ViewName)) {
+							partial.ViewName = actionName;
 						}
 
-						string resultString = RenderView(controller.ControllerContext, res);
+						string resultString = RenderView(controller.ControllerContext, partial);
 						controller.Dispose();
 
 						return resultString;
@@ -203,16 +203,13 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		private static string RenderView(ControllerContext ctrlCtx, PartialViewResult result) {
-			string currentAction = ctrlCtx.RouteData.GetRequiredString("action");
-			string currentController = ctrlCtx.RouteData.GetRequiredString("controller");
-
 			using (var sw = new StringWriter()) {
 				result.View = ViewEngines.Engines.FindPartialView(ctrlCtx, result.ViewName).View;
 				ViewContext vc = new ViewContext(ctrlCtx, result.View, result.ViewData, result.TempData, sw);
 				result.View.Render(vc, sw);
 
-				//return string.Format("{0}{1}", sw.GetStringBuilder(), Environment.NewLine);
-				return string.Format("{0} ", sw.GetStringBuilder());
+				var sb = sw.GetStringBuilder();
+				return string.Format("{0} ", sw.ToString());
 			}
 		}
 
@@ -251,8 +248,8 @@ namespace Carrotware.CMS.UI.Components {
 					controller.ViewData.Model = null;
 				}
 
-				//return string.Format("{0}{1}", sw.GetStringBuilder(), Environment.NewLine);
-				return string.Format("{0} ", sw.GetStringBuilder());
+				var sb = sw.GetStringBuilder();
+				return string.Format("{0} ", sw.ToString());
 			}
 		}
 
@@ -280,7 +277,7 @@ namespace Carrotware.CMS.UI.Components {
 			return new HtmlString(sb.ToString());
 		}
 
-		public static HtmlString RenderOpenGraph(OpenGraph.OpenGraphTypeDef type = Components.OpenGraph.OpenGraphTypeDef.Default, bool showExpire = false) {
+		public static HtmlString RenderOpenGraph(OpenGraph.OpenGraphTypeDef type = OpenGraph.OpenGraphTypeDef.Default, bool showExpire = false) {
 			OpenGraph og = new OpenGraph();
 			og.ShowExpirationDate = showExpire;
 			og.OpenGraphType = type;
@@ -575,7 +572,7 @@ namespace Carrotware.CMS.UI.Components {
 			bodyText = SiteData.CurrentSite.UpdateContent(bodyText);
 
 			if (SecurityData.AdvancedEditMode) {
-				AdvContentModel m = new AdvContentModel();
+				var m = new AdvContentModel();
 				m.Content = bodyText;
 				m.AreaName = zone;
 				switch (zone) {
@@ -648,7 +645,7 @@ namespace Carrotware.CMS.UI.Components {
 
 				string widgetText = string.Empty;
 				string widgetWrapper = string.Empty;
-				Dictionary<string, string> lstMenus = new Dictionary<string, string>();
+				var lstMenus = new Dictionary<string, string>();
 
 				if (widget.ControlPath.Contains(":")) {
 					string[] path = widget.ControlPath.Split(':');

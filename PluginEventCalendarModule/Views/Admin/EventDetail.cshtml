@@ -14,6 +14,12 @@
 	}
 }
 
+<style type="text/css">
+	.datetimecell {
+		white-space: nowrap;
+	}
+</style>
+
 <h3>@ViewBag.Title</h3>
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -25,15 +31,15 @@
 	@Html.HiddenFor(m => m.ItemData.CalendarEventProfileID)
 	@Html.HiddenFor(m => m.Operation)
 
-	<fieldset style="width: 750px;" class="fieldset-free">
+	<fieldset style="width: 775px;" class="fieldset-free">
 		<legend>
 			<label>
 				Event
 			</label>
 		</legend>
 		<div>
-			<b class="tablecaption">title: </b>
-			@Html.TextBoxFor(m => m.ItemData.EventTitle, new { size = "70", maxlength = "100" })
+			<b class="tablecaption tablecaption-right">title: </b>
+			@Html.TextBoxFor(m => m.ItemData.EventTitle, new { size = "70", maxlength = "100", @class = "form-control" })
 			@Html.ValidationMessageFor(m => m.ItemData.EventTitle, "", new { @class = "validationError text-danger" })
 		</div>
 		<table style="width: 98%">
@@ -45,14 +51,14 @@
 					<td style="width: 25%"></td>
 				</tr>
 				<tr>
-					<td class="tablecaption">
+					<td class="tablecaption tablecaption-right">
 						recurrence frequency:
 					</td>
 					<td>
-						@Html.DropDownListFor(m => m.ItemData.CalendarFrequencyID, new SelectList(Model.Frequencies, "CalendarFrequencyID", "FrequencyName"))
+						@Html.DropDownListFor(m => m.ItemData.CalendarFrequencyID, new SelectList(Model.Frequencies, "CalendarFrequencyID", "FrequencyName"), new { @class = "form-control form-select" })
 						@Html.ValidationMessageFor(m => m.ItemData.CalendarFrequencyID, "", new { @class = "validationError text-danger" })
 					</td>
-					<td class="tablecaption">
+					<td class="tablecaption tablecaption-right">
 						<div style="float: left; display: block; clear: left;">
 							category:
 						</div>
@@ -65,7 +71,7 @@
 						</div>
 					</td>
 					<td>
-						@Html.DropDownListFor(m => m.ItemData.CalendarEventCategoryID, new SelectList(Model.Categories, "CalendarEventCategoryID", "CategoryName"))
+						@Html.DropDownListFor(m => m.ItemData.CalendarEventCategoryID, new SelectList(Model.Categories, "CalendarEventCategoryID", "CategoryName"), new { @class = "form-control form-select" })
 					</td>
 				</tr>
 				<tr id="trDaysOfWeek" style="">
@@ -87,43 +93,43 @@
 				</tr>
 			</tbody>
 		</table>
-		<table style="width: 725px">
+		<table style="width: 775px">
 			<tbody>
 				<tr>
-					<td class="tablecaption" style="text-align: right;">
+					<td class="tablecaption tablecaption-right">
 						start date:
 					</td>
-					<td>
-						@Html.TextBoxFor(m => m.ItemData.EventStartDate, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion" })
+					<td class="datetimecell">
+						@Html.TextBoxFor(m => m.ItemData.EventStartDate, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "12", @class = "dateRegion" })
 						@Html.ValidationMessageFor(m => m.ItemData.EventStartDate, "", new { @class = "validationError text-danger" })
 					</td>
-					<td class="tablecaption" style="text-align: right;">
+					<td class="tablecaption tablecaption-right">
 						end by date:
 					</td>
-					<td>
-						@Html.TextBoxFor(m => m.ItemData.EventEndDate, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion" })
+					<td class="datetimecell">
+						@Html.TextBoxFor(m => m.ItemData.EventEndDate, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "12", @class = "dateRegion" })
 						@Html.ValidationMessageFor(m => m.ItemData.EventEndDate, "", new { @class = "validationError text-danger" })
 					</td>
-					<td id="tdRecursEvery1" rowspan="2" class="tablecaption" style="text-align: right;">
+					<td id="tdRecursEvery1" rowspan="2" class="tablecaption tablecaption-right">
 						recurs every:
 					</td>
-					<td id="tdRecursEvery2" rowspan="2">
-						@Html.TextBoxFor(m => m.ItemData.RecursEvery, new { maxlength = "5", size = "10" })
+					<td id="tdRecursEvery2" rowspan="2" class="datetimecell">
+						@Html.TextBoxFor(m => m.ItemData.RecursEvery, new { maxlength = "4", size = "5", @class = "form-control" })
 						@Html.ValidationMessageFor(m => m.ItemData.RecursEvery, "", new { @class = "validationError text-danger" })
 					</td>
 				</tr>
 				<tr>
-					<td class="tablecaption" style="text-align: right;">
+					<td class="tablecaption tablecaption-right">
 						time from:
 					</td>
-					<td>
-						@Html.TextBoxFor(m => m.EventStartTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "14", size = "16", @class = "timeRegion" })
+					<td class="datetimecell">
+						@Html.TextBoxFor(m => m.EventStartTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "10", size = "12", @class = "timeRegion" })
 					</td>
-					<td class="tablecaption" style="text-align: right;">
+					<td class="tablecaption tablecaption-right">
 						time to:
 					</td>
-					<td>
-						@Html.TextBoxFor(m => m.EventEndTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "14", size = "16", @class = "timeRegion" })
+					<td class="datetimecell">
+						@Html.TextBoxFor(m => m.EventEndTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "10", size = "12", @class = "timeRegion" })
 					</td>
 				</tr>
 			</tbody>
@@ -151,14 +157,14 @@
 			</tbody>
 		</table>
 	</fieldset>
-	<fieldset style="width: 700px;" class="fieldset-free">
+	<fieldset style="width: 775px;" class="fieldset-free">
 		<legend>
 			<label>
 				Details
 			</label>
 		</legend>
 		<div>
-			@Html.TextAreaFor(m => m.ItemData.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 200px; width: 600px;" })
+			@Html.TextAreaFor(m => m.ItemData.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 250px; width: 750px;" })
 		</div>
 	</fieldset>
 	<div>

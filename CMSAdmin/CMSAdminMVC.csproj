@@ -1160,6 +1160,10 @@
     <Content Include="Views\Templates\oilpainting\_reset.cshtml" />
     <Content Include="Views\Templates\oilpainting\_resetconf.cshtml" />
     <Content Include="Views\Templates\oilpainting\page-forms.cshtml" />
+    <Content Include="Views\CmsAdmin\_mainCommonHead.cshtml" />
+    <Content Include="Views\CmsAdmin\_mainCommonFoot.cshtml" />
+    <Content Include="Views\CmsAdmin\_popupCommonHead.cshtml" />
+    <Content Include="Views\CmsAdmin\_popupCommonFoot.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,32 @@
+﻿@{
+	bool siteExists = SiteData.CurrentSiteExists;
+
+	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
+}
+
+<div id="divSavedAlert" class="info-saved" style="display: none;">
+	<h2>
+		@ViewBag.SavedPageAlertText
+	</h2>
+</div>
+
+<div style="display: none">
+	<input type="hidden" id="hdnShowSaveLayer" value="@ViewBag.SavedPageAlert" />
+
+	<div id="cms-basic-modal-content">
+		<div id="cmsModalFrame">
+		</div>
+	</div>
+
+	<div id="divCMSModal" title="CarrotCake CMS">
+		<div id="divCMSModalMsg">
+			&nbsp;
+		</div>
+	</div>
+
+	<div id="divCMSCancelWin" title="Quit Editor?">
+		<p id="divCMSCancelWinMsg">
+			Are you sure you want cancel?
+		</p>
+	</div>
+</div>

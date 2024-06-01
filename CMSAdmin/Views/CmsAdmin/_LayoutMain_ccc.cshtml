@@ -3,69 +3,17 @@
 	Layout = null;
 
 	bool siteExists = SiteData.CurrentSiteExists;
-
 	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
 }
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<link href="~/Assets/Admin/includes/normalize.css" rel="stylesheet" type="text/css" />
 	<title>
 		@String.Format("{0} - {1}", SiteData.CarrotCakeCMSVersionMM, ViewBag.Title)
 	</title>
 
-	<link href="~/Assets/iCheck/iCheck.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/Includes/chosen.min.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/jquery.ui.timepicker.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/modal.css?@versionKey" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/MiniColors/jquery.minicolors.css" rel="stylesheet" />
+	@Html.Partial("~/Views/CmsAdmin/_mainCommonHead.cshtml")
 
-	@(new CmsSkin() { SelectedColor = Helper.SiteSkin, WindowMode = CmsSkin.SkinMode.Main })
-	@(new AdminScriptInfo())
-
-	<script src="~/Assets/iCheck/icheck.min.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/Includes/icheck.init.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/jquery.ui.timepicker.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/base64.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/jquery.simplemodal.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/jquery.blockUI.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/Includes/chosen.jquery.min.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/MiniColors/jquery.minicolors.min.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/common-utils.js?@versionKey" type="text/javascript"></script>
-
-	<script type="text/javascript">
-		$(document).ready(function () {
-			AjaxBtnLoad();
-		});
-
-		$(document).ajaxComplete(function (event, xhr, settings) {
-			AjaxBtnLoad();
-		});
-	</script>
-
-	<!-- TinyMCE -->
-	<script src="~/Assets/tinymce/tinymce.min.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/tinymce-config.js?@versionKey" type="text/javascript"></script>
-	<script type="text/javascript">
-		var bTinyLoaded = false;
-		function AjaxTinyLoad() {
-			if (!bTinyLoaded) {
-				var tinyW = $(window).width() - 450;
-				cmsTinyMceInit(tinyW, 500, false);
-			}
-			bTinyLoaded = true;
-		}
-
-		$(document).ready(function () {
-			AjaxTinyLoad();
-		});
-
-		$(document).ajaxComplete(function (event, xhr, settings) {
-			AjaxTinyLoad();
-		});
-	</script>
-	<link href="~/Assets/Admin/Includes/tinymceoverride.css?@versionKey" rel="stylesheet" />
-	<!-- /TinyMCE -->
 	@RenderSection("scripts", required: false)
 </head>
 <body>
@@ -196,58 +144,7 @@
 			</div>
 		</div>
 
-		<div style="display: none">
-			<input type="hidden" id="hdnShowSaveLayer" value="@ViewBag.SavedPageAlert" />
-
-			<div id="cms-basic-modal-content">
-				<div id="cmsModalFrame">
-				</div>
-			</div>
-
-			<div id="divCMSModal" title="CarrotCake CMS">
-				<div id="divCMSModalMsg">
-					&nbsp;
-				</div>
-			</div>
-
-			<div id="divCMSCancelWin" title="Quit Editor?">
-				<p id="divCMSCancelWinMsg">
-					Are you sure you want cancel?
-				</p>
-			</div>
-		</div>
-
-		<script type="text/javascript">
-			function LogoutLink() {
-				var opts = {
-					"No": function () { cmsAlertModalClose(); },
-					"Yes": function () { ClickLogout(); }
-				};
-
-				cmsAlertModalSmallBtns('Are you sure you want to logout?.', opts);
-
-				return false;
-			}
-
-			function ClickLogout() {
-				$('#btnLogout').click();
-			}
-		</script>
-
-		<div style="display: none;">
-
-			<form action="#" method="post">
-				<input type="submit" />
-			</form>
-
-			@if (Request.IsAuthenticated) {
-				using (Html.BeginForm(SiteActions.LogOff, CmsRouteConstants.CmsController.Admin, new { area = "" }, FormMethod.Post, new { id = "logoutForm" })) {
-					@Html.AntiForgeryToken()
-
-					<input type="submit" name="btnLogout" value="Logout" id="btnLogout" />
-				}
-			}
-		</div>
+		@Html.Partial("~/Views/CmsAdmin/_mainCommonFoot.cshtml")
 
 		<div id="footer">
 			<div id="footer-inner">
@@ -266,7 +163,6 @@
 					}
 				</p>
 			</div>
-
 		</div>
 	</div>
 	@RenderSection("footer", required: false)

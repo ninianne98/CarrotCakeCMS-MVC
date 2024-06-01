@@ -485,6 +485,10 @@
 
 /*==========================*/
 
+.minicolors-theme-default .minicolors-input {
+	height: 1.5em;
+}
+
 .minicolors-swatch-color, .minicolors-theme-default .minicolors-swatch {
 	height: 28px;
 	width: 28px;

@@ -3,77 +3,24 @@
 	Layout = null;
 
 	bool siteExists = SiteData.CurrentSiteExists;
-
 	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
 }
 <html lang="en" data-bs-theme="auto">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<link href="~/Assets/Admin/includes/normalize.css" rel="stylesheet" type="text/css" />
 	<title>
 		@String.Format("{0} - {1}", SiteData.CarrotCakeCMSVersionMM, ViewBag.Title)
 	</title>
 
-	<link href="~/Assets/iCheck/iCheck.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/Includes/chosen.min.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/jquery.ui.timepicker.css" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/Admin/includes/modal.css?@versionKey" rel="stylesheet" type="text/css" />
-	<link href="~/Assets/MiniColors/jquery.minicolors.css" rel="stylesheet" />
+	@Html.Partial("~/Views/CmsAdmin/_mainCommonHead.cshtml")
 
-	@(new CmsSkin() { SelectedColor = Helper.SiteSkin, EmitBootstrap = true, WindowMode = CmsSkin.SkinMode.Main })
-	@(new AdminScriptInfo())
-
-	<script src="~/Assets/iCheck/icheck.min.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/Includes/icheck.init.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/jquery.ui.timepicker.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/base64.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/jquery.simplemodal.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/jquery.blockUI.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/Includes/chosen.jquery.min.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/MiniColors/jquery.minicolors.min.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/common-utils.js?@versionKey" type="text/javascript"></script>
-
-	<script type="text/javascript">
-		$(document).ready(function () {
-			AjaxBtnLoad();
-		});
-
-		$(document).ajaxComplete(function (event, xhr, settings) {
-			AjaxBtnLoad();
-		});
-	</script>
-
-	<!-- TinyMCE -->
-	<script src="~/Assets/tinymce/tinymce.min.js?@versionKey" type="text/javascript"></script>
-	<script src="~/Assets/Admin/includes/tinymce-config.js?@versionKey" type="text/javascript"></script>
-	<script type="text/javascript">
-		var bTinyLoaded = false;
-		function AjaxTinyLoad() {
-			if (!bTinyLoaded) {
-				var tinyW = $(window).width() - 450;
-				cmsTinyMceInit(tinyW, 500, false);
-			}
-			bTinyLoaded = true;
-		}
-
-		$(document).ready(function () {
-			AjaxTinyLoad();
-		});
-
-		$(document).ajaxComplete(function (event, xhr, settings) {
-			AjaxTinyLoad();
-		});
-	</script>
-	<link href="~/Assets/Admin/Includes/tinymceoverride.css?@versionKey" rel="stylesheet" />
-	<!-- /TinyMCE -->
 	@RenderSection("scripts", required: false)
 </head>
 <body>
 	<div id="cmsAjaxMainDiv">
 		@if (SiteData.CurrentSite != null) {
-			<div class="container-xl">
+			<div class="container">
 				<h3>
 					@if (!string.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)
 					&& !string.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)) {
@@ -85,7 +32,7 @@
 			</div>
 		}
 		<nav class="navbar navbar-expand-lg navbar-dark bg-primary" aria-label="navbar">
-			<div class="container-xl">
+			<div class="container">
 				<a class="navbar-brand" href="@SiteData.AdminFolderPath">@SiteData.CarrotCakeCMSVersionMM</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -174,7 +121,7 @@
 			</div>
 		</nav>
 
-		<div id="content" class="container-xl body-content bootstrap-content">
+		<div id="content" class="container body-content bootstrap-content">
 			<div class="col-md-12 mx-auto">
 				<h1 class="headingColor">
 					@ViewBag.Title
@@ -190,62 +137,11 @@
 			</div>
 		</div>
 
-		<div style="display: none">
-			<input type="hidden" id="hdnShowSaveLayer" value="@ViewBag.SavedPageAlert" />
+		@Html.Partial("~/Views/CmsAdmin/_mainCommonFoot.cshtml")
 
-			<div id="cms-basic-modal-content">
-				<div id="cmsModalFrame">
-				</div>
-			</div>
-
-			<div id="divCMSModal" title="CarrotCake CMS">
-				<div id="divCMSModalMsg">
-					&nbsp;
-				</div>
-			</div>
-
-			<div id="divCMSCancelWin" title="Quit Editor?">
-				<p id="divCMSCancelWinMsg">
-					Are you sure you want cancel?
-				</p>
-			</div>
-		</div>
-
-		<script type="text/javascript">
-			function LogoutLink() {
-				var opts = {
-					"No": function () { cmsAlertModalClose(); },
-					"Yes": function () { ClickLogout(); }
-				};
-
-				cmsAlertModalSmallBtns('Are you sure you want to logout?.', opts);
-
-				return false;
-			}
-
-			function ClickLogout() {
-				$('#btnLogout').click();
-			}
-		</script>
-
-		<div style="display: none;">
-			<form action="#" method="post">
-				<input type="submit" />
-			</form>
-
-			@if (Request.IsAuthenticated) {
-				using (Html.BeginForm(SiteActions.LogOff, CmsRouteConstants.CmsController.Admin, new { area = "" }, FormMethod.Post, new { id = "logoutForm" })) {
-					@Html.AntiForgeryToken()
-
-					<input type="submit" name="btnLogout" value="Logout" id="btnLogout" />
-				}
-			}
-		</div>
-		<div class="container-xl body-content">
+		<div class="container body-content">
 			<hr />
 			<footer>
-				<div class="widthshim">
-				</div>
 				<p>
 					&copy; <a target="_blank" href="http://www.carrotware.com">carrotware.com</a>
 					@String.Format(" 2001 - {0:yyyy} ", DateTime.UtcNow)

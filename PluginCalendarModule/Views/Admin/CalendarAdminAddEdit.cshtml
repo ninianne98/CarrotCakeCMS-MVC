@@ -21,12 +21,12 @@
 
 	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-	<table style="width: 600px;">
+	<table style="width: 750px;">
 		<tr>
-			<td class="tablecaption" style="width: 150px;">
+			<td class="tablecaption" style="width: 75px;">
 				@Html.LabelFor(m => m.EventDate, htmlAttributes: new { @class = "control-label col-form-label" })
 			</td>
-			<td style="width: 450px;">
+			<td style="width: 675px;">
 				<div class="input-group">
 					@Html.TextBoxFor(m => m.EventDate, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16", @class = "dateRegion form-control form-control-sm" })
 					@Html.ValidationMessageFor(m => m.EventDate, "", new { @class = "text-danger" })
@@ -38,7 +38,7 @@
 				@Html.LabelFor(m => m.EventTitle, htmlAttributes: new { @class = "control-label col-form-label" })
 			</td>
 			<td>
-				@Html.TextBoxFor(m => m.EventTitle, new { @style = "width: 600px;", @class = "form-control form-control-sm" })
+				@Html.TextBoxFor(m => m.EventTitle, new { @style = "width: 500px;", @class = "form-control form-control-sm" })
 				@Html.ValidationMessageFor(m => m.EventTitle, "", new { @class = "text-danger" })
 			</td>
 		</tr>
@@ -47,7 +47,7 @@
 				@Html.LabelFor(m => m.EventDetail, htmlAttributes: new { @class = "control-label col-form-label" })
 			</td>
 			<td>
-				@Html.TextAreaFor(m => m.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 200px; width: 600px;" })
+				@Html.TextAreaFor(m => m.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 200px;" })
 			</td>
 		</tr>
 		<tr>

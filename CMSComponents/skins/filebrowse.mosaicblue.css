@@ -25,16 +25,16 @@ a:hover {
 }
 .headerRow {
   background-color: #006076;
-  color: #fafafa;
+  color: #fefefe;
 }
 .headerRow th {
   padding: 4px;
 }
 .headerRowText {
-  color: #fafafa;
+  color: #fefefe;
 }
 .headerRowText a {
-  color: #fafafa;
+  color: #fefefe;
   font-weight: bold;
   text-decoration: none;
   font-size: 1.2em;
@@ -57,7 +57,7 @@ div.scroll {
   position: sticky;
   top: 0;
   background-color: #006076;
-  color: #fafafa;
+  color: #fefefe;
   z-index: 7;
 }
 #file-list tbody.filelistrows {
@@ -82,11 +82,11 @@ td {
 }
 th {
   font-size: 11px;
-  color: #fafafa;
+  color: #fefefe;
   background-color: #006076;
 }
 th a {
-  color: #fafafa;
+  color: #fefefe;
 }
 .head2 {
   color: #006076;

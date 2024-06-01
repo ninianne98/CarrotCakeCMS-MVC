@@ -34,7 +34,7 @@
 				</div>
 			</td>
 			<td>
-				@Html.TextBoxFor(m => m.CategoryName, new { size = "50", maxlength = "100" })
+				@Html.TextBoxFor(m => m.CategoryName, new { size = "50", maxlength = "100", @class = "form-control" })
 				@Html.ValidationMessageFor(m => m.CategoryName, "", new { @class = "validationError text-danger" })
 			</td>
 		</tr>

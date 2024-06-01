@@ -12,8 +12,8 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 	if (tinyBrowseWidth < 500) {
 		tinyBrowseWidth = 500;
 	}
-	if (tinyBrowseWidth > 960) {
-		tinyBrowseWidth = 960;
+	if (tinyBrowseWidth > 800) {
+		tinyBrowseWidth = 800;
 	}
 	if (tinyBrowseHeight < 100) {
 		tinyBrowseHeight = 100;
@@ -225,7 +225,7 @@ function cmsSetFileName(v) {
 	winBrowse = null;
 }
 
-function __cmsSynchTinyWidths() {
+function __cmsSynchTinyWidth() {
 	$('textarea.mceEditor').each(function () {
 		var id = $(this).attr('id');
 		var wTxt = $(this).css("width");
@@ -254,12 +254,12 @@ function __cmsSynchTinyWidths() {
 	});
 }
 
-function cmsSynchTinyWidthsInit() {
+function cmsSynchTinyWidthInit() {
 	setTimeout(function () {
-		__cmsSynchTinyWidths();
+		__cmsSynchTinyWidth();
 	}, 500);
 	setTimeout(function () {
-		__cmsSynchTinyWidths();
+		__cmsSynchTinyWidth();
 	}, 1500);
 }
 

@@ -165,12 +165,12 @@ table.table thead.header,
 table.table thead.header th {
   font-weight: bolder;
   background-color: #515496;
-  color: #fafafa;
+  color: #fefefe;
 }
 table.table thead.header th a {
   font-weight: bolder;
   text-decoration: none;
-  color: #fafafa;
+  color: #fefefe;
 }
 table.table thead.header th a:hover {
   cursor: pointer;
@@ -189,7 +189,12 @@ table.table thead.header th a:hover {
   padding: 0;
   margin: 0.25em;
 }
-.bootstrap-content .form-control {
+.form-select {
+  padding: 0.25em;
+  margin: 0.5em;
+}
+.bootstrap-content .form-control,
+.bootstrap-content .form-select {
   margin: 0;
 }
 textarea.form-control {
@@ -212,7 +217,7 @@ textarea.form-control {
   padding: 0.5em 0.75em;
   color: #5b5ea6;
   text-decoration: none;
-  background-color: #fafafa;
+  background-color: #fefefe;
   border: 1px solid #dfe0ee;
 }
 .pagination > .active > a,
@@ -222,7 +227,7 @@ textarea.form-control {
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
   z-index: 2;
-  color: #fafafa;
+  color: #fefefe;
   cursor: default;
   background-color: #5b5ea6;
   border-color: #5b5ea6;
@@ -280,7 +285,7 @@ textarea.form-control {
 .datatable tbody tr.tablehead {
   font-weight: bolder;
   background-color: #515496;
-  color: #fafafa;
+  color: #fefefe;
   border: 1px solid #000;
 }
 .datatable thead th,
@@ -288,11 +293,11 @@ textarea.form-control {
   text-align: center;
   font-weight: bolder;
   background-color: #515496;
-  color: #fafafa;
+  color: #fefefe;
 }
 .datatable thead a,
 .datatable tbody tr.tablehead a {
-  color: #fafafa;
+  color: #fefefe;
   cursor: pointer;
   text-decoration: none;
   font-weight: bolder;
@@ -655,12 +660,17 @@ pre,
 tt,
 code,
 kbd,
-samp {
+samp,
+.sourcecode {
   font-family: 'Lucida Console', 'Courier New', Courier, Monaco, monospace, sans-serif;
 }
 .dateRegion,
 .ui-datepicker-trigger {
   margin-right: 5px;
+}
+.dateRegion,
+.timeRegion {
+  min-width: 90px;
 }
 #module-accordion {
   font-size: 1em;
@@ -704,6 +714,20 @@ samp {
 .caption,
 .tablecaption {
   font-weight: bold;
+}
+.caption-right,
+.tablecaption-right {
+  font-weight: bold;
+  text-align: right;
+  padding-left: 0.2em;
+  padding-right: 0.25em;
+}
+.caption-left,
+.tablecaption-left {
+  font-weight: bold;
+  text-align: right;
+  padding-left: 0.25em;
+  padding-right: 0.2em;
 }
 .table-subblock {
   float: left;

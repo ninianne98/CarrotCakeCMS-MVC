@@ -74,15 +74,37 @@
 				selector: "textarea.mceEditor",
 				promotion: false,
 				convert_unsafe_embeds: true,
-				height: h,
-				width: w,
-				resize: r,
-				menubar: false,
 				plugins: 'image link lists media charmap searchreplace visualblocks table preview code codesample help',
-				toolbar: [
-					'bold italic underline strikethrough sub sup | blocks forecolor backcolor | blockquote alignleft aligncenter alignright alignjustify outdent indent | help | ',
-					'undo redo searchreplace | bullist numlist | removeformat pastetext | link unlink anchor image media customfilebrowser | charmap codesample code preview visualblocks'
+				toolbar1: 'savebutton  bold italic underline strikethrough sub sup  blocks forecolor backcolor blockquote alignleft aligncenter alignright alignjustify outdent indent  ',
+				toolbar2: 'undo redo searchreplace  bullist numlist  removeformat pastetext  link unlink anchor image media customfilebrowser  charmap codesample code preview visualblocks   help',
+				removed_menuitems: 'newdocument help',
+				codesample_languages: [
+					{ text: 'HTML', value: 'markup' },
+					{ text: 'Markdown', value: 'markdown' },
+					{ text: 'Plain Text', value: 'plaintext' },
+					{ text: 'XML', value: 'xml' },
+					{ text: 'JSON', value: 'json' },
+					{ text: 'Bash', value: 'bash' },
+					{ text: 'Shell', value: 'shell' },
+					{ text: 'Access log', value: 'accesslog' },
+					{ text: 'JavaScript', value: 'javascript' },
+					{ text: 'TypeScript', value: 'typescript' },
+					{ text: 'CSS', value: 'css' },
+					{ text: 'SQL', value: 'sql' },
+					{ text: 'PHP', value: 'php' },
+					{ text: 'Ruby', value: 'ruby' },
+					{ text: 'Python', value: 'python' },
+					{ text: 'PowerShell', value: 'powershell' },
+					{ text: 'Java', value: 'java' },
+					{ text: 'C', value: 'c' },
+					{ text: 'C#', value: 'csharp' },
+					{ text: 'VB', value: 'vbnet' },
+					{ text: 'ASP', value: 'vbscript-html' },
+					{ text: 'VBS', value: 'vbscript' },
+					{ text: 'C++', value: 'cpp' }
 				],
+				relative_urls: false,
+				remove_script_host: true,
 				content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
 			});
 		}
@@ -121,11 +143,11 @@
 	@RenderSection("scripts", required: false)
 </head>
 <body>
-	<div class="container-xl container">
+	<div class="container">
 		<h2>Widget : @areaName</h2>
 	</div>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" aria-label="navbar">
-		<div class="container-xl">
+		<div class="container">
 			@Html.ActionLink(string.Format("{0}  (MVC5)", widgetName), "Index", "Admin", null, new { @class = "navbar-brand" })
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarWidget" aria-controls="navbarWidget" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
@@ -157,7 +179,7 @@
 		</div>
 	</nav>
 
-	<div class="container-xl container body-content">
+	<div class="container body-content">
 		@RenderBody()
 		<hr />
 		<footer>

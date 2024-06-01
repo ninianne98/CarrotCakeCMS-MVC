@@ -1,0 +1,95 @@
+﻿@{
+	bool siteExists = SiteData.CurrentSiteExists;
+
+	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
+}
+
+<link href="~/Assets/Admin/includes/normalize.css?@versionKey" rel="stylesheet" type="text/css" />
+<link href="~/Assets/iCheck/iCheck.css" rel="stylesheet" type="text/css" />
+<link href="~/Assets/Admin/Includes/chosen.min.css" rel="stylesheet" type="text/css" />
+<link href="~/Assets/Admin/includes/jquery.ui.timepicker.css" rel="stylesheet" type="text/css" />
+<link href="~/Assets/Admin/includes/modal.css?@versionKey" rel="stylesheet" type="text/css" />
+<link href="~/Assets/MiniColors/jquery.minicolors.css" rel="stylesheet" />
+
+@(new CmsSkin() { SelectedColor = Helper.SiteSkin, EmitBootstrap = Helper.UseBootstrap, WindowMode = CmsSkin.SkinMode.Popup })
+@(new AdminScriptInfo())
+
+<script src="~/Assets/iCheck/icheck.min.js?@versionKey" type="text/javascript"></script>
+<script src="~/Assets/Admin/Includes/icheck.init.js?@versionKey" type="text/javascript"></script>
+<script src="~/Assets/Admin/includes/jquery.ui.timepicker.js?@versionKey" type="text/javascript"></script>
+<script src="~/Assets/Admin/includes/base64.js?@versionKey" type="text/javascript"></script>
+<script src="~/Assets/Admin/includes/jquery.simplemodal.js?@versionKey" type="text/javascript"></script>
+<script src="~/Assets/Admin/includes/jquery.blockUI.js?@versionKey" type="text/javascript"></script>
+<script src="~/Assets/Admin/Includes/chosen.jquery.min.js?@versionKey" type="text/javascript"></script>
+<script src="~/Assets/MiniColors/jquery.minicolors.min.js?@versionKey" type="text/javascript"></script>
+@if (SecurityData.IsAuthUser) {
+	<script src="~/Assets/Admin/includes/common-utils.js?@versionKey" type="text/javascript"></script>
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+			AjaxBtnLoad();
+		});
+
+		$(document).ajaxComplete(function (event, xhr, settings) {
+			AjaxBtnLoad();
+		});
+	</script>
+	<!-- TinyMCE -->
+	<script src="~/Assets/tinymce/tinymce.min.js?@versionKey" type="text/javascript"></script>
+	<script src="~/Assets/Admin/includes/tinymce-config.js?@versionKey" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		var pnl = '#divSavedAlert';
+		var fld = '#hdnShowSaveLayer';
+		var timer1 = '';
+
+		function DisplaySaveBox() {
+
+			if ($(fld).length < 1) {
+				hideAlert();
+			}
+
+			if (timer1 != '') {
+				clearTimeout(timer1);
+			}
+
+			if ($(fld).length > 0 && $(pnl).length > 0) {
+				if ($(fld).val().length > 0) {
+					$(pnl).css('display', '');
+					timer1 = setTimeout(function () { hideAlert(); }, 3000);
+				}
+
+				$(fld).val('');
+			}
+		}
+
+		function hideAlert() {
+			if ($(pnl).length > 0) {
+				$(pnl).css('display', 'none');
+			}
+		}
+
+		var bTinyLoaded = false;
+		function AjaxTinyLoad() {
+			if (!bTinyLoaded) {
+				var modalSizeW = window.parent.$("#cms-simplemodal-container").width();
+				var tinyW = modalSizeW - 150;
+				cmsTinyMceInit(tinyW, 450, true);
+			}
+			bTinyLoaded = true;
+		}
+
+		function AjaxScriptLoad() {
+
+			AjaxTinyLoad();
+
+			DisplaySaveBox();
+		}
+
+		$(document).ready(function () {
+			AjaxScriptLoad();
+		});
+	</script>
+	<link href="~/Assets/Admin/Includes/tinymceoverride.css?@versionKey" rel="stylesheet" />
+	<!-- /TinyMCE -->
+}

@@ -168,12 +168,17 @@ pre,
 tt,
 code,
 kbd,
-samp {
+samp,
+.sourcecode {
   font-family: 'Lucida Console', 'Courier New', Courier, Monaco, monospace, sans-serif;
 }
 .dateRegion,
 .ui-datepicker-trigger {
   margin-right: 5px;
+}
+.dateRegion,
+.timeRegion {
+  min-width: 90px;
 }
 #module-accordion {
   font-size: 1em;
@@ -217,6 +222,20 @@ samp {
 .caption,
 .tablecaption {
   font-weight: bold;
+}
+.caption-right,
+.tablecaption-right {
+  font-weight: bold;
+  text-align: right;
+  padding-left: 0.2em;
+  padding-right: 0.25em;
+}
+.caption-left,
+.tablecaption-left {
+  font-weight: bold;
+  text-align: right;
+  padding-left: 0.25em;
+  padding-right: 0.2em;
 }
 .table-subblock {
   float: left;

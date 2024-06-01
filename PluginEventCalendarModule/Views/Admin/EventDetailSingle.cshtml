@@ -5,6 +5,12 @@
 	ViewBag.Title = "Individual Event";
 }
 
+<style type="text/css">
+	.datetimecell {
+		white-space: nowrap;
+	}
+</style>
+
 <h3>@ViewBag.Title</h3>
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -17,25 +23,25 @@
 	@Html.HiddenFor(m => m.ItemData.CalendarEventProfileID)
 	@Html.HiddenFor(m => m.ItemData.EventStartTime)
 
-	<fieldset style="width: 725px;" class="fieldset-free">
+	<fieldset style="width: 775px;" class="fieldset-free">
 		<legend>
 			<label>
 				Individual Event
 			</label>
 		</legend>
 		<div>
-			<b class="tablecaption">title: </b>
+			<b class="tablecaption tablecaption-right">title: </b>
 			@Model.ItemProfile.EventTitle
 		</div>
 		<table style="width: 98%">
 			<tr>
-				<td style="width: 20%"></td>
-				<td style="width: 30%"></td>
-				<td style="width: 20%"></td>
-				<td style="width: 30%"></td>
+				<td style="width: 15%"></td>
+				<td style="width: 35%"></td>
+				<td style="width: 15%"></td>
+				<td style="width: 35%"></td>
 			</tr>
 			<tr>
-				<td class="tablecaption">
+				<td class="tablecaption tablecaption-right">
 					date:
 				</td>
 				<td>
@@ -50,29 +56,29 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="tablecaption">
+				<td class="tablecaption tablecaption-right">
 					time from (override):
 				</td>
 				<td>
-					@Html.TextBoxFor(m => m.EventStartTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "14", size = "16", @class = "timeRegion" })
+					@Html.TextBoxFor(m => m.EventStartTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "10", size = "12", @class = "timeRegion" })
 				</td>
-				<td class="tablecaption">
+				<td class="tablecaption tablecaption-right">
 					time to (override):
 				</td>
 				<td>
-					@Html.TextBoxFor(m => m.EventEndTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "14", size = "16", @class = "timeRegion" })
+					@Html.TextBoxFor(m => m.EventEndTime, WebHelper.ShortTimeFormatPattern, new { maxlength = "10", size = "12", @class = "timeRegion" })
 				</td>
 			</tr>
 		</table>
 	</fieldset>
-	<fieldset style="width: 650px;" class="fieldset-free">
+	<fieldset style="width: 775px;" class="fieldset-free">
 		<legend>
 			<label>
 				Details
 			</label>
 		</legend>
 		<div>
-			@Html.TextAreaFor(m => m.ItemData.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 200px; width: 600px;" })
+			@Html.TextAreaFor(m => m.ItemData.EventDetail, new { @class = "mceEditor", rows = "8", cols = "80", @style = "height: 250px; width: 725px;" })
 		</div>
 	</fieldset>
 	<div>

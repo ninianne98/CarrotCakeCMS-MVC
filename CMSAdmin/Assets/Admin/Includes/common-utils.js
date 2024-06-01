@@ -30,14 +30,16 @@ function AjaxBtnLoad() {
 
 	$("input:button, input:submit, input:reset, button").button();
 
-	$("input:button, input:submit, input:reset, button").each(function () {
-		if (!$(this).hasClass("btn") && !$(this).hasClass("accordion-button")) {
-			$(this).addClass('btn btn-primary');
-		}
-		if ($(this).hasClass("btn-default")) {
-			$(this).addClass('btn btn-primary');
-		}
-	});
+	if (cmsBootstrap) {
+		$("input:button, input:submit, input:reset, button").each(function () {
+			if (!$(this).hasClass("btn") && !$(this).hasClass("accordion-button")) {
+				$(this).addClass('btn btn-primary');
+			}
+			if ($(this).hasClass("btn-default")) {
+				$(this).addClass('btn btn-primary');
+			}
+		});
+	}
 
 	initCheckboxStyle();
 
@@ -106,14 +108,17 @@ function cmsSetDateRegion() {
 
 	$(".dateRegion").each(function () {
 		if ($(this).hasClass('hasDatepicker') == false) {
-
 			if (cmsBootstrap == true && parentGrp == false && nextItem == false) {
 				var id = $(this).attr('id');
 				$(this).addClass('form-control');
 				$(this).css("width", '');
 				$(this).css("margin", '');
-				$(this).wrap('<div style="width:12em" class="input-group" />')
+				$(this).wrap('<div style="width:10em" class="input-group" />')
 				$('<label for="' + id + '" id="' + id + '_triggerbtn" class="input-group-addon input-group-text"><span class="bi bi-calendar3"></span></label>').insertAfter($(this));
+			}
+
+			if (cmsBootstrap == false) {
+				$(this).wrap('<span style="white-space: nowrap;" />')
 			}
 
 			$(this).datepicker(calSetting);
@@ -147,11 +152,12 @@ function cmsSetTimeRegion() {
 				$(this).addClass('form-control');
 				$(this).css("width", '');
 				$(this).css("margin", '');
-				$(this).wrap('<div style="width:12em" class="input-group" />')
+				$(this).wrap('<div style="width:10em" class="input-group" />')
 				$('<label for="' + id + '" id="' + id + '_triggerbtn" class="ui-timepicker-trigger input-group-addon input-group-text"><span class="bi bi-clock"></span></label>').insertAfter($(this));
 			}
 
 			if (cmsBootstrap == false) {
+				$(this).wrap('<span style="white-space: nowrap;" />')
 				$('<img class="ui-timepicker-trigger" src="/Assets/Admin/images/clock.png" for="' + id + '" id="' + id + '_triggerbtn" alt="' + cmsTimePattern + '" title="' + cmsTimePattern + '">').insertAfter($(this));
 			}
 
@@ -258,6 +264,29 @@ function cmsAlertModalHeightWidth(request, h, w) {
 			}
 		}
 	});
+	cmsDecorateDialogButtons();
+}
+
+function cmsDecorateDialogButtons() {
+	if (cmsBootstrap) {
+		$(".ui-dialog-titlebar button").each(function () {
+			if ($(this).hasClass('btn') == false) {
+				$(this).addClass('btn btn-primary');
+				//$(this).html('<span class="ui-button-icon ui-icon ui-icon-closethick"></span>');
+				$(this).html(' <div style="margin-top:-2px; padding:0 3px 2px 1px;"> &#128473; </div> ');
+			}
+		});
+
+		$(".ui-dialog-buttonset button").each(function () {
+			if ($(this).hasClass('btn') == false) {
+				$(this).addClass('btn btn-primary');
+			}
+			if ($(this).hasClass('btn-default')) {
+				$(this).addClass('btn btn-primary');
+			}
+		});
+
+	}
 }
 
 function cmsAlertModal(request) {
@@ -287,6 +316,8 @@ function cmsAlertModalHeightWidthBtns(request, h, w, buttonsOpts) {
 		modal: true,
 		buttons: buttonsOpts
 	});
+
+	cmsDecorateDialogButtons();
 }
 
 function cmsAlertModalBtns(request, buttonsOpts) {
@@ -326,6 +357,7 @@ function cmsOpenPage(theURL) {
 				}
 			}
 		});
+		cmsDecorateDialogButtons();
 	} else {
 		cmsAlertModalSmall("No saved content to show.");
 	}

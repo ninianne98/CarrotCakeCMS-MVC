@@ -78,10 +78,15 @@
 		<br />
 		<br />
 		<input id="rdoRange" type="radio" name="rdoExportGroup" value="range" />
-		<label for="rdoRange" class="caption">Selected date range</label>&nbsp;&nbsp;&nbsp;
-		From : <input name="txtBegin" type="text" value="@dtBegin.ToString("MM/dd/yyyy")" size="12" id="txtBegin" class="dateRegion" />
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		Through : <input name="txtEnd" type="text" value="@dtEnd.ToString("MM/dd/yyyy")" size="12" id="txtEnd" class="dateRegion" />
+		<label for="rdoRange" class="caption">Selected date range</label>
+		<div style="float: left; width: 100%; margin: 0 0 1em 4em; clear: both; ">
+			<div style="float: left; min-width: 14em; margin-right: 3em;">
+				From : <input name="txtBegin" type="text" value="@dtBegin.ToString("MM/dd/yyyy")" size="12" id="txtBegin" class="dateRegion" />
+			</div>
+			<div style="float: left; min-width: 14em;">
+				Through : <input name="txtEnd" type="text" value="@dtEnd.ToString("MM/dd/yyyy")" size="12" id="txtEnd" class="dateRegion" />
+			</div>
+		</div>
 		<br />
 	</p>
 	<p>
@@ -92,7 +97,7 @@
 		<div style="float: left; margin-top: 8px;">
 			<input id="rdoScope" type="radio" name="rdoExportGroup" value="scope" />
 		</div>
-		<div style="float: left;">
+		<div style="float: left; margin: 0.75em 2em 0.5em 1em">
 			<!-- parent page plugin-->
 			@{
 				var drill = new SitePageDrillDownModel {
