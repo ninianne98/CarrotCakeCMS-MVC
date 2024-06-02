@@ -52,49 +52,96 @@
 			</td>
 		</tr>
 	</table>
+	<br />
 </fieldset>
 
 <div id="pnlUsers">
-	<table>
-		<tr>
-			<td>
-				@using (Html.BeginForm("SiteRemoveUsers", CmsRouteConstants.CmsController.Admin)) {
-					@Html.AntiForgeryToken()
-					@Html.HiddenFor(model => model.Site.SiteID)
-					@Html.HiddenFor(model => model.Site.SiteName)
-					@Html.HiddenFor(model => model.Site.SiteTagline)
-					@Html.HiddenFor(model => model.Site.MainURL)
+	<div>
+		@using (Html.BeginForm("SiteAddUser", CmsRouteConstants.CmsController.Admin)) {
+			@Html.AntiForgeryToken()
+			@Html.HiddenFor(model => model.Site.SiteID)
+			@Html.HiddenFor(model => model.Site.SiteName)
+			@Html.HiddenFor(model => model.Site.SiteTagline)
+			@Html.HiddenFor(model => model.Site.MainURL)
 
-					<fieldset class="fieldset-sm">
-						<legend>
-							<label>
-								Users @Html.Partial("_displayErrorPopupButton")
-							</label>
-						</legend>
-						<br />
-						<div>
+			<fieldset class="fieldset-med">
+				<legend>
+					<label>
+						Add Users @Html.Partial("_displayErrorPopupButton")
+					</label>
+				</legend>
 
-							@{
-					var grid = CarrotWeb.CarrotWebGrid<UserModel>(Model.Users);
+				<script src="/Assets/Admin/Includes/FindUsers.js" type="text/javascript"></script>
+				<script type="text/javascript">
+					$(document).ready(function () {
+						initFindUsers("@Html.IdFor(m => m.NewUserId)", "txtSearch");
+					});
+				</script>
+				<div style="width: 600px;">
+					<p>
+						Search for users to add to this site. Search by either username or email address.
+					</p>
+					<table style="width: 99%;">
+						<tr>
+							<td style="width: 500px;">
+								<p>
+									<b>Search:</b> <span id="spanResults"></span><br />
+									<span style="white-space: nowrap;">
+										<input name="txtSearch" type="text" maxlength="100" size="65" id="txtSearch" class="form-control-xlg" />
+										@Html.ValidationMessageFor(m => m.NewUserId, "", new { @class = "validationError" })
+										@Html.HiddenFor(m => m.NewUserId)
+									</span>
+								</p>
+								<p>
+									@Html.CheckBoxFor(m => m.NewUserAsEditor)
+									@Html.LabelFor(m => m.NewUserAsEditor)
+								</p>
+							</td>
+							<td>
+								<p style="text-align: right;">
+									<input type="submit" name="btnAddUsers" value="Add User" id="btnAddUsers" />
+								</p>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</fieldset>
+		}
+	</div>
+	<div>
+		@using (Html.BeginForm("SiteRemoveUsers", CmsRouteConstants.CmsController.Admin)) {
+			@Html.AntiForgeryToken()
+			@Html.HiddenFor(model => model.Site.SiteID)
+			@Html.HiddenFor(model => model.Site.SiteName)
+			@Html.HiddenFor(model => model.Site.SiteTagline)
+			@Html.HiddenFor(model => model.Site.MainURL)
 
-					grid.TableAttributes = new { @class = "datatable" };
-					grid.THeadAttributes = new { @class = "tablehead" };
-					grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
-					grid.UseDataPage = false;
-					grid.ConfigName(Html.NameFor(x => x.Users));
+			<fieldset class="fieldset-med">
+				<legend>
+					<label>
+						Users @Html.Partial("_displayErrorPopupButton")
+					</label>
+				</legend>
+				<br />
+				<div>
+					@{
+						var grid = CarrotWeb.CarrotWebGrid<UserModel>(Model.Users);
+						grid.SetTableAttributes(new { @class = "datatable" }, new { @class = "tablehead" }, null);
+						grid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+						grid.UseDataPage = false;
+						grid.ConfigName(Html.NameFor(x => x.Users));
 
-					grid
-					.AddColumn(new CarrotGridTemplateColumn<UserModel> {
-						HasHeadingText = false,
-						FormatTemplate = @<text> @grid.FormFieldFor(m => m.Selected, GridFormFieldType.Checkbox)
-						@grid.FormFieldFor(m => m.User.UserName, GridFormFieldType.Hidden)
-						@grid.FormFieldFor(m => m.User.UserKey, GridFormFieldType.Hidden)
-						@grid.FormFieldFor(m => m.User.UserId, GridFormFieldType.Hidden)
-						@grid.FormFieldFor(m => m.User.Email, GridFormFieldType.Hidden)
-						@grid.FormFieldFor(m => m.User.IsAdmin, GridFormFieldType.Hidden)
-						@grid.FormFieldFor(m => m.User.IsEditor, GridFormFieldType.Hidden)
-						@grid.FormFieldFor(m => m.User.FullName_FirstLast, GridFormFieldType.Hidden)</text>
-					})
+						grid.AddColumn(new CarrotGridTemplateColumn<UserModel> {
+							HasHeadingText = false,
+							FormatTemplate = @<text> @grid.FormFieldFor(m => m.Selected, GridFormFieldType.Checkbox)
+								@grid.FormFieldFor(m => m.User.UserName, GridFormFieldType.Hidden)
+								@grid.FormFieldFor(m => m.User.UserKey, GridFormFieldType.Hidden)
+								@grid.FormFieldFor(m => m.User.UserId, GridFormFieldType.Hidden)
+								@grid.FormFieldFor(m => m.User.Email, GridFormFieldType.Hidden)
+								@grid.FormFieldFor(m => m.User.IsAdmin, GridFormFieldType.Hidden)
+								@grid.FormFieldFor(m => m.User.IsEditor, GridFormFieldType.Hidden)
+								@grid.FormFieldFor(m => m.User.FullName_FirstLast, GridFormFieldType.Hidden)</text>
+						})
 						.AddColumn(x => x.User.UserName, new CarrotGridColumn())
 						.AddColumn(x => x.User.FullName_FirstLast, new CarrotGridColumn())
 						.AddColumn(x => x.User.Email, new CarrotGridColumn())
@@ -108,68 +155,19 @@
 						});
 
 						@grid.OutputHtmlBody()
+					}
+				</div>
 
-							}
-						</div>
-
-						@if (Model.Users.Any()) {
-							<br />
-							<p>
-								<input type="submit" name="btnRemove" value="Remove Selected" id="btnRemove" />
-							</p>
-						}
-					</fieldset>
-
+				@if (Model.Users.Any()) {
+					<br />
+					<p>
+						<input type="submit" name="btnRemove" value="Remove Selected" id="btnRemove" />
+					</p>
 				}
-			</td>
-			<td>
-				&nbsp;&nbsp;&nbsp;
-			</td>
-			<td>
-				@using (Html.BeginForm("SiteAddUser", CmsRouteConstants.CmsController.Admin)) {
-					@Html.AntiForgeryToken()
-					@Html.HiddenFor(model => model.Site.SiteID)
-					@Html.HiddenFor(model => model.Site.SiteName)
-					@Html.HiddenFor(model => model.Site.SiteTagline)
-					@Html.HiddenFor(model => model.Site.MainURL)
-
-					<fieldset class="fieldset-sm">
-						<legend>
-							<label>
-								Add Users @Html.Partial("_displayErrorPopupButton")
-							</label>
-						</legend>
-
-						<script src="~/Assets/Admin/Includes/FindUsers.js" type="text/javascript"></script>
-						<script type="text/javascript">
-							$(document).ready(function () {
-								initFindUsers("@Html.IdFor(m => m.NewUserId)", "txtSearch");
-							});
-						</script>
-
-						<div style="width: 400px;">
-							<p>
-								Search for users to add to this group. Search by either username or email address.
-							</p>
-							<p>
-								<b>Search:</b> <span id="spanResults"></span><br />
-								<input name="txtSearch" type="text" maxlength="100" id="txtSearch" class="form-control-lg" />
-								@Html.ValidationMessageFor(m => m.NewUserId, "", new { @class = "validationError" })
-								@Html.HiddenFor(m => m.NewUserId)
-							</p>
-							<p>
-								@Html.CheckBoxFor(m => m.NewUserAsEditor)
-								@Html.LabelFor(m => m.NewUserAsEditor)
-							</p>
-							<p style="text-align: right;">
-								<input type="submit" name="btnAddUsers" value="Add User" id="btnAddUsers" />
-							</p>
-						</div>
-					</fieldset>
-				}
-			</td>
-		</tr>
-	</table>
+				<br />
+			</fieldset>
+		}
+	</div>
 </div>
 
 <script type="text/javascript">

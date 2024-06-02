@@ -146,6 +146,7 @@ table.table {
   margin: 1em 0.5em;
   display: inline-block;
   clear: both;
+  width: inherit;
 }
 table.table th {
   text-align: left;

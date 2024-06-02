@@ -79,9 +79,9 @@
 				</td>
 				<td class="tablecontents">
 					@{
-					SplitDateTime rdt = new SplitDateTime();
-					rdt.CombinedDateTime = Model.User.LockoutEndDateUtc;
-					rdt.FieldName = Html.NameFor(model => Model.User.LockoutEndDateUtc).ToString();
+						SplitDateTime rdt = new SplitDateTime();
+						rdt.CombinedDateTime = Model.User.LockoutEndDateUtc;
+						rdt.FieldName = Html.NameFor(model => Model.User.LockoutEndDateUtc).ToString();
 					}
 
 					@Html.Partial("_datetime", rdt)
@@ -94,40 +94,43 @@
 		<legend>
 			@Html.LabelFor(m => m.User.UserBio)
 		</legend>
-		@Html.TextAreaFor(m => m.User.UserBio, new { rows = "20", cols = "55", @class = "mceEditor", style = "height: 250px; width: 525px;" })
+		@Html.TextAreaFor(m => m.User.UserBio, new { rows = "20", cols = "55", @class = "mceEditor", style = "height: 275px; width: 550px;" })
 		<br />
 	</fieldset>
 
 	<table>
 		<tr>
 			<td>
-				<fieldset class="fieldset-xsm">
+				<fieldset class="fieldset-sm">
 					<legend>
 						<label>
 							Roles
 						</label>
 					</legend>
-
-					<table class="datatable">
-						<thead class="tablehead">
-							<tr>
-								<th scope="col">&nbsp;</th>
-								<th scope="col">Role Name</th>
-							</tr>
-						</thead>
-						<tbody>
-							@for (int j = 0; j < Model.RoleOptions.Count; j++) {
-								<tr>
-									<td>
-										@Html.CheckBoxFor(x => Model.RoleOptions[j].Selected)
-										@Html.HiddenFor(x => Model.RoleOptions[j].Value)
-										@Html.HiddenFor(x => Model.RoleOptions[j].Text)
-									</td>
-									<td>@Model.RoleOptions[j].Text</td>
-								</tr>
-				}
-						</tbody>
-					</table>
+					<div class="scroll-container" style="height: 350px; width: 590px;">
+						<div class="scroll-area" style="height: 340px; width: 580px;">
+							<table class="datatable">
+								<thead class="tablehead">
+									<tr>
+										<th scope="col">&nbsp;</th>
+										<th scope="col">Role Name</th>
+									</tr>
+								</thead>
+								<tbody>
+									@for (int j = 0; j < Model.RoleOptions.Count; j++) {
+										<tr>
+											<td>
+												@Html.CheckBoxFor(x => Model.RoleOptions[j].Selected)
+												@Html.HiddenFor(x => Model.RoleOptions[j].Value)
+												@Html.HiddenFor(x => Model.RoleOptions[j].Text)
+											</td>
+											<td>@Model.RoleOptions[j].Text</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</fieldset>
 			</td>
 			<td>
@@ -140,31 +143,33 @@
 							Sites
 						</label>
 					</legend>
-
-					<table class="datatable">
-						<thead class="tablehead">
-							<tr>
-								<th scope="col">&nbsp;</th>
-								<th scope="col">Site</th>
-								<th scope="col">URL</th>
-							</tr>
-						</thead>
-						<tbody>
-							@for (int j = 0; j < Model.SiteOptions.Count; j++) {
-					var site = Model.AllSites.Where(m => m.SiteID.ToString().ToLowerInvariant() == Model.SiteOptions[j].Value).FirstOrDefault();
-
-								<tr>
-									<td>
-										@Html.CheckBoxFor(x => Model.SiteOptions[j].Selected)
-										@Html.HiddenFor(x => Model.SiteOptions[j].Value)
-										@Html.HiddenFor(x => Model.SiteOptions[j].Text)
-									</td>
-									<td>@site.SiteName</td>
-									<td>@site.MainURL</td>
-								</tr>
-				}
-						</tbody>
-					</table>
+					<div class="scroll-container" style="height: 350px; width: 590px;">
+						<div class="scroll-area" style="height: 340px; width: 580px;">
+							<table class="datatable">
+								<thead class="tablehead">
+									<tr>
+										<th scope="col">&nbsp;</th>
+										<th scope="col">Site</th>
+										<th scope="col">URL</th>
+									</tr>
+								</thead>
+								<tbody>
+									@for (int j = 0; j < Model.SiteOptions.Count; j++) {
+										var site = Model.AllSites.Where(m => m.SiteID.ToString().ToLowerInvariant() == Model.SiteOptions[j].Value).FirstOrDefault();
+										<tr>
+											<td>
+												@Html.CheckBoxFor(x => Model.SiteOptions[j].Selected)
+												@Html.HiddenFor(x => Model.SiteOptions[j].Value)
+												@Html.HiddenFor(x => Model.SiteOptions[j].Text)
+											</td>
+											<td>@site.SiteName</td>
+											<td>@site.MainURL</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</fieldset>
 			</td>
 		</tr>
@@ -178,7 +183,7 @@
 	<div style="display: none">
 		<input type="submit" name="btnSave" value="btnSave" id="btnSave" />
 	</div>
-						}
+}
 
 <script type="text/javascript">
 
