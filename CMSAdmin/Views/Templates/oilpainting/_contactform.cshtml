@@ -11,10 +11,10 @@
 				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
 
 				<div>
-					@cmt.LabelFor(m => m.CommenterEmail)
-					@cmt.ValidationMessageFor(m => m.CommenterEmail, "", new { @class = "text-danger" })
+					@cmt.LabelFor(m => m.CommenterName)
+					@cmt.ValidationMessageFor(m => m.CommenterName, "", new { @class = "text-danger" })
 					<br />
-					@cmt.TextBoxFor(m => m.CommenterEmail)
+					@cmt.TextBoxFor(m => m.CommenterName)
 				</div>
 
 				<div>

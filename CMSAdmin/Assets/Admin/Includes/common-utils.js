@@ -39,6 +39,8 @@ function AjaxBtnLoad() {
 				$(this).addClass('btn btn-primary');
 			}
 		});
+
+		$(".datatable").addClass('table table-striped');
 	}
 
 	initCheckboxStyle();

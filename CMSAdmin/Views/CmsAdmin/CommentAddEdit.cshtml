@@ -129,10 +129,12 @@
 			</tr>
 		</table>
 	</fieldset>
+	<div style="width:600px; margin-left:375px;">
+		<input type="button" name="btnSaveButton" value="Save" onclick="SubmitPage();" id="btnSaveButton" /> <text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </text>
+		<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing()" /> <text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </text>
+		<input type="button" name="btnDeleteButton" value="Delete" onclick="return DeleteItem();" id="btnDeleteButton" />
+	</div>
 
-	<input type="button" name="btnSaveButton" value="Save" onclick="SubmitPage();" id="btnSaveButton" /> <text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </text>
-	<input type="button" id="btnCancel" value="Cancel" onclick="cancelEditing()" /> <text>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </text>
-	<input type="button" name="btnDeleteButton" value="Delete" onclick="return DeleteItem();" id="btnDeleteButton" />
 	<br />
 	<div style="display: none;">
 		@Html.HiddenFor(m => m.Comment.ContentCommentID)

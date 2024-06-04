@@ -89,7 +89,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				if (formMode == "searchform") {
 					frm = new SiteSearch();
 					frm = FormHelper.ParseRequest(frm, Request);
-					this.ViewData["CMS_searchform"] = frm;
+					this.ViewData[SiteSearch.Key] = frm;
 					if (frm != null) {
 						this.TryValidateModel(frm);
 					}

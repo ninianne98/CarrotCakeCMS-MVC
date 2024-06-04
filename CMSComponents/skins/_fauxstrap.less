@@ -221,6 +221,8 @@
 		height: auto;
 	}
 
+	// ========================
+
 	.pagination {
 		display: block;
 		padding-left: 0;
@@ -257,6 +259,18 @@
 		border-color: @themeColor;
 	}
 
+	.pagination > li > a:hover,
+	.pagination > li > span:hover {
+		color: @navText;
+		background-color: @themeLight15;
+	}
+
+	.pagination > .active > a:hover,
+	.pagination > .active > span:hover {
+		color: @navText;
+		background-color: @themeDark15;
+	}
+
 	.pagination > li:first-child > a, .pagination > li:first-child > span {
 		border-bottom-left-radius: 6px;
 		border-top-left-radius: 6px;
@@ -271,6 +285,8 @@
 		font-size: 0.95em;
 	}
 
+	.bootstrap-content .pagination > .active > a:hover,
+	.bootstrap-content .pagination > .active > span:hover,
 	.bootstrap-content .pagination > li > a,
 	.bootstrap-content .pagination > li > span {
 		border: 1px solid #ddd;

@@ -156,6 +156,18 @@ strong, b {
 	color: #42474c;
 }
 
+.text-danger {
+	color: #f35858;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.comment-confirm {
+	color: #111111;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
 em, i {
 	font-style: italic;
 }

@@ -233,6 +233,16 @@ textarea.form-control {
   background-color: #006e6d;
   border-color: #006e6d;
 }
+.pagination > li > a:hover,
+.pagination > li > span:hover {
+  color: #fefefe;
+  background-color: #00bbb9;
+}
+.pagination > .active > a:hover,
+.pagination > .active > span:hover {
+  color: #fefefe;
+  background-color: #002221;
+}
 .pagination > li:first-child > a,
 .pagination > li:first-child > span {
   border-bottom-left-radius: 6px;
@@ -247,6 +257,8 @@ textarea.form-control {
 .bootstrap-content .pagination a {
   font-size: 0.95em;
 }
+.bootstrap-content .pagination > .active > a:hover,
+.bootstrap-content .pagination > .active > span:hover,
 .bootstrap-content .pagination > li > a,
 .bootstrap-content .pagination > li > span {
   border: 1px solid #ddd;

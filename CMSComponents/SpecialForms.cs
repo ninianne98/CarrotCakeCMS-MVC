@@ -2,13 +2,11 @@
 using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
-using System.Xml.Serialization;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -60,8 +58,8 @@ namespace Carrotware.CMS.UI.Components {
 		public HtmlHelper<SiteSearch> GetModelHelper(bool restoreQuery) {
 			var model = new SiteSearch();
 
-			if (_helper.ViewData["CMS_searchform"] != null) {
-				model = _helper.ViewData["CMS_searchform"] as SiteSearch;
+			if (_helper.ViewData[SiteSearch.Key] != null) {
+				model = _helper.ViewData[SiteSearch.Key] as SiteSearch;
 			} else {
 				model = new SiteSearch();
 			}
@@ -202,7 +200,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected ContactInfo InitContactInfo(string partialName) {
-			ContactInfo model = new ContactInfo();
+			var model = new ContactInfo();
 			_settings = new ContactInfoSettings();
 
 			if (_helper.ViewData[ContactInfo.Key] != null) {
@@ -219,26 +217,12 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected HtmlHelper<ContactInfo> InitHelp() {
-			var xmlSerializer = new XmlSerializer(typeof(ContactInfoSettings));
-			string xml = string.Empty;
-			using (var sw = new StringWriter()) {
-				xmlSerializer.Serialize(sw, _settings);
-				xml = sw.ToString();
-				xml = xml.EncodeBase64();
-			}
-
 			_model.Settings = _settings;
-			_model.EncodedSettings = xml;
+			var xml = _model.SerializeSettings();
 
 			var hlp = new HtmlHelper<ContactInfo>(_helper.ViewContext, new WrapperForHtmlHelper<ContactInfo>(_model, _helper.ViewData));
 
-			string frmTag = Environment.NewLine
-						+ hlp.AntiForgeryToken().ToString()
-						+ Environment.NewLine
-						+ hlp.HiddenFor(x => x.EncodedSettings).ToString()
-						+ Environment.NewLine;
-
-			_helper.ViewContext.Writer.Write(frmTag);
+			_model.WriteCache(_helper, hlp);
 
 			return hlp;
 		}
@@ -359,7 +343,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected LoginInfo InitLoginInfo(string partialName) {
-			LoginInfo model = new LoginInfo();
+			var model = new LoginInfo();
 			_settings = new LoginInfoSettings();
 
 			if (_helper.ViewData[LoginInfo.Key] != null) {
@@ -376,26 +360,12 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected HtmlHelper<LoginInfo> InitHelp() {
-			var xmlSerializer = new XmlSerializer(typeof(LoginInfoSettings));
-			string xml = string.Empty;
-			using (var sw = new StringWriter()) {
-				xmlSerializer.Serialize(sw, _settings);
-				xml = sw.ToString();
-				xml = xml.EncodeBase64();
-			}
-
 			_model.Settings = _settings;
-			_model.EncodedSettings = xml;
+			var xml = _model.SerializeSettings();
 
 			var hlp = new HtmlHelper<LoginInfo>(_helper.ViewContext, new WrapperForHtmlHelper<LoginInfo>(_model, _helper.ViewData));
 
-			string frmTag = Environment.NewLine
-						+ hlp.AntiForgeryToken().ToString()
-						+ Environment.NewLine
-						+ hlp.HiddenFor(x => x.EncodedSettings).ToString()
-						+ Environment.NewLine;
-
-			_helper.ViewContext.Writer.Write(frmTag);
+			_model.WriteCache(_helper, hlp);
 
 			return hlp;
 		}
@@ -498,7 +468,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected LogoutInfo InitLogoutInfo(string partialName) {
-			LogoutInfo model = new LogoutInfo();
+			var model = new LogoutInfo();
 			_settings = new LogoutInfoSettings();
 
 			if (_helper.ViewData[LogoutInfo.Key] != null) {
@@ -515,26 +485,12 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected HtmlHelper<LogoutInfo> InitHelp() {
-			var xmlSerializer = new XmlSerializer(typeof(LogoutInfoSettings));
-			string xml = string.Empty;
-			using (var sw = new StringWriter()) {
-				xmlSerializer.Serialize(sw, _settings);
-				xml = sw.ToString();
-				xml = xml.EncodeBase64();
-			}
-
 			_model.Settings = _settings;
-			_model.EncodedSettings = xml;
+			var xml = _model.SerializeSettings();
 
 			var hlp = new HtmlHelper<LogoutInfo>(_helper.ViewContext, new WrapperForHtmlHelper<LogoutInfo>(_model, _helper.ViewData));
 
-			string frmTag = Environment.NewLine
-						+ hlp.AntiForgeryToken().ToString()
-						+ Environment.NewLine
-						+ hlp.HiddenFor(x => x.EncodedSettings).ToString()
-						+ Environment.NewLine;
-
-			_helper.ViewContext.Writer.Write(frmTag);
+			_model.WriteCache(_helper, hlp);
 
 			return hlp;
 		}
@@ -633,7 +589,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected ForgotPasswordInfo InitForgotPasswordInfo(string partialName) {
-			ForgotPasswordInfo model = new ForgotPasswordInfo();
+			var model = new ForgotPasswordInfo();
 			_settings = new ForgotPasswordInfoSettings();
 
 			if (_helper.ViewData[ForgotPasswordInfo.Key] != null) {
@@ -650,26 +606,12 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected HtmlHelper<ForgotPasswordInfo> InitHelp() {
-			var xmlSerializer = new XmlSerializer(typeof(ForgotPasswordInfoSettings));
-			string xml = string.Empty;
-			using (var sw = new StringWriter()) {
-				xmlSerializer.Serialize(sw, _settings);
-				xml = sw.ToString();
-				xml = xml.EncodeBase64();
-			}
-
 			_model.Settings = _settings;
-			_model.EncodedSettings = xml;
+			var xml = _model.SerializeSettings();
 
 			var hlp = new HtmlHelper<ForgotPasswordInfo>(_helper.ViewContext, new WrapperForHtmlHelper<ForgotPasswordInfo>(_model, _helper.ViewData));
 
-			string frmTag = Environment.NewLine
-						+ hlp.AntiForgeryToken().ToString()
-						+ Environment.NewLine
-						+ hlp.HiddenFor(x => x.EncodedSettings).ToString()
-						+ Environment.NewLine;
-
-			_helper.ViewContext.Writer.Write(frmTag);
+			_model.WriteCache(_helper, hlp);
 
 			return hlp;
 		}
@@ -775,7 +717,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected ResetPasswordInfo InitResetPasswordInfo(string partialName) {
-			ResetPasswordInfo model = new ResetPasswordInfo();
+			var model = new ResetPasswordInfo();
 			_settings = new ResetPasswordInfoSettings();
 
 			if (_helper.ViewData[ResetPasswordInfo.Key] != null) {
@@ -794,26 +736,12 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected HtmlHelper<ResetPasswordInfo> InitHelp() {
-			var xmlSerializer = new XmlSerializer(typeof(ResetPasswordInfoSettings));
-			string xml = string.Empty;
-			using (var sw = new StringWriter()) {
-				xmlSerializer.Serialize(sw, _settings);
-				xml = sw.ToString();
-				xml = xml.EncodeBase64();
-			}
-
 			_model.Settings = _settings;
-			_model.EncodedSettings = xml;
+			var xml = _model.SerializeSettings();
 
 			var hlp = new HtmlHelper<ResetPasswordInfo>(_helper.ViewContext, new WrapperForHtmlHelper<ResetPasswordInfo>(_model, _helper.ViewData));
 
-			string frmTag = Environment.NewLine
-						+ hlp.AntiForgeryToken().ToString()
-						+ Environment.NewLine
-						+ hlp.HiddenFor(x => x.EncodedSettings).ToString()
-						+ Environment.NewLine;
-
-			_helper.ViewContext.Writer.Write(frmTag);
+			_model.WriteCache(_helper, hlp);
 
 			return hlp;
 		}
@@ -926,7 +854,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected ChangePasswordInfo InitChangePasswordInfo(string partialName) {
-			ChangePasswordInfo model = new ChangePasswordInfo();
+			var model = new ChangePasswordInfo();
 			_settings = new ChangePasswordInfoSettings();
 
 			if (_helper.ViewData[ChangePasswordInfo.Key] != null) {
@@ -944,26 +872,12 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected HtmlHelper<ChangePasswordInfo> InitHelp() {
-			var xmlSerializer = new XmlSerializer(typeof(ChangePasswordInfoSettings));
-			string xml = string.Empty;
-			using (var sw = new StringWriter()) {
-				xmlSerializer.Serialize(sw, _settings);
-				xml = sw.ToString();
-				xml = xml.EncodeBase64();
-			}
-
 			_model.Settings = _settings;
-			_model.EncodedSettings = xml;
+			var xml = _model.SerializeSettings();
 
 			var hlp = new HtmlHelper<ChangePasswordInfo>(_helper.ViewContext, new WrapperForHtmlHelper<ChangePasswordInfo>(_model, _helper.ViewData));
 
-			string frmTag = Environment.NewLine
-						+ hlp.AntiForgeryToken().ToString()
-						+ Environment.NewLine
-						+ hlp.HiddenFor(x => x.EncodedSettings).ToString()
-						+ Environment.NewLine;
-
-			_helper.ViewContext.Writer.Write(frmTag);
+			_model.WriteCache(_helper, hlp);
 
 			return hlp;
 		}
@@ -1072,7 +986,7 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected ChangeProfileInfo InitChangeProfileInfo(string partialName) {
-			ChangeProfileInfo model = new ChangeProfileInfo();
+			var model = new ChangeProfileInfo();
 
 			_settings = new ChangeProfileInfoSettings();
 
@@ -1099,26 +1013,12 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		protected HtmlHelper<ChangeProfileInfo> InitHelp() {
-			var xmlSerializer = new XmlSerializer(typeof(ChangeProfileInfoSettings));
-			string xml = string.Empty;
-			using (var sw = new StringWriter()) {
-				xmlSerializer.Serialize(sw, _settings);
-				xml = sw.ToString();
-				xml = xml.EncodeBase64();
-			}
-
 			_model.Settings = _settings;
-			_model.EncodedSettings = xml;
+			var xml = _model.SerializeSettings();
 
 			var hlp = new HtmlHelper<ChangeProfileInfo>(_helper.ViewContext, new WrapperForHtmlHelper<ChangeProfileInfo>(_model, _helper.ViewData));
 
-			string frmTag = Environment.NewLine
-						+ hlp.AntiForgeryToken().ToString()
-						+ Environment.NewLine
-						+ hlp.HiddenFor(x => x.EncodedSettings).ToString()
-						+ Environment.NewLine;
-
-			_helper.ViewContext.Writer.Write(frmTag);
+			_model.WriteCache(_helper, hlp);
 
 			return hlp;
 		}
