@@ -4,6 +4,17 @@
 
 	bool siteExists = SiteData.CurrentSiteExists;
 	var versionKey = string.Format("cms={0}", SiteData.CurrentDLLVersion);
+
+	var siteCaption = "<span>&nbsp;</span>";
+
+	if (siteExists) {
+		if (!string.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)
+				&& !string.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)) {
+			siteCaption = string.Format("{0}:  {1}", SiteData.CurrentSite.SiteName, SiteData.CurrentSite.SiteTagline);
+		} else {
+			siteCaption = string.Format("{0}  {1}", SiteData.CurrentSite.SiteName, SiteData.CurrentSite.SiteTagline);
+		}
+	}
 }
 <html lang="en">
 <head>
@@ -15,9 +26,40 @@
 	@Html.Partial("~/Views/CmsAdmin/_mainCommonHead.cshtml")
 
 	@RenderSection("scripts", required: false)
+	<script>
+		$(document).ready(function () {
+			$(window).on("scroll", onScroll);
+			onScroll(null);
+		});
+
+		function onScroll(event) {
+			var scrollPos = $(window).scrollTop();
+
+			if ($("#headercontainer").length > 0) {
+				var refElement = $("#headercontainer");
+				var mnuElement = $("#nav-menu-container");
+				//console.log(scrollPos + ' | ' + refElement.height());
+
+				if (scrollPos > (refElement.height() - mnuElement.height())) {
+					$("#nav-break").css('height', '5.5em');
+					$("#headercontainer").css('height', '2.25em');
+					$("#headercontainer").css('min-height', '75px');
+					$("#nav-menu-container").css('top', '3.25em');
+					$("#header").css('display', 'none');
+					$("#header-sm").css('display', '');
+				} else {
+					$("#nav-break").css('height', '');
+					$("#headercontainer").css('height', '');
+					$("#headercontainer").css('min-height', '');
+					$("#nav-menu-container").css('top', '');
+					$("#header").css('display', '');
+					$("#header-sm").css('display', 'none');
+				}
+			}
+		}
+	</script>
 </head>
 <body>
-
 	<div id="cmsAjaxMainDiv">
 		<div id="headercontainer">
 			<div id="header">
@@ -27,20 +69,19 @@
 				<div style="clear: both">
 				</div>
 				<h3>
-					@if (SiteData.CurrentSite != null) {
-						if (!string.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)
-						&& !string.IsNullOrEmpty(SiteData.CurrentSite.SiteTagline)) {
-							@String.Format("{0}:  {1}", SiteData.CurrentSite.SiteName, SiteData.CurrentSite.SiteTagline)
-						} else {
-							@String.Format("{0}  {1}", SiteData.CurrentSite.SiteName, SiteData.CurrentSite.SiteTagline)
-						}
-					} else {
-						<span>&nbsp;</span>
+					@Html.Raw(siteCaption)
+				</h3>
+			</div>
+			<div id="header-sm" style="display: none">
+				<h3>
+					@SiteData.CarrotCakeCMSVersionMM
+					@if (siteExists) {
+						<span> | </span>
 					}
+					@Html.Raw(siteCaption)
 				</h3>
 			</div>
 		</div>
-
 		<div id="nav-menu-container">
 			<ul id="nav-menu">
 				<li id="tabHome">
@@ -128,7 +169,8 @@
 				<li>&nbsp;</li>
 			</ul>
 		</div>
-
+		<div id="nav-break">
+		</div>
 		<div id="content">
 			<div class="pad-content">
 				<h1 class="headingColor">

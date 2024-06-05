@@ -413,54 +413,90 @@ H3 {
 #headercontainer {
   margin: 0;
   padding: 0;
-  min-height: 115px;
-  height: 11em;
+  min-height: 100px;
+  height: 10em;
   background: #00758f;
-  background: linear-gradient(to right, #00b4dc 0%, #00758f 25%, #00758f 75%, #003643 96%);
-  min-width: 1080px;
+  background: linear-gradient(to right, #008aa9 0%, #00758f 20%, #004b5c 70%, #002229 90%);
   width: 100%;
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  left: 0;
+  clear: both;
 }
-#header {
+#header,
+#header-sm {
   font-family: Georgia, Times New Roman, Serif;
   margin: 0;
   padding: 0;
-  min-height: 110px;
-  height: 10em;
   width: 1080px;
   margin-left: 5em;
 }
+#header {
+  min-height: 100px;
+  height: 9em;
+}
+#header-sm {
+  min-height: 50px;
+  height: 2.25em;
+}
 #header h1,
 #header h2,
-#header h3 {
+#header h3,
+#header-sm h1,
+#header-sm h2,
+#header-sm h3 {
   float: left;
   font-weight: bolder;
-  color: #fff;
+  font-size: 1em;
+  color: #fefefe;
   font-family: Georgia, Times New Roman, Serif;
   padding: 2px;
   margin: 2px;
 }
 #header h1 {
   font-size: 2.4em;
-  padding: 1.3em 0 0 1.3em;
+  padding: 1.1em 0 0 1.3em;
 }
 #header h2 {
   font-size: 2em;
-  padding: 1.3em 0 0 0;
+  padding: 1.1em 0 0 0;
 }
 #header h3 {
-  color: #fff;
   font-size: 1.6em;
   padding: 0.6em 0 0 0;
+}
+#header h3,
+#header-sm h3 {
+  font-size: 1.4em;
+  padding: 0.65em 0 0 0;
 }
 /* Menu */
 #nav-menu-container {
   margin: 0;
   padding: 0;
   font: normal 1.1em 'Segoe UI', Tahoma, Lucida Grande, Lucida Sans, Arial, Helvetica, sans-serif;
-  background: #3F3F3F url(../images/menu-gradient.png) repeat-x;
+  background: #444;
+  background: linear-gradient(180deg, #111 0%, #888 20%, #444 45%, #222 70%, #111 88%);
   font-weight: normal;
   min-width: 1080px;
+  height: 3em;
+  top: 8.95em;
+  margin-bottom: 1em;
   width: 100%;
+  position: fixed;
+  z-index: 21;
+  right: 0;
+  left: 0;
+  clear: both;
+}
+#nav-break {
+  clear: both;
+  min-height: 125px;
+  height: 12.75em;
+  width: 1080px;
+  border: 1px dashed transparent;
 }
 #nav-menu {
   margin: 0;
@@ -537,7 +573,16 @@ H3 {
 #nav-menu > li.sub {
   padding-right: 20px;
   margin-right: 10px;
-  background: url(../images/arrowdown.png) no-repeat 98% 50%;
+}
+#nav-menu > li.sub:after {
+  content: '';
+  margin-top: 1.2em;
+  margin-left: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
 }
 #nav-menu > li.sub ul li a {
   padding: 0.4em;
