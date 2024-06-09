@@ -126,10 +126,12 @@
 						&nbsp;&nbsp;
 					</td>
 					<td>
-						@Html.TextBoxFor(m => m.SearchDate, Helper.ShortDateFormatPattern, new { @class = "dateRegion form-control-sm", maxlength = "12", size = "16" })
-
-						@Html.DropDownListFor(m => m.SelectedRange, new SelectList(Model.DateRanges, "Key", "Value"))
-
+						<div style="float:left;margin:0.5em;min-width:8em;">
+							@Html.TextBoxFor(m => m.SearchDate, Helper.ShortDateFormatPattern, new { @class = "dateRegion form-control-sm", maxlength = "12", size = "16" })
+						</div>
+						<div style="float:left;margin:0.5em;min-width:8em;">
+							@Html.DropDownListFor(m => m.SelectedRange, new SelectList(Model.DateRanges, "Key", "Value"))
+						</div>
 						<div style="clear: both; height: 2px;">
 						</div>
 					</td>

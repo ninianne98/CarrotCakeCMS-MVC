@@ -1,3 +1,12 @@
+/*
+// jQuery MiniColors: A tiny color picker built on jQuery
+//
+// Developed by Cory LaViska for A Beautiful Site, LLC
+//      https://github.com/claviska/jquery-minicolors
+//      https://www.abeautifulsite.net/
+// Licensed under the MIT license: http://opensource.org/licenses/MIT
+*/
+
 .minicolors {
 	position: relative;
 }
@@ -484,6 +493,9 @@
 }
 
 /*==========================*/
+/*
+	Customizations below by Carrotware, MIT 2023
+*/
 
 .minicolors-theme-default .minicolors-input {
 	height: 1.5em;
@@ -510,4 +522,8 @@
 .minicolors-theme-default .minicolors-input {
 	padding-left: 8px;
 	padding-right: 8px;
+}
+
+.minicolors-swatch, .minicolors-swatch::before, .minicolors-swatch::after {
+	box-sizing: unset;
 }
