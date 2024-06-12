@@ -70,15 +70,15 @@
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-			doEventCalStyle();
+			doEventCalStyle2();
 		});
 
 		$(document).ajaxComplete(function (event, xhr, settings) {
-			doEventCalStyle();
+			doEventCalStyle2();
 		});
 
-		function doEventCalStyle() {
-			$(".eventDateRegion").each(function () {
+		function doEventCalStyle2() {
+			$("#divCalendarResults2 .eventDateRegion").each(function () {
 				$(this).datepicker({
 					changeMonth: true,
 					changeYear: true,
@@ -98,27 +98,27 @@
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-			$('#CalendarInputDate').change(function () {
-				PostSelected();
+			$('#CalendarInputDate2').change(function () {
+				PostSelected2();
 			});
 		});
 
-		function PostSelected() {
-			$('#@Html.IdFor(m => m.MonthSelected)').val($('#CalendarInputDate').val());
+		function PostSelected2() {
+			$('#divCalendarResults2 #@Html.IdFor(m => m.MonthSelected)').val($('#CalendarInputDate2').val());
 
-			$('#btnSubmitCal').click();
+			$('#btnSubmitCal2').click();
 		}
 
-		function PostNext() {
-			$('#@Html.IdFor(m => m.MonthSelected)').val($('#@Html.IdFor(m => m.MonthNext)').val());
+		function PostNext2() {
+			$('#divCalendarResults2 #@Html.IdFor(m => m.MonthSelected)').val($('#divCalendarResults2 #@Html.IdFor(m => m.MonthNext)').val());
 
-			$('#btnSubmitCal').click();
+			$('#btnSubmitCal2').click();
 		}
 
-		function PostPrior() {
-			$('#@Html.IdFor(m => m.MonthSelected)').val($('#@Html.IdFor(m => m.MonthPrior)').val());
+		function PostPrior2() {
+			$('#divCalendarResults2 #@Html.IdFor(m => m.MonthSelected)').val($('#divCalendarResults2 #@Html.IdFor(m => m.MonthPrior)').val());
 
-			$('#btnSubmitCal').click();
+			$('#btnSubmitCal2').click();
 		}
 	</script>
 
@@ -144,7 +144,7 @@
 		@Html.AntiForgeryToken()
 
 		<div id="divDatePicker" class="calendarCenter1">
-			@Html.TextBox("CalendarInputDate", string.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", style = "width: 120px; display:inline; margin:1em", @class = "eventDateRegion form-control-sm" })
+			@Html.TextBox("CalendarInputDate2", string.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", style = "width: 120px; display:inline; margin:1em", @class = "eventDateRegion form-control-sm" })
 		</div>
 
 		<div class="calendarCenter2">
@@ -152,9 +152,9 @@
 				@cal.RenderBody()
 			</div>
 
-			<input type="button" class="calendarbutton" id="btnLast " value="«««««" onclick="PostPrior();" />
+			<input type="button" class="calendarbutton" id="btnLast2" value="«««««" onclick="PostPrior2();" />
 			&nbsp;&nbsp;&nbsp;
-			<input type="button" class="calendarbutton" id="btnNext " value="»»»»»" onclick="PostNext();" />
+			<input type="button" class="calendarbutton" id="btnNext2" value="»»»»»" onclick="PostNext2();" />
 		</div>
 
 		<div style="display:none;">
@@ -162,7 +162,7 @@
 			@Html.TextBoxFor(m => m.MonthPrior, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
 			@Html.TextBoxFor(m => m.MonthNext, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
 			@Html.HiddenFor(m => m.EncodedSettings)
-			<input type="submit" id="btnSubmitCal" />
+			<input type="submit" id="btnSubmitCal2" />
 		</div>
 	}
 

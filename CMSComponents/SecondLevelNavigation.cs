@@ -25,7 +25,7 @@ namespace Carrotware.CMS.UI.Components {
 			base.LoadData();
 
 			try {
-				string sFoundVal = this.GetParmValue("IncludeParent", String.Empty);
+				string sFoundVal = this.GetParmValue("IncludeParent", string.Empty);
 
 				if (!String.IsNullOrEmpty(sFoundVal)) {
 					this.IncludeParent = Convert.ToBoolean(sFoundVal);

@@ -163,7 +163,7 @@ namespace Carrotware.CMS.UI.Components {
 
 					this.ContentType = (ListContentType)Enum.Parse(typeof(ListContentType), base.GetParmValue("ContentType", ListContentType.Blog.ToString()), true);
 
-					this.DateFormat = base.GetParmValue("DateFormat", String.Empty);
+					this.DateFormat = base.GetParmValue("DateFormat", string.Empty);
 
 					this.ShowUpdateDate = Convert.ToBoolean(base.GetParmValue("ShowUpdateDate", "false"));
 

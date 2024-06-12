@@ -19,10 +19,10 @@ namespace Carrotware.CMS.UI.Components {
 	public class IFrameWidgetWrapper : BaseToolboxComponent {
 
 		public IFrameWidgetWrapper() {
-			this.Hyperlink = String.Empty;
+			this.Hyperlink = string.Empty;
 			this.CssStyle = "width: 300px; height: 100px;";
 			this.ScrollingFrame = true;
-			this.CssClass = String.Empty;
+			this.CssClass = string.Empty;
 		}
 
 		[Widget(WidgetAttribute.FieldMode.TextBox)]
@@ -49,14 +49,14 @@ namespace Carrotware.CMS.UI.Components {
 			} catch (Exception ex) { }
 
 			try {
-				string sFoundVal = this.GetParmValue("CssClass", String.Empty);
+				string sFoundVal = this.GetParmValue("CssClass", string.Empty);
 
 				if (!String.IsNullOrEmpty(sFoundVal)) {
 					this.CssClass = sFoundVal;
 				}
 			} catch (Exception ex) { }
 			try {
-				string sFoundVal = this.GetParmValue("Hyperlink", String.Empty);
+				string sFoundVal = this.GetParmValue("Hyperlink", string.Empty);
 
 				if (!String.IsNullOrEmpty(sFoundVal)) {
 					this.Hyperlink = sFoundVal;
@@ -84,19 +84,19 @@ namespace Carrotware.CMS.UI.Components {
 
 			sb.AppendLine();
 
-			string sCSS = String.Empty;
+			string sCSS = string.Empty;
 			if (!String.IsNullOrEmpty(this.CssClass)) {
 				sCSS = " class=\"" + this.CssClass + "\" ";
 			}
-			string sStyle = String.Empty;
+			string sStyle = string.Empty;
 			if (!String.IsNullOrEmpty(this.CssStyle)) {
 				sStyle = " style=\"" + this.CssStyle + "\" ";
 			}
-			string sHREF = String.Empty;
+			string sHREF = string.Empty;
 			if (!String.IsNullOrEmpty(this.Hyperlink)) {
 				sHREF = " src=\"" + this.Hyperlink + "\" ";
 			}
-			string sScroll = String.Empty;
+			string sScroll = string.Empty;
 			if (this.ScrollingFrame) {
 				sScroll = " scrolling=\"auto\" ";
 			}

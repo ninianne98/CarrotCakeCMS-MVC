@@ -21,7 +21,7 @@ namespace Carrotware.CMS.UI.Components {
 	public class ContentSnippetText : BaseToolboxComponent {
 
 		public ContentSnippetText() {
-			this.SnippetSlug = String.Empty;
+			this.SnippetSlug = string.Empty;
 			this.SnippetID = Guid.Empty;
 		}
 
@@ -65,7 +65,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			StringBuilder sb = new StringBuilder();
 
-			string sBody = String.Empty;
+			string sBody = string.Empty;
 
 			ContentSnippet cs = null;
 
@@ -78,12 +78,12 @@ namespace Carrotware.CMS.UI.Components {
 					cs = ContentSnippet.GetSnippetBySlug(SiteData.CurrentSiteID, this.SnippetSlug, !bIsEditor);
 				}
 
-				string sBodyNote = String.Empty;
-				string sIdent = String.Empty;
+				string sBodyNote = string.Empty;
+				string sIdent = string.Empty;
 
 				if (cs != null) {
 					if (bIsEditor && (cs.IsRetired || cs.IsUnReleased || !cs.ContentSnippetActive)) {
-						string sBodyFlags = String.Empty;
+						string sBodyFlags = string.Empty;
 						if (!cs.ContentSnippetActive) {
 							sBodyFlags += CMSConfigHelper.InactivePagePrefix + " - Status : " + cs.ContentSnippetActive.ToString() + " ";
 						}

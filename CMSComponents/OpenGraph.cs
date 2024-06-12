@@ -53,7 +53,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public string ToHtmlString() {
 			StringBuilder sb = new StringBuilder();
-			sb.AppendLine(String.Empty);
+			sb.AppendLine(string.Empty);
 
 			try {
 				if (this.CmsPage != null) {

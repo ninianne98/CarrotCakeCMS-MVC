@@ -1,6 +1,6 @@
 ﻿@model  CalendarViewModel
 
-<div id="divCalendarResults">
+<div id="divCalendarResults1">
 	<style type="text/css">
 		.calendarCenter1 {
 			width: 300px;
@@ -65,15 +65,15 @@
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-			doEventCalStyle();
+			doEventCalStyle1();
 		});
 
 		$(document).ajaxComplete(function (event, xhr, settings) {
-			doEventCalStyle();
+			doEventCalStyle1();
 		});
 
-		function doEventCalStyle() {
-			$(".eventDateRegion").each(function () {
+		function doEventCalStyle1() {
+			$("#divCalendarResults1 .eventDateRegion").each(function () {
 				$(this).datepicker({
 					changeMonth: true,
 					changeYear: true,
@@ -83,37 +83,37 @@
 			});
 
 			setTimeout(function () {
-				var btnSelector = "#divCalendarResults input:button, #divCalendarResults input:submit, #divCalendarResults input:reset, #divCalendarResults button";
+				var btnSelector = "#divCalendarResults1 input:button, #divCalendarResults1 input:submit, #divCalendarResults1 input:reset, #divCalendarResults1 button";
 				$(btnSelector).addClass('btn btn-default btn-primary');
 				$(btnSelector).button();
-				$('#divCalendarResults .ui-button').removeClass('ui-widget');
+				$('#divCalendarResults1 .ui-button').removeClass('ui-widget');
 			}, 100);
 		}
 	</script>
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-			$('#CalendarInputDate').change(function () {
-				PostSelected();
+			$('#CalendarInputDate1').change(function () {
+				PostSelected1();
 			});
 		});
 
-		function PostSelected() {
-			$('#@Html.IdFor(m => m.MonthSelected)').val($('#CalendarInputDate').val());
+		function PostSelected1() {
+			$('#divCalendarResults1 #@Html.IdFor(m => m.MonthSelected)').val($('#CalendarInputDate1').val());
 
-			$('#btnSubmitCal').click();
+			$('#btnSubmitCal1').click();
 		}
 
-		function PostNext() {
-			$('#@Html.IdFor(m => m.MonthSelected)').val($('#@Html.IdFor(m => m.MonthNext)').val());
+		function PostNext1() {
+			$('#divCalendarResults1 #@Html.IdFor(m => m.MonthSelected)').val($('#divCalendarResults1 #@Html.IdFor(m => m.MonthNext)').val());
 
-			$('#btnSubmitCal').click();
+			$('#btnSubmitCal1').click();
 		}
 
-		function PostPrior() {
-			$('#@Html.IdFor(m => m.MonthSelected)').val($('#@Html.IdFor(m => m.MonthPrior)').val());
+		function PostPrior1() {
+			$('#divCalendarResults1 #@Html.IdFor(m => m.MonthSelected)').val($('#divCalendarResults1 #@Html.IdFor(m => m.MonthPrior)').val());
 
-			$('#btnSubmitCal').click();
+			$('#btnSubmitCal1').click();
 		}
 	</script>
 
@@ -136,9 +136,9 @@
 		grid
 		.AddColumn(x => x.EventDate, new CarrotGridColumn { HasHeadingText = false, CellFormatString = WebHelper.ShortDateFormatPattern })
 		.AddColumn(new CarrotGridTemplateColumn<vw_carrot_CalendarEvent> {
-		HasHeadingText = false,
-		BodyAttributes = new { @class = "leftAlignCell" },
-		FormatTemplate = @<text>
+			HasHeadingText = false,
+			BodyAttributes = new { @class = "leftAlignCell" },
+			FormatTemplate = @<text>
 				@if (!item.IsAllDayEvent) {
 					if (item.EventStartTime.HasValue && item.EventEndTime.HasValue) {
 						@item.EventDate.ToString(WebHelper.ShortTimePattern)
@@ -181,13 +181,13 @@
 					new AjaxOptions {
 						HttpMethod = "POST",
 						InsertionMode = InsertionMode.Replace,
-						UpdateTargetId = "divCalendarResults",
+						UpdateTargetId = "divCalendarResults1",
 						OnFailure = "__carrotOnAjaxRequestFailure"
 					})) {
 		@Html.AntiForgeryToken()
 
 		<div id="divDatePicker" class="calendarCenter1">
-			@Html.TextBox("CalendarInputDate", string.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", style = "width: 120px; display:inline; margin:1em", @class = "eventDateRegion form-control-sm" })
+			@Html.TextBox("CalendarInputDate1", string.Format(WebHelper.ShortDateFormatPattern, Model.MonthSelected), new { maxlength = "12", size = "16", style = "width: 120px; display:inline; margin:1em", @class = "eventDateRegion form-control-sm" })
 		</div>
 
 		<div class="calendarCenter2">
@@ -195,9 +195,9 @@
 				@cal.RenderBody()
 			</div>
 
-			<input type="button" class="calendarbutton" id="btnLast " value="«««««" onclick="PostPrior();" />
+			<input type="button" class="calendarbutton" id="btnLast1" value="«««««" onclick="PostPrior1();" />
 			&nbsp;&nbsp;&nbsp;
-			<input type="button" class="calendarbutton" id="btnNext " value="»»»»»" onclick="PostNext();" />
+			<input type="button" class="calendarbutton" id="btnNext1" value="»»»»»" onclick="PostNext1();" />
 		</div>
 
 		<div style="display:none;">
@@ -205,7 +205,7 @@
 			@Html.TextBoxFor(m => m.MonthPrior, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
 			@Html.TextBoxFor(m => m.MonthNext, WebHelper.ShortDateFormatPattern, new { maxlength = "12", size = "16" })
 			@Html.HiddenFor(m => m.EncodedSettings)
-			<input type="submit" id="btnSubmitCal" />
+			<input type="submit" id="btnSubmitCal1" />
 		</div>
 	}
 

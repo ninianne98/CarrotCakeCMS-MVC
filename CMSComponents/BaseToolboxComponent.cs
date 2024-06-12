@@ -1,5 +1,4 @@
 ﻿using Carrotware.CMS.Interface;
-using System;
 using System.Web;
 
 /*
@@ -17,7 +16,7 @@ namespace Carrotware.CMS.UI.Components {
 	public abstract class BaseToolboxComponent : WidgetBase, IHtmlString {
 
 		public virtual string ToHtmlString() {
-			return String.Empty;
+			return string.Empty;
 		}
 
 		public override bool EnableEdit {

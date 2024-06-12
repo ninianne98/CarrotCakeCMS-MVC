@@ -68,19 +68,14 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Models {
 				this.GenerateCss = settings.GenerateCss;
 				this.StyleSheetPath = settings.SpecifiedCssFile;
 			}
+
+			this.Persist(settings);
 		}
 
 		public CalendarViewSettings ConvertSettings(CalendarDisplaySettings obj) {
 			var settings = new CalendarViewSettings();
 
-			if (obj != null) {
-				settings.SiteID = obj.SiteID;
-				settings.IsBeingEdited = obj.IsBeingEdited;
-				settings.IsDynamicInserted = obj.IsDynamicInserted;
-				settings.AlternateViewFile = obj.AlternateViewFile;
-				settings.GenerateCss = obj.GenerateCss;
-				settings.SpecifiedCssFile = obj.SpecifiedCssFile;
-			}
+			settings.SettingsFromWidget(obj);
 
 			return settings;
 		}
@@ -88,12 +83,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Models {
 		public CalendarViewSettings ConvertSettings(CalendarSimpleSettings obj) {
 			var settings = new CalendarViewSettings();
 
-			if (obj != null) {
-				settings.SiteID = obj.SiteID;
-				settings.IsBeingEdited = obj.IsBeingEdited;
-				settings.IsDynamicInserted = obj.IsDynamicInserted;
-				settings.AlternateViewFile = obj.AlternateViewFile;
-			}
+			settings.SettingsFromWidget(obj);
 
 			settings.GenerateCss = false;
 			settings.SpecifiedCssFile = string.Empty;

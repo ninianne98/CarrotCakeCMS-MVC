@@ -250,8 +250,8 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		public ActionResult GalleryView(Guid id) {
 			var settings = new GallerySettings();
 
-			if (WidgetPayload is GallerySettings) {
-				settings = (GallerySettings)WidgetPayload;
+			if (this.WidgetPayload is GallerySettings) {
+				settings = (GallerySettings)this.WidgetPayload;
 				settings.LoadData();
 			}
 
