@@ -12,8 +12,8 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 	if (tinyBrowseWidth < 500) {
 		tinyBrowseWidth = 500;
 	}
-	if (tinyBrowseWidth > 800) {
-		tinyBrowseWidth = 800;
+	if (tinyBrowseWidth > 850) {
+		tinyBrowseWidth = 850;
 	}
 	if (tinyBrowseHeight < 100) {
 		tinyBrowseHeight = 100;
@@ -49,20 +49,28 @@ function cmsTinyMceInit(winWidth, winHeight, allowResize) {
 			{ text: 'Bash', value: 'bash' },
 			{ text: 'Shell', value: 'shell' },
 			{ text: 'Access log', value: 'accesslog' },
+			{ text: 'Log', value: 'log' },
 			{ text: 'JavaScript', value: 'javascript' },
 			{ text: 'TypeScript', value: 'typescript' },
 			{ text: 'CSS', value: 'css' },
+			{ text: 'LESS (css)', value: 'less' },
+			{ text: 'SASS (css)', value: 'scss' },
 			{ text: 'SQL', value: 'sql' },
 			{ text: 'PHP', value: 'php' },
 			{ text: 'Ruby', value: 'ruby' },
 			{ text: 'Python', value: 'python' },
 			{ text: 'PowerShell', value: 'powershell' },
+			{ text: 'Batch File', value: 'batch' },
 			{ text: 'Java', value: 'java' },
 			{ text: 'C', value: 'c' },
-			{ text: 'C#', value: 'csharp' },
-			{ text: 'VB', value: 'vbnet' },
-			{ text: 'ASP', value: 'vbscript-html' },
+			{ text: 'VB', value: 'visual-basic' },
 			{ text: 'VBS', value: 'vbscript' },
+			{ text: 'ASP', value: 'vbscript-html' },
+			{ text: 'VB.Net', value: 'vbnet' },
+			{ text: 'C#', value: 'csharp' },
+			{ text: 'C# ASP.Net', value: 'aspnet' },
+			{ text: 'C# Razor', value: 'cshtml' },
+			{ text: 'C-Like', value: 'clike' },
 			{ text: 'C++', value: 'cpp' }
 		],
 		resize: tinyBrowseResize,
