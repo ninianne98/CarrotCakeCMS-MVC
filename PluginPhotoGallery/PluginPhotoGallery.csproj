@@ -143,6 +143,10 @@
     <Content Include="Assets\prettyPhoto\light_square\loader.gif" />
     <Content Include="Assets\prettyPhoto\light_square\sprite.png" />
     <Content Include="Assets\prettyPhoto\prettyPhoto.css" />
+    <Content Include="Content\calendar.png" />
+    <Content Include="Content\SampleA.png" />
+    <Content Include="Content\SampleB.png" />
+    <Content Include="Content\SampleC.png" />
     <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />

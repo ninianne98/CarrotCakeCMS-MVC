@@ -25,6 +25,16 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 			LoadLists();
 		}
 
+		public EditPhotoGalleryModel(Guid siteId, Guid galleryId, string path)
+				: this() {
+			this.SiteID = siteId;
+			this.GalleryID = galleryId;
+			this.SelectedFolder = path;
+			this.RestrictFolder = !string.IsNullOrEmpty(this.SelectedFolder);
+
+			LoadLists();
+		}
+
 		public DateTime? Date { get; set; }
 		public bool RestrictDate { get; set; }
 
@@ -38,13 +48,13 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 
 		public GalleryGroup Gallery { get; set; }
 
-		public List<FileData> ImageFiles { get; set; }
-		public List<FileData> SiteImages { get; set; }
+		public List<FileData> ImageFiles { get; set; } = new List<FileData>();
+		public List<FileData> SiteImages { get; set; } = new List<FileData>();
 
-		public string SelectedFolder { get; set; }
-		public List<FileData> FileFolders { get; set; }
+		public string SelectedFolder { get; set; } = "/";
+		public List<FileData> FileFolders { get; set; } = new List<FileData>();
 
-		public string GalleryOrder { get; set; }
+		public string GalleryOrder { get; set; } = string.Empty;
 
 		public string SetSitePath(string sPath) {
 			return FileDataHelper.MakeFileFolderPath(sPath);
@@ -62,12 +72,15 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 				subdirs = null;
 			}
 
-			lstFolders.Add(new FileData { FileName = "[Entire Site]", FolderPath = "/", FileDate = DateTime.Now });
+			var now = DateTime.Now.Date;
+
+			lstFolders.Add(new FileData { FileName = "[Entire Site]", FolderPath = "/", FileDate = now });
+			lstFolders.Add(new FileData { FileName = "/images/", FolderPath = "/images/", FileDate = now });
 
 			if (subdirs != null) {
 				foreach (string theDir in subdirs) {
 					string w = FileDataHelper.MakeWebFolderPath(theDir);
-					lstFolders.Add(new FileData { FileName = w, FolderPath = w, FileDate = DateTime.Now });
+					lstFolders.Add(new FileData { FileName = w, FolderPath = w, FileDate = now });
 
 					string[] subdirs2;
 					try {
@@ -79,7 +92,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 					if (subdirs2 != null) {
 						foreach (string theDir2 in subdirs2) {
 							string w2 = FileDataHelper.MakeWebFolderPath(theDir2);
-							lstFolders.Add(new FileData { FileName = w2, FolderPath = w2, FileDate = DateTime.Now });
+							lstFolders.Add(new FileData { FileName = w2, FolderPath = w2, FileDate = now });
 						}
 					}
 				}
@@ -91,8 +104,10 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/bin/"));
 			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/obj/"));
 			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/views/"));
+			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/controllers/"));
+			lstFolders.RemoveAll(f => f.FileName.ToLower().StartsWith("/."));
 
-			this.FileFolders = lstFolders.OrderBy(f => f.FileName).ToList();
+			this.FileFolders = lstFolders.Distinct().OrderBy(f => f.FileName).ToList();
 		}
 
 		public void LoadGallery() {
@@ -112,28 +127,28 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 								   select fileHelper.GetFileInfo(g.GalleryImage, g.GalleryImage)).ToList();
 			}
 
-			SetSourceFiles(null, "/");
+			SetSourceFiles(null, this.SelectedFolder);
 		}
 
 		protected Dictionary<int, string> ParseGalleryImages() {
-			string sImageList = this.GalleryOrder ?? String.Empty;
-			Dictionary<int, string> lstImages = new Dictionary<int, string>();
+			string imageList = this.GalleryOrder ?? string.Empty;
+			var lstImages = new Dictionary<int, string>();
 
-			if (!String.IsNullOrEmpty(this.GalleryOrder)) {
-				sImageList = sImageList.Replace("\r\n", "\n");
-				sImageList = sImageList.Replace("\r", "\n");
-				var arrImageRows = sImageList.Split('\n');
+			if (!string.IsNullOrEmpty(this.GalleryOrder)) {
+				imageList = imageList.Replace("\r\n", "\n");
+				imageList = imageList.Replace("\r", "\n");
+				var arrImageRows = imageList.Split('\n');
 
-				int iRow = 0;
+				int row = 0;
 				foreach (string arrImgCell in arrImageRows) {
 					if (!string.IsNullOrEmpty(arrImgCell)) {
 						var w = arrImgCell.Split('\t');
 						var img = w[1];
 						if (!string.IsNullOrEmpty(img)) {
-							lstImages.Add(iRow, img);
+							lstImages.Add(row, img);
 						}
 					}
-					iRow++;
+					row++;
 				}
 			}
 
@@ -165,14 +180,14 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 			SetSourceFiles(dtFilter, sPath);
 		}
 
-		public void SetSourceFiles(DateTime? dtFilter, string sPath) {
+		public void SetSourceFiles(DateTime? dtFilter, string path) {
 			List<FileData> flsWorking = new List<FileData>();
 			List<FileData> fldrWorking = new List<FileData>();
 
-			fldrWorking = fileHelper.SpiderDeepFoldersFD(sPath);
+			fldrWorking = fileHelper.SpiderDeepFoldersFD(path);
 
-			if (Directory.Exists(FileDataHelper.MakeFileFolderPath(sPath))) {
-				var fls = fileHelper.GetFiles(sPath);
+			if (Directory.Exists(FileDataHelper.MakeFileFolderPath(path))) {
+				var fls = fileHelper.GetFiles(path);
 
 				var imgs = (from m in flsWorking.Union(fls).ToList()
 							where m.MimeType.StartsWith("image")
@@ -198,7 +213,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 				flsWorking = flsWorking.Where(x => x.FileDate >= dtFlt.AddDays(-14) && x.FileDate <= dtFlt.AddDays(14)).ToList();
 			}
 
-			this.SiteImages = flsWorking.OrderBy(x => x.FileName).OrderBy(x => x.FolderPath).ToList();
+			this.SiteImages = flsWorking.Distinct().OrderBy(x => x.FileName).OrderBy(x => x.FolderPath).ToList();
 		}
 
 		public void Save() {

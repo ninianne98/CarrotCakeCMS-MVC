@@ -41,6 +41,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			}
 		}
 
+		[HttpGet]
 		public ActionResult Index() {
 			var model = new PagedData<GalleryGroup>();
 			model.InitOrderBy(x => x.GalleryTitle, true);
@@ -68,6 +69,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			return View(model);
 		}
 
+		[HttpGet]
 		public ActionResult EditGallery(Guid id) {
 			return View("EditGallery", _helper.GalleryGroupGetByID(id));
 		}
@@ -91,6 +93,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			}
 		}
 
+		[HttpGet]
 		public ActionResult CreateGallery() {
 			return View("EditGallery", new GalleryGroup());
 		}
@@ -101,8 +104,9 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			return EditGallery(model);
 		}
 
+		[HttpGet]
 		public ActionResult EditGalleryPhotos(Guid id) {
-			EditPhotoGalleryModel model = new EditPhotoGalleryModel(this.SiteID, id);
+			EditPhotoGalleryModel model = new EditPhotoGalleryModel(this.SiteID, id, "/images/");
 
 			return View(model);
 		}
@@ -124,6 +128,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			}
 		}
 
+		[HttpGet]
 		public ActionResult GalleryDatabase() {
 			var lst = new List<string>();
 			var du = new DatabaseUpdate();
@@ -172,6 +177,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		[ValidateAntiForgeryToken]
 		[ValidateInput(false)]
 		public ActionResult EditImageMetaData(GalleryMetaData model) {
+			ValidateGalleryImage(model.GalleryImage);
 			GalleryMetaData meta = _helper.GalleryMetaDataGetByFilename(model.GalleryImage);
 
 			if (meta == null) {
@@ -191,11 +197,14 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		}
 
 		protected void ValidateGalleryImage(string imageFile) {
+			if (string.IsNullOrWhiteSpace(imageFile)) {
+				throw new Exception("Image path must be provided.");
+			}
 			if (imageFile.Contains("../") || imageFile.Contains(@"..\")) {
 				throw new Exception("Cannot use relative paths.");
 			}
 			if (imageFile.Contains(":")) {
-				throw new Exception("Cannot specify drive letters.");
+				throw new Exception("Cannot specify drive letters or other protocols.");
 			}
 			if (imageFile.Contains("//") || imageFile.Contains(@"\\")) {
 				throw new Exception("Cannot use UNC paths.");

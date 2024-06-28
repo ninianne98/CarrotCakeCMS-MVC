@@ -31,13 +31,35 @@
 
 		function doStyles() {
 			$("input:button, input:submit, input:reset, button").button();
-			$("input:button, input:submit, input:reset, button").addClass('btn');
-		}
+			$("input:button, input:submit, input:reset, button").each(function () {
+				if (!$(this).hasClass("btn")) {
+					$(this).addClass('btn btn-primary');
+				}
+				if ($(this).hasClass("btn-default")) {
+					$(this).addClass('btn-primary');
+				}
+			});
 
+			$(".dateRegion").each(function () {
+				$(this).datepicker({
+					changeMonth: true,
+					changeYear: true,
+					showOn: "both",
+					buttonImage: '/Content/calendar.png',
+					buttonImageOnly: true,
+					constrainInput: true,
+					beforeShow: function () {
+						setTimeout(function () {
+							$('.ui-datepicker').css('z-index', 15);
+						}, 0);
+					}
+				});
+			});
+		}
 	</script>
 
-	@* https://cdnjs.com/libraries/tinymce/6.8.3 *@
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js" integrity="sha512-VCEWnpOl7PIhbYMcb64pqGZYez41C2uws/M/mDdGPy+vtEJHd9BqbShE4/VNnnZdr7YCPOjd+CBmYca/7WWWCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	@* https://cdnjs.com/libraries/tinymce/6.8.4 *@
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.4/tinymce.min.js" integrity="sha512-DgTvLlVQBm8TJnlfqGDPm0re0QnTIv/frIzuARdI8zeZaYeFx+DgEIJhaD6kUCbcnn9wUYwFaMkxT52NdnYNDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 	<script type="text/javascript">
 		function cmsTinyMceInit(w, h, r) {
