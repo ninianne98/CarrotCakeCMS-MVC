@@ -183,6 +183,19 @@ namespace Carrotware.CMS.Core {
 				}
 
 				_db.SubmitChanges();
+
+				Guid oldId = oldWD != null ? oldWD.WidgetDataID : Guid.Empty;
+
+				var priorVersions = _db.carrot_WidgetDatas.Where(x => x.IsLatestVersion == true
+											&& x.WidgetDataID != oldId
+											&& x.WidgetDataID != wd.WidgetDataID
+											&& x.Root_WidgetID == wd.Root_WidgetID);
+
+				// make sure if there are any stray active rows besides the new one, mark them inactive
+				if (priorVersions != null && priorVersions.Any()) {
+					_db.carrot_WidgetDatas.BatchUpdate(priorVersions, p => new carrot_WidgetData { IsLatestVersion = false });
+					_db.SubmitChanges();
+				}
 			} else {
 				DeleteAll();
 			}

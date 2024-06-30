@@ -497,8 +497,8 @@ namespace Carrotware.CMS.Core {
 			return (from r in ctx.vw_carrot_Comments
 					orderby r.CreateDate descending
 					where r.SiteID == siteID
-						   && (spam == null || r.IsSpam == spam)
-						   && (approved == null || r.IsApproved == approved)
+						&& (spam == null || r.IsSpam == spam)
+						&& (approved == null || r.IsApproved == approved)
 						&& r.ContentTypeID == ContentPageType.GetIDByType(contentEntry)
 					select r);
 		}

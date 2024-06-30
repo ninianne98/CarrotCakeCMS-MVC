@@ -1,6 +1,7 @@
 ﻿using Carrotware.CMS.DBUpdater;
 using Carrotware.Web.UI.Components;
 using System;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 
@@ -17,6 +18,7 @@ using System.Web.Mvc;
 namespace Carrotware.CMS.Core {
 
 	public static class CmsRouteConstants {
+
 		public static class CmsController {
 			public static string Admin { get { return "CmsAdmin"; } }
 			public static string Home { get { return "Home"; } }
@@ -44,17 +46,12 @@ namespace Carrotware.CMS.Core {
 			if (requestedUri.EndsWith(".ashx")
 						|| requestedUri.ToLowerInvariant().Contains("rss.")
 						|| requestedUri.ToLowerInvariant().Contains("sitemap.")) {
-
-				if (requestedUri == SiteFilename.RssFeedUri.ToLowerInvariant()
-						|| requestedUri == SiteFilename.RssFeedUri.ToLowerInvariant().Replace(".ashx", ".axd")
-						|| requestedUri == SiteFilename.RssFeedUri.ToLowerInvariant().Replace(".ashx", ".xml")) {
+				if (UseDynamicFeed(SiteFilename.RssFeedUri, requestedUri)) {
 					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 					requestCtx.RouteData.Values["action"] = CmsRouteConstants.RssAction;
 					return base.GetHttpHandler(requestCtx);
 				}
-				if (requestedUri == SiteFilename.SiteMapUri.ToLowerInvariant()
-						|| requestedUri == SiteFilename.SiteMapUri.ToLowerInvariant().Replace(".ashx", ".axd")
-						|| requestedUri == SiteFilename.SiteMapUri.ToLowerInvariant().Replace(".ashx", ".xml")) {
+				if (UseDynamicFeed(SiteFilename.SiteMapUri, requestedUri)) {
 					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 					requestCtx.RouteData.Values["action"] = CmsRouteConstants.SiteMapAction;
 					return base.GetHttpHandler(requestCtx);
@@ -136,6 +133,22 @@ namespace Carrotware.CMS.Core {
 			}
 
 			return base.GetHttpHandler(requestCtx);
+		}
+
+		private bool UseDynamicFeed(string feedUri, string requestedUri) {
+			var uri = feedUri.ToLowerInvariant();
+			var reqUri = requestedUri.ToLowerInvariant();
+
+			var pathMatch = reqUri == uri.ToLowerInvariant()
+								|| reqUri == uri.Replace(".ashx", ".axd")
+								|| reqUri == uri.Replace(".ashx", ".xml");
+
+			// give precidence to actual xml
+			if (pathMatch && reqUri.EndsWith(".xml")) {
+				return File.Exists(HttpContext.Current.Server.MapPath(reqUri)) == false;
+			}
+
+			return pathMatch;
 		}
 	}
 }

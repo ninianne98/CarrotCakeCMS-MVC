@@ -424,6 +424,16 @@ namespace Carrotware.CMS.Core {
 
 				db.SubmitChanges();
 
+				var priorVersions = db.carrot_Contents.Where(x => x.IsLatestVersion == true
+								&& x.ContentID != c.ContentID
+								&& x.Root_ContentID == c.Root_ContentID);
+
+				// make sure if there are any stray active rows besides the new one, mark them inactive
+				if (priorVersions != null && priorVersions.Any()) {
+					db.carrot_Contents.BatchUpdate(priorVersions, p => new carrot_Content { IsLatestVersion = false });
+					db.SubmitChanges();
+				}
+
 				SaveTrackbacks();
 			}
 		}
