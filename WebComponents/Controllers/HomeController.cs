@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
-using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -47,14 +47,17 @@ namespace Carrotware.Web.UI.Components.Controllers {
 				throw new Exception("Cannot use relative paths.");
 			}
 			if (sImageUri.Contains(":")) {
-				throw new Exception("Cannot specify drive letters.");
+				throw new Exception("Cannot specify drive letters or other protocols.");
 			}
 			if (sImageUri.Contains("//") || sImageUri.Contains(@"\\")) {
 				throw new Exception("Cannot use UNC paths.");
 			}
 
-			if (iThumb < 5 || iThumb > 500) {
-				iThumb = 100;
+			if (iThumb < 5) {
+				iThumb = 5;
+			}
+			if (iThumb > 1024) {
+				iThumb = 1024;
 			}
 
 			Bitmap bmpThumb = new Bitmap(iThumb, iThumb);

@@ -50,19 +50,27 @@ namespace Carrotware.CMS.Interface {
 		#region Common Parser Routines
 
 		public string GetParmValue(string sKey) {
-			return ParmParser.GetParmValue(this.PublicParmValues, sKey);
+			return this.PublicParmValues.GetParmValue(sKey);
 		}
 
 		public string GetParmValue(string sKey, string sDefault) {
-			return ParmParser.GetParmValue(this.PublicParmValues, sKey, sDefault);
+			return this.PublicParmValues.GetParmValue(sKey, sDefault);
+		}
+
+		public string GetParmValue(string sKey, bool bDefault) {
+			return this.PublicParmValues.GetParmValue(sKey, bDefault);
+		}
+
+		public string GetParmValue(string sKey, int iDefault) {
+			return this.PublicParmValues.GetParmValue(sKey, iDefault);
 		}
 
 		public string GetParmValueDefaultEmpty(string sKey, string sDefault) {
-			return ParmParser.GetParmValueDefaultEmpty(this.PublicParmValues, sKey, sDefault);
+			return this.PublicParmValues.GetParmValueDefaultEmpty(sKey, sDefault);
 		}
 
 		public List<string> GetParmValueList(string sKey) {
-			return ParmParser.GetParmValueList(this.PublicParmValues, sKey);
+			return this.PublicParmValues.GetParmValueList(sKey);
 		}
 
 		#endregion Common Parser Routines

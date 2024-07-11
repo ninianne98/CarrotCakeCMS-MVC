@@ -66,8 +66,8 @@ namespace Carrotware.Web.UI.Components {
 			}
 		}
 
-		public int ThumbSize { get; set; }
-		public bool ScaleImage { get; set; }
+		public int ThumbSize { get; set; } = 150;
+		public bool ScaleImage { get; set; } = true;
 		public object ImageAttributes { get; set; }
 
 		public string ToHtmlString() {

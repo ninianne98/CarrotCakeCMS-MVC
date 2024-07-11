@@ -22,12 +22,12 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Models {
 		[Display(Name = "Pretty Photo Skin")]
 		public string PrettyPhotoSkin { get; set; }
 
-		public int ThumbSize { get; set; }
+		public int ThumbSize { get; set; } = 100;
 
 		public Guid GalleryID { get; set; }
 
 		public bool ShowHeading { get; set; }
 
-		public bool ScaleImage { get; set; }
+		public bool ScaleImage { get; set; } = true;
 	}
 }

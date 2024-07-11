@@ -132,9 +132,9 @@ namespace Carrotware.CMS.UI.Components {
 
 		public string Title { get; set; }
 
-		public int ThumbSize { get; set; }
+		public int ThumbSize { get; set; } = 100;
 
-		public bool ScaleImage { get; set; }
+		public bool ScaleImage { get; set; } = true;
 
 		public bool PerformURLResize { get; set; }
 
