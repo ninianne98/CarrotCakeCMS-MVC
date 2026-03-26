@@ -54,8 +54,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -215,8 +214,9 @@
     <Content Include="Scripts\jquery-3.7.1.slim.min.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.1.min.map" />
-    <Content Include="Scripts\jquery-ui-1.13.2.js" />
-    <Content Include="Scripts\jquery-ui-1.13.2.min.js" />
+    <Content Include="Scripts\jquery-ui-1-14.1.js" />
+    <Content Include="Scripts\jquery-ui-1.14.1.js" />
+    <Content Include="Scripts\jquery-ui-1.14.1.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

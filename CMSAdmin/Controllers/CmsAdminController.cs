@@ -213,7 +213,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[CmsAdminAuthorize]
 		public ActionResult UserAdd(RegisterViewModel model) {
 			if (ModelState.IsValid) {
-				SecurityData sd = new SecurityData();
+				var sd = new SecurityData();
 				ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
 
 				ExtendedUserData exUser = null;
@@ -667,7 +667,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (ModelState.IsValid) {
 				SignOut();
 
-				SecurityData sd = new SecurityData();
+				var sd = new SecurityData();
 				ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
 
 				ExtendedUserData exUser = null;
@@ -758,9 +758,67 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		[AllowAnonymous]
-		public ActionResult ResetPassword(string code) {
-			//return code == null ? View("Error") : View();
-			return View();
+		public ActionResult ResetPassword(string key) {
+			// alt parms: ResetPassword(string userId, string email, string token)
+			var user = new ApplicationUser();
+			var sd = new SecurityData();
+			var model = new ResetPasswordViewModel();
+			string userId = "";
+			string email = "";
+			string token = "";
+
+			if (string.IsNullOrEmpty(key)) {
+				model = new ResetPasswordViewModel {
+					Token = token,
+					ValidToken = string.IsNullOrEmpty(token) == false
+				};
+			}
+
+			if (!string.IsNullOrEmpty(key)) {
+				model = sd.DecodeAuthKey(key);
+				token = model.Token;
+				email = model.Email;
+				if (string.IsNullOrEmpty(email) == false) {
+					user = securityHelper.UserManager.FindByEmail(email);
+				}
+			} else {
+				if (string.IsNullOrEmpty(token) == false && token.Length > 20) {
+					if (string.IsNullOrEmpty(email) == false) {
+						user = securityHelper.UserManager.FindByEmail(email);
+					}
+					if (string.IsNullOrEmpty(userId) == false) {
+						user = securityHelper.UserManager.FindById(userId);
+					}
+					if (user != null) {
+						model.ValidToken = !string.IsNullOrEmpty(user.Email) && user.Email.Contains("@");
+					} else {
+						model.ValidToken = false;
+					}
+				}
+			}
+
+			if (model.ValidToken == false || user == null) {
+				model.ValidToken = false;
+				user = null;
+				ModelState.AddModelError(string.Empty, "Reset link is not valid.  Please make a new password reset request.");
+			}
+
+			if (user != null && model.ValidToken) {
+				userId = user.Id;
+				email = user.Email;
+
+				if (user != null) {
+					model.ValidToken = sd.ValidatePasswordToken(user, model.Token);
+					if (model.ValidToken == false) {
+						ModelState.AddModelError(string.Empty, "Reset link is no longer valid.  Please make a new password reset request.");
+					} else {
+						model.Email = user.Email ?? string.Empty;
+					}
+				}
+			}
+
+			Helper.HandleErrorDict(ModelState);
+			return View(model);
 		}
 
 		[HttpPost]
@@ -768,27 +826,36 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model) {
 			if (!ModelState.IsValid) {
+				model.ValidToken = string.IsNullOrEmpty(model.Token) == false;
 				Helper.HandleErrorDict(ModelState);
 
 				return View(model);
 			}
 
-			//var user = await UserManager.FindByNameAsync(model.Email);
 			var user = await securityHelper.UserManager.FindByEmailAsync(model.Email);
 			if (user == null) {
 				// Don't reveal that the user does not exist
 				return RedirectToAction(SiteActions.ResetPasswordConfirmation);
 			}
-			//var result = await manage.UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-			SecurityData sd = new SecurityData();
-			var result = sd.ResetPassword(user, model.Code, model.Password);
+
+			var sd = new SecurityData();
+			model.ValidToken = user != null && sd.ValidatePasswordToken(user, model.Token);
+
+			var result = sd.ResetPassword(user, model.Token, model.Password);
 			if (result.Succeeded) {
 				return RedirectToAction(SiteActions.ResetPasswordConfirmation);
 			}
-			AddErrors(result);
 
+			if (model.ValidToken == false) {
+				ModelState.AddModelError(string.Empty, "Reset link is no longer valid.  Please make a new password reset request.");
+			}
+
+			AddErrors(result);
 			Helper.HandleErrorDict(ModelState);
-			return View();
+
+			model.Password = string.Empty;
+			model.ConfirmPassword = string.Empty;
+			return View(model);
 		}
 
 		[AllowAnonymous]
@@ -825,7 +892,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					// Don't reveal that the user does not exist or is not confirmed
 					return View("ForgotPasswordConfirmation");
 				} else {
-					SecurityData sd = new SecurityData();
+					var sd = new SecurityData();
 					sd.ResetPassword(model.Email);
 					return RedirectToAction(SiteActions.ForgotPasswordConfirmation);
 				}

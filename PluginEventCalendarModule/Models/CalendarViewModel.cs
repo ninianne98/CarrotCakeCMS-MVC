@@ -1,6 +1,6 @@
-﻿using Carrotware.CMS.Core;
+﻿using CarrotCake.CMS.Plugins.EventCalendarModule.Code;
+using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface;
-using CarrotCake.CMS.Plugins.EventCalendarModule.Code;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +13,8 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Models {
 			this.EncodedSettings = string.Empty;
 			this.GenerateCss = true;
 			this.MonthSelected = SiteData.CurrentSite.Now.Date;
-			this.MonthNext = this.MonthSelected.AddMonths(1).AddMinutes(1);
-			this.MonthPrior = this.MonthSelected.AddMonths(-1).AddMinutes(-1);
+			this.MonthNext = CalendarHelper.GetEndOfMonthByDate(this.MonthSelected).AddDays(7);
+			this.MonthPrior = CalendarHelper.GetFirstOfMonthByDate(this.MonthSelected).AddDays(-7);
 			this.MonthDates = new List<vw_carrot_CalendarEvent>();
 		}
 
@@ -29,12 +29,14 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Models {
 		public List<carrot_CalendarEventCategory> Colors { get; set; }
 
 		public void LoadData(Guid siteid, bool activeOnly) {
-			DateTime dtStart = new DateTime(this.MonthSelected.Year, this.MonthSelected.Month, 1).Date.AddSeconds(-10);
-			DateTime dtEnd = dtStart.AddMonths(1).AddSeconds(10);
+			var first = CalendarHelper.GetFirstOfMonthByDate(this.MonthSelected).Date;
 
-			this.MonthSelected = dtStart.AddMinutes(5).Date;
-			this.MonthNext = this.MonthSelected.AddMonths(1);
-			this.MonthPrior = this.MonthSelected.AddMonths(-1);
+			DateTime dtStart = CalendarHelper.GetFirstOfMonthByDate(first).AddMinutes(-15);
+			DateTime dtEnd = CalendarHelper.GetEndOfMonthByDate(first).AddMinutes(15);
+
+			this.MonthSelected = first.Date;
+			this.MonthNext = dtEnd.AddDays(3);
+			this.MonthPrior = dtStart.AddDays(-3);
 
 			var events = CalendarHelper.GetDisplayEvents(siteid, dtStart, dtEnd, -1, activeOnly).ToList();
 

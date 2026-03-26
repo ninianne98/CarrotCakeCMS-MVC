@@ -508,5 +508,14 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 
 			return ts;
 		}
+
+		public static DateTime GetEndOfMonthByDate(DateTime month) {
+			int days = DateTime.DaysInMonth(month.Year, month.Month);
+			return new DateTime(month.Year, month.Month, days, 23, 59, 59);
+		}
+
+		public static DateTime GetFirstOfMonthByDate(DateTime month) {
+			return new DateTime(month.Year, month.Month, 1);
+		}
 	}
 }

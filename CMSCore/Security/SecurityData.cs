@@ -5,9 +5,14 @@ using Carrotware.Web.UI.Components;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Caching;
 
@@ -22,9 +27,7 @@ using System.Web.Caching;
 */
 
 namespace Carrotware.CMS.Core {
-
 	public class SecurityData {
-
 		public SecurityData() { }
 
 		public static UserRole FindRole(string roleName) {
@@ -560,14 +563,38 @@ namespace Carrotware.CMS.Core {
 			return result;
 		}
 
-		public IdentityResult ResetPassword(ApplicationUser user, string code, string password) {
+		public IdentityResult ResetPassword(ApplicationUser user, string token, string password) {
 			IdentityResult result = new IdentityResult();
 
 			if (user != null && !string.IsNullOrEmpty(user.Id)) {
 				using (var securityHelper = new SecurityHelper()) {
-					result = securityHelper.UserManager.ResetPassword(user.Id, code, password);
+					result = securityHelper.UserManager.ResetPassword(user.Id, token, password);
 
 					return result;
+				}
+			}
+
+			return result;
+		}
+
+		public bool ValidatePasswordToken(ApplicationUser user, string token) {
+			if (user == null) { return false; }
+
+			return ValidatePasswordToken(user.Id, token);
+		}
+
+		public bool ValidatePasswordToken(string userId, string token) {
+			if (userId == null || token == null) { return false; }
+
+			var result = false;
+			if (userId != null && !string.IsNullOrEmpty(userId)) {
+				try {
+					using (var securityHelper = new SecurityHelper()) {
+						var task = Task.Run(async () => await securityHelper.UserManager.VerifyUserTokenAsync(userId, "ResetPassword", token));
+						result = task.Result;
+					}
+				} catch {
+					result = false;
 				}
 			}
 
@@ -585,7 +612,7 @@ namespace Carrotware.CMS.Core {
 		public bool ResetPassword(string resetUri, string email) {
 			HttpRequest request = HttpContext.Current.Request;
 			ApplicationUser user = null;
-			string code = string.Empty;
+			string token = string.Empty;
 
 			resetUri = resetUri.TrimPathSlashes();
 
@@ -594,7 +621,7 @@ namespace Carrotware.CMS.Core {
 					user = securityHelper.UserManager.FindByEmail(email);
 
 					if (user != null) {
-						code = securityHelper.UserManager.GeneratePasswordResetToken(user.Id);
+						token = securityHelper.UserManager.GeneratePasswordResetToken(user.Id);
 					}
 				}
 			}
@@ -614,7 +641,14 @@ namespace Carrotware.CMS.Core {
 
 				httpHost = string.Format("{0}{1}", hostPrefix, hostName).ToLowerInvariant();
 
-				var resetTokenUrl = string.Format("{0}/{1}?userId={2}&code={3}", httpHost, resetUri, user.Id, HttpUtility.UrlEncode(code));
+				var resetTokenUrl = string.Empty;
+				var authKey = EncodeAuthKey(user, token);
+
+				if (string.IsNullOrEmpty(authKey)) {
+					resetTokenUrl = string.Format("{0}/{1}?userId={2}&token={3}", httpHost, resetUri, HttpUtility.UrlEncode(user.Id), HttpUtility.UrlEncode(token));
+				} else {
+					resetTokenUrl = string.Format("{0}/{1}?key={2}", httpHost, resetUri, HttpUtility.UrlEncode(authKey));
+				}
 
 				sbBody.Replace("{%%UserName%%}", user.UserName);
 				sbBody.Replace("{%%SiteURL%%}", httpHost);
@@ -637,6 +671,145 @@ namespace Carrotware.CMS.Core {
 			} else {
 				return false;
 			}
+		}
+
+		private string GetAesKey() {
+			var key1 = SiteData.CurrentSiteExists ? SiteData.CurrentSiteID.ToString().Replace("-", "").ToLowerInvariant().Substring(0, 18) : "Key1_PlaceholderValue";
+			var key2 = SiteData.CurrentSiteExists ? CMSConfigHelper.DomainName : "Key2_PlaceholderValue";
+
+			return (key1 + key2).PadRight(12, '0').ToLowerInvariant().Substring(0, 24);
+		}
+
+		private byte[] Compress(string text) {
+			byte[] buffer = Encoding.UTF8.GetBytes(text);
+
+			using (var ms = new MemoryStream()) {
+				using (var zip = new GZipStream(ms, CompressionMode.Compress)) {
+					zip.Write(buffer, 0, buffer.Length);
+				}
+				return ms.ToArray();
+			}
+		}
+
+		private string Decompress(byte[] data) {
+			using (var ms = new MemoryStream(data)) {
+				using (var zip = new GZipStream(ms, CompressionMode.Decompress)) {
+					using (var sr = new StreamReader(zip, Encoding.UTF8)) {
+						return sr.ReadToEnd();
+					}
+				}
+			}
+		}
+
+		public string EncryptString(string aesKey, string rawValue) {
+			byte[] key = Encoding.UTF8.GetBytes(aesKey.PadRight(32, 'Z').Substring(0, 24));
+			byte[] compressedValue = Compress(rawValue);
+
+			using (var aes = Aes.Create()) {
+				aes.Key = key;
+				aes.GenerateIV();
+				byte[] iv = aes.IV;
+
+				using (var ms = new MemoryStream()) {
+					ms.Write(iv, 0, iv.Length);
+
+					using (var encryptor = aes.CreateEncryptor())
+					using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write)) {
+						cs.Write(compressedValue, 0, compressedValue.Length);
+						cs.FlushFinalBlock();
+					}
+
+					return Convert.ToBase64String(ms.ToArray());
+				}
+			}
+		}
+
+		public string DecryptString(string aesKey, string encodedValue) {
+			byte[] key = Encoding.UTF8.GetBytes(aesKey.PadRight(32, 'Z').Substring(0, 24));
+			var model = new ResetPasswordViewModel();
+			byte[] decodedB64 = Convert.FromBase64String(encodedValue);
+			byte[] decryptedData = new byte[0];
+
+			using (var aes = Aes.Create()) {
+				aes.Key = key;
+				int ivLength = aes.BlockSize / 8;
+
+				byte[] iv = new byte[ivLength];
+				byte[] cipherData = new byte[decodedB64.Length - ivLength];
+
+				Array.Copy(decodedB64, 0, iv, 0, ivLength);
+				Array.Copy(decodedB64, ivLength, cipherData, 0, cipherData.Length);
+
+				using (var decryptor = aes.CreateDecryptor(aes.Key, iv))
+				using (var msIn = new MemoryStream(cipherData))
+				using (var cs = new CryptoStream(msIn, decryptor, CryptoStreamMode.Read))
+				using (var msOut = new MemoryStream()) {
+					cs.CopyTo(msOut);
+					decryptedData = msOut.ToArray();
+				}
+			}
+
+			var decodedValue = Decompress(decryptedData);
+
+			return decodedValue;
+		}
+
+		public string EncodeAuthKey(ApplicationUser user, string token) {
+			string key = GetAesKey();
+			string utcTimestamp = DateTime.UtcNow.ToString("s");
+
+			if (user != null) {
+				var stamp = user.SecurityStamp;
+				utcTimestamp = EncryptString(stamp, utcTimestamp);
+			}
+
+			string authString = string.Format("{0}|{1}|{2}|{3}", user.Id, user.Email, utcTimestamp, token);
+
+			return EncryptString(key, authString);
+		}
+
+		public ResetPasswordViewModel DecodeAuthKey(string encodedValue) {
+			var model = new ResetPasswordViewModel();
+			string key = GetAesKey();
+			var decodedValue = DecryptString(key, encodedValue);
+
+			model.ValidToken = false;
+
+			// string authString = string.Format("{0}|{1}|{2}|{3}", user.Id, user.Email, utcTimestamp, token);
+			if (decodedValue.Contains('|')) {
+				var parms = decodedValue.Split('|');
+				if (parms.Length == 4) {
+					var userId = parms[0];
+					var email = parms[1];
+					var utcTimestamp = parms[2];
+					model.Token = parms[3];
+
+					double hrDelta = 24;
+					DateTime utcDate = DateTime.MinValue;
+					var user = GetUserByID(userId);
+
+					try {
+						if (user != null) {
+							var stamp = user.SecurityStamp;
+							utcTimestamp = DecryptString(stamp, utcTimestamp);
+							utcDate = DateTime.Parse(utcTimestamp, null, System.Globalization.DateTimeStyles.RoundtripKind);
+							hrDelta = Math.Abs((DateTime.UtcNow - utcDate).TotalHours);
+						}
+					} catch (Exception ex) {
+						hrDelta = 48;
+					}
+
+					model.ValidToken = hrDelta <= 12 && user != null && !string.IsNullOrEmpty(user.Email) && email.Contains("@")
+								&& user.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase)
+								&& ValidatePasswordToken(user, model.Token);
+
+					if (user != null && model.ValidToken) {
+						model.Email = user.Email ?? string.Empty;
+					}
+				}
+			}
+
+			return model;
 		}
 
 		public static bool RemoveUserFromRole(string userName, string roleName) {
@@ -775,6 +948,5 @@ namespace Carrotware.CMS.Core {
 			//int index = rand.Next(sourceString.Length - 1);
 			//return sourceString.ToCharArray()[index];
 		}
-
 	}
 }
