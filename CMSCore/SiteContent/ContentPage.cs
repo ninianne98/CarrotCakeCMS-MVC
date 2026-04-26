@@ -92,16 +92,16 @@ namespace Carrotware.CMS.Core {
 				this.ContentID = c.ContentID;
 				this.Parent_ContentID = c.Parent_ContentID;
 				this.IsLatestVersion = c.IsLatestVersion;
-				this.TitleBar = c.TitleBar;
-				this.NavMenuText = c.NavMenuText;
-				this.PageHead = c.PageHead;
+				this.TitleBar = c.TitleBar ?? string.Empty;
+				this.NavMenuText = c.NavMenuText ?? string.Empty;
+				this.PageHead = c.PageHead ?? string.Empty;
 				this.PageText = c.PageText;
 				this.LeftPageText = c.LeftPageText;
 				this.RightPageText = c.RightPageText;
 				this.NavOrder = c.NavOrder;
 				this.EditUserId = c.EditUserId;
 				this.CreditUserId = c.CreditUserId;
-				this.TemplateFile = c.TemplateFile;
+				this.TemplateFile = c.TemplateFile ?? SiteData.DefaultTemplateBWFilename;
 				this.Thumbnail = c.PageThumbnail;
 
 				if (string.IsNullOrEmpty(this.PageSlug) && this.ContentType == ContentPageType.PageType.BlogEntry) {
