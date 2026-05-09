@@ -27,23 +27,23 @@ function initFindUsersMethod(hiddenField, searchBox, methodName) {
 }
 
 function loadResults(data, response) {
-	response($.map(data.d, function (item) {
+	response($.map(data, function (item) {
 		return {
 			value: item.UserName + " (" + item.Email + ")",
 			id: item.UserId
 		}
 	}));
 
-	if (data.d.length < 1) {
+	if (data.length < 1) {
 		$(resFld).attr('style', 'color: #990000;');
 		$(resFld).text('  No Results  ');
 		hasResults = false;
 	} else {
 		$(resFld).attr('style', 'color: #009900;');
-		if (data.d.length == 1) {
-			$(resFld).text('  ' + data.d.length + ' Result  ');
+		if (data.length == 1) {
+			$(resFld).text('  ' + data.length + ' Result  ');
 		} else {
-			$(resFld).text('  ' + data.d.length + ' Results  ');
+			$(resFld).text('  ' + data.length + ' Results  ');
 		}
 		hasResults = true;
 	}
@@ -75,11 +75,10 @@ function bindBehavior() {
 			var search = MakeStringSafe(request.term);
 
 			$.ajax({
-				url: webMthd,
-				type: 'POST',
+				url: webMthd + "?searchTerm=" + encodeURIComponent(search),
+				type: 'GET',
 				dataType: 'json',
 				contentType: "application/json; charset=utf-8",
-				data: JSON.stringify({ searchTerm: search }),
 				dataFilter: function (data) { return data; }
 			}).done(function (data, status, xhr) {
 				loadResults(data, response);

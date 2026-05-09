@@ -312,7 +312,10 @@ namespace Carrotware.CMS.UI.Components {
 
 		public static string WebServiceAddress {
 			get {
-				return VirtualPathUtility.ToAbsolute("~/Assets/Admin/CMS.asmx");
+				var config = CarrotCakeConfig.GetConfig();
+				var adminFolder = config.MainConfig.AdminFolderPath.TrimPathSlashes();
+
+				return adminFolder + "-api";
 			}
 		}
 

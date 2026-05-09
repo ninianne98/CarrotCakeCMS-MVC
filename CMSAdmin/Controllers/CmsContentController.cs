@@ -562,7 +562,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 							partialName = settings.PostPartialNameFailure;
 						}
 
-						if (user.LockoutEndDateUtc.HasValue && user.LockoutEndDateUtc.Value < DateTime.UtcNow) {
+						if (user.IsExpiredLockout) {
 							user.LockoutEndDateUtc = null;
 							user.AccessFailedCount = 1;
 							securityHelper.UserManager.Update(user);

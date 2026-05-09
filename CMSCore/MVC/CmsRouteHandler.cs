@@ -21,6 +21,7 @@ namespace Carrotware.CMS.Core {
 
 		public static class CmsController {
 			public static string Admin { get { return "CmsAdmin"; } }
+			public static string AdminApi { get { return "CmsAdminApi"; } }
 			public static string Home { get { return "Home"; } }
 			public static string Content { get { return "CmsContent"; } }
 			public static string AjaxForms { get { return "CmsAjaxForms"; } }

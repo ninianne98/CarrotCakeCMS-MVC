@@ -31,9 +31,8 @@
 			var myPage = MakeStringSafe(thePage);
 
 			$.ajax({
-				type: "POST",
-				url: webMthd,
-				data: JSON.stringify({ TheSlug: myPage, ItemID: thePageID }),
+				type: "GET",
+				url: webMthd + "?TheSlug=" + encodeURIComponent(myPage) + "&ItemID=" + encodeURIComponent(thePageID),
 				contentType: "application/json; charset=utf-8",
 				dataType: "json"
 			}).done(editSlugCallback)
@@ -50,9 +49,9 @@
 				var mySlug = MakeStringSafe(theText);
 
 				$.ajax({
-					type: "POST",
-					url: webMthd,
-					data: JSON.stringify({ TheSlug: mySlug }),
+					type: "GET",
+					url: webMthd + "?TheSlug=" + encodeURIComponent(mySlug),
+					// JSON.stringify({ TheSlug: mySlug }),
 					contentType: "application/json; charset=utf-8",
 					dataType: "json"
 				}).done(editSlug)
@@ -68,12 +67,12 @@
 		});
 
 		function editSlugCallback(data, status) {
-			if (data.d != "FAIL" && data.d != "OK") {
-				cmsAlertModal(data.d);
+			if (data != "FAIL" && data != "OK") {
+				cmsAlertModal(data);
 			}
 
 			var act = true;
-			if (data.d == "OK") {
+			if (data == "OK") {
 				act = false;
 			}
 
@@ -81,10 +80,10 @@
 		}
 
 		function editSlug(data, status) {
-			if (data.d == "FAIL") {
-				cmsAlertModal(data.d);
+			if (data == "FAIL") {
+				cmsAlertModal(data);
 			} else {
-				$(tValidSlug).val(data.d);
+				$(tValidSlug).val(data);
 			}
 
 			CheckSlug();
@@ -155,7 +154,7 @@
 		function updateHeartbeat(data, status) {
 			var hb = $('#cmsHeartBeat');
 			hb.empty().append('HB:  ');
-			hb.append(data.d);
+			hb.append(data);
 		}
 
 		$(document).ready(function () {

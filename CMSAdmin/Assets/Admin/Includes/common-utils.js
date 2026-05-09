@@ -242,8 +242,8 @@ function cmsAjaxFailed(request) {
 }
 
 function cmsAjaxGeneralCallback(data, status) {
-	if (data.d != "OK") {
-		cmsAlertModal(data.d);
+	if (data != "OK") {
+		cmsAlertModal(data);
 	}
 }
 
@@ -330,6 +330,27 @@ function cmsAlertModalSmallBtns(request, buttonsOpts) {
 }
 function cmsAlertModalLargeBtns(request, buttonsOpts) {
 	cmsAlertModalHeightWidthBtns(request, 550, 700, buttonsOpts);
+}
+
+function cmsOpenPatternInfo() {
+	var msg = '<p>Valid placeholders for the <b>Site Titlebar Pattern</b> field: </p>';
+	msg += '<p>';
+	msg += ' [[CARROT_SITENAME]] :  Site Name<br>';
+	msg += ' [[CARROT_SITE_NAME]] :  Site Name<br>';
+	msg += ' [[CARROT_SITE_SLOGAN]] :  Site Tagline <br>';
+	msg += ' [[CARROT_PAGE_TITLEBAR]] :  Page - titlebar<br>';
+	msg += ' [[CARROT_PAGE_PAGEHEAD]] :  Page - page head<br>';
+	msg += ' [[CARROT_PAGE_NAVMENUTEXT]] :  Page - navigation<br>';
+	msg += ' [[CARROT_PAGE_DATE_GOLIVE]] :  Page - release date<br>';
+	msg += ' [[CARROT_PAGE_DATE_EDIT]] :  Page - retire date';
+	msg += '</p>';
+	msg += '<p>';
+	msg += ' [[CARROT_PAGE_DATE_GOLIVE:*]] and [[CARROT_PAGE_DATE_EDIT:*]]';
+	msg += '</p>';
+	msg += '<p>These two date placeholders support standard date format markup such as:<br>';
+	msg += '[[CARROT_SITE_NAME]]: [[CARROT_PAGE_TITLEBAR]] ([[CARROT_PAGE_DATE_GOLIVE:MMMM d, yyyy]])</p>';
+
+	cmsAlertModalLarge(msg);
 }
 
 function cmsOpenPage(theURL) {
@@ -746,7 +767,7 @@ $(document).ajaxError(function (event, jqxhr, settings, exception) {
 //=======================
 
 var cmsAdminUri = cmsAdminBasePath;  //  "/c3-admin/";
-var cmsWebSvc = cmsWebServiceApi;  // "/Assets/Admin/CMS.asmx";
+var cmsWebSvc = cmsWebServiceApi;  // "/api/c3-admin";
 
 var fldNameRet = '';
 

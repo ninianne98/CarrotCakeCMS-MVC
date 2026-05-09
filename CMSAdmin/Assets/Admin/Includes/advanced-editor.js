@@ -3,15 +3,14 @@
 }
 //var $j = jQuery.noConflict();
 
-
 var cmsIsPageLocked = true;
 
 function cmsSetPageStatus(stat) {
 	cmsIsPageLocked = stat;
 }
 
-var cmsWebSvc = cmsWebServiceApi;  // "/Assets/Admin/CMS.asmx";
-var cmsAdminUri = cmsAdminBasePath;  // "/c3-admin/";
+var cmsAdminUri = cmsAdminBasePath;  //  "/c3-admin/";
+var cmsWebSvc = cmsWebServiceApi;  // "/api/c3-admin";
 var thisPage = ""; // used in escaped fashion
 var thisPageNav = "";  // used non-escaped (redirects)
 var thisPageNavSaved = "";  // used non-escaped (redirects)
@@ -19,8 +18,8 @@ var thisPageID = "";
 var cmsTimeTick = 9999;
 
 function cmsGetAdminPath() {
-	cmsWebSvc = cmsWebServiceApi;
 	cmsAdminUri = cmsAdminBasePath;
+	cmsWebSvc = cmsWebServiceApi;
 }
 
 function cmsSetServiceParms(serviceURL, pagePath, pageID) {
@@ -29,6 +28,10 @@ function cmsSetServiceParms(serviceURL, pagePath, pageID) {
 	thisPage = cmsMakeStringSafe(pagePath);
 	thisPageID = pageID;
 
+	cmsSetTick();
+}
+
+function cmsSetTick() {
 	var d = new Date();
 	cmsTimeTick = d.getTime();
 }
@@ -243,10 +246,13 @@ function cmsEditHB() {
 
 		var webMthd = cmsWebSvc + "/RecordHeartbeat";
 
+		var dataObj = {};
+		dataObj["PageID"] = thisPageID;
+
 		$.ajax({
 			type: "POST",
 			url: webMthd,
-			data: JSON.stringify({ PageID: thisPageID }),
+			data: JSON.stringify(dataObj),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json"
 		}).done(cmsUpdateHeartbeat)
@@ -261,10 +267,17 @@ function cmsSaveToolbarPosition() {
 
 	var webMthd = cmsWebSvc + "/RecordEditorPosition";
 
+	var dataObj = {};
+	dataObj["ToolbarState"] = cmsMnuVis.toString();
+	dataObj["ToolbarMargin"] = cmsToolbarMargin.toString();
+	dataObj["ToolbarScroll"] = scrollTopPos.toString();
+	dataObj["WidgetScroll"] = scrollWTopPos.toString();
+	dataObj["SelTabID"] = tabID.toString();
+
 	$.ajax({
 		type: "POST",
 		url: webMthd,
-		data: JSON.stringify({ ToolbarState: cmsMnuVis, ToolbarMargin: cmsToolbarMargin, ToolbarScroll: scrollTopPos, WidgetScroll: scrollWTopPos, SelTabID: tabID }),
+		data: JSON.stringify(dataObj),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json"
 	}).done(cmsAjaxGeneralCallback)
@@ -309,8 +322,9 @@ function cmsSaveGenericContent(val, key) {
 function cmsPreviewTemplate2() {
 	var tmpl = $(cmsTemplateListPreviewer).val();
 	tmpl = cmsMakeStringSafe(tmpl);
+	cmsSetTick();
 
-	var srcURL = cmsTemplatePreview + "?" + cmsTemplatePreviewQS + "=" + tmpl;
+	var srcURL = cmsTemplatePreview + "?" + cmsTemplatePreviewQS + "=" + tmpl + "&ts=" + cmsTimeTick;
 
 	var editIFrame = $('#cmsFrameEditorPreview');
 	$(editIFrame).attr('src', srcURL);
@@ -343,8 +357,9 @@ function cmsWidePreview(width) {
 function cmsPreviewTemplate() {
 	var tmplReal = $(cmsTemplateDDL).val();
 	tmpl = cmsMakeStringSafe(tmplReal);
+	cmsSetTick();
 
-	cmsLaunchWindowOnly(cmsTemplatePreview + "?" + cmsTemplatePreviewQS + "=" + tmpl);
+	cmsLaunchWindowOnly(cmsTemplatePreview + "?" + cmsTemplatePreviewQS + "=" + tmpl + "&ts=" + cmsTimeTick);
 
 	var editFrame = $('#cmsModalFrame');
 
@@ -488,10 +503,14 @@ function cmsUpdateWidgets() {
 
 		val = cmsMakeStringSafe(val);
 
+		var dataObj = {};
+		dataObj["WidgetAddition"] = val;
+		dataObj["ThisPage"] = thisPageID;
+
 		$.ajax({
 			type: "POST",
 			url: webMthd,
-			data: JSON.stringify({ WidgetAddition: val, ThisPage: thisPageID }),
+			data: JSON.stringify(dataObj),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json"
 		}).done(cmsSaveWidgetsCallback)
@@ -582,38 +601,38 @@ function cmsApplyChanges() {
 function cmsUpdateHeartbeat(data, status) {
 	var hb = $('#cmsHeartBeat');
 	hb.empty().append('HB:  ');
-	hb.append(data.d);
+	hb.append(data);
 	//cmsSpinnerShort();
 }
 
 function cmsSaveContentCallback(data, status) {
-	if (data.d == "OK") {
+	if (data == "OK") {
 		cmsSpinnerShort();
 		cmsDirtyPageRefresh();
 	} else {
-		cmsAlertModal(data.d);
+		cmsAlertModal(data);
 	}
 }
 
 function cmsAjaxGeneralCallback(data, status) {
-	if (data.d != "OK") {
-		cmsAlertModal(data.d);
+	if (data != "OK") {
+		cmsAlertModal(data);
 	}
 }
 
 function cmsSaveWidgetsCallback(data, status) {
-	if (data.d == "OK") {
+	if (data == "OK") {
 		cmsSpinnerShort();
 		cmsDirtyPageRefresh();
 	} else {
-		cmsAlertModal(data.d);
+		cmsAlertModal(data);
 	}
 
 	cmsWidgetUpdateInProgress = false;
 }
 
 function cmsSavePageCallback(data, status) {
-	if (data.d == "OK") {
+	if (data == "OK") {
 		cmsSpinnerShort();
 		cmsMakeOKToLeave();
 		cmsNotifySaved();
@@ -621,7 +640,7 @@ function cmsSavePageCallback(data, status) {
 		iCount = 10;
 		cmsCountdownWindow();
 	} else {
-		cmsAlertModal(data.d);
+		cmsAlertModal(data);
 	}
 }
 
@@ -700,6 +719,7 @@ function cmsCancelEdit() {
 	cmsFixDialog('CMScancelconfirmmsg');
 	return false;
 }
+
 function cmsAjaxFailedSwallow(request) {
 	var s = "";
 	if (request.status > 0) {
@@ -1277,6 +1297,7 @@ function cmsCloseModalWin() {
 function cmsDirtyPageRefresh() {
 	cmsSaveToolbarPosition();
 	cmsMakeOKToLeave();
+	cmsSetTick();
 	window.setTimeout('cmsMakeOKToLeave();', 500);
 	window.setTimeout('cmsMakeOKToLeave();', 700);
 	window.setTimeout("location.href = \'" + thisPageNav + "?carrotedit=true&carrottick=" + cmsTimeTick + "\'", 800);

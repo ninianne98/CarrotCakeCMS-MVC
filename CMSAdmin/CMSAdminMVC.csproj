@@ -145,7 +145,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Admin\CMS.asmx" />
     <Content Include="Assets\Admin\editor\advedit.amethystorchid.min.css" />
     <Content Include="Assets\Admin\editor\advedit.blueizis.min.css" />
     <Content Include="Assets\Admin\editor\advedit.classic.min.css" />
@@ -1032,13 +1031,11 @@
     <Compile Include="App_Start\CmsControllerFactory.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Assets\Admin\CMS.asmx.cs">
-      <DependentUpon>CMS.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Code\Helper.cs" />
+    <Compile Include="Controllers\CmsAdminApiController.cs" />
     <Compile Include="Controllers\CmsAdminController.cs" />
     <Compile Include="Controllers\CmsContentController.cs" />
+    <Compile Include="Models\ApiModel.cs" />
     <Compile Include="Models\CommentIndexModel.cs" />
     <Compile Include="Models\ContentHistoryModel.cs" />
     <Compile Include="Models\ContentPageModel.cs" />

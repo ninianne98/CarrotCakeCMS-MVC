@@ -21,9 +21,9 @@
 		var mySlug = MakeStringSafe(theSlug);
 
 		$.ajax({
-			type: "POST",
-			url: webMthd,
-			data: JSON.stringify({ TheSlug: mySlug, ItemID: theItemID }),
+			type: "GET",
+			url: webMthd + "?TheSlug=" + encodeURIComponent(mySlug) + "&ItemID=" + encodeURIComponent(theItemID),
+			//data: JSON.stringify({ TheSlug: mySlug, ItemID: theItemID }),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json"
 		}).done(editSlugCallback)
@@ -40,9 +40,9 @@
 			var mySlug = MakeStringSafe(theText);
 
 			$.ajax({
-				type: "POST",
-				url: webMthd,
-				data: JSON.stringify({ TheSlug: mySlug, ItemID: theItemID, Mode: 'Tag' }),
+				type: "GET",
+				url: webMthd + "?TheSlug=" + encodeURIComponent(mySlug) + "&ItemID=" + encodeURIComponent(theItemID) + "&Mode=Tag",
+				//data: JSON.stringify({ TheSlug: mySlug, ItemID: theItemID, Mode: 'Tag' }),
 				contentType: "application/json; charset=utf-8",
 				dataType: "json"
 			}).done(editSlug)
@@ -54,12 +54,12 @@
 	}
 
 	function editSlugCallback(data, status) {
-		if (data.d != "FAIL" && data.d != "OK") {
-			cmsAlertModal(data.d);
+		if (data != "FAIL" && data != "OK") {
+			cmsAlertModal(data);
 		}
 
 		var act = true;
-		if (data.d == "OK") {
+		if (data == "OK") {
 			act = false;
 		}
 
@@ -67,10 +67,10 @@
 	}
 
 	function editSlug(data, status) {
-		if (data.d == "FAIL") {
-			cmsAlertModal(data.d);
+		if (data == "FAIL") {
+			cmsAlertModal(data);
 		} else {
-			$(tSlug).val(data.d);
+			$(tSlug).val(data);
 		}
 
 		CheckSlug();

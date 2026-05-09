@@ -40,6 +40,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 				namespaces: _namespaces.ToArray()
 			);
 
+			// using -api vs api/ due to route interception
+			routes.MapRoute(
+				name: "C3_AdminApi_Default",
+				url: adminFolder + "-api/{action}/{id}",
+				defaults: new { controller = CmsRouteConstants.CmsController.AdminApi, action = SiteActions.Index, id = UrlParameter.Optional },
+				namespaces: _namespaces.ToArray()
+			);
+
 			CarrotSecurityConfig config = CarrotSecurityConfig.GetConfig();
 			string loginPath = config.AdditionalSettings.LoginPath;
 			if (loginPath.ToLowerInvariant() != SiteFilename.LoginURL.ToLowerInvariant()) {

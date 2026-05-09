@@ -747,10 +747,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				default:
 					ModelState.AddModelError(string.Empty, "Invalid login attempt.");
 
-					if (user != null && user.LockoutEndDateUtc.HasValue && user.LockoutEndDateUtc.Value < DateTime.UtcNow) {
+					if (user != null && user.IsExpiredLockout) {
 						user.LockoutEndDateUtc = null;
 						user.AccessFailedCount = 1;
 						securityHelper.UserManager.Update(user);
+					} else {
+						if (user != null && user.IsLocked == false) {
+							user.AccessFailedCount++;
+							securityHelper.UserManager.Update(user);
+						}
 					}
 
 					return View(model);

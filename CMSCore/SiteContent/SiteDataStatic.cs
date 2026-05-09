@@ -573,37 +573,37 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static void ManuallyWriteDefaultFile(HttpContext context, Exception objErr) {
-			var sbBody = new StringBuilder();
-			sbBody.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Default.htm"));
+			var sb = new StringBuilder();
+			sb.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Default.htm"));
 
 			try {
 				if (CurrentSiteExists) {
-					sbBody.Replace("{TIME_STAMP}", CurrentSite.Now.ToString());
+					sb.Replace("{TIME_STAMP}", CurrentSite.Now.ToString());
 				}
 			} catch { }
-			sbBody.Replace("{TIME_STAMP}", DateTime.Now.ToString());
+			sb.Replace("{TIME_STAMP}", DateTime.Now.ToString());
 
 			if (objErr != null) {
-				sbBody.Replace("{LONG_NAME}", FormatToHTML(" [" + objErr.GetType().ToString() + "] " + objErr.Message));
+				sb.Replace("{LONG_NAME}", FormatToHTML(" [" + objErr.GetType().ToString() + "] " + objErr.Message));
 
 				if (objErr.StackTrace != null) {
-					sbBody.Replace("{STACK_TRACE}", FormatToHTML(objErr.StackTrace));
+					sb.Replace("{STACK_TRACE}", FormatToHTML(objErr.StackTrace));
 				}
 				if (objErr.InnerException != null) {
-					sbBody.Replace("{CONTENT_DETAIL}", FormatToHTML(objErr.InnerException.Message));
+					sb.Replace("{CONTENT_DETAIL}", FormatToHTML(objErr.InnerException.Message));
 				}
 			}
 
-			sbBody.Replace("{STACK_TRACE}", "");
-			sbBody.Replace("{CONTENT_DETAIL}", "");
+			sb.Replace("{STACK_TRACE}", "");
+			sb.Replace("{CONTENT_DETAIL}", "");
 
-			sbBody.Replace("{SITE_ROOT_PATH}", SiteData.AdminFolderPath);
+			sb.Replace("{SITE_ROOT_PATH}", SiteData.AdminFolderPath);
 
 			context.Response.ContentType = "text/html";
 			context.Response.Clear();
 			context.Response.BufferOutput = true;
 
-			context.Response.Write(sbBody.ToString());
+			context.Response.Write(sb.ToString());
 			context.Response.Flush();
 			context.Response.End();
 		}
@@ -622,38 +622,38 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public static string FormatErrorOutput(Exception objErr) {
-			var sbBody = new StringBuilder();
-			sbBody.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.ErrorFormat.htm"));
+			var sb = new StringBuilder();
+			sb.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.ErrorFormat.htm"));
 
 			if (objErr is HttpException) {
 				HttpException httpEx = (HttpException)objErr;
 
-				sbBody.Replace("{PAGE_TITLE}", httpEx.Message);
-				sbBody.Replace("{SHORT_NAME}", httpEx.Message);
-				sbBody.Replace("{LONG_NAME}", "HTTP " + httpEx.GetHttpCode() + " - " + FormatToHTML(httpEx.Message));
+				sb.Replace("{PAGE_TITLE}", httpEx.Message);
+				sb.Replace("{SHORT_NAME}", httpEx.Message);
+				sb.Replace("{LONG_NAME}", "HTTP " + httpEx.GetHttpCode() + " - " + FormatToHTML(httpEx.Message));
 			} else {
-				sbBody.Replace("{PAGE_TITLE}", objErr.Message);
-				sbBody.Replace("{SHORT_NAME}", objErr.Message);
-				sbBody.Replace("{LONG_NAME}", FormatToHTML(" [" + objErr.GetType().ToString() + "] " + objErr.Message));
+				sb.Replace("{PAGE_TITLE}", objErr.Message);
+				sb.Replace("{SHORT_NAME}", objErr.Message);
+				sb.Replace("{LONG_NAME}", FormatToHTML(" [" + objErr.GetType().ToString() + "] " + objErr.Message));
 			}
 
 			if (objErr.StackTrace != null) {
-				sbBody.Replace("{STACK_TRACE}", FormatToHTML(objErr.StackTrace));
+				sb.Replace("{STACK_TRACE}", FormatToHTML(objErr.StackTrace));
 			}
 
 			if (objErr.InnerException != null) {
-				sbBody.Replace("{CONTENT_DETAIL}", FormatToHTML(objErr.InnerException.Message));
+				sb.Replace("{CONTENT_DETAIL}", FormatToHTML(objErr.InnerException.Message));
 			}
 
 			if (CurrentSiteExists) {
-				sbBody.Replace("{TIME_STAMP}", CurrentSite.Now.ToString());
+				sb.Replace("{TIME_STAMP}", CurrentSite.Now.ToString());
 			}
-			sbBody.Replace("{TIME_STAMP}", DateTime.Now.ToString());
+			sb.Replace("{TIME_STAMP}", DateTime.Now.ToString());
 
-			sbBody.Replace("{CONTENT_DETAIL}", "");
-			sbBody.Replace("{STACK_TRACE}", "");
+			sb.Replace("{CONTENT_DETAIL}", "");
+			sb.Replace("{STACK_TRACE}", "");
 
-			return sbBody.ToString();
+			return sb.ToString();
 		}
 
 		public static void Show404MessageFull(bool bResponseEnd) {
@@ -748,26 +748,6 @@ namespace Carrotware.CMS.Core {
 					}
 				}
 			}
-
-			/*
-			Configuration config = WebConfigurationManager.OpenWebConfiguration("~");
-			CustomErrorsSection section = (CustomErrorsSection)config.GetSection("system.web/customErrors");
-
-			if (section != null) {
-				if (section.Mode != CustomErrorsMode.Off) {
-					CustomError configuredError = section.Errors[sErrorKey];
-					if (configuredError != null) {
-						if (!string.IsNullOrEmpty(configuredError.Redirect)) {
-							context.Response.Redirect(configuredError.Redirect + "?aspxerrorpath=" + sReqURL);
-						}
-					} else {
-						if (!string.IsNullOrEmpty(section.DefaultRedirect)) {
-							context.Response.Redirect(section.DefaultRedirect + "?aspxerrorpath=" + sReqURL);
-						}
-					}
-				}
-			}
-			*/
 		}
 
 		public static bool IsFilenameCurrentPage(string sCurrentFile) {

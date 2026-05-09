@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -14,6 +15,14 @@ namespace Carrotware.CMS.Security.Models {
 			var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
 			// Add custom user claims here
 			return userIdentity;
+		}
+
+		public bool IsExpiredLockout {
+			get { return this.LockoutEndDateUtc.HasValue && this.LockoutEndDateUtc.Value <= DateTime.UtcNow; }
+		}
+
+		public bool IsLocked {
+			get { return this.LockoutEndDateUtc.HasValue && this.LockoutEndDateUtc.Value > DateTime.UtcNow; }
 		}
 	}
 
