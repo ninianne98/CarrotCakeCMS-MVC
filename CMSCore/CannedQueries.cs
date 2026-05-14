@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace Carrotware.CMS.Core {
 
-	static internal class CannedQueries {
+	internal static class CannedQueries {
 
 		internal static IQueryable<vw_carrot_Content> GetAllByTypeList(CarrotCMSDataContext ctx, Guid siteID, bool bActiveOnly, ContentPageType.PageType entryType) {
 			return (from ct in ctx.vw_carrot_Contents
@@ -136,7 +136,6 @@ namespace Carrotware.CMS.Core {
 
 		internal static IQueryable<vw_carrot_Content> GetContentByStatusAndType(CarrotCMSDataContext ctx, Guid siteID,
 				ContentPageType.PageType pageType, bool bActiveOnly) {
-
 			Guid contentTypeID = ContentPageType.GetIDByType(pageType);
 
 			return (from ct in ctx.vw_carrot_Contents

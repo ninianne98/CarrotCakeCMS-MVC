@@ -1,5 +1,6 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Security;
+using Carrotware.CMS.UI.Components;
 using Carrotware.Web.UI.Components;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 					.Distinct().ToList();
 
 			string adminFolder = SiteData.AdminFolderPath.TrimPathSlashes();
+			string adminApi = CarrotCakeHtml.WebServiceAddress.TrimPathSlashes();
 
 			routes.MapRoute(
 				name: "C3_Admin_Default",
@@ -43,13 +45,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			// using -api vs api/ due to route interception
 			routes.MapRoute(
 				name: "C3_AdminApi_Default",
-				url: adminFolder + "-api/{action}/{id}",
+				url: adminApi + "/{action}/{id}",
 				defaults: new { controller = CmsRouteConstants.CmsController.AdminApi, action = SiteActions.Index, id = UrlParameter.Optional },
 				namespaces: _namespaces.ToArray()
 			);
 
-			CarrotSecurityConfig config = CarrotSecurityConfig.GetConfig();
+			var config = CarrotSecurityConfig.GetConfig();
 			string loginPath = config.AdditionalSettings.LoginPath;
+
 			if (loginPath.ToLowerInvariant() != SiteFilename.LoginURL.ToLowerInvariant()) {
 				loginPath = loginPath.TrimPathSlashes();
 

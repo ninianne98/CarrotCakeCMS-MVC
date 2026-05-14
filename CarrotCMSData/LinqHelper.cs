@@ -241,7 +241,7 @@ namespace Carrotware.CMS.Data {
 		public static StringBuilder GetMemberInitExpression<T>(this Table<T> table, IQueryable<T> entities, Expression<Func<T, T>> evaluator, DbCommand updateCommand) where T : class {
 			var sb = new StringBuilder();
 
-			evaluator.Visit<MemberInitExpression>(delegate(MemberInitExpression expression) {
+			evaluator.Visit<MemberInitExpression>(delegate (MemberInitExpression expression) {
 				if (sb.Length > 1) {
 					throw new NotImplementedException("Only one MemberInitExpression is allowed for the evaluator parameter.");
 				}
@@ -261,7 +261,7 @@ namespace Carrotware.CMS.Data {
 
 			ParameterExpression entityParam = null;
 
-			assignment.Expression.Visit<ParameterExpression>(delegate(ParameterExpression p) { if (p.Type == entityType) entityParam = p; return p; });
+			assignment.Expression.Visit<ParameterExpression>(delegate (ParameterExpression p) { if (p.Type == entityType) entityParam = p; return p; });
 
 			return entityParam;
 		}

@@ -49,7 +49,6 @@ namespace Carrotware.CMS.Core {
 
 		[Display(Name = "Comment Text")]
 		[Required]
-		//[StringLength(4096)]
 		public string PostCommentText { get; set; }
 
 		private string _commentPlain = null;

@@ -41,7 +41,6 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		[Display(Name = "Hide Inactive Results")]
 		public bool HideInactive { get; set; }
 
-
 		[Display(Name = "Content Type")]
 		public ContentPageType.PageType ContentType { get; set; } = ContentPageType.PageType.Unknown;
 

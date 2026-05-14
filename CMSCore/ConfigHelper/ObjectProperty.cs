@@ -144,8 +144,8 @@ namespace Carrotware.CMS.Core {
 
 			//require that widget be attributed to be on the list
 			List<string> widgetProperties = (from ww in widget.GetType().GetProperties()
-												where Attribute.IsDefined(ww, typeof(WidgetAttribute))
-												select ww.Name.ToLowerInvariant()).ToList();
+											 where Attribute.IsDefined(ww, typeof(WidgetAttribute))
+											 select ww.Name.ToLowerInvariant()).ToList();
 
 			List<string> limitedProperties = widgetProperties;
 			try {

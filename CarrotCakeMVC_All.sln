@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37111.16 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMSAdminMVC", "CMSAdmin\CMSAdminMVC.csproj", "{230946A9-E90D-4D48-BBD6-46D61223E82C}"
 EndProject
@@ -32,6 +32,17 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoremIpsum", "LoremIpsum\LoremIpsum.csproj", "{DE3A83DD-0CAF-4844-A526-16634512C66E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginEventCalendarModule", "PluginEventCalendarModule\PluginEventCalendarModule.csproj", "{C9FE1F2D-9CB1-4298-8090-FDFE3F698D11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		CMSDBUpdater\DataScripts\ALTER01.sql = CMSDBUpdater\DataScripts\ALTER01.sql
+		CMSDBUpdater\DataScripts\ALTER02.sql = CMSDBUpdater\DataScripts\ALTER02.sql
+		CMSDBUpdater\DataScripts\CREATE01.sql = CMSDBUpdater\DataScripts\CREATE01.sql
+		CMSDBUpdater\DataScripts\MEMBER01.sql = CMSDBUpdater\DataScripts\MEMBER01.sql
+		CMSDBUpdater\DataScripts\MIGRATE01.sql = CMSDBUpdater\DataScripts\MIGRATE01.sql
+		CMSDBUpdater\DataScripts\MIGRATEWIDGETS01.sql = CMSDBUpdater\DataScripts\MIGRATEWIDGETS01.sql
+		CMSDBUpdater\DataScripts\REFRESH01.sql = CMSDBUpdater\DataScripts\REFRESH01.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -315,7 +315,7 @@ namespace Carrotware.CMS.UI.Components {
 				var config = CarrotCakeConfig.GetConfig();
 				var adminFolder = config.MainConfig.AdminFolderPath.TrimPathSlashes();
 
-				return adminFolder + "-api";
+				return "/" + adminFolder + "-api/";
 			}
 		}
 

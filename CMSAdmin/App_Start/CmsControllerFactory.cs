@@ -2,7 +2,6 @@
 using Carrotware.CMS.Interface;
 using Carrotware.CMS.Mvc.UI.Admin.Controllers;
 using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
 

@@ -201,7 +201,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 							user = nu.User;
 							var exUser = nu.ExtendedUserData;
 							exUser.AddToRole(SecurityData.CMSGroup_Users);
-							seu.ImportUserID = new Guid(user.Id);
+							seu.ImportUserID = exUser.UserId;
 						} else {
 							throw new Exception(string.Format("Could not create user: {0} ({1}) \r\n{2}", seu.Login, seu.Email, string.Join("\r\n", result.Errors)));
 						}

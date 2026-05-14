@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Web;
-using System;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -47,7 +47,6 @@ namespace Carrotware.Web.UI.Components {
 		public Calendar(string wc, string wb, string cc, string cb,
 							string tc, string tb, string tsb, string tl,
 							string nc, string nb, string nsb, string nl) : this() {
-
 			this.WeekdayColor = CarrotWeb.DecodeColor(wc);
 			this.WeekdayBackground = CarrotWeb.DecodeColor(wb);
 			this.CellColor = CarrotWeb.DecodeColor(cc);

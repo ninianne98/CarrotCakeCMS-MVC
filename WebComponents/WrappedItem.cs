@@ -87,7 +87,6 @@ namespace Carrotware.Web.UI.Components {
 		private string OpenTag(HtmlHelper htmlHelper, StringBuilder sb, string tag,
 				string actionName, string controllerName,
 				object activeAttributes = null, object inactiveAttributes = null) {
-
 			_helper = htmlHelper;
 			_stringbldr = sb;
 			_tag = string.IsNullOrEmpty(tag) ? "li" : tag;
@@ -142,7 +141,6 @@ namespace Carrotware.Web.UI.Components {
 		private string OpenTag(HtmlHelper htmlHelper, StringBuilder sb, string tag,
 							int currentPage, int selectedPage,
 							object activeAttributes = null, object inactiveAttributes = null) {
-
 			_helper = htmlHelper;
 			_stringbldr = sb;
 			_tag = string.IsNullOrEmpty(tag) ? "li" : tag;
