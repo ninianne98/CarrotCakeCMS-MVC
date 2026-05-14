@@ -1,6 +1,7 @@
 ﻿using Carrotware.CMS.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -22,15 +23,20 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public UserModel(Guid UserId) {
 			this.User = new ExtendedUserData(UserId);
+			this.LockOut = this.User.IsLockedOut;
 		}
 
 		public UserModel(ExtendedUserData user) {
 			this.User = user;
+			this.LockOut = this.User.IsLockedOut;
 		}
 
 		public ExtendedUserData User { get; set; }
 
 		public bool Selected { get; set; }
+
+		[Display(Name = "Lock Out?")]
+		public bool LockOut { get; set; }
 
 		private List<SelectListItem> _sites = null;
 

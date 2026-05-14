@@ -77,7 +77,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public string Message { get; set; }
 
 		private void SetMsg(string sMessage) {
-			if (!String.IsNullOrEmpty(sMessage)) {
+			if (!string.IsNullOrEmpty(sMessage)) {
 				this.HasLoaded = true;
 				this.Message = sMessage;
 			}
@@ -91,8 +91,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 			SiteData site = SiteData.CurrentSite;
 
-			this.Message = String.Empty;
-			string sMsg = String.Empty;
+			this.Message = string.Empty;
+			string sMsg = string.Empty;
 
 			if (this.ImportSite || this.ImportPages || this.ImportPosts) {
 				List<string> tags = site.GetTagList().Select(x => x.TagSlug.ToLowerInvariant()).ToList();
@@ -193,19 +193,23 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 				if (this.CreateUsers) {
 					if (seu.ImportUserID == Guid.Empty) {
-						ApplicationUser user = new ApplicationUser { UserName = seu.Login, Email = seu.Email };
-						var result = sd.CreateApplicationUser(user, out usr);
+						var user = new ApplicationUser { UserName = seu.Login, Email = seu.Email };
+						var nu = sd.CreateApplicationUser(user);
+						var result = nu.IdentityResult;
+
 						if (result.Succeeded) {
-							usr = ExtendedUserData.FindByUsername(seu.Login);
+							user = nu.User;
+							var exUser = nu.ExtendedUserData;
+							exUser.AddToRole(SecurityData.CMSGroup_Users);
+							seu.ImportUserID = new Guid(user.Id);
 						} else {
-							throw new Exception(String.Format("Could not create user: {0} ({1}) \r\n{2}", seu.Login, seu.Email, String.Join("\r\n", result.Errors)));
+							throw new Exception(string.Format("Could not create user: {0} ({1}) \r\n{2}", seu.Login, seu.Email, string.Join("\r\n", result.Errors)));
 						}
-						seu.ImportUserID = usr.UserId;
 					}
 
 					if (seu.ImportUserID != Guid.Empty) {
-						ExtendedUserData ud = new ExtendedUserData(seu.ImportUserID);
-						if (!String.IsNullOrEmpty(seu.FirstName) || !String.IsNullOrEmpty(seu.LastName)) {
+						var ud = new ExtendedUserData(seu.ImportUserID);
+						if (!string.IsNullOrEmpty(seu.FirstName) || !string.IsNullOrEmpty(seu.LastName)) {
 							ud.FirstName = seu.FirstName;
 							ud.LastName = seu.LastName;
 							ud.Save();

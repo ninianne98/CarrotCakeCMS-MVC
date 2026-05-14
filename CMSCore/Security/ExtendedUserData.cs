@@ -39,6 +39,14 @@ namespace Carrotware.CMS.Core {
 		[Display(Name = "Lockout End Date (UTC)")]
 		public DateTime? LockoutEndDateUtc { get; set; }
 
+		[Display(Name = "Locked Out")]
+		public bool IsLockedOut {
+			get {
+				return this.LockoutEndDateUtc.HasValue
+						&& this.LockoutEndDateUtc.Value > DateTime.UtcNow;
+			}
+		}
+
 		public bool LockoutEnabled { get; set; }
 
 		[Display(Name = "No Lockout Date")]
@@ -110,47 +118,47 @@ namespace Carrotware.CMS.Core {
 
 		public ExtendedUserData() { }
 
-		public ExtendedUserData(string UserName) {
+		public ExtendedUserData(string userName) {
 			using (var db = CarrotCMSDataContext.Create()) {
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByName(db, UserName);
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByName(db, userName);
 				LoadUserData(rc);
 			}
 		}
 
-		public ExtendedUserData(Guid UserID) {
+		public ExtendedUserData(Guid userID) {
 			using (var db = CarrotCMSDataContext.Create()) {
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(db, UserID);
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(db, userID);
 				LoadUserData(rc);
 			}
 		}
 
-		public static ExtendedUserData FindByUsername(string UserName) {
-			ExtendedUserData usr = new ExtendedUserData();
+		public static ExtendedUserData FindByUsername(string userName) {
+			var usr = new ExtendedUserData();
 
 			using (var db = CarrotCMSDataContext.Create()) {
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByName(db, UserName);
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByName(db, userName);
 				usr.LoadUserData(rc);
 			}
 
 			return usr;
 		}
 
-		public static ExtendedUserData FindByEmail(string Email) {
-			ExtendedUserData usr = new ExtendedUserData();
+		public static ExtendedUserData FindByEmail(string email) {
+			var usr = new ExtendedUserData();
 
 			using (var db = CarrotCMSDataContext.Create()) {
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByEmail(db, Email);
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByEmail(db, email);
 				usr.LoadUserData(rc);
 			}
 
 			return usr;
 		}
 
-		public static ExtendedUserData FindByUserID(Guid UserID) {
-			ExtendedUserData usr = new ExtendedUserData();
+		public static ExtendedUserData FindByUserID(Guid userID) {
+			var usr = new ExtendedUserData();
 
 			using (var db = CarrotCMSDataContext.Create()) {
-				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(db, UserID);
+				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(db, userID);
 				usr.LoadUserData(rc);
 			}
 
@@ -304,6 +312,14 @@ namespace Carrotware.CMS.Core {
 				vw_carrot_UserData rc = CompiledQueries.cqFindUserByID(db, usr.UserId);
 				LoadUserData(rc);
 			}
+		}
+
+		public bool IsExpiredLockout {
+			get { return this.LockoutEndDateUtc.HasValue && this.LockoutEndDateUtc.Value <= DateTime.UtcNow; }
+		}
+
+		public bool IsLocked {
+			get { return this.LockoutEndDateUtc.HasValue && this.LockoutEndDateUtc.Value > DateTime.UtcNow; }
 		}
 
 		internal ExtendedUserData(vw_carrot_UserData c) {

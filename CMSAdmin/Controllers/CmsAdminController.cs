@@ -6,7 +6,6 @@ using Carrotware.CMS.Security;
 using Carrotware.CMS.Security.Models;
 using Carrotware.Web.UI.Components;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,7 +43,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				List<string> lstOKNoSiteActions = (new string[] { "login", "logoff", "about", "siteinfo", "siteindex", "filebrowser", "userindex", "roleindex", "userprofile", "changepassword" }).ToList();
 
 				//carvouts for anon pages
-				List<string> anonMethods = (new string[] { "login", "logoff", "about" }).ToList();
+				List<string> anonMethods = (new string[] { "login", "logoff", "about", "forgotpassword" }).ToList();
 
 				// use reflection to see if the method/action has an anon permission and honor it
 				anonMethods = (this).GetType().GetMethods()
@@ -60,14 +59,14 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 							return;
 						}
 
-						if (DatabaseUpdate.TablesIncomplete) {
+						if (DatabaseSchemaState.TablesIncomplete) {
 							filterContext.Result = new RedirectResult(SiteFilename.DatabaseSetupURL);
 							return;
 						}
 					}
 				} catch (Exception ex) {
 					//assumption is database is probably empty / needs updating, so trigger the under construction view
-					if (DatabaseUpdate.SystemNeedsChecking(ex) || DatabaseUpdate.AreCMSTablesIncomplete()) {
+					if (DatabaseSchemaState.SystemNeedsChecking(ex) || DatabaseSchemaState.AreCMSTablesIncomplete()) {
 						filterContext.Result = new RedirectResult(SiteFilename.DatabaseSetupURL);
 						return;
 					} else {
@@ -159,42 +158,38 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[ValidateAntiForgeryToken]
 		[CmsAdminAuthorize]
 		public ActionResult UserEdit(UserModel model) {
-			ExtendedUserData userExt = model.User;
+			ExtendedUserData modeluser = model.User;
 
 			if (ModelState.IsValid) {
-				var user = securityHelper.UserManager.FindByName(model.User.UserName);
+				var user = securityHelper.UserManager.FindById(model.User.UserKey);
 
-				IdentityResult result = securityHelper.UserManager.SetEmail(userExt.UserKey, userExt.Email);
-				result = securityHelper.UserManager.SetPhoneNumber(userExt.UserKey, userExt.PhoneNumber);
+				IdentityResult result = securityHelper.UserManager.SetEmail(modeluser.UserKey, modeluser.Email);
+				result = securityHelper.UserManager.SetPhoneNumber(modeluser.UserKey, modeluser.PhoneNumber);
 
-				if (userExt.LockoutEndDateUtc.HasValue) {
-					if (!user.LockoutEndDateUtc.HasValue) {
-						// set lockout
-						user.LockoutEndDateUtc = userExt.LockoutEndDateUtc.Value;
-						user.AccessFailedCount = 20;
-						securityHelper.UserManager.Update(user);
-					}
+				if (model.LockOut == false) {
+					user.LockoutEndDateUtc = null;
+					user.AccessFailedCount = 0;
+					securityHelper.UserManager.Update(user);
 				} else {
-					if (user.LockoutEndDateUtc.HasValue) {
-						// unset lockout
-						user.LockoutEndDateUtc = null;
-						user.AccessFailedCount = 0;
+					if (user.LockoutEndDateUtc.HasValue == false || user.LockoutEndDateUtc.Value < DateTime.UtcNow) {
+						user.LockoutEndDateUtc = DateTime.UtcNow.Date.AddYears(2);
+						user.AccessFailedCount = 25;
 						securityHelper.UserManager.Update(user);
 					}
 				}
 
-				ExtendedUserData exUsr = new ExtendedUserData(userExt.UserId);
+				var exUsr = new ExtendedUserData(modeluser.UserId);
 
-				exUsr.UserNickName = userExt.UserNickName;
-				exUsr.FirstName = userExt.FirstName;
-				exUsr.LastName = userExt.LastName;
-				exUsr.UserBio = userExt.UserBio;
+				exUsr.UserNickName = modeluser.UserNickName;
+				exUsr.FirstName = modeluser.FirstName;
+				exUsr.LastName = modeluser.LastName;
+				exUsr.UserBio = modeluser.UserBio;
 
 				exUsr.Save();
 
 				model.SaveOptions();
 
-				return RedirectToAction(SiteActions.UserEdit, new { @id = userExt.UserId });
+				return RedirectToAction(SiteActions.UserEdit, new { @id = modeluser.UserId });
 			}
 
 			Helper.HandleErrorDict(ModelState);
@@ -214,15 +209,20 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult UserAdd(RegisterViewModel model) {
 			if (ModelState.IsValid) {
 				var sd = new SecurityData();
-				ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+				var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
 
-				ExtendedUserData exUser = null;
-				var result = sd.CreateApplicationUser(user, model.Password, out exUser);
+				var newUser = sd.CreateApplicationUser(user, model.Password);
+				var result = newUser.IdentityResult;
 
-				if (result == IdentityResult.Success && exUser != null) {
-					result = securityHelper.UserManager.SetLockoutEnabled(exUser.Id, true);
+				if (result == IdentityResult.Success) {
+					var exUser = newUser.ExtendedUserData;
+					user = newUser.User;
 
-					return RedirectToAction(SiteActions.UserEdit, new { @id = exUser.UserId });
+					if (exUser != null) {
+						result = securityHelper.UserManager.SetLockoutEnabled(exUser.Id, true);
+
+						return RedirectToAction(SiteActions.UserEdit, new { @id = exUser.UserId });
+					}
 				}
 
 				AddErrors(result);
@@ -591,46 +591,50 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				Response.Redirect(SiteFilename.DatabaseSetupURL);
 			}
 
-			DatabaseUpdate du = new DatabaseUpdate(true);
+			var dm = new DatabaseUpdate(true);
 
 			var lst = new List<DatabaseUpdateMessage>();
 			model.Messages = lst;
 
-			if (DatabaseUpdate.LastSQLError != null) {
-				du.HandleResponse(lst, DatabaseUpdate.LastSQLError);
-				DatabaseUpdate.LastSQLError = null;
+			if (DatabaseSchemaState.LastSQLError != null) {
+				dm.HandleResponse(lst, DatabaseSchemaState.LastSQLError);
+				DatabaseSchemaState.LastSQLError = null;
 			} else {
 				bool bUpdate = true;
 
-				if (!du.DoCMSTablesExist()) {
+				if (!dm.DoCMSTablesExist()) {
 					bUpdate = false;
 				}
 
-				bUpdate = du.DatabaseNeedsUpdate();
+				var ver = DatabaseSchemaState.GetDbSchemaVersion();
+				bUpdate = dm.DatabaseNeedsUpdate()
+							|| (ver.DataValue != DatabaseSchemaState.CurrentDbVersion);
 
 				try {
-					model.CreateUser = !DatabaseUpdate.UsersExist;
+					model.CreateUser = !DatabaseSchemaState.UsersExist;
 				} catch { }
 
 				if (bUpdate) {
-					DatabaseUpdateStatus status = du.PerformUpdates();
-					lst = du.MergeMessages(lst, status.Messages);
+					DatabaseUpdateStatus status = dm.PerformUpdates();
+					lst = dm.MergeMessages(lst, status.Messages);
 				} else {
-					DataInfo ver = DatabaseUpdate.GetDbSchemaVersion();
-					int i = 1;
-					du.HandleResponse(lst, "Database up-to-date [" + ver.DataValue + "] ");
-					du.HandleResponse(lst, du.BuildUpdateString(i++), du.Refresh01());
+					ver = DatabaseSchemaState.GetDbSchemaVersion();
+					int iUpdate = 1;
+					dm.HandleResponse(lst, "Database up-to-date [" + ver.DataValue + "] ");
+					if (ver.DataValue != DatabaseSchemaState.CurrentDbVersion) {
+						dm.HandleResponse(lst, dm.BuildUpdateString(iUpdate++), dm.Refresh01());
+					}
 				}
 
-				bUpdate = du.DatabaseNeedsUpdate();
+				bUpdate = dm.DatabaseNeedsUpdate();
 
-				if (!bUpdate && DatabaseUpdate.LastSQLError == null) {
-					model.CreateUser = !DatabaseUpdate.UsersExist;
+				if (!bUpdate && DatabaseSchemaState.LastSQLError == null) {
+					model.CreateUser = !DatabaseSchemaState.UsersExist;
 				}
 			}
 
-			if (DatabaseUpdate.LastSQLError != null) {
-				du.HandleResponse(lst, DatabaseUpdate.LastSQLError);
+			if (DatabaseSchemaState.LastSQLError != null) {
+				dm.HandleResponse(lst, DatabaseSchemaState.LastSQLError);
 			}
 
 			model.HasExceptions = lst.Where(x => !string.IsNullOrEmpty(x.ExceptionText)).Any();
@@ -668,10 +672,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				SignOut();
 
 				var sd = new SecurityData();
-				ApplicationUser user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+				var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
 
-				ExtendedUserData exUser = null;
-				var result = sd.CreateApplicationUser(user, model.Password, out exUser);
+				var nu = sd.CreateApplicationUser(user, model.Password);
+				var result = nu.IdentityResult;
 
 				if (result.Succeeded) {
 					SecurityData.AddUserToRole(model.UserName, SecurityData.CMSGroup_Admins);
@@ -688,9 +692,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		public ActionResult CheckDatabase() {
-			if (DatabaseUpdate.AreCMSTablesIncomplete() || !DatabaseUpdate.UsersExist) {
-				DatabaseUpdate.ResetFailedSQL();
-				DatabaseUpdate.ResetSQLState();
+			if (DatabaseSchemaState.AreCMSTablesIncomplete() || !DatabaseSchemaState.UsersExist) {
+				DatabaseSchemaState.ResetFailedSQL();
+				DatabaseSchemaState.ResetSQLState();
 
 				return RedirectToAction(this.GetActionName(x => x.DatabaseSetup(null)));
 			}
@@ -728,38 +732,55 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			// This doesn't count login failures towards account lockout
 			// To enable password failures to trigger account lockout, change to shouldLockout: true
 			var user = await securityHelper.UserManager.FindByNameAsync(model.UserName);
+			var result = (user == null) ? false : await securityHelper.SimpleLogInAsync(model.UserName, model.Password, false);
 
-			var result = await securityHelper.SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
+			if (result && user != null & user.IsLocked == false) {
+				await securityHelper.UserManager.ResetAccessFailedCountAsync(user.Id);
 
-			switch (result) {
-				case SignInStatus.Success:
-					await securityHelper.UserManager.ResetAccessFailedCountAsync(user.Id);
-
-					return RedirectToLocal(returnUrl);
-
-				case SignInStatus.LockedOut:
-					return View("Lockout");
-
-				case SignInStatus.RequiresVerification:
-					return RedirectToAction(SiteActions.SendCode, new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-
-				case SignInStatus.Failure:
-				default:
-					ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-
-					if (user != null && user.IsExpiredLockout) {
-						user.LockoutEndDateUtc = null;
-						user.AccessFailedCount = 1;
+				return RedirectToLocal(returnUrl);
+			} else {
+				if (user != null) {
+					if (user.IsLocked == false) {
+						user.AccessFailedCount++;
 						securityHelper.UserManager.Update(user);
-					} else {
-						if (user != null && user.IsLocked == false) {
-							user.AccessFailedCount++;
-							securityHelper.UserManager.Update(user);
-						}
 					}
+				}
 
-					return View(model);
+				ModelState.AddModelError(string.Empty, "Invalid login attempt.");
 			}
+
+			//var result2 = await securityHelper.SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
+			//switch (result2) {
+			//	case SignInStatus.Success:
+			//		await securityHelper.UserManager.ResetAccessFailedCountAsync(user.Id);
+
+			//		return RedirectToLocal(returnUrl);
+
+			//	case SignInStatus.LockedOut:
+			//		return View("Lockout");
+
+			//	case SignInStatus.RequiresVerification:
+			//		return RedirectToAction(SiteActions.SendCode, new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+
+			//	case SignInStatus.Failure:
+			//	default:
+			//		ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+
+			//		if (user != null && user.IsExpiredLockout) {
+			//			user.LockoutEndDateUtc = null;
+			//			user.AccessFailedCount = 1;
+			//			securityHelper.UserManager.Update(user);
+			//		} else {
+			//			if (user != null && user.IsLocked == false) {
+			//				user.AccessFailedCount++;
+			//				securityHelper.UserManager.Update(user);
+			//			}
+			//		}
+
+			//		return View(model);
+			//}
+
+			return View(model);
 		}
 
 		[AllowAnonymous]
@@ -2979,7 +3000,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		private void RedirectIfUsersExist() {
-			if (DatabaseUpdate.UsersExist) {
+			if (DatabaseSchemaState.UsersExist) {
 				Response.Redirect(SiteFilename.DashboardURL);
 			}
 		}

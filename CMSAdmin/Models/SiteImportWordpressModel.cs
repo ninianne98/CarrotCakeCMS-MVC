@@ -114,7 +114,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public string Message { get; set; }
 
 		private void SetMsg(string sMessage) {
-			if (!String.IsNullOrEmpty(sMessage)) {
+			if (!string.IsNullOrEmpty(sMessage)) {
 				this.HasLoaded = true;
 				this.Message = sMessage;
 			}
@@ -128,8 +128,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 			SiteData site = SiteData.CurrentSite;
 
-			this.Message = String.Empty;
-			string sMsg = String.Empty;
+			this.Message = string.Empty;
+			string sMsg = string.Empty;
 
 			if (this.ImportSite || this.ImportPages || this.ImportPosts) {
 				List<string> tags = site.GetTagList().Select(x => x.TagSlug.ToLowerInvariant()).ToList();
@@ -199,19 +199,23 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 				if (this.CreateUsers) {
 					if (wpu.ImportUserID == Guid.Empty) {
-						ApplicationUser user = new ApplicationUser { UserName = wpu.Login, Email = wpu.Email };
-						var result = sd.CreateApplicationUser(user, out usr);
+						var user = new ApplicationUser { UserName = wpu.Login, Email = wpu.Email };
+						var nu = sd.CreateApplicationUser(user);
+						var result = nu.IdentityResult;
+
 						if (result.Succeeded) {
-							usr = ExtendedUserData.FindByUsername(wpu.Login);
+							user = nu.User;
+							var exUser = nu.ExtendedUserData;
+							exUser.AddToRole(SecurityData.CMSGroup_Users);
+							wpu.ImportUserID = new Guid(user.Id);
 						} else {
-							throw new Exception(String.Format("Could not create user: {0} ({1}) \r\n{2}", wpu.Login, wpu.Email, String.Join("\r\n", result.Errors)));
+							throw new Exception(string.Format("Could not create user: {0} ({1}) \r\n{2}", wpu.Login, wpu.Email, string.Join("\r\n", result.Errors)));
 						}
-						wpu.ImportUserID = usr.UserId;
 					}
 
 					if (wpu.ImportUserID != Guid.Empty) {
-						ExtendedUserData ud = new ExtendedUserData(wpu.ImportUserID);
-						if (!String.IsNullOrEmpty(wpu.FirstName) || !String.IsNullOrEmpty(wpu.LastName)) {
+						var ud = new ExtendedUserData(wpu.ImportUserID);
+						if (!string.IsNullOrEmpty(wpu.FirstName) || !string.IsNullOrEmpty(wpu.LastName)) {
 							ud.FirstName = wpu.FirstName;
 							ud.LastName = wpu.LastName;
 							ud.Save();

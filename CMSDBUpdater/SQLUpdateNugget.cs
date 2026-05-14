@@ -37,26 +37,27 @@ namespace Carrotware.CMS.DBUpdater {
 
 		protected static CompareMode GetModeType(string sVal) {
 			CompareMode c = CompareMode.LT;
-			if (!String.IsNullOrEmpty(sVal)) {
+			if (!string.IsNullOrEmpty(sVal)) {
 				c = (CompareMode)Enum.Parse(typeof(CompareMode), sVal, true);
 			}
 			return c;
 		}
 
-		private static object nuggetLocker = new Object();
+		private static object nuggetLocker = new object();
 
 		private static List<SQLUpdateNugget> _nuggets = null;
 
 		public static List<SQLUpdateNugget> SQLNuggets {
 			get {
-				if (_nuggets == null) {
+				if (_nuggets == null || _nuggets.Any() == false) {
 					lock (nuggetLocker) {
 						_nuggets = new List<SQLUpdateNugget>();
-						Assembly assembly = Assembly.GetExecutingAssembly();
 
-						DataSet ds = new DataSet();
-						string filePath = "Carrotware.CMS.DBUpdater.DatabaseChecks.xml";
-						using (var stream = new StreamReader(assembly.GetManifestResourceStream(filePath))) {
+						var assembly = Assembly.GetExecutingAssembly();
+						var ds = new DataSet();
+
+						string resourceName = "Carrotware.CMS.DBUpdater.DatabaseChecks.xml";
+						using (var stream = new StreamReader(assembly.GetManifestResourceStream(resourceName))) {
 							ds.ReadXml(stream);
 						}
 
@@ -68,9 +69,10 @@ namespace Carrotware.CMS.DBUpdater {
 										Mode = GetModeType(d.Field<string>("mode")),
 										Priority = int.Parse(d.Field<string>("priority")),
 										RowCount = int.Parse(d.Field<string>("rowcount"))
-									}).OrderBy(x => x.Priority).ToList();
+									}).Where(x => x.SQLQuery != null && x.SQLQuery.Trim().StartsWith("XXXXXXXX") == false)
+									.OrderBy(x => x.Priority).ToList();
 
-						_nuggets.RemoveAll(x => !x.SQLQuery.ToLower().Contains("select"));
+						_nuggets.RemoveAll(x => !x.SQLQuery.ToLowerInvariant().Contains("select"));
 					}
 				}
 
@@ -95,7 +97,7 @@ namespace Carrotware.CMS.DBUpdater {
 
 		public static List<SQLUpdateNugget> GetNuggets(string KeyName) {
 			List<SQLUpdateNugget> nugs = (from s in SQLNuggets
-										  where s.AssociatedWith.ToLower().Contains("|" + KeyName.ToLower() + "|")
+										  where s.AssociatedWith.ToLowerInvariant().Contains("|" + KeyName.ToLowerInvariant() + "|")
 										  orderby s.Priority descending
 										  select s).ToList();
 
@@ -104,7 +106,7 @@ namespace Carrotware.CMS.DBUpdater {
 
 		private static bool RunEval(List<SQLUpdateNugget> nugs) {
 			foreach (var n in nugs) {
-				DataTable table1 = DatabaseUpdate.GetTestData(n.SQLQuery);
+				DataTable table1 = DatabaseSchemaState.GetTestData(n.SQLQuery);
 				int iMatchCount = table1.Rows.Count;
 
 				switch (n.Mode) {

@@ -27,7 +27,9 @@ using System.Web.Caching;
 */
 
 namespace Carrotware.CMS.Core {
+
 	public class SecurityData {
+
 		public SecurityData() { }
 
 		public static UserRole FindRole(string roleName) {
@@ -529,38 +531,44 @@ namespace Carrotware.CMS.Core {
 
 		private static object newUsrLock = new object();
 
-		public IdentityResult CreateApplicationUser(ApplicationUser user, out ExtendedUserData newusr) {
-			return AttemptCreateApplicationUser(user, SecurityData.GenerateSimplePassword(), out newusr);
+		public NewUser CreateApplicationUser(ApplicationUser user) {
+			return AttemptCreateApplicationUser(user, SecurityData.GenerateSimplePassword());
 		}
 
-		public IdentityResult CreateApplicationUser(ApplicationUser user, string password, out ExtendedUserData newusr) {
-			return AttemptCreateApplicationUser(user, password, out newusr);
+		public NewUser CreateApplicationUser(ApplicationUser user, string password) {
+			return AttemptCreateApplicationUser(user, password);
 		}
 
-		private IdentityResult AttemptCreateApplicationUser(ApplicationUser user, string password, out ExtendedUserData newusr) {
-			newusr = null;
+		private NewUser AttemptCreateApplicationUser(ApplicationUser user, string password) {
+			var data = new NewUser();
 			var result = new IdentityResult();
 
 			lock (newUsrLock) {
 				if (user != null && !string.IsNullOrEmpty(user.Id)) {
 					using (var securityHelper = new SecurityHelper()) {
 						result = securityHelper.UserManager.Create(user, password);
+						data.IdentityResult = result;
+						data.User = user;
 
 						if (result.Succeeded) {
+							var newusr = new ExtendedUserData();
 							user = securityHelper.UserManager.FindByName(user.UserName);
 
-							newusr = new ExtendedUserData();
 							newusr.UserKey = user.Id;
 							newusr.Id = user.Id;
+							newusr.UserName = user.UserName;
+							newusr.Email = user.Email;
 							newusr.Save();
 
 							newusr = ExtendedUserData.FindByUserID(newusr.UserId);
+
+							data = new NewUser(newusr, user, result);
 						}
 					}
 				}
 			}
 
-			return result;
+			return data;
 		}
 
 		public IdentityResult ResetPassword(ApplicationUser user, string token, string password) {

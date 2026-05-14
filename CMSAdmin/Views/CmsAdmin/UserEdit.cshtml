@@ -75,16 +75,10 @@
 
 			<tr>
 				<td class="tablecontents">
-					@Html.LabelFor(m => m.User.LockoutEndDateUtc, htmlAttributes: new { @class = "caption" })
+					@Html.LabelFor(m => m.LockOut, htmlAttributes: new { @class = "caption" })
 				</td>
 				<td class="tablecontents">
-					@{
-						SplitDateTime rdt = new SplitDateTime();
-						rdt.CombinedDateTime = Model.User.LockoutEndDateUtc;
-						rdt.FieldName = Html.NameFor(model => Model.User.LockoutEndDateUtc).ToString();
-					}
-
-					@Html.Partial("_datetime", rdt)
+					@Html.CheckBoxFor(m => m.LockOut)
 				</td>
 			</tr>
 		</table>

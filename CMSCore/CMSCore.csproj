@@ -175,6 +175,7 @@
     <Compile Include="ImportExport\WPBlogReader.cs" />
     <Compile Include="MVC\IContentController.cs" />
     <Compile Include="SearchParameterObject.cs" />
+    <Compile Include="Security\NewUser.cs" />
     <Compile Include="Security\UserRole.cs" />
     <Compile Include="Security\UserProfile.cs" />
     <Compile Include="SiteActions.cs" />

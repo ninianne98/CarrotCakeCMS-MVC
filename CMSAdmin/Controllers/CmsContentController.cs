@@ -49,9 +49,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 		[HttpGet]
 		public ActionResult Default() {
-			if (DatabaseUpdate.TablesIncomplete) {
-				if (DatabaseUpdate.LastSQLError != null) {
-					SiteData.WriteDebugException("cmscontentcontroller_default_inc", DatabaseUpdate.LastSQLError);
+			if (DatabaseSchemaState.TablesIncomplete) {
+				if (DatabaseSchemaState.LastSQLError != null) {
+					SiteData.WriteDebugException("cmscontentcontroller_default_inc", DatabaseSchemaState.LastSQLError);
 				} else {
 					SiteData.WriteDebugException("cmscontentcontroller_default_inc", new Exception(string.Format("Requesting: {0} {1}", Request.Path, this.DisplayTemplateFile)));
 				}
@@ -63,7 +63,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				return DefaultView();
 			} catch (Exception ex) {
 				//assumption is database is probably empty / needs updating, so trigger the under construction view
-				if (DatabaseUpdate.SystemNeedsChecking(ex) || DatabaseUpdate.AreCMSTablesIncomplete()) {
+				if (DatabaseSchemaState.SystemNeedsChecking(ex) || DatabaseSchemaState.AreCMSTablesIncomplete()) {
 					SiteData.WriteDebugException("cmscontentcontroller_defaultview", ex);
 
 					return View("_EmptyHome");

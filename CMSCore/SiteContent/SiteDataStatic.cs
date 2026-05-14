@@ -387,7 +387,7 @@ namespace Carrotware.CMS.Core {
 						}
 					} else {
 						pageContents = GetCurrentLivePage();
-						if (pageContents == null && (!SiteData.CurrentSiteExists || DatabaseUpdate.AreCMSTablesIncomplete())) {
+						if (pageContents == null && (!SiteData.CurrentSiteExists || DatabaseSchemaState.AreCMSTablesIncomplete())) {
 							pageContents = ContentPageHelper.GetEmptyHome();
 						}
 						if (SecurityData.CurrentUserGuid != Guid.Empty) {
@@ -702,7 +702,7 @@ namespace Carrotware.CMS.Core {
 #if DEBUG
 			bWriteError = true; // always write errors when debug build
 #endif
-			DatabaseUpdate.WriteDebugException(bWriteError, sSrc, objErr);
+			DatabaseSchemaState.WriteDebugException(bWriteError, sSrc, objErr);
 		}
 
 		public static void Perform404Redirect(string sReqURL) {

@@ -120,7 +120,7 @@ namespace Carrotware.CMS.Core {
 				} catch (Exception ex) {
 					SiteData.WriteDebugException("cmsroutehandler_exception_uri", new Exception(string.Format("Exception: {0}", sCurrentPage)));
 
-					if (DatabaseUpdate.SystemNeedsChecking(ex) || DatabaseUpdate.AreCMSTablesIncomplete()) {
+					if (DatabaseSchemaState.SystemNeedsChecking(ex) || DatabaseSchemaState.AreCMSTablesIncomplete()) {
 						requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
 						requestCtx.RouteData.Values["action"] = CmsRouteConstants.DefaultAction;
 						requestCtx.RouteData.Values["id"] = null;
