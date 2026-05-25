@@ -97,8 +97,8 @@ a:hover {
 }
 .status-scroll {
   border: solid 0 transparent;
-  width: 375px !important;
-  height: 160px !important;
+  width: 380px !important;
+  height: 170px !important;
   overflow: auto;
 }
 @media screen and (min-width: 1610px) {
@@ -106,8 +106,8 @@ a:hover {
     min-width: 575px;
   }
   .status-scroll {
-    width: 450px !important;
-    height: 175px !important;
+    width: 470px !important;
+    height: 180px !important;
   }
 }
 /*
