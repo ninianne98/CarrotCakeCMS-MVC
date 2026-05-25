@@ -21,7 +21,6 @@ namespace Carrotware.CMS.Core {
 
 	public class Widget : IDisposable {
 		private CarrotCMSDataContext _db = CarrotCMSDataContext.Create();
-		//private CarrotCMSDataContext _db = CompiledQueries.dbConn;
 
 		public Widget() { }
 
@@ -276,8 +275,8 @@ namespace Carrotware.CMS.Core {
 
 				props = (from d in ds.Tables[0].AsEnumerable()
 						 select new WidgetProps {
-							 KeyName = d.Field<string>("KeyName"),
-							 KeyValue = d.Field<string>("KeyValue")
+							 KeyName = d.GetStringValue("KeyName"),
+							 KeyValue = d.GetStringValue("KeyValue")
 						 }).ToList();
 			}
 

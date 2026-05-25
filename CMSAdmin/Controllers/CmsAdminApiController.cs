@@ -1,11 +1,11 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Mvc.UI.Admin.Models;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Script.Serialization;
 using System.Xml.Serialization;
 
@@ -27,9 +27,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		protected override void OnAuthorization(AuthorizationContext filterContext) {
 			base.OnAuthorization(filterContext);
 
-			RouteValueDictionary vals = filterContext.RouteData.Values;
-			string action = vals["action"].ToString().ToLowerInvariant();
-			string controller = vals["controller"].ToString().ToLowerInvariant();
+			var routeInfo = filterContext.RouteData.GetRouteInfo();
+			string action = routeInfo.Action.ToLowerInvariant();
+			string controller = routeInfo.Controller.ToLowerInvariant();
 
 			if (!this.User.Identity.IsAuthenticated) {
 				filterContext.Result = new HttpUnauthorizedResult();
@@ -151,21 +151,19 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		private void LoadGuids() {
-			using (var pageHelper = new ContentPageHelper()) {
-				if (!string.IsNullOrEmpty(_currentEditPage)) {
-					filePage = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, _currentEditPage);
+			if (!string.IsNullOrEmpty(_currentEditPage)) {
+				filePage = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, _currentEditPage);
+				if (filePage != null) {
+					currentPageGuid = filePage.Root_ContentID;
+				}
+			} else {
+				if (currentPageGuid != Guid.Empty) {
+					filePage = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, currentPageGuid);
 					if (filePage != null) {
-						currentPageGuid = filePage.Root_ContentID;
+						_currentEditPage = filePage.FileName;
 					}
 				} else {
-					if (currentPageGuid != Guid.Empty) {
-						filePage = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, currentPageGuid);
-						if (filePage != null) {
-							_currentEditPage = filePage.FileName;
-						}
-					} else {
-						filePage = new ContentPage();
-					}
+					filePage = new ContentPage();
 				}
 			}
 		}

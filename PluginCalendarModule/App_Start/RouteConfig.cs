@@ -13,9 +13,9 @@ namespace CarrotCake.CMS.Plugins.CalendarModule {
 			routes.MapMvcAttributeRoutes();
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			Assembly _assembly = Assembly.GetExecutingAssembly();
+			Assembly assembly = Assembly.GetExecutingAssembly();
 
-			List<string> _namespaces = _assembly.GetTypes().Select(t => t.Namespace)
+			List<string> namespaces = assembly.GetTypes().Select(t => t.Namespace)
 					.Where(x => !String.IsNullOrEmpty(x))
 					.Distinct().ToList();
 
@@ -23,7 +23,7 @@ namespace CarrotCake.CMS.Plugins.CalendarModule {
 				name: "Default",
 				url: "{controller}/{action}/{id}",
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },
-				namespaces: _namespaces.ToArray()
+				namespaces: namespaces.ToArray()
 			);
 		}
 	}

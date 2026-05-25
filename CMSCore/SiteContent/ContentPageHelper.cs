@@ -825,12 +825,12 @@ namespace Carrotware.CMS.Core {
 			var caption = SiteNavHelper.GetNextCaption();
 
 			try {
-				Assembly _assembly = Assembly.GetExecutingAssembly();
+				Assembly assembly = Assembly.GetExecutingAssembly();
 
 				sbFile1.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Mock.SampleContent1.txt"));
 				sbFile2.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.SiteContent.Mock.SampleContent2.txt"));
 
-				List<string> imageNames = (from i in _assembly.GetManifestResourceNames()
+				List<string> imageNames = (from i in assembly.GetManifestResourceNames()
 										   where i.ToLowerInvariant().Contains("sitecontent.mock.sample")
 													 && i.EndsWith(".png")
 										   select i).ToList();

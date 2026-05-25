@@ -119,7 +119,7 @@ namespace Carrotware.CMS.Core {
 		public static FileDataHelper GetFileDataHelper() {
 			string fileTypes = null;
 
-			CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+			var config = CarrotCakeConfig.GetConfig();
 			if (config.FileManagerConfig != null && !string.IsNullOrEmpty(config.FileManagerConfig.BlockedExtensions)) {
 				fileTypes = config.FileManagerConfig.BlockedExtensions;
 			}
@@ -130,7 +130,7 @@ namespace Carrotware.CMS.Core {
 		private static DataSet ReadDataSetConfig(CMSConfigFileType cfg, string sPath) {
 			string sPlugCfg = "default.config";
 			string sRealPath = HttpContext.Current.Server.MapPath(sPath);
-			CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+			var config = CarrotCakeConfig.GetConfig();
 
 			int iExpectedTblCount = 1;
 
@@ -336,7 +336,7 @@ namespace Carrotware.CMS.Core {
 		private List<CMSPlugin> GetPluginsByDirectory() {
 			var plugins = new List<CMSPlugin>();
 
-			CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+			var config = CarrotCakeConfig.GetConfig();
 
 			string sPlugCfg = HttpContext.Current.Server.MapPath(config.ConfigFileLocation.PluginPath);
 
@@ -488,7 +488,7 @@ namespace Carrotware.CMS.Core {
 		private List<CMSAdminModule> GetModulesByDirectory() {
 			var plugins = new List<CMSAdminModule>();
 
-			CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+			var config = CarrotCakeConfig.GetConfig();
 
 			string sPlugCfg = HttpContext.Current.Server.MapPath(config.ConfigFileLocation.PluginPath);
 
@@ -643,7 +643,7 @@ namespace Carrotware.CMS.Core {
 		private List<CMSTemplate> GetTemplatesByDirectory() {
 			var plugins = new List<CMSTemplate>();
 
-			CarrotCakeConfig config = CarrotCakeConfig.GetConfig();
+			var config = CarrotCakeConfig.GetConfig();
 
 			string sPlugCfg = HttpContext.Current.Server.MapPath(config.ConfigFileLocation.TemplatePath);
 

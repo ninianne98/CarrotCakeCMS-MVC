@@ -29,10 +29,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 			BuildFolderList();
 
-			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+			using (var pageHelper = new ContentPageHelper()) {
 				this.PageCount = pageHelper.GetSitePageCount(SiteData.CurrentSiteID, ContentPageType.PageType.ContentEntry);
 
-				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+				using (var cmsHelper = new CMSConfigHelper()) {
 					this.Templates = cmsHelper.Templates;
 
 					float iThird = (float)(this.PageCount - 1) / (float)3;
@@ -99,24 +99,15 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			return _navHome;
 		}
 
-		private Guid FindUser(Guid userId) {
-			ExtendedUserData usr = new ExtendedUserData(userId);
-
-			if (usr == null) {
-				return SecurityData.CurrentUserGuid;
-			} else {
-				return userId;
-			}
-		}
-
 		public bool HasLoaded { get; set; }
 
-		public string Message { get; set; }
+		public string Message { get; set; } = string.Empty;
 
-		private void SetMsg(string sMessage) {
-			if (!string.IsNullOrEmpty(sMessage)) {
+		private void SetMsg(List<string> messages) {
+			if (messages != null && messages.Any()) {
+				var htmlString = string.Join(Environment.NewLine, messages.Select(x => string.Format("<li>{0}</li>", x)));
+				this.Message = "<ul>" + Environment.NewLine + htmlString + Environment.NewLine + "<ul>";
 				this.HasLoaded = true;
-				this.Message = sMessage;
 			}
 		}
 
@@ -126,10 +117,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 			SiteData.CurrentSite = null;
 
-			SiteData site = SiteData.CurrentSite;
+			var site = SiteData.CurrentSite;
 
+			var lstMsg = new List<string>();
 			this.Message = string.Empty;
-			string sMsg = string.Empty;
 
 			if (this.ImportSite || this.ImportPages || this.ImportPosts) {
 				List<string> tags = site.GetTagList().Select(x => x.TagSlug.ToLowerInvariant()).ToList();
@@ -138,7 +129,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 				this.Site.Tags.RemoveAll(x => tags.Contains(x.InfoKey.ToLowerInvariant()));
 				this.Site.Categories.RemoveAll(x => cats.Contains(x.InfoKey.ToLowerInvariant()));
 
-				sMsg += "<li>Imported Tags and Categories</li>";
+				lstMsg.Add("Imported Tags and Categories");
 
 				List<ContentTag> lstTag = (from l in this.Site.Tags.Distinct()
 										   select new ContentTag {
@@ -165,24 +156,25 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					v.Save();
 				}
 			}
-			SetMsg(sMsg);
+			SetMsg(lstMsg);
 
 			if (this.ImportSite) {
-				sMsg += "<li>Updated Site Name</li>";
+				lstMsg.Add("Updated Site Name");
+
 				site.SiteName = this.Site.SiteTitle;
 				site.SiteTagline = this.Site.SiteDescription;
 				site.Save();
 			}
-			SetMsg(sMsg);
+			SetMsg(lstMsg);
 
 			if (!this.MapUsers) {
 				this.Site.Authors = new List<WordPressUser>();
 			}
 
+			var sd = new SecurityData();
+
 			//iterate author collection and find if in the system
 			foreach (WordPressUser wpu in this.Site.Authors) {
-				SecurityData sd = new SecurityData();
-
 				ExtendedUserData usr = null;
 				wpu.ImportUserID = Guid.Empty;
 
@@ -214,8 +206,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					}
 
 					if (wpu.ImportUserID != Guid.Empty) {
-						var ud = new ExtendedUserData(wpu.ImportUserID);
 						if (!string.IsNullOrEmpty(wpu.FirstName) || !string.IsNullOrEmpty(wpu.LastName)) {
+							var ud = new ExtendedUserData(wpu.ImportUserID);
 							ud.FirstName = wpu.FirstName;
 							ud.LastName = wpu.LastName;
 							ud.Save();
@@ -228,7 +220,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				if (this.ImportPages) {
-					sMsg += "<li>Imported Pages</li>";
+					lstMsg.Add("Imported Pages");
 
 					int iOrder = 0;
 					SiteNav navHome = navHelper.FindHome(site.SiteID, false);
@@ -292,16 +284,18 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 							cp.GoLiveDate = navData.GoLiveDate;
 						}
 
-						cp.SavePageEdit();
-
-						this.Site.Comments.Where(x => x.PostID == wpp.PostID).ToList().ForEach(r => r.ImportRootID = cp.Root_ContentID);
+						//cp.SavePageEdit();
+						//wpp.ImportRootID = cp.Root_ContentID;
+						//this.Site.Comments.Where(x => x.PostID == wpp.PostID).ToList().ForEach(r => r.ImportRootID = cp.Root_ContentID);
+						//wpp.SavePageEdit(this.Site, cp);
+						this.Site.SavePageEdit(wpp, cp);
 
 						iOrder++;
 					}
 				}
 
 				if (this.ImportPosts) {
-					sMsg += "<li>Imported Posts</li>";
+					lstMsg.Add("Imported Posts");
 
 					foreach (var wpp in (from c in this.Site.Content
 										 where c.PostType == WordPressPost.WPPostType.BlogPost
@@ -330,23 +324,25 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 							cp.GoLiveDate = navData.GoLiveDate;
 						}
 
-						cp.SavePageEdit();
-
-						this.Site.Comments.Where(x => x.PostID == wpp.PostID).ToList().ForEach(r => r.ImportRootID = cp.Root_ContentID);
+						//cp.SavePageEdit();
+						//wpp.ImportRootID = cp.Root_ContentID;
+						//this.Site.Comments.Where(x => x.PostID == wpp.PostID).ToList().ForEach(r => r.ImportRootID = cp.Root_ContentID);
+						//wpp.SavePageEdit(this.Site, cp);
+						this.Site.SavePageEdit(wpp, cp);
 					}
 
-					using (ContentPageHelper cph = new ContentPageHelper()) {
+					using (var cph = new ContentPageHelper()) {
 						cph.BulkBlogFileNameUpdateFromDate(site.SiteID);
 						cph.FixBlogNavOrder(site.SiteID);
 					}
 				}
 			}
-			SetMsg(sMsg);
+			SetMsg(lstMsg);
 
 			this.Site.Comments.RemoveAll(r => r.ImportRootID == Guid.Empty);
 
 			if (this.Site.Comments.Any()) {
-				sMsg += "<li>Imported Comments</li>";
+				lstMsg.Add("Imported Comments");
 			}
 
 			foreach (WordPressComment wpc in this.Site.Comments) {
@@ -384,7 +380,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 					pc.Save();
 				}
 			}
-			SetMsg(sMsg);
+			SetMsg(lstMsg);
 		}
 
 		protected void RepairBody(WordPressPost wpp) {

@@ -81,7 +81,7 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Models {
 			foreach (var prop in props) {
 				var val = prop.GetValue(this.ItemData).ToString();
 
-				if (String.IsNullOrWhiteSpace(val)) {
+				if (string.IsNullOrWhiteSpace(val)) {
 					ValidationResult err = new ValidationResult(string.Format("{0} is required", prop.Name), new string[] { string.Format("ItemData.{0}", prop.Name) });
 					errors.Add(err);
 				}

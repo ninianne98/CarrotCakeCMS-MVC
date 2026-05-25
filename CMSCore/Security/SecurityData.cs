@@ -357,9 +357,8 @@ namespace Carrotware.CMS.Core {
 					keyVal = Convert.ToBoolean(ret);
 				} else {
 					using (var securityHelper = new SecurityHelper()) {
-						var _user = securityHelper.UserManager.FindByName(userName);
-
-						keyVal = securityHelper.UserManager.IsInRole(_user.Id, groupName);
+						var user = securityHelper.UserManager.FindByName(userName);
+						keyVal = securityHelper.UserManager.IsInRole(user.Id, groupName);
 					}
 					HttpContext.Current.Cache.Insert(key, keyVal.ToString(), null, DateTime.Now.AddSeconds(30), Cache.NoSlidingExpiration);
 				}
@@ -953,8 +952,8 @@ namespace Carrotware.CMS.Core {
 		private static char SelectRandomChar(string sourceString) {
 			return SelectRandomString(sourceString, 1).FirstOrDefault();
 			//var rand = new Random();
-			//int index = rand.Next(sourceString.Length - 1);
-			//return sourceString.ToCharArray()[index];
+			//int index = rand.Next(sourcestring.Length - 1);
+			//return sourcestring.ToCharArray()[index];
 		}
 	}
 }

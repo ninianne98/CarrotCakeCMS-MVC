@@ -1,4 +1,4 @@
-﻿using Carrotware.CMS.Security.Models;
+﻿using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +19,15 @@ using System.Xml.Serialization;
 namespace Carrotware.CMS.Core {
 
 	public class ContentImportExportUtils {
-		public static string keyPageImport = "cmsContentPageExport";
+		private static string _keyPageImport = "cmsContentPageExport";
+
+		public static string ImportQueryKey {
+			get { return "importid"; }
+		}
+
+		public static string ImportQuery(string uri, Guid id) {
+			return string.Format("{0}?{1}={2}", uri, ImportQueryKey, id.ToString());
+		}
 
 		public static void AssignContentPageExportNewIDs(ContentPageExport cpe) {
 			cpe.NewRootContentID = Guid.NewGuid();
@@ -60,6 +68,38 @@ namespace Carrotware.CMS.Core {
 				cpe.ThePage.ContentCategories = new List<ContentCategory>();
 				cpe.ThePage.ContentTags = new List<ContentTag>();
 			}
+		}
+
+		public static ContentPageExport MapTemplate(ContentPageExport cpe) {
+			var filePath = cpe.ThePage.TemplateFile ?? string.Empty;
+
+			if (filePath.Length > 0) {
+				cpe.ThePage.TemplateFile = MapTemplate(cpe.ThePage.TemplateFile);
+			}
+
+			return cpe;
+		}
+
+		public static string MapTemplate(string templateName) {
+			var filePath = templateName ?? string.Empty;
+
+			if (filePath.Length > 0) {
+				filePath = filePath.ToLowerInvariant().FixPathSlashes();
+				var fileName = Path.GetFileNameWithoutExtension(filePath);
+				var rootFolder = new DirectoryInfo(Path.GetDirectoryName(filePath)).Name;
+				var tplFilePath = (Path.Combine(rootFolder, fileName) + ".cshtml").FixPathSlashes().ToLowerInvariant();
+
+				using (var cmsHelper = new CMSConfigHelper()) {
+					var tp = cmsHelper.Templates.Where(x => x.TemplatePath.ToLowerInvariant() == filePath
+										|| x.TemplatePath.ToLowerInvariant().EndsWith(tplFilePath)).FirstOrDefault();
+
+					if (tp != null) {
+						return tp.TemplatePath;
+					}
+				}
+			}
+
+			return SiteData.DefaultTemplateFilename;
 		}
 
 		public static void AssignSiteExportNewIDs(SiteExport se) {
@@ -112,20 +152,8 @@ namespace Carrotware.CMS.Core {
 				cont = new ContentPage(site.SiteID, contType);
 				cont.ContentID = Guid.NewGuid();
 
-				cont.CreateUserId = SecurityData.CurrentUserGuid;
-				cont.EditUserId = SecurityData.CurrentUserGuid;
-
-				if (!string.IsNullOrEmpty(c.PostAuthor)) {
-					WordPressUser wpu = wps.Authors.Where(x => x.Login.ToLowerInvariant() == c.PostAuthor.ToLowerInvariant()).FirstOrDefault();
-
-					if (wpu != null && wpu.ImportUserID != Guid.Empty) {
-						ApplicationUser usr = SecurityData.GetUserByID(wpu.ImportUserID.ToString());
-						if (usr != null) {
-							cont.CreateUserId = wpu.ImportUserID;
-							cont.EditUserId = wpu.ImportUserID;
-						}
-					}
-				}
+				cont.EditUserId = wps.FindImportUser(c.PostAuthor);
+				cont.CreateUserId = wps.FindImportUser(c.PostAuthor);
 
 				cont.Root_ContentID = c.ImportRootID;
 				cont.FileName = ContentPageHelper.ScrubFilename(c.ImportRootID, c.ImportFileName);
@@ -248,21 +276,21 @@ namespace Carrotware.CMS.Core {
 		public static string GetContentPageExportXML(Guid siteID, Guid rootContentID) {
 			ContentPageExport exp = GetExportPage(siteID, rootContentID);
 
-			return GetExportXML<ContentPageExport>(exp);
+			return GetExportXML(exp);
 		}
 
 		public static string GetContentPageExportXML(Guid siteID) {
 			SiteExport exp = GetExportSite(siteID);
 
-			return GetExportXML<SiteExport>(exp);
+			return GetExportXML(exp);
 		}
 
 		public static void RemoveSerializedExportData(Guid rootContentID) {
-			CMSConfigHelper.ClearSerialized(rootContentID, keyPageImport);
+			CMSConfigHelper.ClearSerialized(rootContentID, _keyPageImport);
 		}
 
 		public static string GetSerialized(Guid itemID) {
-			return CMSConfigHelper.GetSerialized(itemID, keyPageImport);
+			return CMSConfigHelper.GetSerialized(itemID, _keyPageImport);
 		}
 
 		public static ContentPageExport GetSerializedContentPageExport(Guid rootContentID) {
@@ -319,7 +347,7 @@ namespace Carrotware.CMS.Core {
 
 		public static void SaveSerializedDataExport<T>(Guid guidKey, T theData) {
 			if (theData == null) {
-				CMSConfigHelper.ClearSerialized(guidKey, keyPageImport);
+				CMSConfigHelper.ClearSerialized(guidKey, _keyPageImport);
 			} else {
 				var xmlSerializer = new XmlSerializer(typeof(T));
 				string xml = string.Empty;
@@ -327,12 +355,12 @@ namespace Carrotware.CMS.Core {
 					xmlSerializer.Serialize(stringWriter, theData);
 					xml = stringWriter.ToString();
 				}
-				CMSConfigHelper.SaveSerialized(guidKey, keyPageImport, xml);
+				CMSConfigHelper.SaveSerialized(guidKey, _keyPageImport, xml);
 			}
 		}
 
-		public static Object GetSerialData<T>(string xml) {
-			Object obj = null;
+		public static object GetSerialData<T>(string xml) {
+			object obj = null;
 			try {
 				var xmlSerializer = new XmlSerializer(typeof(T));
 

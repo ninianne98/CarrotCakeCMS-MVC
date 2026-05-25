@@ -26,9 +26,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			routes.MapMvcAttributeRoutes();
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-			Assembly _assembly = Assembly.GetExecutingAssembly();
+			Assembly assembly = Assembly.GetExecutingAssembly();
 
-			List<string> _namespaces = _assembly.GetTypes().Select(t => t.Namespace)
+			List<string> namespaces = assembly.GetTypes().Select(t => t.Namespace)
 					.Where(x => !string.IsNullOrEmpty(x))
 					.Distinct().ToList();
 
@@ -39,7 +39,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 				name: "C3_Admin_Default",
 				url: adminFolder + "/{action}/{id}",
 				defaults: new { controller = CmsRouteConstants.CmsController.Admin, action = SiteActions.Index, id = UrlParameter.Optional },
-				namespaces: _namespaces.ToArray()
+				namespaces: namespaces.ToArray()
 			);
 
 			// using -api vs api/ due to route interception
@@ -47,7 +47,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 				name: "C3_AdminApi_Default",
 				url: adminApi + "/{action}/{id}",
 				defaults: new { controller = CmsRouteConstants.CmsController.AdminApi, action = SiteActions.Index, id = UrlParameter.Optional },
-				namespaces: _namespaces.ToArray()
+				namespaces: namespaces.ToArray()
 			);
 
 			var config = CarrotSecurityConfig.GetConfig();
@@ -60,7 +60,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 					name: "C3_Admin_Login",
 					url: loginPath + "/{id}",
 					defaults: new { controller = CmsRouteConstants.CmsController.Admin, action = SiteActions.Login, id = UrlParameter.Optional },
-					namespaces: _namespaces.ToArray()
+					namespaces: namespaces.ToArray()
 				);
 			}
 
@@ -68,18 +68,18 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 				name: "CmsContent_AjaxForms",
 				url: "CmsAjaxForms/{action}.ashx",
 				defaults: new { controller = CmsRouteConstants.CmsController.Content, action = CmsRouteConstants.IndexAction, id = UrlParameter.Optional },
-				namespaces: _namespaces.ToArray()
+				namespaces: namespaces.ToArray()
 			);
 
 			routes.MapRoute(
 				name: "CMS_Content_Default",
-				url: "{*RequestedUri}").RouteHandler = new CmsRouteHandler();
+				url: "{*" + CmsRouteHandler.RouteKey + "}").RouteHandler = new CmsRouteHandler();
 
 			routes.MapRoute(
 				name: "Default",
 				url: "{controller}/{action}/{id}",
 				defaults: new { controller = CmsRouteConstants.CmsController.Home, action = CmsRouteConstants.IndexAction, id = UrlParameter.Optional },
-				namespaces: _namespaces.ToArray()
+				namespaces: namespaces.ToArray()
 			);
 		}
 	}

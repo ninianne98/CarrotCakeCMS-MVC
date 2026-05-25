@@ -1,6 +1,7 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface;
 using Carrotware.CMS.Mvc.UI.Admin.Controllers;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -38,8 +39,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 				} else {
 					SiteData.WriteDebugException("cmscontrollerfactory_createcontroller", new Exception(String.Format("Anonymous: {0} - {1}", ctrl.GetType(), controllerName)));
 
-					requestContext.RouteData.Values["action"] = "Index";
-					requestContext.RouteData.Values["id"] = null;
+					requestContext.RouteData.Values[RouteInfo.Keys.Action] = CmsRouteConstants.IndexAction;
+					requestContext.RouteData.Values[RouteInfo.Keys.Id] = null;
 
 					ctrl = new CmsAdminController();
 				}

@@ -442,9 +442,9 @@ namespace Carrotware.CMS.Core {
 			} catch { }
 
 			try {
-				Assembly _assembly = Assembly.GetExecutingAssembly();
+				Assembly assembly = Assembly.GetExecutingAssembly();
 
-				List<string> imageNames = (from i in _assembly.GetManifestResourceNames()
+				List<string> imageNames = (from i in assembly.GetManifestResourceNames()
 										   where i.Contains("SiteContent.Mock.sample")
 												&& i.EndsWith(".png")
 										   select i).ToList();

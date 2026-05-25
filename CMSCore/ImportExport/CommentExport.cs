@@ -17,10 +17,10 @@ namespace Carrotware.CMS.Core {
 	public class CommentExport {
 
 		public CommentExport() {
-			CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
-			ExportDate = DateTime.UtcNow;
+			this.CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
+			this.ExportDate = DateTime.UtcNow;
 
-			TheComment = new PostComment();
+			this.TheComment = new PostComment();
 		}
 
 		public static List<CommentExport> GetPageCommentExport(Guid rootContentID) {
@@ -34,27 +34,27 @@ namespace Carrotware.CMS.Core {
 		}
 
 		private void SetVals(PostComment pc) {
-			CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
-			ExportDate = DateTime.UtcNow;
+			this.CarrotCakeVersion = SiteData.CarrotCakeCMSVersion;
+			this.ExportDate = DateTime.UtcNow;
 
-			NewContentCommentID = Guid.NewGuid();
+			this.NewContentCommentID = Guid.NewGuid();
 
-			TheComment = pc;
+			this.TheComment = pc;
 
-			if (TheComment == null) {
-				TheComment = new PostComment();
-				TheComment.Root_ContentID = Guid.NewGuid();
+			if (this.TheComment == null) {
+				this.TheComment = new PostComment();
+				this.TheComment.Root_ContentID = Guid.NewGuid();
 			}
 
-			OriginalRootContentID = TheComment.Root_ContentID;
-			OriginalContentCommentID = TheComment.ContentCommentID;
+			this.OriginalRootContentID = this.TheComment.Root_ContentID;
+			this.OriginalContentCommentID = this.TheComment.ContentCommentID;
 
-			TheComment.ContentCommentID = NewContentCommentID;
+			this.TheComment.ContentCommentID = this.NewContentCommentID;
 		}
 
-		public string CarrotCakeVersion { get; set; }
+		public string CarrotCakeVersion { get; set; } = SiteData.CarrotCakeCMSVersion;
 
-		public DateTime ExportDate { get; set; }
+		public DateTime ExportDate { get; set; } = DateTime.UtcNow;
 
 		public Guid NewContentCommentID { get; set; }
 

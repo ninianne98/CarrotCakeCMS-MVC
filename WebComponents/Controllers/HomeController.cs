@@ -229,9 +229,9 @@ namespace Carrotware.Web.UI.Components.Controllers {
 
 			DoCacheMagic(context, 3);
 
-			Color f = CarrotWeb.DecodeColor(fgcolor);
-			Color b = CarrotWeb.DecodeColor(bgcolor);
-			Color n = CarrotWeb.DecodeColor(ncolor);
+			Color f = CarrotWeb.DecodeColor(CaptchaImage.FGColorDef);
+			Color b = CarrotWeb.DecodeColor(CaptchaImage.BGColorDef);
+			Color n = CarrotWeb.DecodeColor(CaptchaImage.NColorDef);
 
 			Bitmap bmpCaptcha = CaptchaImage.GetCaptchaImage(f, b, n);
 

@@ -26,7 +26,7 @@ namespace Carrotware.CMS.Core {
 		public ContentPageExport(Guid siteID, Guid rootContentID) {
 			ContentPage cp = null;
 
-			using (ContentPageHelper cph = new ContentPageHelper()) {
+			using (var cph = new ContentPageHelper()) {
 				cp = cph.FindContentByID(siteID, rootContentID);
 			}
 
@@ -54,21 +54,21 @@ namespace Carrotware.CMS.Core {
 			if (this.ThePage == null) {
 				this.ThePage = new ContentPage();
 				this.ThePage.Root_ContentID = Guid.NewGuid();
-				this.ThePage.ContentID = ThePage.Root_ContentID;
+				this.ThePage.ContentID = this.ThePage.Root_ContentID;
 			}
 			if (this.ThePageWidgets == null) {
 				this.ThePageWidgets = new List<Widget>();
 			}
 
-			this.OriginalRootContentID = ThePage.Root_ContentID;
-			this.OriginalSiteID = ThePage.SiteID;
+			this.OriginalRootContentID = this.ThePage.Root_ContentID;
+			this.OriginalSiteID = this.ThePage.SiteID;
 			this.OriginalParentContentID = Guid.Empty;
-			this.ParentFileName = String.Empty;
+			this.ParentFileName = "";
 
 			if (this.ThePage.Parent_ContentID != null) {
-				ContentPage parent = new ContentPage();
-				using (ContentPageHelper cph = new ContentPageHelper()) {
-					parent = cph.FindContentByID(siteID, ThePage.Parent_ContentID.Value);
+				var parent = new ContentPage();
+				using (var cph = new ContentPageHelper()) {
+					parent = cph.FindContentByID(siteID, this.ThePage.Parent_ContentID.Value);
 				}
 				this.ParentFileName = parent.FileName;
 				this.OriginalParentContentID = parent.Root_ContentID;
@@ -91,7 +91,7 @@ namespace Carrotware.CMS.Core {
 				userID1 = cp.EditUserId.Value;
 			}
 
-			ExtendedUserData u1 = new ExtendedUserData(userID1);
+			var u1 = new ExtendedUserData(userID1);
 			this.TheUser = new SiteExportUser(u1);
 
 			Guid userID2 = Guid.Empty;
@@ -100,7 +100,7 @@ namespace Carrotware.CMS.Core {
 				userID2 = cp.CreditUserId.Value;
 			}
 
-			ExtendedUserData u2 = new ExtendedUserData(userID2);
+			var u2 = new ExtendedUserData(userID2);
 			if (u2 != null) {
 				this.CreditUser = new SiteExportUser(u2);
 			} else {
@@ -108,11 +108,11 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public string CarrotCakeVersion { get; set; }
+		public string CarrotCakeVersion { get; set; } = SiteData.CarrotCakeCMSVersion;
 
-		public DateTime ExportDate { get; set; }
+		public DateTime ExportDate { get; set; } = DateTime.UtcNow;
 
-		public Guid NewRootContentID { get; set; }
+		public Guid NewRootContentID { get; set; } = Guid.NewGuid();
 
 		public Guid OriginalRootContentID { get; set; }
 
@@ -122,12 +122,21 @@ namespace Carrotware.CMS.Core {
 
 		public string ParentFileName { get; set; }
 
-		public ContentPage ThePage { get; set; }
+		public ContentPage ThePage { get; set; } = new ContentPage();
 
-		public List<Widget> ThePageWidgets { get; set; }
+		public List<Widget> ThePageWidgets { get; set; } = new List<Widget>();
 
-		public SiteExportUser TheUser { get; set; }
+		public SiteExportUser TheUser { get; set; } = new SiteExportUser();
 
-		public SiteExportUser CreditUser { get; set; }
+		public SiteExportUser CreditUser { get; set; } = new SiteExportUser();
+
+		public void SavePageEdit(ContentPage cp) {
+			//cp.SavePageEdit();
+			//this.ThePage.Root_ContentID = cp.Root_ContentID;
+			//this.ThePage.ContentID = cp.ContentID;
+
+			this.ThePage = cp;
+			this.ThePage.SavePageEdit();
+		}
 	}
 }

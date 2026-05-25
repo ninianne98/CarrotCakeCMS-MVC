@@ -21,6 +21,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMSSecurity", "CMSSecurity\
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CMSDataScripts", "CMSDataScripts\CMSDataScripts.sqlproj", "{BE957D52-307D-4EBA-8B37-7016F8CD77E0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		CMSDBUpdater\DataScripts\ALTER01.sql = CMSDBUpdater\DataScripts\ALTER01.sql
+		CMSDBUpdater\DataScripts\ALTER02.sql = CMSDBUpdater\DataScripts\ALTER02.sql
+		CMSDBUpdater\DataScripts\CREATE01.sql = CMSDBUpdater\DataScripts\CREATE01.sql
+		LICENSE = LICENSE
+		CMSDBUpdater\DataScripts\MEMBER01.sql = CMSDBUpdater\DataScripts\MEMBER01.sql
+		CMSDBUpdater\DataScripts\MIGRATE01.sql = CMSDBUpdater\DataScripts\MIGRATE01.sql
+		CMSDBUpdater\DataScripts\MIGRATEWIDGETS01.sql = CMSDBUpdater\DataScripts\MIGRATEWIDGETS01.sql
+		README.md = README.md
+		CMSDBUpdater\DataScripts\REFRESH01.sql = CMSDBUpdater\DataScripts\REFRESH01.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Web;
 
 namespace CarrotCake.CMS.Plugins.LoremIpsum.Code {
 	public class WebHelper {

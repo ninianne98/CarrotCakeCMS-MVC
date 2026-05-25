@@ -4,7 +4,6 @@
 	ViewBag.Title = "Site Import";
 }
 
-
 @if (!String.IsNullOrEmpty(Model.Message)) {
 	<fieldset class="fieldset-xxlg">
 		<legend>
@@ -13,9 +12,7 @@
 			</label>
 		</legend>
 		<div id="divSiteLoadSummary">
-			<ul>
-				@Html.Raw(Model.Message)
-			</ul>
+			@Html.Raw(Model.Message)
 		</div>
 	</fieldset>
 }
@@ -157,20 +154,20 @@
 		</p>
 
 		@{
-	var pageGrid = CarrotWeb.CarrotWebGrid<ContentPage>(Model.Site.TheContentPages.Select(s => s.ThePage).OrderBy(s => s.NavOrder).ToList());
+		var pageGrid = CarrotWeb.CarrotWebGrid<ContentPage>(Model.Site.TheContentPages.Select(s => s.ThePage).OrderBy(s => s.NavOrder).ToList());
 
-	pageGrid.TableAttributes = new { @class = "datatable" };
-	pageGrid.THeadAttributes = new { @class = "tablehead" };
-	pageGrid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
-	pageGrid.UseDataPage = false;
-	pageGrid.ConfigName(Html.NameFor(x => Model.Site.TheContentPages));
+		pageGrid.TableAttributes = new { @class = "datatable" };
+		pageGrid.THeadAttributes = new { @class = "tablehead" };
+		pageGrid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+		pageGrid.UseDataPage = false;
+		pageGrid.ConfigName(Html.NameFor(x => Model.Site.TheContentPages));
 
-	pageGrid
-		.AddColumn(x => x.NavOrder, new CarrotGridColumn())
-		.AddColumn(x => x.FileName, new CarrotGridColumn())
-		.AddColumn(x => x.NavMenuText, new CarrotGridColumn())
-		.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
-		.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn());
+		pageGrid
+			.AddColumn(x => x.NavOrder, new CarrotGridColumn())
+			.AddColumn(x => x.FileName, new CarrotGridColumn())
+			.AddColumn(x => x.NavMenuText, new CarrotGridColumn())
+			.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+			.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn());
 
 		@pageGrid.OutputHtmlBody()
 		}
@@ -198,19 +195,19 @@
 			@String.Format(" {0} records", Model.Site.TheBlogPages.Count)
 		</p>
 		@{
-	var postGrid = CarrotWeb.CarrotWebGrid<ContentPage>(Model.Site.TheBlogPages.Select(s => s.ThePage).OrderByDescending(s => s.CreateDate).ToList());
+		var postGrid = CarrotWeb.CarrotWebGrid<ContentPage>(Model.Site.TheBlogPages.Select(s => s.ThePage).OrderByDescending(s => s.CreateDate).ToList());
 
-	postGrid.TableAttributes = new { @class = "datatable" };
-	postGrid.THeadAttributes = new { @class = "tablehead" };
-	postGrid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
-	postGrid.UseDataPage = false;
-	postGrid.ConfigName(Html.NameFor(x => Model.Site.TheBlogPages));
+		postGrid.TableAttributes = new { @class = "datatable" };
+		postGrid.THeadAttributes = new { @class = "tablehead" };
+		postGrid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+		postGrid.UseDataPage = false;
+		postGrid.ConfigName(Html.NameFor(x => Model.Site.TheBlogPages));
 
-	postGrid
-		.AddColumn(x => x.FileName, new CarrotGridColumn())
-		.AddColumn(x => x.NavMenuText, new CarrotGridColumn())
-		.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
-		.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn());
+		postGrid
+			.AddColumn(x => x.FileName, new CarrotGridColumn())
+			.AddColumn(x => x.NavMenuText, new CarrotGridColumn())
+			.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+			.AddColumn(x => x.PageActive, new CarrotGridBooleanImageColumn());
 
 		@postGrid.OutputHtmlBody()
 		}
@@ -228,19 +225,19 @@
 			@String.Format(" {0} records", Model.Site.TheSnippets.Count)
 		</p>
 		@{
-	var snipGrid = CarrotWeb.CarrotWebGrid<ContentSnippet>(Model.Site.TheSnippets.OrderByDescending(s => s.ContentSnippetName).ToList());
+		var snipGrid = CarrotWeb.CarrotWebGrid<ContentSnippet>(Model.Site.TheSnippets.OrderByDescending(s => s.ContentSnippetName).ToList());
 
-	snipGrid.TableAttributes = new { @class = "datatable" };
-	snipGrid.THeadAttributes = new { @class = "tablehead" };
-	snipGrid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
-	snipGrid.UseDataPage = false;
-	snipGrid.ConfigName(Html.NameFor(x => Model.Site.TheContentPages));
+		snipGrid.TableAttributes = new { @class = "datatable" };
+		snipGrid.THeadAttributes = new { @class = "tablehead" };
+		snipGrid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+		snipGrid.UseDataPage = false;
+		snipGrid.ConfigName(Html.NameFor(x => Model.Site.TheContentPages));
 
-	snipGrid
-		.AddColumn(x => x.ContentSnippetSlug, new CarrotGridColumn())
-		.AddColumn(x => x.ContentSnippetName, new CarrotGridColumn())
-		.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
-		.AddColumn(x => x.ContentSnippetActive, new CarrotGridBooleanImageColumn());
+		snipGrid
+			.AddColumn(x => x.ContentSnippetSlug, new CarrotGridColumn())
+			.AddColumn(x => x.ContentSnippetName, new CarrotGridColumn())
+			.AddColumn(x => x.CreateDate, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+			.AddColumn(x => x.ContentSnippetActive, new CarrotGridBooleanImageColumn());
 
 		@snipGrid.OutputHtmlBody()
 		}

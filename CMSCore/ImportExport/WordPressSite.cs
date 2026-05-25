@@ -35,12 +35,12 @@ namespace Carrotware.CMS.Core {
 
 		public DateTime ExtractDate { get; set; }
 
-		public List<InfoKVP> Categories { get; set; }
-		public List<InfoKVP> Tags { get; set; }
+		public List<InfoKVP> Categories { get; set; } = new List<InfoKVP>();
+		public List<InfoKVP> Tags { get; set; } = new List<InfoKVP>();
 
-		public List<WordPressPost> Content { get; set; }
-		public List<WordPressComment> Comments { get; set; }
-		public List<WordPressUser> Authors { get; set; }
+		public List<WordPressPost> Content { get; set; } = new List<WordPressPost>();
+		public List<WordPressComment> Comments { get; set; } = new List<WordPressComment>();
+		public List<WordPressUser> Authors { get; set; } = new List<WordPressUser>();
 
 		public List<WordPressPost> ContentPages {
 			get {
@@ -60,8 +60,44 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
+		public Guid FindImportUser(string author) {
+			if (!string.IsNullOrEmpty(author) && this.Authors != null && this.Authors.Any()) {
+				var usr = (from t in this.Authors
+						   where (t.Login.ToLowerInvariant() == author.ToLowerInvariant())
+								   || (t.Email.ToLowerInvariant() == author.ToLowerInvariant())
+						   select t).FirstOrDefault();
+
+				if (usr != null && usr.ImportUserID != Guid.Empty) {
+					return usr.ImportUserID;
+				}
+			}
+
+			return SecurityData.CurrentUserGuid;
+		}
+
+		public Guid FindImportUser(WordPressUser u) {
+			var usr = (from t in this.Authors
+					   where (u.Login != null && t.Login.ToLowerInvariant() == u.Login.ToLowerInvariant())
+							   || (u.Email != null && t.Email.ToLowerInvariant() == u.Email.ToLowerInvariant())
+					   select t).FirstOrDefault();
+
+			if (usr != null && usr.ImportUserID != Guid.Empty) {
+				return usr.ImportUserID;
+			}
+			return SecurityData.CurrentUserGuid;
+		}
+
+		public void SavePageEdit(WordPressPost post, ContentPage cp) {
+			cp.SavePageEdit();
+
+			post.ImportRootID = cp.Root_ContentID;
+
+			this.Comments.Where(c => c.PostID == post.PostID).ToList()
+					.ForEach(r => r.ImportRootID = post.ImportRootID);
+		}
+
 		public override string ToString() {
-			return SiteTitle + " : " + SiteDescription;
+			return this.SiteTitle + " : " + this.SiteDescription;
 		}
 
 		public override bool Equals(Object obj) {
@@ -77,7 +113,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public override int GetHashCode() {
-			return SiteTitle.GetHashCode() ^ SiteURL.GetHashCode();
+			return (this.SiteTitle ?? string.Empty).GetHashCode() ^ (this.SiteURL ?? string.Empty).GetHashCode();
 		}
 	}
 }

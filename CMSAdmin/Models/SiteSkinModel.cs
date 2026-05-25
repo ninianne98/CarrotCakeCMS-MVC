@@ -79,7 +79,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 				fldrWorking.Add(skinFolder);
 
 				try {
-					string assetPath = String.Format("~/assets/{0}", skinName);
+					string assetPath = string.Format("~/assets/{0}", skinName);
 
 					if (Directory.Exists(server.MapPath(assetPath))) {
 						FileData incFolder = helpFile.GetFolderInfo("/", server.MapPath(assetPath));
@@ -167,11 +167,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			string realPath = HttpContext.Current.Server.MapPath(this.EditFile);
 
 			if (File.Exists(realPath)) {
-				Encoding encode = System.Text.Encoding.Default;
+				Encoding encode = Encoding.Default;
 
-				using (var oWriter = new StreamWriter(realPath, false, encode)) {
-					oWriter.Write(this.FileContents);
-					oWriter.Close();
+				using (var sw = new StreamWriter(realPath, false, encode)) {
+					sw.Write(this.FileContents);
+					sw.Close();
 				}
 			}
 		}

@@ -4,9 +4,21 @@
 	ViewBag.Title = "Create Database";
 
 	Layout = CarrotLayout.Public;
+
+	string cssListClass = "status-scroll  " + (Model.HasExceptions ? "errMsg" : "okMsg");
 }
 
-<div class="status-scroll">
+<style type="text/css">
+	.errMsg {
+		background-color: #FFE0E0;
+	}
+
+	.okMsg {
+		background-color: #ffffff;
+	}
+</style>
+
+<div id="updateList" class="@cssListClass">
 
 	@foreach (var itm in Model.Messages) {
 		<div>

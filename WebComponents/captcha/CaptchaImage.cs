@@ -21,25 +21,25 @@ namespace Carrotware.Web.UI.Components {
 
 		public static string BGColorDef {
 			get {
-				string s = "#EEEEEE";
-				try { s = HttpContext.Current.Request.QueryString["bgcolor"].ToString(); } catch { }
-				return ((s == null) ? "#EEEEEE" : CarrotWeb.DecodeColorString(s));
+				string d = "#EEEEEE";
+				var v = HttpContext.Current.SafeQueryString("bgcolor", d);
+				return (string.IsNullOrWhiteSpace(v) ? d : CarrotWeb.DecodeColorString(v));
 			}
 		}
 
 		public static string NColorDef {
 			get {
-				string s = "#C46314";
-				try { s = HttpContext.Current.Request.QueryString["ncolor"].ToString(); } catch { }
-				return ((s == null) ? "#C46314" : CarrotWeb.DecodeColorString(s));
+				string d = "#C46314";
+				var v = HttpContext.Current.SafeQueryString("ncolor", d);
+				return (string.IsNullOrWhiteSpace(v) ? d : CarrotWeb.DecodeColorString(v));
 			}
 		}
 
 		public static string FGColorDef {
 			get {
-				string s = "#69785F";
-				try { s = HttpContext.Current.Request.QueryString["fgcolor"].ToString(); } catch { }
-				return ((s == null) ? "#69785F" : CarrotWeb.DecodeColorString(s));
+				string d = "#69785F";
+				var v = HttpContext.Current.SafeQueryString("fgcolor", d);
+				return (string.IsNullOrWhiteSpace(v) ? d : CarrotWeb.DecodeColorString(v));
 			}
 		}
 

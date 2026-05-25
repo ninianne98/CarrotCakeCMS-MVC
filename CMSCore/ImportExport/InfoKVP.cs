@@ -25,7 +25,7 @@ namespace Carrotware.CMS.Core {
 		public string InfoKey { get; set; }
 
 		public override string ToString() {
-			return InfoKey + " : " + InfoLabel;
+			return this.InfoKey + " : " + this.InfoLabel;
 		}
 
 		public override bool Equals(Object obj) {
@@ -40,7 +40,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public override int GetHashCode() {
-			return InfoLabel.GetHashCode() ^ InfoKey.GetHashCode();
+			return (this.InfoLabel ?? string.Empty).GetHashCode() ^ (this.InfoKey ?? string.Empty).ToLowerInvariant().GetHashCode();
 		}
 	}
 }

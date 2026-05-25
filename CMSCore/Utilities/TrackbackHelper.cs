@@ -44,16 +44,16 @@ namespace Carrotware.CMS.Core {
 			request.ContentType = "application/x-www-form-urlencoded; charset=utf-8";
 			request.KeepAlive = true;
 
-			using (StreamWriter myWriter = new StreamWriter(request.GetRequestStream())) {
+			using (var myWriter = new StreamWriter(request.GetRequestStream())) {
 				myWriter.Write(postData);
 			}
 
 			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 			if (response.StatusCode < HttpStatusCode.OK && response.StatusCode >= HttpStatusCode.Ambiguous) {
-				throw new Exception(String.Format(response.StatusCode.ToString()));
+				throw new Exception(string.Format(response.StatusCode.ToString()));
 			}
 
-			var responseText = String.Empty;
+			var responseText = string.Empty;
 			using (var reader = new StreamReader(response.GetResponseStream(), Encoding.ASCII)) {
 				responseText = reader.ReadToEnd();
 			}
@@ -110,31 +110,31 @@ namespace Carrotware.CMS.Core {
 
 			XmlWriter writer = XmlWriter.Create(response.Output);
 
-			if (request.Form.AllKeys.Count() < 6 && (!String.IsNullOrEmpty(request["id"]) || !bRequireID)
-				&& !String.IsNullOrEmpty(request["excerpt"])
-				&& !String.IsNullOrEmpty(request["blog_name"])) {
-				string blogId = String.Empty;
-				if (!String.IsNullOrEmpty(request["id"]))
+			if (request.Form.AllKeys.Count() < 6 && (!string.IsNullOrEmpty(request["id"]) || !bRequireID)
+				&& !string.IsNullOrEmpty(request["excerpt"])
+				&& !string.IsNullOrEmpty(request["blog_name"])) {
+				string blogId = string.Empty;
+				if (!string.IsNullOrEmpty(request["id"]))
 					blogId = request["id"];
 
-				if (!bRequireID && String.IsNullOrEmpty(blogId)) {
+				if (!bRequireID && string.IsNullOrEmpty(blogId)) {
 					blogId = request.Path;
 				}
 
-				string blogTitle = String.Empty;
-				if (!String.IsNullOrEmpty(request["blog_name"]))
+				string blogTitle = string.Empty;
+				if (!string.IsNullOrEmpty(request["blog_name"]))
 					blogTitle = request["blog_name"];
 
-				string url = String.Empty;
-				if (!String.IsNullOrEmpty(request["url"]))
+				string url = string.Empty;
+				if (!string.IsNullOrEmpty(request["url"]))
 					url = request["url"];
 
-				string title = String.Empty;
-				if (!String.IsNullOrEmpty(request["title"]))
+				string title = string.Empty;
+				if (!string.IsNullOrEmpty(request["title"]))
 					title = request["title"];
 
-				string excerpt = String.Empty;
-				if (!String.IsNullOrEmpty(request["excerpt"]))
+				string excerpt = string.Empty;
+				if (!string.IsNullOrEmpty(request["excerpt"]))
 					excerpt = request["excerpt"];
 
 				TrackBackInfo tb = new TrackBackInfo {
@@ -195,7 +195,7 @@ namespace Carrotware.CMS.Core {
 #endif
 
 			pc.CommenterURL = tb.RequestSourceURL;
-			if (!String.IsNullOrEmpty(sReferer)) {
+			if (!string.IsNullOrEmpty(sReferer)) {
 				pc.CommenterURL = sReferer;
 			}
 
@@ -229,7 +229,7 @@ namespace Carrotware.CMS.Core {
 			if (number > 0) {
 				writer.WriteElementString("error", number.ToString());
 			}
-			if (!String.IsNullOrEmpty(message)) {
+			if (!string.IsNullOrEmpty(message)) {
 				writer.WriteElementString("message", message);
 			}
 
@@ -247,14 +247,14 @@ namespace Carrotware.CMS.Core {
 
 			string encodingName = response.ContentEncoding.Trim();
 
-			if (String.IsNullOrEmpty(encodingName)) {
+			if (string.IsNullOrEmpty(encodingName)) {
 				encodingName = "utf-8";
 			}
 
 			Encoding encoding = Encoding.GetEncoding(encodingName);
 
-			using (Stream stream = response.GetResponseStream()) {
-				using (StreamReader reader = new StreamReader(stream, encoding))
+			using (var stream = response.GetResponseStream()) {
+				using (var reader = new StreamReader(stream, encoding))
 					result = reader.ReadToEnd();
 			}
 

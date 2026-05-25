@@ -33,10 +33,16 @@ namespace Carrotware.CMS.DBUpdater {
 
 		public static string DbVersion02 { get { return "20200915"; } }
 
-		public static string ReadEmbededScript(string resouceName) {
+		internal static string ReadEmbededScript(string resouceName) {
 			var sb = new StringBuilder();
 
 			var assembly = Assembly.GetExecutingAssembly();
+			var a_name = assembly.GetName().Name;
+
+			if (resouceName.ToLowerInvariant().StartsWith(a_name.ToLowerInvariant()) == false) {
+				resouceName = string.Format("{0}.DataScripts.{1}", a_name, resouceName);
+			}
+
 			using (var stream = new StreamReader(assembly.GetManifestResourceStream(resouceName))) {
 				sb.Append(stream.ReadToEnd());
 			}
@@ -141,9 +147,9 @@ namespace Carrotware.CMS.DBUpdater {
 
 				Encoding encode = Encoding.Default;
 				lock (logLocker) {
-					using (FileStream fs = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite)) {
-						using (StreamWriter oWriter = new StreamWriter(fs, encode)) {
-							oWriter.Write(sb.ToString());
+					using (var fs = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite)) {
+						using (var sw = new StreamWriter(fs, encode)) {
+							sw.Write(sb.ToString());
 						}
 					}
 				}

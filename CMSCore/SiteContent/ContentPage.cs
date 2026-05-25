@@ -826,7 +826,7 @@ namespace Carrotware.CMS.Core {
 
 			string theFileName = thePageSlug;
 
-			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+			using (var pageHelper = new ContentPageHelper()) {
 				ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, this.Root_ContentID);
 
 				if (cp != null) {
@@ -875,7 +875,7 @@ namespace Carrotware.CMS.Core {
 				return false;
 			}
 
-			using (ContentPageHelper pageHelper = new ContentPageHelper()) {
+			using (var pageHelper = new ContentPageHelper()) {
 				ContentPage fn = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, theFileName);
 
 				ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, this.Root_ContentID);

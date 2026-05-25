@@ -12,9 +12,7 @@
 			</label>
 		</legend>
 		<div id="divSiteLoadSummary">
-			<ul>
-				@Html.Raw(Model.Message)
-			</ul>
+			@Html.Raw(Model.Message)
 		</div>
 	</fieldset>
 }
@@ -211,20 +209,20 @@
 		</p>
 
 		@{
-	var pageGrid = CarrotWeb.CarrotWebGrid<WordPressPost>(Model.Site.ContentPages.OrderBy(s => s.PostOrder).ToList());
+		var pageGrid = CarrotWeb.CarrotWebGrid<WordPressPost>(Model.Site.ContentPages.OrderBy(s => s.PostOrder).ToList());
 
-	pageGrid.TableAttributes = new { @class = "datatable" };
-	pageGrid.THeadAttributes = new { @class = "tablehead" };
-	pageGrid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
-	pageGrid.UseDataPage = false;
-	pageGrid.ConfigName(Html.NameFor(x => Model.Site.ContentPages));
+		pageGrid.TableAttributes = new { @class = "datatable" };
+		pageGrid.THeadAttributes = new { @class = "tablehead" };
+		pageGrid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+		pageGrid.UseDataPage = false;
+		pageGrid.ConfigName(Html.NameFor(x => Model.Site.ContentPages));
 
-	pageGrid
-		.AddColumn(x => x.PostOrder, new CarrotGridColumn())
-		.AddColumn(x => x.ImportFileName, new CarrotGridColumn())
-		.AddColumn(x => x.PostTitle, new CarrotGridColumn())
-		.AddColumn(x => x.PostDateUTC, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
-		.AddColumn(x => x.IsPublished, new CarrotGridBooleanImageColumn());
+		pageGrid
+			.AddColumn(x => x.PostOrder, new CarrotGridColumn())
+			.AddColumn(x => x.ImportFileName, new CarrotGridColumn())
+			.AddColumn(x => x.PostTitle, new CarrotGridColumn())
+			.AddColumn(x => x.PostDateUTC, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+			.AddColumn(x => x.IsPublished, new CarrotGridBooleanImageColumn());
 
 		@pageGrid.OutputHtmlBody()
 		}
@@ -252,19 +250,19 @@
 		</p>
 
 		@{
-	var postGrid = CarrotWeb.CarrotWebGrid<WordPressPost>(Model.Site.ContentPosts.OrderByDescending(s => s.PostDateUTC).ToList());
+		var postGrid = CarrotWeb.CarrotWebGrid<WordPressPost>(Model.Site.ContentPosts.OrderByDescending(s => s.PostDateUTC).ToList());
 
-	postGrid.TableAttributes = new { @class = "datatable" };
-	postGrid.THeadAttributes = new { @class = "tablehead" };
-	postGrid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
-	postGrid.UseDataPage = false;
-	postGrid.ConfigName(Html.NameFor(x => Model.Site.ContentPosts));
+		postGrid.TableAttributes = new { @class = "datatable" };
+		postGrid.THeadAttributes = new { @class = "tablehead" };
+		postGrid.EmptyDataTemplate = @<text><p> <b>No records found.</b> </p></text>;
+		postGrid.UseDataPage = false;
+		postGrid.ConfigName(Html.NameFor(x => Model.Site.ContentPosts));
 
-	postGrid
-		.AddColumn(x => x.ImportFileName, new CarrotGridColumn())
-		.AddColumn(x => x.PostTitle, new CarrotGridColumn())
-		.AddColumn(x => x.PostDateUTC, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
-		.AddColumn(x => x.IsPublished, new CarrotGridBooleanImageColumn());
+		postGrid
+			.AddColumn(x => x.ImportFileName, new CarrotGridColumn())
+			.AddColumn(x => x.PostTitle, new CarrotGridColumn())
+			.AddColumn(x => x.PostDateUTC, new CarrotGridColumn { CellFormatString = Helper.ShortDateFormatPattern })
+			.AddColumn(x => x.IsPublished, new CarrotGridBooleanImageColumn());
 
 		@postGrid.OutputHtmlBody()
 		}

@@ -70,8 +70,17 @@ namespace Carrotware.CMS.Core {
 			return this.PostID.GetHashCode() ^ this.ImportFileName.GetHashCode() ^ this.PostDateUTC.GetHashCode();
 		}
 
+		public void SavePageEdit(WordPressSite wpSite, ContentPage cp) {
+			cp.SavePageEdit();
+
+			this.ImportRootID = cp.Root_ContentID;
+
+			wpSite.Comments.Where(c => c.PostID == this.PostID).ToList()
+					.ForEach(r => r.ImportRootID = this.ImportRootID);
+		}
+
 		public void CleanBody() {
-			if (String.IsNullOrEmpty(this.PostContent)) {
+			if (string.IsNullOrEmpty(this.PostContent)) {
 				this.PostContent = "";
 			}
 

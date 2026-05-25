@@ -92,7 +92,7 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public override int GetHashCode() {
-			return Root_ContentID.GetHashCode();
+			return this.Root_ContentID.GetHashCode();
 		}
 	}
 }

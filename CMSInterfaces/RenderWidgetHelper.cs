@@ -1,4 +1,5 @@
 ﻿using Carrotware.CMS.Interface.Controllers;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,6 +22,7 @@ using System.Web.Routing;
 namespace Carrotware.CMS.Interface {
 
 	public static class RenderWidgetHelper {
+
 		public static Controller CreateController<T>(this Controller source, string actionName, string areaName, object widgetPayload) where T : Controller, new() {
 			Controller controller = null;
 
@@ -33,18 +35,20 @@ namespace Carrotware.CMS.Interface {
 			var routeData = new RouteData();
 
 			var wrapper = new HttpContextWrapper(HttpContext.Current);
-			string controlerName = controller.GetType().Name.ToLowerInvariant().Replace("controller", string.Empty);
+			string controlerName = controller.GetControllerName();
 
-			routeData.Values["area"] = string.Empty;
-			if (!string.IsNullOrWhiteSpace(areaName)) {
-				routeData.Values["area"] = areaName;
-			}
+			//if (string.IsNullOrWhiteSpace(areaName)) {
+			//	routeData.Values[RouteInfo.Keys.Area] = string.Empty;
+			//} else {
+			//	routeData.Values[RouteInfo.Keys.Area] = areaName;
+			//}
 
-			routeData.Values["action"] = actionName;
-			routeData.Values["controller"] = controlerName;
+			//routeData.Values[RouteInfo.Keys.Action] = actionName;
+			//routeData.Values[RouteInfo.Keys.Controller] = controlerName;
 
-			foreach (var r in source.RouteData.Values.Where(x => x.Key.ToLowerInvariant() != "controller"
-					&& x.Key.ToLowerInvariant() != "action" && x.Key.ToLowerInvariant() != "area")) {
+			routeData.SetRouteValues(areaName, controlerName, actionName, null);
+
+			foreach (var r in source.RouteData.Values.Where(x => RouteInfo.Keys.GetStandardKeys().Contains(x.Key.ToLowerInvariant()) == false)) {
 				routeData.Values[r.Key] = r.Value;
 			}
 
@@ -61,10 +65,11 @@ namespace Carrotware.CMS.Interface {
 		public static PartialViewResult ExecuteAction(this Controller controller) {
 			var type = controller.GetType();
 			var routeData = controller.RouteData;
-			var actionName = routeData.GetRequiredString("action");
+			var routeInfo = routeData.GetRouteInfo();
+			var actionName = routeInfo.Action;
 
 			MethodInfo methodInfo = null;
-			List<MethodInfo> mthds = type.GetMethods().Where(x => x.Name == actionName).ToList();
+			List<MethodInfo> mthds = type.GetMethods().Where(x => x.Name.ToLowerInvariant() == actionName.ToLowerInvariant()).ToList();
 
 			// because there might be an overload, get the GET version if there is more than one
 			if (mthds.Count <= 1) {
@@ -134,7 +139,8 @@ namespace Carrotware.CMS.Interface {
 			string stringResult = null;
 
 			if (string.IsNullOrEmpty(viewName)) {
-				viewName = context.RouteData.GetRequiredString("action");
+				var routeInfo = context.RouteData.GetRouteInfo();
+				viewName = routeInfo.Action;
 			}
 
 			if (partialResult != null) {
@@ -163,7 +169,8 @@ namespace Carrotware.CMS.Interface {
 			bool partialView = false;
 
 			if (string.IsNullOrEmpty(viewName)) {
-				viewName = controller.ControllerContext.RouteData.GetRequiredString("action");
+				var routeInfo = controller.ControllerContext.RouteData.GetRouteInfo();
+				viewName = routeInfo.Action;
 			}
 
 			if (result is PartialViewResult) {
@@ -184,7 +191,8 @@ namespace Carrotware.CMS.Interface {
 			ViewEngineResult viewEngineResult = null;
 
 			if (string.IsNullOrEmpty(viewName)) {
-				viewName = context.RouteData.GetRequiredString("action");
+				var routeInfo = context.RouteData.GetRouteInfo();
+				viewName = routeInfo.Action;
 			}
 
 			if (partialView) {

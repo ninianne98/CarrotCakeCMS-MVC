@@ -117,17 +117,17 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public string CarrotCakeVersion { get; set; }
+		public string CarrotCakeVersion { get; set; } = SiteData.CarrotCakeCMSVersion;
 
-		public DateTime ExportDate { get; set; }
+		public DateTime ExportDate { get; set; } = DateTime.UtcNow;
 
 		public Guid NewSiteID { get; set; }
 
 		public Guid OriginalSiteID { get; set; }
 
-		public SiteData TheSite { get; set; }
+		public SiteData TheSite { get; set; } = new SiteData();
 
-		public List<ContentPageExport> ThePages { get; set; }
+		public List<ContentPageExport> ThePages { get; set; } = new List<ContentPageExport>();
 
 		public List<ContentPageExport> TheContentPages {
 			get {
@@ -149,25 +149,24 @@ namespace Carrotware.CMS.Core {
 
 		public Guid FindImportUser(SiteExportUser u) {
 			SiteExportUser usr = (from t in this.TheUsers
-								  where t.Login.ToString() == u.Login.ToString()
-										  || t.Email.ToString() == u.Email.ToString()
+								  where (u.Login != null && t.Login.ToLowerInvariant() == u.Login.ToLowerInvariant())
+										  || (u.Email != null && t.Email.ToLowerInvariant() == u.Email.ToLowerInvariant())
 								  select t).FirstOrDefault();
 
-			if (usr == null || (usr != null && usr.ImportUserID != Guid.Empty)) {
-				return SecurityData.CurrentUserGuid;
-			} else {
+			if (usr != null && usr.ImportUserID != Guid.Empty) {
 				return usr.ImportUserID;
 			}
+			return SecurityData.CurrentUserGuid;
 		}
 
-		public List<CommentExport> TheComments { get; set; }
+		public List<CommentExport> TheComments { get; set; } = new List<CommentExport>();
 
-		public List<ContentCategory> TheCategories { get; set; }
+		public List<ContentCategory> TheCategories { get; set; } = new List<ContentCategory>();
 
-		public List<ContentTag> TheTags { get; set; }
+		public List<ContentTag> TheTags { get; set; } = new List<ContentTag>();
 
-		public List<ContentSnippet> TheSnippets { get; set; }
+		public List<ContentSnippet> TheSnippets { get; set; } = new List<ContentSnippet>();
 
-		public List<SiteExportUser> TheUsers { get; set; }
+		public List<SiteExportUser> TheUsers { get; set; } = new List<SiteExportUser>();
 	}
 }

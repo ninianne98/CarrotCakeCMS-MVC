@@ -1,5 +1,5 @@
 ﻿using Carrotware.CMS.Core;
-using System;
+using Carrotware.Web.UI.Components;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -26,13 +26,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.SelectedCssClass = "notSelectedModule";
 
 			this.SelectedArea = CMSConfigHelper.PluginAreaPath;
-			this.SelectedAreaName = String.Empty;
-			this.SelectedPluginAreaName = String.Empty;
-			this.SelectedPluginActionName = String.Empty;
+			this.SelectedAreaName = string.Empty;
+			this.SelectedPluginAreaName = string.Empty;
+			this.SelectedPluginActionName = string.Empty;
 
-			this.CurrentAction = String.Empty;
-			this.CurrentController = String.Empty;
-			this.CurrentActionFull = String.Empty;
+			this.CurrentAction = string.Empty;
+			this.CurrentController = string.Empty;
+			this.CurrentActionFull = string.Empty;
 
 			this.Modules = new List<CMSAdminModule>();
 			this.RouteValues = new RouteValueDictionary();
@@ -50,22 +50,24 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public void LoadContext(ViewContext viewContext) {
 			this.RouteValues = viewContext.RouteData.Values;
 
-			if (this.RouteValues["action"] != null) {
-				this.CurrentAction = this.RouteValues["action"].ToString();
+			var routeInfo = this.RouteValues.GetRouteInfo();
+
+			if (string.IsNullOrWhiteSpace(routeInfo.Action) == false) {
+				this.CurrentAction = routeInfo.Action;
 			}
-			if (this.RouteValues["controller"] != null) {
-				this.CurrentController = this.RouteValues["controller"].ToString();
+			if (string.IsNullOrWhiteSpace(routeInfo.Controller) == false) {
+				this.CurrentController = routeInfo.Controller;
 			}
 
-			this.CurrentActionFull = String.Format("{0}", this.CurrentAction);
+			this.CurrentActionFull = string.Format("{0}", this.CurrentAction);
 
-			string currentQueryString = String.Empty;
+			string currentQueryString = string.Empty;
 			var request = HttpContext.Current.Request;
 
 			if (request.ServerVariables["QUERY_STRING"] != null) {
 				currentQueryString = request.ServerVariables["QUERY_STRING"].ToString();
-				if (!String.IsNullOrEmpty(currentQueryString)) {
-					this.CurrentActionFull = String.Format("{0}?{1}", this.CurrentAction, currentQueryString);
+				if (!string.IsNullOrEmpty(currentQueryString)) {
+					this.CurrentActionFull = string.Format("{0}?{1}", this.CurrentAction, currentQueryString);
 				}
 			}
 		}
@@ -96,13 +98,13 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		}
 
 		public string GetPluginCaption() {
-			if (!String.IsNullOrEmpty(this.SelectedPluginAreaName)) {
+			if (!string.IsNullOrEmpty(this.SelectedPluginAreaName)) {
 				this.GetCurrentPlug();
 
-				if (!String.IsNullOrEmpty(this.SelectedPluginActionName)) {
-					return String.Format("{0} : {1}", this.SelectedPluginAreaName, this.SelectedPluginActionName);
+				if (!string.IsNullOrEmpty(this.SelectedPluginActionName)) {
+					return string.Format("{0} : {1}", this.SelectedPluginAreaName, this.SelectedPluginActionName);
 				} else {
-					return String.Format("{0}", this.SelectedPluginAreaName);
+					return string.Format("{0}", this.SelectedPluginAreaName);
 				}
 			}
 

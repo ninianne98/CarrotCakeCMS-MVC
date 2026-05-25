@@ -92,33 +92,19 @@ namespace Carrotware.CMS.UI.Components {
 			return new HtmlString(GetResultViewStringFromController(actionName, type, obj));
 		}
 
-		private static void AddUpdateRouting(RouteData routeData, string key, string value) {
-			string keyLower = key.ToLowerInvariant();
-			if (routeData.Values.ContainsKey(keyLower)) {
-				routeData.Values[keyLower] = value;
-			} else {
-				routeData.Values.Add(keyLower, value);
-			}
-		}
-
 		private static string GetResultViewStringFromController(string actionName, Type type, object obj) {
 			bool IsPost = Html.ViewContext.HttpContext.Request.HttpMethod.ToUpperInvariant() == "POST";
 
 			if (obj is Controller) {
 				MethodInfo methodInfo = null;
 				Controller controller = obj.HydrateController();
-				//Controller controller = (Controller)obj;
-				//controller.ControllerContext = new ControllerContext(Html.ViewContext.Controller.ControllerContext.RequestContext, controller);
-				//controller.ControllerContext = Html.ViewContext.Controller.ControllerContext;
 
 				RouteData routeData = controller.ControllerContext.RouteData;
 				string areaName = type.Assembly.GetAssemblyName();
 
-				AddUpdateRouting(routeData, "Controller", type.Name.ToLowerInvariant().Replace("controller", string.Empty));
-				AddUpdateRouting(routeData, "Action", actionName);
-				AddUpdateRouting(routeData, "Area", areaName);
+				routeData.SetRouteValues(areaName, type.GetControllerName(), actionName, null);
 
-				List<MethodInfo> mthds = type.GetMethods().Where(x => x.Name == actionName).ToList();
+				List<MethodInfo> mthds = type.GetMethods().Where(x => x.Name.ToLowerInvariant() == actionName.ToLowerInvariant()).ToList();
 				if (mthds.Count <= 1) {
 					methodInfo = mthds.FirstOrDefault();
 				} else {

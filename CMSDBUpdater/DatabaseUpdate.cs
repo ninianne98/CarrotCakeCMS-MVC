@@ -49,7 +49,7 @@ namespace Carrotware.CMS.DBUpdater {
 				var res1 = new DatabaseUpdateResponse();
 
 				if (!bAuthResult) {
-					res1.LastException = ExecFileContents("Carrotware.CMS.DBUpdater.DataScripts.MEMBER01.sql", false);
+					res1.LastException = ExecFileContents("MEMBER01.sql", false);
 					res1.Response = "Created Membership";
 					res1.RanUpdate = true;
 				} else {
@@ -60,7 +60,7 @@ namespace Carrotware.CMS.DBUpdater {
 				var res2 = new DatabaseUpdateResponse();
 
 				if (!bDbResult) {
-					res2.LastException = ExecFileContents("Carrotware.CMS.DBUpdater.DataScripts.CREATE01.sql", false);
+					res2.LastException = ExecFileContents("CREATE01.sql", false);
 					res2.Response = "Created Database";
 					res2.RanUpdate = true;
 					// change version key when the DB creation is re-scripted
@@ -205,7 +205,7 @@ namespace Carrotware.CMS.DBUpdater {
 					HandleResponse(lst, "Database already exists");
 				}
 
-				DataInfo ver = DatabaseSchemaState.GetDbSchemaVersion();
+				var ver = DatabaseSchemaState.GetDbSchemaVersion();
 
 				bUpdate = DatabaseNeedsUpdate()
 						&& ver.DataValue != DatabaseSchemaState.CurrentDbVersion;
@@ -331,7 +331,8 @@ namespace Carrotware.CMS.DBUpdater {
 			if (!DatabaseSchemaState.FailedSQL) {
 				bool bTestResult = false;
 
-				DataInfo ver = DatabaseSchemaState.GetDbSchemaVersion();
+				var ver = DatabaseSchemaState.GetDbSchemaVersion();
+
 				bTestResult = ver.DataValue != DatabaseSchemaState.CurrentDbVersion;
 				if (bTestResult) {
 					return true;
@@ -357,14 +358,14 @@ namespace Carrotware.CMS.DBUpdater {
 			bool bTestResult = SQLUpdateNugget.EvalNuggetKey("AlterStep01");
 
 			if (bTestResult) {
-				res.LastException = ExecFileContents("Carrotware.CMS.DBUpdater.DataScripts.ALTER01.sql", false);
+				res.LastException = ExecFileContents("ALTER01.sql", false);
 				res.Response = "Update comment view";
 				res.RanUpdate = true;
 				DatabaseSchemaState.SetDbSchemaVersion(DatabaseSchemaState.DbVersion01);
 				return res;
 			} else {
 				// if the db version is off, check leading tidbit against current and immediate prior
-				DataInfo ver = DatabaseSchemaState.GetDbSchemaVersion();
+				var ver = DatabaseSchemaState.GetDbSchemaVersion();
 
 				if (ver.IsMinorOf(DatabaseSchemaState.DbVersion00)
 							|| ver.IsMinorOf(DatabaseSchemaState.DbVersion01)
@@ -383,14 +384,14 @@ namespace Carrotware.CMS.DBUpdater {
 			bool bTestResult = SQLUpdateNugget.EvalNuggetKey("AlterStep02");
 
 			if (bTestResult) {
-				res.LastException = ExecFileContents("Carrotware.CMS.DBUpdater.DataScripts.ALTER02.sql", false);
+				res.LastException = ExecFileContents("ALTER02.sql", false);
 				res.Response = "Update timezone sproc";
 				res.RanUpdate = true;
 				DatabaseSchemaState.SetDbSchemaVersion(DatabaseSchemaState.DbVersion02);
 				return res;
 			} else {
 				// if the db version is off, check leading tidbit against current and immediate prior
-				DataInfo ver = DatabaseSchemaState.GetDbSchemaVersion();
+				var ver = DatabaseSchemaState.GetDbSchemaVersion();
 
 				if (ver.IsMinorOf(DatabaseSchemaState.DbVersion01)
 						|| ver.IsMinorOf(DatabaseSchemaState.DbVersion02)) {
@@ -410,7 +411,7 @@ namespace Carrotware.CMS.DBUpdater {
 			var minorUpdate = ver.IsMinorOf(DatabaseSchemaState.DbVersion02);
 
 			if (priorVer || minorUpdate == false) {
-				res.LastException = ExecFileContents("Carrotware.CMS.DBUpdater.DataScripts.REFRESH01.sql", false);
+				res.LastException = ExecFileContents("REFRESH01.sql", false);
 				res.Response = "Refreshed views and sprocs";
 				res.RanUpdate = true;
 

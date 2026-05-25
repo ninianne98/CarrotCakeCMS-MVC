@@ -38,8 +38,11 @@ namespace Carrotware.CMS.Core {
 
 	public class CmsRouteHandler : MvcRouteHandler {
 
+		public static string RouteKey { get { return "cmsRequestedUri"; } }
+		public static string PageIdKey { get { return "cmsPageid"; } }
+
 		protected override IHttpHandler GetHttpHandler(System.Web.Routing.RequestContext requestCtx) {
-			string requestedUri = (string)requestCtx.RouteData.Values["RequestedUri"];
+			string requestedUri = (string)requestCtx.RouteData.Values[RouteKey];
 
 			requestedUri = string.IsNullOrEmpty(requestedUri) ? @"/" : requestedUri.ToLowerInvariant();
 			requestedUri = requestedUri.FixPathSlashes();
@@ -48,28 +51,27 @@ namespace Carrotware.CMS.Core {
 						|| requestedUri.ToLowerInvariant().Contains("rss.")
 						|| requestedUri.ToLowerInvariant().Contains("sitemap.")) {
 				if (UseDynamicFeed(SiteFilename.RssFeedUri, requestedUri)) {
-					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
-					requestCtx.RouteData.Values["action"] = CmsRouteConstants.RssAction;
+
+					requestCtx.SetContextRoutevalues(CmsRouteConstants.CmsController.Content, CmsRouteConstants.RssAction);
+
 					return base.GetHttpHandler(requestCtx);
 				}
 				if (UseDynamicFeed(SiteFilename.SiteMapUri, requestedUri)) {
-					requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
-					requestCtx.RouteData.Values["action"] = CmsRouteConstants.SiteMapAction;
+
+					requestCtx.SetContextRoutevalues(CmsRouteConstants.CmsController.Content, CmsRouteConstants.SiteMapAction);
+
 					return base.GetHttpHandler(requestCtx);
 				}
 
-				requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
-				requestCtx.RouteData.Values["action"] = CmsRouteConstants.NotFoundAction;
-				requestCtx.RouteData.Values["id"] = null;
+				requestCtx.SetContextRoutevalues(CmsRouteConstants.CmsController.Content, CmsRouteConstants.NotFoundAction);
 
 				SiteData.WriteDebugException("cmsroutehandler ashx not matched", new Exception(string.Format("RequestedUri: {0}", requestedUri)));
 
 				return base.GetHttpHandler(requestCtx);
 			} else if (requestedUri.EndsWith(".aspx")) {
 				//since .aspx is not supported
-				requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
-				requestCtx.RouteData.Values["action"] = CmsRouteConstants.NotFoundAction;
-				requestCtx.RouteData.Values["id"] = null;
+
+				requestCtx.SetContextRoutevalues(CmsRouteConstants.CmsController.Content, CmsRouteConstants.NotFoundAction);
 			} else {
 				string sCurrentPage = SiteData.CurrentScriptName;
 
@@ -107,23 +109,23 @@ namespace Carrotware.CMS.Core {
 							navData = SiteNavHelper.GetEmptySearch();
 						}
 
-						requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
+						string actionRoute = string.Empty;
 						if (navData != null) {
 							SiteData.WriteDebugException("cmsroutehandler != null", new Exception(string.Format("Default: {0}", navData.FileName)));
-							requestCtx.RouteData.Values["action"] = CmsRouteConstants.DefaultAction;
+							actionRoute = CmsRouteConstants.DefaultAction;
 						} else {
 							SiteData.WriteDebugException("cmsroutehandler == null", new Exception(string.Format("_PageNotFound: {0}", sCurrentPage)));
-							requestCtx.RouteData.Values["action"] = CmsRouteConstants.NotFoundAction;
+							actionRoute = CmsRouteConstants.NotFoundAction;
 						}
-						requestCtx.RouteData.Values["id"] = null;
+
+						requestCtx.SetContextRoutevalues(CmsRouteConstants.CmsController.Content, actionRoute);
 					}
 				} catch (Exception ex) {
 					SiteData.WriteDebugException("cmsroutehandler_exception_uri", new Exception(string.Format("Exception: {0}", sCurrentPage)));
 
 					if (DatabaseSchemaState.SystemNeedsChecking(ex) || DatabaseSchemaState.AreCMSTablesIncomplete()) {
-						requestCtx.RouteData.Values["controller"] = CmsRouteConstants.CmsController.Content;
-						requestCtx.RouteData.Values["action"] = CmsRouteConstants.DefaultAction;
-						requestCtx.RouteData.Values["id"] = null;
+						requestCtx.SetContextRoutevalues(CmsRouteConstants.CmsController.Content, CmsRouteConstants.DefaultAction);
+
 						SiteData.WriteDebugException("cmsroutehandler_exception_systemneedschecking", ex);
 					} else {
 						//something bad has gone down, toss back the error
