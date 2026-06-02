@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -15,7 +13,7 @@ namespace Northwind {
 			Assembly assembly = Assembly.GetExecutingAssembly();
 
 			List<string> namespaces = assembly.GetTypes().Select(t => t.Namespace)
-					.Where(x => !String.IsNullOrEmpty(x))
+					.Where(x => !string.IsNullOrEmpty(x))
 					.Distinct().ToList();
 
 			routes.MapRoute(

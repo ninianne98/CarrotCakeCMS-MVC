@@ -17,8 +17,9 @@ namespace Carrotware.CMS.Interface {
 	public static class Utils {
 
 		public static string GetAssemblyName(this Assembly assembly) {
-			var assemblyName = assembly.ManifestModule.Name;
-			return Path.GetFileNameWithoutExtension(assemblyName);
+			//var assemblyName = assembly.ManifestModule.Name;
+			//return Path.GetFileNameWithoutExtension(assemblyName);
+			return assembly.GetName().Name;
 		}
 	}
 }

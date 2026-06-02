@@ -21,13 +21,13 @@ namespace Carrotware.Web.UI.Components {
 
 		public CarrotWebAreaReg()
 			: base() {
-			Assembly asmbly = this.GetType().Assembly;
+			Assembly assembly = this.GetType().Assembly;
 
-			_namespaces = asmbly.GetTypes().Select(t => t.Namespace)
+			_namespaces = assembly.GetTypes().Select(t => t.Namespace)
 								.Where(x => !string.IsNullOrEmpty(x))
 								.Distinct().ToList();
 
-			_areaName = asmbly.GetAssemblyName();
+			_areaName = assembly.GetAssemblyName();
 		}
 
 		public CarrotWebAreaReg(string areaName)

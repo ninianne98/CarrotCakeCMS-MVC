@@ -26,8 +26,14 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 		private Guid _siteid = Guid.Empty;
 
+		protected PhotoGalleryDataContext _db = PhotoGalleryDataContext.GetDataContext();
+
+		private string _homeActionName = string.Empty;
+
 		public TestController() {
 			_siteid = new Guid(this.TestSiteID);
+
+			_homeActionName = nameof(HomeController.ShowPrettyPhotoGallery);
 		}
 
 		protected override void Initialize(RequestContext requestContext) {
@@ -36,25 +42,24 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 			_helper = new GalleryHelper(_siteid);
 
-			RouteValueDictionary vals = requestContext.RouteData.Values;
-
+			var routeInfo = requestContext.RouteData.GetRouteInfo();
 			// use the test id to build a fake payload so the widget can be loaded for dev
-			string action = vals["action"].ToString().ToLowerInvariant();
-			string controller = vals["controller"].ToString().ToLowerInvariant();
+			string action = routeInfo.Action;
+			string controller = routeInfo.Controller;
+			string id = routeInfo.Id;
 
 			var settings = new GallerySettings();
 			settings.SiteID = _siteid;
 			settings.ShowHeading = true;
 
-			if (vals.ContainsKey("id")) {
-				string id = vals["id"].ToString().ToLowerInvariant();
+			if (id.Length > 30) {
 				settings.GalleryID = new Guid(id);
-				settings.WidgetClientID = "Widget_" + settings.GalleryID.ToString().ToLowerInvariant().Substring(0, 5);
+				settings.WidgetClientID = "Widget_" + settings.GalleryID.ToString("N").Substring(0, 8);
 			}
 
 			settings.PublicParmValues.Add("SiteID", _siteid.ToString());
 			settings.PublicParmValues.Add("WidgetClientID", settings.WidgetClientID);
-			settings.PublicParmValues.Add("GalleryID", settings.GalleryID.ToString().ToLowerInvariant());
+			settings.PublicParmValues.Add("GalleryID", settings.GalleryID.ToString());
 			settings.PublicParmValues.Add("ShowHeading", settings.ShowHeading.ToString());
 
 			this.WidgetPayload = settings;
@@ -66,6 +71,11 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			if (_helper != null) {
 				_helper.Dispose();
 			}
+
+			if (_db != null) {
+				_db.Dispose();
+				_db = null;
+			}
 		}
 
 		[HttpGet]
@@ -73,13 +83,12 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			var model = new PagedData<tblGalleryImage>();
 			model.InitOrderBy(x => x.ImageOrder, true);
 
-			using (var db = PhotoGalleryDataContext.GetDataContext()) {
-				model.DataSource = (from c in db.tblGalleryImages
-									orderby c.ImageOrder ascending
-									select c).Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
+			model.DataSource = (from c in _db.tblGalleryImages
+								where c.tblGallery.SiteID == _siteid
+								orderby c.ImageOrder ascending
+								select c).Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
 
-				model.TotalRecords = (from c in db.tblGalleryImages select c).Count();
-			}
+			model.TotalRecords = (from c in _db.tblGalleryImages where c.tblGallery.SiteID == _siteid select c).Count();
 
 			return View(model);
 		}
@@ -89,15 +98,13 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			model.ToggleSort();
 			var srt = model.ParseSort();
 
-			using (var db = PhotoGalleryDataContext.GetDataContext()) {
-				IQueryable<tblGalleryImage> query = (from c in db.tblGalleryImages select c);
+			IQueryable<tblGalleryImage> query = (from c in _db.tblGalleryImages where c.tblGallery.SiteID == _siteid select c);
 
-				query = query.SortByParm(srt.SortField, srt.SortDirection);
+			query = query.SortByParm(srt.SortField, srt.SortDirection);
 
-				model.DataSource = query.Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
+			model.DataSource = query.Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
 
-				model.TotalRecords = (from c in db.tblGalleryImages select c).Count();
-			}
+			model.TotalRecords = (from c in _db.tblGalleryImages where c.tblGallery.SiteID == _siteid select c).Count();
 
 			ModelState.Clear();
 
@@ -111,11 +118,9 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		public ActionResult View(Guid id) {
 			var model = new tblGalleryImage();
 
-			using (var db = PhotoGalleryDataContext.GetDataContext()) {
-				model = (from c in db.tblGalleryImages
-						 where c.GalleryImageID == id
-						 select c).FirstOrDefault();
-			}
+			model = (from c in _db.tblGalleryImages
+					 where c.GalleryImageID == id
+					 select c).FirstOrDefault();
 
 			return View(model);
 		}
@@ -128,14 +133,12 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			//model.PageNumber = 1;
 			model.InitOrderBy(x => x.GalleryTitle, true);
 
-			using (var db = PhotoGalleryDataContext.GetDataContext()) {
-				model.DataSource = (from c in db.tblGalleries
-									where c.SiteID == siteid
-									orderby c.GalleryTitle ascending
-									select c).Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
+			model.DataSource = (from c in _db.tblGalleries
+								where c.SiteID == siteid
+								orderby c.GalleryTitle ascending
+								select c).Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
 
-				model.TotalRecords = (from c in db.tblGalleries select c).Count();
-			}
+			model.TotalRecords = (from c in _db.tblGalleries select c).Count();
 
 			return View(model);
 		}
@@ -147,21 +150,19 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			model.ToggleSort();
 			var srt = model.ParseSort();
 
-			using (var db = PhotoGalleryDataContext.GetDataContext()) {
-				IQueryable<tblGallery> query = (from c in db.tblGalleries
-												where c.SiteID == siteid
-												orderby c.GalleryTitle ascending
-												select c);
+			IQueryable<tblGallery> query = (from c in _db.tblGalleries
+											where c.SiteID == siteid
+											orderby c.GalleryTitle ascending
+											select c);
 
-				query = query.SortByParm(srt.SortField, srt.SortDirection);
+			query = query.SortByParm(srt.SortField, srt.SortDirection);
 
-				model.DataSource = query.Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
+			model.DataSource = query.Skip(model.PageSize * (model.PageNumber - 1)).Take(model.PageSize).ToList();
 
-				model.TotalRecords = (from c in db.tblGalleries
-									  where c.SiteID == siteid
-									  orderby c.GalleryTitle ascending
-									  select c).Count();
-			}
+			model.TotalRecords = (from c in _db.tblGalleries
+								  where c.SiteID == siteid
+								  orderby c.GalleryTitle ascending
+								  select c).Count();
 
 			ModelState.Clear();
 
@@ -172,7 +173,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			var model = new GalleryTest();
 			model.Settings = (GallerySettings)this.WidgetPayload;
 
-			var ctrl = this.CreateController<HomeController>("ShowPrettyPhotoGallery", this.AssemblyName, this.WidgetPayload);
+			var ctrl = this.CreateController<HomeController>(_homeActionName, this.AssemblyName, this.WidgetPayload);
 
 			var result = ((HomeController)ctrl).ShowPrettyPhotoGallery();
 			model.PartialResult = result;
@@ -180,11 +181,12 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			string viewName = model.Settings.AlternateViewFile ?? result.ViewName;
 
 			if (string.IsNullOrEmpty(viewName)) {
-				viewName = "ShowPrettyPhotoGallery";
+				viewName = _homeActionName;
 			}
 
 			model.RenderedContent = RenderWidgetHelper.RenderViewToString(ctrl, result, viewName);
 
+			ViewBag.Title = "Widget Display 2";
 			ViewBag.WidgetTitle = "Test Widget Display 2";
 
 			return View(model);
@@ -198,11 +200,13 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			object obj = Activator.CreateInstance(type);
 
 			var routeData = new RouteData();
-			routeData.Values.Add("controller", "Home");
-			routeData.Values.Add("area", AssemblyName);
-			routeData.Values.Add("action", "ShowPrettyPhotoGallery");
+			routeData.SetRouteValues(this.AssemblyName, typeof(HomeController).GetControllerName(), _homeActionName, id.ToString());
 
-			MethodInfo methodInfo = type.GetMethod("ShowPrettyPhotoGallery");
+			//routeData.Values.Add(RouteInfo.Keys.Controller, "Home");
+			//routeData.Values.Add(RouteInfo.Keys.Area, this.AssemblyName);
+			//routeData.Values.Add(RouteInfo.Keys.Action, _homeActionName);
+
+			MethodInfo methodInfo = type.GetMethod(nameof(HomeController.ShowPrettyPhotoGallery));
 
 			Controller ctrl = null;
 
@@ -229,6 +233,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 				model.RenderedContent = RenderWidgetHelper.RenderViewToString(ctrl, result, model.PartialResult.ViewName);
 			}
 
+			ViewBag.Title = "Widget Display 3";
 			ViewBag.WidgetTitle = "Test Widget Display 3";
 
 			return View("GalleryView2", model);
@@ -238,10 +243,11 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			var model = new GalleryTest();
 			model.Settings = (GallerySettings)this.WidgetPayload;
 
-			var ctrl = this.CreateController<HomeController>("ShowPrettyPhotoGallery", this.AssemblyName, this.WidgetPayload);
+			var ctrl = this.CreateController<HomeController>(_homeActionName, this.AssemblyName, this.WidgetPayload);
 			model.PartialResult = ctrl.ExecuteAction();
 			model.RenderedContent = ctrl.ResultToString(model.PartialResult);
 
+			ViewBag.Title = "Widget Display 4";
 			ViewBag.WidgetTitle = "Test Widget Display 4";
 
 			return View("GalleryView2", model);
@@ -263,10 +269,8 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		public ActionResult Index2() {
 			var lst = new List<tblGalleryImage>();
 
-			using (var db = PhotoGalleryDataContext.GetDataContext()) {
-				lst = (from c in db.tblGalleryImages
-					   select c).ToList();
-			}
+			lst = (from c in _db.tblGalleryImages
+				   select c).ToList();
 
 			return View(lst);
 		}

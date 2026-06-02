@@ -111,8 +111,8 @@ namespace Carrotware.CMS.Core {
 			if (WebPageContext.Current != null) {
 				WebViewPage page = ((WebViewPage)WebPageContext.Current.Page);
 				if (page != null) {
-					if (page.ViewData[PagePayload.ViewDataKey] != null) {
-						return (PagePayload)page.ViewData[PagePayload.ViewDataKey];
+					if (page.ViewData[ViewDataKey] != null) {
+						return (PagePayload)page.ViewData[ViewDataKey];
 					}
 					if (page is CmsWebViewPage) {
 						return ((CmsWebViewPage)page).CmsPage;
@@ -148,9 +148,9 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		public ContentPage ThePage { get; set; }
-		public SiteData TheSite { get; set; }
-		public List<Widget> TheWidgets { get; set; }
+		public ContentPage ThePage { get; set; } = new ContentPage();
+		public SiteData TheSite { get; set; } = new SiteData();
+		public List<Widget> TheWidgets { get; set; } = new List<Widget>();
 
 		public bool IsSiteIndex {
 			get {
@@ -261,7 +261,7 @@ namespace Carrotware.CMS.Core {
 			return heads;
 		}
 
-		public List<TypeHeadingOption> TypeLabelPrefixes { get; set; }
+		public List<TypeHeadingOption> TypeLabelPrefixes { get; set; } = new List<TypeHeadingOption>();
 
 		private List<SiteNav> _topnav = null;
 
@@ -355,20 +355,20 @@ namespace Carrotware.CMS.Core {
 			}
 		}
 
-		private SiteNav _hometnav = null;
+		private SiteNav _homenav = null;
 
 		public SiteNav HomeNav {
 			get {
-				if (_hometnav == null) {
+				if (_homenav == null) {
 					using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
-						_hometnav = navHelper.FindHome(this.TheSite.SiteID);
+						_homenav = navHelper.FindHome(this.TheSite.SiteID);
 					}
-					if (_hometnav != null) {
-						_hometnav = CMSConfigHelper.FixNavLinkText(_hometnav);
+					if (_homenav != null) {
+						_homenav = CMSConfigHelper.FixNavLinkText(_homenav);
 					}
 				}
 
-				return _hometnav;
+				return _homenav;
 			}
 		}
 

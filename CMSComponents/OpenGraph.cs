@@ -52,12 +52,12 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public string ToHtmlString() {
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.AppendLine(string.Empty);
 
 			try {
 				if (this.CmsPage != null) {
-					if (!String.IsNullOrEmpty(this.CmsPage.ThePage.MetaDescription)) {
+					if (!string.IsNullOrEmpty(this.CmsPage.ThePage.MetaDescription)) {
 						sb.AppendLine(CarrotWeb.MetaTag("og:description", this.CmsPage.ThePage.MetaDescription).ToString());
 					}
 					sb.AppendLine(CarrotWeb.MetaTag("og:url", this.CmsPage.TheSite.DefaultCanonicalURL).ToString());
@@ -79,15 +79,15 @@ namespace Carrotware.CMS.UI.Components {
 
 					sb.AppendLine(CarrotWeb.MetaTag("og:type", contType).ToString());
 
-					if (!String.IsNullOrEmpty(this.CmsPage.ThePage.TitleBar)) {
+					if (!string.IsNullOrEmpty(this.CmsPage.ThePage.TitleBar)) {
 						sb.AppendLine(CarrotWeb.MetaTag("og:title", this.CmsPage.ThePage.TitleBar).ToString());
 					}
 
-					if (!String.IsNullOrEmpty(this.CmsPage.ThePage.Thumbnail)) {
-						sb.AppendLine(CarrotWeb.MetaTag("og:image", String.Format("{0}/{1}", this.CmsPage.TheSite.MainCanonicalURL, this.CmsPage.ThePage.Thumbnail).Replace(@"//", @"/").Replace(@"//", @"/").Replace(@":/", @"://")).ToString());
+					if (!string.IsNullOrEmpty(this.CmsPage.ThePage.Thumbnail)) {
+						sb.AppendLine(CarrotWeb.MetaTag("og:image", string.Format("{0}/{1}", this.CmsPage.TheSite.MainCanonicalURL, this.CmsPage.ThePage.Thumbnail).Replace(@"//", @"/").Replace(@"//", @"/").Replace(@":/", @"://")).ToString());
 					}
 
-					if (!String.IsNullOrEmpty(this.CmsPage.TheSite.SiteName)) {
+					if (!string.IsNullOrEmpty(this.CmsPage.TheSite.SiteName)) {
 						sb.AppendLine(CarrotWeb.MetaTag("og:site_name", this.CmsPage.TheSite.SiteName).ToString());
 					}
 
@@ -100,6 +100,7 @@ namespace Carrotware.CMS.UI.Components {
 				}
 			} catch (Exception ex) { }
 
+			sb.Replace(Environment.NewLine, Environment.NewLine + "\t").Replace("\t\t", "\t");
 			return sb.ToString();
 		}
 	}

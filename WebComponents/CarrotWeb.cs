@@ -342,8 +342,8 @@ namespace Carrotware.Web.UI.Components {
 		public static string GetWebResourceUrl(Assembly assembly, string resource) {
 			string sUri = string.Empty;
 
-			var asmb = assembly.ManifestModule.Name;
-			var resName = HttpUtility.HtmlEncode(string.Format("{0}:{1}", resource, asmb).EncodeBase64());
+			var mod_name = assembly.ManifestModule.Name;
+			var resName = HttpUtility.HtmlEncode(string.Format("{0}:{1}", resource, mod_name).EncodeBase64());
 
 			try {
 				var ver = assembly.GetName().Version.ToString().Replace(".", string.Empty);
@@ -359,17 +359,22 @@ namespace Carrotware.Web.UI.Components {
 			return GetAssembly(type, resource.Split(':'));
 		}
 
-		internal static Assembly GetAssembly(Type type, string[] res) {
-			if (res.Length > 1) {
+		internal static Assembly GetAssembly(Type type, string[] resources) {
+			if (resources.Length > 1) {
 				var dir = AppDomain.CurrentDomain.RelativeSearchPath;
-				return Assembly.LoadFrom(Path.Combine(dir, res[1]));
+				var fileName = resources[1];
+				if (fileName != null && !fileName.ToLowerInvariant().EndsWith(".dll")) {
+					fileName = fileName + ".dll";
+				}
+
+				return Assembly.LoadFrom(Path.Combine(dir, fileName));
 			}
 
 			return Assembly.GetAssembly(type);
 		}
 
-		internal static Assembly GetAssembly(string[] res) {
-			return GetAssembly(typeof(CarrotWeb), res);
+		internal static Assembly GetAssembly(string[] resources) {
+			return GetAssembly(typeof(CarrotWeb), resources);
 		}
 
 		internal static Assembly GetAssembly(string resource) {
@@ -384,40 +389,44 @@ namespace Carrotware.Web.UI.Components {
 			return GetManifestResourceBytes(typeof(CarrotWeb), GetInternalResourceName(resource));
 		}
 
-		internal static string[] FixResourceName(Assembly assembly, string[] res) {
-			if (res.Length > 1) {
-				var asmbName = assembly.GetAssemblyName();
+		internal static string[] FixResourceName(Assembly assembly, string[] resources) {
+			if (resources.Length > 1) {
+				var a_name = assembly.GetAssemblyName();
 
-				if (!res[0].StartsWith(asmbName)) {
-					res[0] = string.Format("{0}.{1}", asmbName, res[0]);
+				if (!resources[0].StartsWith(a_name)) {
+					resources[0] = string.Format("{0}.{1}", a_name, resources[0]);
 				}
 			}
 
-			return res;
+			return resources;
+		}
+
+		private static string[] BuildResourceName(Type type, string resource, out Assembly assembly) {
+			var resources = resource.Split(':');
+
+			assembly = GetAssembly(type, resources);
+			resources = FixResourceName(assembly, resources);
+
+			return resources;
 		}
 
 		public static string GetManifestResourceText(Type type, string resource) {
-			string returnText = null;
-			var res = resource.Split(':');
+			var sb = new StringBuilder();
 
-			var assembly = GetAssembly(type, res);
-			res = FixResourceName(assembly, res);
+			var resources = BuildResourceName(type, resource, out Assembly assembly);
 
-			using (var stream = new StreamReader(assembly.GetManifestResourceStream(res[0]))) {
-				returnText = stream.ReadToEnd();
+			using (var stream = new StreamReader(assembly.GetManifestResourceStream(resources[0]))) {
+				sb.Append(stream.ReadToEnd());
 			}
 
-			return returnText;
+			return sb.ToString();
 		}
 
 		public static byte[] GetManifestResourceBytes(Type type, string resource) {
 			byte[] returnBytes = null;
-			var res = resource.Split(':');
+			var resources = BuildResourceName(type, resource, out Assembly assembly);
 
-			var assembly = GetAssembly(type, res);
-			res = FixResourceName(assembly, res);
-
-			using (var stream = assembly.GetManifestResourceStream(res[0])) {
+			using (var stream = assembly.GetManifestResourceStream(resources[0])) {
 				returnBytes = new byte[stream.Length];
 				stream.Read(returnBytes, 0, returnBytes.Length);
 			}
@@ -600,10 +609,10 @@ namespace Carrotware.Web.UI.Components {
 			return new HtmlString(string.Empty);
 		}
 
-		public static MvcHtmlString MetaTag(string Name, string Content) {
+		public static MvcHtmlString MetaTag(string name, string content) {
 			var metaTag = new HtmlTag("meta");
-			metaTag.MergeAttribute("name", Name);
-			metaTag.MergeAttribute("content", Content);
+			metaTag.MergeAttribute("name", name);
+			metaTag.MergeAttribute("content", HttpUtility.HtmlAttributeEncode(content));
 
 			return MvcHtmlString.Create(metaTag.RenderSelfClosingTag());
 		}

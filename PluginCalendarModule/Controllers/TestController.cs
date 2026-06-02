@@ -1,5 +1,6 @@
 ﻿using CarrotCake.CMS.Plugins.CalendarModule.Models;
 using Carrotware.CMS.Interface;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Web;
 using System.Web.Mvc;
@@ -23,11 +24,10 @@ namespace CarrotCake.CMS.Plugins.CalendarModule.Controllers {
 		protected override void Initialize(RequestContext requestContext) {
 			base.Initialize(requestContext);
 
-			RouteValueDictionary vals = requestContext.RouteData.Values;
-
+			var routeInfo = requestContext.RouteData.GetRouteInfo();
 			// use the test id to build a fake payload so the widget can be loaded for dev
-			string action = vals["action"].ToString().ToLowerInvariant();
-			string controller = vals["controller"].ToString().ToLowerInvariant();
+			string action = routeInfo.Action;
+			string controller = routeInfo.Controller;
 
 			if (this.TestSiteID != Guid.Empty.ToString()) {
 				_siteId = new Guid(this.TestSiteID);

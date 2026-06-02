@@ -146,8 +146,8 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			var mime = "text/x-plain";
 			string resource = r.DecodeBase64();
 
-			var res = resource.Split(':');
-			var ext = Path.GetExtension(res[0]).ToLowerInvariant();
+			var resources = resource.Split(':');
+			var ext = Path.GetExtension(resources[0]).ToLowerInvariant();
 
 			if (FileDataHelper.MimeTypes.ContainsKey(ext)) {
 				mime = FileDataHelper.MimeTypes[ext];
@@ -162,7 +162,7 @@ namespace Carrotware.Web.UI.Components.Controllers {
 			}
 
 			if (mime.ToLowerInvariant().StartsWith("text")) {
-				var assembly = CarrotWeb.GetAssembly(res);
+				var assembly = CarrotWeb.GetAssembly(resources);
 
 				var txt = CarrotWeb.GetManifestResourceText(this.GetType(), resource);
 				var sb = new StringBuilder(txt);

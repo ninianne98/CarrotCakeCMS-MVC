@@ -7,9 +7,12 @@
 
 	var cats = CmsPage.GetSiteCategories(10, true);
 	var tags = CmsPage.GetSiteTags(10, true);
-	var dates = CmsPage.GetSiteDates(12);
+
+	var pagecat = CmsPage.GetPageCategories(10);
+	var pagetag = CmsPage.GetPageTags(10);
 
 	var usr = CmsPage.BylineUser;
+
 }
 
 @section Banner {
@@ -44,11 +47,25 @@
 							@CarrotCakeHtml.RenderWidget("phCenterTop")
 						</div>
 
-						@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
+						@CarrotCakeHtml.RenderBody()
 
 						<div>
 							@CarrotCakeHtml.RenderWidget("phCenterBottom")
 						</div>
+						@if (cats.Any()) {
+							<div class="meta">
+								@foreach (var itm in pagecat) {
+									<span class="meta-item"><a href="@itm.Uri">@itm.Text</a></span>
+								}
+							</div>
+						}
+						@if (tags.Any()) {
+							<div class="meta">
+								@foreach (var itm in pagetag) {
+									<span class="meta-item"><a href="@itm.Uri">@itm.Text</a></span>
+								}
+							</div>
+						}
 					</article>
 				</section>
 				<section>

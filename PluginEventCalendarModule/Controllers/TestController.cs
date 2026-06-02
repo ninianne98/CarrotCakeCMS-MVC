@@ -1,8 +1,8 @@
 ﻿using CarrotCake.CMS.Plugins.EventCalendarModule.Models;
 using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface;
+using Carrotware.Web.UI.Components;
 using System;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -24,11 +24,11 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule.Controllers {
 		protected override void Initialize(RequestContext requestContext) {
 			base.Initialize(requestContext);
 
-			RouteValueDictionary vals = requestContext.RouteData.Values;
-
+			var routeInfo = requestContext.RouteData.GetRouteInfo();
 			// use the test id to build a fake payload so the widget can be loaded for dev
-			string action = vals["action"].ToString().ToLowerInvariant();
-			string controller = vals["controller"].ToString().ToLowerInvariant();
+			string action = routeInfo.Action;
+			string controller = routeInfo.Controller;
+			string id = routeInfo.Id;
 
 			// since there are different models, set them up as needed to match the test
 

@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web;
 
 /*
@@ -41,15 +42,21 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 			return lst;
 		}
 
-		public static string ReadEmbededScript(string resouceName) {
-			string ret = null;
+		internal static string ReadEmbededScript(string resouceName) {
+			var sb = new StringBuilder();
 
-			Assembly a = Assembly.GetExecutingAssembly();
-			using (var stream = new StreamReader(a.GetManifestResourceStream(resouceName))) {
-				ret = stream.ReadToEnd();
+			var assembly = Assembly.GetExecutingAssembly();
+			var a_name = assembly.GetName().Name;
+
+			if (resouceName.ToLowerInvariant().StartsWith(a_name.ToLowerInvariant()) == false) {
+				resouceName = string.Format("{0}.{1}", a_name, resouceName);
 			}
 
-			return ret;
+			using (var stream = new StreamReader(assembly.GetManifestResourceStream(resouceName))) {
+				sb.Append(stream.ReadToEnd());
+			}
+
+			return sb.ToString();
 		}
 
 		private static string _areaName = null;
@@ -57,9 +64,9 @@ namespace CarrotCake.CMS.Plugins.EventCalendarModule {
 		public static string AssemblyName {
 			get {
 				if (_areaName == null) {
-					Assembly a = Assembly.GetExecutingAssembly();
+					Assembly assembly = Assembly.GetExecutingAssembly();
 
-					_areaName = a.GetAssemblyName();
+					_areaName = assembly.GetAssemblyName();
 				}
 
 				return _areaName;

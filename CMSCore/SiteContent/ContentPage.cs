@@ -206,6 +206,36 @@ namespace Carrotware.CMS.Core {
 			this.MetaDescription = string.IsNullOrEmpty(this.MetaDescription) ? string.Empty : this.MetaDescription;
 		}
 
+		public string GetDefaultUri() {
+			var site = SiteData.CurrentSite;
+			var blogIndexId = site.Blog_Root_ContentID.HasValue ? site.Blog_Root_ContentID.Value : Guid.Empty;
+			var pageUri = string.Empty;
+			var pageisIndex = false;
+
+			if (site != null) {
+				pageisIndex = this.Root_ContentID == blogIndexId;
+				pageUri = site.DefaultCanonicalURL;
+
+				if (this != null) {
+					if (this.NavOrder == 0) {
+						pageUri = site.MainCanonicalURL;
+					} else {
+						if (pageisIndex && SiteData.CurrentScriptName.Length > 1
+								&& this.FileName.ToLowerInvariant() != SiteData.CurrentScriptName.ToLowerInvariant()) {
+							// if blog index, use whatever the url is as the valid url
+							pageUri = site.MainCanonicalURL + SiteData.CurrentScriptName.Substring(1);
+						} else {
+							pageUri = site.DefaultCanonicalURL;
+						}
+					}
+				}
+			} else {
+				pageUri = SiteData.DefaultDirectoryFilename;
+			}
+
+			return pageUri;
+		}
+
 		private void SaveKeywordsAndTags(CarrotCMSDataContext db) {
 			IQueryable<carrot_TagContentMapping> oldContentTags = CannedQueries.GetContentTagMapByContentID(db, this.Root_ContentID);
 			IQueryable<carrot_CategoryContentMapping> oldContentCategories = CannedQueries.GetContentCategoryMapByContentID(db, this.Root_ContentID);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
@@ -17,18 +16,18 @@ using System.Web.Mvc;
 namespace Carrotware.CMS.Interface {
 
 	public class BaseWidgetAreaReg : AreaRegistration {
-		protected string _areaName = String.Empty;
+		protected string _areaName = string.Empty;
 		protected List<string> _namespaces = new List<string>();
 
 		public BaseWidgetAreaReg()
 			: base() {
-			Assembly asmbly = this.GetType().Assembly;
+			Assembly assembly = this.GetType().Assembly;
 
-			_namespaces = asmbly.GetTypes().Select(t => t.Namespace)
+			_namespaces = assembly.GetTypes().Select(t => t.Namespace)
 								.Where(x => !string.IsNullOrEmpty(x))
 								.Distinct().ToList();
 
-			_areaName = asmbly.GetAssemblyName();
+			_areaName = assembly.GetAssemblyName();
 		}
 
 		public BaseWidgetAreaReg(string areaName)

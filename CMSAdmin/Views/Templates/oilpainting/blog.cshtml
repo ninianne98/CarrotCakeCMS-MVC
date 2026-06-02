@@ -45,17 +45,17 @@
 }
 
 @section MetaTags {
+	<div>
+		<ul class="meta">
+			@foreach (var itm in pagecat) {
+				<li class="meta-item"><a href="@itm.Uri">@itm.Text</a></li>
+			}
+		</ul>
 
-	<div class="meta">
-		@foreach (var itm in pagecat) {
-			<span class="meta-item"><a href="@itm.Uri">@itm.Text</a></span>
-		}
+		<ul class="meta">
+			@foreach (var itm in pagetag) {
+				<li class="meta-item"><a href="@itm.Uri">@itm.Text</a></li>
+			}
+		</ul>
 	</div>
-
-	<div class="meta">
-		@foreach (var itm in pagetag) {
-			<span class="meta-item"><a href="@itm.Uri">@itm.Text</a></span>
-		}
-	</div>
-
 }

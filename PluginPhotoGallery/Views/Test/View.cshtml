@@ -35,6 +35,14 @@
 		</dd>
 
 		<dt>
+			@Html.DisplayNameFor(model => model.tblGallery.GalleryTitle)
+		</dt>
+
+		<dd>
+			@Html.ActionLink(Model.tblGallery.GalleryTitle, "GalleryView", new { id = Model.GalleryID })
+		</dd>
+
+		<dt>
 			@Html.DisplayNameFor(model => model.GalleryID)
 		</dt>
 

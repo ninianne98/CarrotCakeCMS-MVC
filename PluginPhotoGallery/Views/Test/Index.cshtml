@@ -15,12 +15,15 @@
 	grid.THeadAttributes = new { @class = "header" };
 	grid.ConfigName(Html.NameFor(x => x));
 
+	
 	grid.AddColumn(x => x.GalleryID, new CarrotGridTemplateColumn<tblGalleryImage> {
 		HeaderText = "Gallery",
 		FormatTemplate = @<text> @CarrotWeb.ActionImage("GalleryView", "Test", new { @id = @item.GalleryID }, "~/assets/admin/images/chart_organisation.png", @item.GalleryID.ToString(), null, null) </text>
 	})
+	.AddColumn(x => x.tblGallery.GalleryTitle, new CarrotGridColumn { HeaderText = "Gallery", Sortable = true })
+
 	.AddColumn(x => x.GalleryImageID, new CarrotGridTemplateColumn<tblGalleryImage> {
-		HeaderText = "Pic",
+		HeaderText = "Image",
 		FormatTemplate = @<text> @CarrotWeb.ActionImage("View", "Test", new { @id = @item.GalleryImageID }, "~/assets/admin/images/image.png", @item.GalleryImageID.ToString(), null, null) </text>
 	})
 	.AddColumn(x => x.GalleryImage, new CarrotGridColumn { HeaderText = "Name", Sortable = true })

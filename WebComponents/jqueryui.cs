@@ -22,7 +22,7 @@ namespace Carrotware.Web.UI.Components {
 			}
 		}
 
-		public string JQUIVersion { get; set; }
+		public string JQUIVersion { get; set; } = DefaultJQUIVersion;
 
 		private static string _generalUri = null;
 
@@ -38,7 +38,7 @@ namespace Carrotware.Web.UI.Components {
 
 		public override string GetHtml() {
 			string sJQFile = string.Empty;
-			string jqVer = JQUIVersion;
+			string jqVer = this.JQUIVersion;
 
 			if (!string.IsNullOrEmpty(jqVer) && jqVer.Length > 2) {
 				if (jqVer.LastIndexOf(".") != jqVer.IndexOf(".")) {

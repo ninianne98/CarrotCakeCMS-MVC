@@ -3,6 +3,10 @@
 <div id="contactForm">
 	@{
 		var cap = new Captcha();
+		cap.SetForeColor("#1C1916");
+		cap.SetBackColor("#DDDDDD");
+		cap.SetNoiseColor("#B9547E");
+
 		cap.AltValidationFailText = null; // trigger default text
 
 		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" })) {
@@ -34,7 +38,7 @@
 				<div>
 					@cap<br />
 					@cap.Instructions <br />
-					@cmt.TextBoxFor(m => m.ValidationValue)
+					@cmt.TextBoxFor(m => m.ValidationValue, "", new { autocomplete = "off" })
 					@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
 				</div>
 

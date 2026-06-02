@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Web;
@@ -22,8 +21,9 @@ namespace Carrotware.Web.UI.Components {
 	public static class Utils {
 
 		internal static string GetAssemblyName(this Assembly assembly) {
-			var assemblyName = assembly.ManifestModule.Name;
-			return Path.GetFileNameWithoutExtension(assemblyName);
+			//var assemblyName = assembly.ManifestModule.Name;
+			//return Path.GetFileNameWithoutExtension(assemblyName);
+			return assembly.GetName().Name;
 		}
 
 		public static string ScrubQueryElement(this string text) {
@@ -202,12 +202,12 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public static string GetControllerName(this Controller controller) {
-			return (controller == null) ? string.Empty : controller.GetType().Name.ToLowerInvariant().Replace("controller", string.Empty);
+			return (controller == null) ? string.Empty : controller.GetType().Name.ToLowerInvariant().Replace(RouteInfo.Keys.Controller, string.Empty);
 		}
 
 		public static string GetControllerName(this Type type) {
 			if (typeof(ControllerBase).IsAssignableFrom(type)) {
-				return (type == null) ? string.Empty : type.Name.ToLowerInvariant().Replace("controller", string.Empty);
+				return (type == null) ? string.Empty : type.Name.ToLowerInvariant().Replace(RouteInfo.Keys.Controller, string.Empty);
 			}
 			return string.Empty;
 		}

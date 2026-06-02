@@ -1,4 +1,5 @@
 ﻿using Carrotware.CMS.Interface;
+using Carrotware.Web.UI.Components;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -19,15 +20,16 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 		protected override void Initialize(RequestContext requestContext) {
 			base.Initialize(requestContext);
 
-			RouteValueDictionary vals = requestContext.RouteData.Values;
-
+			var vals = requestContext.RouteData.Values;
+			var routeInfo = vals.GetRouteInfo();
 			// use the test id to build a fake payload so the widget can be loaded for dev
-			string action = vals["action"].ToString().ToLowerInvariant();
-			string controller = vals["controller"].ToString().ToLowerInvariant();
+			string action = routeInfo.Action;
+			string controller = routeInfo.Controller;
+			string id = routeInfo.Id;
 		}
 
 		public ActionResult Index() {
-			return View("Index");
+			return View(nameof(this.Index));
 		}
 
 		public ActionResult Index2() {

@@ -1,5 +1,4 @@
 ﻿@inherits CmsWebViewPage
-
 @*
 	Design by TEMPLATED
 	https://templated.live
@@ -13,7 +12,6 @@
 
 	Conversion to CarrotCake CMS MVC Template: Carrotware
 *@
-
 @{
 	Layout = null;
 
@@ -32,13 +30,12 @@
 		ElementId = "navigation"
 	};
 }
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML>
+<html>
 <head>
 	@CarrotCakeHtml.MetaTags()
 	@CarrotCakeHtml.Rss()
+	@CarrotCakeHtml.SocialMetaTags()
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>@CmsPage.Titlebar</title>
@@ -54,11 +51,11 @@
 
 	<script type="text/javascript">
 		$(document).ready(function () {
-			$("input:button, input:submit, input:reset, button").button();
+			$("button, input:button, input:submit, input:reset, button").button();
 		});
 
 		$(document).ajaxComplete(function (event, xhr, settings) {
-			$("input:button, input:submit, input:reset, button").button();
+			$("button, input:button, input:submit, input:reset, button").button();
 		});
 	</script>
 
@@ -95,15 +92,13 @@
 							</div>
 							<div>
 								@CarrotCakeHtml.RenderBody(CarrotCakeHtml.TextFieldZone.TextCenter)
-								@RenderBody()
 							</div>
-							<div>
-								@RenderSection("MetaTags", required: false)
-							</div>
+							@RenderSection("MetaTags", required: false)
 							<div>
 								@CarrotCakeHtml.RenderWidget("phCenterBottom")
 							</div>
 						</div>
+						@RenderBody()
 						<div>
 							@RenderSection("PagedDataSection", required: false)
 						</div>

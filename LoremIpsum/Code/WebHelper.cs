@@ -1,18 +1,25 @@
 ﻿using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Text;
 
 namespace CarrotCake.CMS.Plugins.LoremIpsum.Code {
 	public class WebHelper {
-		public static string ReadEmbededScript(string resouceName) {
-			string ret = null;
+		internal static string ReadEmbededScript(string resouceName) {
+			var sb = new StringBuilder();
 
-			Assembly assembly = Assembly.GetExecutingAssembly();
-			using (var stream = new StreamReader(assembly.GetManifestResourceStream(resouceName))) {
-				ret = stream.ReadToEnd();
+			var assembly = Assembly.GetExecutingAssembly();
+			var a_name = assembly.GetName().Name;
+
+			if (resouceName.ToLowerInvariant().StartsWith(a_name.ToLowerInvariant()) == false) {
+				resouceName = string.Format("{0}.{1}", a_name, resouceName);
 			}
 
-			return ret;
+			using (var stream = new StreamReader(assembly.GetManifestResourceStream(resouceName))) {
+				sb.Append(stream.ReadToEnd());
+			}
+
+			return sb.ToString();
 		}
 
 		private static string _shortDatePattern = null;

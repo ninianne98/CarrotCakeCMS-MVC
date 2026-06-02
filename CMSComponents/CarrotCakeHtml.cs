@@ -3,6 +3,8 @@ using Carrotware.CMS.Interface;
 using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -263,8 +265,9 @@ namespace Carrotware.CMS.UI.Components {
 			return new HtmlString(sb.ToString());
 		}
 
-		public static HtmlString RenderOpenGraph(OpenGraph.OpenGraphTypeDef type = OpenGraph.OpenGraphTypeDef.Default, bool showExpire = false) {
-			OpenGraph og = new OpenGraph();
+		public static HtmlString RenderOpenGraph(OpenGraph.OpenGraphTypeDef type = OpenGraph.OpenGraphTypeDef.Default,
+					bool showExpire = false) {
+			var og = new OpenGraph();
 			og.ShowExpirationDate = showExpire;
 			og.OpenGraphType = type;
 
@@ -273,6 +276,104 @@ namespace Carrotware.CMS.UI.Components {
 			}
 
 			return new HtmlString(og.ToHtmlString());
+		}
+
+		public static HtmlString SocialMetaTags() {
+			return SocialMetaTags(string.Empty);
+		}
+
+		public static HtmlString SocialMetaTags(string twitterSite) {
+			var sb = new StringBuilder();
+			sb.AppendLine(string.Empty);
+
+			// Extract the active page payload context directly from the instance
+			var page = CmsPage;
+			if (page == null || page.ThePage == null) {
+				return new HtmlString(sb.ToString());
+			}
+
+			var cp = page.ThePage;
+			var site = page.TheSite;
+			string culture = CultureInfo.CurrentUICulture.Name.Replace("-", "_");
+
+			// Resolve Page Mapping
+			bool isHome = cp.NavOrder == 0;
+			string siteName = site != null ? site.SiteName : string.Empty;
+			string pageTitle = !string.IsNullOrEmpty(cp.TitleBar) ? cp.TitleBar : (cp.PageHead ?? cp.NavMenuText ?? string.Empty);
+			string pageDesc = cp.MetaDescription ?? string.Empty;
+			if (string.IsNullOrEmpty(pageDesc)) {
+				pageDesc = cp.PageTextPlainSummary.ToString() ?? string.Empty;
+			}
+			if (string.IsNullOrEmpty(pageDesc)) {
+				pageDesc = cp.NavMenuText;
+			}
+
+			//string absoluteUrl = HttpContext.Current.Request.Url.AbsoluteUri;
+			string absoluteUrl = cp.GetDefaultUri();
+			string absoluteImageUrl = string.IsNullOrWhiteSpace(cp.Thumbnail) == false ?
+								VirtualPathUtility.ToAbsolute(cp.Thumbnail) : string.Empty;
+
+			string twitterHandle = twitterSite;
+			if (string.IsNullOrEmpty(twitterHandle)) {
+				if (ConfigurationManager.AppSettings["carrot:TwitterAccount"] != null) {
+					var ta = ConfigurationManager.AppSettings["carrot:TwitterAccount"].ToString();
+					if (!string.IsNullOrWhiteSpace(ta)) {
+						twitterHandle = ta;
+					}
+				}
+			}
+
+			if (!string.IsNullOrWhiteSpace(twitterHandle) && !twitterHandle.StartsWith("@")) {
+				twitterHandle = "@" + twitterHandle;
+			}
+
+			// Common Open Graph Tags
+			sb.AppendLine("<!-- Open Graph Meta Tags -->");
+			sb.AppendLine(CarrotWeb.MetaTag("og:site_name", siteName).ToString());
+			sb.AppendLine(CarrotWeb.MetaTag("og:locale", culture).ToString());
+			sb.AppendLine(CarrotWeb.MetaTag("og:title", pageTitle).ToString());
+			sb.AppendLine(CarrotWeb.MetaTag("og:description", pageDesc).ToString());
+			sb.AppendLine(CarrotWeb.MetaTag("og:url", absoluteUrl).ToString());
+
+			var pageType = isHome ? "frontpage" : (page.IsBlogPost ? "article" : "website");
+			sb.AppendLine(CarrotWeb.MetaTag("og:type", pageType).ToString());
+
+			if (page.IsBlogPost) {
+				sb.AppendLine(CarrotWeb.MetaTag("article:published_time", site.ConvertSiteTimeToISO8601(cp.GoLiveDate)).ToString());
+				sb.AppendLine(CarrotWeb.MetaTag("article:modified_time", site.ConvertSiteTimeToISO8601(cp.EditDate)).ToString());
+
+				if (cp.BylineUser != null && !string.IsNullOrEmpty(cp.BylineUser.FullName_FirstLast)
+							&& cp.BylineUser.FullName_FirstLast != cp.BylineUser.UserName) {
+					sb.AppendLine(CarrotWeb.MetaTag("article:author", cp.BylineUser.FullName_FirstLast).ToString());
+				}
+				foreach (var pc in page.GetPageCategories(10)) {
+					sb.AppendLine(CarrotWeb.MetaTag("article:section", pc.CategoryText).ToString());
+				}
+				foreach (var pt in page.GetPageTags(10)) {
+					sb.AppendLine(CarrotWeb.MetaTag("article:tag", pt.TagText).ToString());
+				}
+			}
+
+			// Convert and resolve virtual paths to absolute application URLs
+			if (!string.IsNullOrEmpty(absoluteImageUrl)) {
+				sb.AppendLine(CarrotWeb.MetaTag("og:image", absoluteImageUrl).ToString());
+			}
+
+			// Output Twitter Card Tags
+			sb.AppendLine(Environment.NewLine + "<!-- Twitter Card Meta Tags -->");
+			if (!string.IsNullOrEmpty(twitterHandle)) {
+				sb.AppendLine(CarrotWeb.MetaTag("twitter:site", twitterHandle).ToString());
+			}
+			sb.AppendLine(CarrotWeb.MetaTag("twitter:card", "summary").ToString()); // or summary_large_image
+			sb.AppendLine(CarrotWeb.MetaTag("twitter:title", pageTitle).ToString());
+			sb.AppendLine(CarrotWeb.MetaTag("twitter:description", pageDesc).ToString());
+
+			if (!string.IsNullOrEmpty(absoluteImageUrl)) {
+				sb.AppendLine(CarrotWeb.MetaTag("twitter:image", absoluteImageUrl).ToString());
+			}
+
+			sb.Replace(Environment.NewLine, Environment.NewLine + "\t").Replace("\t\t", "\t");
+			return new HtmlString(sb.ToString());
 		}
 
 		public static string CurrentViewName {
@@ -536,20 +637,24 @@ namespace Carrotware.CMS.UI.Components {
 			phWidgetZone10,
 		}
 
+		public static HtmlString RenderBody() {
+			return RenderBody(TextFieldZone.TextCenter);
+		}
+
 		public static HtmlString RenderBody(TextFieldZone zone) {
 			string bodyText = string.Empty;
 
 			switch (zone) {
 				case TextFieldZone.TextLeft:
-					bodyText = CmsPage.ThePage.LeftPageText;
+					bodyText = CmsPage.ThePage.LeftPageText ?? string.Empty;
 					break;
 
 				case TextFieldZone.TextCenter:
-					bodyText = CmsPage.ThePage.PageText;
+					bodyText = CmsPage.ThePage.PageText ?? string.Empty;
 					break;
 
 				case TextFieldZone.TextRight:
-					bodyText = CmsPage.ThePage.RightPageText;
+					bodyText = CmsPage.ThePage.RightPageText ?? string.Empty;
 					break;
 
 				default:
@@ -614,9 +719,12 @@ namespace Carrotware.CMS.UI.Components {
 				sbMasterWidgetWrapper.Replace("[[CMS_WIDGET_PLACEHOLDER]]", placeHolderName);
 			}
 
-			int iWidgetCount = 0;
+			int widgetCount = 0;
 
-			var widgetList = (from w in CmsPage.TheWidgets
+			var page = CmsPage != null ? CmsPage : new PagePayload();
+			var siteId = page != null ? page.TheSite.SiteID : SiteData.CurrentSiteID;
+
+			var widgetList = (from w in page.TheWidgets
 							  where w.PlaceholderName.ToLowerInvariant() == placeHolderName.ToLowerInvariant()
 							  orderby w.WidgetOrder, w.EditDate
 							  select w).ToList();
@@ -624,13 +732,13 @@ namespace Carrotware.CMS.UI.Components {
 			foreach (Widget widget in widgetList) {
 				bool isWidgetClass = false;
 
-				string widgetKey = string.Format("WidgetId_{0}_{1}", placeHolderName, iWidgetCount);
+				string widgetKey = string.Format("WidgetId_{0}_{1}", placeHolderName, widgetCount);
 				if (Html.ViewContext.Controller is IContentController) {
 					IContentController cc = (Html.ViewContext.Controller as IContentController);
 					widgetKey = string.Format("WidgetId_{0}", cc.WidgetCount);
 				}
 
-				iWidgetCount++;
+				widgetCount++;
 
 				string widgetText = string.Empty;
 				string widgetWrapper = string.Empty;
@@ -669,7 +777,7 @@ namespace Carrotware.CMS.UI.Components {
 						if (settings != null) {
 							if (settings is IWidget) {
 								IWidget w = settings as IWidget;
-								w.SiteID = CmsPage.TheSite.SiteID;
+								w.SiteID = siteId;
 								w.RootContentID = widget.Root_ContentID;
 								w.PageWidgetID = widget.Root_WidgetID;
 								w.IsDynamicInserted = true;
@@ -740,7 +848,7 @@ namespace Carrotware.CMS.UI.Components {
 
 								if (model is IWidget) {
 									IWidget w = model as IWidget;
-									w.SiteID = CmsPage.TheSite.SiteID;
+									w.SiteID = siteId;
 									w.RootContentID = widget.Root_ContentID;
 									w.PageWidgetID = widget.Root_WidgetID;
 									w.IsDynamicInserted = true;
@@ -790,7 +898,7 @@ namespace Carrotware.CMS.UI.Components {
 					sbWidget.Replace("[[sequence]]", widget.WidgetOrder.ToString());
 					sbWidget.Replace("[[ITEM_ID]]", widget.Root_WidgetID.ToString());
 
-					CMSPlugin plug = (from p in CmsPage.Plugins
+					CMSPlugin plug = (from p in page.Plugins
 									  where p.FilePath.ToLowerInvariant() == widget.ControlPath.ToLowerInvariant()
 									  select p).FirstOrDefault();
 

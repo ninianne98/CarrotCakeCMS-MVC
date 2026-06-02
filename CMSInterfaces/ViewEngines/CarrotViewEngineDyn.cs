@@ -19,9 +19,9 @@ namespace Carrotware.CMS.Interface {
 
 		public string AssemblyKey {
 			get {
-				Assembly asmbly = this.GetType().Assembly;
+				Assembly assembly = this.GetType().Assembly;
 
-				return asmbly.GetAssemblyName();
+				return assembly.GetAssemblyName();
 			}
 		}
 

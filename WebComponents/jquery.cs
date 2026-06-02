@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -25,7 +26,7 @@ namespace Carrotware.Web.UI.Components {
 			}
 		}
 
-		public string JQVersion { get; set; }
+		public string JQVersion { get; set; } = DefaultJQVersion;
 
 		public bool UseJqueryMigrate { get; set; }
 
@@ -42,10 +43,10 @@ namespace Carrotware.Web.UI.Components {
 		}
 
 		public override string GetHtml() {
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			string sJQFile = string.Empty;
-			string jqVer = JQVersion;
+			string jqVer = this.JQVersion;
 
 			if (!string.IsNullOrEmpty(jqVer) && jqVer.Length > 2) {
 				if (jqVer.LastIndexOf(".") != jqVer.IndexOf(".")) {
@@ -139,6 +140,7 @@ namespace Carrotware.Web.UI.Components {
 
 			sb.AppendLine(UrlPaths.CreateJavascriptTag("Carrot Helpers", string.Format("{0}?ts={1}&v={2}", UrlPaths.HelperPath, CarrotWeb.DateKey(), CarrotWeb.FileVersion.Replace(".", string.Empty))));
 
+			sb.Replace(Environment.NewLine, Environment.NewLine + "\t").Replace("\t\t", "\t");
 			return sb.ToString().Trim();
 		}
 	}

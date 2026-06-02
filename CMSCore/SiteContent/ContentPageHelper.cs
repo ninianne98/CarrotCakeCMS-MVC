@@ -671,14 +671,40 @@ namespace Carrotware.CMS.Core {
 				if (rc.Heartbeat_UserId.HasValue && rc.Heartbeat_UserId.Value == currentUserID) {
 					rc.EditHeartbeat = DateTime.UtcNow.AddHours(-2);
 					rc.Heartbeat_UserId = null;
-					_db.SubmitChanges();
+					SubmitChanges();
 				} else {
 					if (!rc.Heartbeat_UserId.HasValue) {
 						rc.EditHeartbeat = DateTime.UtcNow.AddHours(-4);
 						rc.Heartbeat_UserId = null;
-						_db.SubmitChanges();
+						SubmitChanges();
 					}
 				}
+			}
+		}
+
+		public bool PendingChanges {
+			get {
+				if (_db != null) {
+					var chg = _db.GetChangeSet();
+
+					return chg.Updates.Any()
+							|| chg.Inserts.Any()
+							|| chg.Deletes.Any();
+				}
+
+				return false;
+			}
+		}
+
+		private object _lockSavePend = new object();
+
+		private bool SubmitChanges() {
+			lock (_lockSavePend) {
+				if (this.PendingChanges) {
+					_db.SubmitChanges();
+					return true;
+				}
+				return false;
 			}
 		}
 
@@ -688,8 +714,8 @@ namespace Carrotware.CMS.Core {
 			if (rc != null) {
 				rc.Heartbeat_UserId = currentUserID;
 				rc.EditHeartbeat = DateTime.UtcNow == rc.EditHeartbeat ? DateTime.UtcNow.AddSeconds(-3) : DateTime.UtcNow;
-				_db.SubmitChanges();
-				return true;
+
+				return SubmitChanges();
 			}
 
 			return false;

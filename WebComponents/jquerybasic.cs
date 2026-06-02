@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -31,11 +32,11 @@ namespace Carrotware.Web.UI.Components {
 			NotUsed
 		}
 
-		public jQueryTheme SelectedSkin { get; set; }
+		public jQueryTheme SelectedSkin { get; set; } = jQueryTheme.GlossyBlack;
 
 		public bool StylesheetOnly { get; set; }
 
-		public string JQVersion { get; set; }
+		public string JQVersion { get; set; } = jquery.DefaultJQVersion;
 
 		public bool UseJqueryMigrate { get; set; }
 
@@ -43,8 +44,8 @@ namespace Carrotware.Web.UI.Components {
 		private jqueryui _jqui = new jqueryui();
 
 		public override string GetHtml() {
+			var sb = new StringBuilder();
 			string sJQFile = string.Empty;
-			StringBuilder sb = new StringBuilder();
 			sb.AppendLine(string.Empty);
 
 			if (!this.StylesheetOnly) {
@@ -86,6 +87,7 @@ namespace Carrotware.Web.UI.Components {
 				sb.AppendLine(UrlPaths.CreateCssTag(string.Format("JQuery UI CSS {0}", this.SelectedSkin), sJQFile));
 			}
 
+			sb.Replace(Environment.NewLine, Environment.NewLine + "\t").Replace("\t\t", "\t");
 			return sb.ToString().Trim();
 		}
 	}

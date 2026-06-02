@@ -7,6 +7,9 @@ GO
 SET ANSI_PADDING ON
 GO
 
+-- for best results, update the CMS to the latest version of Webforms and apply any database updates before applying these updates
+-- all sites that use this database must use the MVC 5 version of the CMS after updating
+
 IF NOT EXISTS( select * from [INFORMATION_SCHEMA].[COLUMNS] 
 		where table_name = 'membership_Role' and column_name = 'Name') BEGIN
 
@@ -209,8 +212,9 @@ GO
 
 GO
 
-IF EXISTS( select * from [INFORMATION_SCHEMA].[COLUMNS] 
-		where table_name = 'aspnet_Membership' and column_name = 'UserId') BEGIN
+IF EXISTS(select * from [INFORMATION_SCHEMA].[COLUMNS] 
+		where table_name = 'aspnet_Membership' and column_name = 'UserId')
+		AND NOT EXISTS (select * from [dbo].[membership_UserRole]) BEGIN
 
 INSERT INTO [dbo].[membership_User](
 		[Id]
@@ -231,17 +235,17 @@ INSERT INTO [dbo].[membership_User](
 		null as [LockoutEndDateUtc], 1 as [LockoutEnabled], 0 as [AccessFailedCount], lower(u.[LoweredUserName]) as [UserName]
 	 FROM [dbo].[aspnet_Membership] as m
 		 JOIN [dbo].[aspnet_Users] as u on m.UserId = u.UserId
-	 WHERE u.UserName not in(SELECT [UserName] from [dbo].[membership_User])
+	 WHERE u.UserName NOT IN(SELECT [UserName] from [dbo].[membership_User])
 
 INSERT INTO [dbo].[membership_Role] ([Id], [Name])
 	SELECT lower([RoleId]), [RoleName]
 	FROM [dbo].[aspnet_Roles]
-	WHERE [RoleName] not in(SELECT [Name] from [dbo].[membership_Role])
+	WHERE [RoleName] NOT IN(SELECT [Name] from [dbo].[membership_Role])
 
 INSERT INTO [dbo].[membership_UserRole] ([UserId], [RoleId])
 	SELECT lower([UserId]), lower([RoleId])
 	FROM [dbo].[aspnet_UsersInRoles]
-	WHERE [UserId] not in(SELECT [UserId] from [dbo].[membership_UserRole])
+	WHERE [UserId] NOT IN(SELECT [UserId] from [dbo].[membership_UserRole])
 
 END
 
@@ -408,12 +412,6 @@ ALTER TABLE [dbo].[carrot_UserSiteMapping] DROP CONSTRAINT [aspnet_Users_carrot_
 END
 
 GO
-
---carrot_Content	CreditUserId	aspnet_Users	UserId	carrot_Content_CreditUserId_FK	ALTER TABLE [dbo].[carrot_Content] DROP CONSTRAINT [carrot_Content_CreditUserId_FK]
---carrot_Content	EditUserId	aspnet_Users	UserId	carrot_Content_EditUserId_FK	ALTER TABLE [dbo].[carrot_Content] DROP CONSTRAINT [carrot_Content_EditUserId_FK]
---carrot_RootContent	CreateUserId	aspnet_Users	UserId	carrot_RootContent_CreateUserId_FK	ALTER TABLE [dbo].[carrot_RootContent] DROP CONSTRAINT [carrot_RootContent_CreateUserId_FK]
---carrot_UserData	UserId	aspnet_Users	UserId	FK_carrot_UserData_UserId	ALTER TABLE [dbo].[carrot_UserData] DROP CONSTRAINT [FK_carrot_UserData_UserId]
---carrot_UserSiteMapping	UserId	aspnet_Users	UserId	aspnet_Users_carrot_UserSiteMapping_FK	ALTER TABLE [dbo].[carrot_UserSiteMapping] DROP CONSTRAINT [aspnet_Users_carrot_UserSiteMapping_FK]
 
 IF NOT EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[carrot_RootContent_CreateUserId_FK]') )
 BEGIN
@@ -684,8 +682,7 @@ FROM [dbo].carrot_RootContent AS rc
 GO
 
 UPDATE [dbo].[carrot_DataInfo]
-set [DataValue] = '20150829' -- match date in the create script
+set [DataValue] = '20150829' -- set to a prior schema version of the MVC version so it will catch up
 WHERE [DataKey] = 'DBSchema'
-
 
 GO

@@ -1,5 +1,6 @@
 ﻿using CarrotCake.CMS.Plugins.FAQ2.Models;
 using Carrotware.CMS.Interface;
+using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.Web;
@@ -13,19 +14,19 @@ namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 		protected override void Initialize(RequestContext requestContext) {
 			base.Initialize(requestContext);
 
-			RouteValueDictionary vals = requestContext.RouteData.Values;
-
+			var vals = requestContext.RouteData.Values;
+			var routeInfo = vals.GetRouteInfo();
 			// use the test id to build a fake payload so the widget can be loaded for dev
-			string action = vals["action"].ToString().ToLowerInvariant();
-			string controller = vals["controller"].ToString().ToLowerInvariant();
+			string action = routeInfo.Action;
+			string controller = routeInfo.Controller;
+			string id = routeInfo.Id;
 
 			// since there are different models, set them up as needed to match the test
 			if (action.ToLowerInvariant() == "testview1" || action.ToLowerInvariant() == "testview2") {
 				var settings = new FaqPublic();
 				settings.SiteID = new Guid(this.TestSiteID);
 
-				if (vals.ContainsKey("id")) {
-					string id = vals["id"].ToString().ToLowerInvariant();
+				if (id.Length > 30) {
 					settings.FaqCategoryID = new Guid(id);
 					settings.WidgetClientID = "Widget_" + settings.FaqCategoryID.ToString().ToLowerInvariant().Substring(0, 5);
 				}
@@ -37,10 +38,9 @@ namespace CarrotCake.CMS.Plugins.FAQ2.Controllers {
 				var settings = new FaqPublicTop();
 				settings.SiteID = new Guid(this.TestSiteID);
 
-				if (vals.ContainsKey("id")) {
-					string id = vals["id"].ToString().ToLowerInvariant();
+				if (id.Length > 30) {
 					settings.FaqCategoryID = new Guid(id);
-					settings.WidgetClientID = "Widget_" + settings.FaqCategoryID.ToString().ToLowerInvariant().Substring(0, 5);
+					settings.WidgetClientID = "Widget_" + settings.FaqCategoryID.ToString("N").ToLowerInvariant().Substring(0, 8);
 				}
 
 				int top = 3;
