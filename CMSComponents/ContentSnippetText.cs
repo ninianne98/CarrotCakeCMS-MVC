@@ -34,14 +34,14 @@ namespace Carrotware.CMS.UI.Components {
 		[Widget(WidgetAttribute.FieldMode.DictionaryList)]
 		public Dictionary<string, string> lstSnippetID {
 			get {
-				if (SiteID == Guid.Empty) {
-					SiteID = SiteData.CurrentSiteID;
+				if (this.SiteID == Guid.Empty) {
+					this.SiteID = SiteData.CurrentSiteID;
 				}
 				Dictionary<string, string> _dict = (from c in SiteData.CurrentSite.GetContentSnippetList()
-													orderby c.ContentSnippetName
-													where c.SiteID == SiteID
+													orderby c.ContentSnippetName, c.CreateDate
+													where c.SiteID == this.SiteID
 													select c).ToList().ToDictionary(k => k.Root_ContentSnippetID.ToString(),
-													v => String.Format("{0} - {1} ({2})", v.ContentSnippetSlug, v.ContentSnippetName, (v.ContentSnippetActive ? "active" : "inactive")));
+													v => string.Format("{0} - {1} ({2})", v.ContentSnippetSlug, v.ContentSnippetName, (v.ContentSnippetActive ? "active" : "inactive")));
 				return _dict;
 			}
 		}
@@ -63,7 +63,7 @@ namespace Carrotware.CMS.UI.Components {
 		public override string ToHtmlString() {
 			LoadData();
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			string sBody = string.Empty;
 
@@ -105,7 +105,7 @@ namespace Carrotware.CMS.UI.Components {
 						sIdent = "<div class=\"cmsSnippetOuter\"> <div class=\"cmsSnippetInner\">\r\n" + cs.ContentSnippetSlug + ": " + cs.ContentSnippetName + "\r\n<br style=\"clear: both;\" /></div></div>";
 					}
 
-					sBody = String.Format("{0}\r\n{1}\r\n{2}", sIdent, cs.ContentBody, sBodyNote);
+					sBody = string.Format("{0}\r\n{1}\r\n{2}", sIdent, cs.ContentBody, sBodyNote);
 				}
 			} catch {
 				if (!SiteData.IsWebView) {

@@ -25,13 +25,15 @@ namespace Carrotware.CMS.DBUpdater {
 	public static class DatabaseSchemaState {
 		public static SqlException LastSQLError { get; set; }
 
-		public static string CurrentDbVersion { get { return DbVersion02; } }
+		public static string CurrentDbVersion { get { return DbVersion02B; } }
 
 		public static string DbVersion00 { get { return "20150829"; } }
 
 		public static string DbVersion01 { get { return "20151001"; } }
 
 		public static string DbVersion02 { get { return "20200915"; } }
+
+		public static string DbVersion02B { get { return "20200925"; } }
 
 		internal static string ReadEmbededScript(string resouceName) {
 			var sb = new StringBuilder();
@@ -81,14 +83,13 @@ namespace Carrotware.CMS.DBUpdater {
 			HttpContext.Current.Cache.Remove(_contentKey);
 		}
 
-		public static bool SystemNeedsChecking(Exception ex) {
+		public static bool SystemNeedsChecking(this Exception ex) {
 			//assumption is database is probably empty / needs updating, so trigger the under construction view
 
+			WriteDebugException("systemneedschecking", ex);
+
 			if (ex is SqlException && ex != null) {
-				string msg = ex.Message.ToLowerInvariant();
-				if (ex.InnerException != null) {
-					msg += "\r\n" + ex.InnerException.Message.ToLowerInvariant();
-				}
+				string msg = ex.CombineMessage().ToLowerInvariant();
 				if (msg.Contains("the server was not found")) {
 					return false;
 				}
@@ -117,7 +118,7 @@ namespace Carrotware.CMS.DBUpdater {
 			return item != null ? item.ToString() : null;
 		}
 
-		private static object logLocker = new object();
+		private static object _logLocker = new object();
 
 		public static void WriteDebugException(string debugSource, Exception objErr) {
 			WriteDebugException(false, debugSource, objErr);
@@ -129,10 +130,9 @@ namespace Carrotware.CMS.DBUpdater {
 #endif
 
 			if (bWriteError && objErr != null) {
-				StringBuilder sb = new StringBuilder();
+				var sb = new StringBuilder();
 
 				sb.AppendLine("----------------  " + debugSource.ToUpperInvariant() + " - " + DateTime.Now.ToString() + "  ----------------");
-
 				sb.AppendLine("[" + objErr.GetType().ToString() + "] " + objErr.Message);
 
 				if (objErr.StackTrace != null) {
@@ -141,12 +141,17 @@ namespace Carrotware.CMS.DBUpdater {
 
 				if (objErr.InnerException != null) {
 					sb.AppendLine(objErr.InnerException.Message);
+
+					if (objErr.InnerException.Message != null) {
+						sb.AppendLine(objErr.InnerException.Message);
+					}
 				}
+
+				Encoding encode = Encoding.Default;
 
 				string filePath = HttpContext.Current.Server.MapPath("~/carrot_errors.txt");
 
-				Encoding encode = Encoding.Default;
-				lock (logLocker) {
+				lock (_logLocker) {
 					using (var fs = new FileStream(filePath, FileMode.Append, FileAccess.Write, FileShare.ReadWrite)) {
 						using (var sw = new StreamWriter(fs, encode)) {
 							sw.Write(sb.ToString());
@@ -161,25 +166,26 @@ namespace Carrotware.CMS.DBUpdater {
 		public static bool TablesIncomplete {
 			get {
 				string tablesIncomplete = string.Empty;
-				bool c = true;
+				bool isIncomplete = true;
 				var ret = GetCacheItemString(_contentSqlStateKey);
 
 				if (ret != null) {
 					tablesIncomplete = ret;
 				} else {
 					try {
-						c = AreCMSTablesIncomplete();
+						var du = new DatabaseUpdate();
+						isIncomplete = du.DatabaseNeedsUpdate();
 					} catch (Exception ex) {
-						c = false;
+						isIncomplete = false;
 						WriteDebugException("tablesincomplete", ex);
 					}
 
-					tablesIncomplete = c.ToString();
+					tablesIncomplete = isIncomplete.ToString();
 					HttpContext.Current.Cache.Insert(_contentSqlStateKey, tablesIncomplete, null, DateTime.Now.AddMinutes(3), Cache.NoSlidingExpiration);
 				}
 
-				c = Convert.ToBoolean(tablesIncomplete);
-				return c;
+				isIncomplete = Convert.ToBoolean(tablesIncomplete);
+				return isIncomplete;
 			}
 		}
 
@@ -190,51 +196,9 @@ namespace Carrotware.CMS.DBUpdater {
 			}
 		}
 
-		public static bool AreCMSTablesIncomplete() {
-			if (!DatabaseSchemaState.FailedSQL) {
-				bool bTestResult = false;
-
-				DataInfo ver = GetDbSchemaVersion();
-				bTestResult = ver.DataValue != DatabaseSchemaState.CurrentDbVersion;
-				if (bTestResult) {
-					return true;
-				}
-
-				bTestResult = SQLUpdateNugget.EvalNuggetKey("AreCMSTablesIncomplete");
-				if (bTestResult) {
-					return true;
-				}
-
-				bTestResult = SQLUpdateNugget.EvalManditoryChecks();
-				if (bTestResult) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		public static bool UsersExist {
-			get {
-				if (!DatabaseSchemaState.FailedSQL) {
-					try {
-						bool bTestResult = SQLUpdateNugget.EvalNuggetKey("DoUsersExist");
-
-						return bTestResult;
-					} catch (Exception ex) {
-						WriteDebugException("usersexist", ex);
-					}
-				}
-
-				return false;
-			}
-		}
-
 		#region Work with data keys
 
 		private static object schemaCheckLocker = new object();
-
-		//private static string SchemaKey = "cms_GetDbSchemaVersion";
 
 		public static DataInfo GetDbSchemaVersion() {
 			var di = DataInfo.CreateBlankSchema();
@@ -243,6 +207,7 @@ namespace Carrotware.CMS.DBUpdater {
 					di = GetDataKeyValue(DataInfo.DBSchema);
 				} catch (Exception ex) {
 					di = DataInfo.CreateBlankSchema();
+					WriteDebugException("getdbschemaversion", ex);
 				}
 			}
 			return di;
@@ -463,11 +428,11 @@ namespace Carrotware.CMS.DBUpdater {
 
 		public static string CombineMessage(this Exception ex) {
 			var msgInner = string.Empty;
-			var msgTop = ex.Message + "\n" + ex.StackTrace;
+			var msgTop = ex.Message + Environment.NewLine + ex.StackTrace;
 
 			if (ex.InnerException != null) {
-				msgInner = ex.InnerException.Message + "\n" + ex.InnerException.StackTrace;
-				msgInner = "\n" + msgInner;
+				msgInner = ex.InnerException.Message + Environment.NewLine + ex.InnerException.StackTrace;
+				msgInner = Environment.NewLine + msgInner;
 			}
 
 			return msgTop + msgInner;

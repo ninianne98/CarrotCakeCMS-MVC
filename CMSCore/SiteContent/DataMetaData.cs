@@ -15,6 +15,14 @@ namespace Carrotware.CMS.Core {
 	//======================================
 
 	public class ContentDateTally : IMetaDataLinks {
+
+		public ContentDateTally() { }
+
+		public ContentDateTally(SiteData site, DateTime tallyDate) {
+			this.TheSite = site;
+			this.TallyDate = tallyDate;
+		}
+
 		public SiteData TheSite { get; set; }
 		public DateTime TallyDate { get; set; }
 		public string DateCaption { get; set; }

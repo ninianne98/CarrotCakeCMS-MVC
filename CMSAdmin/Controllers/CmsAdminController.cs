@@ -64,8 +64,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 						}
 					}
 				} catch (Exception ex) {
+					var du = new DatabaseUpdate();
 					//assumption is database is probably empty / needs updating, so trigger the under construction view
-					if (DatabaseSchemaState.SystemNeedsChecking(ex) || DatabaseSchemaState.AreCMSTablesIncomplete()) {
+					if (ex.SystemNeedsChecking() || du.DatabaseNeedsUpdate()) {
 						filterContext.Result = new RedirectResult(SiteFilename.DatabaseSetupURL);
 						return;
 					} else {
@@ -585,51 +586,27 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			if (!string.IsNullOrEmpty(signout)) {
 				SignOut();
 				Response.Redirect(SiteFilename.DatabaseSetupURL);
+				return View(model);
 			}
 
-			var dm = new DatabaseUpdate(true);
-
+			var du = new DatabaseUpdate();
 			var lst = new List<DatabaseUpdateMessage>();
 
 			if (DatabaseSchemaState.LastSQLError != null) {
-				dm.HandleResponse(lst, DatabaseSchemaState.LastSQLError);
-				DatabaseSchemaState.LastSQLError = null;
+				du.HandleResponse(lst, DatabaseSchemaState.LastSQLError);
+				du.ClearTest();
 			} else {
-				bool bUpdate = true;
-
-				if (!dm.DoCMSTablesExist()) {
-					bUpdate = false;
-				}
-
-				var ver = DatabaseSchemaState.GetDbSchemaVersion();
-				bUpdate = dm.DatabaseNeedsUpdate()
-							|| (ver.DataValue != DatabaseSchemaState.CurrentDbVersion);
-
-				try {
-					model.CreateUser = !DatabaseSchemaState.UsersExist;
-				} catch { }
-
-				if (bUpdate) {
-					DatabaseUpdateStatus status = dm.PerformUpdates();
-					lst = dm.MergeMessages(lst, status.Messages);
-				} else {
-					ver = DatabaseSchemaState.GetDbSchemaVersion();
-					int iUpdate = 1;
-					dm.HandleResponse(lst, "Database up-to-date [" + ver.DataValue + "] ");
-					if (ver.DataValue != DatabaseSchemaState.CurrentDbVersion) {
-						dm.HandleResponse(lst, dm.BuildUpdateString(iUpdate++), dm.Refresh01());
-					}
-				}
-
-				bUpdate = dm.DatabaseNeedsUpdate();
-
-				if (!bUpdate && DatabaseSchemaState.LastSQLError == null) {
-					model.CreateUser = !DatabaseSchemaState.UsersExist;
-				}
+				du.ClearTest();
+				DatabaseUpdateStatus status = du.PerformUpdates();
+				lst = du.MergeMessages(lst, status.Messages);
 			}
 
+			try {
+				model.CreateUser = du.DoUsersExist() == false;
+			} catch { }
+
 			if (DatabaseSchemaState.LastSQLError != null) {
-				dm.HandleResponse(lst, DatabaseSchemaState.LastSQLError);
+				du.HandleResponse(lst, DatabaseSchemaState.LastSQLError);
 			}
 
 			model.SetMessages(lst);
@@ -686,9 +663,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		public ActionResult CheckDatabase() {
-			if (DatabaseSchemaState.AreCMSTablesIncomplete() || !DatabaseSchemaState.UsersExist) {
-				DatabaseSchemaState.ResetFailedSQL();
-				DatabaseSchemaState.ResetSQLState();
+			var du = new DatabaseUpdate();
+
+			if (du.DatabaseNeedsUpdate() || !du.DoUsersExist()) {
+				du.ClearTest();
 
 				return RedirectToAction(this.GetActionName(x => x.DatabaseSetup(null)));
 			}
@@ -2959,7 +2937,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		}
 
 		private void RedirectIfUsersExist() {
-			if (DatabaseSchemaState.UsersExist) {
+			var du = new DatabaseUpdate();
+
+			if (du.DoUsersExist()) {
 				Response.Redirect(SiteFilename.DashboardURL);
 			}
 		}

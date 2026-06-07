@@ -62,8 +62,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			try {
 				return DefaultView();
 			} catch (Exception ex) {
+				var du = new DatabaseUpdate();
 				//assumption is database is probably empty / needs updating, so trigger the under construction view
-				if (DatabaseSchemaState.SystemNeedsChecking(ex) || DatabaseSchemaState.AreCMSTablesIncomplete()) {
+				if (ex.SystemNeedsChecking() || du.DatabaseNeedsUpdate()) {
 					SiteData.WriteDebugException("cmscontentcontroller_defaultview", ex);
 
 					return View("_EmptyHome");

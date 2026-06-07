@@ -54,11 +54,11 @@
 			<div style="clear: both; display: block; min-height: 4px;">
 				<!-- parent page plugin-->
 				@{
-	var drill = new SitePageDrillDownModel {
-		FieldName = Html.NameFor(m => m.IndexPageID).ToString(),
-		CurrentPageID = Guid.Empty,
-		SelectedPageID = Model.IndexPageID
-	};
+					var drill = new SitePageDrillDownModel {
+						FieldName = Html.NameFor(m => m.IndexPageID).ToString(),
+						CurrentPageID = Guid.Empty,
+						SelectedPageID = Model.IndexPageID
+					};
 				}
 
 				@Html.Partial("_SitePageDrillDown", drill)

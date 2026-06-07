@@ -1,12 +1,16 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.CMS.Interface;
+using Carrotware.CMS.Mvc.UI.Admin.Models;
 using Carrotware.CMS.UI.Components;
 using Carrotware.Web.UI.Components;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -42,14 +46,17 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 
 		public static CmsSkin.SkinOption SiteSkin {
 			get {
-				if (_theme == CmsSkin.SkinOption.None) {
-					var config = CarrotCakeConfig.GetConfig();
-					string skin = config.MainConfig.SiteSkin;
-					var actualSkin = CmsSkin.SkinOption.Classic;
-					try { actualSkin = (CmsSkin.SkinOption)Enum.Parse(typeof(CmsSkin.SkinOption), skin, true); } catch { }
+				try {
+					if (_theme == CmsSkin.SkinOption.None) {
+						var config = CarrotCakeConfig.GetConfig();
+						string skin = config.MainConfig.SiteSkin;
 
-					_theme = actualSkin;
-				}
+						var actualSkin = CmsSkin.SkinOption.Classic;
+						try { actualSkin = (CmsSkin.SkinOption)Enum.Parse(typeof(CmsSkin.SkinOption), skin, true); } catch { }
+
+						_theme = actualSkin;
+					}
+				} catch { }
 
 				return _theme;
 			}
@@ -145,6 +152,35 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 
 		public static string GetWebResourceUrl(string sResouceName) {
 			return CarrotWeb.GetWebResourceUrl(typeof(Controllers.CmsContentController), sResouceName);
+		}
+
+		public static HtmlString SplitDateTimeFor<TModel, TValue>(this HtmlHelper<TModel> htmlHelper,
+			Expression<Func<TModel, TValue>> expression) {
+			var metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+
+			var sdt = new SplitDateTime();
+
+			if (metadata.Model is DateTime) {
+				var expressionText = ExpressionHelper.GetExpressionText(expression);
+
+				string fieldName = htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(expressionText);
+				DateTime? value = metadata.Model as DateTime?;
+				sdt = new SplitDateTime(value, fieldName);
+			}
+
+			var viewResult = ViewEngines.Engines.FindPartialView(htmlHelper.ViewContext, "_datetime");
+
+			if (viewResult.View != null) {
+				using (var sw = new StringWriter()) {
+					var newViewData = new ViewDataDictionary(htmlHelper.ViewData) { Model = sdt };
+					var newViewContext = new ViewContext(htmlHelper.ViewContext, viewResult.View, newViewData, htmlHelper.ViewContext.TempData, sw);
+
+					viewResult.View.Render(newViewContext, sw);
+					return new HtmlString(sw.ToString());
+				}
+			} else {
+				return new HtmlString("<!-- '_datetime' not found for " + sdt.FieldName + " -->");
+			}
 		}
 
 		public static void AddErrors(ModelStateDictionary stateDictionary, IdentityResult result) {

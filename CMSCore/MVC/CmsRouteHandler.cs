@@ -37,7 +37,6 @@ namespace Carrotware.CMS.Core {
 	//=====================
 
 	public class CmsRouteHandler : MvcRouteHandler {
-
 		public static string RouteKey { get { return "cmsRequestedUri"; } }
 		public static string PageIdKey { get { return "cmsPageid"; } }
 
@@ -51,13 +50,11 @@ namespace Carrotware.CMS.Core {
 						|| requestedUri.ToLowerInvariant().Contains("rss.")
 						|| requestedUri.ToLowerInvariant().Contains("sitemap.")) {
 				if (UseDynamicFeed(SiteFilename.RssFeedUri, requestedUri)) {
-
 					requestCtx.SetContextRoutevalues(CmsRouteConstants.CmsController.Content, CmsRouteConstants.RssAction);
 
 					return base.GetHttpHandler(requestCtx);
 				}
 				if (UseDynamicFeed(SiteFilename.SiteMapUri, requestedUri)) {
-
 					requestCtx.SetContextRoutevalues(CmsRouteConstants.CmsController.Content, CmsRouteConstants.SiteMapAction);
 
 					return base.GetHttpHandler(requestCtx);
@@ -113,6 +110,7 @@ namespace Carrotware.CMS.Core {
 						if (navData != null) {
 							SiteData.WriteDebugException("cmsroutehandler != null", new Exception(string.Format("Default: {0}", navData.FileName)));
 							actionRoute = CmsRouteConstants.DefaultAction;
+							requestCtx.RouteData.Values[PageIdKey] = navData.Root_ContentID;
 						} else {
 							SiteData.WriteDebugException("cmsroutehandler == null", new Exception(string.Format("_PageNotFound: {0}", sCurrentPage)));
 							actionRoute = CmsRouteConstants.NotFoundAction;
@@ -121,9 +119,11 @@ namespace Carrotware.CMS.Core {
 						requestCtx.SetContextRoutevalues(CmsRouteConstants.CmsController.Content, actionRoute);
 					}
 				} catch (Exception ex) {
+					var du = new DatabaseUpdate();
+
 					SiteData.WriteDebugException("cmsroutehandler_exception_uri", new Exception(string.Format("Exception: {0}", sCurrentPage)));
 
-					if (DatabaseSchemaState.SystemNeedsChecking(ex) || DatabaseSchemaState.AreCMSTablesIncomplete()) {
+					if (ex.SystemNeedsChecking() || du.DatabaseNeedsUpdate()) {
 						requestCtx.SetContextRoutevalues(CmsRouteConstants.CmsController.Content, CmsRouteConstants.DefaultAction);
 
 						SiteData.WriteDebugException("cmsroutehandler_exception_systemneedschecking", ex);

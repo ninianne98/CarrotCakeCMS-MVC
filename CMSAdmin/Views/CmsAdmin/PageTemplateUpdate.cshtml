@@ -65,11 +65,11 @@
 				<td>
 					<!-- parent page plugin-->
 					@{
-		var drill = new SitePageDrillDownModel {
-			FieldName = Html.NameFor(m => m.ParentPageID).ToString(),
-			CurrentPageID = Guid.Empty,
-			SelectedPageID = Model.ParentPageID
-		};
+						var drill = new SitePageDrillDownModel {
+							FieldName = Html.NameFor(m => m.ParentPageID).ToString(),
+							CurrentPageID = Guid.Empty,
+							SelectedPageID = Model.ParentPageID
+						};
 					}
 
 					@Html.Partial("_SitePageDrillDown", drill)

@@ -18,9 +18,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.SelectedPageID = Guid.Empty;
 		}
 
-		public Guid? SelectedPageID { get; set; }
+		public Guid? SelectedPageID { get; set; } = Guid.Empty;
 
-		public Guid CurrentPageID { get; set; }
+		public Guid CurrentPageID { get; set; } = Guid.Empty;
 
 		public string FieldName { get; set; }
 

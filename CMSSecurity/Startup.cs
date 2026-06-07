@@ -6,7 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Owin;
 using System;
 
-[assembly: OwinStartupAttribute(typeof(Carrotware.CMS.Security.Startup))]
+[assembly: OwinStartup(typeof(Carrotware.CMS.Security.Startup))]
 
 namespace Carrotware.CMS.Security {
 

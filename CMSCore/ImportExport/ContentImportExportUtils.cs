@@ -265,9 +265,9 @@ namespace Carrotware.CMS.Core {
 		public static string GetExportXML<T>(T cpe) {
 			var xmlSerializer = new XmlSerializer(typeof(T));
 			string xml = string.Empty;
-			using (var stringWriter = new StringWriter()) {
-				xmlSerializer.Serialize(stringWriter, cpe);
-				xml = stringWriter.ToString();
+			using (var writer = new StringWriter()) {
+				xmlSerializer.Serialize(writer, cpe);
+				xml = writer.ToString();
 			}
 
 			return xml;
@@ -351,9 +351,9 @@ namespace Carrotware.CMS.Core {
 			} else {
 				var xmlSerializer = new XmlSerializer(typeof(T));
 				string xml = string.Empty;
-				using (var stringWriter = new StringWriter()) {
-					xmlSerializer.Serialize(stringWriter, theData);
-					xml = stringWriter.ToString();
+				using (var writer = new StringWriter()) {
+					xmlSerializer.Serialize(writer, theData);
+					xml = writer.ToString();
 				}
 				CMSConfigHelper.SaveSerialized(guidKey, _keyPageImport, xml);
 			}

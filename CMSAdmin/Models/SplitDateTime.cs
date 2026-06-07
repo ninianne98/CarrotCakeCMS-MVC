@@ -18,6 +18,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			SetTimeStrings();
 		}
 
+		public SplitDateTime(DateTime? date, string fldName) {
+			this.CombinedDateTime = date;
+			this.FieldName = fldName;
+		}
+
 		protected void SetTimeStrings() {
 			DateTime dtModel = DateTime.MinValue;
 

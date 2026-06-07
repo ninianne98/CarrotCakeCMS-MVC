@@ -35,19 +35,19 @@ namespace Carrotware.CMS.Interface {
 
 			string[] views = new[] {
 					"~/Views/" + this.AssemblyKey + "/{0}.cshtml",
-                    "~/Views/" + this.AssemblyKey + "/{0}.vbhtml",
-                    "~/Views/" + this.AssemblyKey + "/{1}/{0}.cshtml",
-                    "~/Views/" + this.AssemblyKey + "/{1}/{0}.vbhtml",
-                    "~/Views/" + this.AssemblyKey + "/Shared/{0}.cshtml",
-                    "~/Views/" + this.AssemblyKey + "/Shared/{0}.vbhtml"};
+					"~/Views/" + this.AssemblyKey + "/{0}.vbhtml",
+					"~/Views/" + this.AssemblyKey + "/{1}/{0}.cshtml",
+					"~/Views/" + this.AssemblyKey + "/{1}/{0}.vbhtml",
+					"~/Views/" + this.AssemblyKey + "/Shared/{0}.cshtml",
+					"~/Views/" + this.AssemblyKey + "/Shared/{0}.vbhtml"};
 
 			string[] areas = new[] {
 					"~/Areas/" + this.AssemblyKey + "/Views/{0}.cshtml",
-                    "~/Areas/" + this.AssemblyKey + "/Views/{0}.vbhtml",
-                    "~/Areas/" + this.AssemblyKey + "/Views/{1}/{0}.cshtml",
-                    "~/Areas/" + this.AssemblyKey + "/Views/{1}/{0}.vbhtml",
-                    "~/Areas/" + this.AssemblyKey + "/Views/Shared/{0}.cshtml",
-                    "~/Areas/" + this.AssemblyKey + "/Views/Shared/{0}.vbhtml"};
+					"~/Areas/" + this.AssemblyKey + "/Views/{0}.vbhtml",
+					"~/Areas/" + this.AssemblyKey + "/Views/{1}/{0}.cshtml",
+					"~/Areas/" + this.AssemblyKey + "/Views/{1}/{0}.vbhtml",
+					"~/Areas/" + this.AssemblyKey + "/Views/Shared/{0}.cshtml",
+					"~/Areas/" + this.AssemblyKey + "/Views/Shared/{0}.vbhtml"};
 
 			this.LoadPaths(views, areas);
 		}

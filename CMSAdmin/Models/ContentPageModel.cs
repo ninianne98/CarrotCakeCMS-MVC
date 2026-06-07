@@ -33,7 +33,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			}
 		}
 
-		public ContentPage ContentPage { get; set; }
+		public ContentPage ContentPage { get; set; } = new ContentPage();
 
 		public Guid? ImportID { get; set; }
 		public Guid? VersionID { get; set; }
@@ -42,9 +42,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		public string SerialCache { get; set; } = string.Empty;
 		public bool VisitPage { get; set; }
 
-		public Dictionary<string, string> VersionHistory { get; set; }
+		public Dictionary<string, string> VersionHistory { get; set; } = new Dictionary<string, string>();
 
-		public List<CMSTemplate> SiteTemplates { get; set; }
+		public List<CMSTemplate> SiteTemplates { get; set; } = new List<CMSTemplate>();
 
 		private ExtendedUserData _usr = null;
 
@@ -72,8 +72,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		private List<SelectListItem> _cats = null;
 
-		public List<string> SelectedCategories { get; set; }
-		public List<string> SelectedTags { get; set; }
+		public List<string> SelectedCategories { get; set; } = new List<string>();
+		public List<string> SelectedTags { get; set; } = new List<string>();
 
 		protected void InitSelections() {
 			if (this.SelectedCategories == null) {
@@ -118,9 +118,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 
 		public string OriginalFileName { get; set; }
 
-		public List<Widget> WidgetListText { get; set; }
+		public List<Widget> WidgetListText { get; set; } = new List<Widget>();
 
-		public List<Widget> WidgetListHtml { get; set; }
+		public List<Widget> WidgetListHtml { get; set; } = new List<Widget>();
 
 		public void SetPage(ContentPage page) {
 			this.ContentPage = page;
@@ -133,6 +133,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			if (this.ContentPage != null) {
 				using (var pageHelper = new ContentPageHelper()) {
 					if (this.ContentPage.Root_ContentID != Guid.Empty) {
+						this.ParentID = this.ContentPage.Parent_ContentID;
 						this.VersionHistory = (from v in pageHelper.GetVersionHistory(this.ContentPage.SiteID, this.ContentPage.Root_ContentID)
 											   join u in ExtendedUserData.GetUserList() on v.EditUserId equals u.UserId
 											   orderby v.EditDate descending
@@ -176,7 +177,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 		}
 
 		protected void OverrideCache(ContentPage pageContents) {
-			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+			using (var cmsHelper = new CMSConfigHelper()) {
 				cmsHelper.OverrideKey(pageContents.Root_ContentID);
 				cmsHelper.cmsAdminContent = pageContents;
 				cmsHelper.cmsAdminWidget = pageContents.GetWidgetList();
@@ -188,7 +189,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.WidgetListText = new List<Widget>();
 
 			if (this.ContentPage != null && this.ContentPage.Root_ContentID != Guid.Empty) {
-				using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+				using (var cmsHelper = new CMSConfigHelper()) {
 					cmsHelper.OverrideKey(this.ContentPage.Root_ContentID);
 					if (cmsHelper.cmsAdminWidget != null) {
 						this.WidgetListHtml = (from w in cmsHelper.cmsAdminWidget

@@ -3,11 +3,9 @@ using Carrotware.CMS.Mvc.UI.Admin.Models;
 using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
-using System.Xml.Serialization;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -64,106 +62,56 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		protected ContentPageHelper pageHelper = new ContentPageHelper();
 		protected WidgetHelper widgetHelper = new WidgetHelper();
 		protected SiteMapOrderHelper sitemapHelper = new SiteMapOrderHelper();
+		protected CMSConfigHelper cmsHelper = new CMSConfigHelper();
 
-		protected Guid currentPageGuid = Guid.Empty;
-		protected ContentPage filePage = null;
+		protected Guid _currentPageGuid = Guid.Empty;
+		protected ContentPage _filePage = null;
 
 		public ContentPage cmsAdminContent {
 			get {
-				ContentPage c = null;
-				try {
-					string xml = GetSerialized(CMSConfigHelper.keyAdminContent);
-					var xmlSerializer = new XmlSerializer(typeof(ContentPage));
-					object genpref = null;
-					using (var stringReader = new StringReader(xml)) {
-						genpref = xmlSerializer.Deserialize(stringReader);
-					}
-					c = genpref as ContentPage;
-				} catch { }
-				return c;
+				LoadGuids();
+				cmsHelper.OverridePage(_filePage);
+				return cmsHelper.cmsAdminContent;
 			}
 			set {
-				if (value == null) {
-					ClearSerialized(CMSConfigHelper.keyAdminContent);
-				} else {
-					string xml = string.Empty;
-					var xmlSerializer = new XmlSerializer(typeof(ContentPage));
-					using (var sw = new StringWriter()) {
-						xmlSerializer.Serialize(sw, value);
-						xml = sw.ToString();
-					}
-					SaveSerialized(CMSConfigHelper.keyAdminContent, xml);
-				}
+				LoadGuids();
+				cmsHelper.OverridePage(_filePage);
+				cmsHelper.cmsAdminContent = value;
 			}
 		}
 
 		public List<Widget> cmsAdminWidget {
 			get {
-				List<Widget> c = null;
-				string xml = GetSerialized(CMSConfigHelper.keyAdminWidget);
-				//since a page may not have any widgets, initialize it and skip deserializing
-				if (!string.IsNullOrEmpty(xml)) {
-					var xmlSerializer = new XmlSerializer(typeof(List<Widget>));
-					object genpref = null;
-					using (var stringReader = new StringReader(xml)) {
-						genpref = xmlSerializer.Deserialize(stringReader);
-					}
-					c = genpref as List<Widget>;
-				} else {
-					c = new List<Widget>();
-				}
-				return c;
+				LoadGuids();
+				cmsHelper.OverridePage(_filePage);
+				return cmsHelper.cmsAdminWidget;
 			}
 			set {
-				if (value == null) {
-					ClearSerialized(CMSConfigHelper.keyAdminWidget);
-				} else {
-					string xml = string.Empty;
-					var xmlSerializer = new XmlSerializer(typeof(List<Widget>));
-					using (var sw = new StringWriter()) {
-						xmlSerializer.Serialize(sw, value);
-						xml = sw.ToString();
-					}
-					SaveSerialized(CMSConfigHelper.keyAdminWidget, xml);
-				}
+				LoadGuids();
+				cmsHelper.OverridePage(_filePage);
+				cmsHelper.cmsAdminWidget = value;
 			}
-		}
-
-		private void SaveSerialized(string key, string data) {
-			LoadGuids();
-
-			CMSConfigHelper.SaveSerialized(currentPageGuid, key, data);
-		}
-
-		private string GetSerialized(string key) {
-			string data = string.Empty;
-			LoadGuids();
-
-			data = CMSConfigHelper.GetSerialized(currentPageGuid, key);
-
-			return data;
-		}
-
-		private bool ClearSerialized(string key) {
-			LoadGuids();
-
-			return CMSConfigHelper.ClearSerialized(currentPageGuid, key);
 		}
 
 		private void LoadGuids() {
-			if (!string.IsNullOrEmpty(_currentEditPage)) {
-				filePage = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, _currentEditPage);
-				if (filePage != null) {
-					currentPageGuid = filePage.Root_ContentID;
-				}
-			} else {
-				if (currentPageGuid != Guid.Empty) {
-					filePage = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, currentPageGuid);
-					if (filePage != null) {
-						_currentEditPage = filePage.FileName;
+			if (_filePage == null || _currentPageGuid == Guid.Empty) {
+				if (!string.IsNullOrEmpty(_currentEditPage)) {
+					_filePage = pageHelper.FindByFilename(SiteData.CurrentSite.SiteID, _currentEditPage);
+					if (_filePage != null) {
+						_currentEditPage = _filePage.FileName;
+						_currentPageGuid = _filePage.Root_ContentID;
 					}
 				} else {
-					filePage = new ContentPage();
+					if (_currentPageGuid != Guid.Empty) {
+						_filePage = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, _currentPageGuid);
+						if (_filePage != null) {
+							_currentEditPage = _filePage.FileName;
+							_currentPageGuid = _filePage.Root_ContentID;
+						}
+					} else {
+						_currentPageGuid = Guid.Empty;
+						_filePage = new ContentPage();
+					}
 				}
 			}
 		}
@@ -180,9 +128,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			try {
 				string pageId = model.PageID;
 
-				currentPageGuid = new Guid(pageId);
+				_currentPageGuid = new Guid(pageId);
 
-				bool ret = pageHelper.RecordPageLock(currentPageGuid, SiteData.CurrentSite.SiteID, SecurityData.CurrentUserGuid);
+				bool ret = pageHelper.RecordPageLock(_currentPageGuid, SiteData.CurrentSite.SiteID, SecurityData.CurrentUserGuid);
 
 				if (ret) {
 					return JsonSerialize(SiteData.CurrentSite.Now.ToString());
@@ -201,9 +149,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			try {
 				string thisPage = model.ThisPage;
 
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 
-				pageHelper.ResetHeartbeatLock(currentPageGuid, SiteData.CurrentSite.SiteID, SecurityData.CurrentUserGuid);
+				pageHelper.ResetHeartbeatLock(_currentPageGuid, SiteData.CurrentSite.SiteID, SecurityData.CurrentUserGuid);
 
 				GetSetUserEditStateAsEmpty();
 
@@ -219,9 +167,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public string SendTrackbackPageBatch(ApiModel model) {
 			try {
 				string thisPage = model.ThisPage;
-				currentPageGuid = new Guid(thisPage);
-				if (currentPageGuid != Guid.Empty) {
-					ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, currentPageGuid);
+				_currentPageGuid = new Guid(thisPage);
+				if (_currentPageGuid != Guid.Empty) {
+					ContentPage cp = pageHelper.FindContentByID(SiteData.CurrentSite.SiteID, _currentPageGuid);
 					cp.SaveTrackbackTop();
 				}
 				return JsonSerialize(ServiceResponse.OK);
@@ -379,7 +327,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string thisPage = model.ThisPage;
 
 				theTemplate = CMSConfigHelper.DecodeBase64(theTemplate);
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
 
 				ContentPage c = cmsAdminContent;
@@ -609,12 +557,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public string GenerateNewFilename(string ThePageTitle, string GoLiveDate, string PageID, string Mode) {
 			try {
-				currentPageGuid = new Guid(PageID);
+				_currentPageGuid = new Guid(PageID);
 				DateTime goLiveDate = Convert.ToDateTime(GoLiveDate);
 				string sThePageTitle = CMSConfigHelper.DecodeBase64(ThePageTitle);
 				var pageType = Mode.ToLowerInvariant() == "page" ? ContentPageType.PageType.ContentEntry : ContentPageType.PageType.BlogEntry;
 
-				return JsonSerialize(SiteData.GenerateNewFilename(currentPageGuid, sThePageTitle, goLiveDate, pageType));
+				return JsonSerialize(SiteData.GenerateNewFilename(_currentPageGuid, sThePageTitle, goLiveDate, pageType));
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 				return JsonSerialize(ServiceResponse.Fail);
@@ -624,10 +572,10 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public string ValidateUniqueFilename(string TheFileName, string PageID) {
 			try {
-				currentPageGuid = new Guid(PageID);
+				_currentPageGuid = new Guid(PageID);
 				TheFileName = CMSConfigHelper.DecodeBase64(TheFileName);
 
-				return JsonSerialize(IsUniqueFilename(TheFileName, currentPageGuid));
+				return JsonSerialize(IsUniqueFilename(TheFileName, _currentPageGuid));
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -664,11 +612,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public string ValidateUniqueBlogFilename(string ThePageSlug, string GoLiveDate, string PageID) {
 			try {
-				currentPageGuid = new Guid(PageID);
+				_currentPageGuid = new Guid(PageID);
 				DateTime dateGoLive = Convert.ToDateTime(GoLiveDate);
 				ThePageSlug = CMSConfigHelper.DecodeBase64(ThePageSlug);
 
-				return JsonSerialize(IsUniqueBlogFilename(ThePageSlug, dateGoLive, currentPageGuid));
+				return JsonSerialize(IsUniqueBlogFilename(ThePageSlug, dateGoLive, _currentPageGuid));
 			} catch (Exception ex) {
 				SiteData.WriteDebugException("webservice", ex);
 
@@ -753,7 +701,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string widgetDropped = model.WidgetDropped;
 				string thisPage = model.ThisPage;
 
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
 				string[] w = widgetDropped.Split('\t');
 
@@ -806,7 +754,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string thisPage = model.ThisPage;
 
 				widgetAddition = CMSConfigHelper.DecodeBase64(widgetAddition);
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
 
 				List<Widget> cacheWidget = cmsAdminWidget;
@@ -848,7 +796,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 							rWidg.IsPendingChange = true;
 							rWidg.PlaceholderName = w[1].Substring(4);
 							rWidg.WidgetOrder = int.Parse(w[0]);
-							rWidg.Root_ContentID = currentPageGuid;
+							rWidg.Root_ContentID = _currentPageGuid;
 							rWidg.IsWidgetActive = true;
 							rWidg.IsLatestVersion = true;
 							rWidg.EditDate = SiteData.CurrentSite.Now;
@@ -895,7 +843,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string dbKey = DBKey;
 				string thisPage = ThisPage;
 
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
 				Guid guidWidget = new Guid(dbKey);
 
@@ -929,7 +877,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string dbKey = DBKey;
 				string thisPage = ThisPage;
 
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
 				Guid guidWidget = new Guid(dbKey);
 
@@ -960,7 +908,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		[HttpGet]
 		public string GetWidgetLatestText(string DBKey, string ThisPage) {
 			try {
-				currentPageGuid = new Guid(ThisPage);
+				_currentPageGuid = new Guid(ThisPage);
 				LoadGuids();
 				Guid guidWidget = new Guid(DBKey);
 				Widget ww = null;
@@ -993,7 +941,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string dbKey = model.DBKey;
 				string thisPage = model.ThisPage;
 
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
 				Guid guidWidget = new Guid(dbKey);
 
@@ -1027,7 +975,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string dbKey = model.DBKey;
 				string thisPage = model.ThisPage;
 
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
 
 				Guid guidWidget = new Guid(dbKey);
@@ -1080,7 +1028,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string dbKey = model.DBKey;
 				string thisPage = model.ThisPage;
 
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
 				Guid guidWidget = new Guid(dbKey);
 
@@ -1113,7 +1061,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string dbKey = model.DBKey;
 				string thisPage = model.ThisPage;
 
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
 				Guid guidWidget = new Guid(dbKey);
 
@@ -1148,7 +1096,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				string thisPage = model.ThisPage;
 
 				zoneText = CMSConfigHelper.DecodeBase64(zoneText);
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
 				Guid guidWidget = new Guid(dbKey);
 
@@ -1180,9 +1128,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 				zoneText = CMSConfigHelper.DecodeBase64(zoneText);
 				zone = CMSConfigHelper.DecodeBase64(zone);
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
-				_currentEditPage = filePage.FileName.ToLowerInvariant();
+				_currentEditPage = _filePage.FileName.ToLowerInvariant();
 
 				var c = cmsAdminContent;
 				c.EditDate = SiteData.CurrentSite.Now;
@@ -1213,21 +1161,21 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			try {
 				string thisPage = model.ThisPage;
 
-				currentPageGuid = new Guid(thisPage);
+				_currentPageGuid = new Guid(thisPage);
 				LoadGuids();
-				_currentEditPage = filePage.FileName.ToLowerInvariant();
+				_currentEditPage = _filePage.FileName.ToLowerInvariant();
 
-				bool isLocked = pageHelper.IsPageLocked(currentPageGuid, SiteData.CurrentSite.SiteID, SecurityData.CurrentUserGuid);
-				Guid guidUser = pageHelper.GetCurrentEditUser(currentPageGuid, SiteData.CurrentSite.SiteID);
+				bool isLocked = pageHelper.IsPageLocked(_currentPageGuid, SiteData.CurrentSite.SiteID, SecurityData.CurrentUserGuid);
+				Guid guidUser = pageHelper.GetCurrentEditUser(_currentPageGuid, SiteData.CurrentSite.SiteID);
 
 				if (isLocked || guidUser != SecurityData.CurrentUserGuid) {
 					return JsonSerialize("Cannot publish changes, not current editing user.");
 				}
 
-				List<Widget> pageWidgets = widgetHelper.GetWidgets(currentPageGuid, true);
+				List<Widget> pageWidgets = widgetHelper.GetWidgets(_currentPageGuid, true);
 
 				if (cmsAdminContent != null) {
-					ContentPage oldContent = pageHelper.FindContentByID(SiteData.CurrentSiteID, currentPageGuid);
+					ContentPage oldContent = pageHelper.FindContentByID(SiteData.CurrentSiteID, _currentPageGuid);
 
 					ContentPage newContent = cmsAdminContent;
 					newContent.ContentID = Guid.NewGuid();
@@ -1298,6 +1246,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			}
 			if (sitemapHelper != null) {
 				sitemapHelper.Dispose();
+			}
+			if (cmsHelper != null) {
+				cmsHelper.Dispose();
 			}
 		}
 	}

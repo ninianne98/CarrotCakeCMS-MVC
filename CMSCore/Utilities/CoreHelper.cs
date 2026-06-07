@@ -1,6 +1,7 @@
 ﻿using Carrotware.Web.UI.Components;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -25,13 +26,30 @@ namespace Carrotware.CMS.Core {
 		}
 
 		internal static string GetWebResourceUrl(string resource) {
-			string sPath = string.Empty;
+			string path = string.Empty;
 
 			try {
-				sPath = CarrotWeb.GetWebResourceUrl(typeof(CoreHelper), resource);
+				path = CarrotWeb.GetWebResourceUrl(typeof(CoreHelper), resource);
 			} catch { }
 
-			return sPath;
+			return path;
+		}
+
+		public static XmlReaderSettings GetXmlReaderSettings() {
+			var settings = new XmlReaderSettings {
+				ConformanceLevel = ConformanceLevel.Fragment
+			};
+
+			return settings;
+		}
+
+		public static XmlWriterSettings GetXmlWriterSettings() {
+			var settings = new XmlWriterSettings {
+				OmitXmlDeclaration = true,
+				Indent = true
+			};
+
+			return settings;
 		}
 
 		public static T Clone<T>(this T source) {

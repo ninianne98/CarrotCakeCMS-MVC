@@ -152,7 +152,6 @@
     <Compile Include="ListInBody.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="adminHelp.js" />
     <Content Include="editor\advedit.amethystorchid.css">
       <DependentUpon>advedit.amethystorchid.less</DependentUpon>
     </Content>
@@ -572,12 +571,9 @@
     <Content Include="skins\popup.rust.min.css">
       <DependentUpon>popup.rust.css</DependentUpon>
     </Content>
-    <EmbeddedResource Include="feed.png" />
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
-    <EmbeddedResource Include="_WidgetWrapper.cshtml" />
-    <EmbeddedResource Include="TopMenu.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CMSCore\CMSCore.csproj">
@@ -594,11 +590,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="_TextZone.cshtml" />
+    <EmbeddedResource Include="_WidgetWrapper.cshtml" />
+    <EmbeddedResource Include="_WidgetZone.cshtml" />
+    <EmbeddedResource Include="adminHelp.js" />
+    <EmbeddedResource Include="feed.png" />
+    <EmbeddedResource Include="TopMenu.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <EmbeddedResource Include="_TextZone.cshtml" />
-    <EmbeddedResource Include="_WidgetZone.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -679,8 +681,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)\skins\*.min.css" "$(SolutionDir)\CMSAdmin\Assets\Admin\skins\" /F /R /Y /I
-xcopy "$(ProjectDir)\editor\*.min.css" "$(SolutionDir)\CMSAdmin\Assets\Admin\editor\" /F /R /Y /I</PostBuildEvent>
+    <PostBuildEvent>
+xcopy "$(ProjectDir)\skins\*.min.css" "$(SolutionDir)\CMSAdmin\Assets\Admin\skins\" /F /R /Y /I
+xcopy "$(ProjectDir)\editor\*.min.css" "$(SolutionDir)\CMSAdmin\Assets\Admin\editor\" /F /R /Y /I
+</PostBuildEvent>
   </PropertyGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

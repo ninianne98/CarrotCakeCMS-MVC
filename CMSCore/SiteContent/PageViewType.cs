@@ -1,6 +1,4 @@
-﻿using System;
-
-/*
+﻿/*
 * CarrotCake CMS (MVC5)
 * http://www.carrotware.com/
 *
@@ -16,7 +14,19 @@ namespace Carrotware.CMS.Core {
 
 		public PageViewType() { }
 
-		public PageViewType(ViewType type, string extraTitle, Object value) {
+		public PageViewType(ViewType type) {
+			this.CurrentViewType = type;
+			this.ExtraTitle = string.Empty;
+			this.RawValue = null;
+		}
+
+		public PageViewType(ViewType type, string extraTitle) {
+			this.CurrentViewType = type;
+			this.ExtraTitle = extraTitle;
+			this.RawValue = null;
+		}
+
+		public PageViewType(ViewType type, string extraTitle, object value) {
 			this.CurrentViewType = type;
 			this.ExtraTitle = extraTitle;
 			this.RawValue = value;
@@ -38,7 +48,7 @@ namespace Carrotware.CMS.Core {
 
 		public string ExtraTitle { get; set; }
 
-		public Object RawValue { get; set; }
+		public object RawValue { get; set; }
 	}
 
 	//=======================
@@ -46,13 +56,13 @@ namespace Carrotware.CMS.Core {
 	public class TypeHeadingOption {
 
 		public TypeHeadingOption()
-			: this(PageViewType.ViewType.SinglePage, String.Empty, String.Empty) {
+			: this(PageViewType.ViewType.SinglePage, string.Empty, string.Empty) {
 		}
 
 		public TypeHeadingOption(PageViewType.ViewType key, string labelText) {
 			this.KeyValue = key;
 			this.LabelText = labelText;
-			this.FormatText = String.Empty;
+			this.FormatText = string.Empty;
 		}
 
 		public TypeHeadingOption(PageViewType.ViewType key, string labelText, string formatText) {

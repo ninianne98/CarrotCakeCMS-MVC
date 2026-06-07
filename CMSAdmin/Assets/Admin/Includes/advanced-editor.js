@@ -10,7 +10,7 @@ function cmsSetPageStatus(stat) {
 }
 
 var cmsAdminUri = cmsAdminBasePath;  //  "/c3-admin/";
-var cmsWebSvc = cmsWebServiceApi;  // "/api/c3-admin";
+var cmsWebSvc = cmsWebServiceApi;  // "**api**";
 var thisPage = ""; // used in escaped fashion
 var thisPageNav = "";  // used non-escaped (redirects)
 var thisPageNavSaved = "";  // used non-escaped (redirects)
@@ -292,10 +292,15 @@ function cmsSaveContent(val, zone) {
 	val = cmsMakeStringSafe(val);
 	zone = cmsMakeStringSafe(zone);
 
+	var dataObj = {};
+	dataObj["ZoneText"] = val;
+	dataObj["Zone"] = zone;
+	dataObj["ThisPage"] = thisPageID;
+
 	$.ajax({
 		type: "POST",
 		url: webMthd,
-		data: JSON.stringify({ ZoneText: val, Zone: zone, ThisPage: thisPageID }),
+		data: JSON.stringify(dataObj),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json"
 	}).done(cmsSaveContentCallback)
@@ -309,10 +314,15 @@ function cmsSaveGenericContent(val, key) {
 
 	val = cmsMakeStringSafe(val);
 
+	var dataObj = {};
+	dataObj["ZoneText"] = val;
+	dataObj["DBKey"] = key;
+	dataObj["ThisPage"] = thisPageID;
+
 	$.ajax({
 		type: "POST",
 		url: webMthd,
-		data: JSON.stringify({ ZoneText: val, DBKey: key, ThisPage: thisPageID }),
+		data: JSON.stringify(dataObj),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json"
 	}).done(cmsSaveContentCallback)
@@ -478,10 +488,14 @@ function cmsUpdateTemplate() {
 
 	var webMthd = cmsWebSvc + "/UpdatePageTemplate";
 
+	var dataObj = {};
+	dataObj["TheTemplate"] = tmpl;
+	dataObj["ThisPage"] = thisPageID;
+
 	$.ajax({
 		type: "POST",
 		url: webMthd,
-		data: JSON.stringify({ TheTemplate: tmpl, ThisPage: thisPageID }),
+		data: JSON.stringify(dataObj),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json"
 	}).done(cmsSaveContentCallback)
@@ -527,10 +541,14 @@ function cmsRemoveWidget(key) {
 	if (!cmsWidgetUpdateInProgress) {
 		cmsWidgetUpdateInProgress = true;
 
+		var dataObj = {};
+		dataObj["DBKey"] = key;
+		dataObj["ThisPage"] = thisPageID;
+
 		$.ajax({
 			type: "POST",
 			url: webMthd,
-			data: JSON.stringify({ DBKey: key, ThisPage: thisPageID }),
+			data: JSON.stringify(dataObj),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json"
 		}).done(cmsSaveWidgetsCallback)
@@ -547,10 +565,14 @@ function cmsActivateWidgetLink(key) {
 	if (!cmsWidgetUpdateInProgress) {
 		cmsWidgetUpdateInProgress = true;
 
+		var dataObj = {};
+		dataObj["DBKey"] = key;
+		dataObj["ThisPage"] = thisPageID;
+
 		$.ajax({
 			type: "POST",
 			url: webMthd,
-			data: JSON.stringify({ DBKey: key, ThisPage: thisPageID }),
+			data: JSON.stringify(dataObj),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json"
 		}).done(cmsSaveWidgetsCallback)
@@ -567,10 +589,15 @@ function cmsMoveWidgetZone(zone, val) {
 	if (!cmsWidgetUpdateInProgress) {
 		cmsWidgetUpdateInProgress = true;
 
+		var dataObj = {};
+		dataObj["WidgetTarget"] = zone;
+		dataObj["WidgetDropped"] = val;
+		dataObj["ThisPage"] = thisPageID;
+
 		$.ajax({
 			type: "POST",
 			url: webMthd,
-			data: JSON.stringify({ WidgetTarget: zone, WidgetDropped: val, ThisPage: thisPageID }),
+			data: JSON.stringify(dataObj),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json"
 		}).done(cmsSaveWidgetsCallback)
@@ -585,10 +612,13 @@ function cmsApplyChanges() {
 
 	// prevent multiple submissions
 	if (!IsPublishing) {
+		var dataObj = {};
+		dataObj["ThisPage"] = thisPageID;
+
 		$.ajax({
 			type: "POST",
 			url: webMthd,
-			data: JSON.stringify({ ThisPage: thisPageID }),
+			data: JSON.stringify(dataObj),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json"
 		}).done(cmsSavePageCallback)
@@ -683,10 +713,13 @@ function cmsNotifySaved() {
 function cmsRecordCancellation() {
 	var webMthd = cmsWebSvc + "/CancelEditing";
 
+	var dataObj = {};
+	dataObj["ThisPage"] = thisPageID;
+
 	$.ajax({
 		type: "POST",
 		url: webMthd,
-		data: JSON.stringify({ ThisPage: thisPageID }),
+		data: JSON.stringify(dataObj),
 		contentType: "application/json; charset=utf-8",
 		dataType: "json"
 	}).done(cmsAjaxGeneralCallback)
@@ -901,10 +934,14 @@ function cmsCopyWidget(key) {
 	if (!cmsWidgetUpdateInProgress) {
 		cmsWidgetUpdateInProgress = true;
 
+		var dataObj = {};
+		dataObj["DBKey"] = key;
+		dataObj["ThisPage"] = thisPageID;
+
 		$.ajax({
 			type: "POST",
 			url: webMthd,
-			data: JSON.stringify({ DBKey: key, ThisPage: thisPageID }),
+			data: JSON.stringify(dataObj),
 			contentType: "application/json; charset=utf-8",
 			dataType: "json"
 		}).done(cmsSaveWidgetsCallback)

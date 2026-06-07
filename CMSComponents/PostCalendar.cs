@@ -115,9 +115,10 @@ namespace Carrotware.CMS.UI.Components {
 				sCssClassTableFoot = " class=\"" + this.CssClassTableFoot + "\" ";
 			}
 
-			ContentDateTally thisMonth = new ContentDateTally { TallyDate = this.ThisMonth, TheSite = SiteData.CurrentSite };
-			ContentDateTally lastMonth = new ContentDateTally { TallyDate = this.ThisMonth.AddMonths(-1), TheSite = SiteData.CurrentSite };
-			ContentDateTally nextMonth = new ContentDateTally { TallyDate = this.ThisMonth.AddMonths(1), TheSite = SiteData.CurrentSite };
+			var site = SiteData.CurrentSite;
+			ContentDateTally thisMonth = new ContentDateTally(site, this.ThisMonth);
+			ContentDateTally lastMonth = new ContentDateTally(site, this.ThisMonth.AddMonths(-1));
+			ContentDateTally nextMonth = new ContentDateTally(site, this.ThisMonth.AddMonths(1));
 
 			sb.AppendLine("<div" + sCSS + " id=\"" + this.ElementId + "\"> ");
 

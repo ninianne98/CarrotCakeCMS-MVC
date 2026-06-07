@@ -69,8 +69,8 @@ namespace Carrotware.CMS.UI.Components {
 			_useEditor = editModes.Contains(this.WindowMode);
 		}
 
-		public SkinOption SelectedColor { get; set; }
-		public SkinMode WindowMode { get; set; }
+		public SkinOption SelectedColor { get; set; } = SkinOption.Classic;
+		public SkinMode WindowMode { get; set; } = SkinMode.Main;
 
 		public bool EmitBootstrap { get; set; } = false;
 
@@ -284,33 +284,43 @@ namespace Carrotware.CMS.UI.Components {
 				case SkinOption.AmethystOrchid:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.AmethystOrchid;
 					break;
+
 				case SkinOption.BlueIzis:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.BlueIzis;
 					break;
+
 				case SkinOption.FrenchBlue:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.FrenchBlue;
 					break;
+
 				case SkinOption.Mauve:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Mauve;
 					break;
+
 				case SkinOption.MosaicBlue:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.MosaicBlue;
 					break;
+
 				case SkinOption.Plum:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Plum;
 					break;
+
 				case SkinOption.QuetzalGreen:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.QuetzalGreen;
 					break;
+
 				case SkinOption.Rust:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Rust;
 					break;
+
 				case SkinOption.Sandstone:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Sandstone;
 					break;
+
 				case SkinOption.SugarAlmond:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.SugarAlmond;
 					break;
+
 				default:
 					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Seafoam;
 					break;

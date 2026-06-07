@@ -797,13 +797,25 @@
     <Content Include="env.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <None Include="Assets\Admin\Includes\C3SiteConfigSchema.xsd">
+    <None Include="Assets\Admin\Includes\C3MVCSiteConfigSchema.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Assets\Admin\Includes\C3WebSecurityConfigSchema.xsd">
+    <None Include="Assets\Admin\Includes\C3MVCTemplateSchema.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Assets\Admin\Includes\C3WebConfigSchema.xsd">
+    <None Include="Assets\Admin\Includes\C3MVCWebConfigSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Assets\Admin\Includes\C3MVCWebSecurityConfigSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Assets\Admin\Includes\C3MVCWidgetAdminSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Assets\Admin\Includes\C3MVCWidgetPublicSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Assets\Admin\Includes\C3MVCWidgetTextSchema.xsd">
       <SubType>Designer</SubType>
     </None>
     <Content Include="GPL-LICENSE.txt" />
@@ -958,18 +970,6 @@
     <Content Include="Views\Templates\citrus-island\_changeprofileconf.cshtml" />
     <Content Include="SiteMapping.config" />
     <Content Include="Views\CmsAdmin\ContentSnippetHistory.cshtml" />
-    <None Include="Assets\Admin\Includes\C3TemplateSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Assets\Admin\Includes\C3WidgetAdminSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Assets\Admin\Includes\C3WidgetPublicSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Assets\Admin\Includes\C3WidgetTextSchema.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Views\Templates\Aqueous\_contact.cshtml" />
     <Content Include="Views\Templates\Dragonfruit\blogpost.cshtml" />
     <Content Include="Views\Templates\Dragonfruit\_blogpost.cshtml" />

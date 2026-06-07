@@ -177,6 +177,9 @@
 		}
 
 		function EditHB() {
+			var dataObj = {};
+			dataObj["PageID"] = thisPageID;
+
 			var webMthd = webSvc + "/RecordHeartbeat";
 			setTimeout("EditHB();", 25 * 1000);
 
@@ -236,13 +239,15 @@
 		function cmsRecordCancellation() {
 
 			if (thePageID != '@Guid.Empty') {
+				var dataObj = {};
+				dataObj["ThisPage"] = thePageID;
 
 				var webMthd = webSvc + "/CancelEditing";
 
 				$.ajax({
 					type: "POST",
 					url: webMthd,
-					data: JSON.stringify({ ThisPage: thePageID }),
+					data: JSON.stringify(dataObj),
 					contentType: "application/json; charset=utf-8",
 					dataType: "json"
 				}).done(cmsAjaxGeneralCallback)
@@ -374,13 +379,7 @@
 					release date:
 				</td>
 				<td>
-					@{
-						SplitDateTime gld = new SplitDateTime();
-						gld.CombinedDateTime = Model.ContentPage.GoLiveDate;
-						gld.FieldName = Html.NameFor(model => model.ContentPage.GoLiveDate).ToString();
-					}
-
-					@Html.Partial("_datetime", gld)
+					@Helper.SplitDateTimeFor(Html, m => m.ContentPage.GoLiveDate)
 				</td>
 			</tr>
 			<tr>
@@ -388,13 +387,7 @@
 					retire date:
 				</td>
 				<td>
-					@{
-						SplitDateTime rdt = new SplitDateTime();
-						rdt.CombinedDateTime = Model.ContentPage.RetireDate;
-						rdt.FieldName = Html.NameFor(model => model.ContentPage.RetireDate).ToString();
-					}
-
-					@Html.Partial("_datetime", rdt)
+					@Helper.SplitDateTimeFor(Html, m => m.ContentPage.RetireDate)
 				</td>
 			</tr>
 			<tr>

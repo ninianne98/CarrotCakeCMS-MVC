@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -136,7 +137,7 @@ namespace Carrotware.CMS.Interface {
 
 		public static string ResultToString(this Controller controller, ViewResultBase partialResult, string viewName = null) {
 			var context = controller.ControllerContext;
-			string stringResult = null;
+			var sb = new StringBuilder();
 
 			if (string.IsNullOrEmpty(viewName)) {
 				var routeInfo = context.RouteData.GetRouteInfo();
@@ -153,15 +154,13 @@ namespace Carrotware.CMS.Interface {
 				var viewEngineResult = ViewEngines.Engines.FindPartialView(context, actualViewName);
 				var view = viewEngineResult.View;
 
-				using (var sw = new StringWriter()) {
+				using (var sw = new StringWriter(sb)) {
 					var ctx = new ViewContext(context, view, context.Controller.ViewData, context.Controller.TempData, sw);
 					view.Render(ctx, sw);
-
-					stringResult = sw.ToString();
 				}
 			}
 
-			return stringResult;
+			return sb.ToString();
 		}
 
 		public static string RenderViewToString(this Controller controller, object result, string viewName = null) {
@@ -189,6 +188,7 @@ namespace Carrotware.CMS.Interface {
 		public static string RenderViewToString(this ControllerContext context, object model, string viewName = null, bool partialView = false) {
 			// first find the ViewEngine for this view
 			ViewEngineResult viewEngineResult = null;
+			var sb = new StringBuilder();
 
 			if (string.IsNullOrEmpty(viewName)) {
 				var routeInfo = context.RouteData.GetRouteInfo();
@@ -208,16 +208,12 @@ namespace Carrotware.CMS.Interface {
 			// get the view and attach the model to view data
 			var view = viewEngineResult.View;
 
-			string result = null;
-
-			using (var sw = new StringWriter()) {
+			using (var sw = new StringWriter(sb)) {
 				var ctx = new ViewContext(context, view, context.Controller.ViewData, context.Controller.TempData, sw);
 				view.Render(ctx, sw);
-
-				result = sw.ToString();
 			}
 
-			return result;
+			return sb.ToString();
 		}
 	}
 }

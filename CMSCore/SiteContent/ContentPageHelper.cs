@@ -374,73 +374,73 @@ namespace Carrotware.CMS.Core {
 			return newFilePath;
 		}
 
-		public PageViewType GetBlogHeadingFromURL(SiteData currentSite, string sFilterPath) {
-			Guid siteID = currentSite.SiteID;
-			PageViewType pvt = new PageViewType { ExtraTitle = string.Empty, CurrentViewType = PageViewType.ViewType.SinglePage, RawValue = null };
+		public PageViewType GetBlogHeadingFromURL(SiteData site, string blogUrl) {
+			Guid siteID = site.SiteID;
+			PageViewType pvt = new PageViewType(PageViewType.ViewType.SinglePage);
 
-			string sTitle = string.Empty;
+			string titleText = string.Empty;
 
-			if (currentSite.CheckIsBlogCategoryPath(sFilterPath)) {
+			if (site.CheckIsBlogCategoryPath(blogUrl)) {
 				pvt.CurrentViewType = PageViewType.ViewType.CategoryIndex;
-				vw_carrot_CategoryURL query = CompiledQueries.cqGetCategoryByURL(_db, siteID, sFilterPath);
+				vw_carrot_CategoryURL query = CompiledQueries.cqGetCategoryByURL(_db, siteID, blogUrl);
 				if (query != null) {
-					sTitle = query.CategoryText;
+					titleText = query.CategoryText;
 					pvt.RawValue = query.CategoryText;
 				}
 			}
-			if (currentSite.CheckIsBlogTagPath(sFilterPath)) {
+			if (site.CheckIsBlogTagPath(blogUrl)) {
 				pvt.CurrentViewType = PageViewType.ViewType.TagIndex;
-				vw_carrot_TagURL query = CompiledQueries.cqGetTagByURL(_db, siteID, sFilterPath);
+				vw_carrot_TagURL query = CompiledQueries.cqGetTagByURL(_db, siteID, blogUrl);
 				if (query != null) {
-					sTitle = query.TagText;
+					titleText = query.TagText;
 					pvt.RawValue = query.TagText;
 				}
 			}
-			if (currentSite.CheckIsBlogEditorFolderPath(sFilterPath)) {
+			if (site.CheckIsBlogEditorFolderPath(blogUrl)) {
 				pvt.CurrentViewType = PageViewType.ViewType.AuthorIndex;
-				vw_carrot_EditorURL query = CompiledQueries.cqGetEditorByURL(_db, siteID, sFilterPath);
+				vw_carrot_EditorURL query = CompiledQueries.cqGetEditorByURL(_db, siteID, blogUrl);
 				if (query != null) {
 					ExtendedUserData usr = new ExtendedUserData(query.UserId);
-					sTitle = usr.ToString();
+					titleText = usr.ToString();
 					pvt.RawValue = usr;
 				}
 			}
-			if (currentSite.CheckIsBlogDateFolderPath(sFilterPath)) {
+			if (site.CheckIsBlogDateFolderPath(blogUrl)) {
 				pvt.CurrentViewType = PageViewType.ViewType.DateIndex;
 
-				BlogDatePathParser p = new BlogDatePathParser(currentSite, sFilterPath);
+				BlogDatePathParser p = new BlogDatePathParser(site, blogUrl);
 				TimeSpan ts = p.DateEndUTC - p.DateBeginUTC;
 
 				pvt.RawValue = p.DateBegin;
 
 				int daysDelta = ts.Days;
 				if (daysDelta < 400 && daysDelta > 90) {
-					sTitle = p.DateBegin.ToString("yyyy");
+					titleText = p.DateBegin.ToString("yyyy");
 					pvt.CurrentViewType = PageViewType.ViewType.DateYearIndex;
 				}
 				if (daysDelta < 36 && daysDelta > 3) {
-					sTitle = p.DateBegin.ToString("MMMM yyyy");
+					titleText = p.DateBegin.ToString("MMMM yyyy");
 					pvt.CurrentViewType = PageViewType.ViewType.DateMonthIndex;
 				}
 				if (daysDelta < 5) {
-					sTitle = p.DateBegin.ToString("MMMM d, yyyy");
+					titleText = p.DateBegin.ToString("MMMM d, yyyy");
 					pvt.CurrentViewType = PageViewType.ViewType.DateDayIndex;
 				}
 			}
 
-			if (currentSite.CheckIsSiteSearchPath(sFilterPath)) {
+			if (site.CheckIsSiteSearchPath(blogUrl)) {
 				pvt.CurrentViewType = PageViewType.ViewType.SearchResults;
-				string sSearchTerm = "";
+				string searchTerm = "";
 
 				if (HttpContext.Current.Request.QueryString[SiteData.SearchQueryParameter] != null) {
-					sSearchTerm = HttpContext.Current.Request.QueryString[SiteData.SearchQueryParameter].ToString();
+					searchTerm = HttpContext.Current.Request.QueryString[SiteData.SearchQueryParameter].ToString();
 				}
 
-				pvt.RawValue = sSearchTerm;
-				sTitle = string.Format(" '{0}' ", sSearchTerm);
+				pvt.RawValue = searchTerm;
+				titleText = string.Format(" '{0}' ", searchTerm);
 			}
 
-			pvt.ExtraTitle = sTitle;
+			pvt.ExtraTitle = titleText;
 
 			return pvt;
 		}

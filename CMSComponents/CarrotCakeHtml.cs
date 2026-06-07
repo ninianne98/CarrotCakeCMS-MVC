@@ -191,14 +191,16 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		private static string RenderView(ControllerContext ctrlCtx, PartialViewResult result) {
-			using (var sw = new StringWriter()) {
+			var sb = new StringBuilder();
+			sb.Append(string.Empty);
+
+			using (var sw = new StringWriter(sb)) {
 				result.View = ViewEngines.Engines.FindPartialView(ctrlCtx, result.ViewName).View;
 				ViewContext vc = new ViewContext(ctrlCtx, result.View, result.ViewData, result.TempData, sw);
 				result.View.Render(vc, sw);
-
-				var sb = sw.GetStringBuilder();
-				return string.Format("{0} ", sw.ToString());
 			}
+
+			return sb.ToString();
 		}
 
 		private static string RenderPartialToString(string partialViewName) {
@@ -219,7 +221,10 @@ namespace Carrotware.CMS.UI.Components {
 				controller.ViewData.Model = model;
 			}
 
-			using (var sw = new StringWriter()) {
+			var sb = new StringBuilder();
+			sb.Append(string.Empty);
+
+			using (var sw = new StringWriter(sb)) {
 				ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(controller.ControllerContext, partialViewName);
 				ViewContext viewContext = new ViewContext(controller.ControllerContext, viewResult.View, controller.ViewData, tempData, sw);
 
@@ -235,10 +240,9 @@ namespace Carrotware.CMS.UI.Components {
 				if (bNullModel) {
 					controller.ViewData.Model = null;
 				}
-
-				var sb = sw.GetStringBuilder();
-				return string.Format("{0} ", sw.ToString());
 			}
+
+			return sb.ToString();
 		}
 
 		public static HtmlString MetaTags() {
