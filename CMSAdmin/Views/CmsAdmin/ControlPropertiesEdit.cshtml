@@ -12,6 +12,7 @@
 	@Html.HiddenFor(modelItem => Model.Widget.Root_ContentID)
 
 	for (int i = 0; i < Model.Properties.Count; i++) {
+		var fieldId = string.Format("editFormField_{0}", i);
 
 		<div style="padding-bottom: 5px;">
 			<div style="float: left; padding-right: 10px;">
@@ -24,10 +25,17 @@
 		</div>
 		<div style="padding-bottom: 20px;">
 			<div style="float: left; padding-right: 50px;">
-				@Model.Properties[i].Name
+				<b>
+					@Model.Properties[i].Name
+				</b>
+				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.CheckBoxList) {
+					<div style="margin: 0.5em 0 0.5em 2em">
+						<a href="javascript:void(0)" onclick="checkGridBoxes('@fieldId');">All</a>
+						| <a href="javascript:void(0)" onclick="uncheckGridBoxes('@fieldId');">None</a>
+					</div>
+				}
 			</div>
-			<div style="float: left;">
-
+			<div style="float: left;" id="@fieldId">
 				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.DropDownList) {
 					@Html.DropDownListFor(modelItem => Model.Properties[i].TextValue,
 						new SelectList(Model.Properties[i].Options, "Key", "Value", Model.Properties[i].TextValue), "[select]")
@@ -38,19 +46,19 @@
 				}
 
 				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.CheckBoxList) {
-					for (var j = 0; j < Model.Properties[i].Options.Count(); j++) {
-						<table>
+					<table>
+						@for (var j = 0; j < Model.Properties[i].Options.Count(); j++) {
 							<tr>
 								<td>
 									@Html.CheckBoxFor(it => Model.Properties[i].Options[j].Selected)
 								</td>
-								<td>
+								<td style="width: 96%">
 									@Html.DisplayFor(it => Model.Properties[i].Options[j].Value)
 									@Html.HiddenFor(it => Model.Properties[i].Options[j].Key)
 								</td>
 							</tr>
-						</table>
-					}
+						}
+					</table>
 				}
 
 				@if (Model.Properties[i].FieldMode == WidgetAttribute.FieldMode.TextBox) {
@@ -74,8 +82,7 @@
 			<div style="clear: both;">
 			</div>
 		</div>
-
-				}
+	}
 
 	<div style="display: none;">
 		<input type="submit" name="btnSave" value="Apply" id="btnSave" />

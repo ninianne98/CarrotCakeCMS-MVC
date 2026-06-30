@@ -11,6 +11,7 @@ function cmsSetPageStatus(stat) {
 
 var cmsAdminUri = cmsAdminBasePath;  //  "/c3-admin/";
 var cmsWebSvc = cmsWebServiceApi;  // "**api**";
+var cmsResourceBase = cmsGetResourceBase();
 var thisPage = ""; // used in escaped fashion
 var thisPageNav = "";  // used non-escaped (redirects)
 var thisPageNavSaved = "";  // used non-escaped (redirects)
@@ -20,6 +21,14 @@ var cmsTimeTick = 9999;
 function cmsGetAdminPath() {
 	cmsAdminUri = cmsAdminBasePath;
 	cmsWebSvc = cmsWebServiceApi;
+	cmsResourceBase = cmsGetResourceBase();
+}
+
+function cmsGetResourceBase() {
+	if (cmsPlatform == "webform") {
+		return cmsAdminUri;
+	}
+	return '/Assets/Admin';
 }
 
 function cmsSetServiceParms(serviceURL, pagePath, pageID) {
@@ -169,7 +178,7 @@ function cmsFixGeneralImage(elm, img) {
 	var title = $(elm).attr('title');
 	var alt = $(elm).attr('alt');
 
-	$(elm).html(" <img class='cmsWidgetBarImgReset' border='0' src='/Assets/Admin/images/" + img + "' alt='" + alt + "' title='" + alt + "' />" + title);
+	$(elm).html(" <img class='cmsWidgetBarImgReset' border='0' src='" + cmsResourceBase + "/images/" + img + "' alt='" + alt + "' title='" + alt + "' />" + title);
 }
 
 function cmsPageLockCheck() {
@@ -867,7 +876,7 @@ function cmsFixSpinner() {
 	$(".blockMsg table").addClass('cmsImageSpinnerTbl');
 }
 
-var cmsHtmlSpinner = '<table width="100%" class="cmsImageSpinnerTbl" border="0"><tr><td align="center" id="cmsSpinnerZone"><img id="cmsImageSpinnerImage" class="cmsImageSpinner" border="0" src="/Assets/Admin/images/ani-smallbar.gif"/></td></tr></table>';
+var cmsHtmlSpinner = '<table width="100%" class="cmsImageSpinnerTbl" border="0"><tr><td align="center" id="cmsSpinnerZone"><img id="cmsImageSpinnerImage" class="cmsImageSpinner" border="0" src="' + cmsResourceBase + '/images/ani-smallbar.gif"/></td></tr></table>';
 
 function cmsSpinnerShort() {
 	$("#cmsDivActive").block({
@@ -1274,12 +1283,12 @@ function cmsSetIframeRealSrc(theFrameID) {
 function cmsSetiFrameSource(theURL) {
 	var realURL = theURL;
 
-	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="96%" height="500" realsrc="' + realURL + '" src="/Assets/Admin/includes/Blank.htm" /> </div>');
+	$('#cmsModalFrame').html('<div id="cmsAjaxMainDiv2"> <iframe scrolling="auto" id="cmsFrameEditor" frameborder="0" name="cmsFrameEditor" width="96%" height="500" realsrc="' + realURL + '" src="' + cmsResourceBase + '/includes/Blank.htm" /> </div>');
 
 	setTimeout("cmsSetIframeRealSrc('cmsFrameEditor');", 750);
 
 	$("#cmsAjaxMainDiv2").block({
-		message: '<table><tr><td><img class="cmsAjaxModalSpinner" src="/Assets/Admin/images/Ring-64px-A7B2A0.gif"/></td></tr></table>',
+		message: '<table><tr><td><img class="cmsAjaxModalSpinner" src="' + cmsResourceBase + '/images/Ring-64px-A7B2A0.gif"/></td></tr></table>',
 		css: { width: '98%', height: '98%' },
 		fadeOut: 1000,
 		timeout: 1200,

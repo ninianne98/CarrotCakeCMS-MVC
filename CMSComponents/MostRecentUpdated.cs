@@ -170,9 +170,9 @@ namespace Carrotware.CMS.UI.Components {
 					this.SelectedCategories = new List<Guid>();
 
 					List<string> lstCategories = base.GetParmValueList("SelectedCategories");
-					foreach (string sCat in lstCategories) {
-						if (!String.IsNullOrEmpty(sCat)) {
-							this.SelectedCategories.Add(new Guid(sCat));
+					foreach (string cat in lstCategories) {
+						if (!String.IsNullOrEmpty(cat)) {
+							this.SelectedCategories.Add(new Guid(cat));
 						}
 					}
 				}

@@ -53,22 +53,22 @@
 				@if (pager1.HasData) {
 					foreach (var itm in pager1.DataSource) {
 						cssPagerSel = pagerStyles.Where(x => !pagerStylesOld.Contains(x)).OrderBy(x => Guid.NewGuid()).FirstOrDefault();
-						pagerStylesOld.Add(cssPagerSel) ;
+						pagerStylesOld.Add(cssPagerSel);
 
-					<section class="3u">
-						<header>
-							<h2>
-								<a href="@itm.FileName">
-									@itm.NavigationText
-								</a>
-							</h2>
-						</header>
-						<span class="@cssPagerSel"></span>
-						<p>
-							@String.Format(" [{0:d}] ", itm.GoLiveDate)
-							@itm.PageTextPlainSummary
-						</p>
-					</section>
+						<section class="3u">
+							<header>
+								<h2>
+									<a href="@itm.FileName">
+										@itm.NavigationText
+									</a>
+								</h2>
+							</header>
+							<span class="@cssPagerSel"></span>
+							<p>
+								@String.Format(" [{0:d}] ", itm.GoLiveDate)
+								@itm.PageTextPlainSummary
+							</p>
+						</section>
 					}
 				} else {
 					<section class="12u">
@@ -80,7 +80,7 @@
 			@if (SiteData.CurrentSiteExists && SiteData.CurrentSite.Blog_Root_ContentID.HasValue) {
 				var blgIdx = SiteData.GetPage(SiteData.CurrentSite.Blog_Root_ContentID.Value);
 				if (blgIdx != null) {
-				<a href="@blgIdx.FileName" class="button medium">More</a>
+					<a href="@blgIdx.FileName" class="button medium">More</a>
 				}
 			}
 		</div>

@@ -54,6 +54,8 @@ namespace Carrotware.CMS.UI.Components {
 				url: CarrotCakeHtml.AdminScriptValues.Replace("/", "") + "/{id}",
 				defaults: new { controller = "Home", action = "GetAdminScriptValues", id = UrlParameter.Optional },
 				namespaces: _namespaces.ToArray());
+
+			VirtualViewFileProvider.BulkRegister();
 		}
 	}
 }

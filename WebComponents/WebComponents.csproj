@@ -288,7 +288,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="captcha2\bell.png" />
+    <EmbeddedResource Include="captcha2\book.png" />
     <EmbeddedResource Include="captcha2\bouquet.png" />
+    <EmbeddedResource Include="captcha2\candle.png" />
+    <EmbeddedResource Include="captcha2\flag.png" />
+    <EmbeddedResource Include="captcha2\flower.png" />
     <EmbeddedResource Include="captcha2\pen.png" />
     <EmbeddedResource Include="captcha2\pepper.png" />
     <EmbeddedResource Include="captcha2\scissors.png" />

@@ -1153,6 +1153,7 @@
     <Content Include="Views\CmsAdmin\_mainCommonFoot.cshtml" />
     <Content Include="Views\CmsAdmin\_popupCommonHead.cshtml" />
     <Content Include="Views\CmsAdmin\_popupCommonFoot.cshtml" />
+    <Content Include="Views\CmsContent\PlainPage\_main.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

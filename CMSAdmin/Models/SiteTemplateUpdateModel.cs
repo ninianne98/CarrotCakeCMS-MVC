@@ -17,12 +17,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 	public class SiteTemplateUpdateModel {
 
 		public SiteTemplateUpdateModel() {
-			using (CMSConfigHelper cmsHelper = new CMSConfigHelper()) {
+			using (var cmsHelper = new CMSConfigHelper()) {
 				this.SiteTemplateList = cmsHelper.Templates;
 			}
 		}
 
-		public List<CMSTemplate> SiteTemplateList { get; set; }
+		public List<CMSTemplate> SiteTemplateList { get; set; } = new List<CMSTemplate>();
 
 		public string HomePageLink { get; set; }
 		public string HomePageTitle { get; set; }

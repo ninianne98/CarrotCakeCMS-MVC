@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -142,16 +143,16 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			}
 		}
 
-		public static string ReadEmbededScript(string sResouceName) {
-			return CarrotWeb.GetManifestResourceText(typeof(Controllers.CmsContentController), sResouceName);
+		public static string ReadEmbededScript(string resouceName) {
+			return CarrotWeb.GetManifestResourceText(typeof(Controllers.CmsContentController), resouceName);
 		}
 
-		public static byte[] ReadEmbededBinary(string sResouceName) {
-			return CarrotWeb.GetManifestResourceBytes(typeof(Controllers.CmsContentController), sResouceName);
+		public static byte[] ReadEmbededBinary(string resouceName) {
+			return CarrotWeb.GetManifestResourceBytes(typeof(Controllers.CmsContentController), resouceName);
 		}
 
-		public static string GetWebResourceUrl(string sResouceName) {
-			return CarrotWeb.GetWebResourceUrl(typeof(Controllers.CmsContentController), sResouceName);
+		public static string GetWebResourceUrl(string resouceName) {
+			return CarrotWeb.GetWebResourceUrl(typeof(Controllers.CmsContentController), resouceName);
 		}
 
 		public static HtmlString SplitDateTimeFor<TModel, TValue>(this HtmlHelper<TModel> htmlHelper,
@@ -247,6 +248,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin {
 			// ViewEngines.Engines.Add(new CarrotViewEngineWidgetAdmin());
 
 			ControllerBuilder.Current.SetControllerFactory(CmsControllerFactory.GetFactory());
+
+			HostingEnvironment.RegisterVirtualPathProvider(new VirtualViewFileProvider());
 		}
 	}
 }

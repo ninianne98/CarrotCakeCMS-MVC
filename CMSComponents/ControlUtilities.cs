@@ -3,7 +3,9 @@ using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -105,38 +107,59 @@ namespace Carrotware.CMS.UI.Components {
 		public static string HtmlFormat(string input) {
 			return CarrotWeb.HtmlFormat(input);
 		}
-	}
 
-	//===========================
+		public static Controller AddFauxContext<T>(this Controller controller) {
+			if (controller == null) return controller;
 
-	public class WrapperForHtmlHelper<T, U> : IViewDataContainer {
-		public ViewDataDictionary ViewData { get; set; }
+			// Ensure the controller has a valid context even when created via 'new'
+			if (controller.ControllerContext == null) {
+				var httpContext = new HttpContextWrapper(HttpContext.Current);
 
-		public WrapperForHtmlHelper(T type, ViewDataDictionary<U> viewdata) {
-			this.ViewData = new ViewDataDictionary<T>(type);
-
-			foreach (var item in viewdata.ModelState) {
-				if (!this.ViewData.ModelState.Keys.Contains(item.Key)) {
-					this.ViewData.ModelState.Add(item);
+				var routeData = new RouteData();
+				if (HttpContext.Current?.Request?.RequestContext?.RouteData != null) {
+					routeData = HttpContext.Current.Request.RequestContext.RouteData;
+				} else {
+					routeData.Values.Add("controller", controller.GetControllerName());
+					routeData.Values.Add("action", "DynamicRender");
 				}
+
+				controller.ControllerContext = new ControllerContext(httpContext, routeData, controller);
+			}
+
+			return controller;
+		}
+	}
+}
+
+//===========================
+
+public class WrapperForHtmlHelper<T, U> : IViewDataContainer {
+	public ViewDataDictionary ViewData { get; set; }
+
+	public WrapperForHtmlHelper(T type, ViewDataDictionary<U> viewdata) {
+		this.ViewData = new ViewDataDictionary<T>(type);
+
+		foreach (var item in viewdata.ModelState) {
+			if (!this.ViewData.ModelState.Keys.Contains(item.Key)) {
+				this.ViewData.ModelState.Add(item);
 			}
 		}
 	}
+}
 
-	public class WrapperForHtmlHelper<T> : IViewDataContainer {
-		public ViewDataDictionary ViewData { get; set; }
+public class WrapperForHtmlHelper<T> : IViewDataContainer {
+	public ViewDataDictionary ViewData { get; set; }
 
-		public WrapperForHtmlHelper(T type) {
-			this.ViewData = new ViewDataDictionary<T>(type);
-		}
+	public WrapperForHtmlHelper(T type) {
+		this.ViewData = new ViewDataDictionary<T>(type);
+	}
 
-		public WrapperForHtmlHelper(T type, ViewDataDictionary viewdata) {
-			this.ViewData = new ViewDataDictionary<T>(type);
+	public WrapperForHtmlHelper(T type, ViewDataDictionary viewdata) {
+		this.ViewData = new ViewDataDictionary<T>(type);
 
-			foreach (var item in viewdata.ModelState) {
-				if (!this.ViewData.ModelState.Keys.Contains(item.Key)) {
-					this.ViewData.ModelState.Add(item);
-				}
+		foreach (var item in viewdata.ModelState) {
+			if (!this.ViewData.ModelState.Keys.Contains(item.Key)) {
+				this.ViewData.ModelState.Add(item);
 			}
 		}
 	}

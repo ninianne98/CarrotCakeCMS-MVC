@@ -1,12 +1,12 @@
 ﻿using Carrotware.CMS.Core;
 using Carrotware.Web.UI.Components;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Mvc.Html;
+using System.Web.Routing;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -22,33 +22,17 @@ namespace Carrotware.CMS.UI.Components {
 
 	public class SearchForm : IDisposable {
 		protected HtmlHelper _helper;
+		protected MvcForm _form = null;
 
 		public SearchForm(HtmlHelper helper, PagePayload page, object formAttributes = null) {
 			_helper = helper;
 
-			var frmID = new TagBuilder("input");
-			frmID.MergeAttribute("type", "hidden");
-			frmID.MergeAttribute("name", "form_type");
-			frmID.MergeAttribute("value", "SearchForm");
+			string formAction = page.TheSite.SiteSearchPath;
 
-			var frmBuilder = new TagBuilder("form");
-			frmBuilder.MergeAttribute("action", page.TheSite.SiteSearchPath);
-			frmBuilder.MergeAttribute("method", "GET");
+			var htmlAttributes = new RouteValueDictionary(formAttributes);
+			htmlAttributes["action"] = formAction;
 
-			//frmBuilder.MergeAttribute("action", page.ThePage.FileName);
-			//frmBuilder.MergeAttribute("method", "POST");
-
-			var frmAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(formAttributes);
-			frmBuilder.MergeAttributes(frmAttribs);
-
-			string frmTag = frmBuilder.ToString(TagRenderMode.StartTag)
-							//+ Environment.NewLine
-							//+ helper.AntiForgeryToken().ToString()  // only put in if using a post
-							//+ Environment.NewLine
-							//+ frmID.ToString(TagRenderMode.SelfClosing)
-							+ Environment.NewLine;
-
-			_helper.ViewContext.Writer.Write(frmTag);
+			_form = _helper.BeginForm(null, null, FormMethod.Get, htmlAttributes);
 		}
 
 		public HtmlHelper<SiteSearch> GetModelHelper() {
@@ -72,65 +56,11 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void Dispose() {
-			_helper.ViewContext.Writer.Write("</form>");
+			if (_form != null) {
+				_form.Dispose();
+			}
 		}
 	}
-
-	//==================================================
-
-	//public class ContactForm : IDisposable {
-	//	protected HtmlHelper _helper;
-
-	//	public ContactForm(HtmlHelper helper, PagePayload page, object formAttributes = null) {
-	//		_helper = helper;
-
-	//		var frmID = new TagBuilder("input");
-	//		frmID.MergeAttribute("type", "hidden");
-	//		frmID.MergeAttribute("name", "form_type");
-	//		frmID.MergeAttribute("value", "ContactForm");
-
-	//		var frmBuilder = new TagBuilder("form");
-	//		frmBuilder.MergeAttribute("action", page.ThePage.FileName);
-	//		frmBuilder.MergeAttribute("method", "POST");
-
-	//		var frmAttribs = (IDictionary<string, object>)HtmlHelper.AnonymousObjectToHtmlAttributes(formAttributes);
-	//		frmBuilder.MergeAttributes(frmAttribs);
-
-	//		string frmTag = frmBuilder.ToString(TagRenderMode.StartTag)
-	//						+ Environment.NewLine
-	//						+ _helper.AntiForgeryToken().ToString()
-	//						+ Environment.NewLine
-	//						+ frmID.ToString(TagRenderMode.SelfClosing);
-
-	//		_helper.ViewContext.Writer.Write(frmTag);
-	//	}
-
-	//	public HtmlHelper<ContactInfo> GetModelHelper() {
-	//		ContactInfo model = new ContactInfo();
-
-	//		//var lst = ModelBinders.Binders.Values.Where(x => x is GenericModelBinder).Cast<GenericModelBinder>().ToList();
-	//		////.Where(x => x.BinderType is ContactInfo).ToList();
-
-	//		//if (!lst.Any()) {
-	//		//	var bind = new GenericModelBinder();
-	//		//	bind.BinderType = typeof(ContactInfo);
-	//		//	ModelBinders.Binders.Add(bind.BinderType, bind);
-	//		//}
-
-	//		if (_helper.ViewData[ContactInfo.Key] != null) {
-	//			model = _helper.ViewData[ContactInfo.Key] as ContactInfo;
-
-	//		} else {
-	//			model = new ContactInfo();
-	//		}
-
-	//		return new HtmlHelper<ContactInfo>(_helper.ViewContext, new WrapperForHtmlHelper<ContactInfo>(model, _helper.ViewData));
-	//	}
-
-	//	public void Dispose() {
-	//		_helper.ViewContext.Writer.Write("</form>");
-	//	}
-	//}
 
 	//==================================================
 
@@ -139,6 +69,7 @@ namespace Carrotware.CMS.UI.Components {
 		protected MvcForm _form = null;
 		protected ContactInfo _model = null;
 		protected ContactInfoSettings _settings = null;
+		protected string _updateTargetId = string.Empty;
 
 		public AjaxContactForm(AjaxHelper ajaxHelper, PagePayload page, AjaxOptions ajaxOptions, object formAttributes = null) {
 			_helper = ajaxHelper;
@@ -161,6 +92,8 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 
+			_updateTargetId = ajaxOptions.UpdateTargetId;
+
 			string formAction = "Contact.ashx";
 
 			if (SecurityData.AdvancedEditMode) {
@@ -178,6 +111,7 @@ namespace Carrotware.CMS.UI.Components {
 			if (!string.IsNullOrEmpty(validateHuman.AltValidationFailText)) {
 				_settings.ValidationFailText = validateHuman.AltValidationFailText;
 			}
+			_settings.UpdateTargetId = _updateTargetId;
 
 			return InitHelp();
 		}
@@ -189,6 +123,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			_settings.DirectEmailKeyName = config.DirectEmailKeyName;
 			_settings.NotifyEditors = config.NotifyEditors;
+			_settings.UpdateTargetId = _updateTargetId;
 
 			return InitHelp();
 		}
@@ -211,6 +146,8 @@ namespace Carrotware.CMS.UI.Components {
 
 			_settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
 			_settings.PostPartialName = partialName;
+			_settings.UpdateTargetId = _updateTargetId;
+
 			model.Settings = _settings;
 
 			return model;
@@ -228,7 +165,6 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void Dispose() {
-			//_helper.ViewContext.Writer.Write("</form>");
 			if (_form != null) {
 				_form.Dispose();
 			}
@@ -269,7 +205,7 @@ namespace Carrotware.CMS.UI.Components {
 			this.DirectEmailKeyName = string.Empty;
 		}
 
-		public string DirectEmailKeyName { get; set; }
+		public string DirectEmailKeyName { get; set; } = string.Empty;
 		public bool NotifyEditors { get; set; }
 	}
 
@@ -280,6 +216,7 @@ namespace Carrotware.CMS.UI.Components {
 		protected MvcForm _form = null;
 		protected LoginInfo _model = null;
 		protected LoginInfoSettings _settings = null;
+		protected string _updateTargetId = string.Empty;
 
 		public AjaxLoginForm(AjaxHelper ajaxHelper, PagePayload page, AjaxOptions ajaxOptions, object formAttributes = null) {
 			_helper = ajaxHelper;
@@ -302,6 +239,8 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 
+			_updateTargetId = ajaxOptions.UpdateTargetId;
+
 			string formAction = "Login.ashx";
 
 			if (SecurityData.AdvancedEditMode) {
@@ -315,6 +254,7 @@ namespace Carrotware.CMS.UI.Components {
 			_model = InitLoginInfo(partialName);
 
 			_settings.SetHuman(validateHuman);
+			_settings.UpdateTargetId = _updateTargetId;
 
 			return InitHelp();
 		}
@@ -331,6 +271,8 @@ namespace Carrotware.CMS.UI.Components {
 			_settings.PostPartialNameLockout = config.PostPartialNameLockout;
 			_settings.PostPartialNameVerification = config.PostPartialNameVerification;
 			_settings.PostPartialNameFailure = config.PostPartialNameFailure;
+
+			_settings.UpdateTargetId = _updateTargetId;
 
 			return InitHelp();
 		}
@@ -354,6 +296,8 @@ namespace Carrotware.CMS.UI.Components {
 
 			_settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
 			_settings.PostPartialName = partialName;
+			_settings.UpdateTargetId = _updateTargetId;
+
 			model.Settings = _settings;
 
 			return model;
@@ -371,7 +315,6 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void Dispose() {
-			//_helper.ViewContext.Writer.Write("</form>");
 			if (_form != null) {
 				_form.Dispose();
 			}
@@ -420,6 +363,7 @@ namespace Carrotware.CMS.UI.Components {
 		protected MvcForm _form = null;
 		protected LogoutInfo _model = null;
 		protected LogoutInfoSettings _settings = null;
+		protected string _updateTargetId = string.Empty;
 
 		public AjaxLogoutForm(AjaxHelper ajaxHelper, PagePayload page, AjaxOptions ajaxOptions, object formAttributes = null) {
 			_helper = ajaxHelper;
@@ -442,6 +386,8 @@ namespace Carrotware.CMS.UI.Components {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
 
+			_updateTargetId = ajaxOptions.UpdateTargetId;
+
 			string formAction = "Logout.ashx";
 
 			if (SecurityData.AdvancedEditMode) {
@@ -456,6 +402,7 @@ namespace Carrotware.CMS.UI.Components {
 			_model.RedirectUri = config.RedirectUri;
 
 			_settings.RedirectUri = config.RedirectUri;
+			_settings.UpdateTargetId = _updateTargetId;
 
 			return InitHelp();
 		}
@@ -479,6 +426,8 @@ namespace Carrotware.CMS.UI.Components {
 
 			_settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
 			_settings.PostPartialName = partialName;
+			_settings.UpdateTargetId = _updateTargetId;
+
 			model.Settings = _settings;
 
 			return model;
@@ -496,7 +445,6 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void Dispose() {
-			//_helper.ViewContext.Writer.Write("</form>");
 			if (_form != null) {
 				_form.Dispose();
 			}
@@ -532,6 +480,7 @@ namespace Carrotware.CMS.UI.Components {
 		protected MvcForm _form = null;
 		protected ForgotPasswordInfo _model = null;
 		protected ForgotPasswordInfoSettings _settings = null;
+		protected string _updateTargetId = string.Empty;
 
 		public AjaxForgotPasswordForm(AjaxHelper ajaxHelper, PagePayload page, AjaxOptions ajaxOptions, object formAttributes = null) {
 			_helper = ajaxHelper;
@@ -553,6 +502,8 @@ namespace Carrotware.CMS.UI.Components {
 			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
+
+			_updateTargetId = ajaxOptions.UpdateTargetId;
 
 			string formAction = "ForgotPassword.ashx";
 
@@ -578,6 +529,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			_settings.PostPartialConfirmation = config.PostPartialConfirmation;
 			_settings.ConfirmUri = config.ConfirmUri;
+			_settings.UpdateTargetId = _updateTargetId;
 
 			return InitHelp();
 		}
@@ -600,6 +552,8 @@ namespace Carrotware.CMS.UI.Components {
 
 			_settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
 			_settings.PostPartialName = partialName;
+			_settings.UpdateTargetId = _updateTargetId;
+
 			model.Settings = _settings;
 
 			return model;
@@ -617,7 +571,6 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void Dispose() {
-			//_helper.ViewContext.Writer.Write("</form>");
 			if (_form != null) {
 				_form.Dispose();
 			}
@@ -659,6 +612,7 @@ namespace Carrotware.CMS.UI.Components {
 		protected MvcForm _form = null;
 		protected ResetPasswordInfo _model = null;
 		protected ResetPasswordInfoSettings _settings = null;
+		protected string _updateTargetId = string.Empty;
 
 		public AjaxResetPasswordForm(AjaxHelper ajaxHelper, PagePayload page, AjaxOptions ajaxOptions, object formAttributes = null) {
 			_helper = ajaxHelper;
@@ -680,6 +634,8 @@ namespace Carrotware.CMS.UI.Components {
 			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
+
+			_updateTargetId = ajaxOptions.UpdateTargetId;
 
 			string code = ResetPasswordInfoSettings.CodeUrl;
 
@@ -706,6 +662,7 @@ namespace Carrotware.CMS.UI.Components {
 			_settings.GetSettingFromConfig(config);
 
 			_settings.PostPartialConfirmation = config.PostPartialConfirmation;
+			_settings.UpdateTargetId = _updateTargetId;
 
 			return InitHelp();
 		}
@@ -729,6 +686,7 @@ namespace Carrotware.CMS.UI.Components {
 			_settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
 			_settings.PostPartialName = partialName;
 			_settings.UserCode = ResetPasswordInfoSettings.CodeUrl;
+			_settings.UpdateTargetId = _updateTargetId;
 
 			model.Settings = _settings;
 
@@ -747,7 +705,6 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void Dispose() {
-			//_helper.ViewContext.Writer.Write("</form>");
 			if (_form != null) {
 				_form.Dispose();
 			}
@@ -798,6 +755,7 @@ namespace Carrotware.CMS.UI.Components {
 		protected MvcForm _form = null;
 		protected ChangePasswordInfo _model = null;
 		protected ChangePasswordInfoSettings _settings = null;
+		protected string _updateTargetId = string.Empty;
 
 		public AjaxChangePasswordForm(AjaxHelper ajaxHelper, PagePayload page, AjaxOptions ajaxOptions, object formAttributes = null) {
 			_helper = ajaxHelper;
@@ -819,6 +777,8 @@ namespace Carrotware.CMS.UI.Components {
 			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
+
+			_updateTargetId = ajaxOptions.UpdateTargetId;
 
 			string formAction = "ChangePassword.ashx";
 
@@ -843,6 +803,7 @@ namespace Carrotware.CMS.UI.Components {
 			_settings.GetSettingFromConfig(config);
 
 			_settings.PostPartialSuccess = config.PostPartialSuccess;
+			_settings.UpdateTargetId = _updateTargetId;
 
 			return InitHelp();
 		}
@@ -865,6 +826,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			_settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
 			_settings.PostPartialName = partialName;
+			_settings.UpdateTargetId = _updateTargetId;
 
 			model.Settings = _settings;
 
@@ -883,7 +845,6 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void Dispose() {
-			//_helper.ViewContext.Writer.Write("</form>");
 			if (_form != null) {
 				_form.Dispose();
 			}
@@ -930,6 +891,7 @@ namespace Carrotware.CMS.UI.Components {
 		protected MvcForm _form = null;
 		protected ChangeProfileInfo _model = null;
 		protected ChangeProfileInfoSettings _settings = null;
+		protected string _updateTargetId = string.Empty;
 
 		public AjaxChangeProfileForm(AjaxHelper ajaxHelper, PagePayload page, AjaxOptions ajaxOptions, object formAttributes = null) {
 			_helper = ajaxHelper;
@@ -951,6 +913,8 @@ namespace Carrotware.CMS.UI.Components {
 			if (string.IsNullOrEmpty(ajaxOptions.OnFailure)) {
 				ajaxOptions.OnFailure = "__OnAjaxRequestFailure";
 			}
+
+			_updateTargetId = ajaxOptions.UpdateTargetId;
 
 			string formAction = "ChangeProfile.ashx";
 
@@ -975,6 +939,7 @@ namespace Carrotware.CMS.UI.Components {
 			_settings.GetSettingFromConfig(config);
 
 			_settings.PostPartialSuccess = config.PostPartialSuccess;
+			_settings.UpdateTargetId = _updateTargetId;
 
 			return InitHelp();
 		}
@@ -1006,6 +971,7 @@ namespace Carrotware.CMS.UI.Components {
 
 			_settings.Uri = CarrotCakeHtml.CmsPage.ThePage.FileName;
 			_settings.PostPartialName = partialName;
+			_settings.UpdateTargetId = _updateTargetId;
 
 			model.Settings = _settings;
 
@@ -1024,7 +990,6 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public void Dispose() {
-			//_helper.ViewContext.Writer.Write("</form>");
 			if (_form != null) {
 				_form.Dispose();
 			}

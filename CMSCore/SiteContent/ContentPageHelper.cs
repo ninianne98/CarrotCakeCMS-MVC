@@ -949,25 +949,12 @@ namespace Carrotware.CMS.Core {
 		}
 
 		public void RemoveVersions(Guid siteID, List<Guid> lstDel) {
-			//List<carrot_Content> lstContent = (from ct in db.carrot_Contents
-			//                                   join r in db.carrot_RootContents on ct.Root_ContentID equals r.Root_ContentID
-			//                                   orderby ct.EditDate descending
-			//                                   where r.SiteID == siteID
-			//                                    && lstDel.Contains(ct.ContentID)
-			//                                    && ct.IsLatestVersion != true
-			//                                   select ct).ToList();
-
-			//if (lstContent.Count > 0) {
-			//    db.carrot_Contents.DeleteAllOnSubmit(lstContent);
-			//    db.SubmitChanges();
-			//}
-
 			IQueryable<carrot_Content> queryCont = (from ct in _db.carrot_Contents
 													join r in _db.carrot_RootContents on ct.Root_ContentID equals r.Root_ContentID
 													orderby ct.EditDate descending
 													where r.SiteID == siteID
-													 && lstDel.Contains(ct.ContentID)
-													 && ct.IsLatestVersion != true
+														&& lstDel.Contains(ct.ContentID)
+														&& ct.IsLatestVersion != true
 													select ct);
 
 			if (lstDel.Any()) {

@@ -1,0 +1,78 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	string partialName = VirtualViewFileProvider.PartialViews.Login;
+	string formTargetId = CarrotCakeHtml.BuildTarget("logonForm");
+}
+
+<div id="@formTargetId">
+	<br />
+	<!-- virtual view -->
+	<script type="text/javascript">
+		function logInOutComplete2() {
+			var d = new Date();
+			var timeTick = d.getTime();
+
+			document.location = $("#@formTargetId #RedirectUri").val() + '?auth=' + timeTick;
+		}
+
+		function logInOutComplete() {
+			if ($("#@formTargetId #LogInStatus").val() == 'Success' || $("#@formTargetId #LogInStatus").length < 1) {
+				setTimeout(function () { logInOutComplete2(); }, 250);
+			}
+		}
+	</script>
+
+	@{
+		if (SecurityData.IsAuthenticated) {
+
+			var config = new LogoutInfoConfig(partialName);
+			config.RedirectUri = String.Format("{0}", CmsPage.ThePage.FileName);
+
+			using (var logoutFrm = CarrotCakeHtml.BeginLogoutForm(new AjaxOptions { UpdateTargetId = formTargetId, OnSuccess = "logInOutComplete" })) {
+				var frmhelp = logoutFrm.GetModelHelper(config);
+
+				@frmhelp.HiddenFor(m => m.RedirectUri)
+
+				<input class="button" type="submit" value="@String.Format("Logout '{0}'", SecurityData.GetUserName()) " />
+			}
+		} else {
+			var config = new LoginInfoConfig(partialName);
+			config.RedirectUri = String.Format("{0}", CmsPage.ThePage.FileName);
+
+			using (var loginFrm = CarrotCakeHtml.BeginLoginForm(new AjaxOptions { UpdateTargetId = formTargetId, OnSuccess = "logInOutComplete" })) {
+				var frmhelp = loginFrm.GetModelHelper(config);
+
+				@frmhelp.HiddenFor(m => m.RedirectUri)
+
+				<div>
+					@frmhelp.HiddenFor(m => m.LogInStatus)
+					@frmhelp.Hidden("RedirectUri", config.RedirectUri)
+					@frmhelp.ValidationSummary(true, "", new { @class = "text-danger" })
+				</div>
+
+				<div>
+					@frmhelp.LabelFor(m => m.UserName)
+					@frmhelp.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })<br />
+					@frmhelp.TextBoxFor(m => m.UserName)
+				</div>
+
+				<div>
+					@frmhelp.LabelFor(m => m.Password)
+					@frmhelp.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })<br />
+					@frmhelp.PasswordFor(m => m.Password)
+				</div>
+
+				<br />
+				<div>
+					<input class="button" type="submit" value="Login" />
+					<input class="button" type="reset" value="Clear form" />
+				</div>
+			}
+		}
+	}
+	<br />
+</div>
+<div style="clear:both">
+	&nbsp;
+</div>

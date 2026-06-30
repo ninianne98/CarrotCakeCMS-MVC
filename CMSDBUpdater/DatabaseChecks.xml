@@ -28,10 +28,22 @@
 
 	<querynugget>
 		<priority>1</priority>
+		<mode>EQ</mode>
+		<rowcount>0</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|IsBlankDb|</testcontext>
+		<sql>
+			select distinct table_name
+			from [INFORMATION_SCHEMA].[COLUMNS]
+		</sql>
+	</querynugget>
+
+	<querynugget>
+		<priority>1</priority>
 		<mode>GTE</mode>
 		<rowcount>4</rowcount>
 		<alwayscheck>False</alwayscheck>
-		<testcontext>|DoCMSTablesExist|AlterStep00|</testcontext>
+		<testcontext>|DoCMSTablesExist|HasCarrotPrefix|AlterStep00|</testcontext>
 		<sql>
 			select distinct table_name
 			from [INFORMATION_SCHEMA].[COLUMNS]
@@ -50,6 +62,18 @@
 			from [INFORMATION_SCHEMA].[COLUMNS]
 			where table_name in ('carrot_UserData', 'tblSites', 'tblRootContent', 'carrot_Sites', 'carrot_RootContent',
 			'membership_Role', 'membership_User', 'aspnet_Roles', 'aspnet_Users')
+		</sql>
+	</querynugget>
+
+	<querynugget>
+		<priority>20</priority>
+		<mode>EQ</mode>
+		<rowcount>5</rowcount>
+		<alwayscheck>False</alwayscheck>
+		<testcontext>|HasMembership|</testcontext>
+		<sql>
+			select distinct table_name from [INFORMATION_SCHEMA].[COLUMNS]
+			where table_name in('membership_Role', 'membership_User', 'membership_UserClaim', 'membership_UserLogin', 'membership_UserRole')
 		</sql>
 	</querynugget>
 

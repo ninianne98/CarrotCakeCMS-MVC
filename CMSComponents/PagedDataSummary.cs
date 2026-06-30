@@ -2,6 +2,7 @@
 using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Web;
 
@@ -26,10 +27,20 @@ namespace Carrotware.CMS.UI.Components {
 
 		public enum SummaryContentType {
 			Unknown,
+
+			[Description("Blog")]
 			Blog,
+
+			[Description("Content Page")]
 			ContentPage,
+
+			[Description("Child Content Page")]
 			ChildContentPage,
+
+			[Description("Specified Categories")]
 			SpecifiedCategories,
+
+			[Description("Site Search")]
 			SiteSearch
 		}
 

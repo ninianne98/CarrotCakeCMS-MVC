@@ -13,6 +13,8 @@
 namespace Carrotware.CMS.Interface {
 
 	public class WidgetAttribute : Attribute {
+		private string _field = string.Empty;
+		private FieldMode _mode = FieldMode.Unknown;
 
 		public enum FieldMode {
 			Unknown,
@@ -27,31 +29,27 @@ namespace Carrotware.CMS.Interface {
 		}
 
 		public WidgetAttribute() {
-			this._mode = FieldMode.Unknown;
+			_mode = FieldMode.Unknown;
 		}
 
 		public WidgetAttribute(FieldMode mode) {
-			this._mode = mode;
+			_mode = mode;
 		}
 
 		public WidgetAttribute(FieldMode mode, string field) {
-			this._mode = mode;
-			this._field = field;
+			_mode = mode;
+			_field = field;
 		}
-
-		private FieldMode _mode;
 
 		public FieldMode Mode {
 			get {
-				return this._mode;
+				return _mode;
 			}
 		}
 
-		private string _field;
-
 		public string SelectFieldSource {
 			get {
-				return this._field;
+				return _field;
 			}
 		}
 	}

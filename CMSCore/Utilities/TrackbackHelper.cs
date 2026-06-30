@@ -174,9 +174,9 @@ namespace Carrotware.CMS.Core {
 			using (ISiteNavHelper navHelper = SiteNavFactory.GetSiteNavHelper()) {
 				navData = navHelper.FindByFilename(SiteData.CurrentSiteID, tb.BlogPostID);
 			}
-			string sReferer = null;
-			string sIP = request.ServerVariables["REMOTE_ADDR"].ToString();
-			try { sReferer = request.ServerVariables["HTTP_REFERER"].ToString(); } catch { }
+			string referer = null;
+			string addr = request.ServerVariables["REMOTE_ADDR"].ToString();
+			try { referer = request.ServerVariables["HTTP_REFERER"].ToString(); } catch { }
 
 			PostComment pc = new PostComment();
 			pc.ContentCommentID = Guid.NewGuid();
@@ -184,7 +184,7 @@ namespace Carrotware.CMS.Core {
 			pc.CreateDate = SiteData.CurrentSite.Now;
 			pc.IsApproved = false;
 			pc.IsSpam = false;
-			pc.CommenterIP = sIP;
+			pc.CommenterIP = addr;
 			pc.CommenterEmail = "trackback";
 
 			pc.CommenterName = tb.BlogName;
@@ -195,8 +195,8 @@ namespace Carrotware.CMS.Core {
 #endif
 
 			pc.CommenterURL = tb.RequestSourceURL;
-			if (!string.IsNullOrEmpty(sReferer)) {
-				pc.CommenterURL = sReferer;
+			if (!string.IsNullOrEmpty(referer)) {
+				pc.CommenterURL = referer;
 			}
 
 			pc.Save();

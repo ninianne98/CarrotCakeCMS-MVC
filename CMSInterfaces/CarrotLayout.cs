@@ -58,9 +58,9 @@ namespace Carrotware.CMS.Interface {
 
 		public static string CurrentScriptName {
 			get {
-				string sPath = "/";
-				try { sPath = HttpContext.Current.Request.ServerVariables["script_name"].ToString(); } catch { }
-				return sPath;
+				string script = "/";
+				try { script = HttpContext.Current.Request.ServerVariables["script_name"].ToString(); } catch { }
+				return script;
 			}
 		}
 	}

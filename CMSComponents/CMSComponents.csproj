@@ -1,17 +1,21 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5DCEAB4C-2E06-4A3A-BADD-EC2680DB6B54}</ProjectGuid>
+    <!-- <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids> -->
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Carrotware.CMS.UI.Components</RootNamespace>
     <AssemblyName>Carrotware.CMS.UI.Components</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -19,20 +23,32 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -46,6 +62,27 @@
     <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.4\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.4\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
@@ -76,82 +113,167 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="adminHelp.js" />
+    <EmbeddedResource Include="feed.png" />
+    <EmbeddedResource Include="TopMenu.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="Views\web.config" />
+    <Content Include="Web.config" />
+    <None Include="packages.config" />
+    <EmbeddedResource Include="Views\Shared\_paged_comments.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_paged_data.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminScriptInfo.cs" />
     <Compile Include="AdvContentModel.cs" />
+    <Compile Include="BaseCmsComponent.cs" />
     <Compile Include="BaseToolboxComponent.cs" />
     <Compile Include="BaseTwoPartCmsComponent.cs" />
-    <Compile Include="BaseCmsComponent.cs" />
     <Compile Include="BreadCrumbNavigation.cs" />
     <Compile Include="CarrotCakeAreaReg.cs" />
     <Compile Include="CarrotCakeHtml.cs" />
-    <Compile Include="TopLevelNavigation.cs" />
     <Compile Include="ChildNavigation.cs" />
     <Compile Include="CmsSkin.cs" />
     <Compile Include="ContentPageComponents.cs" />
     <Compile Include="ContentPlainText.cs" />
     <Compile Include="ContentRichText.cs" />
     <Compile Include="ContentSnippetText.cs" />
+    <Compile Include="Controllers\FormsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="ControlUtilities.cs" />
     <Compile Include="EmailEscapeInBody.cs" />
+    <Compile Include="ICmsComponent.cs" />
     <Compile Include="IFrameWidgetWrapper.cs" />
     <Compile Include="IPagedContent.cs" />
+    <Compile Include="ListInBody.cs" />
     <Compile Include="LiteralMessage.cs" />
+    <Compile Include="Models\PagedCommentSettings.cs" />
+    <Compile Include="Models\PagedDataSettings.cs" />
     <Compile Include="MostRecentUpdated.cs" />
     <Compile Include="MultiLevelNavigation.cs" />
     <Compile Include="OpenGraph.cs" />
     <Compile Include="PagedComments.cs" />
+    <Compile Include="PagedDataSummary.cs" />
     <Compile Include="PostCalendar.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecondLevelNavigation.cs" />
     <Compile Include="SimpleList.cs" />
     <Compile Include="SpecialFormModels.cs" />
     <Compile Include="SpecialForms.cs" />
-    <Compile Include="ICmsComponent.cs" />
-    <Compile Include="PagedDataSummary.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialFormsBase.cs" />
+    <Compile Include="StringVirtualFile.cs" />
+    <Compile Include="TopLevelNavigation.cs" />
     <Compile Include="TwoLevelNavigation.cs" />
-    <Compile Include="ListInBody.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Views\Shared\_form_contact.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_form_loginout.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_TextZone.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_WidgetWrapper.cshtml" />
+    <EmbeddedResource Include="Views\Shared\_WidgetZone.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <None Include="editor\advedit.amethystorchid.less" />
+    <None Include="editor\advedit.blueizis.less" />
+    <None Include="editor\advedit.classic.less" />
+    <None Include="editor\advedit.frenchblue.less" />
+    <None Include="editor\advedit.mosaicblue.less" />
+    <None Include="editor\advedit.plum.less" />
+    <None Include="editor\advedit.quetzalgreen.less" />
+    <None Include="editor\advedit.rust.less" />
+    <None Include="editor\_colors.less" />
+    <None Include="editor\_edit-notifier.less" />
+    <None Include="skins\filebrowse.amethystorchid.less" />
+    <None Include="skins\filebrowse.blueizis.less" />
+    <None Include="skins\filebrowse.classic.less" />
+    <None Include="skins\filebrowse.frenchblue.less" />
+    <None Include="skins\filebrowse.mauve.less" />
+    <None Include="skins\filebrowse.mosaicblue.less" />
+    <None Include="skins\filebrowse.plum.less" />
+    <None Include="skins\filebrowse.quetzalgreen.less" />
+    <None Include="skins\filebrowse.rust.less" />
+    <None Include="skins\filebrowse.sandstone.less" />
+    <None Include="skins\filebrowse.sugaralmond.less" />
+    <None Include="skins\logon.amethystorchid.less" />
+    <None Include="skins\logon.blueizis.less" />
+    <None Include="skins\logon.classic.less" />
+    <None Include="skins\logon.frenchblue.less" />
+    <None Include="skins\logon.mauve.less" />
+    <None Include="skins\logon.mosaicblue.less" />
+    <None Include="skins\logon.plum.less" />
+    <None Include="skins\logon.quetzalgreen.less" />
+    <None Include="skins\logon.rust.less" />
+    <None Include="skins\logon.sandstone.less" />
+    <None Include="skins\logon.sugaralmond.less" />
+    <None Include="skins\main.amethystorchid.less" />
+    <None Include="skins\main.blueizis.less" />
+    <None Include="skins\main.classic.less" />
+    <None Include="skins\main.frenchblue.less" />
+    <None Include="skins\main.mauve.less" />
+    <None Include="skins\main.mosaicblue.less" />
+    <None Include="skins\main.plum.less" />
+    <None Include="skins\main.quetzalgreen.less" />
+    <None Include="skins\main.rust.less" />
+    <None Include="editor\notify.amethystorchid.less" />
+    <None Include="editor\notify.blueizis.less" />
+    <None Include="editor\notify.classic.less" />
+    <None Include="editor\notify.frenchblue.less" />
+    <None Include="editor\notify.mosaicblue.less" />
+    <None Include="editor\notify.plum.less" />
+    <None Include="editor\notify.quetzalgreen.less" />
+    <None Include="editor\notify.rust.less" />
+    <None Include="skins\main.sandstone.less" />
+    <None Include="skins\main.sugaralmond.less" />
+    <None Include="skins\popup.amethystorchid.less" />
+    <None Include="skins\popup.blueizis.less" />
+    <None Include="skins\popup.classic.less" />
+    <None Include="skins\popup.frenchblue.less" />
+    <None Include="skins\popup.mauve.less" />
+    <None Include="skins\popup.mosaicblue.less" />
+    <None Include="skins\popup.plum.less" />
+    <None Include="skins\popup.quetzalgreen.less" />
+    <None Include="skins\popup.rust.less" />
+    <None Include="skins\popup.sandstone.less" />
+    <None Include="skins\popup.sugaralmond.less" />
+    <None Include="skins\_colors.less" />
+    <None Include="skins\_common.less" />
+    <None Include="skins\_fauxstrap.less" />
+    <None Include="skins\_filebrowser.less" />
+    <None Include="skins\_logon-window.less" />
+    <None Include="skins\_logon.less" />
+    <None Include="skins\_main-popup.less" />
+    <None Include="skins\_main-window.less" />
+    <None Include="skins\_main.less" />
+    <None Include="skins\_popup.less" />
+    <None Include="skins\_TableStyles.less" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="editor\images\ui-bg_hexagon_90_eeeeee_12x10.png" />
+    <Content Include="editor\images\ui-icons_222222_256x240.png" />
+    <Content Include="editor\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="editor\images\ui-icons_333333_256x240.png" />
+    <Content Include="editor\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="editor\images\ui-icons_efefef_256x240.png" />
     <Content Include="editor\advedit.amethystorchid.css">
       <DependentUpon>advedit.amethystorchid.less</DependentUpon>
     </Content>
@@ -346,12 +468,6 @@
     <Content Include="editor\advedit.sugaralmond.min.css">
       <DependentUpon>advedit.sugaralmond.css</DependentUpon>
     </Content>
-    <Content Include="editor\images\ui-bg_hexagon_90_eeeeee_12x10.png" />
-    <Content Include="editor\images\ui-icons_222222_256x240.png" />
-    <Content Include="editor\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="editor\images\ui-icons_333333_256x240.png" />
-    <Content Include="editor\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="editor\images\ui-icons_efefef_256x240.png" />
     <Content Include="editor\notify.mauve.css">
       <DependentUpon>notify.mauve.less</DependentUpon>
     </Content>
@@ -571,9 +687,6 @@
     <Content Include="skins\popup.rust.min.css">
       <DependentUpon>popup.rust.css</DependentUpon>
     </Content>
-    <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CMSCore\CMSCore.csproj">
@@ -589,116 +702,18 @@
       <Name>WebComponents</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="_TextZone.cshtml" />
-    <EmbeddedResource Include="_WidgetWrapper.cshtml" />
-    <EmbeddedResource Include="_WidgetZone.cshtml" />
-    <EmbeddedResource Include="adminHelp.js" />
-    <EmbeddedResource Include="feed.png" />
-    <EmbeddedResource Include="TopMenu.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="compilerconfig.json" />
-    <None Include="compilerconfig.json.defaults">
-      <DependentUpon>compilerconfig.json</DependentUpon>
-    </None>
-    <None Include="editor\advedit.amethystorchid.less" />
-    <None Include="editor\advedit.blueizis.less" />
-    <None Include="editor\advedit.classic.less" />
-    <None Include="editor\advedit.frenchblue.less" />
-    <None Include="editor\advedit.mosaicblue.less" />
-    <None Include="editor\advedit.plum.less" />
-    <None Include="editor\advedit.quetzalgreen.less" />
-    <None Include="editor\advedit.rust.less" />
-    <None Include="editor\_colors.less" />
-    <None Include="editor\_edit-notifier.less" />
-    <None Include="skins\filebrowse.amethystorchid.less" />
-    <None Include="skins\filebrowse.blueizis.less" />
-    <None Include="skins\filebrowse.classic.less" />
-    <None Include="skins\filebrowse.frenchblue.less" />
-    <None Include="skins\filebrowse.mauve.less" />
-    <None Include="skins\filebrowse.mosaicblue.less" />
-    <None Include="skins\filebrowse.plum.less" />
-    <None Include="skins\filebrowse.quetzalgreen.less" />
-    <None Include="skins\filebrowse.rust.less" />
-    <None Include="skins\filebrowse.sandstone.less" />
-    <None Include="skins\filebrowse.sugaralmond.less" />
-    <None Include="skins\logon.amethystorchid.less" />
-    <None Include="skins\logon.blueizis.less" />
-    <None Include="skins\logon.classic.less" />
-    <None Include="skins\logon.frenchblue.less" />
-    <None Include="skins\logon.mauve.less" />
-    <None Include="skins\logon.mosaicblue.less" />
-    <None Include="skins\logon.plum.less" />
-    <None Include="skins\logon.quetzalgreen.less" />
-    <None Include="skins\logon.rust.less" />
-    <None Include="skins\logon.sandstone.less" />
-    <None Include="skins\logon.sugaralmond.less" />
-    <None Include="skins\main.amethystorchid.less" />
-    <None Include="skins\main.blueizis.less" />
-    <None Include="skins\main.classic.less" />
-    <None Include="skins\main.frenchblue.less" />
-    <None Include="skins\main.mauve.less" />
-    <None Include="skins\main.mosaicblue.less" />
-    <None Include="skins\main.plum.less" />
-    <None Include="skins\main.quetzalgreen.less" />
-    <None Include="skins\main.rust.less" />
-    <None Include="editor\notify.amethystorchid.less" />
-    <None Include="editor\notify.blueizis.less" />
-    <None Include="editor\notify.classic.less" />
-    <None Include="editor\notify.frenchblue.less" />
-    <None Include="editor\notify.mosaicblue.less" />
-    <None Include="editor\notify.plum.less" />
-    <None Include="editor\notify.quetzalgreen.less" />
-    <None Include="editor\notify.rust.less" />
-    <None Include="skins\main.sandstone.less" />
-    <None Include="skins\main.sugaralmond.less" />
-    <None Include="skins\popup.amethystorchid.less" />
-    <None Include="skins\popup.blueizis.less" />
-    <None Include="skins\popup.classic.less" />
-    <None Include="skins\popup.frenchblue.less" />
-    <None Include="skins\popup.mauve.less" />
-    <None Include="skins\popup.mosaicblue.less" />
-    <None Include="skins\popup.plum.less" />
-    <None Include="skins\popup.quetzalgreen.less" />
-    <None Include="skins\popup.rust.less" />
-    <None Include="skins\popup.sandstone.less" />
-    <None Include="skins\popup.sugaralmond.less" />
-    <None Include="skins\_colors.less" />
-    <None Include="skins\_common.less" />
-    <None Include="skins\_fauxstrap.less" />
-    <None Include="skins\_filebrowser.less" />
-    <None Include="skins\_logon-window.less" />
-    <None Include="skins\_logon.less" />
-    <None Include="skins\_main-popup.less" />
-    <None Include="skins\_main-window.less" />
-    <None Include="skins\_main.less" />
-    <None Include="skins\_popup.less" />
-    <None Include="skins\_TableStyles.less" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions />
   <PropertyGroup>
     <PostBuildEvent>
 xcopy "$(ProjectDir)\skins\*.min.css" "$(SolutionDir)\CMSAdmin\Assets\Admin\skins\" /F /R /Y /I
 xcopy "$(ProjectDir)\editor\*.min.css" "$(SolutionDir)\CMSAdmin\Assets\Admin\editor\" /F /R /Y /I
 </PostBuildEvent>
   </PropertyGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.2\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.2\build\EntityFramework.targets'))" />
-  </Target>
-  <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

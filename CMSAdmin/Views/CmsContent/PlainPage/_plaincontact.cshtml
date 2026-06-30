@@ -1,14 +1,21 @@
 ﻿@inherits CmsWebViewPage
 
-<div id="contactForm">
-	@{
-		var cap = new Captcha();
-		cap.SetBackColor("#ffffff");
-		cap.SetForeColor("#333333");
-		cap.SetNoiseColor("#999999");
+@{
+	var cap = new Captcha();
+	cap.SetBackColor("#ffffff");
+	cap.SetForeColor("#333333");
+	cap.SetNoiseColor("#999999");
 
-		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = "contactForm" })) {
-			var cmt = cmtFrm.GetModelHelper("_plaincontact", cap);
+	string partialName = "_plaincontact";
+	string formTargetId = "contactForm";
+}
+
+<div id="@formTargetId">
+	<br style="clear:both" />
+	@{
+		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = formTargetId })) {
+			var cmt = cmtFrm.GetModelHelper(partialName, cap);
+
 			if (!cmt.ViewData.Model.IsSaved) {
 				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
 				<div>
@@ -33,7 +40,7 @@
 				<div>
 					<div> @cap </div>
 					<label for="@cmt.IdFor(m => m.ValidationValue)">@cap.Instructions</label><br />
-					@cmt.TextBoxFor(m => m.ValidationValue)
+					@cmt.TextBoxFor(m => m.ValidationValue, "", new { autocomplete = "off" })
 					@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
 					<br />
 				</div>
@@ -46,4 +53,5 @@
 			}
 		}
 	}
+	<br style="clear:both" />
 </div>

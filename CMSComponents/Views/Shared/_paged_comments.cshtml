@@ -1,0 +1,50 @@
+@inherits WebViewPage<PagedCommentModel>
+
+@{
+	var CmsPage = PagePayload.GetContent(Model.SiteNav);
+	CmsPage.TypeLabelPrefixes = CmsPage.GetDefaultTypeHeadingOptions();
+
+	var comments = new PagedComments();
+
+	if (CmsPage.IsBlogPost) {
+		comments.MaxPage = Model.MaxPage;
+		comments.PageSize = Model.PageSize;
+		comments.FetchData();
+	} else {
+		comments.PageSize = 1;
+	}
+}
+
+@if (comments.HasData) {
+	<div class="result-content @Model.CSSPageListing">
+		<br style="clear: both;" />
+		@foreach (var item in comments.DataSource) {
+			<div>
+				<p>
+					<b>
+						@Html.Raw(string.Format("{0} on {1:d} @  {1:t}", item.CommenterName, item.CreateDate))
+					</b>
+				</p>
+				<div class="comment-border top">
+					<p>
+						@item.PostCommentEscaped
+					</p>
+				</div>
+			</div>
+		}
+
+		@if (Model.ShowPager) {
+			<div class="pagerfooterlinks @Model.CSSPageFooter">
+				@foreach (var i in comments.PageNumbers) {
+					using (CarrotWeb.BeginWrappedItem("div", i, comments.PageNumber, new { @class = "pagerlink selectedwrap " + Model.CSSSelectedPage }, new { @class = "pagerlink" })) {
+						using (CarrotWeb.BeginWrappedItem("a", i, comments.PageNumber, new { @class = "selected " + Model.CSSSelectedPage, @href = comments.GetUrl(i) }, new { @href = comments.GetUrl(i) })) {
+							@String.Format(" {0} ", i)
+						}
+					}
+				}
+			</div>
+		}
+	</div>
+	<div style="clear: both;">
+	</div>
+}

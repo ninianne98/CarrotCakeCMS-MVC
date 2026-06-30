@@ -637,30 +637,30 @@ namespace Carrotware.CMS.Core {
 				var sbBody = new StringBuilder();
 				sbBody.Append(CoreHelper.ReadEmbededScript("Carrotware.CMS.Core.Security.EmailForgotPassMsg.txt"));
 
-				string httpHost = string.Empty;
-				try { httpHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { httpHost = string.Empty; }
-				string hostName = httpHost.ToLowerInvariant();
+				string host = string.Empty;
+				try { host = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { host = string.Empty; }
+				string hostName = host.ToLowerInvariant();
 
 				string hostPrefix = "http://";
 				try {
 					hostPrefix = request.ServerVariables["SERVER_PORT_SECURE"] == "1" ? "https://" : "http://";
 				} catch { hostPrefix = "http://"; }
 
-				httpHost = string.Format("{0}{1}", hostPrefix, hostName).ToLowerInvariant();
+				host = string.Format("{0}{1}", hostPrefix, hostName).ToLowerInvariant();
 
 				var resetTokenUrl = string.Empty;
 				var authKey = EncodeAuthKey(user, token);
 
 				if (string.IsNullOrEmpty(authKey)) {
-					resetTokenUrl = string.Format("{0}/{1}?userId={2}&token={3}", httpHost, resetUri, HttpUtility.UrlEncode(user.Id), HttpUtility.UrlEncode(token));
+					resetTokenUrl = string.Format("{0}/{1}?userId={2}&token={3}", host, resetUri, HttpUtility.UrlEncode(user.Id), HttpUtility.UrlEncode(token));
 				} else {
-					resetTokenUrl = string.Format("{0}/{1}?key={2}", httpHost, resetUri, HttpUtility.UrlEncode(authKey));
+					resetTokenUrl = string.Format("{0}/{1}?key={2}", host, resetUri, HttpUtility.UrlEncode(authKey));
 				}
 
 				sbBody.Replace("{%%UserName%%}", user.UserName);
-				sbBody.Replace("{%%SiteURL%%}", httpHost);
+				sbBody.Replace("{%%SiteURL%%}", host);
 				sbBody.Replace("{%%Version%%}", CurrentDLLVersion);
-				sbBody.Replace("{%%AdminFolderPath%%}", string.Format("{0}{1}", httpHost, SiteData.AdminFolderPath));
+				sbBody.Replace("{%%AdminFolderPath%%}", string.Format("{0}{1}", host, SiteData.AdminFolderPath));
 
 				sbBody.Replace("{%%ResetURL%%}", resetTokenUrl);
 

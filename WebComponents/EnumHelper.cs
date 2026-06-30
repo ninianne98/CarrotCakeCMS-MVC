@@ -17,7 +17,7 @@ using System.Reflection;
 
 namespace Carrotware.Web.UI.Components {
 
-	public class EnumHelper {
+	public static class EnumHelper {
 
 		public static List<EnumProperty> ToList<T>()
 								 where T : struct, IConvertible, IComparable, IFormattable {
@@ -63,6 +63,49 @@ namespace Carrotware.Web.UI.Components {
 
 			//default to member name if no description
 			return memberName;
+		}
+
+		public static string GetDescription(this Enum value) {
+			Type type = value.GetType();
+			string name = value.ToString();
+			var field = type.GetField(name);
+
+			if (field != null) {
+				var attribute = field.GetCustomAttribute<DescriptionAttribute>();
+
+				if (attribute != null) {
+					return attribute.Description;
+				}
+			}
+
+			return name;
+		}
+
+		public static Dictionary<string, string> GetEnumDictionary<TEnum>() where TEnum : struct, Enum {
+			Type enumType = typeof(TEnum);
+
+			return Enum.GetValues(enumType)
+				.Cast<TEnum>()
+				.ToDictionary(
+					key => key.ToString(),
+					val => val.GetDescription()
+				);
+		}
+
+		public static Dictionary<string, string> ToDescriptionDictionary(this Type enumType) {
+			if (enumType == null) {
+				throw new ArgumentNullException(nameof(enumType));
+			}
+
+			if (!enumType.IsEnum) {
+				throw new ArgumentException("The provided type must be an Enum.", nameof(enumType));
+			}
+
+			return Enum.GetValues(enumType).Cast<Enum>()
+						.ToDictionary(
+							key => key.ToString(),
+							val => val.GetDescription()
+						);
 		}
 	}
 

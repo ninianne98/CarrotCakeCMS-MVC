@@ -102,12 +102,12 @@ namespace Carrotware.CMS.Core {
 
 		public static string DomainName {
 			get {
-				var domName = HttpContext.Current.Request.ServerVariables["HTTP_HOST"];
-				if ((domName.IndexOf(":") > 0) && (domName.EndsWith(":80") || domName.EndsWith(":443"))) {
-					domName = domName.Substring(0, domName.IndexOf(":"));
+				var host = HttpContext.Current.Request.ServerVariables["HTTP_HOST"];
+				if ((host.IndexOf(":") > 0) && (host.EndsWith(":80") || host.EndsWith(":443"))) {
+					host = host.Substring(0, host.IndexOf(":"));
 				}
 
-				return domName.ToLowerInvariant();
+				return host.ToLowerInvariant();
 			}
 		}
 
@@ -627,6 +627,12 @@ namespace Carrotware.CMS.Core {
 					p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Most Recent Updated", FilePath = "CLASS:Carrotware.CMS.UI.Components.MostRecentUpdated, Carrotware.CMS.UI.Components" });
 
 					p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Multi Level Nav List", FilePath = "CLASS:Carrotware.CMS.UI.Components.MultiLevelNavigation, Carrotware.CMS.UI.Components" });
+
+					p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Comment Form", FilePath = "ContentCommentForm:Carrotware.CMS.UI.Components.Controllers.FormsController, Carrotware.CMS.UI.Components" });
+					p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Login / Out Form", FilePath = "LoginOutForm:Carrotware.CMS.UI.Components.Controllers.FormsController, Carrotware.CMS.UI.Components" });
+
+					p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Show Paged Comments", FilePath = "ShowPagedComments:Carrotware.CMS.UI.Components.Controllers.FormsController, Carrotware.CMS.UI.Components" });
+					p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "Show Paged Data", FilePath = "ShowPagedData:Carrotware.CMS.UI.Components.Controllers.FormsController, Carrotware.CMS.UI.Components" });
 
 					p1.Add(new CMSPlugin { SystemPlugin = true, SortOrder = iSortOrder++, Caption = "IFRAME content wrapper", FilePath = "CLASS:Carrotware.CMS.UI.Components.IFrameWidgetWrapper, Carrotware.CMS.UI.Components" });
 

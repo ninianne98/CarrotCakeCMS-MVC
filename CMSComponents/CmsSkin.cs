@@ -241,90 +241,101 @@ namespace Carrotware.CMS.UI.Components {
 			return Color.FromArgb(color.A, (int)rr, (int)gg, (int)bb);
 		}
 
+		public static jquerybasic.jQueryTheme GetJQ_Skin(CmsSkin.SkinOption skin) {
+			var selectedSkin = jquerybasic.jQueryTheme.Silver;
+
+			switch (skin) {
+				case SkinOption.Classic:
+					selectedSkin = jquerybasic.jQueryTheme.LightGreen;
+					break;
+
+				case SkinOption.Mauve:
+				case SkinOption.AmethystOrchid:
+					selectedSkin = jquerybasic.jQueryTheme.Purple;
+					break;
+
+				case SkinOption.Rust:
+				case SkinOption.Sandstone:
+				case SkinOption.SugarAlmond:
+				case SkinOption.MosaicBlue:
+					selectedSkin = jquerybasic.jQueryTheme.GlossyBlack;
+					break;
+
+				case SkinOption.FrenchBlue:
+					selectedSkin = jquerybasic.jQueryTheme.Blue;
+					break;
+
+				case SkinOption.QuetzalGreen:
+				case SkinOption.BlueIzis:
+				case SkinOption.Plum:
+					selectedSkin = jquerybasic.jQueryTheme.Silver;
+					break;
+
+				default:
+					selectedSkin = jquerybasic.jQueryTheme.Silver;
+					break;
+			}
+
+			return selectedSkin;
+		}
+
+		public static Bootstrap5.Bootstrap5ColorScheme GetB5_Skin(CmsSkin.SkinOption skin) {
+			var selectedSkin = Bootstrap5.Bootstrap5ColorScheme.Seafoam;
+
+			switch (skin) {
+				case SkinOption.AmethystOrchid:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.AmethystOrchid;
+					break;
+
+				case SkinOption.BlueIzis:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.BlueIzis;
+					break;
+
+				case SkinOption.FrenchBlue:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.FrenchBlue;
+					break;
+
+				case SkinOption.Mauve:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.Mauve;
+					break;
+
+				case SkinOption.MosaicBlue:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.MosaicBlue;
+					break;
+
+				case SkinOption.Plum:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.Plum;
+					break;
+
+				case SkinOption.QuetzalGreen:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.QuetzalGreen;
+					break;
+
+				case SkinOption.Rust:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.Rust;
+					break;
+
+				case SkinOption.Sandstone:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.Sandstone;
+					break;
+
+				case SkinOption.SugarAlmond:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.SugarAlmond;
+					break;
+
+				default:
+					selectedSkin = Bootstrap5.Bootstrap5ColorScheme.Seafoam;
+					break;
+			}
+
+			return selectedSkin;
+		}
+
 		public override string GetHtml() {
 			GetEditState();
 			var sb = new StringBuilder();
-
-			_jqb.SelectedSkin = jquerybasic.jQueryTheme.LightGreen;
-			_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Seafoam;
-
-			switch (this.SelectedColor) {
-				case SkinOption.Classic:
-					_jqb.SelectedSkin = jquerybasic.jQueryTheme.LightGreen;
-					break;
-
-				case SkinOption.Mauve:
-				case SkinOption.AmethystOrchid:
-					_jqb.SelectedSkin = jquerybasic.jQueryTheme.Purple;
-					break;
-
-				case SkinOption.Rust:
-				case SkinOption.Sandstone:
-				case SkinOption.SugarAlmond:
-				case SkinOption.MosaicBlue:
-					_jqb.SelectedSkin = jquerybasic.jQueryTheme.GlossyBlack;
-					break;
-
-				case SkinOption.FrenchBlue:
-					_jqb.SelectedSkin = jquerybasic.jQueryTheme.Blue;
-					break;
-
-				case SkinOption.QuetzalGreen:
-				case SkinOption.BlueIzis:
-				case SkinOption.Plum:
-					_jqb.SelectedSkin = jquerybasic.jQueryTheme.Silver;
-					break;
-
-				default:
-					_jqb.SelectedSkin = jquerybasic.jQueryTheme.Silver;
-					break;
-			}
-
-			switch (this.SelectedColor) {
-				case SkinOption.AmethystOrchid:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.AmethystOrchid;
-					break;
-
-				case SkinOption.BlueIzis:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.BlueIzis;
-					break;
-
-				case SkinOption.FrenchBlue:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.FrenchBlue;
-					break;
-
-				case SkinOption.Mauve:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Mauve;
-					break;
-
-				case SkinOption.MosaicBlue:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.MosaicBlue;
-					break;
-
-				case SkinOption.Plum:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Plum;
-					break;
-
-				case SkinOption.QuetzalGreen:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.QuetzalGreen;
-					break;
-
-				case SkinOption.Rust:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Rust;
-					break;
-
-				case SkinOption.Sandstone:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Sandstone;
-					break;
-
-				case SkinOption.SugarAlmond:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.SugarAlmond;
-					break;
-
-				default:
-					_bs5.SelectedSkin = Bootstrap5.Bootstrap5ColorScheme.Seafoam;
-					break;
-			}
+			_jqb.SelectedSkin = GetJQ_Skin(this.SelectedColor);
+			_bs5.SelectedSkin = GetB5_Skin(this.SelectedColor);
 
 			var rootPath = _useEditor ? _rootThemePathEdit : _rootThemePathSkin;
 

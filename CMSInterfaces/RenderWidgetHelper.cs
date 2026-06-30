@@ -1,5 +1,4 @@
-﻿using Carrotware.CMS.Interface.Controllers;
-using Carrotware.Web.UI.Components;
+﻿using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -38,15 +37,6 @@ namespace Carrotware.CMS.Interface {
 			var wrapper = new HttpContextWrapper(HttpContext.Current);
 			string controlerName = controller.GetControllerName();
 
-			//if (string.IsNullOrWhiteSpace(areaName)) {
-			//	routeData.Values[RouteInfo.Keys.Area] = string.Empty;
-			//} else {
-			//	routeData.Values[RouteInfo.Keys.Area] = areaName;
-			//}
-
-			//routeData.Values[RouteInfo.Keys.Action] = actionName;
-			//routeData.Values[RouteInfo.Keys.Controller] = controlerName;
-
 			routeData.SetRouteValues(areaName, controlerName, actionName, null);
 
 			foreach (var r in source.RouteData.Values.Where(x => RouteInfo.Keys.GetStandardKeys().Contains(x.Key.ToLowerInvariant()) == false)) {
@@ -56,8 +46,116 @@ namespace Carrotware.CMS.Interface {
 			var context = new ControllerContext(wrapper, routeData, controller);
 			controller.ControllerContext = context;
 
-			if (controller is BaseDataWidgetController) {
-				((BaseDataWidgetController)controller).WidgetPayload = widgetPayload;
+			if (controller is IWidgetDataObject) {
+				((IWidgetDataObject)controller).WidgetPayload = widgetPayload;
+			}
+
+			return controller;
+		}
+
+		public static object ControllerObjectInitialize(object ctrl) {
+			if (ctrl is Controller && ctrl != null) {
+				var controller = ctrl as Controller;
+				controller = controller.ControllerInitialize();
+				return controller;
+			}
+
+			return ctrl;
+		}
+
+		public static Controller ControllerInitLifecycle(this Controller controller, MethodInfo actionInfo) {
+			if (controller != null) {
+				controller = controller.ControllerInitialize();
+				controller = controller.ControllerOnActionExecuting(actionInfo);
+			}
+
+			return controller;
+		}
+
+		public static Controller ControllerInitialize(this Controller controller) {
+			if (controller != null) {
+				var requestContext = controller.ControllerContext.RequestContext;
+				var controllerType = controller.GetType();
+
+				var invokeMethod = controllerType.GetMethod("Initialize", BindingFlags.Instance | BindingFlags.NonPublic);
+				invokeMethod.Invoke(controller, new object[] { requestContext });
+			}
+
+			return controller;
+		}
+
+		public static Controller ControllerOnActionExecuting(this Controller controller, MethodInfo actionInfo) {
+			if (controller != null) {
+				var controllerType = controller.GetType();
+				var context = controller.ControllerContext;
+				var requestContext = context.RequestContext;
+				var routeData = context.RouteData;
+				var parameters = actionInfo.GetParameters();
+
+				var ctrlDescriptor = new ReflectedControllerDescriptor(controllerType);
+				var actDescriptor = ctrlDescriptor.FindAction(context, actionInfo.Name);
+
+				var execParms = new Dictionary<string, object>();
+
+				if (parameters.Length > 0) {
+					foreach (var parm in parameters) {
+						object val = null;
+						if (routeData.Values[parm.Name] != null) {
+							val = routeData.Values[parm.Name];
+						}
+						if (val == null && controller.Request.QueryString[parm.Name] != null) {
+							val = controller.Request.QueryString[parm.Name];
+						}
+						execParms.Add(parm.Name, val);
+					}
+				}
+
+				var execContext = new ActionExecutingContext(context, actDescriptor, execParms);
+
+				var invokeMethod = controllerType.GetMethod("OnActionExecuting", BindingFlags.Instance | BindingFlags.NonPublic);
+				invokeMethod.Invoke(controller, new object[] { execContext });
+			}
+
+			return controller;
+		}
+
+		public static Controller ControllerFinalize(this Controller controller, MethodInfo actionInfo, object result) {
+			var action = actionInfo != null ? actionInfo.Name : "Index";
+
+			return ControllerFinalize(controller, action, result);
+		}
+
+		public static Controller ControllerFinalize(this Controller controller, string actionName, object result) {
+			if (controller != null) {
+				var controllerType = controller.GetType();
+				var context = controller.ControllerContext;
+
+				if (result != null && result is ViewResultBase) {
+					var viewResult = (ViewResultBase)result;
+					actionName = string.IsNullOrWhiteSpace(actionName) ? viewResult.ViewName : actionName;
+
+					var ctrlDescriptor = new ReflectedControllerDescriptor(controllerType);
+					var actDescriptor = ctrlDescriptor.FindAction(context, actionName);
+
+					var execContext = new ActionExecutedContext(context, actDescriptor, false, null);
+
+					// result is deliberately not set for partials otherwise, the widget will append
+					// to the top of the target page AND in the placeholder
+					if ((result is PartialViewResult) == false) {
+						execContext.Result = viewResult;
+					}
+
+					var invokeExecuted = controllerType.GetMethod("OnActionExecuted", BindingFlags.Instance | BindingFlags.NonPublic);
+					invokeExecuted.Invoke(controller, new object[] { execContext });
+					execContext.Result.ExecuteResult(context);
+				}
+
+				if (controller is IDisposable) {
+					var invokeDispose = typeof(Controller).GetMethod("Dispose", BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[] { typeof(bool) }, null);
+					if (invokeDispose != null) {
+						invokeDispose.Invoke(controller, new object[] { true });
+					}
+				}
 			}
 
 			return controller;
@@ -78,6 +176,9 @@ namespace Carrotware.CMS.Interface {
 			} else {
 				methodInfo = mthds.Where(x => x.GetCustomAttributes(typeof(HttpGetAttribute), true).Any()).FirstOrDefault();
 			}
+
+			// invoke the init before actually calling the action
+			controller = controller.ControllerInitLifecycle(methodInfo);
 
 			PartialViewResult partialResult = null;
 
@@ -138,9 +239,11 @@ namespace Carrotware.CMS.Interface {
 		public static string ResultToString(this Controller controller, ViewResultBase partialResult, string viewName = null) {
 			var context = controller.ControllerContext;
 			var sb = new StringBuilder();
+			sb.Append(string.Empty);
+
+			var routeInfo = context.RouteData.GetRouteInfo();
 
 			if (string.IsNullOrEmpty(viewName)) {
-				var routeInfo = context.RouteData.GetRouteInfo();
 				viewName = routeInfo.Action;
 			}
 
@@ -160,6 +263,8 @@ namespace Carrotware.CMS.Interface {
 				}
 			}
 
+			controller = controller.ControllerFinalize(routeInfo.Action, partialResult);
+
 			return sb.ToString();
 		}
 
@@ -167,8 +272,9 @@ namespace Carrotware.CMS.Interface {
 			object model = new object();
 			bool partialView = false;
 
+			var routeInfo = controller.ControllerContext.RouteData.GetRouteInfo();
+
 			if (string.IsNullOrEmpty(viewName)) {
-				var routeInfo = controller.ControllerContext.RouteData.GetRouteInfo();
 				viewName = routeInfo.Action;
 			}
 
@@ -182,16 +288,21 @@ namespace Carrotware.CMS.Interface {
 				}
 			}
 
-			return RenderViewToString(controller.ControllerContext, model, viewName, partialView);
+			var renderedView = RenderViewToString(controller.ControllerContext, model, viewName, partialView);
+
+			controller = controller.ControllerFinalize(routeInfo.Action, result);
+
+			return renderedView;
 		}
 
-		public static string RenderViewToString(this ControllerContext context, object model, string viewName = null, bool partialView = false) {
+		internal static string RenderViewToString(this ControllerContext context, object model, string viewName = null, bool partialView = false) {
 			// first find the ViewEngine for this view
 			ViewEngineResult viewEngineResult = null;
 			var sb = new StringBuilder();
 
+			var routeInfo = context.RouteData.GetRouteInfo();
+
 			if (string.IsNullOrEmpty(viewName)) {
-				var routeInfo = context.RouteData.GetRouteInfo();
 				viewName = routeInfo.Action;
 			}
 

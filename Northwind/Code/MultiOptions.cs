@@ -1,8 +1,8 @@
 ﻿using Carrotware.CMS.Interface;
 using Northwind.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 namespace Northwind {
 
@@ -19,21 +19,21 @@ namespace Northwind {
 			}
 		}
 
-		[Widget(WidgetAttribute.FieldMode.CheckBoxList, "lstCategoryID")]
+		[Widget(WidgetAttribute.FieldMode.CheckBoxList, nameof(lstCategories))]
 		public List<int> CategoryIDs { get; set; }
 
 		[Widget(WidgetAttribute.FieldMode.DictionaryList)]
-		public Dictionary<string, string> lstCategoryID {
+		public Dictionary<string, string> lstCategories {
 			get {
-				Dictionary<string, string> _dict = null;
+				Dictionary<string, string> dict = null;
 
 				using (var db = new NorthwindDataContext()) {
-					_dict = (from c in db.Categories.ToList()
-							 orderby c.CategoryName
-							 select c).ToList().ToDictionary(k => k.CategoryID.ToString(), v => v.CategoryName);
+					dict = (from c in db.Categories.ToList()
+							orderby c.CategoryName
+							select c).ToList().ToDictionary(k => k.CategoryID.ToString(), v => v.CategoryName);
 				}
 
-				return _dict;
+				return dict;
 			}
 		}
 
@@ -41,7 +41,7 @@ namespace Northwind {
 			base.LoadData();
 
 			try {
-				List<string> foundValues = this.GetParmValueList("CategoryIDs");
+				List<string> foundValues = this.GetParmValueList(nameof(this.CategoryIDs));
 
 				if (foundValues.Any()) {
 					this.CategoryIDs = foundValues.Select(x => int.Parse(x)).ToList();
@@ -50,7 +50,7 @@ namespace Northwind {
 		}
 
 		public ProductSearch GetData() {
-			ProductSearch model = new ProductSearch();
+			var model = new ProductSearch();
 			LoadData();
 
 			using (var db = new NorthwindDataContext()) {

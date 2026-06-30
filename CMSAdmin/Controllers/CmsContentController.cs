@@ -99,7 +99,11 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				if (formMode == "contactform") {
 					frm = new ContactInfo();
 					frm = FormHelper.ParseRequest(frm, Request);
+
 					var cmt = (ContactInfo)frm;
+					var settings = cmt.Settings;
+					ViewBag.CmsUpdateTargetId = settings.UpdateTargetId;
+
 					cmt.Root_ContentID = _page.ThePage.Root_ContentID;
 					cmt.CreateDate = SiteData.CurrentSite.Now;
 					cmt.CommenterIP = Request.ServerVariables["REMOTE_ADDR"];
@@ -239,6 +243,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			var settings = model.Settings;
 
+			ViewBag.CmsUpdateTargetId = settings.UpdateTargetId;
+
 			if (settings.UseValidateHuman) {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
@@ -249,7 +255,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			//TODO: log the comment and B64 encode some of the settings (TBD)
 			if (ModelState.IsValid) {
-				string sIP = Request.ServerVariables["REMOTE_ADDR"].ToString();
+				string addr = Request.ServerVariables["REMOTE_ADDR"].ToString();
 
 				PostComment pc = new PostComment();
 				pc.ContentCommentID = Guid.NewGuid();
@@ -257,7 +263,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 				pc.CreateDate = SiteData.CurrentSite.Now;
 				pc.IsApproved = false;
 				pc.IsSpam = false;
-				pc.CommenterIP = sIP;
+				pc.CommenterIP = addr;
 				pc.CommenterName = Server.HtmlEncode(model.CommenterName);
 				pc.CommenterEmail = Server.HtmlEncode(model.CommenterEmail ?? string.Empty);
 				pc.PostCommentText = Server.HtmlEncode(model.PostCommentText); //.Replace("<", "&lt;").Replace(">", "&gt;");
@@ -312,6 +318,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			var settings = model.Settings;
 
+			ViewBag.CmsUpdateTargetId = settings.UpdateTargetId;
+
 			if (settings.UseValidateHuman) {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
@@ -355,6 +363,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			LoadPage(model.Settings.Uri);
 
 			var settings = model.Settings;
+
+			ViewBag.CmsUpdateTargetId = settings.UpdateTargetId;
 
 			if (settings.UseValidateHuman) {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
@@ -405,6 +415,9 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 			LoadPage(model.Settings.Uri);
 
 			var settings = model.Settings;
+
+			ViewBag.CmsUpdateTargetId = settings.UpdateTargetId;
+
 			if (!SecurityData.IsAuthenticated) {
 				ModelState.AddModelError("", "User is not authenticated");
 			}
@@ -453,6 +466,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			var settings = model.Settings;
 
+			ViewBag.CmsUpdateTargetId = settings.UpdateTargetId;
+
 			if (settings.UseValidateHuman) {
 				bool IsValidated = model.ValidateHuman.ValidateValue(model.ValidationValue);
 				if (!IsValidated) {
@@ -493,7 +508,12 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 		public ActionResult Logout(LogoutInfo model) {
 			model.ReconstructSettings();
 			this.ViewData[LogoutInfo.Key] = model;
-			LoadPage(model.Settings.Uri);
+
+			var settings = model.Settings;
+
+			ViewBag.CmsUpdateTargetId = settings.UpdateTargetId;
+
+			LoadPage(settings.Uri);
 
 			if (ModelState.IsValid) {
 				ModelState.Clear();
@@ -517,6 +537,7 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			var settings = model.Settings;
 
+			ViewBag.CmsUpdateTargetId = settings.UpdateTargetId;
 			string partialName = settings.PostPartialName;
 
 			if (settings.UseValidateHuman) {

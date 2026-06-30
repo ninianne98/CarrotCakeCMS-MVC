@@ -13,6 +13,8 @@ var cmsWebServiceApi = '[[API_PATH]]';
 
 var cmsAdminBasePath = '[[ADMIN_PATH]]';
 
+var cmsPlatform = '[[CMS_PLATFORM]]';
+
 var cmsTemplatePreview = '[[TEMPLATE_PATH]]';
 
 var cmsTemplatePreviewQS = '[[TEMPLATE_QS]]';

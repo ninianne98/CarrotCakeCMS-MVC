@@ -33,8 +33,8 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Models {
 			this.Users = this.Site.GetMappedUsers().OrderBy(x => x.UserName).Select(x => new UserModel(x)).ToList();
 		}
 
-		public SiteData Site { get; set; }
-		public List<UserModel> Users { get; set; }
+		public SiteData Site { get; set; } = new SiteData();
+		public List<UserModel> Users { get; set; } = new List<UserModel>();
 
 		[Display(Name = "New User")]
 		public string NewUserId { get; set; }

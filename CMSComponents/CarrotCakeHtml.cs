@@ -10,10 +10,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Mvc.Ajax;
 using System.Web.Routing;
 using System.Web.WebPages;
+using System.Web.WebPages.Razor.Configuration;
 
 /*
 * CarrotCake CMS (MVC5)
@@ -77,9 +79,6 @@ namespace Carrotware.CMS.UI.Components {
 
 			if (obj is Controller) {
 				Controller controller = obj.HydrateController();
-				//Controller controller = (Controller)obj;
-				//controller.ControllerContext = new ControllerContext(Html.ViewContext.Controller.ControllerContext.RequestContext, controller);
-				//controller.ControllerContext = Html.ViewContext.Controller.ControllerContext;
 
 				return new HtmlString(RenderPartialToString(controller, controller.TempData, partialViewName, model));
 			}
@@ -89,9 +88,9 @@ namespace Carrotware.CMS.UI.Components {
 
 		public static HtmlString RenderResultViewFromController(string actionName, string controllerClass) {
 			Type type = ReflectionUtilities.GetTypeFromString(controllerClass);
-			object obj = Activator.CreateInstance(type);
+			object ctrl = Activator.CreateInstance(type);
 
-			return new HtmlString(GetResultViewStringFromController(actionName, type, obj));
+			return new HtmlString(GetResultViewStringFromController(actionName, type, ctrl));
 		}
 
 		private static string GetResultViewStringFromController(string actionName, Type type, object obj) {
@@ -122,6 +121,9 @@ namespace Carrotware.CMS.UI.Components {
 						}
 					}
 				}
+
+				// invoke the init before actually calling the action
+				controller = controller.ControllerInitLifecycle(methodInfo);
 
 				if (methodInfo != null) {
 					object result = null;
@@ -169,18 +171,23 @@ namespace Carrotware.CMS.UI.Components {
 						result = methodInfo.Invoke(controller, parametersArray.ToArray());
 					}
 
-					if (result is PartialViewResult) {
-						var partial = (PartialViewResult)result;
+					if (result != null) {
+						string resultString = null;
 
-						Html.ViewContext.Controller.ViewData[actionName] = partial.ViewData;
-						Html.ViewContext.Controller.TempData[actionName] = partial.TempData;
+						if (result is PartialViewResult) {
+							var partial = (PartialViewResult)result;
 
-						if (string.IsNullOrWhiteSpace(partial.ViewName)) {
-							partial.ViewName = actionName;
+							Html.ViewContext.Controller.ViewData[actionName] = partial.ViewData;
+							Html.ViewContext.Controller.TempData[actionName] = partial.TempData;
+
+							if (string.IsNullOrWhiteSpace(partial.ViewName)) {
+								partial.ViewName = actionName;
+							}
+
+							resultString = RenderView(controller.ControllerContext, partial);
 						}
 
-						string resultString = RenderView(controller.ControllerContext, partial);
-						controller.Dispose();
+						controller = controller.ControllerFinalize(methodInfo, result);
 
 						return resultString;
 					}
@@ -517,10 +524,10 @@ namespace Carrotware.CMS.UI.Components {
 		}
 
 		public static string GenerateUrl() {
-			ViewContext viewContext = Html.ViewContext;
 			Uri url = Html.ViewContext.HttpContext.Request.Url;
+			var routeInfo = Html.ViewContext.RouteData.GetRouteInfo();
 
-			if (viewContext.RouteData.Values["id"] != null) {
+			if (string.IsNullOrWhiteSpace(routeInfo.Id) == false) {
 				return string.Join("", url.Segments.Take(url.Segments.Length - 1));
 			} else {
 				return string.Join("", url.Segments) + @"/";
@@ -584,6 +591,27 @@ namespace Carrotware.CMS.UI.Components {
 			};
 		}
 
+		public static string BuildTarget(string defaultTarget) {
+			string widgetId = Html.ViewBag.CmsWidgetClientID ?? string.Empty;
+			string targetId = Html.ViewBag.CmsUpdateTargetId ?? string.Empty;
+
+			Html.ViewContext.RouteData.Values.Remove(RouteInfo.Keys.Area);
+
+			string formTargetId = defaultTarget;
+
+			if (string.IsNullOrEmpty(widgetId) == false) {
+				formTargetId = defaultTarget + "_" + widgetId;
+			} else {
+				formTargetId = targetId;
+			}
+
+			if (string.IsNullOrEmpty(formTargetId)) {
+				formTargetId = defaultTarget;
+			}
+
+			return formTargetId;
+		}
+
 		public static SearchForm BeginSearchForm(object formAttributes = null) {
 			return new SearchForm(Html, CmsPage, formAttributes);
 		}
@@ -641,6 +669,32 @@ namespace Carrotware.CMS.UI.Components {
 			phWidgetZone10,
 		}
 
+		internal static List<string> GetRazorNamespaces() {
+			string physicalPath = HttpContext.Current.Server.MapPath("~/Views/Web.config");
+
+			var map = new ExeConfigurationFileMap { ExeConfigFilename = physicalPath };
+			var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+
+			var razorGroup = config.GetSectionGroup("system.web.webPages.razor");
+
+			if (razorGroup != null) {
+				var razorSection = razorGroup.Sections["pages"] as RazorPagesSection;
+
+				if (razorSection != null) {
+					return razorSection.Namespaces.Cast<NamespaceInfo>()
+									   .Select(n => n.Namespace)
+									   .OrderBy(x => x)
+									   .ToList();
+				}
+			}
+
+			return new List<string>();
+		}
+
+		internal static string GetEmbededView(string viewName) {
+			return ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components.Views.Shared." + viewName);
+		}
+
 		public static HtmlString RenderBody() {
 			return RenderBody(TextFieldZone.TextCenter);
 		}
@@ -688,7 +742,7 @@ namespace Carrotware.CMS.UI.Components {
 				}
 
 				var sb = new StringBuilder();
-				sb.Append(ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._TextZone.cshtml"));
+				sb.Append(GetEmbededView("_TextZone.cshtml"));
 
 				sb.Replace("[[cms_zone]]", m.Zone);
 				sb.Replace("[[htmltext]]", SiteData.HtmlMode);
@@ -716,8 +770,8 @@ namespace Carrotware.CMS.UI.Components {
 			if (SecurityData.AdvancedEditMode) {
 				widgetMenuTemplate = "<li id=\"liMenu\"><a href=\"javascript:[[JS_CALL]]\" id=\"cmsMenuEditLink\" class=\"cmsWidgetBarLink cmsWidgetBarIconPencil\" alt=\"[[CAP]]\" title=\"[[CAP]]\"> [[CAP]]</a></li>";
 
-				sbWidgetZone.Append(ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._WidgetZone.cshtml"));
-				sbMasterWidgetWrapper.Append(ControlUtilities.ReadEmbededScript("Carrotware.CMS.UI.Components._WidgetWrapper.cshtml"));
+				sbWidgetZone.Append(GetEmbededView("_WidgetZone.cshtml"));
+				sbMasterWidgetWrapper.Append(GetEmbededView("_WidgetWrapper.cshtml"));
 
 				sbWidgetZone.Replace("[[CMS_WIDGET_PLACEHOLDER]]", placeHolderName);
 				sbMasterWidgetWrapper.Replace("[[CMS_WIDGET_PLACEHOLDER]]", placeHolderName);

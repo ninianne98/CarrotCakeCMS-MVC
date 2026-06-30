@@ -1,0 +1,55 @@
+﻿@inherits CmsWebViewPage
+
+@{
+	string partialName = VirtualViewFileProvider.PartialViews.Contact;
+	string formTargetId = CarrotCakeHtml.BuildTarget("contactForm");
+}
+
+<div id="@formTargetId">
+	<br />
+	<!-- virtual view -->
+	@{
+		var cap = new Captcha2();
+		var cfg = new ContactInfoConfig(partialName, cap);
+
+		using (var cmtFrm = CarrotCakeHtml.BeginContactForm(new AjaxOptions { UpdateTargetId = formTargetId })) {
+			var cmt = cmtFrm.GetModelHelper(cfg);
+			if (!cmt.ViewData.Model.IsSaved) {
+				@cmt.ValidationSummary(true, "", new { @class = "text-danger" })
+				<div>
+					<label>Name</label>
+					@cmt.ValidationMessageFor(m => m.CommenterName, "", new { @class = "text-danger" })<br />
+					@cmt.TextBoxFor(m => m.CommenterName)
+				</div>
+				<div>
+					<label>Email</label>
+					@cmt.ValidationMessageFor(m => m.CommenterEmail, "", new { @class = "text-danger" })<br />
+					@cmt.TextBoxFor(m => m.CommenterEmail)
+				</div>
+				<div>
+					<label>Your Comments</label>
+					@cmt.ValidationMessageFor(m => m.PostCommentText, "", new { @class = "text-danger" })<br />
+					@cmt.TextAreaFor(m => m.PostCommentText, new { rows = "5", cols = "50" })
+				</div>
+				<div>
+					@cap<br />
+					@cap.Instructions <br />
+					@cmt.DropDownListFor(m => m.ValidationValue, new SelectList(cap.ImageOptions, "Value", "Value"), "[Select Image Title]")
+					@cmt.ValidationMessageFor(m => m.ValidationValue, "", new { @class = "text-danger" })
+					<br />
+				</div>
+				<div>
+					<br />
+					<input class="button" type="submit" />
+					<input class="button" type="reset" value="Clear form" />
+				</div>
+
+			} else {
+				<p>Thank you for your comment.</p>
+			}
+		}
+	}
+</div>
+<div style="clear:both">
+	&nbsp;
+</div>

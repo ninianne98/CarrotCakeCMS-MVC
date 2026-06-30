@@ -174,6 +174,7 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			model.Settings = (GallerySettings)this.WidgetPayload;
 
 			var ctrl = this.CreateController<HomeController>(_homeActionName, this.AssemblyName, this.WidgetPayload);
+			ctrl = ctrl.ControllerInitialize();
 
 			var result = ((HomeController)ctrl).ShowPrettyPhotoGallery();
 			model.PartialResult = result;
@@ -202,10 +203,6 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 			var routeData = new RouteData();
 			routeData.SetRouteValues(this.AssemblyName, typeof(HomeController).GetControllerName(), _homeActionName, id.ToString());
 
-			//routeData.Values.Add(RouteInfo.Keys.Controller, "Home");
-			//routeData.Values.Add(RouteInfo.Keys.Area, this.AssemblyName);
-			//routeData.Values.Add(RouteInfo.Keys.Action, _homeActionName);
-
 			MethodInfo methodInfo = type.GetMethod(nameof(HomeController.ShowPrettyPhotoGallery));
 
 			Controller ctrl = null;
@@ -223,6 +220,9 @@ namespace CarrotCake.CMS.Plugins.PhotoGallery.Controllers {
 
 					((HomeController)ctrl).WidgetPayload = this.WidgetPayload;
 				}
+
+				ctrl = ctrl.ControllerInitLifecycle(methodInfo);
+
 				if (parameters.Length == 0) {
 					result = methodInfo.Invoke(classInstance, null);
 

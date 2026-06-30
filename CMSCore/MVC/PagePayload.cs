@@ -131,7 +131,7 @@ namespace Carrotware.CMS.Core {
 
 			if (SecurityData.AdvancedEditMode && !this.IsPageLocked) {
 				using (ContentPageHelper pageHelper = new ContentPageHelper()) {
-					bool bRet = pageHelper.RecordPageLock(this.ThePage.Root_ContentID, this.TheSite.SiteID, SecurityData.CurrentUserGuid);
+					bool ret = pageHelper.RecordPageLock(this.ThePage.Root_ContentID, this.TheSite.SiteID, SecurityData.CurrentUserGuid);
 				}
 			}
 

@@ -11,9 +11,9 @@
 		cap.SetForeColor("#333333");
 		cap.SetNoiseColor("#999999");
 
-		ForgotPasswordInfoConfig config = new ForgotPasswordInfoConfig("_plainforgot"); // new ForgotPasswordInfoConfig("_plainforgot", cap);
+		ForgotPasswordInfoConfig config = new ForgotPasswordInfoConfig("~/Views/CmsContent/PlainPage/_plainforgot.cshtml");
 		config.ConfirmUri = String.Format("{0}", CmsPage.ThePage.FileName);
-		config.PostPartialConfirmation = "_plainforgotconf";
+		config.PostPartialConfirmation = "~/Views/CmsContent/PlainPage/_plainforgotconf.cshtml";
 
 		using (var cmtFrm = CarrotCakeHtml.BeginForgotPasswordForm(new AjaxOptions { UpdateTargetId = "forgotForm" })) {
 			var cmt = cmtFrm.GetModelHelper(config);

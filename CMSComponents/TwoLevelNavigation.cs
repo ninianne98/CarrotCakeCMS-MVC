@@ -114,7 +114,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public SizeUnit MenuFontSize { get; set; }
 
-		public string CssTopBackground { get; set; }
+		public string CssTopBackground { get; set; } = string.Empty;
 
 		[Widget(WidgetAttribute.FieldMode.ColorBox)]
 		public Color ForeColor { get; set; }
@@ -235,8 +235,8 @@ namespace Carrotware.CMS.UI.Components {
 				sb.Append(string.Format("&hbc={0}&hfc={1}", CarrotWeb.EncodeColor(this.HoverBGColor), CarrotWeb.EncodeColor(this.HoverFGColor)));
 				sb.Append(string.Format("&uf={0}&sbg={1}&sfg={2}", CarrotWeb.EncodeColor(this.UnSelFGColor), CarrotWeb.EncodeColor(this.SelBGColor), CarrotWeb.EncodeColor(this.SelFGColor)));
 				sb.Append(string.Format("&bc2={0}&fc2={1}", CarrotWeb.EncodeColor(this.SubBGColor), CarrotWeb.EncodeColor(this.SubFGColor)));
-				if (!string.IsNullOrWhiteSpace(CssTopBackground)) {
-					sb.Append(string.Format("&tbg={0}", HttpUtility.HtmlEncode(CssTopBackground)));
+				if (!string.IsNullOrWhiteSpace(this.CssTopBackground)) {
+					sb.Append(string.Format("&tbg={0}", HttpUtility.HtmlEncode(this.CssTopBackground)));
 				}
 				sb.Append(string.Format("&ts={0}", CarrotWeb.DateKey()));
 

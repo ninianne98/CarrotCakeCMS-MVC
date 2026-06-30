@@ -59,7 +59,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public void ReconstructSettings() {
 			base.GetSettings();
-			this.Settings = null;   // new ContactInfoSettings();
+			this.Settings = null;
 
 			if (this.ValidateSettings != null && this.ValidateSettings is ContactInfoSettings) {
 				this.Settings = this.ValidateSettings as ContactInfoSettings;
@@ -118,30 +118,30 @@ namespace Carrotware.CMS.UI.Components {
 					emails.Add(ConfigurationManager.AppSettings[this.Settings.DirectEmailKeyName].ToString());
 				}
 
-				string strHTTPHost = string.Empty;
-				try { strHTTPHost = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { strHTTPHost = string.Empty; }
+				string host = string.Empty;
+				try { host = request.ServerVariables["HTTP_HOST"].ToString().Trim(); } catch { host = string.Empty; }
 
-				string hostName = strHTTPHost.ToLowerInvariant();
+				string hostName = host.ToLowerInvariant();
 
-				string strHTTPPrefix = "http://";
+				string hostPrefix = "http://";
 				try {
-					strHTTPPrefix = request.ServerVariables["SERVER_PORT_SECURE"] == "1" ? "https://" : "http://";
-				} catch { strHTTPPrefix = "http://"; }
+					hostPrefix = request.ServerVariables["SERVER_PORT_SECURE"] == "1" ? "https://" : "http://";
+				} catch { hostPrefix = "http://"; }
 
-				strHTTPHost = string.Format("{0}{1}", strHTTPPrefix, strHTTPHost).ToLowerInvariant();
+				host = string.Format("{0}{1}", hostPrefix, hostName).ToLowerInvariant();
 
 				string mailSubject = string.Format("Comment Form From {0}", hostName);
 
 				string sBody = "Name:   " + pc.CommenterName
-					+ "\r\nEmail:   " + pc.CommenterEmail
-					+ "\r\nURL:   " + pc.CommenterURL
-					+ "\r\n-----------------"
-					+ "\r\nComment:\r\n" + HttpUtility.HtmlEncode(pc.PostCommentText)
-					+ "\r\n=================\r\n"
-					+ "\r\nIP:   " + pc.CommenterIP
-					+ "\r\nSite URL:   " + string.Format("{0}{1}", strHTTPHost, page.FileName)
-					+ "\r\nSite Time:   " + SiteData.CurrentSite.Now.ToString()
-					+ "\r\nUTC Time:   " + DateTime.UtcNow.ToString();
+					+ Environment.NewLine + "Email:   " + pc.CommenterEmail
+					+ Environment.NewLine + "URL:   " + pc.CommenterURL
+					+ Environment.NewLine + " -----------------"
+					+ Environment.NewLine + "Comment:" + Environment.NewLine + HttpUtility.HtmlEncode(pc.PostCommentText)
+					+ Environment.NewLine + " ================= "
+					+ Environment.NewLine + Environment.NewLine + "IP:   " + pc.CommenterIP
+					+ Environment.NewLine + "Site URL:   " + string.Format("{0}{1}", host, page.FileName)
+					+ Environment.NewLine + "Site Time:   " + SiteData.CurrentSite.Now.ToString()
+					+ Environment.NewLine + "UTC Time:   " + DateTime.UtcNow.ToString();
 
 				string sEmail = string.Join(";", emails);
 
@@ -166,7 +166,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public void ReconstructSettings() {
 			base.GetSettings();
-			this.Settings = null;   // new LogoutInfoSettings();
+			this.Settings = null;
 
 			if (this.ValidateSettings != null && this.ValidateSettings is LogoutInfoSettings) {
 				this.Settings = this.ValidateSettings as LogoutInfoSettings;
@@ -196,7 +196,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public void ReconstructSettings() {
 			base.GetSettings();
-			this.Settings = null;   // new LoginInfoSettings();
+			this.Settings = null;
 
 			if (this.ValidateSettings != null && this.ValidateSettings is LoginInfoSettings) {
 				this.Settings = this.ValidateSettings as LoginInfoSettings;
@@ -240,7 +240,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public void ReconstructSettings() {
 			base.GetSettings();
-			this.Settings = null;   // new ForgotPasswordInfoSettings();
+			this.Settings = null;
 
 			if (this.ValidateSettings != null && this.ValidateSettings is ForgotPasswordInfoSettings) {
 				this.Settings = this.ValidateSettings as ForgotPasswordInfoSettings;
@@ -273,7 +273,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public void ReconstructSettings() {
 			base.GetSettings();
-			this.Settings = null;   // new ResetPasswordInfoSettings();
+			this.Settings = null;
 
 			if (this.ValidateSettings != null && this.ValidateSettings is ResetPasswordInfoSettings) {
 				this.Settings = this.ValidateSettings as ResetPasswordInfoSettings;
@@ -317,7 +317,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public void ReconstructSettings() {
 			base.GetSettings();
-			this.Settings = null;   // new ChangePasswordInfoSettings();
+			this.Settings = null;
 
 			if (this.ValidateSettings != null && this.ValidateSettings is ChangePasswordInfoSettings) {
 				this.Settings = this.ValidateSettings as ChangePasswordInfoSettings;
@@ -358,7 +358,7 @@ namespace Carrotware.CMS.UI.Components {
 
 		public void ReconstructSettings() {
 			base.GetSettings();
-			this.Settings = null;   // new ChangeProfileInfoSettings();
+			this.Settings = null;
 
 			if (this.ValidateSettings != null && this.ValidateSettings is ChangeProfileInfoSettings) {
 				this.Settings = this.ValidateSettings as ChangeProfileInfoSettings;

@@ -1,15 +1,56 @@
 ﻿using Carrotware.CMS.Interface;
 using Carrotware.CMS.Interface.Controllers;
+using Carrotware.Web.UI.Components;
 using Northwind.Code;
 using Northwind.Models;
 using System;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace Northwind.Controllers {
 
 	public class HomeController : BaseDataWidgetController {
 		private Guid _testGuid = Guid.NewGuid();
+		private NorthwindDataContext db = null;
+
+		protected override void Initialize(RequestContext requestContext) {
+			base.Initialize(requestContext);
+
+			db = new NorthwindDataContext();
+
+			var path = requestContext.HttpContext.Request.Path;
+
+			var routeInfo = requestContext.RouteData.GetRouteInfo();
+
+			string action = routeInfo.Action.ToLowerInvariant();
+			string controller = routeInfo.Controller.ToLowerInvariant();
+			string area = routeInfo.Area.ToLowerInvariant();
+		}
+
+		protected override void OnActionExecuting(ActionExecutingContext filterContext) {
+			base.OnActionExecuting(filterContext);
+
+			var path = filterContext.HttpContext.Request.Path;
+
+			var routeInfo = filterContext.RouteData.GetRouteInfo();
+		}
+
+		protected override void OnActionExecuted(ActionExecutedContext filterContext) {
+			base.OnActionExecuted(filterContext);
+
+			var path = filterContext.HttpContext.Request.Path;
+
+			var routeInfo = filterContext.RouteData.GetRouteInfo();
+		}
+
+		protected override void Dispose(bool disposing) {
+			base.Dispose(disposing);
+
+			if (db != null) {
+				db.Dispose();
+			}
+		}
 
 		public ActionResult Index() {
 			return View();
@@ -183,13 +224,13 @@ namespace Northwind.Controllers {
 				model.SelectedCat = -1;
 			}
 
-			using (var db = new NorthwindDataContext()) {
-				model.Options = db.Categories.ToList();
+			//using (var db = new NorthwindDataContext()) {
+			model.Options = db.Categories.ToList();
 
-				if (model.SelectedCat.HasValue) {
-					model.Results = db.Products.Where(x => x.CategoryID == model.SelectedCat.Value).ToList();
-				}
+			if (model.SelectedCat.HasValue) {
+				model.Results = db.Products.Where(x => x.CategoryID == model.SelectedCat.Value).ToList();
 			}
+			//}
 
 			return model;
 		}
