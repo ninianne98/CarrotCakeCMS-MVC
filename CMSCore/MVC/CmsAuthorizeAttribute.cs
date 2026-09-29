@@ -1,4 +1,6 @@
-﻿using System.Web;
+﻿using Carrotware.Web.UI.Components;
+using System.Net;
+using System.Web;
 using System.Web.Mvc;
 
 /*
@@ -30,6 +32,9 @@ namespace Carrotware.CMS.Core {
 		public override void OnAuthorization(AuthorizationContext filterContext) {
 			base.OnAuthorization(filterContext);
 
+			var routeInfo = filterContext.RouteData.GetRouteInfo();
+			var isApi = CmsRouteConstants.CmsController.AdminApi.ToLowerInvariant() == routeInfo.Controller.ToLowerInvariant();
+
 			bool skipAuth = filterContext.ActionDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true)
 								|| filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true);
 
@@ -37,10 +42,18 @@ namespace Carrotware.CMS.Core {
 				return;
 			} else {
 				if (!filterContext.HttpContext.User.Identity.IsAuthenticated) {
-					if (filterContext.HttpContext.Request.Path.ToLowerInvariant() != SiteFilename.LoginURL.ToLowerInvariant()) {
-						filterContext.Result = new RedirectResult(string.Format("{0}?returnUrl={1}", SiteFilename.LoginURL, HttpUtility.UrlEncode(filterContext.HttpContext.Request.Path)));
+					if (isApi) {
+						filterContext.HttpContext.Response.SuppressFormsAuthenticationRedirect = true;
+						filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
+						filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+						filterContext.HttpContext.Response.StatusDescription = HttpStatusCode.Forbidden.ToString();
+						filterContext.Result = new HttpUnauthorizedResult();
 					} else {
-						filterContext.Result = new RedirectResult(SiteFilename.LoginURL);
+						if (filterContext.HttpContext.Request.Path.ToLowerInvariant() != SiteFilename.LoginURL.ToLowerInvariant()) {
+							filterContext.Result = new RedirectResult(string.Format("{0}?returnUrl={1}", SiteFilename.LoginURL, HttpUtility.UrlEncode(filterContext.HttpContext.Request.Path)));
+						} else {
+							filterContext.Result = new RedirectResult(SiteFilename.LoginURL);
+						}
 					}
 					return;
 				}

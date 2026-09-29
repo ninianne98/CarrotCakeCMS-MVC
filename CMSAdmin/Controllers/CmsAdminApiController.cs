@@ -4,6 +4,7 @@ using Carrotware.Web.UI.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
@@ -27,16 +28,34 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 
 			var routeInfo = filterContext.RouteData.GetRouteInfo();
 			string action = routeInfo.Action.ToLowerInvariant();
-			string controller = routeInfo.Controller.ToLowerInvariant();
 
-			if (!this.User.Identity.IsAuthenticated) {
-				filterContext.Result = new HttpUnauthorizedResult();
-				throw new Exception("Not Authenticated!");
+			var forbiddenRoute = "apiforbidden";
+			bool forbidden = false;
+
+			if (action != forbiddenRoute) {
+				if (!this.User.Identity.IsAuthenticated) {
+					forbidden = true;
+					filterContext.Result = new HttpUnauthorizedResult();
+				}
+
+				if (!(SecurityData.IsAdmin || SecurityData.IsSiteEditor)) {
+					forbidden = true;
+					filterContext.Result = new HttpUnauthorizedResult();
+				}
 			}
 
-			if (!(SecurityData.IsAdmin || SecurityData.IsSiteEditor)) {
-				filterContext.Result = new HttpUnauthorizedResult();
-				throw new Exception("Not Authorized!");
+			if (forbidden) {
+				var response = filterContext.HttpContext.Response;
+				filterContext.RouteData.AddUpdateRouting(RouteInfo.Keys.Action, forbiddenRoute);
+
+				response.Clear();
+				response.StatusCode = (int)HttpStatusCode.PreconditionFailed;
+				response.StatusDescription = HttpStatusCode.PreconditionFailed.ToString();
+				response.SuppressFormsAuthenticationRedirect = true;
+				response.TrySkipIisCustomErrors = true;
+
+				filterContext.HttpContext.ApplicationInstance.CompleteRequest();
+				filterContext.Result = ApiForbidden();
 			}
 		}
 
@@ -114,6 +133,16 @@ namespace Carrotware.CMS.Mvc.UI.Admin.Controllers {
 					}
 				}
 			}
+		}
+
+		[AllowAnonymous]
+		public ActionResult ApiForbidden() {
+			Response.StatusCode = (int)HttpStatusCode.Forbidden;
+			Response.StatusDescription = HttpStatusCode.Forbidden.ToString();
+			Response.SuppressFormsAuthenticationRedirect = true;
+			Response.TrySkipIisCustomErrors = true;
+
+			return new EmptyResult();
 		}
 
 		[HttpGet]
